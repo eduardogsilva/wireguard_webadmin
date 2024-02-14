@@ -1,0 +1,46 @@
+{% if messages %}
+    <script>
+      {% for message in messages %}
+        var fullMessage = "{{ message.message|escapejs }}";
+        var parts = fullMessage.split("|");
+        if (parts.length > 1) {
+            $(document).Toasts('create', {
+                {% if message.tags %}
+                class: 'bg-{{ message.tags }}',
+                {% endif %}
+                title: parts[0],
+                subtitle: '{{ message.tags }}',
+                body: parts[1],
+                delay: 10000, 
+                autohide: true, 
+            });
+        } else {
+            $(document).Toasts('create', {
+                {% if message.tags %}
+                class: 'bg-{{ message.tags }}',
+                {% endif %}
+                subtitle: '{{ message.tags }}',
+                body: parts[0],
+                delay: 10000, 
+                autohide: true, 
+            });
+        }
+      {% endfor %}
+    </script>
+{% endif %}
+
+{% if form.errors %}
+    <script>
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+                $(document).Toasts('create', {
+                    class: 'bg-danger', 
+                    title: 'Error!',
+                    body: '{{ error|escapejs }}',
+                    delay: 10000, 
+                    autohide: true, 
+                });
+            {% endfor %}
+        {% endfor %}
+    </script>
+{% endif %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="card card-primary card-outline">
+    <div class="card-header">
+      <div class="card-title">
+        <div class='row'>
+            <div class='col-md-12'>
+                <a href='/console/' class='btn btn-outline-primary'>Clear</a>
+                <a href='?command=iptables' class='btn btn-outline-primary'>iptables</a>
+                <a href='?command=ifconfig' class='btn btn-outline-primary'>ifconfig</a>
+                <a href='?command=ps' class='btn btn-outline-primary'>processes</a>
+                <a href='?command=wgshow' class='btn btn-outline-primary'>wg show</a>
+                <a href='?command=freem' class='btn btn-outline-primary'>free -m</a>
+                <a href='?command=top' class='btn btn-outline-primary'>top</a>
+                <a href='?command=route' class='btn btn-outline-primary'>route -n</a>
+                <a href='javascript:void(0)' class='btn btn-outline-primary' data-command='traceroute' onclick='openCommandDialog(this)'>traceroute</a>
+                <a href='javascript:void(0)' class='btn btn-outline-primary' data-command='ping' onclick='openCommandDialog(this)'>ping</a>
+        
+                <script>
+                function openCommandDialog(element) {
+                    var command = element.getAttribute('data-command');
+                    var destination = prompt("Host or IP address to " + command);
+                    if (destination) {
+                        var url = "?command=" + command + "&target=" + encodeURIComponent(destination);
+                        window.location.href = url;
+                    }
+                }
+                </script>
+        
+                
+        
+                
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="card-body">
+        <div class='row'>
+            <div class='col-md-12'>
+                <pre>{{command_output}}</pre>
+
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+
+{%comment%}<div style='white-space: pre-wrap;'>{{command_output}}</div>{%endcomment%}
+
+
+
+{% endblock %}

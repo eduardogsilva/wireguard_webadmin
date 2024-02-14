@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class='row'>
+    <div class='col-lg-4'>    
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">Configure Peer Allowed IP</h3>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="card-body row">
+            <div class="col-lg-12">
+                <!-- Allowed IP -->
+                <div class="form-group">
+                    <label for="{{ form.allowed_ip.id_for_label }}">{{ form.allowed_ip.label }}</label>
+                    <input type="text" class="form-control" id="{{ form.allowed_ip.id_for_label }}" name="{{ form.allowed_ip.html_name }}" placeholder="Enter Allowed IP" value="{{ form.allowed_ip.value|default_if_none:'' }}" required>
+                </div>
+
+                <!-- Netmask -->
+                <div class="form-group">
+                    <label for="{{ form.netmask.id_for_label }}">{{ form.netmask.label }}</label>
+                    <select class="form-control" id="{{ form.netmask.id_for_label }}" name="{{ form.netmask.html_name }}">
+                        {% for value, display in form.netmask.field.choices %}
+                            <option value="{{ value }}" {% if form.netmask.value|stringformat:"s" == value|stringformat:"s" %}selected{% endif %}>{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Priority -->
+                <div class="form-group">
+                    <label for="{{ form.priority.id_for_label }}">{{ form.priority.label }}</label>
+                    <input type="number" class="form-control" id="{{ form.priority.id_for_label }}" name="{{ form.priority.html_name }}" placeholder="Priority" value="{{ form.priority.value|default_if_none:'' }}" required>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a class="btn btn-outline-secondary" href="/peer/manage/?peer={{ current_peer.uuid }}">Back</a>
+            {% if current_ip %}<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete IP</a>{% endif %}
+        </div>
+    </form>
+</div>
+
+</div>
+</div>
+
+{% endblock %}
+
+{% block custom_page_scripts %}
+
+<script>
+    function openCommandDialog(element) {
+        var command = element.getAttribute('data-command');
+        var confirmation = prompt("Please type 'delete' to remove this IP address.");
+        if (confirmation) {
+            var url = "?ip={{ current_ip.uuid }}&action=delete&confirmation=" + encodeURIComponent(confirmation);
+            window.location.href = url;
+        }
+    }
+</script>
+
+{% endblock %}

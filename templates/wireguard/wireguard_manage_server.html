@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card card-primary card-outline">
+    
+    <div class="card-body">
+        <ul class="nav nav-tabs"  role="tablist">
+            {% for wgconf in wireguard_instances %}
+            <li class="nav-item">
+                <a class="nav-link {%if wgconf == current_instance%}active{%endif%}" href="/server/manage/?uuid={{wgconf.uuid}}" role="tab" >
+                    wg{{wgconf.instance_id}} {%if wgconf.name %}({{wgconf.name}}){%endif%}
+                </a>
+            </li>
+            {% endfor %}
+            <li class="nav-item">
+                <a class="nav-link {%if not current_instance%}active{%endif%}" href="/server/manage/?action=create" role="tab" >Create Instance</a>
+            </li>
+
+          </ul>
+        <div class="tab-content" id="custom-content-below-tabContent">
+            <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="card-body row">
+                        <div class="col-lg-6">
+                            <!-- Line 1: Name and Instance ID -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                                    <input type="text" class="form-control" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" placeholder="Enter Name" value="{{ form.name.value|default_if_none:'' }}">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="{{ form.instance_id.id_for_label }}">{{ form.instance_id.label }}</label>
+                                    <input type="number" class="form-control" id="{{ form.instance_id.id_for_label }}" name="{{ form.instance_id.html_name }}" placeholder="Instance ID" value="{{ form.instance_id.value|default_if_none:'' }}" required>
+                                </div>
+                            </div>
+                            <!-- Line 2: Hostname and Listen Port -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="{{ form.hostname.id_for_label }}">{{ form.hostname.label }}</label>
+                                    <input type="text" class="form-control" id="{{ form.hostname.id_for_label }}" name="{{ form.hostname.html_name }}" placeholder="Hostname" value="{{ form.hostname.value|default_if_none:'' }}" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="{{ form.listen_port.id_for_label }}">{{ form.listen_port.label }}</label>
+                                    <input type="number" class="form-control" id="{{ form.listen_port.id_for_label }}" name="{{ form.listen_port.html_name }}" placeholder="Listen Port" value="{{ form.listen_port.value|default_if_none:'' }}" required>
+                                </div>
+                            </div>
+                            <!-- Line 3: Private Key and Persistent Keepalive -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="{{ form.private_key.id_for_label }}">{{ form.private_key.label }}</label>
+                                    <input type="text" class="form-control" id="{{ form.private_key.id_for_label }}" name="{{ form.private_key.html_name }}" placeholder="Private Key" value="{{ form.private_key.value|default_if_none:'' }}" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="{{ form.persistent_keepalive.id_for_label }}">{{ form.persistent_keepalive.label }}</label>
+                                    <input type="number" class="form-control" id="{{ form.persistent_keepalive.id_for_label }}" name="{{ form.persistent_keepalive.html_name }}" placeholder="Persistent Keepalive" value="{{ form.persistent_keepalive.value|default_if_none:'' }}" required>
+                                </div>
+                            </div>
+                            <!-- Line 4: Address and Netmask -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
+                                    <input type="text" class="form-control" id="{{ form.address.id_for_label }}" name="{{ form.address.html_name }}" placeholder="Address" value="{{ form.address.value|default_if_none:'' }}" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="{{ form.netmask.id_for_label }}">{{ form.netmask.label }}</label>
+                                    <select class="form-control" id="{{ form.netmask.id_for_label }}" name="{{ form.netmask.html_name }}">
+                                        {% for value, display in form.netmask.field.choices %}
+                                        <option value="{{ value }}" {% if form.netmask.value == value %}selected{% endif %}>{{ display }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <!-- Line 1: Post Up -->
+                            <div class="form-group">
+                                <label for="{{ form.post_up.id_for_label }}">{{ form.post_up.label }}</label>
+                                <textarea class="form-control" id="{{ form.post_up.id_for_label }}" name="{{ form.post_up.html_name }}" placeholder="Post Up" style="height: 150px;">{{ form.post_up.value|default_if_none:'' }}</textarea>
+                            </div>
+                            <!-- Line 2: Post Down -->
+                            <div class="form-group">
+                                <label for="{{ form.post_down.id_for_label }}">{{ form.post_down.label }}</label>
+                                <textarea class="form-control" id="{{ form.post_down.id_for_label }}" name="{{ form.post_down.html_name }}" placeholder="Post Down" style="height: 150px;">{{ form.post_down.value|default_if_none:'' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        {% if current_instance.uuid %}
+                        <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete Configuration</a>
+                        {% endif %}
+                    </div>
+                </form>            
+                </div>
+        </div>
+      
+    </div>
+</div>
+<script>
+    function openCommandDialog(element) {
+        var command = element.getAttribute('data-command');
+        var confirmation = prompt("Please type 'delete wg{{ current_instance.instance_id }}' to remove the configuration.");
+        if (confirmation) {
+            var url = "?uuid={{current_instance.uuid}}&action=delete&confirmation=" + encodeURIComponent(confirmation);
+            window.location.href = url;
+        }
+    }
+    </script>
+
+
+
+
+{% endblock %}
+
+
+{% block custom_page_scripts %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var alertShown = false; 
+        var fieldsToWatch = ['id_address', 'id_listen_port', 'id_instance_id', 'netmask'];
+        function showAlert() {
+            if (!alertShown) { 
+                $(document).Toasts('create', {
+                    class: 'bg-warning', 
+                    title: 'Action Required!',
+                    body: 'When manually updating the "IP Address", "Netmask", "Listen Port", or "Instance ID", it is essential that you also manually review and update the "PostUp" and "PostDown" scripts to ensure that the new configuration matches your firewall.',
+                    
+                });
+                alertShown = true; 
+            }
+        }
+
+        
+        fieldsToWatch.forEach(function(fieldId) {
+            var field = document.getElementById(fieldId);
+            if (field) {
+                field.addEventListener('change', showAlert);
+            }
+        });
+    });
+</script>
+
+{% endblock %}

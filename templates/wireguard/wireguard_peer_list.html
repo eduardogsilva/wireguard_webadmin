@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if wireguard_instances %}
+<div class="card card-primary card-outline">
+    
+    <div class="card-body">
+        <ul class="nav nav-tabs"  role="tablist">
+            {% for wgconf in wireguard_instances %}
+            <li class="nav-item">
+                <a class="nav-link {%if wgconf == current_instance%}active{%endif%}" href="/peer/list/?uuid={{wgconf.uuid}}" role="tab" >
+                    wg{{wgconf.instance_id}} {%if wgconf.name %}({{wgconf.name}}){%endif%}
+                </a>
+            </li>
+            {% endfor %}
+            
+          </ul>
+        <div class="tab-content" id="custom-content-below-tabContent">
+            <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
+                <div class="row">
+                    {% for peer in peer_list %}
+                    <div class="col-md-6">
+                        <div class="callout callout-success">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5>{% if peer.name %}{{ peer.name}}{% else %}{{ peer.public_key }}{% endif %}</h5>
+                                <a href="/peer/manage/?peer={{ peer.uuid }}"><i class="far fa-edit"></i></a>
+                            </div>
+                            {% comment %}This needs to be improved{% endcomment %}
+                            <p>{% for address in peer.peerallowedip_set.all %}{% if address.priority == 0 %}
+                                {% if address.missing_from_wireguard %}
+                                    <a href='#' class='bg-warning' title="This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.">{{ address }}</a>
+                                {% else %}
+                                    {{ address }}
+                                {% endif %}
+                                {% endif %}{% endfor %}
+                                
+                                {% for address in peer.peerallowedip_set.all %}{% if address.priority >= 1 %} 
+                                {% if address.missing_from_wireguard %}
+                                    <a href='#' class='bg-warning' title="This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.">{{ address }}</a>
+                                {% else %}
+                                    {{ address }}
+                                {% endif %}
+                                {% endif %}{% endfor %}</p>
+                        </div>
+                        
+                        
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+
+
+                <a class="btn btn-primary" href="/peer/manage/?instance={{ current_instance.uuid}}">Create Peer</a>
+                <a class="btn btn-outline-primary disabled" href="/peer/import_peers/?instance={{ current_instance.uuid}}" title='teste'>Import peers</a>
+                </div>
+        </div>
+      
+    </div>
+</div>
+    <script>
+        function openCommandDialog(element) {
+            var command = element.getAttribute('data-command');
+            var confirmation = prompt("Please type 'delete wg{{ current_instance.instance_id }}' to remove the configuration.");
+            if (confirmation) {
+                var url = "?uuid={{current_instance.uuid}}&action=delete&confirmation=" + encodeURIComponent(confirmation);
+                window.location.href = url;
+            }
+        }
+    </script>
+{% else %}
+
+<div class="alert alert-warning" role="alert">
+    <h4 class="alert-heading">No WireGuard Instances Found</h4>
+    <p>There are no WireGuard instances configured. You can add a new instance by clicking the button below.</p>
+</div>
+<p>
+    <a href="/server/manage/" class="btn btn-primary">Add WireGuard Instance</a>
+</p>
+{% endif %}
+
+
+
+{% endblock %}
+
+
+{% block custom_page_scripts %}
+{% endblock %}
