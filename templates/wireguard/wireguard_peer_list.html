@@ -28,8 +28,10 @@
                                     {% else %}
                                     {{ peer.public_key|slice:":16" }}{% if peer.public_key|length > 16 %}...{% endif %}
                                     {% endif %}
-                                </h5>
-                                <a href="/peer/manage/?peer={{ peer.uuid }}"><i class="far fa-edit"></i></a>
+                                </h5><span>
+                                <a href="javascript:void(0);" onclick="openImageLightbox('/tools/download_peer_config/?uuid={{ peer.uuid }}&format=qrcode');"><i class="fas fa-qrcode"></i></a>
+                                <a href="/tools/download_peer_config/?uuid={{ peer.uuid }}"><i class="fas fa-download"></i></a>
+                                <a href="/peer/manage/?peer={{ peer.uuid }}"><i class="far fa-edit"></i></a></span>
                             </div>
                             {% comment %}This needs to be improved{% endcomment %}
                             <p>{% for address in peer.peerallowedip_set.all %}{% if address.priority == 0 %}
@@ -93,4 +95,10 @@
 
 
 {% block custom_page_scripts %}
+<script>
+    function openImageLightbox(url) {
+      window.open(url, 'Image', 'width=500,height=500,toolbar=0,location=0,menubar=0');
+    }
+</script>
+
 {% endblock %}

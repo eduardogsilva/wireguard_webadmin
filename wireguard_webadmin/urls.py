@@ -21,6 +21,7 @@ from wireguard_peer.views import view_wireguard_peer_list, view_wireguard_peer_m
 from console.views import view_console
 from user_manager.views import view_user_list, view_manage_user
 from accounts.views import view_create_first_user, view_login, view_logout
+from wireguard_tools.views import export_wireguard_configs, download_config_or_qrcode, restart_wireguard_interfaces
 
 
 urlpatterns = [
@@ -33,6 +34,9 @@ urlpatterns = [
     path('console/', view_console, name='console'),
     path('user/list/', view_user_list, name='user_list'),
     path('user/manage/', view_manage_user, name='manage_user'),
+    path('tools/export_wireguard_config/', export_wireguard_configs, name='export_wireguard_configs'),
+    path('tools/download_peer_config/', download_config_or_qrcode, name='download_config_or_qrcode'),
+    path('tools/restart_wireguard/', restart_wireguard_interfaces, name='restart_wireguard_interfaces'),
     path('server/manage/', view_wireguard_manage_instance, name='wireguard_manage_instance'),
     path('accounts/create_first_user/', view_create_first_user, name='create_first_user'),
     path('accounts/login/', view_login, name='login'),
