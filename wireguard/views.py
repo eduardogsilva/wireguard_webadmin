@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from user_manager.models import UserAcl
 
 from wireguard.forms import WireGuardInstanceForm
 from .models import WireGuardInstance
@@ -80,6 +81,8 @@ def view_wireguard_status(request):
 
 @login_required
 def view_wireguard_manage_instance(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
     wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
     if request.GET.get('uuid'):
         current_instance = get_object_or_404(WireGuardInstance, uuid=request.GET.get('uuid'))

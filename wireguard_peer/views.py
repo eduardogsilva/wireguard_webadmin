@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from user_manager.models import UserAcl
 from wireguard.models import WireGuardInstance, Peer, PeerAllowedIP
 from django.contrib import messages
 from django.db.models import Max
@@ -60,6 +61,13 @@ def view_wireguard_peer_list(request):
 
 @login_required
 def view_wireguard_peer_manage(request):
+    if request.method == 'POST':
+        if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
+            return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    else:
+        if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=20).exists():
+            return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+
     if request.GET.get('instance'):
         current_instance = get_object_or_404(WireGuardInstance, uuid=request.GET.get('instance'))
         current_peer = None
@@ -122,6 +130,8 @@ def view_wireguard_peer_manage(request):
 
 
 def view_manage_ip_address(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
     if request.GET.get('peer'):
         current_peer = get_object_or_404(Peer, uuid=request.GET.get('peer'))
         page_title = 'Add new IP address for Peer '
