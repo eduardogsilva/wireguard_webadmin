@@ -1,5 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-this page is just a placeholder for the moment
+
+<div class='row'>
+    <div class='col-lg-12'>    
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">WireGuard Status</h3>
+    </div>
+    <div class="card-body">
+        <div class='row'>
+            <div class='col-md-12'>
+                <pre>{{command_output}}</pre>
+
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+</div>
+</div>
+<p style="text-align: right" class="small">
+    This is just a placeholder for the WireGuard status page.  It will be updated with more information in the near future.
+</p>
+
 {% endblock %}

@@ -75,7 +75,15 @@ def view_welcome(request):
 @login_required
 def view_wireguard_status(request):
     page_title = 'WireGuard Status'
-    context = {'page_title': page_title}
+    bash_command = ['bash', '-c', 'wg show']
+    try:
+        command_output = subprocess.check_output(bash_command, stderr=subprocess.STDOUT).decode('utf-8')
+        command_success = True
+    except subprocess.CalledProcessError as e:
+        command_output = e.output.decode('utf-8')
+        command_success = False
+    
+    context = {'page_title': page_title, 'command_output': command_output, 'command_success': command_success}
     return render(request, 'wireguard/wireguard_status.html', context)
 
 
