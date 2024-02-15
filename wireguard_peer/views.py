@@ -21,7 +21,7 @@ def generate_peer_default(wireguard_instance):
     
     # the code below can be an issue for larger networks, for now it's fine, but it should be optimized in the future
     used_ips = set(WireGuardInstance.objects.all().values_list('address', flat=True)) | \
-               set(PeerAllowedIP.objects.all().values_list('allowed_ip', flat=True))
+               set(PeerAllowedIP.objects.filter(priority=0).values_list('allowed_ip', flat=True))
     
     free_ip_address = None
     for ip in network.hosts():

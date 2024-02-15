@@ -22,7 +22,13 @@
                     <div class="col-md-6">
                         <div class="callout callout-success">
                             <div class="d-flex justify-content-between align-items-start">
-                                <h5>{% if peer.name %}{{ peer.name}}{% else %}{{ peer.public_key }}{% endif %}</h5>
+                                <h5>
+                                    {% if peer.name %}
+                                    {{ peer.name}}
+                                    {% else %}
+                                    {{ peer.public_key|slice:":16" }}{% if peer.public_key|length > 16 %}...{% endif %}
+                                    {% endif %}
+                                </h5>
                                 <a href="/peer/manage/?peer={{ peer.uuid }}"><i class="far fa-edit"></i></a>
                             </div>
                             {% comment %}This needs to be improved{% endcomment %}

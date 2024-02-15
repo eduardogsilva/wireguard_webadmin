@@ -7,18 +7,19 @@ class WireGuardInstanceForm(forms.ModelForm):
     name = forms.CharField(label='Display Name', required=False)
     instance_id = forms.IntegerField(label='Instance ID')
     private_key = forms.CharField(label='Private Key')
+    public_key = forms.CharField(label='Public Key')
     hostname = forms.CharField(label='Public Address')
     listen_port = forms.IntegerField(label='Listen Port')
     address = forms.GenericIPAddressField(label='VPN IP Address')
     netmask = forms.ChoiceField(choices=NETMASK_CHOICES, label='Netmask')
     post_up = forms.CharField(label='Post Up', required=False)
     post_down = forms.CharField(label='Post Down', required=False)
-    persistent_keepalive = forms.IntegerField(label='Persistent Keepalive')
+    persistent_keepalive = forms.IntegerField(label='Keepalive')
 
     class Meta:
         model = WireGuardInstance
         fields = [
-            'name', 'instance_id', 'private_key', 'hostname', 'listen_port', 'address', 'netmask', 'post_up', 'post_down', 'persistent_keepalive'
+            'name', 'instance_id', 'private_key', 'public_key','hostname', 'listen_port', 'address', 'netmask', 'post_up', 'post_down', 'persistent_keepalive'
             ]
         
     def clean(self):

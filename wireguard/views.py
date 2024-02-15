@@ -17,6 +17,7 @@ def generate_instance_defaults():
     new_listen_port = (max_listen_port + 1) if max_listen_port is not None else 51820
 
     new_private_key = subprocess.check_output('wg genkey', shell=True).decode('utf-8').strip()
+    new_public_key = subprocess.check_output(f'echo {new_private_key} | wg pubkey', shell=True).decode('utf-8').strip()
 
     new_address = f'10.188.{new_instance_id}.1'
 
@@ -52,6 +53,7 @@ def generate_instance_defaults():
         'instance_id': new_instance_id,
         'listen_port': new_listen_port,
         'private_key': new_private_key,
+        'public_key': new_public_key,
         'address': new_address,
         'netmask': 24,
         'persistent_keepalive': 25,

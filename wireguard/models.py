@@ -33,6 +33,7 @@ class WireGuardInstance(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     instance_id = models.PositiveIntegerField(unique=True, default=0)
     private_key = models.CharField(max_length=100)
+    public_key = models.CharField(max_length=100)
     hostname = models.CharField(max_length=100)
     listen_port = models.IntegerField(default=51820, unique=True)
     address = models.GenericIPAddressField(unique=True, protocol='IPv4')
