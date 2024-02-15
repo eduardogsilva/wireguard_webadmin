@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="card card-primary card-outline">
+        <div class="card-header">
+            <h3 class="card-title">{{ form.instance.pk|yesno:"Edit User,Create New User" }}</h3>
+        </div>
+        <div class="card-body">
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+        {% csrf_token %}
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Username</label>
+                <input type="text" class="form-control" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" placeholder="Enter Username" value="{{ form.username.value|default_if_none:'' }}" {% if form.instance.pk %}readonly{% endif %}>
+            </div>
+            <!-- Password -->
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}">Password</label>
+                <input type="password" class="form-control" id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}" placeholder="Password">
+            </div>
+            
+            <!-- Retype Password -->
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}">Retype Password</label>
+                <input type="password" class="form-control" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}" placeholder="Retype Password">
+            </div>           
+            <!-- User Level -->
+            <div class="form-group">
+                <label for="{{ form.user_level.id_for_label }}">{{ form.user_level.label }}</label>
+                <select class="form-control" id="{{ form.user_level.id_for_label }}" name="{{ form.user_level.html_name }}">
+                    {% for value, display in form.user_level.field.choices %}
+                        <option value="{{ value }}" {% if form.user_level.value|stringformat:"s" == value|stringformat:"s" %}selected{% endif %}>{{ display }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="/user/list/" class="btn btn-outline-secondary">Back</a>
+                {% if user_acl %}<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete User</a>{% endif %}
+    
+            </div>
+        </form>
+    </div>
+        
+    
+    <div class="col-md-8">
+        
+        <h5>Debugging Analyst</h5>
+        <p>Access to basic system information and logs for troubleshooting. No access to modify settings or view sensitive data such as peer keys.</p>
+
+        <h5>View Only User</h5>
+        <p>Full view access, including peer keys and configuration files. Cannot modify any settings or configurations.</p>
+
+        <h5>Peer Manager</h5>
+        <p>Permissions to add, edit, and remove peers and IP addresses. Does not include access to modify WireGuard instance configurations or higher-level settings.</p>
+
+        <h5>Wireguard Manager</h5>
+        <p>Authority to add, edit, and remove configurations of WireGuard instances.</p>
+
+        <h5>Administrator</h5>
+        <p>Full access across the system. Can view and modify all settings, configurations and manage users. </p>
+
+    </div>
+
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        
+    </div>
+</div>
+        
+    </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block custom_page_scripts %}
+
+<script>
+    function openCommandDialog(element) {
+        var command = element.getAttribute('data-command');
+        var confirmation = prompt("Please type '{{ user_acl.user.username }}' to remove this user.");
+        if (confirmation) {
+            var url = "?uuid={{ user_acl.uuid }}&action=delete&confirmation=" + encodeURIComponent(confirmation);
+            window.location.href = url;
+        }
+    }
+</script>
+
+{% endblock %}

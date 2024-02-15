@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from .forms import CreateUserForm, LoginForm
 from django.http import HttpResponse
+from user_manager.models import UserAcl
 
 
 def view_create_first_user(request):
@@ -13,7 +14,8 @@ def view_create_first_user(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            User.objects.create_superuser(username=username, password=password)
+            new_user = User.objects.create_superuser(username=username, password=password)
+            UserAcl.objects.create(user=new_user, user_level=50)
             return render(request, 'accounts/superuser_created.html')
     else:
         form = CreateUserForm()

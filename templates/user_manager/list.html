@@ -1,5 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-this page is just a placeholder for the moment
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>User Level</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user_acl in user_acl_list %}
+        <tr>
+            <td>{{ user_acl.user.username }}</td>
+            <td>{{ user_acl.get_user_level_display }}</td>
+            <td style="width: 1%; white-space: nowrap;">
+                <a href="/user/manage/?uuid={{ user_acl.uuid }}" ><i class="far fa-edit"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
 {% endblock %}
