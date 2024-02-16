@@ -41,6 +41,7 @@ class WireGuardInstance(models.Model):
     post_up = models.TextField(blank=True, null=True)
     post_down = models.TextField(blank=True, null=True)
     persistent_keepalive = models.IntegerField(default=25)
+    pending_changes = models.BooleanField(default=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
