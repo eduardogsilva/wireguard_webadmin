@@ -88,6 +88,8 @@ def export_wireguard_configs(request):
         with open(config_path, "w") as config_file:
             config_file.write(config_content)
     messages.success(request, "Export successful!|WireGuard configuration files have been exported to /etc/wireguard/. Don't forget to restart the interfaces.")
+    if request.GET.get('action') == 'update_and_restart':
+        return redirect('/tools/restart_wireguard/?action=dismiss_warning')
     return redirect('/status/')
 
 
@@ -159,6 +161,9 @@ def restart_wireguard_interfaces(request):
 
     if interface_count == 0 and error_count == 0:
         messages.info(request, "No interfaces found|No WireGuard interfaces were found to restart.")
-
+    if request.GET.get('action') == 'dismiss_warning':
+        for wireguard_instancee in WireGuardInstance.objects.filter(pending_changes=True):
+            wireguard_instancee.pending_changes = False
+            wireguard_instancee.save()
     return redirect("/status/")
 

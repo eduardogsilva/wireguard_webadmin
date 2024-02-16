@@ -75,6 +75,11 @@ def view_welcome(request):
 @login_required
 def view_wireguard_status(request):
     page_title = 'WireGuard Status'
+    wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
+    if wireguard_instances.filter(pending_changes=True).exists():
+        pending_changes_warning = True
+    else:
+        pending_changes_warning = False
     bash_command = ['bash', '-c', 'wg show']
     try:
         command_output = subprocess.check_output(bash_command, stderr=subprocess.STDOUT).decode('utf-8')
@@ -83,7 +88,7 @@ def view_wireguard_status(request):
         command_output = e.output.decode('utf-8')
         command_success = False
     
-    context = {'page_title': page_title, 'command_output': command_output, 'command_success': command_success}
+    context = {'page_title': page_title, 'command_output': command_output, 'command_success': command_success, 'pending_changes_warning': pending_changes_warning, 'wireguard_instances': wireguard_instances}
     return render(request, 'wireguard/wireguard_status.html', context)
 
 
@@ -92,6 +97,10 @@ def view_wireguard_manage_instance(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
     wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
+    if wireguard_instances.filter(pending_changes=True).exists():
+        pending_changes_warning = True
+    else:
+        pending_changes_warning = False
     if request.GET.get('uuid'):
         current_instance = get_object_or_404(WireGuardInstance, uuid=request.GET.get('uuid'))
     else:
@@ -124,7 +133,9 @@ def view_wireguard_manage_instance(request):
     if request.method == 'POST':
         form = WireGuardInstanceForm(request.POST, instance=current_instance)
         if form.is_valid():
-            form.save()
+            this_form = form.save(commit=False)
+            this_form.pending_changes = True
+            this_form.save()
             messages.success(request, message_title + '|WireGuard instance wg' + str(form.instance.instance_id) + ' saved successfully.')
             return redirect('/server/manage/?uuid=' + str(form.instance.uuid))
     else:
@@ -132,5 +143,5 @@ def view_wireguard_manage_instance(request):
             form = WireGuardInstanceForm(initial=generate_instance_defaults())
         else:
             form = WireGuardInstanceForm(instance=current_instance)  
-    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'form': form}
+    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'form': form, 'pending_changes_warning': pending_changes_warning}
     return render(request, 'wireguard/wireguard_manage_server.html', context)

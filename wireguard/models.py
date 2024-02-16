@@ -73,6 +73,21 @@ class Peer(models.Model):
             return self.public_key
 
 
+class PeerStatus(models.Model):
+    peer = models.OneToOneField(Peer, on_delete=models.CASCADE)
+    last_handshake = models.DateTimeField(blank=True, null=True)
+    transfer_rx = models.BigIntegerField(default=0)
+    transfer_tx = models.BigIntegerField(default=0)
+    latest_config = models.TextField(blank=True, null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    uuid = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+
+    def __str__(self):
+        return str(self.peer)
+
+
 class PeerAllowedIP(models.Model):
     peer = models.ForeignKey(Peer, on_delete=models.CASCADE)
     priority = models.PositiveBigIntegerField(default=1)

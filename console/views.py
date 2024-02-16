@@ -1,3 +1,4 @@
+from wireguard.models import WireGuardInstance
 from wgwadmlibrary.tools import is_valid_ip_or_hostname
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -7,6 +8,11 @@ import subprocess
 @login_required
 def view_console(request):
     page_title = 'Console'
+    wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
+    if wireguard_instances.filter(pending_changes=True).exists():
+        pending_changes_warning = True
+    else:
+        pending_changes_warning = False
     requested_command = request.GET.get('command')
     command_target = request.GET.get('target', '')
     if command_target:
@@ -59,5 +65,5 @@ def view_console(request):
             command_output = e.output.decode('utf-8')
             command_success = False
         
-    context = {'page_title': page_title, 'command_output': command_output, 'command_success': command_success}
+    context = {'page_title': page_title, 'command_output': command_output, 'command_success': command_success, 'pending_changes_warning': pending_changes_warning}  
     return render(request, 'console/console.html', context)
