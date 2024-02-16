@@ -1,5 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-this page is just a placeholder for the moment
+<h1>Welcome to wireguard_webadmin</h1>
+    <p>I've been working hard on it over the past week and plan to continue making corrections and finishing it in the coming days.</p>
+    <p>Currently, it's quite functional, but there's still a need to polish various aspects of the interface to enhance usability.</p>
+    <p>If you encounter any issues or have suggestions, please open an issue on GitHub so I can review it.</p>
+    <h2>Important Points to Note:</h2>
+    <ul>
+        <li>The peers page does not yet display data from WireGuard such as the last handshake and data transfer.</li>
+        <li>The verification of allowed IPs against the output of wg show has not yet been implemented. This will help detect configuration errors for crypto routing.</li>
+        <li>After editing a peer or server settings, go to the status page and click to update the WireGuard configurations, then restart the service. I still need to make this process more intuitive.</li>
+        <li>The DNS server provided to the peer is still hardcoded.</li>
+    </ul>
+    <p>Your involvement and feedback are crucial to the development of wireguard_webadmin. Together, we can refine and enhance its functionality. Thank you for being part of this journey!</p>
+
+    <h2>Don't Forget</h2>
+    <p>Remember to save your configuration changes and restart the service for them to take effect.</p>
+    <p>Keep checking the GitHub page, I will be updating this project very soon.</p>
+
 {% endblock %}
