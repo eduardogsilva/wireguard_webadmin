@@ -17,27 +17,34 @@ def clean_command_field(command_field):
     return cleaned_field
 
 
+
 def generate_peer_config(peer_uuid):
     peer = get_object_or_404(Peer, uuid=peer_uuid)
     wg_instance = peer.wireguard_instance
 
-    allowed_ips = PeerAllowedIP.objects.filter(peer=peer).order_by('priority')
-    allowed_ips_line = ", ".join([f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips])
+    priority_zero_ip = PeerAllowedIP.objects.filter(peer=peer, priority=0).first()
+
+    if not priority_zero_ip:
+        return "No IP with priority zero found for this peer."
+
+    client_address = f"{priority_zero_ip.allowed_ip}/{priority_zero_ip.netmask}"
+
+    #allowed_ips = PeerAllowedIP.objects.filter(peer=peer).exclude(uuid=priority_zero_ip.uuid).order_by('priority')
+    #allowed_ips_line = ", ".join([f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips])
 
     config_lines = [
         "[Interface]",
         f"PrivateKey = {peer.private_key}" if peer.private_key else "",
-        f"Address = {wg_instance.address}/{wg_instance.netmask}",
-        f"DNS = 8.8.8.8",  # Sorry, it's hardcoded for now, I will fix it later
+        f"Address = {client_address}",
+        f"DNS = 8.8.8.8",  
         "\n[Peer]",
         f"PublicKey = {wg_instance.public_key}",
         f"Endpoint = {wg_instance.hostname}:{wg_instance.listen_port}",
-        f"AllowedIPs = {allowed_ips_line}",  # Usar os AllowedIPs do banco de dados
+        f"AllowedIPs = 0.0.0.0/0, ::/0",  
         f"PresharedKey = {peer.pre_shared_key}" if peer.pre_shared_key else "",
         f"PersistentKeepalive = {peer.persistent_keepalive}",
     ]
     return "\n".join(config_lines)
-
 
 @login_required
 def export_wireguard_configs(request):
@@ -57,7 +64,6 @@ def export_wireguard_configs(request):
             f"ListenPort = {instance.listen_port}",
             f"PostUp = {post_up_processed}",
             f"PostDown = {post_down_processed}",
-            f"PersistentKeepalive = {instance.persistent_keepalive}\n",
         ]
 
         peers = Peer.objects.filter(wireguard_instance=instance)
@@ -122,22 +128,37 @@ def download_config_or_qrcode(request):
 def restart_wireguard_interfaces(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    
     config_dir = "/etc/wireguard"
     interface_count = 0
+    error_count = 0
+
     for filename in os.listdir(config_dir):
         if filename.endswith(".conf"):
             interface_name = filename[:-5]
-            # Parar a interface
             stop_command = f"wg-quick down {interface_name}"
-            subprocess.run(stop_command, shell=True, check=True)
+            stop_result = subprocess.run(stop_command, shell=True, capture_output=True, text=True)
+            if stop_result.returncode != 0:
+                messages.warning(request, f"Error stopping {interface_name}|{stop_result.stderr}")
+                error_count += 1
             start_command = f"wg-quick up {interface_name}"
-            subprocess.run(start_command, shell=True, check=True)
-            interface_count += 1
-    if interface_count == 1:
-        messages.success(request, "Interface restarted|The WireGuard interface has been restarted.")
-    elif interface_count > 1:
-        messages.success(request, "Interfaces restarted|" + str(interface_count) + " WireGuard interfaces have been restarted.")
-    else:
-        messages.warning(request, "No interfaces found|No WireGuard interfaces were found to restart.")
+            start_result = subprocess.run(start_command, shell=True, capture_output=True, text=True)
+            if start_result.returncode != 0:
+                messages.warning(request, f"Error starting {interface_name}|{start_result.stderr}")
+                error_count += 1
+            else:
+                interface_count += 1
+
+    if interface_count > 0 and error_count == 0:
+        if interface_count == 1:
+            messages.success(request, "Interface restarted|The WireGuard interface has been restarted.")
+        else:
+            messages.success(request, f"Interfaces restarted|{interface_count} WireGuard interfaces have been restarted.")
+    elif error_count > 0:
+        messages.warning(request, f"Errors encountered|There were errors restarting some interfaces. See warnings for details.")
+
+    if interface_count == 0 and error_count == 0:
+        messages.info(request, "No interfaces found|No WireGuard interfaces were found to restart.")
+
     return redirect("/status/")
 

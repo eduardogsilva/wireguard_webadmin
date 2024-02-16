@@ -1,7 +1,6 @@
 version: '3'
 services:
   wireguard-webadmin:
-    image: ubuntu:latest
     container_name: wireguard-webadmin
     build:
       context: .
@@ -10,9 +9,12 @@ services:
       - static_volume:/app_static_files/
       - .:/app
     ports:
+      # Do not directly expose the Django port to the internet, use the reverse proxy below instead
       - "127.0.0.1:8000:8000"
+      # dont go crazy increasing the udp port range. Docker will have a hard time handling with a large range of ports
+      # Actually, you probably will use only one port, but you can add more server instances if you want
       - "51820-51839:51820-51839/udp"
-      # dont go crazy adding ports. Docker will have a hard time handling with a large range of ports
+      
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
