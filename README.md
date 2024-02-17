@@ -14,6 +14,10 @@ This project aims to offer an intuitive and user-friendly solution for WireGuard
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## Screenshots
+
+![Wireguard Peer List](screenshots/peerlist.png) ![Wireguard Server Configuration](screenshots/serverconfig.png) ![Console](screenshots/console.png) ![User Manager](screenshots/usermanager.png)
+
 ## Deployment
 
 Follow these steps to deploy wireguard_webadmin:
