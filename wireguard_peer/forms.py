@@ -30,6 +30,9 @@ class PeerAllowedIPForm(forms.ModelForm):
         priority = cleaned_data.get('priority')
         allowed_ip = cleaned_data.get('allowed_ip')
         netmask = cleaned_data.get('netmask')
+        if allowed_ip is None:
+            raise forms.ValidationError("Please provide a valid IP address.")
+
         wireguard_network = ipaddress.ip_network(f"{self.current_peer.wireguard_instance.address}/{self.current_peer.wireguard_instance.netmask}", strict=False)
 
         if priority == 0:

@@ -119,7 +119,7 @@ def view_wireguard_peer_manage(request):
         if current_peer.name:
             page_title += current_peer.name
         else:
-            page_title += current_peer.public_key
+            page_title += current_peer.public_key[:16] + ("..." if len(current_peer.public_key) > 16 else "")
         if request.method == 'POST':
             form = PeerForm(request.POST, instance=current_peer)
             if form.is_valid():
@@ -157,7 +157,7 @@ def view_manage_ip_address(request):
         if current_peer.name:
             page_title += current_peer.name
         else:
-            page_title += current_peer.public_key
+            page_title += current_peer.public_key[:10] + ("..." if len(current_peer.public_key) > 16 else "")
         if request.GET.get('action') == 'delete':
             if request.GET.get('confirmation') == 'delete':
                 current_ip.delete()
