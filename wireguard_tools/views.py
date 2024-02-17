@@ -36,7 +36,7 @@ def generate_peer_config(peer_uuid):
         "[Interface]",
         f"PrivateKey = {peer.private_key}" if peer.private_key else "",
         f"Address = {client_address}",
-        f"DNS = 8.8.8.8",  
+        f"DNS = {wg_instance.dns_primary}" + (f", {wg_instance.dns_secondary}" if wg_instance.dns_secondary else ""),
         "\n[Peer]",
         f"PublicKey = {wg_instance.public_key}",
         f"Endpoint = {wg_instance.hostname}:{wg_instance.listen_port}",

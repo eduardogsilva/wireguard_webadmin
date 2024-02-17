@@ -3,8 +3,8 @@ from .models import WireGuardInstance, Peer, PeerAllowedIP
 
 
 class WireGuardInstanceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'instance_id', 'private_key', 'hostname', 'listen_port', 'address', 'netmask', 'post_up', 'post_down', 'persistent_keepalive', 'created', 'updated', 'uuid')
-    search_fields = ('name', 'instance_id', 'private_key', 'hostname', 'listen_port', 'address', 'netmask', 'post_up', 'post_down', 'persistent_keepalive', 'created', 'updated', 'uuid')
+    list_display = ('name', 'instance_id', 'private_key', 'hostname', 'listen_port', 'address', 'netmask', 'post_up', 'post_down', 'created', 'updated', 'uuid')
+    search_fields = ('name', 'instance_id', 'private_key', 'hostname', 'listen_port', 'address', 'netmask', 'post_up', 'post_down', 'created', 'updated', 'uuid')
 
 admin.site.register(WireGuardInstance, WireGuardInstanceAdmin)
 

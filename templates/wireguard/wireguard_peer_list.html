@@ -136,7 +136,7 @@
         };
     
         fetchWireguardStatus();
-        setInterval(fetchWireguardStatus, 30000);
+        setInterval(fetchWireguardStatus, {{ current_instance.peer_list_refresh_interval }} * 1000);
     });
     
     const updateUI = (data) => {

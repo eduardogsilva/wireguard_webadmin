@@ -24,18 +24,21 @@
                     {% csrf_token %}
                     <div class="card-body row">
                         <div class="col-lg-6">
-                            <!-- Line 1: Name and Instance ID -->
+                            <!-- Line 1: Name and peer_list_refresh_interval -->
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
                                     <input type="text" class="form-control" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" placeholder="Enter Name" value="{{ form.name.value|default_if_none:'' }}">
                                 </div>
+                                
                                 <div class="form-group col-md-6">
-                                    <label for="{{ form.instance_id.id_for_label }}">{{ form.instance_id.label }}</label>
-                                    <input type="number" class="form-control" id="{{ form.instance_id.id_for_label }}" name="{{ form.instance_id.html_name }}" placeholder="Instance ID" value="{{ form.instance_id.value|default_if_none:'' }}" required>
+                                    <label for="{{ form.peer_list_refresh_interval.id_for_label }}">{{ form.peer_list_refresh_interval.label }}</label>
+                                    <input type="number" class="form-control" id="{{ form.peer_list_refresh_interval.id_for_label }}" name="{{ form.peer_list_refresh_interval.html_name }}" placeholder="Persistent Keepalive" value="{{ form.peer_list_refresh_interval.value|default_if_none:'' }}" required>
                                 </div>
+
+
                             </div>
-                            <!-- Line 2: Hostname, Listen Port and keepalive -->
+                            <!-- Line 2: Hostname, Listen Port and instance id -->
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="{{ form.hostname.id_for_label }}">{{ form.hostname.label }}</label>
@@ -45,10 +48,12 @@
                                     <label for="{{ form.listen_port.id_for_label }}">{{ form.listen_port.label }}</label>
                                     <input type="number" class="form-control" id="{{ form.listen_port.id_for_label }}" name="{{ form.listen_port.html_name }}" placeholder="Listen Port" value="{{ form.listen_port.value|default_if_none:'' }}" required>
                                 </div>
+
                                 <div class="form-group col-md-3">
-                                    <label for="{{ form.persistent_keepalive.id_for_label }}">{{ form.persistent_keepalive.label }}</label>
-                                    <input type="number" class="form-control" id="{{ form.persistent_keepalive.id_for_label }}" name="{{ form.persistent_keepalive.html_name }}" placeholder="Persistent Keepalive" value="{{ form.persistent_keepalive.value|default_if_none:'' }}" required>
+                                    <label for="{{ form.instance_id.id_for_label }}">{{ form.instance_id.label }}</label>
+                                    <input type="number" class="form-control" id="{{ form.instance_id.id_for_label }}" name="{{ form.instance_id.html_name }}" placeholder="Instance ID" value="{{ form.instance_id.value|default_if_none:'' }}" required>
                                 </div>
+                                
                             </div>
                             <!-- Line 3: Private Key and Persistent Keepalive -->
                             <div class="form-row">
@@ -77,6 +82,22 @@
                                     </select>
                                 </div>
                             </div>
+                            <!-- Line 5: Primary and secondary DNS -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="{{ form.dns_primary.id_for_label }}">{{ form.dns_primary.label }}</label>
+                                    <input type="text" class="form-control" id="{{ form.dns_primary.id_for_label }}" name="{{ form.dns_primary.html_name }}" placeholder="1.1.1.1" value="{{ form.dns_primary.value|default_if_none:'' }}" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="{{ form.dns_secondary.id_for_label }}">{{ form.dns_secondary.label }}</label>
+                                    <input type="text" class="form-control" id="{{ form.dns_secondary.id_for_label }}" name="{{ form.dns_secondary.html_name }}" placeholder="1.0.0.1" value="{{ form.dns_secondary.value|default_if_none:'' }}">
+                                </div>
+                                
+                            </div>
+
+
+
+
                         </div>
                         <div class="col-lg-6">
                             <!-- Line 1: Post Up -->

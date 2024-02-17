@@ -14,12 +14,15 @@ class WireGuardInstanceForm(forms.ModelForm):
     netmask = forms.ChoiceField(choices=NETMASK_CHOICES, label='Netmask')
     post_up = forms.CharField(label='Post Up', required=False)
     post_down = forms.CharField(label='Post Down', required=False)
-    persistent_keepalive = forms.IntegerField(label='Keepalive')
+    peer_list_refresh_interval = forms.IntegerField(label='Web Refresh Interval', initial=20)
+    dns_primary = forms.GenericIPAddressField(label='Primary DNS', initial='1.1.1.1')
+    dns_secondary = forms.GenericIPAddressField(label='Secondary DNS', initial='1.0.0.1', required=False)
 
     class Meta:
         model = WireGuardInstance
         fields = [
-            'name', 'instance_id', 'private_key', 'public_key','hostname', 'listen_port', 'address', 'netmask', 'post_up', 'post_down', 'persistent_keepalive'
+            'name', 'instance_id', 'private_key', 'public_key','hostname', 'listen_port', 'address', 
+            'netmask', 'post_up', 'post_down', 'peer_list_refresh_interval', 'dns_primary', 'dns_secondary'
             ]
         
     def clean(self):
@@ -27,6 +30,9 @@ class WireGuardInstanceForm(forms.ModelForm):
         hostname = cleaned_data.get('hostname')
         address = cleaned_data.get('address')
         netmask = cleaned_data.get('netmask')
+        peer_list_refresh_interval = cleaned_data.get('peer_list_refresh_interval')
+        if peer_list_refresh_interval < 10:
+            raise forms.ValidationError('Peer List Refresh Interval must be at least 10 seconds')
 
         if not is_valid_ip_or_hostname(hostname):
             raise forms.ValidationError('Invalid hostname or IP Address')
