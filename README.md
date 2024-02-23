@@ -28,6 +28,7 @@ Follow these steps to deploy wireguard_webadmin:
    ```
 
 2. **Place your SSL certificates for nginx in the `certificates` volume.**
+
    The files should be named `nginx.pem` and `nginx.key`. You can use self-signed certificates and accept the certificate exception in your browser.
 
 3. **Run Docker Compose (choose one):**
@@ -48,6 +49,64 @@ Follow these steps to deploy wireguard_webadmin:
    Access the web interface using `http://127.0.0.1:8000`.
 
 After completing these steps, your wireguard_webadmin should be up and running. Begin configuration by accessing your server.
+
+
+## Upgrade Instructions
+
+Upgrading your wireguard_webadmin installation ensures you have the latest features, security updates, and bug fixes. Follow these steps to upgrade safely:
+
+1. **Preparation:**
+
+   Begin by navigating to your wireguard_webadmin directory:
+   ```
+   cd path/to/wireguard_webadmin
+   ```
+
+2. **Shutdown Services:**
+
+   Gracefully stop all running services to ensure there's no data loss:
+   ```
+   docker-compose down
+   ```
+
+3. **Backup Database:**
+
+   It's crucial to back up your database before proceeding with the upgrade. This step ensures you can restore your data in case something goes wrong during the upgrade process. Use the following command to create a backup of your database files, which will include the current date in the backup filename for easy identification:
+   ```
+   tar cvfz /root/wireguard-webadmin-$(date +%Y-%m-%d).tar.gz /var/lib/docker/volumes/wireguard_webadmin_wireguard/_data/
+   ```
+   This command compresses and saves the database files to the `/root` directory. Adjust the path as necessary to match your backup storage practices.
+
+4. **Fetch the Latest Updates:**
+
+   Pull the latest version of wireguard_webadmin from the repository:
+   ```
+   git pull origin main
+   ```
+
+5. **Deploy Updated Version:**
+
+   Re-deploy wireguard_webadmin using Docker Compose. If you're using NGINX as a reverse proxy (recommended for production), ensure your SSL certificates are in place and then start the services:
+   ```
+   SERVER_ADDRESS=yourserver.example.com docker-compose up --build -d
+   ```
+   If you're in a development or testing environment and not using NGINX, you can start the services without it:
+   ```
+   docker-compose -f docker-compose-no-nginx.yml up --build -d
+   ```
+
+6. **Verify Operation:**
+
+   After the services start, access the web interface to verify that wireguard_webadmin is functioning correctly. Check the application logs if you encounter any issues:
+   ```
+   docker-compose logs
+   ```
+
+7. **Post-Upgrade:**
+
+   - Review application and system logs to ensure there are no errors.
+   - If you encounter issues, consult the [Discussions](https://github.com/eduardogsilva/wireguard_webadmin/discussions) page or revert to your backup if necessary.
+
 
 ## Contributing
 
