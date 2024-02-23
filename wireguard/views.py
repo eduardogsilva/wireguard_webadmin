@@ -1,11 +1,13 @@
+from decimal import Decimal, ROUND_DOWN
 from django.shortcuts import render, get_object_or_404, redirect
 from user_manager.models import UserAcl
 
 from wireguard.forms import WireGuardInstanceForm
-from .models import WireGuardInstance
+from .models import WireGuardInstance, WebadminSettings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import models
+from django.conf import settings
 import os
 import subprocess
 
@@ -67,8 +69,7 @@ def generate_instance_defaults():
 @login_required
 def view_welcome(request):
     page_title = 'Welcome'
-    breadcrumb = {'level2': {'title': 'Place holder', 'href': '/blabla'}}
-    context = {'page_title': page_title, 'breadcrumb': breadcrumb}
+    context = {'page_title': page_title}
     return render(request, 'wireguard/welcome.html', context)
 
 

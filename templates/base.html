@@ -26,6 +26,9 @@
   <!-- summernote -->
   <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.css">
 </head>
+{% load custom_tags %}
+{% tag_webadmin_version as webadmin_version %}
+
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
@@ -165,7 +168,34 @@
     </div>
     <!-- /.content-header -->
 
+<!-- Generic Modal Structure -->
+<div class="modal fade" id="genericModal" tabindex="-1" aria-labelledby="genericModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="genericModalLabel">Modal Title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="genericModalBody">
+        <!-- Content will be loaded here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="genericModalCloseButton">Close</button>
+        <a href="#" class="btn btn-primary" id="genericModalActionButton">Action</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- End modal -->
+
     <!-- Main content -->
+
+
+
+
     <section class="content">
         <div class="container-fluid">
           {% if pending_changes_warning %}
@@ -190,9 +220,9 @@
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
-    wireguard-webadmin 
+    {% if webadmin_version.update_available %}<a class='btn btn-sm btn-danger' id="btn_update_changelog">Update Available</a>{% else %}wireguard-webadmin {% endif %}
     <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 0.9.0
+      <b>Version</b> {{ webadmin_version.current_version }} 
     </div>
   </footer>
 
@@ -259,8 +289,53 @@
           
       {% endif %}
 {% endcomment %}
-{% include "template_messages.html" %}
 
+<script>
+  $(document).ready(function() {
+    const webadminVersion = '{{ webadmin_version.current_version }}'; 
+
+    $('#btn_update_changelog').on('click', function() {
+        $.ajax({
+            url: `https://updates.eth0.com.br/api/application_changelog/?app=wireguard_webadmin&version=${webadminVersion}`,
+            type: 'GET',
+            success: function(response) {
+                const updates = response.updates.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+                let updatesHtml = '';
+                updates.forEach(update => {
+                    updatesHtml += `<div class="update">
+                                        <h5>Version ${update.version}</h5>
+                                        <p>${update.release_notes.replace(/\r\n/g, "<br>")}</p>
+                                    </div>`;
+                });
+
+                // Update modal content
+                $('#genericModalLabel').text('Wireguard Webadmin Updates');
+                $('#genericModalBody').html(updatesHtml);
+                $('#genericModalCloseButton').text('Close');
+                $('#genericModalActionButton').text('Update Instructions').attr('href', 'https://github.com/eduardogsilva/wireguard_webadmin').attr('target', '_blank');
+                
+                // Show modal
+                $('#genericModal').modal('show');
+            },
+            error: function(xhr, status, error) {
+                // Update modal for error display
+                $('#genericModalLabel').text('Error');
+                $('#genericModalBody').html('<p>An error occurred while fetching the update information. Please try again later.</p>');
+                $('#genericModalCloseButton').text('Close');
+                $('#genericModalActionButton').hide(); // Hide the action button in case of error
+                
+                // Show modal
+                $('#genericModal').modal('show');
+                console.error("An error occurred while fetching updates: ", error);
+            }
+        });
+    });
+});
+
+
+</script>
+
+{% include "template_messages.html" %}
 
 {% block custom_page_scripts %}
 

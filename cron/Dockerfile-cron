@@ -1,0 +1,16 @@
+FROM ubuntu:latest
+
+# Instalar cron
+RUN apt-get update && apt-get install -y cron curl
+
+# Adicionar seus scripts de cron
+COPY cron_tasks /etc/cron.d/cron_tasks
+
+# Dar permissões apropriadas
+RUN chmod 0644 /etc/cron.d/cron_tasks
+
+# Criar um arquivo de log para armazenar os resultados do cron
+RUN touch /var/log/cron.log
+
+# Executar o cron em primeiro plano
+CMD cron -f

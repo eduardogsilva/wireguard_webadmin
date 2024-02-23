@@ -13,12 +13,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='wireguardinstance',
             name='dns_primary',
-            field=models.GenericIPAddressField(default='1.1.1.1', protocol='IPv4', unique=True),
+            field=models.GenericIPAddressField(default='1.1.1.1', protocol='IPv4', unique=False),
         ),
         migrations.AddField(
             model_name='wireguardinstance',
             name='dns_secondary',
-            field=models.GenericIPAddressField(blank=True, default='1.0.0.1', null=True, protocol='IPv4', unique=True),
+            field=models.GenericIPAddressField(blank=True, default='1.0.0.1', null=True, protocol='IPv4', unique=False),
         ),
         migrations.AddField(
             model_name='wireguardinstance',

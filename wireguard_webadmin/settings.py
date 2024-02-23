@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'wireguard',
     'user_manager',
+    'wireguard_tools',
 ]
 
 MIDDLEWARE = [
@@ -126,5 +127,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+WIREGUARD_WEBADMIN_VERSION = 9000
 
 from wireguard_webadmin.production_settings import *

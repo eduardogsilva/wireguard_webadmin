@@ -26,6 +26,13 @@ services:
       - net.ipv4.ip_forward=1
     command: /bin/bash /app/init.sh
 
+  wireguard-webadmin-cron:
+    build:
+      context: ./cron
+      dockerfile: Dockerfile-cron
+    depends_on:
+      - wireguard-webadmin
+
   nginx:
     container_name: wireguard-webadmin-nginx
     restart: unless-stopped

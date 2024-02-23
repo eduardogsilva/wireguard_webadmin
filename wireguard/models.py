@@ -29,6 +29,21 @@ NETMASK_CHOICES = (
     )
 
 
+class WebadminSettings(models.Model):
+    name = models.CharField(default='webadmin_settings', max_length=20, unique=True)
+    update_available = models.BooleanField(default=False)
+    current_version = models.PositiveIntegerField(default=0)
+    latest_version = models.PositiveIntegerField(default=0)
+    last_checked = models.DateTimeField(blank=True, null=True)
+
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class WireGuardInstance(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     instance_id = models.PositiveIntegerField(unique=True, default=0)
@@ -41,8 +56,8 @@ class WireGuardInstance(models.Model):
     post_up = models.TextField(blank=True, null=True)
     post_down = models.TextField(blank=True, null=True)
     peer_list_refresh_interval = models.IntegerField(default=20)
-    dns_primary = models.GenericIPAddressField(unique=True, protocol='IPv4', default='1.1.1.1')
-    dns_secondary = models.GenericIPAddressField(unique=True, protocol='IPv4', default='1.0.0.1', blank=True, null=True)
+    dns_primary = models.GenericIPAddressField(unique=False, protocol='IPv4', default='1.1.1.1')
+    dns_secondary = models.GenericIPAddressField(unique=False, protocol='IPv4', default='1.0.0.1', blank=True, null=True)
     pending_changes = models.BooleanField(default=True)
 
     created = models.DateTimeField(auto_now_add=True)

@@ -14,8 +14,8 @@ fi
 
 cat > /app/wireguard_webadmin/production_settings.py <<EOL
 DEBUG = $DEBUG_VALUE
-ALLOWED_HOSTS = ['$SERVER_ADDRESS']
-CSRF_TRUSTED_ORIGINS = ['https://$SERVER_ADDRESS']
+ALLOWED_HOSTS = ['wireguard-webadmin', '$SERVER_ADDRESS']
+CSRF_TRUSTED_ORIGINS = ['http://wireguard-webadmin', 'https://$SERVER_ADDRESS']
 SECRET_KEY = '$(openssl rand -base64 32)'
 EOL
 
