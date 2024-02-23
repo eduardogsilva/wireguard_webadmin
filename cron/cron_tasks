@@ -1,1 +1,2 @@
 * * * * * root /usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_check_updates/ >> /var/log/cron.log 2>&1
+*/10 * * * * root /usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_update_peer_latest_handshake/ >> /var/log/cron.log 2>&1

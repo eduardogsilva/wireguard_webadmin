@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import WireGuardInstance, Peer, PeerAllowedIP, WebadminSettings
+from .models import WireGuardInstance, Peer, PeerAllowedIP, PeerStatus, WebadminSettings
 
 
 class WireGuardInstanceAdmin(admin.ModelAdmin):
@@ -14,6 +14,13 @@ class PeerAdmin(admin.ModelAdmin):
     search_fields = ('name', 'public_key', 'pre_shared_key', 'persistent_keepalive', 'wireguard_instance', 'created', 'updated', 'uuid')
 
 admin.site.register(Peer, PeerAdmin)
+
+
+class PeerStatusAdmin(admin.ModelAdmin):
+    list_display = ('peer', 'last_handshake', 'created', 'updated', 'uuid')
+    search_fields = ('peer', 'last_handshake', 'created', 'updated', 'uuid')
+
+admin.site.register(PeerStatus, PeerStatusAdmin)
 
 
 class PeerAllowedIPAdmin(admin.ModelAdmin):

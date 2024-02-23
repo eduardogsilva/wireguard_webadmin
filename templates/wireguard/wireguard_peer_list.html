@@ -36,7 +36,7 @@
                             {% comment %}This needs to be improved{% endcomment %}
                             <p>
                                 <b>Transfer:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br>
-                                <b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span><br>
+                                <b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span> <span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">{% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}</span><br>
                                 <b>Endpoints:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br>
                                 <b>Allowed IPs: </b><span id="peer-allowed-ips-{{ peer.public_key }}">
                                     {% for address in peer.peerallowedip_set.all %}{% if address.priority == 0 %}
@@ -125,10 +125,31 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        //const fetchWireguardStatus = async () => {
+        //    try {
+        //        const response = await fetch('/api/wireguard_status/');
+        //        const data = await response.json();
+        //        updateUI(data);
+        //    } catch (error) {
+        //        console.error('Error fetching Wireguard status:', error);
+        //    }
+        //};
         const fetchWireguardStatus = async () => {
             try {
                 const response = await fetch('/api/wireguard_status/');
-                const data = await response.json();
+                let data = await response.json();
+
+                // if latest-handshakes is 0, use the stored value
+                for (const [interfaceName, peers] of Object.entries(data)) {
+                    for (const [peerId, peerInfo] of Object.entries(peers)) {
+                        const peerElementId = `peer-stored-latest-handshake-${peerId}`;
+                        const storedHandshakeElement = document.getElementById(peerElementId);
+                        if (peerInfo['latest-handshakes'] === '0' && storedHandshakeElement) {
+                            peerInfo['latest-handshakes'] = storedHandshakeElement.textContent;
+                        }
+                    }
+                }
+        
                 updateUI(data);
             } catch (error) {
                 console.error('Error fetching Wireguard status:', error);

@@ -27,6 +27,7 @@ services:
     command: /bin/bash /app/init.sh
 
   wireguard-webadmin-cron:
+    container_name: wireguard-webadmin-cron
     build:
       context: ./cron
       dockerfile: Dockerfile-cron

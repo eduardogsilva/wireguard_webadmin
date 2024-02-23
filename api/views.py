@@ -3,9 +3,11 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.utils import timezone
-from wireguard.models import WebadminSettings
+from wireguard.models import WebadminSettings, Peer, PeerStatus
 import requests
 import subprocess
+import datetime
+import pytz
 
 
 @login_required
@@ -33,6 +35,8 @@ def wireguard_status(request):
             if len(parts) >= 3:
                 interface, peer, value = parts[0], parts[1], " ".join(parts[2:])
                 current_interface = interface
+            elif len(parts) == 2 and current_interface:
+                peer, value = parts
             else:
                 continue
 
@@ -58,6 +62,43 @@ def wireguard_status(request):
                 output[interface][peer][key] = value
 
     return JsonResponse(output)
+
+
+@require_http_methods(["GET"])
+def cron_update_peer_latest_handshake(request):
+    command = "wg show all latest-handshakes | expand | tr -s ' '"
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    stdout, stderr = process.communicate()
+
+    if process.returncode != 0:
+        return JsonResponse({'error': stderr}, status=400)
+    #debug_information = []
+    for line in stdout.strip().split('\n'):
+        parts = line.split()
+        if len(parts) < 3:
+            continue
+        interface, peer_public_key, latest_handshake = parts[0], parts[1], parts[2]
+        latest_handshake_timestamp = int(latest_handshake)
+
+        if latest_handshake_timestamp > 0:
+            last_handshake_time = datetime.datetime.fromtimestamp(latest_handshake_timestamp, tz=pytz.utc)
+            #debug_information.append(f'Last handshake for {peer_public_key} is {last_handshake_time}')
+            peer = Peer.objects.filter(public_key=peer_public_key).first()
+            if peer:
+                #debug_information.append(f'Peer found: {peer.public_key}')
+                peer_status, created = PeerStatus.objects.get_or_create(
+                    peer=peer,
+                    defaults={'last_handshake': last_handshake_time}
+                )
+                if not created:
+                    if peer_status.last_handshake != last_handshake_time:
+                        #debug_information.append(f'Updating last_handshake for {peer.public_key} to {last_handshake_time}')
+                        peer_status.last_handshake = last_handshake_time
+                        peer_status.save()
+                    #else:
+                    #    debug_information.append(f'No changes for {peer.public_key}')
+
+    return JsonResponse({'status': 'success'})
 
 
 def cron_check_updates(request):
