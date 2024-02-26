@@ -10,6 +10,9 @@ def tag_webadmin_version():
     if webadmin_settings.current_version != settings.WIREGUARD_WEBADMIN_VERSION:
         webadmin_settings.current_version = settings.WIREGUARD_WEBADMIN_VERSION
         webadmin_settings.save()
+    if webadmin_settings.current_version == webadmin_settings.latest_version:
+        webadmin_settings.update_available = False
+        webadmin_settings.save()
     return {
         'current_version': settings.WIREGUARD_WEBADMIN_VERSION / 10000,
         'latest_version': webadmin_settings.latest_version / 10000,
