@@ -29,11 +29,11 @@ def view_manage_user(request):
         page_title = 'Edit User '+ user.username
         if request.GET.get('action') == 'delete':
             username = user.username
-            if request.GET.get('confirm') == user.username:
+            if request.GET.get('confirmation') == username:
                 user.delete()
                 messages.success(request, 'User deleted|The user '+ username +' has been deleted.')
                 return redirect('/user/list/')
-            user_acl.delete()
+            
             return redirect('/user/list/')
     else:
         form = UserAclForm()
@@ -49,12 +49,13 @@ def view_manage_user(request):
             form.save()
             if form.cleaned_data.get('password1'):
                 user_disconnected = False
-                for session in Session.objects.all():
-                    if str(user.id) == session.get_decoded().get('_auth_user_id'):
-                        session.delete()
-                        if not user_disconnected:
-                            messages.warning(request, 'User Disconnected|The user '+ user.username +' has been disconnected.')
-                            user_disconnected = True
+                if user:
+                    for session in Session.objects.all():
+                        if str(user.id) == session.get_decoded().get('_auth_user_id'):
+                            session.delete()
+                            if not user_disconnected:
+                                messages.warning(request, 'User Disconnected|The user '+ user.username +' has been disconnected.')
+                                user_disconnected = True
             if user_acl:
                 messages.success(request, 'User updated|The user '+ form.cleaned_data['username'] +' has been updated.')
             else:
