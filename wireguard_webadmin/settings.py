@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'wireguard',
     'user_manager',
     'wireguard_tools',
+    'firewall',
 ]
 
 MIDDLEWARE = [
