@@ -4,6 +4,7 @@ wireguard_webadmin is a full-featured yet easy-to-configure web interface for ma
 
 ## Features
 
+- **Port Forwarding**: Seamlessly redirect TCP or UDP ports to peers or networks located beyond those peers with ease! 
 - **Multi-User Support**: Manage access with different permission levels for each user.
 - **Multiple WireGuard Instances**: Enables separate management for peers across multiple instances.
 - **Crypto Key Routing**: Simplifies the configuration for site-to-site interconnections.
