@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404, render
 from user_manager.models import UserAcl
 from wireguard.models import WireGuardInstance, Peer, PeerAllowedIP
+from firewall.models import RedirectRule
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from io import BytesIO
@@ -15,7 +16,6 @@ def clean_command_field(command_field):
     cleaned_field = re.sub(r'[\r\n]+', '; ', command_field)
     cleaned_field = re.sub(r'[\x00-\x1F\x7F]+', '', cleaned_field)
     return cleaned_field
-
 
 
 def generate_peer_config(peer_uuid):
@@ -56,7 +56,32 @@ def export_wireguard_configs(request):
     for instance in instances:
         post_up_processed = clean_command_field(instance.post_up) if instance.post_up else ""
         post_down_processed = clean_command_field(instance.post_down) if instance.post_down else ""
+        
+        if post_up_processed:
+            post_up_processed += '; '
+        if post_down_processed:
+            post_down_processed += '; '
 
+        for redirect_rule in RedirectRule.objects.filter(wireguard_instance=instance):
+            rule_text_up = ""
+            rule_text_down = ""
+            rule_destination = redirect_rule.ip_address
+            if redirect_rule.peer:
+                peer_allowed_ip_address = PeerAllowedIP.objects.filter(peer=redirect_rule.peer, netmask=32, priority=0).first()
+                if peer_allowed_ip_address:
+                    rule_destination = peer_allowed_ip_address.allowed_ip
+            if rule_destination:
+                rule_text_up   = f"iptables -t nat -A PREROUTING -p {redirect_rule.protocol} -d wireguard-webadmin --dport {redirect_rule.port} -j DNAT --to-dest {rule_destination}:{redirect_rule.port} ; "
+                rule_text_down = f"iptables -t nat -D PREROUTING -p {redirect_rule.protocol} -d wireguard-webadmin --dport {redirect_rule.port} -j DNAT --to-dest {rule_destination}:{redirect_rule.port} ; "
+                if redirect_rule.add_forward_rule:
+                    rule_text_up   += f"iptables -A FORWARD -d {rule_destination} -p {redirect_rule.protocol} --dport {redirect_rule.port} -j ACCEPT ; "
+                    rule_text_down += f"iptables -D FORWARD -d {rule_destination} -p {redirect_rule.protocol} --dport {redirect_rule.port} -j ACCEPT ; "
+                if redirect_rule.masquerade_source:
+                    rule_text_up   += f"iptables -t nat -A POSTROUTING -d {rule_destination} -p {redirect_rule.protocol} --dport {redirect_rule.port} -j MASQUERADE ; "
+                    rule_text_down += f"iptables -t nat -D POSTROUTING -d {rule_destination} -p {redirect_rule.protocol} --dport {redirect_rule.port} -j MASQUERADE ; "
+                post_up_processed += rule_text_up
+                post_down_processed += rule_text_down
+                
         config_lines = [
             "[Interface]",
             f"PrivateKey = {instance.private_key}",

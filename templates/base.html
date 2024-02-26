@@ -151,6 +151,7 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
+        {% if page_title %}
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0">{{ page_title }}</h1>
@@ -173,6 +174,7 @@
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
+        {% endif %}
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->

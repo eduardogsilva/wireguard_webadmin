@@ -1,17 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Welcome to wireguard_webadmin</h1>
-    <p>I've been working hard on it over the past week and plan to continue making corrections and finishing it in the coming days.</p>
-    <p>Currently, it's quite functional, but there's still a need to polish various aspects of the interface to enhance usability.</p>
-    <p>If you encounter any issues or have suggestions, please open an issue on GitHub so I can review it.</p>
-    <h2>TODO list</h2>
-    <ul>
-        <li>AllowedIPs on client configuration side.</li>
-        <li>Allow peer portforwarding</li>
-    </ul>
-    
 
-    <p>Keep checking the GitHub page, I will be updating this project very soon.</p>
+<h1>Welcome to WireGuard WebAdmin</h1>
+<p>WireGuard WebAdmin is a web-based interface designed for managing WireGuard VPN, a remarkably simple, fast, and modern VPN that employs cutting-edge cryptography.</p>
+<p>I have dedicated significant effort to this project over the past few weeks and am thrilled to announce that the primary functionalities are performing as anticipated!</p>
+
+<p>I just introduced the port forwarding feature. It is functioning well, aside from a few minor issues that I intend to resolve shortly.</p>
+<h3>Known Port Forwarding Issues</h3>
+<ul>
+    <li>Upon creating a port forwarding rule and updating the service, an initial reload may trigger a warning. This is due to the PostDown script's inability to remove a rule that does not yet exist.</li>
+    <li>Unchecking "Allow Forward" or "Masquerade Source" and then updating the service, fails to properly remove the corresponding iptables rules.</li>
+    <li>Deleting a rule and reloading the service does not properly remove the corresponding iptables rules.</li>
+</ul>
+<p>These issues are on my radar for fixes in the near future. In the meantime, restarting the main Docker container will cause the firewall to rebuild as expected, eliminating any lingering rules.</p>
+<br>
+<h3>Upcoming Enhancements</h3>
+<ul>
+    <li>Implementing AllowedIPs in the client configuration.</li>
+    <li>Revising the firewall logic for PostUp/PostDown scripts.</li>
+    <li>Developing a straightforward firewall management interface.</li>
+</ul>
+
+<p>Stay tuned to our GitHub page for imminent updates to this project.</p>
+
 
 {% endblock %}

@@ -12,11 +12,13 @@ services:
       - wireguard:/etc/wireguard
       - static_volume:/app_static_files/
     ports:
-      # Do not directly expose the Django port to the internet, use the reverse proxy below instead
+      # Do not directly expose the Django port to the internet, use some kind of reverse proxy with SSL.
       - "127.0.0.1:8000:8000"
-      # dont go crazy increasing the udp port range. Docker will have a hard time handling with a large range of ports
-      # Actually, you probably will use only one port, but you can add more server instances if you want
+      # Warning: Docker will have a hard time handling large amount of ports. Expose only the ports that you need.
+      # Ports for multiple WireGuard instances. (Probably, you just need one)
       - "51820-51839:51820-51839/udp"
+      # Ports for port forwarding rules. Add your own ports here if you need them.
+      - "8080-8089:8080-8089/tcp"
       
     cap_add:
       - NET_ADMIN

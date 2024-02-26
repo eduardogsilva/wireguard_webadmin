@@ -68,9 +68,9 @@ def generate_instance_defaults():
 
 @login_required
 def view_welcome(request):
-    page_title = 'Welcome'
-    context = {'page_title': page_title}
-    return render(request, 'wireguard/welcome.html', context)
+    #page_title = 'Welcome'
+    #context = {'page_title': page_title}
+    return render(request, 'wireguard/welcome.html')
 
 
 @login_required
