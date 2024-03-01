@@ -87,7 +87,7 @@
                     </tbody>
                 </table>
                 
-                <a href="/firewall/manage_firewall_rule/" class='btn btn-primary'>Create Firewall Rule</a>
+                <a href="/firewall/manage_firewall_rule/?chain={{ current_chain }}" class='btn btn-primary'>Create Firewall Rule</a>
             </div>
         </div>
     </div>
@@ -102,42 +102,6 @@
 {% endblock %}
 
 {% block custom_page_scripts %}
-{% comment %}
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll('td').forEach(function(td) {
-          // Conta o número de <br> na célula
-          let brCount = (td.innerHTML.match(/<br>/g) || []).length;
-      
-          // Aplica a lógica de mostrar/esconder apenas se houver 2 ou mais <br>
-          if (brCount >= 2) {
-            let contentParts = td.innerHTML.split('<br>');
-            // Assume que queremos manter a primeira linha visível, adiciona explicitamente uma quebra de linha antes do conteúdo escondido
-            td.innerHTML = contentParts[0] + '<br>' +
-                           '<span style="display: none;">' + 
-                           contentParts.slice(1).join('<br>') + '</span>' + 
-                           '<button class="more-btn">Mais</button>';
-          }
-        });
-      
-        // Adiciona evento de clique para botões "Mais"
-        document.querySelectorAll('.more-btn').forEach(function(button) {
-          button.addEventListener('click', function() {
-            let moreText = this.previousElementSibling; // O span com o texto extra
-            if (moreText.style.display === "none") {
-              moreText.style.display = "inline";
-              this.textContent = "Menos";
-            } else {
-              moreText.style.display = "none";
-              this.textContent = "Mais";
-            }
-          });
-        });
-      });
-      
-      
-</script>
-{% endcomment %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         document.querySelectorAll('td').forEach(function(td) {
@@ -168,8 +132,6 @@
           });
         });
       });
-      
-      
 </script>
 
 {% endblock %}

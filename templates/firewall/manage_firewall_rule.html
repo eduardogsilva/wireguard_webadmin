@@ -431,4 +431,29 @@
     
 
 </script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        var forward_sort_order = {{ forward_sort_order }}; 
+        var postrouting_sort_order = {{ postrouting_sort_order }}; 
+    
+        function updateSortOrder() {
+            var chainSelected = document.getElementById('firewall_chain').value;
+            var sortOrderField = document.getElementById('sort_order');
+    
+            if (chainSelected === 'forward') {
+                sortOrderField.value = forward_sort_order;
+            } else if (chainSelected === 'postrouting') {
+                sortOrderField.value = postrouting_sort_order;
+            }
+        }
+        document.getElementById('firewall_chain').addEventListener('change', updateSortOrder);
+        {% if not instance %}
+        updateSortOrder();
+        {% endif %}
+    });
+    </script>
+    
 {% endblock %}

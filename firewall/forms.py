@@ -53,44 +53,68 @@ class RedirectRuleForm(forms.ModelForm):
     
 
 class FirewallRuleForm(forms.ModelForm):
-    firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
-    interface_list = [('', '------'),]
-    interface_list.append((firewall_settings.wan_interface, firewall_settings.wan_interface + ' (WAN)'))
-    
-    for wireguard_instance in WireGuardInstance.objects.all().order_by('instance_id'):
-        wireguard_instance_interface = 'wg'+ str(wireguard_instance.instance_id)
-        interface_list.append((wireguard_instance_interface, wireguard_instance_interface))
-    
-    interface_list.append(('wg+', 'wg+ (Any WireGuard Interface)'))
+    def __init__(self, *args, **kwargs):
+        current_chain = kwargs.pop('current_chain', None)
+        super(FirewallRuleForm, self).__init__(*args, **kwargs)
 
-    description = forms.CharField(label='Description', required=False)
-    firewall_chain = forms.ChoiceField(label='Firewall Chain', choices=[('forward', 'FORWARD'), ('postrouting', 'POSTROUTING (nat)')], initial='forward')
-    in_interface = forms.ChoiceField(label='In Interface', choices=interface_list, required=False)
-    out_interface = forms.ChoiceField(label='Out Interface', choices=interface_list, required=False)
-    source_ip = forms.GenericIPAddressField(label='Source IP', required=False)
-    source_netmask = forms.IntegerField(label='Source Netmask', initial=32, min_value=0, max_value=32)
-    source_peer = forms.ModelMultipleChoiceField(label='Source Peer', queryset=Peer.objects.all(), required=False)
-    source_peer_include_networks = forms.BooleanField(label='Source Peer Include Networks', required=False)
-    not_source = forms.BooleanField(label='Not Source', required=False)
-    destination_ip = forms.GenericIPAddressField(label='Destination IP', required=False)
-    destination_netmask = forms.IntegerField(label='Destination Netmask', initial=32, min_value=0, max_value=32)
-    destination_peer = forms.ModelMultipleChoiceField(label='Destination Peer', queryset=Peer.objects.all(), required=False)
-    destination_peer_include_networks = forms.BooleanField(label='Destination Peer Include Networks', required=False)
-    not_destination = forms.BooleanField(label='Not Destination', required=False)
-    protocol = forms.ChoiceField(label='Protocol', choices=[('', 'all'), ('tcp', 'TCP'), ('udp', 'UDP'), ('both', 'TCP+UDP'), ('icmp', 'ICMP')], required=False)
-    destination_port = forms.CharField(label='Destination Port', required=False)
-    state_new = forms.BooleanField(label='State NEW', required=False)
-    state_related = forms.BooleanField(label='State RELATED', required=False)
-    state_established = forms.BooleanField(label='State ESTABLISHED', required=False)
-    state_invalid = forms.BooleanField(label='State INVALID', required=False)
-    state_untracked = forms.BooleanField(label='State UNTRACKED', required=False)
-    not_state = forms.BooleanField(label='Not State', required=False)
-    rule_action = forms.ChoiceField(label='Rule Action', initial='accept', choices=[('accept', 'ACCEPT'), ('reject', 'REJECT'), ('drop', 'DROP'), ('masquerade', 'MASQUERADE')])
-    sort_order = forms.IntegerField(label='Sort Order', initial=0, min_value=0)
+        firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
+        interface_list = [('', '------'),]
+        interface_list.append((firewall_settings.wan_interface, firewall_settings.wan_interface + ' (WAN)'))
+        
+        for wireguard_instance in WireGuardInstance.objects.all().order_by('instance_id'):
+            wireguard_instance_interface = 'wg'+ str(wireguard_instance.instance_id)
+            interface_list.append((wireguard_instance_interface, wireguard_instance_interface))
+        
+        interface_list.append(('wg+', 'wg+ (Any WireGuard Interface)'))
+        
+        description = forms.CharField(label='Description', required=False)
+        firewall_chain = forms.ChoiceField(label='Firewall Chain', choices=[('forward', 'FORWARD'), ('postrouting', 'POSTROUTING (nat)')])
+        in_interface = forms.ChoiceField(label='In Interface', required=False)
+        out_interface = forms.ChoiceField(label='Out Interface', required=False)
+        source_ip = forms.GenericIPAddressField(label='Source IP', required=False)
+        source_netmask = forms.IntegerField(label='Source Netmask', initial=32, min_value=0, max_value=32)
+        source_peer = forms.ModelMultipleChoiceField(label='Source Peer', queryset=Peer.objects.all(), required=False)
+        source_peer_include_networks = forms.BooleanField(label='Source Peer Include Networks', required=False)
+        not_source = forms.BooleanField(label='Not Source', required=False)
+        destination_ip = forms.GenericIPAddressField(label='Destination IP', required=False)
+        destination_netmask = forms.IntegerField(label='Destination Netmask', initial=32, min_value=0, max_value=32)
+        destination_peer = forms.ModelMultipleChoiceField(label='Destination Peer', queryset=Peer.objects.all(), required=False)
+        destination_peer_include_networks = forms.BooleanField(label='Destination Peer Include Networks', required=False)
+        not_destination = forms.BooleanField(label='Not Destination', required=False)
+        protocol = forms.ChoiceField(label='Protocol', choices=[('', 'all'), ('tcp', 'TCP'), ('udp', 'UDP'), ('both', 'TCP+UDP'), ('icmp', 'ICMP')], required=False)
+        destination_port = forms.CharField(label='Destination Port', required=False)
+        state_new = forms.BooleanField(label='State NEW', required=False)
+        state_related = forms.BooleanField(label='State RELATED', required=False)
+        state_established = forms.BooleanField(label='State ESTABLISHED', required=False)
+        state_invalid = forms.BooleanField(label='State INVALID', required=False)
+        state_untracked = forms.BooleanField(label='State UNTRACKED', required=False)
+        not_state = forms.BooleanField(label='Not State', required=False)
+        rule_action = forms.ChoiceField(label='Rule Action', initial='accept', choices=[('accept', 'ACCEPT'), ('reject', 'REJECT'), ('drop', 'DROP'), ('masquerade', 'MASQUERADE')])
+        sort_order = forms.IntegerField(label='Sort Order', initial=0, min_value=0)
+        self.fields['firewall_chain'].initial = current_chain
+        self.fields['in_interface'].choices = interface_list
+        self.fields['out_interface'].choices = interface_list
 
     class Meta:
         model = FirewallRule
         fields = ['description', 'firewall_chain', 'in_interface', 'out_interface', 'source_ip', 'source_netmask', 'source_peer', 'source_peer_include_networks', 'not_source', 'destination_ip', 'destination_netmask', 'destination_peer', 'destination_peer_include_networks', 'not_destination', 'protocol', 'destination_port', 'state_new', 'state_related', 'state_established', 'state_invalid', 'state_untracked', 'not_state', 'rule_action', 'sort_order']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        firewall_chain = cleaned_data.get('firewall_chain')
+        rule_action = cleaned_data.get('rule_action')
+        in_interface = cleaned_data.get('in_interface')
+
+        if firewall_chain == 'forward' and rule_action not in ['accept', 'drop', 'reject']:
+            raise forms.ValidationError("Invalid rule action for firewall chain 'forward'. Allowed actions are 'accept', 'drop', and 'reject'.")
+        
+        if firewall_chain == 'postrouting':
+            if rule_action not in ['masquerade', 'accept']:
+                raise forms.ValidationError("Invalid rule action for firewall chain 'postrouting'. Allowed actions are 'masquerade' and 'accept'.")
+            if in_interface:
+                raise forms.ValidationError("In Interface cannot be used with firewall chain 'postrouting'.")
+
+        return cleaned_data
 
 
 

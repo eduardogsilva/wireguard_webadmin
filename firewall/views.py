@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Max
 from firewall.models import RedirectRule, FirewallRule, FirewallSettings
 from firewall.forms import RedirectRuleForm, FirewallRuleForm
 from django.contrib import messages
@@ -82,6 +83,7 @@ def manage_firewall_rule(request):
     uuid = request.GET.get('uuid', None)
     if uuid:
         instance = get_object_or_404(FirewallRule, uuid=uuid)
+        current_chain = instance.firewall_chain
         if request.GET.get('action') == 'delete':
             if request.GET.get('confirmation') == 'delete':
                 firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
@@ -91,19 +93,32 @@ def manage_firewall_rule(request):
             else:
                 messages.warning(request, 'Error deleting Firewall rule|Confirmation did not match. Firewall rule was not deleted.')
             return redirect('/firewall/rule_list/')
+    else:
+        current_chain = request.GET.get('chain', 'forward')
 
     if request.method == 'POST':
-        form = FirewallRuleForm(request.POST, instance=instance)
+        form = FirewallRuleForm(request.POST, instance=instance, current_chain=current_chain)
         if form.is_valid():
             firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
             firewall_settings.pending_changes = True
             firewall_settings.save()
             form.save()
             messages.success(request, 'Firewall rule saved successfully')
-            return redirect('/firewall/rule_list/')
+            return redirect('/firewall/rule_list/?chain=' + current_chain)
     else:
-        form = FirewallRuleForm(instance=instance)
+        form = FirewallRuleForm(instance=instance, current_chain=current_chain)
     context['form'] = form
     context['instance'] = instance 
+
+    highest_forward_sort_order = FirewallRule.objects.filter(firewall_chain='forward').aggregate(Max('sort_order'))['sort_order__max']
+    if highest_forward_sort_order is None:
+        highest_forward_sort_order = 0
+
+    highest_postrouting_sort_order = FirewallRule.objects.filter(firewall_chain='postrouting').aggregate(Max('sort_order'))['sort_order__max']
+    if highest_postrouting_sort_order is None:
+        highest_postrouting_sort_order = 0
+
+    context['forward_sort_order'] = highest_forward_sort_order + 10
+    context['postrouting_sort_order'] = highest_postrouting_sort_order + 10
     
     return render(request, 'firewall/manage_firewall_rule.html', context=context)
