@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block page_custom_head %}
+<style>
+    .first-line-container {
+        display: flex;
+        align-items: center; /* Centraliza os itens verticalmente */
+        width: 100%;
+      }
+      
+      .more-link {
+        margin-left: auto; /* Empurra o link para a direita */
+        text-decoration: none;
+      }
+      
+      .more-text {
+        display: none;
+        width: 100%;
+      }
+      
+      
+   
+      
+</style>
+{% endblock%}
+
+{% block content %}
+
+<div class="card card-primary card-outline">
+    <div class="card-body">
+        {% include "firewall/firewall_nav_tabs.html" %}
+        <div class="tab-content" id="custom-content-below-tabContent">
+            <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>#</th>
+                        <th><i class="fas fa-info-circle"></i></th>
+                        <th>In</th>
+                        <th>Out</th>
+                        <th>Source</th>
+                        <th>Destination</th>
+                        <th>Protocol</th>
+                        <th>Port</th>
+                        <th>State</th>
+                        <th>Action</th>
+                        <th></th>
+                
+                       
+                    </thead>
+                    <tbody>
+                        {% for rule in firewall_rule_list %}
+                            
+                            <tr>
+                                <td style="width: 1%; white-space: nowrap;">{{ rule.sort_order }}</td>
+                                <td style="width: 1%; white-space: nowrap;">{% if rule.description %}<i class="fas fa-info-circle" title="{{ rule.description }}"></i>{% endif %}</td>
+                                <td>{{ rule.in_interface }}</td>
+                                <td>{{ rule.out_interface }}</td>
+                                <td>
+                                    {% if rule.source_ip %}{% if rule.not_source %}<span title="Not source">!</span> {% endif %}{{ rule.source_ip }}/{{ rule.source_netmask }}<br>{% endif%}
+                                    {% for peer in rule.source_peer.all %}{% if rule.not_source %}<span title="Not source">!</span> {% endif %}{{ peer }}{% if rule.source_peer_include_networks %} <span title="Include peer networks">+</span>{% endif %}<br>{% endfor %}
+                
+                                </td>
+                                <td>
+                                    {% if rule.destination_ip %}{% if rule.not_destination %}<span title="Not destination">!</span> {% endif %}{{ rule.destination_ip }}/{{ rule.destination_netmask }}<br>{% endif%}
+                                    {% for peer in rule.destination_peer.all %}{% if rule.not_destination %}<span title="Not destination">!</span> {% endif %}{{ peer }}{% if rule.destination_peer_include_networks %} <span title="Include peer networks">+</span>{% endif %}<br>{% endfor %}
+                                </td>
+                
+                                <td>{{ rule.get_protocol_display }}</td>
+                                <td>{{ rule.destination_port }}</td>
+                                <td>
+                                    {% if rule.state_new %}{% if rule.not_state %}<span title="Not state">! </span>{% endif %}New<br>{% endif %}
+                                    {% if rule.state_related %}{% if rule.not_state %}<span title="Not state">! </span>{% endif %}Related<br>{% endif %}
+                                    {% if rule.state_established %}{% if rule.not_state %}<span title="Not state">! </span>{% endif %}Established<br>{% endif %}
+                                    {% if rule.state_invalid %}{% if rule.not_state %}<span title="Not state">! </span>{% endif %}Invalid<br>{% endif %}
+                                    {% if rule.state_untracked %}{% if rule.not_state %}<span title="Not state">! </span>{% endif %}Untracked<br>{% endif %}
+                                </td>
+                                <td>{{ rule.get_rule_action_display }}</td>
+                                {% comment%}
+                                <td>{{ rule. }}</td>
+                                {% endcomment %}
+                                <td style="width: 1%; white-space: nowrap;">
+                                    <a href="/firewall/manage_firewall_rule/?uuid={{ rule.uuid }}" ><i class="far fa-edit"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                
+                    </tbody>
+                </table>
+                
+                <a href="/firewall/manage_firewall_rule/" class='btn btn-primary'>Create Firewall Rule</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block custom_page_scripts %}
+{% comment %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('td').forEach(function(td) {
+          // Conta o número de <br> na célula
+          let brCount = (td.innerHTML.match(/<br>/g) || []).length;
+      
+          // Aplica a lógica de mostrar/esconder apenas se houver 2 ou mais <br>
+          if (brCount >= 2) {
+            let contentParts = td.innerHTML.split('<br>');
+            // Assume que queremos manter a primeira linha visível, adiciona explicitamente uma quebra de linha antes do conteúdo escondido
+            td.innerHTML = contentParts[0] + '<br>' +
+                           '<span style="display: none;">' + 
+                           contentParts.slice(1).join('<br>') + '</span>' + 
+                           '<button class="more-btn">Mais</button>';
+          }
+        });
+      
+        // Adiciona evento de clique para botões "Mais"
+        document.querySelectorAll('.more-btn').forEach(function(button) {
+          button.addEventListener('click', function() {
+            let moreText = this.previousElementSibling; // O span com o texto extra
+            if (moreText.style.display === "none") {
+              moreText.style.display = "inline";
+              this.textContent = "Menos";
+            } else {
+              moreText.style.display = "none";
+              this.textContent = "Mais";
+            }
+          });
+        });
+      });
+      
+      
+</script>
+{% endcomment %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('td').forEach(function(td) {
+          let brCount = (td.innerHTML.match(/<br>/g) || []).length;
+      
+          if (brCount >= 2) {
+            let contentParts = td.innerHTML.split('<br>');
+            // Mantém a estrutura do contêiner com o texto e o link "More"
+            let firstLineContainer = `<div class="first-line-container">${contentParts[0]}<a href="#" class="more-link">more</a></div>`;
+      
+            td.innerHTML = firstLineContainer +
+                           '<span class="more-text" style="display: none;">' +
+                           contentParts.slice(1).join('<br>') + '</span>';
+          }
+        });
+      
+        document.querySelectorAll('.more-link').forEach(function(link) {
+          link.addEventListener('click', function(e) {
+            e.preventDefault(); // Impede a ação padrão do link
+            let moreText = this.parentNode.nextElementSibling; // Seleciona o span corretamente
+            if (moreText.style.display === "none") {
+              moreText.style.display = "inline";
+              this.textContent = "less";
+            } else {
+              moreText.style.display = "none";
+              this.textContent = "more";
+            }
+          });
+        });
+      });
+      
+      
+</script>
+
+{% endblock %}

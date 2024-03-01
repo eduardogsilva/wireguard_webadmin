@@ -88,7 +88,7 @@ class Peer(models.Model):
         if self.name:
             return self.name
         else:
-            return self.public_key
+            return self.public_key[:16] + "..."
 
 
 class PeerStatus(models.Model):

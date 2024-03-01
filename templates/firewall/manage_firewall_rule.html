@@ -1,0 +1,434 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Manage Firewall Rule</h3>
+        </div>
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="accordion" id="firewallRuleAccordion">
+                <!-- General Group -->
+                <div class="card">
+                    <div class="card-header" id="headingGeneral">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseGeneral" aria-expanded="true" aria-controls="collapseGeneral">
+                                General
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseGeneral" class="collapse show" aria-labelledby="headingGeneral" >
+                        {% comment %}
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="description">{{ form.description.label }}</label>
+                                <input type="text" class="form-control" id="description" name="description" value="{{ form.description.value|default_if_none:""}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="wireguard_instance">{{ form.wireguard_instance.label }}</label>
+                                <select class="form-control" id="wireguard_instance" name="wireguard_instance">
+                                    {% for instance in form.wireguard_instance.field.queryset %}
+                                    <option value="{{ instance.pk }}" {% if form.wireguard_instance.value == instance.pk %} selected {% endif %}>{{ instance }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="firewall_chain">{{ form.firewall_chain.label }}</label>
+                                <select class="form-control" id="firewall_chain" name="firewall_chain">
+                                    {% for value, display in form.firewall_chain.field.choices %}
+                                    <option value="{{ value }}" {% if form.firewall_chain.value == value %} selected {% endif %}>{{ display }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sort_order">{{ form.sort_order.label }}</label>
+                                <input type="number" class="form-control" id="sort_order" name="sort_order" value="{{ form.sort_order.value }}">
+                            </div>
+                        </div>{% endcomment %}
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="description">{{ form.description.label }}</label>
+                                            <input type="text" class="form-control" id="description" name="description" value="{{ form.description.value|default_if_none:'' }}">
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="firewall_chain">{{ form.firewall_chain.label }}</label>
+                                            <select class="form-control" id="firewall_chain" name="firewall_chain">
+                                                {% for value, display in form.firewall_chain.field.choices %}
+                                                <option value="{{ value }}" {% if form.firewall_chain.value == value %} selected {% endif %}>{{ display }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="sort_order">{{ form.sort_order.label }}</label>
+                                            <input type="number" class="form-control" id="sort_order" name="sort_order" value="{{ form.sort_order.value }}">
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                        
+                                <div class="col-md-6">
+                                    <h5>Advanced VPN Firewall Configuration</h5>
+                                    <p>
+                                        This interface serves as a comprehensive tool for managing firewall rules, enabling users to implement advanced traffic policies between VPN peers and networks. It simplifies establishing firewall rules, packet filtering, and NAT configurations, allowing for precise control over network security. Users can define source and destination IP addresses, ports, protocols, and actions to tailor traffic flow, ensuring a secure and efficient networking environment.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+
+
+                    </div>
+                </div>
+
+                <!-- Interface Group -->
+                <div class="card">
+                    <div class="card-header" id="headingInterface">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseInterface" aria-expanded="false" aria-controls="collapseInterface">
+                                Interface
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseInterface" class="collapse" aria-labelledby="headingInterface" >
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- In Interface -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="in_interface">{{ form.in_interface.label }}</label>
+                                        <select class="form-control" id="in_interface" name="in_interface">
+                                            {% for value, display in form.in_interface.field.choices %}
+                                            <option value="{{ value }}" {% if form.in_interface.value == value %} selected {% endif %}>{{ display }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                        
+                                <!-- Out Interface -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="out_interface">{{ form.out_interface.label }}</label>
+                                        <select class="form-control" id="out_interface" name="out_interface">
+                                            {% for value, display in form.out_interface.field.choices %}
+                                            <option value="{{ value }}" {% if form.out_interface.value == value %} selected {% endif %}>{{ display }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Source Group -->
+                <div class="card">
+                    <div class="card-header" id="headingSource">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseSource" aria-expanded="false" aria-controls="collapseSource">
+                                Source
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseSource" class="collapse" aria-labelledby="headingSource" >
+                        
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-8">
+                                            <label for="source_ip">{{ form.source_ip.label }}</label>
+                                            <input type="text" class="form-control" id="source_ip" name="source_ip" value="{{ form.source_ip.value|default_if_none:'' }}">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="source_netmask">{{ form.source_netmask.label }}</label>
+                                            <input type="number" class="form-control" id="source_netmask" name="source_netmask" value="{{ form.source_netmask.value }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="source_peer">{{ form.source_peer.label }}</label>
+                                        <select class="form-control" id="source_peer" name="source_peer" multiple>
+                                            {% for peer in form.source_peer.field.queryset %}
+                                            <option value="{{ peer.pk }}" {% if peer.pk in form.source_peer.value %} selected {% endif %}>{{ peer }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="source_peer_include_networks" name="source_peer_include_networks" {% if form.source_peer_include_networks.value %} checked {% endif %}>
+                                        <label class="form-check-label" for="source_peer_include_networks">{{ form.source_peer_include_networks.label }}</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="not_source" name="not_source" {% if form.not_source.value %} checked {% endif %}>
+                                        <label class="form-check-label" for="not_source">{{ form.not_source.label }}</label>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-md-6">
+                                    <h5>Source Selection</h5>
+                                    <p>
+                                        You have the option to apply this rule to a specific IP address or network and/or to multiple peers.<br><br>
+                                        Enabling the "Include peer networks" option will automatically include all Allowed IPs associated with each selected peer.<br><br>
+                                        Please note that selecting multiple peers with included networks on both the source and destination ends may result in a rapid increase in the number of firewall rules generated, depending on your configuration.<br><br>
+                                        The "Not Source" option negates the selected source IP, network, or peer(s).
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+
+                <!-- Destination Group -->
+                <div class="card">
+                    <div class="card-header" id="headingDestination">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseDestination" aria-expanded="false" aria-controls="collapseDestination">
+                                Destination
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseDestination" class="collapse" aria-labelledby="headingDestination" >
+                        
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-8">
+                                            <label for="destination_ip">{{ form.destination_ip.label }}</label>
+                                            <input type="text" class="form-control" id="destination_ip" name="destination_ip" value="{{ form.destination_ip.value|default_if_none:'' }}">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="destination_netmask">{{ form.destination_netmask.label }}</label>
+                                            <input type="number" class="form-control" id="destination_netmask" name="destination_netmask" value="{{ form.destination_netmask.value }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="destination_peer">{{ form.destination_peer.label }}</label>
+                                        <select class="form-control" id="destination_peer" name="destination_peer" multiple>
+                                            {% for peer in form.destination_peer.field.queryset %}
+                                            <option value="{{ peer.pk }}" {% if peer.pk in form.destination_peer.value %} selected {% endif %}>{{ peer }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="destination_peer_include_networks" name="destination_peer_include_networks" {% if form.destination_peer_include_networks.value %} checked {% endif %}>
+                                        <label class="form-check-label" for="destination_peer_include_networks">{{ form.destination_peer_include_networks.label }}</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="not_destination" name="not_destination" {% if form.not_destination.value %} checked {% endif %}>
+                                        <label class="form-check-label" for="not_destination">{{ form.not_destination.label }}</label>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-md-6">
+                                    <h5>Destination Selection</h5>
+                                    <p>
+                                        You have the option to apply this rule to a specific IP address or network and/or to multiple peers as the destination.<br><br>
+                                        Enabling the "Include peer networks" option will automatically include all Allowed IPs associated with each selected peer as the destination.<br><br>
+                                        Please note that selecting multiple peers with included networks on both the source and destination ends may result in a rapid increase in the number of firewall rules generated, depending on your configuration.<br><br>
+                                        The "Not Destination" option negates the selected destination IP, network, or peer(s).
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+
+                <!-- Protocol Group -->
+                <div class="card">
+                    <div class="card-header" id="headingProtocol">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseProtocol" aria-expanded="false" aria-controls="collapseProtocol">
+                                Protocol
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseProtocol" class="collapse" aria-labelledby="headingProtocol" >
+                        
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <!-- Protocol -->
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="protocol">{{ form.protocol.label }}</label>
+                                                <select class="form-control" id="protocol" name="protocol">
+                                                    {% for value, display in form.protocol.field.choices %}
+                                                    <option value="{{ value }}" {% if form.protocol.value == value %} selected {% endif %}>{{ display }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Destination Port -->
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="destination_port">{{ form.destination_port.label }}</label>
+                                                <input type="text" class="form-control" id="destination_port" name="destination_port" value="{{ form.destination_port.value|default_if_none:'' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h5>Protocol and Port</h5>
+                                    <p>
+                                        Only the most commonly used protocols are listed here. If you require a specific protocol, please open an issue on GitHub.<br><br>
+                                        Selecting TCP+UDP will result in the duplication of generated rules.<br><br>
+                                        Ports can be specified as single numbers (e.g., 8080) or as ranges (e.g., 8001:8999).
+                                    </p>
+
+
+
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+
+
+                    </div>
+                </div>
+
+                <!-- Packet State Group -->
+                <div class="card">
+                    <div class="card-header" id="headingPacketState">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapsePacketState" aria-expanded="false" aria-controls="collapsePacketState">
+                                Packet State
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapsePacketState" class="collapse" aria-labelledby="headingPacketState" >
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="state_new" name="state_new" {% if form.state_new.value %} checked {% endif %}>
+                                <label class="form-check-label" for="state_new">{{ form.state_new.label }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="state_related" name="state_related" {% if form.state_related.value %} checked {% endif %}>
+                                <label class="form-check-label" for="state_related">{{ form.state_related.label }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="state_established" name="state_established" {% if form.state_established.value %} checked {% endif %}>
+                                <label class="form-check-label" for="state_established">{{ form.state_established.label }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="state_invalid" name="state_invalid" {% if form.state_invalid.value %} checked {% endif %}>
+                                <label class="form-check-label" for="state_invalid">{{ form.state_invalid.label }}</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="state_untracked" name="state_untracked" {% if form.state_untracked.value %} checked {% endif %}>
+                                <label class="form-check-label" for="state_untracked">{{ form.state_untracked.label }}</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="not_state" name="not_state" {% if form.not_state.value %} checked {% endif %}>
+                                <label class="form-check-label" for="not_state">{{ form.not_state.label }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Group -->
+                <div class="card">
+                    <div class="card-header" id="headingAction">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseAction" aria-expanded="false" aria-controls="collapseAction">
+                                Action
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseAction" class="collapse" aria-labelledby="headingAction" >
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="rule_action">{{ form.rule_action.label }}</label>
+                                <select class="form-control" id="rule_action" name="rule_action">
+                                    {% for value, display in form.rule_action.field.choices %}
+                                    <option value="{{ value }}" {% if form.rule_action.value == value %} selected {% endif %}>{{ display }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Array de IDs dos campos a serem ignorados
+        var ignoreFields = ['source_netmask', 'destination_netmask'];
+    
+        // Itera por cada painel para verificar se contém dados nos campos
+        $('.collapse').each(function() {
+            var panel = $(this);
+            var shouldOpen = false;
+    
+            // Verifica inputs do tipo texto e número, excluindo os ignorados
+            panel.find('input[type=text], input[type=number], textarea').each(function() {
+                if (!ignoreFields.includes(this.id) && $(this).val()) {
+                    shouldOpen = true;
+                }
+            });
+    
+            // Verifica checkboxes e radios, excluindo os ignorados
+            panel.find('input[type=checkbox], input[type=radio]').each(function() {
+                if (!ignoreFields.includes(this.id) && $(this).is(':checked')) {
+                    shouldOpen = true;
+                }
+            });
+    
+            // Verifica selects, incluindo múltipla seleção, excluindo os ignorados
+            panel.find('select').each(function() {
+                if (!ignoreFields.includes(this.id) && $(this).find('option:selected').length > 0) {
+                    var allUnselected = true;
+                    $(this).find('option:selected').each(function() {
+                        if ($(this).val()) {
+                            allUnselected = false;
+                        }
+                    });
+                    if (!allUnselected) {
+                        shouldOpen = true;
+                    }
+                }
+            });
+    
+            // Se dados relevantes foram encontrados e não são para ser ignorados, abre o painel
+            if (shouldOpen) {
+                panel.collapse('show');
+            }
+        });
+    
+        // Controla o abrir/fechar dos painéis sem afetar os outros
+        $('.card-header button').on('click', function(e) {
+            e.preventDefault();
+            var target = $(this).attr('data-target');
+            $(target).collapse('toggle');
+        });
+    });
+    
+
+</script>
+{% endblock %}

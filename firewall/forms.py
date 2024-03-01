@@ -1,5 +1,5 @@
-from firewall.models import RedirectRule
-from wireguard.models import Peer, WireGuardInstance
+from firewall.models import RedirectRule, FirewallRule, FirewallSettings
+from wireguard.models import Peer, WireGuardInstance, NETMASK_CHOICES
 from django import forms
 
 
@@ -34,7 +34,7 @@ class RedirectRuleForm(forms.ModelForm):
             raise forms.ValidationError("Port 8000 (tcp) is reserved for wireguard-webadmin.")
         
         if protocol == 'udp':
-            if WireGuardInstance.objects.filter(udp_port=port).exists():
+            if WireGuardInstance.objects.filter(listen_port=port).exists():
                 raise forms.ValidationError("Port " + str(port) + " (udp) is already in use by a WireGuard instance.")
 
         if peer and ip_address:
@@ -50,3 +50,47 @@ class RedirectRuleForm(forms.ModelForm):
             cleaned_data['peer'] = None
 
         return cleaned_data
+    
+
+class FirewallRuleForm(forms.ModelForm):
+    firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
+    interface_list = [('', '------'),]
+    interface_list.append((firewall_settings.wan_interface, firewall_settings.wan_interface + ' (WAN)'))
+    
+    for wireguard_instance in WireGuardInstance.objects.all().order_by('instance_id'):
+        wireguard_instance_interface = 'wg'+ str(wireguard_instance.instance_id)
+        interface_list.append((wireguard_instance_interface, wireguard_instance_interface))
+    
+    interface_list.append(('wg+', 'wg+ (Any WireGuard Interface)'))
+
+    description = forms.CharField(label='Description', required=False)
+    firewall_chain = forms.ChoiceField(label='Firewall Chain', choices=[('forward', 'FORWARD'), ('postrouting', 'POSTROUTING (nat)')], initial='forward')
+    in_interface = forms.ChoiceField(label='In Interface', choices=interface_list, required=False)
+    out_interface = forms.ChoiceField(label='Out Interface', choices=interface_list, required=False)
+    source_ip = forms.GenericIPAddressField(label='Source IP', required=False)
+    source_netmask = forms.IntegerField(label='Source Netmask', initial=32, min_value=0, max_value=32)
+    source_peer = forms.ModelMultipleChoiceField(label='Source Peer', queryset=Peer.objects.all(), required=False)
+    source_peer_include_networks = forms.BooleanField(label='Source Peer Include Networks', required=False)
+    not_source = forms.BooleanField(label='Not Source', required=False)
+    destination_ip = forms.GenericIPAddressField(label='Destination IP', required=False)
+    destination_netmask = forms.IntegerField(label='Destination Netmask', initial=32, min_value=0, max_value=32)
+    destination_peer = forms.ModelMultipleChoiceField(label='Destination Peer', queryset=Peer.objects.all(), required=False)
+    destination_peer_include_networks = forms.BooleanField(label='Destination Peer Include Networks', required=False)
+    not_destination = forms.BooleanField(label='Not Destination', required=False)
+    protocol = forms.ChoiceField(label='Protocol', choices=[('', 'all'), ('tcp', 'TCP'), ('udp', 'UDP'), ('both', 'TCP+UDP'), ('icmp', 'ICMP')], required=False)
+    destination_port = forms.CharField(label='Destination Port', required=False)
+    state_new = forms.BooleanField(label='State NEW', required=False)
+    state_related = forms.BooleanField(label='State RELATED', required=False)
+    state_established = forms.BooleanField(label='State ESTABLISHED', required=False)
+    state_invalid = forms.BooleanField(label='State INVALID', required=False)
+    state_untracked = forms.BooleanField(label='State UNTRACKED', required=False)
+    not_state = forms.BooleanField(label='Not State', required=False)
+    rule_action = forms.ChoiceField(label='Rule Action', initial='accept', choices=[('accept', 'ACCEPT'), ('reject', 'REJECT'), ('drop', 'DROP'), ('masquerade', 'MASQUERADE')])
+    sort_order = forms.IntegerField(label='Sort Order', initial=0, min_value=0)
+
+    class Meta:
+        model = FirewallRule
+        fields = ['description', 'firewall_chain', 'in_interface', 'out_interface', 'source_ip', 'source_netmask', 'source_peer', 'source_peer_include_networks', 'not_source', 'destination_ip', 'destination_netmask', 'destination_peer', 'destination_peer_include_networks', 'not_destination', 'protocol', 'destination_port', 'state_new', 'state_related', 'state_established', 'state_invalid', 'state_untracked', 'not_state', 'rule_action', 'sort_order']
+
+
+
