@@ -1,4 +1,5 @@
 import ipaddress, re
+import subprocess
 
 
 def is_valid_ip_or_hostname(value):
@@ -15,3 +16,21 @@ def is_valid_ip_or_hostname(value):
         return True
     
     return False
+
+
+def list_network_interfaces():
+    # Executa o comando 'ip link show' com grep para filtrar linhas com 'UP'
+    cmd = "ip link show | grep UP"
+    cmd_output = subprocess.check_output(cmd, shell=True, text=True)
+
+    # Processa a saída para extrair os nomes das interfaces
+    interfaces = []
+    for line in cmd_output.split('\n'):
+        if line:  # Verifica se a linha não está vazia
+            parts = line.split(': ')
+            if len(parts) > 1:
+                # O nome da interface está na segunda posição após o split
+                interface_name = parts[1].split('@')[0]  # Remove qualquer coisa após '@'
+                interfaces.append(interface_name)
+
+    return interfaces

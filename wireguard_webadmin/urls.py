@@ -23,7 +23,7 @@ from user_manager.views import view_user_list, view_manage_user
 from accounts.views import view_create_first_user, view_login, view_logout
 from wireguard_tools.views import export_wireguard_configs, download_config_or_qrcode, restart_wireguard_interfaces
 from api.views import wireguard_status, cron_check_updates, cron_update_peer_latest_handshake
-from firewall.views import view_redirect_rule_list, manage_redirect_rule, view_firewall_rule_list, manage_firewall_rule
+from firewall.views import view_redirect_rule_list, manage_redirect_rule, view_firewall_rule_list, manage_firewall_rule, view_manage_firewall_settings
 
 
 urlpatterns = [
@@ -49,5 +49,6 @@ urlpatterns = [
     path('firewall/port_forward/', view_redirect_rule_list, name='redirect_rule_list'),    
     path('firewall/manage_port_forward_rule/', manage_redirect_rule, name='manage_redirect_rule'),
     path('firewall/rule_list/', view_firewall_rule_list, name='firewall_rule_list'),
-    path('firewall/manage_firewall_rule/', manage_firewall_rule, name='manage_firewall_rule')
+    path('firewall/manage_firewall_rule/', manage_firewall_rule, name='manage_firewall_rule'),
+    path('firewall/firewall_settings/', view_manage_firewall_settings, name='firewall_settings'),
 ]

@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Max
 from firewall.models import RedirectRule, FirewallRule, FirewallSettings
-from firewall.forms import RedirectRuleForm, FirewallRuleForm
+from firewall.forms import RedirectRuleForm, FirewallRuleForm, FirewallSettingsForm
 from django.contrib import messages
 from wireguard.models import WireGuardInstance
 from user_manager.models import UserAcl
+from wgwadmlibrary.tools import list_network_interfaces
 
 
 def view_redirect_rule_list(request):
@@ -124,3 +125,34 @@ def manage_firewall_rule(request):
     context['current_chain'] = current_chain
     
     return render(request, 'firewall/manage_firewall_rule.html', context=context)
+
+
+def view_manage_firewall_settings(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=40).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    context = {'page_title': 'Manage Firewall Settings'}
+    previous_firewall_chain = request.GET.get('chain')
+    if previous_firewall_chain not in ['forward', 'portforward', 'postrouting']:
+        previous_firewall_chain = 'forward'
+
+    if previous_firewall_chain == 'portforward':
+        redirect_url = '/firewall/port_forward/'
+    else:
+        redirect_url = '/firewall/rule_list/?chain=' + previous_firewall_chain
+        
+    firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
+
+    if request.method == 'POST':
+        form = FirewallSettingsForm(request.POST, instance=firewall_settings)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Firewall settings saved successfully')
+            return redirect(redirect_url)
+    else:
+        form = FirewallSettingsForm(instance=firewall_settings)
+    context['form'] = form
+    context['instance'] = firewall_settings
+    context['back_url'] = redirect_url
+
+    return render(request, 'firewall/manage_firewall_settings.html', context=context)
+

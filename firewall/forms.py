@@ -1,5 +1,6 @@
 from firewall.models import RedirectRule, FirewallRule, FirewallSettings
 from wireguard.models import Peer, WireGuardInstance, NETMASK_CHOICES
+from wgwadmlibrary.tools import list_network_interfaces
 from django import forms
 import re
 
@@ -135,4 +136,19 @@ class FirewallRuleForm(forms.ModelForm):
         return cleaned_data
 
 
+class FirewallSettingsForm(forms.ModelForm):
+    interface_choices = []
+    for interface in list_network_interfaces():
+        if not interface.startswith('wg') and interface != 'lo':
+            interface_choices.append((interface, interface))
 
+        #if interface.startswith('wg'):
+        #    list_network_interfaces().remove(interface)
+    default_forward_policy = forms.ChoiceField(label='Default Forward Policy', choices=[('accept', 'ACCEPT'), ('reject', 'REJECT'), ('drop', 'DROP')], initial='accept')
+    allow_peer_to_peer = forms.BooleanField(label='Allow Peer to Peer', required=False)
+    allow_instance_to_instance = forms.BooleanField(label='Allow Instance to Instance', required=False)
+    wan_interface = forms.ChoiceField(label='WAN Interface', choices=interface_choices, initial='eth0')
+
+    class Meta:
+        model = FirewallSettings
+        fields = ['default_forward_policy', 'allow_peer_to_peer', 'allow_instance_to_instance', 'wan_interface']

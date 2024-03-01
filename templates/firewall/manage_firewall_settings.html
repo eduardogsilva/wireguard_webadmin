@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            {% csrf_token %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- WAN Interface -->
+                    <div class="form-group">
+                        <label for="id_wan_interface">{{ form.wan_interface.label }}</label>
+                        <select class="form-control" id="id_wan_interface" name="wan_interface">
+                            {% for value, display in form.wan_interface.field.choices %}
+                            <option value="{{ value }}" {% if form.wan_interface.value == value %} selected {% endif %}>{{ display }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+        
+                    <!-- Default Forward Policy -->
+                    <div class="form-group">
+                        <label for="id_default_forward_policy">{{ form.default_forward_policy.label }}</label>
+                        <select class="form-control" id="id_default_forward_policy" name="default_forward_policy">
+                            {% for value, display in form.default_forward_policy.field.choices %}
+                            <option value="{{ value }}" {% if form.default_forward_policy.value == value %} selected {% endif %}>{{ display }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                   
+        
+                    <!-- Allow Peer to Peer -->
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="id_allow_peer_to_peer" name="allow_peer_to_peer" {% if form.allow_peer_to_peer.value %} checked {% endif %}>
+                        <label for="id_allow_peer_to_peer">{{ form.allow_peer_to_peer.label }}</label>
+                    </div>
+                    
+                    <!-- Allow Instance to Instance -->
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="id_allow_instance_to_instance" name="allow_instance_to_instance" {% if form.allow_instance_to_instance.value %} checked {% endif %}>
+                        <label for="id_allow_instance_to_instance">{{ form.allow_instance_to_instance.label }}</label>
+                    </div>
+        
+                        </div>
+        
+                        <div class="col-md-6">
+        
+                        </div>
+                    </div>
+        
+                    
+                    
+                    
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a class="btn btn-outline-secondary" href="{{ back_url }}">Back</a>
+                </div>
+            </div>
+        </form>
+        
+        
+    </div>
+</div>
+
+{% endblock %}
