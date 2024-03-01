@@ -16,14 +16,14 @@
                             <th>Destination</th>
                             <th>Allow Forward</th>
                             <th>Masquerade Source</th>
-                            <th>Actions</th>
+                            <th><i class="far fa-edit"></i></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for redirect_rule in redirect_rule_list %}
                             <tr>
                                 <td>{{ redirect_rule.wireguard_instance }}</td>
-                                <td>{{ redirect_rule.protocol }}</td>
+                                <td>{{ redirect_rule.get_protocol_display }}</td>
                                 <td>{{ redirect_rule.port }}</td>
                                 <td>
                                     {% if redirect_rule.peer %}

@@ -60,6 +60,7 @@ def manage_redirect_rule(request):
 
 def view_firewall_rule_list(request):
     wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
+    firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
     current_chain = request.GET.get('chain', 'forward')
     if current_chain not in ['forward', 'portforward', 'postrouting']:
         current_chain = 'forward'
@@ -72,6 +73,9 @@ def view_firewall_rule_list(request):
         'pending_changes_warning': pending_changes_warning,
         'firewall_rule_list': FirewallRule.objects.filter(firewall_chain=current_chain).order_by('sort_order'),
         'current_chain': current_chain,
+        'port_forward_list': RedirectRule.objects.all().order_by('port'),
+        'firewall_settings': firewall_settings,
+        'wireguard_instances': wireguard_instances,
         }
     return render(request, 'firewall/firewall_rule_list.html', context=context)
 

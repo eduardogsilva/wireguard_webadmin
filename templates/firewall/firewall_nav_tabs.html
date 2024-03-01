@@ -9,5 +9,11 @@
     <li class="nav-item">
         <a class="nav-link {% if current_chain == "portforward" %}active{% endif %}" href="/firewall/port_forward/" role="tab">Port Forward</a>
     </li>
+    {% if current_chain == 'forward' %}
+    <li class="nav-item ml-auto">
+        <a class="nav-link" role="">Default Policy: <b>{{ firewall_settings.get_default_forward_policy_display }}</b></a>
+    </li>
+    {% endif %}
     
 </ul>
+

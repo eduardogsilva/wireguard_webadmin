@@ -17,6 +17,10 @@
         display: none;
         width: 100%;
       }
+
+      .fw_automatic_rule {
+        display: none;
+      }
       
       
    
@@ -43,9 +47,56 @@
                         <th>Port</th>
                         <th>State</th>
                         <th>Action</th>
-                        <th></th>
+                        <th><i class="far fa-edit"></i></th>
                     </thead>
                     <tbody>
+
+                        {% for rule in port_forward_list %}
+                            {% if rule.add_forward_rule and current_chain == 'forward' %}
+                                <tr class="fw_automatic_rule">  
+                                  <td>-</td>
+                                  <td><i class="fas fa-info-circle" title="Port forward automatic rule. {{ rule.description|default_if_none:'' }}"></i></td>
+                                  <td>{{ firewall_settings.wan_interface }}</td>
+                                  <td>wg{{ rule.wireguard_instance.instance_id }}</td>
+                                  <td></td>
+                                  <td>
+                                    {% if rule.ip_address %}
+                                      {{ rule.ip_address }}
+                                    {% elif rule.peer %}
+                                      {{ rule.peer }}
+                                    {% endif %}
+                                  </td>
+                                  <td>{{ rule.get_protocol_display }}</td>
+                                  <td>{{ rule.port }}</td>
+                                  <td></td>
+                                  <td>ACCEPT</td>
+                                  <td></td>
+                                </tr>
+                            {% elif rule.masquerade_source and current_chain == 'postrouting' %}
+                              <tr class="fw_automatic_rule">  
+                                <td>-</td>
+                                <td><i class="fas fa-info-circle" title="Port forward automatic rule. {{ rule.description|default_if_none:'' }}"></i></td>
+                                <td></td>
+                                <td>wg{{ rule.wireguard_instance.instance_id }}</td>
+                                <td></td>
+                                <td>
+                                  {% if rule.ip_address %}
+                                    {{ rule.ip_address }}
+                                  {% elif rule.peer %}
+                                    {{ rule.peer }}
+                                  {% endif %}
+                                </td>
+                                <td>{{ rule.get_protocol_display }}</td>
+                                <td>{{ rule.port }}</td>
+                                <td></td>
+                                <td>MASQUERADE</td>
+                                <td></td>
+                              </tr>
+                            {% endif %}
+
+
+                        {% endfor %}
+
                         {% for rule in firewall_rule_list %}
                             
                             <tr>
@@ -82,11 +133,50 @@
                             </tr>
                         {% endfor %}
                 
+                        {% if current_chain == 'forward' %}
+                        {% for wireguard_instance in wireguard_instances %}
+                            <tr class="fw_automatic_rule">
+                              <td>-</td>
+                              <td><i class="fas fa-info-circle" title="Automatic Rule: Firewall Settings Peer to Peer traffic"></i></td>
+                              <td>wg{{ wireguard_instance.instance_id }}</td>
+                              <td>wg{{ wireguard_instance.instance_id }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                  {% if firewall_settings.allow_peer_to_peer %}
+                                    ACCEPT
+                                  {% else %}
+                                    REJECT
+                                  {% endif %}
+                                </td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+
+                        <tr class="fw_automatic_rule">
+                          <td>-</td>
+                          <td><i class="fas fa-info-circle" title="Automatic Rule: Firewall Settings Instance to Instance"></i></td>
+                          <td>wg+</td>
+                          <td>wg+</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{% if firewall_settings.allow_instance_to_instance %}ACCEPT{% else %}REJECT{% endif %}</td>
+                            <td></td>
+                        </tr>
+                        {% endif %}
+
                     </tbody>
                 </table>
                 
                 <a href="/firewall/manage_firewall_rule/?chain={{ current_chain }}" class='btn btn-primary'>Create Firewall Rule</a>
                 <a href="/firewall/firewall_settings/?chain={{ current_chain }}" class='btn btn-outline-primary'>Firewall Settings</a>
+                <a class='btn btn-outline-primary' onclick=$('.fw_automatic_rule').slideToggle();>Display automatic rules</a>
             </div>
         </div>
     </div>
