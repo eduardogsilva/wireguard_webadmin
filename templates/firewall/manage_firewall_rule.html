@@ -370,37 +370,42 @@
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Submit</button>
+                <a class="btn btn-outline-secondary" href="/firewall/rule_list/?chain={{ current_chain }}">Back</a>
+                {% if instance %}
+                <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete Rule</a>
+                {% endif %}
             </div>
         </form>
     </div>
 </div>
 
+    
+{% endblock %}
+
+
+{% block custom_page_scripts %}
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Array de IDs dos campos a serem ignorados
         var ignoreFields = ['source_netmask', 'destination_netmask'];
     
-        // Itera por cada painel para verificar se contém dados nos campos
         $('.collapse').each(function() {
             var panel = $(this);
             var shouldOpen = false;
     
-            // Verifica inputs do tipo texto e número, excluindo os ignorados
             panel.find('input[type=text], input[type=number], textarea').each(function() {
                 if (!ignoreFields.includes(this.id) && $(this).val()) {
                     shouldOpen = true;
                 }
             });
     
-            // Verifica checkboxes e radios, excluindo os ignorados
             panel.find('input[type=checkbox], input[type=radio]').each(function() {
                 if (!ignoreFields.includes(this.id) && $(this).is(':checked')) {
                     shouldOpen = true;
                 }
             });
     
-            // Verifica selects, incluindo múltipla seleção, excluindo os ignorados
             panel.find('select').each(function() {
                 if (!ignoreFields.includes(this.id) && $(this).find('option:selected').length > 0) {
                     var allUnselected = true;
@@ -413,15 +418,12 @@
                         shouldOpen = true;
                     }
                 }
-            });
-    
-            // Se dados relevantes foram encontrados e não são para ser ignorados, abre o painel
+            });    
             if (shouldOpen) {
                 panel.collapse('show');
             }
         });
     
-        // Controla o abrir/fechar dos painéis sem afetar os outros
         $('.card-header button').on('click', function(e) {
             e.preventDefault();
             var target = $(this).attr('data-target');
@@ -429,7 +431,6 @@
         });
     });
     
-
 </script>
 
 
@@ -454,6 +455,20 @@
         updateSortOrder();
         {% endif %}
     });
-    </script>
-    
+</script>
+
+
+<script>
+    function openCommandDialog(element) {
+        var command = element.getAttribute('data-command');
+        var confirmation = prompt("Please type 'delete' to remove this firewall rule.");
+        if (confirmation) {
+            var url = "?uuid={{ instance.uuid }}&action=delete&confirmation=" + encodeURIComponent(confirmation);
+            window.location.href = url;
+        }
+    }
+</script>
+
+
+
 {% endblock %}

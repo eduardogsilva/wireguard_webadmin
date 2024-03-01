@@ -89,6 +89,7 @@ def manage_firewall_rule(request):
                 firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
                 firewall_settings.pending_changes = True
                 firewall_settings.save()
+                instance.delete()
                 messages.success(request, 'Firewall rule deleted successfully')
             else:
                 messages.warning(request, 'Error deleting Firewall rule|Confirmation did not match. Firewall rule was not deleted.')
@@ -120,5 +121,6 @@ def manage_firewall_rule(request):
 
     context['forward_sort_order'] = highest_forward_sort_order + 10
     context['postrouting_sort_order'] = highest_postrouting_sort_order + 10
+    context['current_chain'] = current_chain
     
     return render(request, 'firewall/manage_firewall_rule.html', context=context)

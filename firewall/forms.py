@@ -1,6 +1,7 @@
 from firewall.models import RedirectRule, FirewallRule, FirewallSettings
 from wireguard.models import Peer, WireGuardInstance, NETMASK_CHOICES
 from django import forms
+import re
 
 
 class RedirectRuleForm(forms.ModelForm):
@@ -104,6 +105,8 @@ class FirewallRuleForm(forms.ModelForm):
         firewall_chain = cleaned_data.get('firewall_chain')
         rule_action = cleaned_data.get('rule_action')
         in_interface = cleaned_data.get('in_interface')
+        destination_port = self.cleaned_data.get('destination_port')
+        protocol = cleaned_data.get('protocol')
 
         if firewall_chain == 'forward' and rule_action not in ['accept', 'drop', 'reject']:
             raise forms.ValidationError("Invalid rule action for firewall chain 'forward'. Allowed actions are 'accept', 'drop', and 'reject'.")
@@ -113,6 +116,21 @@ class FirewallRuleForm(forms.ModelForm):
                 raise forms.ValidationError("Invalid rule action for firewall chain 'postrouting'. Allowed actions are 'masquerade' and 'accept'.")
             if in_interface:
                 raise forms.ValidationError("In Interface cannot be used with firewall chain 'postrouting'.")
+        
+        if destination_port:
+            if protocol not in ['tcp', 'udp', 'both']:
+                raise forms.ValidationError("Destination Port can only be used with protocol 'tcp' and/or 'udp'.")
+            if not re.match(r'^(\d+|\d+:\d+)$', destination_port):
+                raise forms.ValidationError("Invalid destination port format. Use a single port number or a range of port numbers separated by a colon. Example: 80 or 8000:8080.")
+            
+            if ':' in destination_port:
+                start, end = map(int, destination_port.split(':'))
+                if not 1 <= start <= 65535 or not 1 <= end <= 65535 or start >= end:
+                    raise forms.ValidationError("Invalid port range. The start and end port numbers must be between 1 and 65535 and the start port number must be less than the end port number.")
+            else:
+                port = int(destination_port)
+                if not 1 <= port <= 65535:
+                    raise forms.ValidationError("Invalid port number. The port number must be between 1 and 65535.")
 
         return cleaned_data
 

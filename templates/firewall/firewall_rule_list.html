@@ -44,8 +44,6 @@
                         <th>State</th>
                         <th>Action</th>
                         <th></th>
-                
-                       
                     </thead>
                     <tbody>
                         {% for rule in firewall_rule_list %}
@@ -53,8 +51,8 @@
                             <tr>
                                 <td style="width: 1%; white-space: nowrap;">{{ rule.sort_order }}</td>
                                 <td style="width: 1%; white-space: nowrap;">{% if rule.description %}<i class="fas fa-info-circle" title="{{ rule.description }}"></i>{% endif %}</td>
-                                <td>{{ rule.in_interface }}</td>
-                                <td>{{ rule.out_interface }}</td>
+                                <td>{{ rule.in_interface|default_if_none:'' }}</td>
+                                <td>{{ rule.out_interface|default_if_none:'' }}</td>
                                 <td>
                                     {% if rule.source_ip %}{% if rule.not_source %}<span title="Not source">!</span> {% endif %}{{ rule.source_ip }}/{{ rule.source_netmask }}<br>{% endif%}
                                     {% for peer in rule.source_peer.all %}{% if rule.not_source %}<span title="Not source">!</span> {% endif %}{{ peer }}{% if rule.source_peer_include_networks %} <span title="Include peer networks">+</span>{% endif %}<br>{% endfor %}
@@ -65,8 +63,8 @@
                                     {% for peer in rule.destination_peer.all %}{% if rule.not_destination %}<span title="Not destination">!</span> {% endif %}{{ peer }}{% if rule.destination_peer_include_networks %} <span title="Include peer networks">+</span>{% endif %}<br>{% endfor %}
                                 </td>
                 
-                                <td>{{ rule.get_protocol_display }}</td>
-                                <td>{{ rule.destination_port }}</td>
+                                <td>{{ rule.get_protocol_display|default_if_none:'' }}</td>
+                                <td>{{ rule.destination_port|default_if_none:'' }}</td>
                                 <td>
                                     {% if rule.state_new %}{% if rule.not_state %}<span title="Not state">! </span>{% endif %}New<br>{% endif %}
                                     {% if rule.state_related %}{% if rule.not_state %}<span title="Not state">! </span>{% endif %}Related<br>{% endif %}
