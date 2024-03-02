@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Max
 from firewall.models import RedirectRule, FirewallRule, FirewallSettings
@@ -5,7 +6,7 @@ from firewall.forms import RedirectRuleForm, FirewallRuleForm, FirewallSettingsF
 from django.contrib import messages
 from wireguard.models import WireGuardInstance
 from user_manager.models import UserAcl
-from wgwadmlibrary.tools import list_network_interfaces
+from firewall.tools import generate_iptable_rules
 
 
 def view_redirect_rule_list(request):
@@ -160,3 +161,13 @@ def view_manage_firewall_settings(request):
 
     return render(request, 'firewall/manage_firewall_settings.html', context=context)
 
+
+def view_generate_iptables_script(request):
+    data = {'status': 'ok'}
+    firewall_rule_list = FirewallRule.objects.all().order_by('firewall_chain', 'sort_order')
+    for rule in firewall_rule_list:
+        print(str(rule.sort_order) + ' - ' + str(rule.uuid))
+
+    rules_text = generate_iptable_rules()
+    print(rules_text)
+    return JsonResponse(data)
