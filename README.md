@@ -4,6 +4,7 @@ wireguard_webadmin is a full-featured yet easy-to-configure web interface for ma
 
 ## Features
 
+- **Advanced Firewall Management**: Experience effortless and comprehensive VPN firewall management, designed for simplicity and effectiveness.
 - **Port Forwarding**: Seamlessly redirect TCP or UDP ports to peers or networks located beyond those peers with ease! 
 - **Multi-User Support**: Manage access with different permission levels for each user.
 - **Multiple WireGuard Instances**: Enables separate management for peers across multiple instances.
