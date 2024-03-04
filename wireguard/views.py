@@ -31,25 +31,27 @@ def generate_instance_defaults():
         instance_id = new_instance_id
         interface_name = f"wg{instance_id}"
 
-        post_up_script = (
-            f"iptables -t nat -A POSTROUTING -s {network} -o eth0 -j MASQUERADE\n"
-            f"iptables -A INPUT -p udp -m udp --dport {port} -j ACCEPT\n"
-            f"iptables -A FORWARD -i {interface_name} -o eth0 -d 10.0.0.0/8 -j REJECT\n"
-            f"iptables -A FORWARD -i {interface_name} -o eth0 -d 172.16.0.0/12 -j REJECT\n"
-            f"iptables -A FORWARD -i {interface_name} -o eth0 -d 192.168.0.0/16 -j REJECT\n"
-            f"iptables -A FORWARD -i {interface_name} -j ACCEPT\n"
-            f"iptables -A FORWARD -o {interface_name} -j ACCEPT"
-        )
+        #post_up_script = (
+        #    f"iptables -t nat -A POSTROUTING -s {network} -o eth0 -j MASQUERADE\n"
+        #    f"iptables -A INPUT -p udp -m udp --dport {port} -j ACCEPT\n"
+        #    f"iptables -A FORWARD -i {interface_name} -o eth0 -d 10.0.0.0/8 -j REJECT\n"
+        #    f"iptables -A FORWARD -i {interface_name} -o eth0 -d 172.16.0.0/12 -j REJECT\n"
+        #    f"iptables -A FORWARD -i {interface_name} -o eth0 -d 192.168.0.0/16 -j REJECT\n"
+        #    f"iptables -A FORWARD -i {interface_name} -j ACCEPT\n"
+        #    f"iptables -A FORWARD -o {interface_name} -j ACCEPT"
+        #)
 
-        post_down_script = (
-            f"iptables -t nat -D POSTROUTING -s {network} -o eth0 -j MASQUERADE\n"
-            f"iptables -D INPUT -p udp -m udp --dport {port} -j ACCEPT\n"
-            f"iptables -D FORWARD -i {interface_name} -o eth0 -d 10.0.0.0/8 -j REJECT\n"
-            f"iptables -D FORWARD -i {interface_name} -o eth0 -d 172.16.0.0/12 -j REJECT\n"
-            f"iptables -D FORWARD -i {interface_name} -o eth0 -d 192.168.0.0/16 -j REJECT\n"
-            f"iptables -D FORWARD -i {interface_name} -j ACCEPT\n"
-            f"iptables -D FORWARD -o {interface_name} -j ACCEPT"
-        )
+        #post_down_script = (
+        #    f"iptables -t nat -D POSTROUTING -s {network} -o eth0 -j MASQUERADE\n"
+        #    f"iptables -D INPUT -p udp -m udp --dport {port} -j ACCEPT\n"
+        #    f"iptables -D FORWARD -i {interface_name} -o eth0 -d 10.0.0.0/8 -j REJECT\n"
+        #    f"iptables -D FORWARD -i {interface_name} -o eth0 -d 172.16.0.0/12 -j REJECT\n"
+        #    f"iptables -D FORWARD -i {interface_name} -o eth0 -d 192.168.0.0/16 -j REJECT\n"
+        #    f"iptables -D FORWARD -i {interface_name} -j ACCEPT\n"
+        #    f"iptables -D FORWARD -o {interface_name} -j ACCEPT"
+        #)
+        post_up_script = ''
+        post_down_script = ''
 
     return {
         'name': '',

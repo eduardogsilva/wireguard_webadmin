@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            {% csrf_token %}
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title>">Firewall migration required</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        I've upgraded our firewall's functionality. The new configuration tool enhances flexibility and power, granting complete control over your firewall via the web interface.<br><br>
+
+                        Please note down your PostUp and PostDown rules before migrating; they will be erased in the process.<br><br>
+
+                        Although the migration tool establishes a default rule set, you will have to manually input your specific rules.
+                    
+                    </p>
+                <div class="card-footer">
+                    
+                    <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Reset firewall to default</a>
+                </div>
+            </div>
+        </form>
+        
+        
+    </div>
+</div>
+
+{% endblock %}
+
+{% block custom_page_scripts %}
+
+<script>
+    function openCommandDialog(element) {
+        var command = element.getAttribute('data-command');
+        var confirmation = prompt("Reseting the firewall to default will remove all rules and settings. Are you sure you want to continue?\n\nType 'delete all rules and reset firewall' to confirm. ");
+        if (confirmation) {
+            var url = "/firewall/reset_to_default/?confirmation=" + encodeURIComponent(confirmation);
+            window.location.href = url;
+        }
+    }
+</script>
+{% endblock %}

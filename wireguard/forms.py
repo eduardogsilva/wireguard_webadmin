@@ -30,6 +30,9 @@ class WireGuardInstanceForm(forms.ModelForm):
         hostname = cleaned_data.get('hostname')
         address = cleaned_data.get('address')
         netmask = cleaned_data.get('netmask')
+        post_up = cleaned_data.get('post_up')
+        post_down = cleaned_data.get('post_down')
+
         peer_list_refresh_interval = cleaned_data.get('peer_list_refresh_interval')
         if peer_list_refresh_interval < 10:
             raise forms.ValidationError('Peer List Refresh Interval must be at least 10 seconds')
@@ -46,5 +49,13 @@ class WireGuardInstanceForm(forms.ModelForm):
             if current_network.overlaps(other_network):
                 raise forms.ValidationError(f"The network range {current_network} overlaps with another instance's network range {other_network}.")
 
+        #if self.instance:
+        #    if post_up or post_down:
+        #        if self.instance.post_up != post_up or self.instance.post_down != post_down:
+        #            raise forms.ValidationError('Post Up and Post Down cannot be changed, please go to Firewall page to make changes to the firewall.')
+        #else:
+        #    if post_up or post_down:
+        #        raise forms.ValidationError('Post Up and Post Down cannot be set, please go to Firewall page to make changes to the firewall.')
+            
         return cleaned_data
 

@@ -73,6 +73,7 @@ class FirewallSettings(models.Model):
     allow_instance_to_instance = models.BooleanField(default=True)
     wan_interface = models.CharField(max_length=12, default='eth0')
     pending_changes = models.BooleanField(default=False)
+    last_firewall_reset = models.DateTimeField(blank=True, null=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

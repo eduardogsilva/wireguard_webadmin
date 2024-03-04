@@ -6,11 +6,16 @@ from firewall.forms import RedirectRuleForm, FirewallRuleForm, FirewallSettingsF
 from django.contrib import messages
 from wireguard.models import WireGuardInstance
 from user_manager.models import UserAcl
-from firewall.tools import generate_iptable_rules
+from firewall.tools import export_user_firewall, generate_firewall_header, generate_firewall_footer, generate_port_forward_firewall, reset_firewall_to_default
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 
+@login_required
 def view_redirect_rule_list(request):
     wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
+    if wireguard_instances.filter(legacy_firewall=True).exists():
+        return redirect('/firewall/migration_required/')
     if wireguard_instances.filter(pending_changes=True).exists():
         pending_changes_warning = True
     else:
@@ -24,6 +29,7 @@ def view_redirect_rule_list(request):
     return render(request, 'firewall/redirect_rule_list.html', context=context)
 
 
+@login_required
 def manage_redirect_rule(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=40).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
@@ -59,8 +65,11 @@ def manage_redirect_rule(request):
     return render(request, 'firewall/manage_redirect_rule.html', context=context)
 
 
+@login_required
 def view_firewall_rule_list(request):
     wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
+    if wireguard_instances.filter(legacy_firewall=True).exists():
+        return redirect('/firewall/migration_required/')
     firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
     current_chain = request.GET.get('chain', 'forward')
     if current_chain not in ['forward', 'portforward', 'postrouting']:
@@ -81,6 +90,7 @@ def view_firewall_rule_list(request):
     return render(request, 'firewall/firewall_rule_list.html', context=context)
 
 
+@login_required
 def manage_firewall_rule(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=40).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
@@ -96,6 +106,12 @@ def manage_firewall_rule(request):
                 firewall_settings.pending_changes = True
                 firewall_settings.save()
                 instance.delete()
+                # Marking wireguard_instance as having pending changes, not the best way to do this, but it works for now.
+                # I will improve it later.
+                wireguard_instance = WireGuardInstance.objects.all().first()
+                if wireguard_instance:
+                    wireguard_instance.pending_changes = True
+                    wireguard_instance.save()
                 messages.success(request, 'Firewall rule deleted successfully')
             else:
                 messages.warning(request, 'Error deleting Firewall rule|Confirmation did not match. Firewall rule was not deleted.')
@@ -111,6 +127,12 @@ def manage_firewall_rule(request):
             firewall_settings.save()
             form.save()
             messages.success(request, 'Firewall rule saved successfully')
+            # Marking wireguard_instance as having pending changes, not the best way to do this, but it works for now.
+            # I will improve it later.
+            wireguard_instance = WireGuardInstance.objects.all().first()
+            if wireguard_instance:
+                wireguard_instance.pending_changes = True
+                wireguard_instance.save()
             return redirect('/firewall/rule_list/?chain=' + current_chain)
     else:
         form = FirewallRuleForm(instance=instance, current_chain=current_chain)
@@ -132,6 +154,7 @@ def manage_firewall_rule(request):
     return render(request, 'firewall/manage_firewall_rule.html', context=context)
 
 
+@login_required
 def view_manage_firewall_settings(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=40).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
@@ -162,12 +185,39 @@ def view_manage_firewall_settings(request):
     return render(request, 'firewall/manage_firewall_settings.html', context=context)
 
 
+@login_required
 def view_generate_iptables_script(request):
     data = {'status': 'ok'}
-    firewall_rule_list = FirewallRule.objects.all().order_by('firewall_chain', 'sort_order')
-    for rule in firewall_rule_list:
-        print(str(rule.sort_order) + ' - ' + str(rule.uuid))
-
-    rules_text = generate_iptable_rules()
-    print(rules_text)
+    #firewall_header = generate_firewall_header()
+    #port_forward_firewall = generate_port_forward_firewall()
+    #user_firewall = export_user_firewall()
+    #firewall_footer = generate_firewall_footer()
+    #print(port_forward_firewall)
+    #print(firewall_header)
+    #print(user_firewall)
+    #print(firewall_footer)
+    
     return JsonResponse(data)
+
+
+@login_required
+def view_reset_firewall(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=40).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    if request.GET.get('confirmation') == 'delete all rules and reset firewall':
+        reset_firewall_to_default()
+        messages.success(request, 'VPN Firewall|Firewall reset to default successfully!')
+    else:
+        messages.warning(request, 'VPN Firewall|Firewall was not reset to default. Confirmation did not match.')
+    return redirect('/firewall/rule_list/')
+
+
+@login_required
+def view_firewall_migration_required(request):
+    if not WireGuardInstance.objects.filter(legacy_firewall=True).exists():
+        messages.warning(request, 'No Firewall Migration pending|No WireGuard instances with legacy firewall settings found.')
+        return redirect('/firewall/rule_list/')
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=40).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    
+    return render(request, 'firewall/firewall_migration_required.html')

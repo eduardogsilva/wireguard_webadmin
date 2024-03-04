@@ -142,8 +142,6 @@ class FirewallSettingsForm(forms.ModelForm):
         if not interface.startswith('wg') and interface != 'lo':
             interface_choices.append((interface, interface))
 
-        #if interface.startswith('wg'):
-        #    list_network_interfaces().remove(interface)
     default_forward_policy = forms.ChoiceField(label='Default Forward Policy', choices=[('accept', 'ACCEPT'), ('reject', 'REJECT'), ('drop', 'DROP')], initial='accept')
     allow_peer_to_peer = forms.BooleanField(label='Allow Peer to Peer', required=False)
     allow_instance_to_instance = forms.BooleanField(label='Allow Instance to Instance', required=False)
