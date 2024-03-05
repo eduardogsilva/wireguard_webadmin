@@ -42,10 +42,12 @@ def reset_firewall_to_default():
         description='Masquerade traffic from VPN to WAN',
     )
 
-    FirewallRule.objects.create(
-        firewall_chain='forward', sort_order=0, rule_action='accept', description='Allow established/related traffic', 
-        state_established=True, state_related=True
-        )
+    # This rule will now be fixed in the firewall header
+    #FirewallRule.objects.create(
+    #    firewall_chain='forward', sort_order=0, rule_action='accept', description='Allow established/related traffic', 
+    #    state_established=True, state_related=True
+    #    )
+
     FirewallRule.objects.create(
         firewall_chain='forward', sort_order=1, rule_action='reject', description='Reject traffic to private networks exiting on WAN interface',
         in_interface='wg+', out_interface=firewall_settings.wan_interface, destination_ip='10.0.0.0', destination_netmask=8
@@ -165,6 +167,8 @@ iptables -t filter -D FORWARD     -j WGWADM_FORWARD     >> /dev/null 2>&1
 iptables -t nat    -I POSTROUTING -j WGWADM_POSTROUTING
 iptables -t nat    -I PREROUTING  -j WGWADM_PREROUTING
 iptables -t filter -I FORWARD     -j WGWADM_FORWARD
+
+iptables -t filter -A WGWADM_FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 '''
     
 

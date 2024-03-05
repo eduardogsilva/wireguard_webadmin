@@ -129,6 +129,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-WIREGUARD_WEBADMIN_VERSION = 9501
+WIREGUARD_WEBADMIN_VERSION = 9502
 
 from wireguard_webadmin.production_settings import *

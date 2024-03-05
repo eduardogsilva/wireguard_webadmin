@@ -47,6 +47,21 @@
                         <th><i class="far fa-edit"></i></th>
                     </thead>
                     <tbody>
+                            <tr class="fw_automatic_rule">  
+                              <td>-</td>
+                              <td><i class="fas fa-info-circle" title="Automatic rule: Allow established/related traffic"></i></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td>all</td>
+                              <td></td>
+                              <td>Related<br>
+                                  Established
+                              </td>
+                              <td>ACCEPT</td>
+                              <td></td>
+                            </tr>
 
                         {% for rule in port_forward_list %}
                             {% if rule.add_forward_rule and current_chain == 'forward' %}

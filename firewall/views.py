@@ -71,6 +71,11 @@ def view_firewall_rule_list(request):
     if wireguard_instances.filter(legacy_firewall=True).exists():
         return redirect('/firewall/migration_required/')
     firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
+    if not firewall_settings.last_firewall_reset:
+        reset_firewall_to_default()
+        messages.success(request, 'VPN Firewall|Firewall initialized with the default rule set!')
+        return redirect('/firewall/rule_list/')
+
     current_chain = request.GET.get('chain', 'forward')
     if current_chain not in ['forward', 'portforward', 'postrouting']:
         current_chain = 'forward'

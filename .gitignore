@@ -5,3 +5,4 @@
 *.pyo
 *.pyd
 wireguard_webadmin/production_settings.py
+.idea/
