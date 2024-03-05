@@ -13,7 +13,7 @@ services:
       - static_volume:/app_static_files/
     ports:
       # Do not directly expose the Django port to the internet, use the reverse proxy below instead
-      #- "127.0.0.1:8000:8000"
+      # - "127.0.0.1:8000:8000"
       # Warning: Docker will have a hard time handling large amount of ports. Expose only the ports that you need.
       # Ports for multiple WireGuard instances. (Probably, you just need one)
       - "51820-51839:51820-51839/udp"
@@ -40,6 +40,9 @@ services:
     container_name: wireguard-webadmin-nginx
     restart: unless-stopped
     image: nginx:alpine
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
     volumes:
       - ./virtualhost.conf:/etc/nginx/conf.d/wireguard-webadmin.conf
       - static_volume:/static

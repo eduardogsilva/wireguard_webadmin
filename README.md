@@ -29,22 +29,19 @@ Follow these steps to deploy wireguard_webadmin:
    git clone https://github.com/eduardogsilva/wireguard_webadmin
    ```
 
-2. **Place your SSL certificates for nginx in the `certificates` volume.**
-
-   The files should be named `nginx.pem` and `nginx.key`. You can use self-signed certificates and accept the certificate exception in your browser.
-
-3. **Run Docker Compose (choose one):**
+2. **Run Docker Compose (choose one):**
 
    ### With NGINX (Recommended)
-   This mode is recommended for running the webadmin. Set up your certificates for nginx; you can use a self-signed certificate. If you don't have a DNS name pointing to your server, use `SERVER_ADDRESS=ip_address`.
-
-   ```
+   This mode is recommended for running the web admin interface. The container deployment will automatically generate a self-signed certificate for you. If you want to update your certificates, simply navigate to the `certificates` volume and replace `nginx.pem` and `nginx.key` with your own certificates. If you don't have a DNS name pointing to your server, use `SERVER_ADDRESS=ip_address`.
+   
+   ```bash
    SERVER_ADDRESS=yourserver.example.com docker-compose up --build -d
    ```
-   Access the web interface using `https://yourserver.example.com`.
+      
+   Access the web interface using `https://yourserver.example.com`. If you are using a self-signed certificate, you must accept the certificate exception that your browser will present.
 
    ### Without NGINX (Debug mode and testing only)
-   This mode does not require SSL certificates and runs Django with `DEBUG=True`. Not recommended for production use without HTTPS.
+   This mode does not use SSL certificates and runs Django with `DEBUG=True`. Not recommended for production use without HTTPS.
    ```
    docker-compose -f docker-compose-no-nginx.yml up --build -d
    ```
