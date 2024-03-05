@@ -126,7 +126,7 @@
                                     {% for peer in rule.destination_peer.all %}{% if rule.not_destination %}<span title="Not destination">!</span> {% endif %}{{ peer }}{% if rule.destination_peer_include_networks %} <span title="Include peer networks">+</span>{% endif %}<br>{% endfor %}
                                 </td>
                 
-                                <td>{{ rule.get_protocol_display|default_if_none:'' }}</td>
+                                <td>{% if rule.protocol %}{{ rule.get_protocol_display }}{% else %}all{% endif %}</td>
                                 <td>{{ rule.destination_port|default_if_none:'' }}</td>
                                 <td>
                                     {% if rule.state_new %}{% if rule.not_state %}<span title="Not state">! </span>{% endif %}New<br>{% endif %}
