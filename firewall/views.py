@@ -180,6 +180,12 @@ def view_manage_firewall_settings(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Firewall settings saved successfully')
+            # Marking wireguard_instance as having pending changes, not the best way to do this, but it works for now.
+            # I will improve it later.
+            wireguard_instance = WireGuardInstance.objects.all().first()
+            if wireguard_instance:
+                wireguard_instance.pending_changes = True
+                wireguard_instance.save()
             return redirect(redirect_url)
     else:
         form = FirewallSettingsForm(instance=firewall_settings)
