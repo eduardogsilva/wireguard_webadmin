@@ -31,7 +31,12 @@
                 <!-- Private Key -->
                 <div class="form-group">
                     <label for="{{ form.private_key.id_for_label }}">{{ form.private_key.label }}</label>
-                    <input type="text" class="form-control" id="{{ form.private_key.id_for_label }}" name="{{ form.private_key.html_name }}" placeholder="Private Key" value="{{ form.private_key.value|default_if_none:'' }}" required>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="{{ form.private_key.id_for_label }}" name="{{ form.private_key.html_name }}" placeholder="Private Key" value="{{ form.private_key.value|default_if_none:'' }}" required>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary toggle-password" type="button"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Pre-Shared Key -->
@@ -120,6 +125,21 @@
         }
     }
 </script>
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelector('.toggle-password').addEventListener('click', function () {
+            let passwordInput = document.getElementById('{{ form.private_key.id_for_label }}');
+            let passStatus = passwordInput.getAttribute('type') === 'password';
+            passwordInput.setAttribute('type', passStatus ? 'text' : 'password');
+            this.innerHTML = passStatus ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+        });
+    
+        document.getElementById('{{ form.private_key.id_for_label }}').addEventListener('keypress', function () {
+            this.setAttribute('type', 'text');
+        });
+    });
+</script>
 
-
+    
 {% endblock %}
