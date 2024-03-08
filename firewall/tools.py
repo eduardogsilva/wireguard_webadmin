@@ -170,12 +170,15 @@ iptables -t filter -I FORWARD     -j WGWADM_FORWARD
 
 iptables -t filter -A WGWADM_FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 '''
-    
-
     return header
+
 
 def generate_firewall_footer():
     firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
+    deny_policy = 'REJECT'
+    if firewall_settings.default_forward_policy == 'drop':
+        deny_policy = 'DROP'
+
     footer = '# The following rules come from Firewall settings\n'
     footer += '# Default FORWARD policy\n'
     footer += f'iptables -t filter -P FORWARD {firewall_settings.default_forward_policy.upper()}\n'
@@ -183,10 +186,10 @@ def generate_firewall_footer():
     footer += '# Same instance Peer to Peer traffic\n'
     for wireguard_instance in WireGuardInstance.objects.all().order_by('instance_id'):
         footer += f'iptables -t filter -A WGWADM_FORWARD -i wg{wireguard_instance.instance_id} -o wg{wireguard_instance.instance_id} -j '
-        footer += 'ACCEPT\n' if firewall_settings.allow_peer_to_peer else "REJECT\n"
+        footer += 'ACCEPT\n' if firewall_settings.allow_peer_to_peer else deny_policy + "\n"
     footer += '# Instance to Instance traffic\n'
     footer += 'iptables -t filter -A WGWADM_FORWARD -i wg+ -o wg+ -j '
-    footer += 'ACCEPT\n' if firewall_settings.allow_instance_to_instance else "REJECT\n"
+    footer += 'ACCEPT\n' if firewall_settings.allow_instance_to_instance else deny_policy + "\n"
     return footer
 
 
