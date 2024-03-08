@@ -72,7 +72,7 @@ Upgrading your wireguard_webadmin installation ensures you have the latest featu
 
    It's crucial to back up your database before proceeding with the upgrade. This step ensures you can restore your data in case something goes wrong during the upgrade process. Use the following command to create a backup of your database files, which will include the current date in the backup filename for easy identification:
    ```
-   tar cvfz /root/wireguard-webadmin-$(date +%Y-%m-%d).tar.gz /var/lib/docker/volumes/wireguard_webadmin_wireguard/_data/
+   tar cvfz /root/wireguard-webadmin-$(date +%Y-%m-%d-%H%M%S).tar.gz /var/lib/docker/volumes/wireguard_webadmin_wireguard/_data/
    ```
    This command compresses and saves the database files to the `/root` directory. Adjust the path as necessary to match your backup storage practices.
 
