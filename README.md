@@ -18,7 +18,22 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Screenshots
 
-![Wireguard Peer List](screenshots/peerlist.png) ![Wireguard Server Configuration](screenshots/serverconfig.png) ![Console](screenshots/console.png) ![User Manager](screenshots/usermanager.png)
+### Peer List
+Displays a comprehensive list of peers, including their status and other details, allowing for easy monitoring and management of WireGuard VPN connections.
+![Wireguard Peer List](screenshots/peerlist.png)
+### Firewall Management
+Offers a comprehensive interface for managing VPN firewall rules, enabling users to easily create, edit, and delete rules with iptables-style syntax. This feature ensures precise control over network traffic, enhancing security and connectivity for WireGuard VPN instances.
+![Firewall Rule List](screenshots/firewall-rule-list.png)
+![Firewall Rule Manager](screenshots/firewall-manage-rule.png)
+### WireGuard Instance Settings
+A central hub for managing settings across one or multiple WireGuard instances, enabling straightforward configuration adjustments for VPN interfaces.
+![Wireguard Server Configuration](screenshots/serverconfig.png) 
+### Console 
+Offers quick access to common debugging tools, facilitating the diagnosis and resolution of potential issues within the WireGuard VPN environment.
+![Console](screenshots/console.png) 
+### User Manager
+Supports multi-user environments by allowing the assignment of varying permission levels, from restricted access to full administrative rights, ensuring secure and tailored access control.
+![User Manager](screenshots/usermanager.png)
 
 ## Deployment
 
@@ -35,7 +50,7 @@ Follow these steps to deploy wireguard_webadmin:
    This mode is recommended for running the web admin interface. The container deployment will automatically generate a self-signed certificate for you. If you want to update your certificates, simply navigate to the `certificates` volume and replace `nginx.pem` and `nginx.key` with your own certificates. If you don't have a DNS name pointing to your server, use `SERVER_ADDRESS=ip_address`.
    
    ```bash
-   SERVER_ADDRESS=yourserver.example.com docker-compose up --build -d
+   SERVER_ADDRESS=yourserver.example.com docker compose up --build -d
    ```
       
    Access the web interface using `https://yourserver.example.com`. If you are using a self-signed certificate, you must accept the certificate exception that your browser will present.
@@ -43,7 +58,7 @@ Follow these steps to deploy wireguard_webadmin:
    ### Without NGINX (Debug mode and testing only)
    This mode does not use SSL certificates and runs Django with `DEBUG=True`. Not recommended for production use without HTTPS.
    ```
-   docker-compose -f docker-compose-no-nginx.yml up --build -d
+   docker compose -f docker-compose-no-nginx.yml up --build -d
    ```
    Access the web interface using `http://127.0.0.1:8000`.
 
@@ -65,7 +80,7 @@ Upgrading your wireguard_webadmin installation ensures you have the latest featu
 
    Gracefully stop all running services to ensure there's no data loss:
    ```
-   docker-compose down
+   docker compose down
    ```
 
 3. **Backup Database:**
@@ -87,18 +102,18 @@ Upgrading your wireguard_webadmin installation ensures you have the latest featu
 
    Re-deploy wireguard_webadmin using Docker Compose. If you're using NGINX as a reverse proxy (recommended for production), ensure your SSL certificates are in place and then start the services:
    ```
-   SERVER_ADDRESS=yourserver.example.com docker-compose up --build -d
+   SERVER_ADDRESS=yourserver.example.com docker compose up --build -d
    ```
    If you're in a development or testing environment and not using NGINX, you can start the services without it:
    ```
-   docker-compose -f docker-compose-no-nginx.yml up --build -d
+   docker compose -f docker-compose-no-nginx.yml up --build -d
    ```
 
 6. **Verify Operation:**
 
    After the services start, access the web interface to verify that wireguard_webadmin is functioning correctly. Check the application logs if you encounter any issues:
    ```
-   docker-compose logs
+   docker compose logs
    ```
 
 7. **Post-Upgrade:**
