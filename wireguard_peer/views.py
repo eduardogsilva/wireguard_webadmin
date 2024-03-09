@@ -22,7 +22,7 @@ def generate_peer_default(wireguard_instance):
     
     # the code below can be an issue for larger networks, for now it's fine, but it should be optimized in the future
     used_ips = set(WireGuardInstance.objects.all().values_list('address', flat=True)) | \
-               set(PeerAllowedIP.objects.filter(priority=0).values_list('allowed_ip', flat=True))
+               set(PeerAllowedIP.objects.filter(config_file='server', priority=0).values_list('allowed_ip', flat=True))
     
     free_ip_address = None
     for ip in network.hosts():
@@ -88,6 +88,7 @@ def view_wireguard_peer_manage(request):
                 wireguard_instance=current_instance,
             )
             PeerAllowedIP.objects.create(
+                config_file='server',
                 peer=new_peer,
                 allowed_ip=new_peer_data['allowed_ip'],
                 priority=0,
@@ -115,7 +116,8 @@ def view_wireguard_peer_manage(request):
                 messages.warning(request, 'Error deleting peer|Invalid confirmation message. Type "delete" to confirm.')
                 return redirect('/peer/manage/?peer=' + str(current_peer.uuid))
         page_title = 'Update Peer '
-        peer_ip_list = current_peer.peerallowedip_set.all().order_by('priority')
+        peer_ip_list = current_peer.peerallowedip_set.filter(config_file='server').order_by('priority')
+        peer_client_ip_list = current_peer.peerallowedip_set.filter(config_file='client').order_by('priority')
         if current_peer.name:
             page_title += current_peer.name
         else:
@@ -133,31 +135,28 @@ def view_wireguard_peer_manage(request):
     else:
         return redirect('/peer/list/')
     context = {
-        'page_title': page_title, 'current_instance': current_instance, 'current_peer': current_peer, 'form': form, 'peer_ip_list': peer_ip_list
+        'page_title': page_title, 'current_instance': current_instance, 'current_peer': current_peer, 'form': form,
+        'peer_ip_list': peer_ip_list, 'peer_client_ip_list': peer_client_ip_list
         }
     return render(request, 'wireguard/wireguard_manage_peer.html', context)
-
 
 
 def view_manage_ip_address(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+
+    config_file = request.GET.get('config', 'server')
+
     if request.GET.get('peer'):
         current_peer = get_object_or_404(Peer, uuid=request.GET.get('peer'))
-        page_title = 'Add new IP address for Peer '
+        #page_title = 'Add new IP address for Peer ' + str(current_peer)
         current_ip = None
-        if current_peer.name:
-            page_title += current_peer.name
-        else:
-            page_title += current_peer.public_key
     elif request.GET.get('ip'):
         current_ip = get_object_or_404(PeerAllowedIP, uuid=request.GET.get('ip'))
         current_peer = current_ip.peer
-        page_title = 'Update IP address for Peer '
-        if current_peer.name:
-            page_title += current_peer.name
-        else:
-            page_title += current_peer.public_key[:10] + ("..." if len(current_peer.public_key) > 16 else "")
+        config_file = current_ip.config_file
+        #page_title = 'Update IP address for Peer ' + str(current_peer)
+
         if request.GET.get('action') == 'delete':
             if request.GET.get('confirmation') == 'delete':
                 current_ip.delete()
@@ -168,13 +167,20 @@ def view_manage_ip_address(request):
             else:
                 messages.warning(request, 'Error deleting IP address|Invalid confirmation message. Type "delete" to confirm.')
                 return redirect('/peer/ip/?ip=' + str(current_ip.uuid))
-    
+    if config_file not in ['client', 'server']:
+        config_file = 'server'
+    if config_file == 'client':
+        page_title = 'Manage client route'
+    else:
+        page_title = 'Manage IP address or Network'
+
     if request.method == 'POST':
-        form = PeerAllowedIPForm(request.POST or None, instance=current_ip, current_peer=current_peer)
+        form = PeerAllowedIPForm(request.POST or None, instance=current_ip, current_peer=current_peer, config_file=config_file)
         if form.is_valid():
             this_form = form.save(commit=False)
             if not current_ip:
                 this_form.peer = current_peer
+            this_form.config_file = config_file
             this_form.save()
             current_peer.wireguard_instance.pending_changes = True
             current_peer.wireguard_instance.save()

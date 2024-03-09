@@ -23,15 +23,18 @@ def generate_peer_config(peer_uuid):
     peer = get_object_or_404(Peer, uuid=peer_uuid)
     wg_instance = peer.wireguard_instance
 
-    priority_zero_ip = PeerAllowedIP.objects.filter(peer=peer, priority=0).first()
+    priority_zero_ip = PeerAllowedIP.objects.filter(config_file='server', peer=peer, priority=0).first()
 
     if not priority_zero_ip:
         return "No IP with priority zero found for this peer."
 
     client_address = f"{priority_zero_ip.allowed_ip}/{priority_zero_ip.netmask}"
 
-    #allowed_ips = PeerAllowedIP.objects.filter(peer=peer).exclude(uuid=priority_zero_ip.uuid).order_by('priority')
-    #allowed_ips_line = ", ".join([f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips])
+    allowed_ips = PeerAllowedIP.objects.filter(peer=peer, config_file='client').order_by('priority')
+    if allowed_ips:
+        allowed_ips_line = ", ".join([f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips])
+    else:
+        allowed_ips_line = "0.0.0.0/0, ::/0"
 
     config_lines = [
         "[Interface]",
@@ -41,7 +44,7 @@ def generate_peer_config(peer_uuid):
         "\n[Peer]",
         f"PublicKey = {wg_instance.public_key}",
         f"Endpoint = {wg_instance.hostname}:{wg_instance.listen_port}",
-        f"AllowedIPs = 0.0.0.0/0, ::/0",  
+        f"AllowedIPs = {allowed_ips_line}",
         f"PresharedKey = {peer.pre_shared_key}" if peer.pre_shared_key else "",
         f"PersistentKeepalive = {peer.persistent_keepalive}",
     ]
@@ -85,7 +88,7 @@ def export_wireguard_configs(request):
                 rule_text_down = ""
                 rule_destination = redirect_rule.ip_address
                 if redirect_rule.peer:
-                    peer_allowed_ip_address = PeerAllowedIP.objects.filter(peer=redirect_rule.peer, netmask=32, priority=0).first()
+                    peer_allowed_ip_address = PeerAllowedIP.objects.filter(config_file='server', peer=redirect_rule.peer, netmask=32, priority=0).first()
                     if peer_allowed_ip_address:
                         rule_destination = peer_allowed_ip_address.allowed_ip
                 if rule_destination:
@@ -128,7 +131,7 @@ def export_wireguard_configs(request):
                 f"PresharedKey = {peer.pre_shared_key}" if peer.pre_shared_key else "",
                 f"PersistentKeepalive = {peer.persistent_keepalive}",
             ]
-            allowed_ips = PeerAllowedIP.objects.filter(peer=peer).order_by('priority')
+            allowed_ips = PeerAllowedIP.objects.filter(config_file='server', peer=peer).order_by('priority')
             allowed_ips_line = "AllowedIPs = " + ", ".join([f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips])
             peer_lines.append(allowed_ips_line)
             config_lines.extend(peer_lines)

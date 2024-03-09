@@ -39,43 +39,14 @@
                                 <b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span> <span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">{% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}</span><br>
                                 <b>Endpoints:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br>
                                 <b>Allowed IPs: </b><span id="peer-allowed-ips-{{ peer.public_key }}">
-                                    {% for address in peer.peerallowedip_set.all %}{% if address.priority == 0 %}
-                                    {% if address.missing_from_wireguard %}
-                                        <a href='#' class='bg-warning' title="This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.">{{ address }}</a>
-                                    {% else %}
-                                        {{ address }}
-                                    {% endif %}
-                                    {% endif %}{% endfor %}
-                                    
-                                    {% for address in peer.peerallowedip_set.all %}{% if address.priority >= 1 %} 
-                                    {% if address.missing_from_wireguard %}
-                                        <a href='#' class='bg-warning' title="This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.">{{ address }}</a>
-                                    {% else %}
-                                        {{ address }}
-                                    {% endif %}
-                                    {% endif %}{% endfor %}
+                                    {% for address in peer.peerallowedip_set.all %}
+                                        {% if address.priority == 0 and address.config_file == 'server' %}{{ address }}{% endif %}
+                                    {% endfor %}
+                                    {% for address in peer.peerallowedip_set.all %}
+                                        {% if address.priority >= 1 and address.config_file == 'server' %}{{ address }}{% endif %}
+                                    {% endfor %}
                                 </span>
                             </p>
-                            
-                            {% comment %}
-                            <p>{% for address in peer.peerallowedip_set.all %}{% if address.priority == 0 %}
-                                {% if address.missing_from_wireguard %}
-                                    <a href='#' class='bg-warning' title="This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.">{{ address }}</a>
-                                {% else %}
-                                    {{ address }}
-                                {% endif %}
-                                {% endif %}{% endfor %}
-                                
-                                {% for address in peer.peerallowedip_set.all %}{% if address.priority >= 1 %} 
-                                {% if address.missing_from_wireguard %}
-                                    <a href='#' class='bg-warning' title="This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.">{{ address }}</a>
-                                {% else %}
-                                    {{ address }}
-                                {% endif %}
-                                {% endif %}{% endfor %}
-                            </p>
-                            {% endcomment %}
-
                         </div>
                         
                         

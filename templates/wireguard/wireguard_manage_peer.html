@@ -47,30 +47,91 @@
 
             </div>
             <div class="col-lg-6">
-                <label>IP Addresses</label>
-                {% for ip_address in peer_ip_list %}
-                <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-                    <p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label>
+                                <i class="fas fa-info-circle" title="AllowedIPs at Peer section of wg{{ current_peer.wireguard_instance.instance_id }}.conf"></i>
+                                Peer IP Addresses and networks
+                            </label>
+                            <a class="btn btn-outline-primary btn-xs" href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}&config=server" >Add IP Address</a>
+                        </div>
+                    
+                        {% for ip_address in peer_ip_list %}
+                            <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                <p>
+                                    <a href="/peer/manage_ip_address/?ip={{ ip_address.uuid }}">
+                                        <i class="fas fa-network-wired"></i>
+                                        {{ ip_address}}
+                                    </a>
 
-                        {% if ip_address.missing_from_wireguard %}
-                            <a href='/peer/manage_ip_address/?ip={{ ip_address.uuid }}' class='bg-warning' title="This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.">
-                                <i class="fas fa-network-wired"></i>
-                                {{ ip_address}}
-                            </a>
-                        {% else %}
-                            <a href="/peer/manage_ip_address/?ip={{ ip_address.uuid }}">
-                                <i class="fas fa-network-wired"></i>
-                                {{ ip_address}}
-                            </a>
-                        {% endif %}
-                        
-                        
-                    </p>
-                    <p class="d-flex flex-column text-right small">
-                      Priority: {{ ip_address.priority }}
-                    </p>
-                  </div>
-                {% endfor %}
+
+
+                                </p>
+                                <p class="d-flex flex-column text-right small">
+                                    {% if ip_address.priority == 0 %}
+                                        Main ip address
+                                    {% else %}
+                                        Priority: {{ ip_address.priority }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label>
+                                <i class="fas fa-info-circle" title="AllowedIPs at client configuration file"></i> 
+                                Client Routing Configuration
+                            </label>
+                            <a class="btn btn-outline-primary btn-xs" href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}&config=client" >Add Client route</a>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                <p>
+                                    <a href="#"
+                                       {% if peer_client_ip_list %}
+                                            onclick="alert('The client is not configured to use the VPN as the default gateway.\n\nOnly the specific networks listed below are routed through the VPN.\n\nNote: These routes are not automatically pushed to the client. You will need to manually update the client configuration file to reflect these settings.');"
+                                       style="text-decoration: line-through;"
+                                       {% else %}
+                                            onclick="alert('The client is configured to use the VPN as the default gateway. \n\nThis setting routes all client internet traffic through the VPN, enhancing privacy and security across all connections.');"
+                                        {% endif %}
+                                        
+                                    >
+                                        <i class="fas fa-network-wired"></i>
+                                        0.0.0.0/0, ::/0
+                                    </a>
+                                </p>
+                                <p class="d-flex flex-column text-right small">
+                                    default route
+                                </p>
+                        </div>
+
+
+                        {% for ip_address in peer_client_ip_list %}
+                            <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                <p>
+                                    <a href="/peer/manage_ip_address/?ip={{ ip_address.uuid }}">
+                                        <i class="fas fa-network-wired"></i>
+                                        {{ ip_address}}
+                                    </a>
+                                </p>
+                                <p class="d-flex flex-column text-right small">
+                                    {% if ip_address.priority == 0 %}
+                                        Main ip address
+                                    {% else %}
+                                        Priority: {{ ip_address.priority }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+
 
 
             </div>

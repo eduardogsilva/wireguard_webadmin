@@ -111,7 +111,7 @@ class PeerAllowedIP(models.Model):
     priority = models.PositiveBigIntegerField(default=1)
     allowed_ip = models.GenericIPAddressField(protocol='IPv4')
     netmask = models.IntegerField(default=32, choices=NETMASK_CHOICES)
-    missing_from_wireguard = models.BooleanField(default=False)
+    config_file = models.CharField(max_length=6, choices=(('server', 'Server Config'), ('client', 'Client config')), default='server')
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

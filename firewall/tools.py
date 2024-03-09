@@ -6,7 +6,7 @@ from django.utils import timezone
 def get_peer_addresses(peers, include_networks):
     addresses = []
     for peer in peers.all():
-        peer_ips = peer.peerallowedip_set.all().order_by('priority')
+        peer_ips = peer.peerallowedip_set.filter(config_file='server').order_by('priority')
         if not include_networks:
             peer_ips = peer_ips.filter(priority=0)
         
@@ -202,7 +202,7 @@ def generate_port_forward_firewall():
         description = f" - {redirect_rule.description} " if redirect_rule.description else ""
         rule_destination = redirect_rule.ip_address
         if redirect_rule.peer:
-            peer_allowed_ip_address = PeerAllowedIP.objects.filter(peer=redirect_rule.peer, netmask=32, priority=0).first()
+            peer_allowed_ip_address = PeerAllowedIP.objects.filter(peer=redirect_rule.peer, config_file='server', netmask=32, priority=0).first()
             if peer_allowed_ip_address:
                 rule_destination = peer_allowed_ip_address.allowed_ip
         if rule_destination:
