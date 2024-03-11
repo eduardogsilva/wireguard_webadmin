@@ -35,12 +35,14 @@ def generate_peer_config(peer_uuid):
         allowed_ips_line = ", ".join([f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips])
     else:
         allowed_ips_line = "0.0.0.0/0, ::/0"
+    dns_entries = [wg_instance.dns_primary, wg_instance.dns_secondary]
+    dns_line = ", ".join(filter(None, dns_entries))
 
     config_lines = [
         "[Interface]",
         f"PrivateKey = {peer.private_key}" if peer.private_key else "",
         f"Address = {client_address}",
-        f"DNS = {wg_instance.dns_primary}" + (f", {wg_instance.dns_secondary}" if wg_instance.dns_secondary else ""),
+        f"DNS = {dns_line}" if dns_line else "",
         "\n[Peer]",
         f"PublicKey = {wg_instance.public_key}",
         f"Endpoint = {wg_instance.hostname}:{wg_instance.listen_port}",

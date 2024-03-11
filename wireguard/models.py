@@ -56,7 +56,7 @@ class WireGuardInstance(models.Model):
     post_up = models.TextField(blank=True, null=True)
     post_down = models.TextField(blank=True, null=True)
     peer_list_refresh_interval = models.IntegerField(default=20)
-    dns_primary = models.GenericIPAddressField(unique=False, protocol='IPv4', default='1.1.1.1')
+    dns_primary = models.GenericIPAddressField(unique=False, protocol='IPv4', default='1.1.1.1', blank=True, null=True)
     dns_secondary = models.GenericIPAddressField(unique=False, protocol='IPv4', default='1.0.0.1', blank=True, null=True)
     pending_changes = models.BooleanField(default=True)
     legacy_firewall = models.BooleanField(default=False)
