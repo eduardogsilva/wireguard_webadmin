@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+
 from django.conf import settings
 from django.utils import timezone
 from wireguard.models import WebadminSettings, Peer, PeerStatus
@@ -8,11 +9,41 @@ import requests
 import subprocess
 import datetime
 import pytz
+import os
+import uuid
 
 
-@login_required
+def get_api_key():
+    api_file_path = '/etc/wireguard/api_key'
+    api_key = None
+
+    if os.path.exists(api_file_path) and os.path.isfile(api_file_path):
+        with open(api_file_path, 'r') as api_file:
+            api_file_content = api_file.read().strip()
+            try:
+                uuid_test = uuid.UUID(api_file_content)
+
+                if str(uuid_test) == api_file_content:
+                    api_key = str(uuid_test)
+            except:
+                pass
+
+    return api_key
+
+
 @require_http_methods(["GET"])
 def wireguard_status(request):
+    if request.user.is_authenticated:
+        pass
+    elif request.GET.get('key'):
+        api_key = get_api_key()
+        if api_key and api_key == request.GET.get('key'):
+            pass
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponseForbidden()
+
     commands = {
         'latest-handshakes': "wg show all latest-handshakes | expand | tr -s ' '",
         'allowed-ips': "wg show all allowed-ips | expand | tr -s ' '",
@@ -104,7 +135,7 @@ def cron_update_peer_latest_handshake(request):
 def cron_check_updates(request):
     webadmin_settings, webadmin_settings_created = WebadminSettings.objects.get_or_create(name='webadmin_settings')
 
-    if webadmin_settings.last_checked is None or timezone.now() - webadmin_settings.last_checked > timezone.timedelta(hours=6):
+    if webadmin_settings.last_checked is None or timezone.now() - webadmin_settings.last_checked > timezone.timedelta(hours=1):
         try:
             version = settings.WIREGUARD_WEBADMIN_VERSION / 10000
             url = f'https://updates.eth0.com.br/api/check_updates/?app=wireguard_webadmin&version={version}'
