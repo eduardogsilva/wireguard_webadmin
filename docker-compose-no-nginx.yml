@@ -30,6 +30,7 @@ services:
 
   wireguard-webadmin-cron:
     container_name: wireguard-webadmin-cron
+    restart: unless-stopped
     build:
       context: ./cron
       dockerfile: Dockerfile-cron
