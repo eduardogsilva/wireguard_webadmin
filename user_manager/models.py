@@ -19,3 +19,10 @@ class UserAcl(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class AuthenticationToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    uuid = models.UUIDField(editable=False, default=uuid.uuid4)

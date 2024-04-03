@@ -1,6 +1,9 @@
 from django.shortcuts import render, Http404, redirect
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django.contrib import messages
+
+from api.views import get_api_key
 from .forms import CreateUserForm, LoginForm
 from django.http import HttpResponse
 from user_manager.models import UserAcl
@@ -25,6 +28,11 @@ def view_create_first_user(request):
 def view_login(request):
     if not User.objects.filter().all():
         return redirect('/accounts/create_first_user/')
+
+    if get_api_key('routerfleet'):
+        messages.warning(request, 'Login disabled|Login form is disabled. Check integration settings.')
+        return redirect('/accounts/logout/')
+
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():

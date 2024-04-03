@@ -22,7 +22,7 @@ from console.views import view_console
 from user_manager.views import view_user_list, view_manage_user
 from accounts.views import view_create_first_user, view_login, view_logout
 from wireguard_tools.views import export_wireguard_configs, download_config_or_qrcode, restart_wireguard_interfaces
-from api.views import wireguard_status, cron_check_updates, cron_update_peer_latest_handshake
+from api.views import wireguard_status, cron_check_updates, cron_update_peer_latest_handshake, routerfleet_get_user_token, routerfleet_authenticate_session
 from firewall.views import view_redirect_rule_list, manage_redirect_rule, view_firewall_rule_list, manage_firewall_rule, view_manage_firewall_settings, view_generate_iptables_script, view_reset_firewall, view_firewall_migration_required
 
 
@@ -43,6 +43,8 @@ urlpatterns = [
     path('accounts/create_first_user/', view_create_first_user, name='create_first_user'),
     path('accounts/login/', view_login, name='login'),
     path('accounts/logout/', view_logout, name='logout'),
+    path('accounts/routerfleet_authenticate_session/', routerfleet_authenticate_session, name='routerfleet_authenticate_session'),
+    path('api/routerfleet_get_user_token/', routerfleet_get_user_token, name='routerfleet_get_user_token'),
     path('api/wireguard_status/', wireguard_status, name='api_wireguard_status'),
     path('api/cron_check_updates/', cron_check_updates, name='cron_check_updates'),
     path('api/cron_update_peer_latest_handshake/', cron_update_peer_latest_handshake, name='cron_update_peer_latest_handshake'),
