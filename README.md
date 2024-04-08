@@ -60,7 +60,7 @@ Follow these steps to deploy the WireGuard WebAdmin:
    ```bash
    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose.yml
    ```
-
+This mode is recommended for running the web admin interface. The container deployment will automatically generate a self-signed certificate for you. If you want to update your certificates, simply navigate to the `certificates` volume and replace `nginx.pem` and `nginx.key` with your own certificates.
    ### Without NGINX (Debug Mode and Testing Only)
    
    For a debug environment without NGINX, suitable only for testing (not recommended for production), use:
