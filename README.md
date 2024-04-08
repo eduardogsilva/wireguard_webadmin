@@ -96,10 +96,10 @@ This mode is recommended for running the web admin interface. The container depl
 
    ### Without NGINX (Debug Mode and Testing Only)
    
-   If you opted for the non-NGINX setup, simply run the previously fetched `docker-compose.yml` with:
+   If you opted for the non-NGINX setup, simply run the previously fetched `docker-compose-no-nginx.yml` with:
 
    ```bash
-   docker compose up -d
+   docker compose -f docker-compose-no-nginx.yml up -d
    ```
    
    Access the web interface using `http://127.0.0.1:8000`.
