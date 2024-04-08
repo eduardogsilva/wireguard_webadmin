@@ -35,91 +35,126 @@ Offers quick access to common debugging tools, facilitating the diagnosis and re
 Supports multi-user environments by allowing the assignment of varying permission levels, from restricted access to full administrative rights, ensuring secure and tailored access control.
 ![User Manager](screenshots/usermanager.png)
 
-## Deployment
+Based on your requirements, here's an updated set of deployment instructions incorporating the use of `wget` for fetching the latest `docker-compose.yml` files directly from your GitHub repository, and guidance on creating a `.env` file for environment variables. These instructions ensure users always have the most current version of your deployment configuration and clarify the setup process.
 
-Follow these steps to deploy wireguard_webadmin:
+## Deployment Instructions
 
-1. **Clone the repository:**
+Follow these steps to deploy the WireGuard WebAdmin:
+
+1.**Prepare the Environment:**
+   
+   First, create a directory for the WireGuard WebAdmin project and navigate into it. This will serve as the working directory for the deployment.
+
+   ```bash
+   mkdir wireguard_webadmin && cd wireguard_webadmin
    ```
-   git clone https://github.com/eduardogsilva/wireguard_webadmin
-   ```
 
-2. **Run Docker Compose (choose one):**
+2.**Fetch the Docker Compose File:**
+
+   Depending on your deployment scenario, choose one of the following commands to download the appropriate `docker-compose.yml` file directly into your working directory. This approach ensures you're using the latest version of the deployment configuration.
 
    ### With NGINX (Recommended)
-   This mode is recommended for running the web admin interface. The container deployment will automatically generate a self-signed certificate for you. If you want to update your certificates, simply navigate to the `certificates` volume and replace `nginx.pem` and `nginx.key` with your own certificates. If you don't have a DNS name pointing to your server, use `SERVER_ADDRESS=ip_address`.
+   
+   For a production-ready deployment with NGINX as a reverse proxy (recommended for most users), use:
+
+   ```bash
+   wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose.yml
+   ```
+
+   ### Without NGINX (Debug Mode and Testing Only)
+   
+   For a debug environment without NGINX, suitable only for testing (not recommended for production), use:
+
+   ```bash
+   wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-nginx.yml
+   ```
+
+3.**Create the `.env` File:**
+
+   Create a `.env` file in the same directory as your `docker-compose.yml` with the following content, adjusting `my_server_address` to your server's DNS name or IP address. This step is crucial for ensuring the application functions correctly.
+
+   ```env
+   # Configure SERVER_ADDRESS to match the address of the server. If you don't have a DNS name, you can use the IP address.
+   # A misconfigured SERVER_ADDRESS will cause the app to have CSRF errors.
+   SERVER_ADDRESS=my_server_address
+   DEBUG_MODE=False
+   ```
+
+   Replace `my_server_address` with your actual server address.
+
+4.**Run Docker Compose:**
+
+   Execute the Docker Compose command to start your deployment. Remember to replace `yourserver.example.com` with your server's actual address if you're using the NGINX version.
+
+   ### With NGINX (Recommended)
    
    ```bash
-   SERVER_ADDRESS=yourserver.example.com docker compose up --build -d
+   docker compose up -d
    ```
-      
+   
    Access the web interface using `https://yourserver.example.com`. If you are using a self-signed certificate, you must accept the certificate exception that your browser will present.
 
-   ### Without NGINX (Debug mode and testing only)
-   This mode does not use SSL certificates and runs Django with `DEBUG=True`. Not recommended for production use without HTTPS.
+   ### Without NGINX (Debug Mode and Testing Only)
+   
+   If you opted for the non-NGINX setup, simply run the previously fetched `docker-compose.yml` with:
+
+   ```bash
+   docker compose up -d
    ```
-   docker compose -f docker-compose-no-nginx.yml up --build -d
-   ```
+   
    Access the web interface using `http://127.0.0.1:8000`.
 
-After completing these steps, your wireguard_webadmin should be up and running. Begin configuration by accessing your server.
+After completing these steps, your WireGuard WebAdmin should be up and running. Begin the configuration by accessing your server's web interface.
+
+Certainly, let's refine the upgrade instructions with the inclusion of a backup step for the database and a more appropriate suggestion for transitioning users from a git clone workflow. 
 
 
 ## Upgrade Instructions
 
-Upgrading your wireguard_webadmin installation ensures you have the latest features, security updates, and bug fixes. Follow these steps to upgrade safely:
+Upgrading your WireGuard WebAdmin installation ensures you have access to the latest features, security improvements, and bug fixes. Follow these instructions for a smooth upgrade:
 
-1. **Preparation:**
+### Preparing for Upgrade:
 
-   Begin by navigating to your wireguard_webadmin directory:
-   ```
+1.**Transitioning from a Git Clone Workflow:**
+  
+Begin by navigating to your wireguard_webadmin directory:
+   ```bash
    cd path/to/wireguard_webadmin
    ```
-
-2. **Shutdown Services:**
-
-   Gracefully stop all running services to ensure there's no data loss:
+   If you're upgrading from an existing git clone installation, navigate to your current project directory. 
+   ```bash
+   cd /path/to/wireguard_webadmin_git_clone
    ```
+
+2.**Shutdown Services:**
+
+   Stop all running services to prevent data loss during the upgrade.
+   ```bash
    docker compose down
    ```
 
-3. **Backup Database:**
+3.**Backup Your Data:**
 
-   It's crucial to back up your database before proceeding with the upgrade. This step ensures you can restore your data in case something goes wrong during the upgrade process. Use the following command to create a backup of your database files, which will include the current date in the backup filename for easy identification:
-   ```
-   tar cvfz /root/wireguard-webadmin-$(date +%Y-%m-%d-%H%M%S).tar.gz /var/lib/docker/volumes/wireguard_webadmin_wireguard/_data/
-   ```
-   This command compresses and saves the database files to the `/root` directory. Adjust the path as necessary to match your backup storage practices.
+   Before making any changes, back up your database and any other important data. This step is crucial for restoring your setup if needed.
+   
+   - **Backup Database Command:**
+     ```bash
+     tar cvfz wireguard-webadmin-backup-$(date +%Y-%m-%d-%H%M%S).tar.gz /var/lib/docker/volumes/wireguard_webadmin_wireguard/_data/
+     ```
+   
+   Replace `/var/lib/docker/volumes/wireguard_webadmin_wireguard/_data/` with the actual path to your Docker volume data if it's different. This command saves the backup to the current directory.
 
-4. **Fetch the Latest Updates:**
 
-   Pull the latest version of wireguard_webadmin from the repository:
-   ```
-   git pull origin main
-   ```
+4.**Deploy Using Docker Compose:**
+   
+   Follow the previously outlined [Deployment Instructions](#deployment-instructions).
 
-5. **Deploy Updated Version:**
+### Post-Upgrade Checks:
 
-   Re-deploy wireguard_webadmin using Docker Compose. If you're using NGINX as a reverse proxy (recommended for production), ensure your SSL certificates are in place and then start the services:
-   ```
-   SERVER_ADDRESS=yourserver.example.com docker compose up --build -d
-   ```
-   If you're in a development or testing environment and not using NGINX, you can start the services without it:
-   ```
-   docker compose -f docker-compose-no-nginx.yml up --build -d
-   ```
+- **Verify Operation:** After the services start, access the web interface to ensure WireGuard WebAdmin functions as expected. Examine the application logs for potential issues.
+- **Support and Troubleshooting:** For any complications or need for further information, consult the project's [Discussions](https://github.com/eduardogsilva/wireguard_webadmin/discussions) page or relevant documentation.
 
-6. **Verify Operation:**
-
-   After the services start, access the web interface to verify that wireguard_webadmin is functioning correctly. Check the application logs if you encounter any issues:
-   ```
-   docker compose logs
-   ```
-
-7. **Post-Upgrade:**
-
-   - Review application and system logs to ensure there are no errors.
-   - If you encounter issues, consult the [Discussions](https://github.com/eduardogsilva/wireguard_webadmin/discussions) page or revert to your backup if necessary.
+By adhering to these instructions, you will update your WireGuard WebAdmin to the latest version, incorporating all available enhancements and security updates. Remember, regular backups and following these upgrade steps will help maintain your deployment's health and security.
 
 
 ## Contributing
