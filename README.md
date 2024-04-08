@@ -84,7 +84,7 @@ Follow these steps to deploy the WireGuard WebAdmin:
 
 4.**Run Docker Compose:**
 
-   Execute the Docker Compose command to start your deployment. Remember to replace `yourserver.example.com` with your server's actual address if you're using the NGINX version.
+   Execute the Docker Compose command to start your deployment.
 
    ### With NGINX (Recommended)
    
@@ -148,6 +148,9 @@ Begin by navigating to your wireguard_webadmin directory:
 4.**Deploy Using Docker Compose:**
    
    Follow the previously outlined [Deployment Instructions](#deployment-instructions).
+
+Don't forget to update the `docker-compose.yml` file to the latest version by re-downloading it from the repository.
+
 
 ### Post-Upgrade Checks:
 
