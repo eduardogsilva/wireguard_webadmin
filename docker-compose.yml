@@ -37,7 +37,7 @@ services:
     depends_on:
       - wireguard-webadmin
 
-  nginx:
+  wireguard-webadmin-nginx:
     container_name: wireguard-webadmin-nginx
     restart: unless-stopped
     image: nginx:alpine
@@ -45,7 +45,6 @@ services:
       context: .
       dockerfile: Dockerfile_nginx
     volumes:
-      - ./virtualhost.conf:/etc/nginx/conf.d/wireguard-webadmin.conf
       - static_volume:/static
       - https_cert:/certificate
     ports:
