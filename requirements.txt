@@ -1,7 +1,7 @@
 asgiref==3.7.2
 certifi==2024.2.2
 charset-normalizer==3.3.2
-Django==5.0.2
+Django==5.0.4
 idna==3.6
 pypng==0.20220715.0
 pytz==2024.1
