@@ -3,8 +3,7 @@ services:
   wireguard-webadmin:
     container_name: wireguard-webadmin
     restart: unless-stopped
-    build:
-      context: .
+    image: eduardosilva/wireguard_webadmin:latest
     environment:
       - SERVER_ADDRESS=${SERVER_ADDRESS}
       - DEBUG_MODE=${DEBUG_MODE}
@@ -19,7 +18,6 @@ services:
       - "51820-51839:51820-51839/udp"
       # Ports for port forwarding rules. Add your own ports here if you need them.
       - "8080-8089:8080-8089/tcp"
-      
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -31,19 +29,14 @@ services:
   wireguard-webadmin-cron:
     container_name: wireguard-webadmin-cron
     restart: unless-stopped
-    build:
-      context: ./cron
-      dockerfile: Dockerfile-cron
+    image: eduardosilva/wireguard_webadmin_cron:latest
     depends_on:
       - wireguard-webadmin
 
   wireguard-webadmin-nginx:
     container_name: wireguard-webadmin-nginx
     restart: unless-stopped
-    image: nginx:alpine
-    build:
-      context: .
-      dockerfile: Dockerfile_nginx
+    image: eduardosilva/wireguard_webadmin_nginx:latest
     volumes:
       - static_volume:/static
       - https_cert:/certificate
@@ -52,6 +45,6 @@ services:
       - "443:443"
 
 volumes:
-  static_volume: 
+  static_volume:
   https_cert:
   wireguard:

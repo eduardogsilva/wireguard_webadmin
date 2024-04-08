@@ -1,0 +1,18 @@
+version: '3'
+services:
+  wireguard-webadmin:
+    image: eduardosilva/wireguard_webadmin:latest
+    build:
+      context: .
+
+  wireguard-webadmin-cron:
+    image: eduardosilva/wireguard_webadmin_cron:latest
+    build:
+      context: ./cron
+      dockerfile: Dockerfile-cron
+
+  wireguard-webadmin-nginx:
+    image: eduardosilva/wireguard_webadmin_nginx:latest
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
