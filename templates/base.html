@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{page_title}} | wireguard-webadmin</title>
+  <title>{% if page_title %}{{page_title}} | {% endif %}wireguard-webadmin</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -25,12 +25,23 @@
   <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.css">
+
+  <style>
+    .min-width {
+        width: 1%; 
+        white-space: nowrap;
+    }
+    .preloader{
+        display: none;
+    }
+  </style>
+
   {% block page_custom_head %}{% endblock%}
 </head>
 {% load custom_tags %}
 {% tag_webadmin_version as webadmin_version %}
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed {% if request.COOKIES.sidebarState == 'collapsed' %}sidebar-collapse{% endif %}">
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -279,30 +290,6 @@
 <script src="/static/AdminLTE-3.2.0/dist/js/adminlte.js"></script>
 <script src="/static/AdminLTE-3.2.0/dist/js/pages/dashboard.js"></script>
 
-
-{% comment %}{% if messages %}
-            <script>
-              {% for message in messages %}
-                {% with message.message|split:"|" as message_part %}
-                    $(document).Toasts('create', {
-                      {% if message.tags %}
-                      class: 'bg-{{ message.tags}}',
-                      {% endif %}
-                      {% if partes|length > 1 %}
-                      title: '{{ message_part.1 }}',
-                      {% endif %}
-                      delay: 750,
-                      body: '{{ message_part.0 }}'
-                    })
-                {% endwith %}
-              {% endfor %}
-
-            </script>
-              
-          
-      {% endif %}
-{% endcomment %}
-
 <script>
   $(document).ready(function() {
     const webadminVersion = '{{ webadmin_version.current_version }}'; 
@@ -349,6 +336,51 @@
 </script>
 
 {% include "template_messages.html" %}
+
+<script>
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+</script>
+
+<script>
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+        var sidebarState = getCookie('sidebarState');
+        if (sidebarState === 'collapsed') {
+            $('body').addClass('sidebar-collapse');
+        }
+
+        $('[data-widget="pushmenu"]').on('click', function(event) {
+            event.preventDefault();
+            setTimeout(function() {
+                if ($('body').hasClass('sidebar-collapse')) {
+                    setCookie('sidebarState', 'collapsed', 7);
+                } else {
+                    setCookie('sidebarState', 'opened', 7);
+                }
+            }, 500);
+        });
+    });
+</script>
 
 {% block custom_page_scripts %}
 
