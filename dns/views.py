@@ -4,12 +4,28 @@ from django.contrib import messages
 from user_manager.models import UserAcl
 from .models import DNSSettings, StaticHost
 from .forms import StaticHostForm, DNSSettingsForm
+from .functions import generate_unbound_config
+from django.conf import settings
+
+
+@login_required
+def view_apply_dns_config(request):
+    dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
+    dns_settings.pending_changes = False
+    dns_settings.save()
+    unbound_config = generate_unbound_config()
+    with open(settings.UNBOUND_CONFIG, 'w') as f:
+        f.write(unbound_config)
+    messages.success(request, 'DNS settings applied successfully')
+    return redirect('/dns/')
 
 
 @login_required
 def view_static_host_list(request):
     dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
     static_host_list = StaticHost.objects.all().order_by('hostname')
+    if dns_settings.pending_changes:
+        messages.warning(request, 'Pending Changes|There are pending DNS changes that have not been applied')
     context = {
         'dns_settings': dns_settings,
         'static_host_list': static_host_list,
@@ -25,8 +41,7 @@ def view_manage_dns_settings(request):
     form = DNSSettingsForm(request.POST or None, instance=dns_settings)
     if form.is_valid():
         form.save()
-        messages.success(request, 'DNS settings saved successfully')
-        return redirect('/dns/')
+        return redirect('/dns/apply_config/')
 
     form_description_content = '''
         <strong>DNS Forwarders</strong>
