@@ -24,12 +24,15 @@ from accounts.views import view_create_first_user, view_login, view_logout
 from wireguard_tools.views import export_wireguard_configs, download_config_or_qrcode, restart_wireguard_interfaces
 from api.views import wireguard_status, cron_check_updates, cron_update_peer_latest_handshake, routerfleet_get_user_token, routerfleet_authenticate_session
 from firewall.views import view_redirect_rule_list, manage_redirect_rule, view_firewall_rule_list, manage_firewall_rule, view_manage_firewall_settings, view_generate_iptables_script, view_reset_firewall, view_firewall_migration_required
+from dns.views import view_static_host_list, view_manage_static_host
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', view_welcome, name='welcome'),
     path('status/', view_wireguard_status, name='wireguard_status'),
+    path('dns/', view_static_host_list, name='static_host_list'),
+    path('dns/manage_static_host/', view_manage_static_host, name='manage_static_host'),
     path('peer/list/', view_wireguard_peer_list, name='wireguard_peer_list'),
     path('peer/manage/', view_wireguard_peer_manage, name='wireguard_peer_manage'),
     path('peer/manage_ip_address/', view_manage_ip_address, name='manage_ip_address'),
