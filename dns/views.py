@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from user_manager.models import UserAcl
 from .models import DNSSettings, StaticHost
-from .forms import StaticHostForm
+from .forms import StaticHostForm, DNSSettingsForm
 
 
 @login_required
@@ -15,6 +15,41 @@ def view_static_host_list(request):
         'static_host_list': static_host_list,
     }
     return render(request, 'dns/static_host_list.html', context=context)
+
+
+@login_required
+def view_manage_dns_settings(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
+    form = DNSSettingsForm(request.POST or None, instance=dns_settings)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'DNS settings saved successfully')
+        return redirect('/dns/')
+
+    form_description_content = '''
+        <strong>DNS Forwarders</strong>
+        <p>
+        All DNS queries will be forwarded to the primary resolver. If the primary resolver is not available, the secondary resolver will be used.
+        </p>
+        <strong>
+        Local DNS Resolution
+        </strong>
+        <p>
+        If no forwarders are specified, the system will locally resolve DNS queries. This can lead to slower DNS resolution times, but can be useful in certain scenarios.
+        </p>
+        '''
+
+    context = {
+        'dns_settings': dns_settings,
+        'form': form,
+        'form_description': {
+            'size': '',
+            'content': form_description_content
+        },
+    }
+    return render(request, 'generic_form.html', context=context)
 
 
 @login_required
