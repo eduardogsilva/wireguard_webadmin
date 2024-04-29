@@ -11,6 +11,12 @@ services:
       context: ./cron
       dockerfile: Dockerfile-cron
 
+  wireguard-webadmin-dns:
+    image: eduardosilva/wireguard_webadmin_dns:latest
+    build:
+      context: ./containers/dnsmasq
+      dockerfile: Dockerfile-dnsmasq
+
   wireguard-webadmin-nginx:
     image: eduardosilva/wireguard_webadmin_nginx:latest
     build:

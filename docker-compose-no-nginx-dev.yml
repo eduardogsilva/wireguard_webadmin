@@ -8,10 +8,12 @@ services:
     environment:
       - SERVER_ADDRESS=127.0.0.1
       - DEBUG_MODE=True
+      - COMPOSE_VERSION=02b
     volumes:
       - wireguard:/etc/wireguard
       - static_volume:/app_static_files/
       - .:/app
+      - dnsmasq_conf:/etc/dnsmasq
     ports:
       # Do not directly expose the Django port to the internet, use some kind of reverse proxy with SSL.
       - "127.0.0.1:8000:8000"
@@ -38,6 +40,16 @@ services:
     depends_on:
       - wireguard-webadmin
 
+  wireguard-webadmin-dns:
+    container_name: wireguard-webadmin-dns
+    restart: unless-stopped
+    build:
+      context: ./containers/dnsmasq
+      dockerfile: Dockerfile-dnsmasq
+    volumes:
+      - dnsmasq_conf:/etc/dnsmasq/
+
 volumes:
   static_volume: 
   wireguard:
+  dnsmasq_conf:

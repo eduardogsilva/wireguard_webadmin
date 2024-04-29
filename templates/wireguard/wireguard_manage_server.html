@@ -98,11 +98,11 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="{{ form.dns_primary.id_for_label }}">{{ form.dns_primary.label }}</label>
-                                    <input type="text" class="form-control" id="{{ form.dns_primary.id_for_label }}" name="{{ form.dns_primary.html_name }}" placeholder="1.1.1.1" value="{{ form.dns_primary.value|default_if_none:'' }}">
+                                    <input type="text" class="form-control" id="{{ form.dns_primary.id_for_label }}" name="{{ form.dns_primary.html_name }}" value="{{ form.dns_primary.value|default_if_none:'' }}">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="{{ form.dns_secondary.id_for_label }}">{{ form.dns_secondary.label }}</label>
-                                    <input type="text" class="form-control" id="{{ form.dns_secondary.id_for_label }}" name="{{ form.dns_secondary.html_name }}" placeholder="1.0.0.1" value="{{ form.dns_secondary.value|default_if_none:'' }}">
+                                    <input type="text" class="form-control" id="{{ form.dns_secondary.id_for_label }}" name="{{ form.dns_secondary.html_name }}" value="{{ form.dns_secondary.value|default_if_none:'' }}">
                                 </div>
                                 
                             </div>

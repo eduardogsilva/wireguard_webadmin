@@ -25,9 +25,51 @@ server:
     local-zone: "local." static
     do-not-query-localhost: {do_not_query_localhost}
     verbosity: 1
-    recursion: yes    
 '''
     unbound_config += forward_zone
-    for static_host in static_hosts:
-        unbound_config += f'local-data: "{static_host.hostname}. IN A {static_host.ip_address}"\n'
+
+    if static_hosts:
+        unbound_config += '\nlocal-zone: "." transparent\n'
+        for static_host in static_hosts:
+            unbound_config += f'    local-data: "{static_host.hostname}. IN A {static_host.ip_address}"\n'
     return unbound_config
+
+
+def generate_dnsdist_config():
+    dns_settings = DNSSettings.objects.get(name='dns_settings')
+    static_hosts = StaticHost.objects.all()
+    dnsdist_config = "setLocal('0.0.0.0:53')\n"
+    dnsdist_config += "setACL('0.0.0.0/0')\n"
+
+    if dns_settings.dns_primary:
+        dnsdist_config += f"newServer({{address='{dns_settings.dns_primary}', pool='upstreams'}})\n"
+    if dns_settings.dns_secondary:
+        dnsdist_config += f"newServer({{address='{dns_settings.dns_secondary}', pool='upstreams'}})\n"
+
+    if static_hosts:
+        dnsdist_config += "addAction(makeRule(''), PoolAction('staticHosts'))\n"
+        for static_host in static_hosts:
+            dnsdist_config += f"addLocal('{static_host.hostname}', '{static_host.ip_address}')\n"
+
+    return dnsdist_config
+
+
+def generate_dnsmasq_config():
+    dns_settings = DNSSettings.objects.get(name='dns_settings')
+    static_hosts = StaticHost.objects.all()
+    dnsmasq_config = f'''
+no-dhcp-interface=
+listen-address=0.0.0.0
+bind-interfaces
+    
+'''
+    if dns_settings.dns_primary:
+        dnsmasq_config += f'server={dns_settings.dns_primary}\n'
+    if dns_settings.dns_secondary:
+        dnsmasq_config += f'server={dns_settings.dns_secondary}\n'
+
+    if static_hosts:
+        dnsmasq_config += '\n'
+        for static_host in static_hosts:
+            dnsmasq_config += f'address=/{static_host.hostname}/{static_host.ip_address}\n'
+    return dnsmasq_config

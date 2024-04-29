@@ -60,6 +60,7 @@ def generate_instance_defaults():
         'private_key': new_private_key,
         'public_key': new_public_key,
         'address': new_address,
+        'dns_primary': new_address,
         'netmask': 24,
         'persistent_keepalive': 25,
         'hostname': 'myserver.example.com',

@@ -131,9 +131,9 @@ STATICFILES_DIRS = [
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-UNBOUND_CONFIG = '/config/unbound.conf'
+DNS_CONFIG_FILE = '/etc/dnsmasq/wireguard_webadmin_dns.conf'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-WIREGUARD_WEBADMIN_VERSION = 9607
+WIREGUARD_WEBADMIN_VERSION = 9609
 
 from wireguard_webadmin.production_settings import *

@@ -16,7 +16,7 @@ class WireGuardInstanceForm(forms.ModelForm):
     post_down = forms.CharField(label='Post Down', required=False)
     peer_list_refresh_interval = forms.IntegerField(label='Web Refresh Interval', initial=20)
     dns_primary = forms.GenericIPAddressField(label='Primary DNS', initial='1.1.1.1', required=False)
-    dns_secondary = forms.GenericIPAddressField(label='Secondary DNS', initial='1.0.0.1', required=False)
+    dns_secondary = forms.GenericIPAddressField(label='Secondary DNS', initial='', required=False)
 
     class Meta:
         model = WireGuardInstance

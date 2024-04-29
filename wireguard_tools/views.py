@@ -4,7 +4,8 @@ import qrcode
 import subprocess
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404, render
-from firewall.tools import generate_firewall_header, generate_firewall_footer, generate_port_forward_firewall, export_user_firewall
+from firewall.tools import generate_firewall_header, generate_firewall_footer, generate_port_forward_firewall, \
+    export_user_firewall, generate_redirect_dns_rules
 from user_manager.models import UserAcl
 from wireguard.models import WireGuardInstance, Peer, PeerAllowedIP
 from firewall.models import RedirectRule
@@ -55,6 +56,7 @@ def generate_peer_config(peer_uuid):
 
 def export_firewall_configuration():
     firewall_content = generate_firewall_header()
+    firewall_content += generate_redirect_dns_rules()
     firewall_content += generate_port_forward_firewall()
     firewall_content += export_user_firewall()
     firewall_content += generate_firewall_footer()

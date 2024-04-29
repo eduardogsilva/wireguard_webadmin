@@ -4,7 +4,7 @@ from django.contrib import messages
 from user_manager.models import UserAcl
 from .models import DNSSettings, StaticHost
 from .forms import StaticHostForm, DNSSettingsForm
-from .functions import generate_unbound_config
+from .functions import generate_dnsmasq_config
 from django.conf import settings
 
 
@@ -13,9 +13,9 @@ def view_apply_dns_config(request):
     dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
     dns_settings.pending_changes = False
     dns_settings.save()
-    unbound_config = generate_unbound_config()
-    with open(settings.UNBOUND_CONFIG, 'w') as f:
-        f.write(unbound_config)
+    dnsmasq_config = generate_dnsmasq_config()
+    with open(settings.DNS_CONFIG_FILE, 'w') as f:
+        f.write(dnsmasq_config)
     messages.success(request, 'DNS settings applied successfully')
     return redirect('/dns/')
 
@@ -48,12 +48,7 @@ def view_manage_dns_settings(request):
         <p>
         All DNS queries will be forwarded to the primary resolver. If the primary resolver is not available, the secondary resolver will be used.
         </p>
-        <strong>
-        Local DNS Resolution
-        </strong>
-        <p>
-        If no forwarders are specified, the system will locally resolve DNS queries. This can lead to slower DNS resolution times, but can be useful in certain scenarios.
-        </p>
+        
         '''
 
     context = {

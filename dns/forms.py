@@ -21,6 +21,7 @@ class DNSSettingsForm(forms.ModelForm):
         self.helper = FormHelper()
         self.fields['dns_primary'].label = 'Primary Resolver'
         self.fields['dns_secondary'].label = 'Secondary Resolver'
+        self.fields['dns_primary'].required = True
         self.helper.form_method = 'post'
         self.helper.layout = Layout(
             Fieldset(
