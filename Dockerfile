@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     nano \
     vim-nox \
     openssl \
+    bind9-host \
     && rm -rf /var/lib/apt/lists/*
 
 # those are the really necessary packages
