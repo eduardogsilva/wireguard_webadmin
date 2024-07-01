@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Lets wait for the DNS container to start
+sleep 5
+
 # Starts each WireGuard configuration file found in /etc/wireguard
 shopt -s nullglob
 config_files=(/etc/wireguard/*.conf)

@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
     inetutils-ping \
     inetutils-traceroute \
     nano \
-    vim-nox \
     openssl \
     && rm -rf /var/lib/apt/lists/*
 
