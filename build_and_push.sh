@@ -9,7 +9,7 @@ IMAGES=(
 
 build_images() {
   echo "Starting the build of the images..."
-  docker-compose -f docker-compose-build.yml build
+  docker compose -f docker-compose-build.yml build
   if [ $? -eq 0 ]; then
     echo "Build completed successfully."
   else
