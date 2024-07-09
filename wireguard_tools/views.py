@@ -4,6 +4,8 @@ import qrcode
 import subprocess
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404, render
+
+from dns.views import export_dns_configuration
 from firewall.tools import generate_firewall_header, generate_firewall_footer, generate_port_forward_firewall, \
     export_user_firewall, generate_redirect_dns_rules
 from user_manager.models import UserAcl
@@ -75,6 +77,7 @@ def export_wireguard_configs(request):
     base_dir = "/etc/wireguard"
 
     export_firewall_configuration()
+    export_dns_configuration()
     
     firewall_inserted = False
     for instance in instances:

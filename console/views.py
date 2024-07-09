@@ -46,6 +46,9 @@ def view_console(request):
     elif requested_command == 'traceroute':
         page_title = 'Console: traceroute ' + command_target
         bash_command = ['bash', '-c', 'traceroute ' + command_target]
+    elif requested_command == 'testdns':
+        page_title = 'Console: DNS container test script'
+        bash_command = ['/app/dns/scripts/test_dns_service.sh']
     else:
         bash_command = None
         command_output = ''

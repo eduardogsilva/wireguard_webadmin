@@ -8,14 +8,19 @@ from .functions import generate_dnsmasq_config
 from django.conf import settings
 
 
-@login_required
-def view_apply_dns_config(request):
+def export_dns_configuration():
     dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
     dns_settings.pending_changes = False
     dns_settings.save()
     dnsmasq_config = generate_dnsmasq_config()
     with open(settings.DNS_CONFIG_FILE, 'w') as f:
         f.write(dnsmasq_config)
+    return
+
+
+@login_required
+def view_apply_dns_config(request):
+    export_dns_configuration()
     messages.success(request, 'DNS settings applied successfully')
     return redirect('/dns/')
 

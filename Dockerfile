@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     inetutils-traceroute \
     nano \
     openssl \
+    dnsutils \
     && rm -rf /var/lib/apt/lists/*
 
 # those are the really necessary packages
