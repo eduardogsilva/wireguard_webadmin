@@ -31,6 +31,7 @@ push_images() {
   done
 }
 
+docker system prune -a
 build_images
 push_images
 
