@@ -28,7 +28,7 @@ from dns.views import view_static_host_list, view_manage_static_host, view_manag
 
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', view_welcome, name='welcome'),
     path('status/', view_wireguard_status, name='wireguard_status'),
     path('dns/', view_static_host_list, name='static_host_list'),

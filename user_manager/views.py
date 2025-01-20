@@ -30,11 +30,12 @@ def view_peer_group_manage(request):
         page_title = 'Edit Peer Group ' + peer_group.name
         if request.GET.get('action') == 'delete':
             group_name = peer_group.name
-            if request.GET.get('confirmation') == group_name:
+            if request.GET.get('confirmation') == 'delete':
                 peer_group.delete()
                 messages.success(request, 'Peer Group deleted|The peer group ' + group_name + ' has been deleted.')
                 return redirect('/user/peer-group/list/')
-            
+            else:
+                messages.warning(request, 'Peer Group not deleted|Invalid confirmation.')
             return redirect('/user/peer-group/list/')
     else:
         form = PeerGroupForm(user_id=request.user.id)
@@ -50,8 +51,19 @@ def view_peer_group_manage(request):
             peer_group = form.save()
             form.save_m2m()
             return redirect('/user/peer-group/list/')
-    context = {'page_title': page_title, 'form': form, 'peer_group': peer_group}
-    return render(request, 'user_manager/manage_peer_group.html', context)
+        
+    form_description = {
+        'size': '',
+        'content': '''
+        <h5>Peers</h5>
+        <p>Select which peers can be managed by users with this peer group.</p>
+
+        <h5>WireGuard Instances</h5>
+        <p>All peers in this WireGuard instance can be managed by users with this peer group, including adding or removing peers.</p>
+        '''
+    }
+    context = {'page_title': page_title, 'form': form, 'peer_group': peer_group, 'instance': peer_group, 'form_description': form_description}
+    return render(request, 'generic_form.html', context)
 
 
 @login_required

@@ -7,6 +7,7 @@
             <th>Name</th>
             <th>Peers</th>
             <th>Server Instance</th>
+            <th>Users</th>
             <th></th>
         </tr>
     </thead>
@@ -16,12 +17,17 @@
             <td>{{ peer_group.name }}</td>
             <td>
                 {% for peer in peer_group.peer.all %}
-                    {{ peer }}{% if not forloop.last %}, {% endif %}
+                    <a href="/peer/manage/?peer={{ peer.uuid }}">{{ peer }}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </td>
             <td>
                 {% for instance in peer_group.server_instance.all %}
-                    {{ instance }}{% if not forloop.last %}, {% endif %}
+                    <a href="/peer/list/?uuid={{ instance.uuid }}">{{ instance }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for user_acl in peer_group.useracl_set.all %}
+                    <a href="/user/manage/?uuid={{ user_acl.uuid }}">{{ user_acl.user.username }}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </td>
             <td style="width: 1%; white-space: nowrap;">
