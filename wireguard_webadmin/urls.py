@@ -19,7 +19,7 @@ from django.urls import path
 from wireguard.views import view_welcome, view_wireguard_status, view_wireguard_manage_instance
 from wireguard_peer.views import view_wireguard_peer_list, view_wireguard_peer_manage, view_manage_ip_address
 from console.views import view_console
-from user_manager.views import view_user_list, view_manage_user
+from user_manager.views import view_user_list, view_manage_user, view_peer_group_list, view_peer_group_manage
 from accounts.views import view_create_first_user, view_login, view_logout
 from wireguard_tools.views import export_wireguard_configs, download_config_or_qrcode, restart_wireguard_interfaces
 from api.views import wireguard_status, cron_check_updates, cron_update_peer_latest_handshake, routerfleet_get_user_token, routerfleet_authenticate_session
@@ -41,6 +41,8 @@ urlpatterns = [
     path('console/', view_console, name='console'),
     path('user/list/', view_user_list, name='user_list'),
     path('user/manage/', view_manage_user, name='manage_user'),
+    path('user/peer-group/list/', view_peer_group_list, name='peer_group_list'),
+    path('user/peer-group/manage/', view_peer_group_manage, name='peer_group_manage'),
     path('tools/export_wireguard_config/', export_wireguard_configs, name='export_wireguard_configs'),
     path('tools/download_peer_config/', download_config_or_qrcode, name='download_config_or_qrcode'),
     path('tools/restart_wireguard/', restart_wireguard_interfaces, name='restart_wireguard_interfaces'),

@@ -5,6 +5,54 @@ from .forms import UserAclForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.sessions.models import Session
+from wireguard.models import PeerGroup
+from .forms import PeerGroupForm
+
+
+@login_required
+def view_peer_group_list(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    page_title = 'Peer Group Manager'
+    peer_group_list = PeerGroup.objects.all().order_by('name')
+    context = {'page_title': page_title, 'peer_group_list': peer_group_list}
+    return render(request, 'user_manager/peer_group_list.html', context)
+
+
+@login_required
+def view_peer_group_manage(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    peer_group = None
+    if 'uuid' in request.GET:
+        peer_group = get_object_or_404(PeerGroup, uuid=request.GET['uuid'])
+        form = PeerGroupForm(instance=peer_group, user_id=request.user.id)
+        page_title = 'Edit Peer Group ' + peer_group.name
+        if request.GET.get('action') == 'delete':
+            group_name = peer_group.name
+            if request.GET.get('confirmation') == group_name:
+                peer_group.delete()
+                messages.success(request, 'Peer Group deleted|The peer group ' + group_name + ' has been deleted.')
+                return redirect('/user/peer-group/list/')
+            
+            return redirect('/user/peer-group/list/')
+    else:
+        form = PeerGroupForm(user_id=request.user.id)
+        page_title = 'Add Peer Group'
+
+    if request.method == 'POST':
+        if peer_group:
+            form = PeerGroupForm(request.POST, instance=peer_group, user_id=request.user.id)
+        else:
+            form = PeerGroupForm(request.POST, user_id=request.user.id)
+
+        if form.is_valid():
+            peer_group = form.save()
+            form.save_m2m()
+            return redirect('/user/peer-group/list/')
+    context = {'page_title': page_title, 'form': form, 'peer_group': peer_group}
+    return render(request, 'user_manager/manage_peer_group.html', context)
+
 
 @login_required
 def view_user_list(request):

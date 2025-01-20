@@ -129,12 +129,5 @@ class PeerGroup(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    uuid = models.UUIDField(primary_key=True, editable=False)
+    uuid = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
 
-    def clean(self):
-        if self.peer.exists() and self.server_instance.exists():
-            raise ValidationError("Please choose either WireGuard Instances or Peers, not both.")
-
-    def save(self, *args, **kwargs):
-        self.clean()
-        super().save(*args, **kwargs)

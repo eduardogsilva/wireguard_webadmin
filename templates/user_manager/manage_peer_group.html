@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="card card-primary card-outline">
+        <div class="card-header">
+            <h3 class="card-title">{{ form.instance.pk|yesno:"Edit Peer Group,Create New Peer Group" }}</h3>
+        </div>
+        <div class="card-body">
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+        {% csrf_token %}
+
+            <!-- Name -->
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}">Name</label>
+                <input type="text" class="form-control" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" placeholder="Enter Name" value="{{ form.name.value|default_if_none:'' }}">
+            </div>
+
+            <!-- Peers -->
+            <div class="form-group">
+                <label for="{{ form.peer.id_for_label }}">Peers</label>
+                <select class="form-control" id="{{ form.peer.id_for_label }}" name="{{ form.peer.html_name }}" multiple>
+                    {% for peer in form.peer.field.queryset %}
+                        <option value="{{ peer.pk }}" {% if peer.pk in form.peer.value %}selected{% endif %}>{{ peer }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Server Instances -->
+            <div class="form-group">
+                <label for="{{ form.server_instance.id_for_label }}">WireGuard Instances</label>
+                <select class="form-control" id="{{ form.server_instance.id_for_label }}" name="{{ form.server_instance.html_name }}" multiple>
+                    {% for instance in form.server_instance.field.queryset %}
+                        <option value="{{ instance.pk }}" {% if instance.pk in form.server_instance.value %}selected{% endif %}>{{ instance }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="/user/peer-group/list/" class="btn btn-outline-secondary">Back</a>
+                {% if peer_group %}<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete Peer Group</a>{% endif %}
+            </div>
+        </form>
+    </div>
+
+        
+    <div class="col-md-8">
+        
+        <h5>Peers</h5>
+        <p>Select which peers can be managed by users with this peer group.</p>
+
+        <h5>WireGuard Instances</h5>
+        <p>All peers in this WireGuard instance can be managed by users with this peer group, including adding or removing peers.</p>
+
+    </div>
+
+</div>
+    </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_page_scripts %}
+<script>
+    function openCommandDialog(element) {
+        var command = element.getAttribute('data-command');
+        var confirmation = prompt("Please type '{{ peer_group.name }}' to remove this peer group.");
+        if (confirmation) {
+            var url = "?uuid={{ peer_group.uuid }}&action=delete&confirmation=" + encodeURIComponent(confirmation);
+            window.location.href = url;
+        }
+    }
+</script>
+{% endblock %}

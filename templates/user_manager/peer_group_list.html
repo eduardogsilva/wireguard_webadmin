@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Peers</th>
+            <th>Server Instance</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for peer_group in peer_group_list %}
+        <tr>
+            <td>{{ peer_group.name }}</td>
+            <td>
+                {% for peer in peer_group.peer.all %}
+                    {{ peer }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for instance in peer_group.server_instance.all %}
+                    {{ instance }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td style="width: 1%; white-space: nowrap;">
+                <a href="/user/peer-group/manage/?uuid={{ peer_group.uuid }}" ><i class="far fa-edit"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+    {% include "user_manager/list_buttons.html" %}
+
+{% endblock %}
