@@ -6,6 +6,7 @@
         <tr>
             <th>Username</th>
             <th>User Level</th>
+            <th>Peer Groups</th>
             <th></th>
         </tr>
     </thead>
@@ -14,6 +15,15 @@
         <tr>
             <td>{{ user_acl.user.username }}</td>
             <td>{{ user_acl.get_user_level_display }}</td>
+            <td>
+                {% if user_acl.peer_groups.all %}
+                    {% for peer_group in user_acl.peer_groups.all %}
+                        <a href="/user/peer-group/manage/?uuid={{ peer_group.uuid }}">{{ peer_group.name }}</a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    Any
+                {% endif %}
+            </td>
             <td style="width: 1%; white-space: nowrap;">
                 <a href="/user/manage/?uuid={{ user_acl.uuid }}" ><i class="far fa-edit"></i></a>
             </td>
