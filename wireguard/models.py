@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 import uuid
 
@@ -119,4 +120,21 @@ class PeerAllowedIP(models.Model):
 
     def __str__(self):
         return str(self.allowed_ip) + '/' + str(self.netmask)
-    
+
+
+class PeerGroup(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    peer = models.ManyToManyField(Peer, blank=True)
+    server_instance = models.ManyToManyField(WireGuardInstance, blank=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    uuid = models.UUIDField(primary_key=True, editable=False)
+
+    def clean(self):
+        if self.peer.exists() and self.server_instance.exists():
+            raise ValidationError("Please choose either WireGuard Instances or Peers, not both.")
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)

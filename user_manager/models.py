@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from wireguard.models import PeerGroup
 
 
 class UserAcl(models.Model):
@@ -12,6 +13,7 @@ class UserAcl(models.Model):
         (40, 'Wireguard Manager'),
         (50, 'Administrator'),
     ))
+    peer_groups = models.ManyToManyField(PeerGroup, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
