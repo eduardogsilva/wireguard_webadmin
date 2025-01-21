@@ -2,9 +2,11 @@ asgiref==3.8.1
 certifi==2024.12.14
 charset-normalizer==3.4.1
 crispy-bootstrap4==2024.10
+crispy-bootstrap5==2024.10
 Django==5.1.5
 django-crispy-forms==2.3
 idna==3.10
+pillow==11.1.0
 pypng==0.20220715.0
 pytz==2024.2
 qrcode==8.0
