@@ -9,7 +9,8 @@ from django.conf import settings
 from django.utils import timezone
 
 from user_manager.models import UserAcl, AuthenticationToken
-from wireguard.models import WebadminSettings, Peer, PeerStatus
+from wireguard.models import WebadminSettings, Peer, PeerStatus, WireGuardInstance
+from wgwadmlibrary.tools import user_allowed_peers
 import requests
 import subprocess
 import datetime
@@ -111,8 +112,13 @@ def routerfleet_get_user_token(request):
 
 @require_http_methods(["GET"])
 def wireguard_status(request):
+    user_acl = None
+    enhanced_filter = False
+    filter_peer_list = []
+
     if request.user.is_authenticated:
-        pass
+        user_acl = get_object_or_404(UserAcl, user=request.user)
+        enhanced_filter = user_acl.enable_enhanced_filter
     elif request.GET.get('key'):
         api_key = get_api_key('api')
         if api_key and api_key == request.GET.get('key'):
@@ -121,7 +127,13 @@ def wireguard_status(request):
             return HttpResponseForbidden()
     else:
         return HttpResponseForbidden()
-
+    
+    if enhanced_filter:
+        for server_instance in WireGuardInstance.objects.all():
+            for peer in user_allowed_peers(user_acl, server_instance):
+                if peer.public_key not in filter_peer_list:
+                    filter_peer_list.append(peer.public_key)
+    
     commands = {
         'latest-handshakes': "wg show all latest-handshakes | expand | tr -s ' '",
         'allowed-ips': "wg show all allowed-ips | expand | tr -s ' '",
@@ -151,7 +163,8 @@ def wireguard_status(request):
 
             if interface not in output:
                 output[interface] = {}
-
+            if enhanced_filter and peer not in filter_peer_list:
+                continue
             if peer not in output[interface]:
                 output[interface][peer] = {
                     'allowed-ips': [],
