@@ -156,6 +156,12 @@ def view_manage_user(request):
         <h4>Peer Groups</h4>
         <p>Select which peer groups this user can access. If no peer groups are selected, the user will have access to all peers.</p>
 
+        <h4>Console</h4>
+        <p>Enable or disable web console access for this user.</p>
+
+        <h4>Enhanced Filter</h4>
+        <p>This option filters the API status response to include only peers that the user has access to. Depending on the size of your environment, enabling this option may impact performance. To mitigate this, consider increasing the "Web Refresh Interval" to reduce the number of requests.</p>
+
         '''
     }
     

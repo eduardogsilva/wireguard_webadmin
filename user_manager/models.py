@@ -14,6 +14,8 @@ class UserAcl(models.Model):
         (50, 'Administrator'),
     ))
     peer_groups = models.ManyToManyField(PeerGroup, blank=True)
+    enable_console = models.BooleanField(default=True)
+    enable_enhanced_filter = models.BooleanField(default=False)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

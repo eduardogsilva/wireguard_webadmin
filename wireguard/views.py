@@ -78,19 +78,25 @@ def view_welcome(request):
 
 @login_required
 def view_wireguard_status(request):
+    user_acl = get_object_or_404(UserAcl, user=request.user)
     page_title = 'WireGuard Status'
     wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
     if wireguard_instances.filter(pending_changes=True).exists():
         pending_changes_warning = True
     else:
         pending_changes_warning = False
-    bash_command = ['bash', '-c', 'wg show']
-    try:
-        command_output = subprocess.check_output(bash_command, stderr=subprocess.STDOUT).decode('utf-8')
+
+    if user_acl.enable_enhanced_filter:
+        command_output = 'Enhanced filter is enabled. This command is not available.'
         command_success = True
-    except subprocess.CalledProcessError as e:
-        command_output = e.output.decode('utf-8')
-        command_success = False
+    else:
+        bash_command = ['bash', '-c', 'wg show']
+        try:
+            command_output = subprocess.check_output(bash_command, stderr=subprocess.STDOUT).decode('utf-8')
+            command_success = True
+        except subprocess.CalledProcessError as e:
+            command_output = e.output.decode('utf-8')
+            command_success = False
     
     context = {'page_title': page_title, 'command_output': command_output, 'command_success': command_success, 'pending_changes_warning': pending_changes_warning, 'wireguard_instances': wireguard_instances}
     return render(request, 'wireguard/wireguard_status.html', context)

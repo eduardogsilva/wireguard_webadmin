@@ -1,13 +1,19 @@
 from wireguard.models import WireGuardInstance
 from wgwadmlibrary.tools import is_valid_ip_or_hostname
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from user_manager.models import UserAcl
 import subprocess
 
 
 @login_required
 def view_console(request):
     page_title = 'Console'
+    user_acl = get_object_or_404(UserAcl, user=request.user)
+
+    if not user_acl.enable_console:
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+
     wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
     if wireguard_instances.filter(pending_changes=True).exists():
         pending_changes_warning = True
@@ -59,14 +65,19 @@ def view_console(request):
             command_output = requested_command + ': Invalid target'
             bash_command = None
             command_success = False
-
-    if bash_command:
-        try:
-            command_output = subprocess.check_output(bash_command, stderr=subprocess.STDOUT).decode('utf-8')
-            command_success = True
-        except subprocess.CalledProcessError as e:
-            command_output = e.output.decode('utf-8')
-            command_success = False
+    
+    if user_acl.enable_enhanced_filter and requested_command == 'wgshow':
+        command_output = 'Enhanced filter is enabled. This command is not available.'
+        bash_command = None
+        command_success = False
+    else:
+        if bash_command:
+            try:
+                command_output = subprocess.check_output(bash_command, stderr=subprocess.STDOUT).decode('utf-8')
+                command_success = True
+            except subprocess.CalledProcessError as e:
+                command_output = e.output.decode('utf-8')
+                command_success = False
         
     context = {'page_title': page_title, 'command_output': command_output, 'command_success': command_success, 'pending_changes_warning': pending_changes_warning}  
     return render(request, 'console/console.html', context)

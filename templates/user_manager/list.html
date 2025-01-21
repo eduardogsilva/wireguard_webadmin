@@ -8,6 +8,8 @@
             <th>User Level</th>
             <th>Peer Groups</th>
             <th></th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -22,6 +24,16 @@
                     {% endfor %}
                 {% else %}
                     Any
+                {% endif %}
+            </td>
+            <td style="width: 1%; white-space: nowrap;">
+                {% if user_acl.enable_console %}
+                <i class="fas fa-terminal" title="Console Enabled"></i>
+                {% endif %}
+            </td>
+            <td style="width: 1%; white-space: nowrap;">
+                {% if user_acl.enable_enhanced_filter %}
+                <i class="fas fa-eye-slash" title="Enhanced Filter Enabled"></i>
                 {% endif %}
             </td>
             <td style="width: 1%; white-space: nowrap;">

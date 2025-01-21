@@ -12,6 +12,8 @@ class UserAclForm(forms.Form):
     username = forms.CharField(max_length=150)
     password1 = forms.CharField(widget=forms.PasswordInput, required=False, label="Password")
     password2 = forms.CharField(widget=forms.PasswordInput, required=False, label="Password confirmation")
+    enable_console = forms.BooleanField(required=False, label="Enable Console")
+    enable_enhanced_filter = forms.BooleanField(required=False, label="Enable Enhanced Filter")
     user_level = forms.ChoiceField(choices=UserAcl.user_level.field.choices, required=True, label="User Level")
     peer_groups = forms.ModelMultipleChoiceField(
         queryset=PeerGroup.objects.all(),
@@ -27,9 +29,16 @@ class UserAclForm(forms.Form):
             self.fields['username'].initial = self.instance.username
             self.fields['username'].widget.attrs['readonly'] = True
             self.fields['peer_groups'].initial = self.instance.useracl.peer_groups.all()
+            self.fields['enable_console'].initial = self.instance.useracl.enable_console
+            self.fields['enable_enhanced_filter'].initial = self.instance.useracl.enable_enhanced_filter
         else:
             self.fields['password1'].required = True
             self.fields['password2'].required = True
+            self.fields['enable_console'].initial = True
+            self.fields['enable_enhanced_filter'].initial = False
+        
+        self.fields['enable_console'].label = "Console"
+        self.fields['enable_enhanced_filter'].label = "Enhanced Filter"
 
         self.helper = FormHelper()
         self.helper.form_method = 'post'
@@ -58,6 +67,14 @@ class UserAclForm(forms.Form):
             ),
             Row(
                 Column('peer_groups', css_class='form-group col-md-12 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('enable_console', css_class='form-group col-md-12 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('enable_enhanced_filter', css_class='form-group col-md-12 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -100,6 +117,8 @@ class UserAclForm(forms.Form):
         password = self.cleaned_data.get('password1')
         user_level = self.cleaned_data['user_level']
         peer_groups = self.cleaned_data.get('peer_groups', [])
+        enable_console = self.cleaned_data.get('enable_console', False)
+        enable_enhanced_filter = self.cleaned_data.get('enable_enhanced_filter', False)
 
         if self.instance:
             user = self.instance
@@ -115,7 +134,9 @@ class UserAclForm(forms.Form):
         user_acl, created = UserAcl.objects.update_or_create(
             user=user,
             defaults={
-                'user_level': user_level
+                'user_level': user_level,
+                'enable_console': enable_console,
+                'enable_enhanced_filter': enable_enhanced_filter
             }
         )
         
