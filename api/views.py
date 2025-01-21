@@ -118,7 +118,8 @@ def wireguard_status(request):
 
     if request.user.is_authenticated:
         user_acl = get_object_or_404(UserAcl, user=request.user)
-        enhanced_filter = user_acl.enable_enhanced_filter
+        if user_acl.enable_enhanced_filter and user_acl.peer_groups.count() > 0:
+            enhanced_filter = True
     elif request.GET.get('key'):
         api_key = get_api_key('api')
         if api_key and api_key == request.GET.get('key'):
