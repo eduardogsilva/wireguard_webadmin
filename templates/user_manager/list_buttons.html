@@ -2,3 +2,5 @@
 <a href="/user/list/" class="btn {% if request.path == '/user/list/' %}btn-outline-primary{% else %}btn-primary{% endif %}">List Users</a>
 <a href="/user/peer-group/list/" class="btn {% if request.path == '/user/peer-group/list/' %}btn-outline-primary{% else %}btn-primary{% endif %}">List Peer Groups</a>
 <a href="/user/peer-group/manage/" class="btn btn-primary">Add Peer Group</a>
+<br><br><br><h5>Warning:</h5>
+<p>The limitation of Peer Groups for users is implemented. However, in some places, information about other peers may still leak, such as in Console -> wg show or through the endpoint /api/wireguard_status/. In the next version, we will add a fix for this.</p>

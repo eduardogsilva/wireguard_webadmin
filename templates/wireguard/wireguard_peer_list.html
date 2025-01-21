@@ -56,11 +56,12 @@
 
                 </div>
 
-
-
-
+                {% if add_peer_enabled %}
                 <a class="btn btn-primary" href="/peer/manage/?instance={{ current_instance.uuid}}">Create Peer</a>
-                <a class="btn btn-outline-primary disabled" href="/peer/import_peers/?instance={{ current_instance.uuid}}" title='teste'>Import peers</a>
+                {% else %}
+                <a class="btn btn-primary disabled" href="">Create Peer</a>
+                {% endif %}
+                {% comment %}<a class="btn btn-outline-primary disabled" href="/peer/import_peers/?instance={{ current_instance.uuid}}" title='teste'>Import peers</a>{% endcomment %}
                 </div>
         </div>
       

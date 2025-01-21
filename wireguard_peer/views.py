@@ -6,7 +6,8 @@ from django.contrib import messages
 from django.db.models import Max
 import subprocess
 import ipaddress
-
+from wgwadmlibrary.tools import user_has_access_to_peer, user_has_access_to_instance, user_allowed_instances, user_allowed_peers
+from django.http import Http404
 from wireguard_peer.forms import PeerAllowedIPForm, PeerForm
 
 
@@ -44,22 +45,32 @@ def generate_peer_default(wireguard_instance):
 @login_required
 def view_wireguard_peer_list(request):
     page_title = 'WireGuard Peer List'
-    wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
-    if wireguard_instances.filter(pending_changes=True).exists():
+    user_acl = get_object_or_404(UserAcl, user=request.user)
+    wireguard_instances = user_allowed_instances(user_acl)
+    
+    if WireGuardInstance.objects.filter(pending_changes=True).exists():
         pending_changes_warning = True
     else:
         pending_changes_warning = False
+
     if wireguard_instances:
         if request.GET.get('uuid'):
             current_instance = get_object_or_404(WireGuardInstance, uuid=request.GET.get('uuid'))
         else:
             current_instance = wireguard_instances.first()
-        peer_list = current_instance.peer_set.all()
+        if current_instance not in wireguard_instances:
+            raise Http404
+        peer_list = user_allowed_peers(user_acl, current_instance)
     else:
         current_instance = None
         peer_list = None
 
-    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'peer_list': peer_list, 'pending_changes_warning': pending_changes_warning}
+    add_peer_enabled = False
+    if current_instance:
+        if user_has_access_to_instance(user_acl, current_instance):
+            add_peer_enabled = True
+        
+    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'peer_list': peer_list, 'pending_changes_warning': pending_changes_warning, 'add_peer_enabled': add_peer_enabled}
     return render(request, 'wireguard/wireguard_peer_list.html', context)
 
 
@@ -71,9 +82,12 @@ def view_wireguard_peer_manage(request):
     else:
         if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=20).exists():
             return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    user_acl = get_object_or_404(UserAcl, user=request.user)
 
     if request.GET.get('instance'):
         current_instance = get_object_or_404(WireGuardInstance, uuid=request.GET.get('instance'))
+        if not user_has_access_to_instance(user_acl, current_instance):
+            raise Http404
         current_peer = None
         page_title = 'Create a new Peer for instance wg' + str(current_instance.instance_id)
         new_peer_data = generate_peer_default(current_instance)
@@ -104,6 +118,8 @@ def view_wireguard_peer_manage(request):
             
     elif request.GET.get('peer'):
         current_peer = get_object_or_404(Peer, uuid=request.GET.get('peer'))
+        if not user_has_access_to_peer(user_acl, current_peer):
+            raise Http404
         current_instance = current_peer.wireguard_instance
         if request.GET.get('action') == 'delete':
             if request.GET.get('confirmation') == 'delete':
@@ -145,17 +161,21 @@ def view_manage_ip_address(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
 
+    user_acl = get_object_or_404(UserAcl, user=request.user)
     config_file = request.GET.get('config', 'server')
 
     if request.GET.get('peer'):
         current_peer = get_object_or_404(Peer, uuid=request.GET.get('peer'))
-        #page_title = 'Add new IP address for Peer ' + str(current_peer)
         current_ip = None
+        if not user_has_access_to_peer(user_acl, current_peer):
+            raise Http404
+        
     elif request.GET.get('ip'):
         current_ip = get_object_or_404(PeerAllowedIP, uuid=request.GET.get('ip'))
         current_peer = current_ip.peer
         config_file = current_ip.config_file
-        #page_title = 'Update IP address for Peer ' + str(current_peer)
+        if not user_has_access_to_peer(user_acl, current_peer):
+            raise Http404
 
         if request.GET.get('action') == 'delete':
             if request.GET.get('confirmation') == 'delete':

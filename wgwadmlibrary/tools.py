@@ -1,5 +1,53 @@
 import ipaddress, re
 import subprocess
+from wireguard.models import Peer, WireGuardInstance
+from user_manager.models import UserAcl
+
+
+def user_has_access_to_instance(user_acl: UserAcl, instance: WireGuardInstance):
+    if user_acl.peer_groups.all():
+        if user_acl.peer_groups.filter(server_instance=instance).exists():
+            return True
+    else:
+        return True
+    return False
+
+
+def user_has_access_to_peer(user_acl: UserAcl, peer: Peer):
+    if user_acl.peer_groups.all():
+        if user_acl.peer_groups.filter(peer=peer).exists():
+            return True
+        if user_acl.peer_groups.filter(server_instance=peer.wireguard_instance).exists():
+            return True
+    else:
+        return True
+    return False
+
+
+def user_allowed_instances(user_acl: UserAcl):
+    if not user_acl.peer_groups.exists():
+        return WireGuardInstance.objects.all().order_by('instance_id')
+    instances_from_groups = WireGuardInstance.objects.filter(peergroup__in=user_acl.peer_groups.all())    
+    instances_from_peers = WireGuardInstance.objects.filter(peer__peergroup__in=user_acl.peer_groups.all())
+    return instances_from_groups.union(instances_from_peers).order_by('instance_id')
+
+
+def user_allowed_peers(user_acl: UserAcl, instance: WireGuardInstance):
+
+    if not user_acl.peer_groups.exists():
+        return Peer.objects.filter(wireguard_instance=instance).order_by('name')
+
+    peers_from_direct = Peer.objects.filter(
+        wireguard_instance=instance,
+        peergroup__in=user_acl.peer_groups.all()
+    )
+    
+    peers_from_instance = Peer.objects.filter(
+        wireguard_instance=instance,
+        wireguard_instance__peergroup__in=user_acl.peer_groups.filter(server_instance=instance)
+    )
+
+    return peers_from_direct.union(peers_from_instance).order_by('name')
 
 
 def is_valid_ip_or_hostname(value):

@@ -3,7 +3,7 @@ import re
 import qrcode
 import subprocess
 from django.http import HttpResponse
-from django.shortcuts import redirect, get_object_or_404, render
+from django.shortcuts import redirect, get_object_or_404, render, Http404
 
 from dns.views import export_dns_configuration
 from firewall.tools import generate_firewall_header, generate_firewall_footer, generate_port_forward_firewall, \
@@ -14,6 +14,8 @@ from firewall.models import RedirectRule
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from io import BytesIO
+from wgwadmlibrary.tools import user_has_access_to_peer
+
 
 
 def clean_command_field(command_field):
@@ -161,10 +163,14 @@ def export_wireguard_configs(request):
 def download_config_or_qrcode(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=20).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
-    peer_uuid = request.GET.get('uuid')
+    peer = get_object_or_404(Peer, uuid=request.GET.get('uuid'))
+    user_acl = get_object_or_404(UserAcl, user=request.user)
+    
+    if not user_has_access_to_peer(user_acl, peer):
+        raise Http404
     format_type = request.GET.get('format', 'conf')
 
-    config_content = generate_peer_config(peer_uuid)
+    config_content = generate_peer_config(peer.uuid)
 
     if format_type == 'qrcode':
         qr = qrcode.QRCode(
@@ -185,7 +191,8 @@ def download_config_or_qrcode(request):
 
     else:
         response = HttpResponse(config_content, content_type="text/plain")
-        response['Content-Disposition'] = f'attachment; filename="peer_{peer_uuid}.conf"'
+        peer_filename = re.sub(r'[^a-zA-Z0-9]', '_', str(peer))
+        response['Content-Disposition'] = f'attachment; filename="peer_{peer_filename}.conf"'
 
     return response
 
