@@ -2,6 +2,7 @@ import ipaddress, re
 import subprocess
 from wireguard.models import Peer, WireGuardInstance
 from user_manager.models import UserAcl
+from django.db.models import Max
 
 
 def user_has_access_to_instance(user_acl: UserAcl, instance: WireGuardInstance):
@@ -35,7 +36,7 @@ def user_allowed_instances(user_acl: UserAcl):
 def user_allowed_peers(user_acl: UserAcl, instance: WireGuardInstance):
 
     if not user_acl.peer_groups.exists():
-        return Peer.objects.filter(wireguard_instance=instance).order_by('name')
+        return Peer.objects.filter(wireguard_instance=instance).order_by('sort_order')
 
     peers_from_direct = Peer.objects.filter(
         wireguard_instance=instance,
@@ -47,7 +48,7 @@ def user_allowed_peers(user_acl: UserAcl, instance: WireGuardInstance):
         wireguard_instance__peergroup__in=user_acl.peer_groups.filter(server_instance=instance)
     )
 
-    return peers_from_direct.union(peers_from_instance).order_by('name')
+    return peers_from_direct.union(peers_from_instance).order_by('sort_order')
 
 
 def is_valid_ip_or_hostname(value):
@@ -82,3 +83,17 @@ def list_network_interfaces():
                 interfaces.append(interface_name)
 
     return interfaces
+
+
+def default_sort_peers(wireguard_instance: WireGuardInstance):
+    unsorted_peers = Peer.objects.filter(wireguard_instance=wireguard_instance, sort_order=0).order_by('created')
+    highest_sort_order = Peer.objects.filter(wireguard_instance=wireguard_instance).aggregate(Max('sort_order'))['sort_order__max']
+    if not highest_sort_order:
+        highest_sort_order = 0
+    if unsorted_peers:
+        new_sort_order = highest_sort_order + 1
+        for peer in unsorted_peers:
+            peer.sort_order = new_sort_order
+            peer.save()
+            new_sort_order += 1
+    return unsorted_peers

@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.db.models import Max
 import subprocess
 import ipaddress
-from wgwadmlibrary.tools import user_has_access_to_peer, user_has_access_to_instance, user_allowed_instances, user_allowed_peers
+from wgwadmlibrary.tools import user_has_access_to_peer, user_has_access_to_instance, user_allowed_instances, user_allowed_peers, default_sort_peers
 from django.http import Http404
 from wireguard_peer.forms import PeerAllowedIPForm, PeerForm
 
@@ -60,6 +60,7 @@ def view_wireguard_peer_list(request):
             current_instance = wireguard_instances.first()
         if current_instance not in wireguard_instances:
             raise Http404
+        default_sort_peers(current_instance)
         peer_list = user_allowed_peers(user_acl, current_instance)
     else:
         current_instance = None

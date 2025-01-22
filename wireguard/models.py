@@ -80,6 +80,7 @@ class Peer(models.Model):
     private_key = models.CharField(max_length=100, blank=True, null=True)
     persistent_keepalive = models.IntegerField(default=25)
     wireguard_instance = models.ForeignKey(WireGuardInstance, on_delete=models.CASCADE)
+    sort_order = models.IntegerField(default=0)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
