@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from wireguard.views import view_welcome, view_wireguard_status, view_wireguard_manage_instance
-from wireguard_peer.views import view_wireguard_peer_list, view_wireguard_peer_manage, view_manage_ip_address
+from wireguard_peer.views import view_wireguard_peer_list, view_wireguard_peer_manage, view_manage_ip_address, view_wireguard_peer_sort
 from console.views import view_console
 from user_manager.views import view_user_list, view_manage_user, view_peer_group_list, view_peer_group_manage
 from accounts.views import view_create_first_user, view_login, view_logout
@@ -36,6 +36,7 @@ urlpatterns = [
     path('dns/manage_static_host/', view_manage_static_host, name='manage_static_host'),
     path('dns/manage_settings/', view_manage_dns_settings, name='manage_dns_settings'),
     path('peer/list/', view_wireguard_peer_list, name='wireguard_peer_list'),
+    path('peer/sort/', view_wireguard_peer_sort, name='wireguard_peer_sort'),
     path('peer/manage/', view_wireguard_peer_manage, name='wireguard_peer_manage'),
     path('peer/manage_ip_address/', view_manage_ip_address, name='manage_ip_address'),
     path('console/', view_console, name='console'),

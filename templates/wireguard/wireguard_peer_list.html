@@ -28,10 +28,21 @@
                                     {% else %}
                                     {{ peer.public_key|slice:":16" }}{% if peer.public_key|length > 16 %}...{% endif %}
                                     {% endif %}
-                                </h5><span>
-                                <a href="javascript:void(0);" onclick="openImageLightbox('/tools/download_peer_config/?uuid={{ peer.uuid }}&format=qrcode');"><i class="fas fa-qrcode"></i></a>
-                                <a href="/tools/download_peer_config/?uuid={{ peer.uuid }}"><i class="fas fa-download"></i></a>
-                                <a href="/peer/manage/?peer={{ peer.uuid }}"><i class="far fa-edit"></i></a></span>
+                                </h5>
+                                <span>
+                                    {% if user_acl.user_level >= 30 %}
+                                    <div class="d-inline-flex flex-column">
+                                        <a href="/peer/sort/?peer={{ peer.uuid }}&direction=up" style="line-height:0px"><i class="fas fa-sort-up"></i></a>
+                                        <div style="overflow:hidden;margin-top: -9px">
+                                            <a href="/peer/sort/?peer={{ peer.uuid }}&direction=down" style="position:relative;top:-11px"><i class="fas fa-sort-down"></i></a>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <a href="javascript:void(0);" onclick="openImageLightbox('/tools/download_peer_config/?uuid={{ peer.uuid }}&format=qrcode');"><i class="fas fa-qrcode"></i></a>
+                                    <a href="/tools/download_peer_config/?uuid={{ peer.uuid }}"><i class="fas fa-download"></i></a>
+                                    <a href="/peer/manage/?peer={{ peer.uuid }}"><i class="far fa-edit"></i></a>
+                                </span>
+
                             </div>
                             {% comment %}This needs to be improved{% endcomment %}
                             <p>

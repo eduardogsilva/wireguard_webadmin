@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.db.models import Max
 import subprocess
 import ipaddress
-from wgwadmlibrary.tools import user_has_access_to_peer, user_has_access_to_instance, user_allowed_instances, user_allowed_peers, default_sort_peers
+from wgwadmlibrary.tools import user_has_access_to_peer, user_has_access_to_instance, user_allowed_instances, user_allowed_peers, default_sort_peers, deduplicate_sort_order, check_sort_order_conflict
 from django.http import Http404
 from wireguard_peer.forms import PeerAllowedIPForm, PeerForm
 
@@ -71,8 +71,46 @@ def view_wireguard_peer_list(request):
         if user_has_access_to_instance(user_acl, current_instance):
             add_peer_enabled = True
         
-    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'peer_list': peer_list, 'pending_changes_warning': pending_changes_warning, 'add_peer_enabled': add_peer_enabled}
+    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'peer_list': peer_list, 'pending_changes_warning': pending_changes_warning, 'add_peer_enabled': add_peer_enabled, 'user_acl': user_acl}
     return render(request, 'wireguard/wireguard_peer_list.html', context)
+
+
+@login_required
+def view_wireguard_peer_sort(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
+            return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    peer = get_object_or_404(Peer, uuid=request.GET.get('peer'))
+    # check if the current sort order is duplicated with another peer
+    if check_sort_order_conflict(peer):
+        deduplicate_sort_order(peer.wireguard_instance)
+    redirect_url = f'/peer/list/?uuid={peer.wireguard_instance.uuid}#peer-{peer.public_key}'
+    direction = request.GET.get('direction')
+    sort_order_changed = False
+    if direction == 'up':
+        previous_peer = Peer.objects.filter(wireguard_instance=peer.wireguard_instance, sort_order__lt=peer.sort_order).order_by('-sort_order').first()                
+        if previous_peer:
+            peer.sort_order, previous_peer.sort_order = previous_peer.sort_order, peer.sort_order
+            peer.save()
+            previous_peer.save()
+            sort_order_changed = True
+        else:
+            messages.warning(request, 'Cannot move peer up|Peer is already at the top.')
+    elif direction == 'down':
+        next_peer = Peer.objects.filter(wireguard_instance=peer.wireguard_instance, sort_order__gt=peer.sort_order).order_by('sort_order').first()
+        if next_peer:
+            peer.sort_order, next_peer.sort_order = next_peer.sort_order, peer.sort_order
+            peer.save()
+            next_peer.save()
+            sort_order_changed = True
+        else:
+            messages.warning(request, 'Cannot move peer down|Peer is already at the bottom.')
+
+    if sort_order_changed:
+        # check if the new sort order is duplicated with another peer
+        if check_sort_order_conflict(peer):
+            deduplicate_sort_order(peer.wireguard_instance)
+
+    return redirect(redirect_url)
 
 
 @login_required

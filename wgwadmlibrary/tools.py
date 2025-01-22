@@ -86,7 +86,7 @@ def list_network_interfaces():
 
 
 def default_sort_peers(wireguard_instance: WireGuardInstance):
-    unsorted_peers = Peer.objects.filter(wireguard_instance=wireguard_instance, sort_order=0).order_by('created')
+    unsorted_peers = Peer.objects.filter(wireguard_instance=wireguard_instance, sort_order__lte=0).order_by('created')
     highest_sort_order = Peer.objects.filter(wireguard_instance=wireguard_instance).aggregate(Max('sort_order'))['sort_order__max']
     if not highest_sort_order:
         highest_sort_order = 0
@@ -97,3 +97,20 @@ def default_sort_peers(wireguard_instance: WireGuardInstance):
             peer.save()
             new_sort_order += 1
     return unsorted_peers
+
+
+def deduplicate_sort_order(wireguard_instance: WireGuardInstance):
+    peers = Peer.objects.filter(wireguard_instance=wireguard_instance)
+    for peer in peers:
+        duplicated_peers = peers.filter(sort_order=peer.sort_order).exclude(uuid=peer.uuid)
+        for duplicated_peer in duplicated_peers:
+            duplicated_peer.sort_order = 0
+            duplicated_peer.save()
+    return peers
+
+
+def check_sort_order_conflict(peer: Peer):
+    peers = Peer.objects.filter(wireguard_instance=peer.wireguard_instance, sort_order=peer.sort_order).exclude(uuid=peer.uuid)
+    if peers.exists():
+        return True
+    return False
