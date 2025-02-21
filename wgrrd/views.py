@@ -59,10 +59,12 @@ def view_rrd_graph(request):
         "CDEF:rx_mb=rxdata,1048576,/",
         "VDEF:tx_total=tx_mb,TOTAL",
         "VDEF:rx_total=rx_mb,TOTAL",
-        "LINE1:txdata#FF0000:Transmitted",
-        "GPRINT:tx_total:Total Tx\\: %6.2lf MB",
-        "LINE1:rxdata#0000FF:Received",
-        "GPRINT:rx_total:Total Rx\\: %6.2lf MB"
+        "LINE1:txdata#FF0000:Transmitted ",
+        "GPRINT:tx_total:%6.2lf MB",
+        "COMMENT:\\n",
+        "LINE1:rxdata#0000FF:Received ",
+        "GPRINT:rx_total:%6.2lf MB",
+        "COMMENT:\\n"
     ]
 
     try:
