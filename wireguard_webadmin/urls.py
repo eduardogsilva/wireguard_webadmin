@@ -25,7 +25,7 @@ from wireguard_tools.views import export_wireguard_configs, download_config_or_q
 from api.views import wireguard_status, cron_check_updates, cron_update_peer_latest_handshake, routerfleet_get_user_token, routerfleet_authenticate_session
 from firewall.views import view_redirect_rule_list, manage_redirect_rule, view_firewall_rule_list, manage_firewall_rule, view_manage_firewall_settings, view_generate_iptables_script, view_reset_firewall, view_firewall_migration_required
 from dns.views import view_static_host_list, view_manage_static_host, view_manage_dns_settings, view_apply_dns_config
-
+from wgrrd.views import view_rrd_graph
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -39,6 +39,7 @@ urlpatterns = [
     path('peer/sort/', view_wireguard_peer_sort, name='wireguard_peer_sort'),
     path('peer/manage/', view_wireguard_peer_manage, name='wireguard_peer_manage'),
     path('peer/manage_ip_address/', view_manage_ip_address, name='manage_ip_address'),
+    path('rrd/graph/', view_rrd_graph, name='rrd_graph'),
     path('console/', view_console, name='console'),
     path('user/list/', view_user_list, name='user_list'),
     path('user/manage/', view_manage_user, name='manage_user'),
