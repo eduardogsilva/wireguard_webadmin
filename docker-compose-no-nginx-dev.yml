@@ -8,12 +8,14 @@ services:
     environment:
       - SERVER_ADDRESS=127.0.0.1
       - DEBUG_MODE=True
-      - COMPOSE_VERSION=02b
+      - COMPOSE_VERSION=02r
     volumes:
       - wireguard:/etc/wireguard
       - static_volume:/app_static_files/
       - .:/app
       - dnsmasq_conf:/etc/dnsmasq
+      - app_secrets:/app_secrets/
+      - rrd_data:/rrd_data/
     ports:
       # Do not directly expose the Django port to the internet, use some kind of reverse proxy with SSL.
       - "127.0.0.1:8000:8000"
@@ -40,6 +42,18 @@ services:
     depends_on:
       - wireguard-webadmin
 
+  wireguard-webadmin-rrdtool:
+    container_name: wireguard-webadmin-rrdtool
+    restart: unless-stopped
+    build:
+      context: ./containers/rrdtool
+      dockerfile: Dockerfile-rrdtool
+    volumes:
+      - app_secrets:/app_secrets/
+      - rrd_data:/rrd_data/
+    depends_on:
+      - wireguard-webadmin
+
   wireguard-webadmin-dns:
     container_name: wireguard-webadmin-dns
     restart: unless-stopped
@@ -53,3 +67,5 @@ volumes:
   static_volume: 
   wireguard:
   dnsmasq_conf:
+  app_secrets:
+  rrd_data:

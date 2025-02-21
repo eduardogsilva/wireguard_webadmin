@@ -1,0 +1,17 @@
+FROM python:3.12-slim
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    net-tools \
+    inetutils-ping \
+    inetutils-traceroute \
+    nano \
+    vim-nox \
+    rrdtool \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY wgrrd.py .
+
+CMD ["python", "-u", "wgrrd.py"]

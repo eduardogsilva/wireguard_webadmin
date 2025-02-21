@@ -6,3 +6,5 @@
 *.pyd
 wireguard_webadmin/production_settings.py
 .idea/
+containers/*/.venv
+.env

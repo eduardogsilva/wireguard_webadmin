@@ -25,6 +25,8 @@ def get_api_key(api_name):
         api_file_path = '/etc/wireguard/api_key'
     elif api_name == 'routerfleet':
         api_file_path = '/etc/wireguard/routerfleet_key'
+    elif api_name == 'rrdkey':
+        api_file_path = '/app_secrets/rrdtool_key'
     else:
         return api_key
 
@@ -123,6 +125,12 @@ def wireguard_status(request):
     elif request.GET.get('key'):
         api_key = get_api_key('api')
         if api_key and api_key == request.GET.get('key'):
+            pass
+        else:
+            return HttpResponseForbidden()
+    elif request.GET.get('rrdkey'):
+        api_key = get_api_key('rrdkey')
+        if api_key and api_key == request.GET.get('rrdkey'):
             pass
         else:
             return HttpResponseForbidden()

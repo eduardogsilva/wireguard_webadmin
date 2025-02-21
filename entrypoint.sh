@@ -2,7 +2,7 @@
 
 set -e
 
-if [[ "$COMPOSE_VERSION" != "02b" ]]; then
+if [[ "$COMPOSE_VERSION" != "02r" ]]; then
     echo "ERROR: Please upgrade your docker compose file. Exiting."
     exit 1
 fi
@@ -15,6 +15,10 @@ fi
 DEBUG_VALUE="False"
 if [[ "${DEBUG_MODE,,}" == "true" ]]; then
     DEBUG_VALUE="True"
+fi
+
+if [ ! -f /app_secrets/rrdtool_key ]; then
+    cat /proc/sys/kernel/random/uuid > /app_secrets/rrdtool_key
 fi
 
 cat > /app/wireguard_webadmin/production_settings.py <<EOL
