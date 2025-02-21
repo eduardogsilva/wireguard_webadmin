@@ -136,13 +136,13 @@ def wireguard_status(request):
             return HttpResponseForbidden()
     else:
         return HttpResponseForbidden()
-    
+
     if enhanced_filter:
         for server_instance in WireGuardInstance.objects.all():
             for peer in user_allowed_peers(user_acl, server_instance):
                 if peer.public_key not in filter_peer_list:
                     filter_peer_list.append(peer.public_key)
-    
+
     commands = {
         'latest-handshakes': "wg show all latest-handshakes | expand | tr -s ' '",
         'allowed-ips': "wg show all allowed-ips | expand | tr -s ' '",
@@ -161,7 +161,7 @@ def wireguard_status(request):
 
         current_interface = None
         for line in stdout.strip().split('\n'):
-            parts = line.split()  
+            parts = line.split()
             if len(parts) >= 3:
                 interface, peer, value = parts[0], parts[1], " ".join(parts[2:])
                 current_interface = interface
@@ -185,7 +185,7 @@ def wireguard_status(request):
             if key == 'allowed-ips':
                 output[interface][peer]['allowed-ips'].append(value)
             elif key == 'transfer':
-                tx, rx = value.split()[-2:]  
+                rx, tx = value.split()[-2:]
                 output[interface][peer]['transfer'] = {'tx': int(tx), 'rx': int(rx)}
             elif key == 'endpoints':
                 output[interface][peer]['endpoints'] = value
