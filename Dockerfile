@@ -13,6 +13,10 @@ RUN apt-get update && apt-get install -y \
     nano \
     openssl \
     dnsutils \
+    rrdtool \
+    gcc \
+    librrd-dev \
+    python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # those are the really necessary packages
