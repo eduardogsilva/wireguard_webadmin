@@ -9,7 +9,7 @@ import subprocess
 
 # Global variables
 DEBUG = True
-API_ADDRESS = "http://127.0.0.1:8000"
+API_ADDRESS = "http://wireguard-webadmin:8000"
 
 # Base directory for storing RRD files
 RRD_DATA_PATH = "/rrd_data"
@@ -170,6 +170,7 @@ def main_loop():
     Main loop that:
       - Ensures the necessary directories exist
       - Retrieves the API key (terminating the script if invalid)
+      - Waits 30 seconds before the first query
       - Queries the wireguard status API every 5 minutes
       - Processes each peer using process_peer()
       - Aggregates total tx and rx per interface and updates the corresponding instance RRD
@@ -184,6 +185,9 @@ def main_loop():
     if not api_key:
         print("API key not found or invalid. Exiting.")
         sys.exit(1)
+
+    debug_log("Waiting 30 seconds before first query...")
+    time.sleep(30)
 
     while True:
         loop_start = time.time()
@@ -202,8 +206,7 @@ def main_loop():
             data = response.json()
         except Exception as e:
             debug_log("Error fetching or parsing API data: " + str(e))
-            elapsed = time.time() - loop_start
-            time.sleep(max(300 - elapsed, 0))
+            time.sleep(30)
             continue
 
         # Process each interface and its peers, aggregate tx and rx for the interface
