@@ -9,6 +9,7 @@ services:
       - SERVER_ADDRESS=127.0.0.1
       - DEBUG_MODE=True
       - COMPOSE_VERSION=02r
+      - TZ=${TIMEZONE}
     volumes:
       - wireguard:/etc/wireguard
       - static_volume:/app_static_files/
@@ -39,6 +40,8 @@ services:
     build:
       context: ./cron
       dockerfile: Dockerfile-cron
+    environment:
+      - TZ=${TIMEZONE}
     depends_on:
       - wireguard-webadmin
 
@@ -51,6 +54,8 @@ services:
     volumes:
       - app_secrets:/app_secrets/
       - rrd_data:/rrd_data/
+    environment:
+      - TZ=${TIMEZONE}
     depends_on:
       - wireguard-webadmin
 
@@ -60,6 +65,8 @@ services:
     build:
       context: ./containers/dnsmasq
       dockerfile: Dockerfile-dnsmasq
+    environment:
+      - TZ=${TIMEZONE}
     volumes:
       - dnsmasq_conf:/etc/dnsmasq/
 

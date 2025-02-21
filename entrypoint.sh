@@ -28,6 +28,11 @@ CSRF_TRUSTED_ORIGINS = ['http://wireguard-webadmin', 'https://$SERVER_ADDRESS']
 SECRET_KEY = '$(openssl rand -base64 32)'
 EOL
 
+if [ -n "$TZ" ]; then
+    echo "TIME_ZONE = '$TZ'" >> /app/wireguard_webadmin/production_settings.py
+fi
+
+
 sed -i "/^    path('admin\/', admin.site.urls),/s/^    /    # /" /app/wireguard_webadmin/urls.py
 
 exec "$@"
