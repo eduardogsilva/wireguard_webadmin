@@ -57,8 +57,8 @@ def create_peer_rrd(rrd_file):
     cmd = [
         "rrdtool", "create", rrd_file,
         "--step", "300",
-        "DS:tx:COUNTER:600:0:U",
-        "DS:rx:COUNTER:600:0:U",
+        "DS:tx:DERIVE:600:0:U",
+        "DS:rx:DERIVE:600:0:U",
         "DS:status:GAUGE:600:0:1",
         "RRA:AVERAGE:0.5:1:1440",
         "RRA:AVERAGE:0.5:6:700",
@@ -81,8 +81,8 @@ def create_instance_rrd(rrd_file):
     cmd = [
         "rrdtool", "create", rrd_file,
         "--step", "300",
-        "DS:tx:COUNTER:600:0:U",
-        "DS:rx:COUNTER:600:0:U",
+        "DS:tx:DERIVE:600:0:U",
+        "DS:rx:DERIVE:600:0:U",
         "RRA:AVERAGE:0.5:1:1440",
         "RRA:AVERAGE:0.5:6:700",
         "RRA:AVERAGE:0.5:24:775",
