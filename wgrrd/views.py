@@ -38,19 +38,13 @@ def view_rrd_graph(request):
 
     with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as tmp_file:
         graph_file = tmp_file.name
-    #command = [
-    #    "rrdtool", "graph", graph_file,
-    #    "--start", "-6h",
-    #    "--title", "RRD Data Graph",
-    #    "--vertical-label", "Value",
-    #    f"DEF:txdata={rrd_file_path}:tx:AVERAGE",
-    #    f"DEF:rxdata={rrd_file_path}:rx:AVERAGE",
-    #    "LINE1:txdata#FF0000:Transmitted",
-    #    "LINE1:rxdata#0000FF:Received"
-    #]
+
+    period = request.GET.get('period', '6h')
+    if not (period[:-1].isdigit() and period[-1] in ['h', 'd']):
+        period = '6h'
     command = [
         "rrdtool", "graph", graph_file,
-        "--start", "-6h",
+        "--start", f"-{period}",
         "--title", "RRD Data Graph",
         "--vertical-label", "Value",
         f"DEF:txdata={rrd_file_path}:tx:AVERAGE",
