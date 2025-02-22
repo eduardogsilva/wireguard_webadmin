@@ -5,6 +5,7 @@ IMAGES=(
   "eduardosilva/wireguard_webadmin_cron:latest"
   "eduardosilva/wireguard_webadmin_nginx:latest"
   "eduardosilva/wireguard_webadmin_dns:latest"
+  "eduardosilva/wireguard_webadmin_rrdtool:latest"
 )
 
 build_images() {
