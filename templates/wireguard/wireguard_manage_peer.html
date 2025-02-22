@@ -49,9 +49,35 @@
             <div class="col-lg-6">
                 <div class="row">
                     <div class="col-lg-12">
-                        <img src="/rrd/graph/?peer={{ current_peer.uuid }}">
+                            <label>
+                                <i class="fas fa-chart-area"></i>
+                                Peer Traffic History
+                            </label>
                     </div>
                 </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <center>
+                        <img id="graphImg" src="/rrd/graph/?peer={{ current_peer.uuid }}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}" class="img-fluid" alt="No traffic history, please wait a few minutes">
+                    </center>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-lg-12 text-center">
+                    <div class="btn-group" role="group" aria-label="Graph interval">
+                        <a href="#" data-period="1h" class="btn btn-outline-primary btn-xs">1h</a>
+                        <a href="#" data-period="3h" class="btn btn-outline-primary btn-xs">3h</a>
+                        <a href="#" data-period="6h" class="btn btn-outline-primary btn-xs">6h</a>
+                        <a href="#" data-period="7d" class="btn btn-outline-primary btn-xs">7d</a>
+                        <a href="#" data-period="30d" class="btn btn-outline-primary btn-xs">30d</a>
+                        <a href="#" data-period="90d" class="btn btn-outline-primary btn-xs">3m</a>
+                        <a href="#" data-period="180d" class="btn btn-outline-primary btn-xs">6m</a>
+                        <a href="#" data-period="365d" class="btn btn-outline-primary btn-xs">1y</a>
+                    </div>
+                </div>
+            </div>
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="d-flex justify-content-between align-items-center">
@@ -205,6 +231,24 @@
             this.setAttribute('type', 'text');
         });
     });
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    var buttons = document.querySelectorAll('.btn-group a');
+    buttons.forEach(function(button){
+        button.addEventListener('click', function(e){
+            e.preventDefault();
+            var period = this.getAttribute('data-period');
+            var newSrc = '/rrd/graph/?peer={{ current_peer.uuid }}&period=' + period;
+            var imgElement = document.getElementById('graphImg');
+            if(imgElement){
+                imgElement.setAttribute('src', newSrc);
+            }
+        });
+    });
+});
 </script>
 
     

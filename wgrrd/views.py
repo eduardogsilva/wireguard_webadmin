@@ -26,10 +26,12 @@ def view_rrd_graph(request):
         graph_type = 'peer'
         rrd_filename = base64.urlsafe_b64encode(peer.public_key.encode()).decode().replace('=', '')
         rrd_file_path = f'/rrd_data/peers/{rrd_filename}.rrd'
+        graph_title = f'Peer {peer}'
     elif request.GET.get('instance'):
         wireguard_instance = get_object_or_404(WireGuardInstance, uuid=request.GET.get('instance'))
         graph_type = 'instance'
         rrd_file_path = f'/rrd_data/wginstances/wg{wireguard_instance.instance_id}.rrd'
+        graph_title = f'WG{wireguard_instance.instance_id}'
     else:
         raise Http404
 
@@ -42,10 +44,11 @@ def view_rrd_graph(request):
     period = request.GET.get('period', '6h')
     if not (period[:-1].isdigit() and period[-1] in ['h', 'd']):
         period = '6h'
+
     command = [
         "rrdtool", "graph", graph_file,
         "--start", f"-{period}",
-        "--title", "RRD Data Graph",
+        "--title", f"{graph_title} - traffic",
         "--vertical-label", "Value",
         f"DEF:txdata={rrd_file_path}:tx:AVERAGE",
         f"DEF:rxdata={rrd_file_path}:rx:AVERAGE",
@@ -62,17 +65,11 @@ def view_rrd_graph(request):
     ]
 
     try:
-        # Execute the command using subprocess
         subprocess.run(command, check=True, stdout=subprocess.PIPE)
-
-        # Open and read the generated image file
         with open(graph_file, 'rb') as f:
             image_data = f.read()
     finally:
-        # Clean up the temporary file
         os.remove(graph_file)
-
-        # Return the image data as an HTTP response with PNG content type
     return HttpResponse(image_data, content_type="image/png")
 
 
