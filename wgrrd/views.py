@@ -31,7 +31,7 @@ def view_rrd_graph(request):
         wireguard_instance = get_object_or_404(WireGuardInstance, uuid=request.GET.get('instance'))
         graph_type = 'instance'
         rrd_file_path = f'/rrd_data/wginstances/wg{wireguard_instance.instance_id}.rrd'
-        graph_title = f'WG{wireguard_instance.instance_id}'
+        graph_title = f'Instance wg{wireguard_instance.instance_id}'
     else:
         raise Http404
 
@@ -48,7 +48,7 @@ def view_rrd_graph(request):
     command = [
         "rrdtool", "graph", graph_file,
         "--start", f"-{period}",
-        "--title", f"{graph_title} - traffic",
+        "--title", f"{graph_title}",
         "--vertical-label", "Value",
         f"DEF:txdata={rrd_file_path}:tx:AVERAGE",
         f"DEF:rxdata={rrd_file_path}:rx:AVERAGE",
