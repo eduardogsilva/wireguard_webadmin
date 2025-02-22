@@ -22,3 +22,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile_nginx
+
+  wireguard-webadmin-rrdtool:
+    image: eduardosilva/wireguard_webadmin_rrdtool:latest
+    build:
+      context: ./containers/rrdtool
+      dockerfile: Dockerfile-rrdtool
