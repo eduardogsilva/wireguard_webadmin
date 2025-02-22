@@ -68,7 +68,7 @@
                     </div>
 
                     <center>
-                        <img id="graphImg" src="/rrd/graph/?peer={{ current_peer.uuid }}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}" class="img-fluid" alt="No traffic history, please wait a few minutes">
+                        <img id="graphImg" src="/rrd/graph/?peer={{ current_peer.uuid }}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}" class="img-fluid" alt="No traffic history, please wait a few minutes" onerror="this.onerror=null; this.style.display='none'; this.insertAdjacentHTML('afterend', this.alt);">
                     </center>
 
                     <div class="d-flex justify-content-between align-items-center border-bottom mb-3" style="padding-top: 16px;"></div>
