@@ -79,3 +79,5 @@ volumes:
   https_cert:
   wireguard:
   dnsmasq_conf:
+  app_secrets:
+  rrd_data:

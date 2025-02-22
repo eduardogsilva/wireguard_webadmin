@@ -65,3 +65,5 @@ volumes:
   static_volume:
   wireguard:
   dnsmasq_conf:
+  app_secrets:
+  rrd_data:
