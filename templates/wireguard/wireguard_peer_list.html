@@ -15,7 +15,7 @@
                 </ul>
                 <div class="tab-content" id="custom-content-below-tabContent">
                     <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
-                        <div class="row">
+                        <div class="row" style="padding-top: 15px">
                             {% for peer in peer_list %}
                                 <div class="col-md-6" id="peer-{{ peer.public_key }}" data-uuid="{{ peer.uuid }}">
                                     <div class="callout">
@@ -70,7 +70,7 @@
                             {% endfor %}
                         </div>
                         {% if add_peer_enabled %}
-                            <a class="btn btn-primary" href="/peer/manage/?instance={{ current_instance.uuid }}">Create Peer</a>
+                            <a class="btn btn-primary" href="/peer/manage/?instance={{ current_instance.uuid }}" onclick="return confirm('Are you sure you want to create a new peer?');">Create Peer</a>
                         {% else %}
                             <a class="btn btn-primary disabled" href="">Create Peer</a>
                         {% endif %}
@@ -177,6 +177,7 @@
             $(".qr-code-content").hide();
             $(".info-content").show();
             $("#qrCodeImg").attr("src", "");
+            $('#graphImg').attr('src', '').hide();
             // Find the peer element by its data-uuid attribute
             var peerElem = document.querySelector('[data-uuid="' + uuid + '"]');
             if (peerElem) {
