@@ -3,18 +3,16 @@
 {% block content %}
 {% if wireguard_instances %}
 <div class="card card-primary card-outline">
-    
     <div class="card-body">
-        <ul class="nav nav-tabs"  role="tablist">
+        <ul class="nav nav-tabs" role="tablist">
             {% for wgconf in wireguard_instances %}
             <li class="nav-item">
-                <a class="nav-link {%if wgconf == current_instance%}active{%endif%}" href="/peer/list/?uuid={{wgconf.uuid}}" role="tab" >
-                    wg{{wgconf.instance_id}} {%if wgconf.name %}({{wgconf.name}}){%endif%}
+                <a class="nav-link {% if wgconf == current_instance %}active{% endif %}" href="/peer/list/?uuid={{ wgconf.uuid }}" role="tab">
+                    wg{{ wgconf.instance_id }} {% if wgconf.name %}({{ wgconf.name }}){% endif %}
                 </a>
             </li>
             {% endfor %}
-            
-          </ul>
+        </ul>
         <div class="tab-content" id="custom-content-below-tabContent">
             <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
                 <div class="row">
@@ -22,74 +20,96 @@
                     <div class="col-md-6" id="peer-{{ peer.public_key }}">
                         <div class="callout">
                             <div class="d-flex justify-content-between align-items-start">
-                                <h5>
-                                    {% if peer.name %}
-                                    {{ peer.name}}
-                                    {% else %}
-                                    {{ peer.public_key|slice:":16" }}{% if peer.public_key|length > 16 %}...{% endif %}
-                                    {% endif %}
-                                </h5>
+                                <h5><a href="#" onclick="openPeerModal('{{ peer.uuid }}');" style="text-decoration: none">{{ peer }}</a></h5>
                                 <span>
                                     {% if user_acl.user_level >= 30 %}
                                     <div class="d-inline-flex flex-column">
-                                        <a href="/peer/sort/?peer={{ peer.uuid }}&direction=up" style="line-height:0px"><i class="fas fa-sort-up"></i></a>
+                                        <a href="/peer/sort/?peer={{ peer.uuid }}&direction=up" style="line-height:0px">
+                                            <i class="fas fa-sort-up"></i>
+                                        </a>
                                         <div style="overflow:hidden;margin-top: -9px">
-                                            <a href="/peer/sort/?peer={{ peer.uuid }}&direction=down" style="position:relative;top:-11px"><i class="fas fa-sort-down"></i></a>
+                                            <a href="/peer/sort/?peer={{ peer.uuid }}&direction=down" style="position:relative;top:-11px">
+                                                <i class="fas fa-sort-down"></i>
+                                            </a>
                                         </div>
                                     </div>
                                     {% endif %}
-                                    <a href="javascript:void(0);" onclick="openImageLightbox('/tools/download_peer_config/?uuid={{ peer.uuid }}&format=qrcode');"><i class="fas fa-qrcode"></i></a>
-                                    <a href="/tools/download_peer_config/?uuid={{ peer.uuid }}"><i class="fas fa-download"></i></a>
-                                    <a href="/peer/manage/?peer={{ peer.uuid }}"><i class="far fa-edit"></i></a>
+                                    <a href="javascript:void(0);" onclick="openImageLightbox('/tools/download_peer_config/?uuid={{ peer.uuid }}&format=qrcode');">
+                                        <i class="fas fa-qrcode"></i>
+                                    </a>
+                                    <a href="/tools/download_peer_config/?uuid={{ peer.uuid }}">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                    <a href="/peer/manage/?peer={{ peer.uuid }}">
+                                        <i class="far fa-edit"></i>
+                                    </a>
                                 </span>
-
                             </div>
-                            {% comment %}This needs to be improved{% endcomment %}
                             <p>
                                 <b>Transfer:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br>
-                                <b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span> <span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">{% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}</span><br>
+                                <b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span>
+                                <span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">
+                                    {% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}
+                                </span><br>
                                 <b>Endpoints:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br>
-                                <b>Allowed IPs: </b><span id="peer-allowed-ips-{{ peer.public_key }}">
+                                <b>Allowed IPs:</b>
+                                <span id="peer-allowed-ips-{{ peer.public_key }}">
                                     {% for address in peer.peerallowedip_set.all %}
-                                        {% if address.priority == 0 and address.config_file == 'server' %}{{ address }}{% endif %}
+                                        {% if address.priority == 0 and address.config_file == 'server' %}
+                                            {{ address }}
+                                        {% endif %}
                                     {% endfor %}
                                     {% for address in peer.peerallowedip_set.all %}
-                                        {% if address.priority >= 1 and address.config_file == 'server' %}{{ address }}{% endif %}
+                                        {% if address.priority >= 1 and address.config_file == 'server' %}
+                                            {{ address }}
+                                        {% endif %}
                                     {% endfor %}
                                 </span>
                             </p>
                         </div>
-                        
-                        
                     </div>
-
                     {% endfor %}
-
                 </div>
-
                 {% if add_peer_enabled %}
-                <a class="btn btn-primary" href="/peer/manage/?instance={{ current_instance.uuid}}">Create Peer</a>
+                    <a class="btn btn-primary" href="/peer/manage/?instance={{ current_instance.uuid }}">Create Peer</a>
                 {% else %}
-                <a class="btn btn-primary disabled" href="">Create Peer</a>
+                    <a class="btn btn-primary disabled" href="">Create Peer</a>
                 {% endif %}
-                {% comment %}<a class="btn btn-outline-primary disabled" href="/peer/import_peers/?instance={{ current_instance.uuid}}" title='teste'>Import peers</a>{% endcomment %}
-                </div>
+            </div>
         </div>
-      
     </div>
 </div>
-    <script>
-        function openCommandDialog(element) {
-            var command = element.getAttribute('data-command');
-            var confirmation = prompt("Please type 'delete wg{{ current_instance.instance_id }}' to remove the configuration.");
-            if (confirmation) {
-                var url = "?uuid={{current_instance.uuid}}&action=delete&confirmation=" + encodeURIComponent(confirmation);
-                window.location.href = url;
-            }
-        }
-    </script>
-{% else %}
 
+<!-- Peer Preview Modal -->
+<div class="modal fade" id="peerPreviewModal" tabindex="-1" aria-labelledby="peerPreviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="peerPreviewModalLabel">Peer Preview</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <!-- Peer Information -->
+         <h3 id="peerName">Peer Name Placeholder</h3>
+         <p><b>Transfer:</b> <span id="peerTransfer">--</span></p>
+         <p><b>Latest Handshake:</b> <span id="peerHandshake">--</span></p>
+         <p><b>Endpoints:</b> <span id="peerEndpoints">--</span></p>
+         <p><b>Allowed IPs:</b> <span id="peerAllowedIPs">--</span></p>
+         <!-- Consumption graph placeholder -->
+         <div>
+            <canvas id="peerGraph" width="400" height="200"></canvas>
+         </div>
+      </div>
+      <div class="modal-footer">
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         <a href="#" class="btn btn-primary" id="editPeerButton">Edit</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
 <div class="alert alert-warning" role="alert">
     <h4 class="alert-heading">No WireGuard Instances Found</h4>
     <p>There are no WireGuard instances configured. You can add a new instance by clicking the button below.</p>
@@ -98,13 +118,43 @@
     <a href="/server/manage/" class="btn btn-primary">Add WireGuard Instance</a>
 </p>
 {% endif %}
-
-
-
 {% endblock %}
 
 
 {% block custom_page_scripts %}
+
+<script>
+    // Function to open the peer preview modal and fetch its details
+    function openPeerModal(uuid) {
+        $.ajax({
+            url: '/api/peer_info/',
+            data: { uuid: uuid },
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                // Update modal placeholders with fetched data
+                $('#peerName').text(data.name || 'Unnamed Peer');
+                if (data.transfer) {
+                    $('#peerTransfer').text(convertBytes(data.transfer.tx) + ' TX, ' + convertBytes(data.transfer.rx) + ' RX');
+                } else {
+                    $('#peerTransfer').text('--');
+                }
+                $('#peerHandshake').text(data.latest_handshake ? new Date(parseInt(data.latest_handshake) * 1000).toLocaleString() : '--');
+                $('#peerEndpoints').text(data.endpoints || '--');
+                $('#peerAllowedIPs').text(data.allowed_ips || '--');
+
+                // Update the Edit button URL
+                $('#editPeerButton').attr('href', '/peer/manage/?peer=' + uuid);
+
+                // Open the modal
+                $('#peerPreviewModal').modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching peer info:", error);
+            }
+        });
+    }
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

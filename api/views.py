@@ -1,6 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import auth
-from django.http import JsonResponse
+from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponseForbidden
@@ -10,7 +12,7 @@ from django.utils import timezone
 
 from user_manager.models import UserAcl, AuthenticationToken
 from wireguard.models import WebadminSettings, Peer, PeerStatus, WireGuardInstance
-from wgwadmlibrary.tools import user_allowed_peers
+from wgwadmlibrary.tools import user_allowed_peers, user_has_access_to_peer
 import requests
 import subprocess
 import datetime
@@ -110,6 +112,22 @@ def routerfleet_get_user_token(request):
         return JsonResponse(data, status=400)
     else:
         return JsonResponse(data)
+
+
+@login_required
+def peer_info(request):
+    peer = get_object_or_404(Peer, uuid=request.GET.get('uuid'))
+    user_acl = get_object_or_404(UserAcl, user=request.user)
+
+    if not user_has_access_to_peer(user_acl, peer):
+        raise PermissionDenied
+
+    data = {
+        'name': str(peer),
+        'public_key': str(peer.public_key),
+        'uuid': str(peer.uuid),
+    }
+    return JsonResponse(data)
 
 
 @require_http_methods(["GET"])
