@@ -1,47 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page_title %}{{page_title}} | {% endif %}wireguard-webadmin</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if page_title %}{{page_title}} | {% endif %}wireguard-webadmin</title>
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/jqvmap/jqvmap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="/static/AdminLTE-3.2.0/dist/css/adminlte.min.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/static/AdminLTE-3.2.0/dist/css/adminlte.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.css">
 
-  <style>
-    .min-width {
-        width: 1%; 
-        white-space: nowrap;
-    }
-    .preloader{
-        display: none;
-    }
-  </style>
+    <style>
+        .min-width {
+            width: 1%;
+            white-space: nowrap;
+        }
+        .preloader{
+            display: none;
+        }
+    </style>
+    <style>
+        .wrapper {
+            max-width: 1400px !important;
+            margin: 0 auto;
+        }
 
-  {% block page_custom_head %}{% endblock%}
+        body.layout-boxed {
+            background: radial-gradient(circle at center, #444 0%, #ccc 80%, #fff 100%);
+        }
+        body.layout-boxed .wrapper {
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+    </style>
+
+
+    {% block page_custom_head %}{% endblock%}
 </head>
 {% load custom_tags %}
 {% tag_webadmin_version as webadmin_version %}
 
-<body class="hold-transition sidebar-mini layout-fixed {% if request.COOKIES.sidebarState == 'collapsed' %}sidebar-collapse{% endif %}">
+<body class="hold-transition sidebar-mini layout-boxed {% if request.COOKIES.sidebarState == 'collapsed' %}sidebar-collapse{% endif %}">
 <div class="wrapper">
 
   <!-- Preloader -->
