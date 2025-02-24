@@ -169,7 +169,7 @@
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Submit</button>
             <a href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}" class="btn btn-outline-primary">Add IP Address</a>
-            <a class="btn btn-outline-secondary" href="/peer/list/">Back</a>
+            <a class="btn btn-outline-secondary" href="/peer/list/?uuid={{ current_peer.wireguard_instance.uuid }}#peer-{{ current_peer.public_key }}">Back</a>
             <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete Peer</a>
 
         </div>
