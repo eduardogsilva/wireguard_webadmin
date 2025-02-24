@@ -6,25 +6,45 @@
     <div class='col-lg-12'>    
 <div class="card card-primary card-outline">
     <div class="card-header">
-        <a href='/status/' class='btn btn-outline-primary'>wg show</a>
         <a href='/tools/export_wireguard_config/' class='btn btn-outline-primary'>Update Configuration</a>
         <a href='/tools/restart_wireguard/' class='btn btn-outline-primary'>Restart Wireguard service</a>
+
+        <div class="btn-group float-right" role="group" aria-label="Graph interval">
+            <a href="?period=6h" data-period="6h" class="btn btn-outline-primary">6h</a>
+            <a href="?period=7d" data-period="7d" class="btn btn-outline-primary">7d</a>
+            <a href="?period=30d" data-period="30d" class="btn btn-outline-primary">1m</a>
+            <a href="?period=180d" data-period="180d" class="btn btn-outline-primary">6m</a>
+            <a href="?period=365d" data-period="365d" class="btn btn-outline-primary">1y</a>
+        </div>
+
     </div>
     <div class="card-body">
         <div class='row'>
             <div class='col-md-12'>
-                <pre>{{command_output}}</pre>
-
+            <div class="row" style="padding-bottom: 20px">
+                {% for wireguard_instance in wireguard_instances %}
+                    <div class="col-md-12">
+                        <h3>wg{{ wireguard_instance.instance_id }} {% if wireguard_instance.name %}({{ wireguard_instance.name }}){% endif %}</h3>
+                        <p><b><i class="fas fa-chart-area nav-icon"></i> Instance Traffic</b></p>
+                        <img id="graphImg" src="/rrd/graph/?instance={{ wireguard_instance.uuid }}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}" class="img-fluid" alt="No traffic history, please wait a few minutes" onerror="this.onerror=null; this.style.display='none'; this.insertAdjacentHTML('afterend', this.alt);">
+                        <p>
+                            <b><i class="fas fa-network-wired nav-icon"></i> IP Address: </b>{{ wireguard_instance.address }}/{{ wireguard_instance.netmask }}<br>
+                            <b><i class="fas fa-link nav-icon"></i> Public Address: </b>{{ wireguard_instance.hostname }}<br>
+                            <b><i class="fas fa-door-open nav-icon"></i> Port: </b>{{ wireguard_instance.listen_port }}<br>
+                            <b><i class="fas fa-users-cog nav-icon"></i> Peers: </b>{{ wireguard_instance.peer_set.count }}<br>
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
             </div>
         </div>
         
     </div>
+<div class="card-footer">
+</div>
 </div>
 
 </div>
 </div>
-<p style="text-align: right" class="small">
-    This is just a placeholder for the WireGuard status page.  It will be updated with more information in the near future.
-</p>
 
 {% endblock %}

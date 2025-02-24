@@ -56,9 +56,6 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
         <a href="/status/" class="nav-link">Status</a>
       </li>
     </ul>
@@ -87,14 +84,6 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                <li class="nav-item">
-                    <a href="/" class="nav-link {% if '/' == request.path %}active{% endif %}">
-                      <i class="fas fa-home nav-icon"></i>
-                      <p>
-                        Home
-                      </p>
-                    </a>
-                </li>
 
                 <li class="nav-item">
                     <a href="/status/" class="nav-link {% if '/status/' in request.path %}active{% endif %}">
