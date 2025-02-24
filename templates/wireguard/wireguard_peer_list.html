@@ -1,29 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if wireguard_instances %}
-<div class="card card-primary card-outline">
-    <div class="card-body">
-        <ul class="nav nav-tabs" role="tablist">
-            {% for wgconf in wireguard_instances %}
-            <li class="nav-item">
-                <a class="nav-link {% if wgconf == current_instance %}active{% endif %}" href="/peer/list/?uuid={{ wgconf.uuid }}" role="tab">
-                    wg{{ wgconf.instance_id }} {% if wgconf.name %}({{ wgconf.name }}){% endif %}
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-        <div class="tab-content" id="custom-content-below-tabContent">
-            <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
-                <div class="row">
-                    {% for peer in peer_list %}
-                    <div class="col-md-6" id="peer-{{ peer.public_key }}">
-                        <div class="callout">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <h5><a href="#" onclick="openPeerModal('{{ peer.uuid }}');" style="text-decoration: none">{{ peer }}</a></h5>
-                                <span>
+    {% if wireguard_instances %}
+        <div class="card card-primary card-outline">
+            <div class="card-body">
+                <ul class="nav nav-tabs" role="tablist">
+                    {% for wgconf in wireguard_instances %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if wgconf == current_instance %}active{% endif %}" href="/peer/list/?uuid={{ wgconf.uuid }}" role="tab">
+                                wg{{ wgconf.instance_id }} {% if wgconf.name %}({{ wgconf.name }}){% endif %}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="tab-content" id="custom-content-below-tabContent">
+                    <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
+                        <div class="row">
+                            {% for peer in peer_list %}
+                                <div class="col-md-6" id="peer-{{ peer.public_key }}">
+                                    <div class="callout">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <h5><a href="#" onclick="openPeerModal('{{ peer.uuid }}');" style="text-decoration: none">{{ peer }}</a></h5>
+                                            <span>
                                     {% if user_acl.user_level >= 30 %}
-                                    <div class="d-inline-flex flex-column">
+                                        <div class="d-inline-flex flex-column">
                                         <a href="/peer/sort/?peer={{ peer.uuid }}&direction=up" style="line-height:0px">
                                             <i class="fas fa-sort-up"></i>
                                         </a>
@@ -34,7 +34,7 @@
                                         </div>
                                     </div>
                                     {% endif %}
-                                    <a href="javascript:void(0);" onclick="openImageLightbox('/tools/download_peer_config/?uuid={{ peer.uuid }}&format=qrcode');">
+                                                <a href="javascript:void(0);" onclick="openImageLightbox('/tools/download_peer_config/?uuid={{ peer.uuid }}&format=qrcode');">
                                         <i class="fas fa-qrcode"></i>
                                     </a>
                                     <a href="/tools/download_peer_config/?uuid={{ peer.uuid }}">
@@ -44,237 +44,234 @@
                                         <i class="far fa-edit"></i>
                                     </a>
                                 </span>
-                            </div>
-                            <p>
-                                <b>Transfer:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br>
-                                <b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span>
-                                <span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">
+                                        </div>
+                                        <p>
+                                            <b>Transfer:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br>
+                                            <b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span>
+                                            <span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">
                                     {% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}
                                 </span><br>
-                                <b>Endpoints:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br>
-                                <b>Allowed IPs:</b>
-                                <span id="peer-allowed-ips-{{ peer.public_key }}">
+                                            <b>Endpoints:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br>
+                                            <b>Allowed IPs:</b>
+                                            <span id="peer-allowed-ips-{{ peer.public_key }}">
                                     {% for address in peer.peerallowedip_set.all %}
                                         {% if address.priority == 0 and address.config_file == 'server' %}
                                             {{ address }}
                                         {% endif %}
                                     {% endfor %}
-                                    {% for address in peer.peerallowedip_set.all %}
-                                        {% if address.priority >= 1 and address.config_file == 'server' %}
-                                            {{ address }}
-                                        {% endif %}
-                                    {% endfor %}
+                                                {% for address in peer.peerallowedip_set.all %}
+                                                    {% if address.priority >= 1 and address.config_file == 'server' %}
+                                                        {{ address }}
+                                                    {% endif %}
+                                                {% endfor %}
                                 </span>
-                            </p>
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
+                        {% if add_peer_enabled %}
+                            <a class="btn btn-primary" href="/peer/manage/?instance={{ current_instance.uuid }}">Create Peer</a>
+                        {% else %}
+                            <a class="btn btn-primary disabled" href="">Create Peer</a>
+                        {% endif %}
                     </div>
-                    {% endfor %}
                 </div>
-                {% if add_peer_enabled %}
-                    <a class="btn btn-primary" href="/peer/manage/?instance={{ current_instance.uuid }}">Create Peer</a>
-                {% else %}
-                    <a class="btn btn-primary disabled" href="">Create Peer</a>
-                {% endif %}
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Peer Preview Modal -->
-<div class="modal fade" id="peerPreviewModal" tabindex="-1" aria-labelledby="peerPreviewModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="peerPreviewModalLabel">Peer Preview</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-         <!-- Peer Information -->
-         <h3 id="peerName">Peer Name Placeholder</h3>
-         <p><b>Transfer:</b> <span id="peerTransfer">--</span></p>
-         <p><b>Latest Handshake:</b> <span id="peerHandshake">--</span></p>
-         <p><b>Endpoints:</b> <span id="peerEndpoints">--</span></p>
-         <p><b>Allowed IPs:</b> <span id="peerAllowedIPs">--</span></p>
-         <!-- Consumption graph placeholder -->
-         <div>
-            <canvas id="peerGraph" width="400" height="200"></canvas>
-         </div>
-      </div>
-      <div class="modal-footer">
-         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-         <a href="#" class="btn btn-primary" id="editPeerButton">Edit</a>
-      </div>
-    </div>
-  </div>
-</div>
-{% else %}
-<div class="alert alert-warning" role="alert">
-    <h4 class="alert-heading">No WireGuard Instances Found</h4>
-    <p>There are no WireGuard instances configured. You can add a new instance by clicking the button below.</p>
-</div>
-<p>
-    <a href="/server/manage/" class="btn btn-primary">Add WireGuard Instance</a>
-</p>
-{% endif %}
+        <!-- Peer Preview Modal -->
+        <div class="modal fade" id="peerPreviewModal" tabindex="-1" aria-labelledby="peerPreviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="peerPreviewModalLabel">Peer Preview</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Peer Information -->
+                        <h3 id="peerName">Peer Name Placeholder</h3>
+                        <p><b>Transfer:</b> <span id="peerTransfer">--</span></p>
+                        <p><b>Latest Handshake:</b> <span id="peerHandshake">--</span></p>
+                        <p><b>Endpoints:</b> <span id="peerEndpoints">--</span></p>
+                        <p><b>Allowed IPs:</b> <span id="peerAllowedIPs">--</span></p>
+                        <!-- Consumption graph placeholder -->
+                        <div>
+                            <canvas id="peerGraph" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <a href="#" class="btn btn-primary" id="editPeerButton">Edit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">No WireGuard Instances Found</h4>
+            <p>There are no WireGuard instances configured. You can add a new instance by clicking the button below.</p>
+        </div>
+        <p>
+            <a href="/server/manage/" class="btn btn-primary">Add WireGuard Instance</a>
+        </p>
+    {% endif %}
 {% endblock %}
 
 
 {% block custom_page_scripts %}
 
-<script>
-    // Function to open the peer preview modal and fetch its details
-    function openPeerModal(uuid) {
-        $.ajax({
-            url: '/api/peer_info/',
-            data: { uuid: uuid },
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                // Update modal placeholders with fetched data
-                $('#peerName').text(data.name || 'Unnamed Peer');
-                if (data.transfer) {
-                    $('#peerTransfer').text(convertBytes(data.transfer.tx) + ' TX, ' + convertBytes(data.transfer.rx) + ' RX');
-                } else {
-                    $('#peerTransfer').text('--');
-                }
-                $('#peerHandshake').text(data.latest_handshake ? new Date(parseInt(data.latest_handshake) * 1000).toLocaleString() : '--');
-                $('#peerEndpoints').text(data.endpoints || '--');
-                $('#peerAllowedIPs').text(data.allowed_ips || '--');
-
-                // Update the Edit button URL
-                $('#editPeerButton').attr('href', '/peer/manage/?peer=' + uuid);
-
-                // Open the modal
-                $('#peerPreviewModal').modal('show');
-            },
-            error: function(xhr, status, error) {
-                console.error("Error fetching peer info:", error);
-            }
-        });
-    }
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        //const fetchWireguardStatus = async () => {
-        //    try {
-        //        const response = await fetch('/api/wireguard_status/');
-        //        const data = await response.json();
-        //        updateUI(data);
-        //    } catch (error) {
-        //        console.error('Error fetching Wireguard status:', error);
-        //    }
-        //};
-        const fetchWireguardStatus = async () => {
-            try {
-                const response = await fetch('/api/wireguard_status/');
-                let data = await response.json();
-
-                // if latest-handshakes is 0, use the stored value
-                for (const [interfaceName, peers] of Object.entries(data)) {
-                    for (const [peerId, peerInfo] of Object.entries(peers)) {
-                        const peerElementId = `peer-stored-latest-handshake-${peerId}`;
-                        const storedHandshakeElement = document.getElementById(peerElementId);
-                        if (peerInfo['latest-handshakes'] === '0' && storedHandshakeElement) {
-                            peerInfo['latest-handshakes'] = storedHandshakeElement.textContent;
-                        }
+    <script>
+        // Function to open the peer preview modal and fetch its details
+        function openPeerModal(uuid) {
+            $.ajax({
+                url: '/api/peer_info/',
+                data: { uuid: uuid },
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Update modal placeholders with fetched data
+                    $('#peerName').text(data.name || 'Unnamed Peer');
+                    if (data.transfer) {
+                        $('#peerTransfer').text(convertBytes(data.transfer.tx) + ' TX, ' + convertBytes(data.transfer.rx) + ' RX');
+                    } else {
+                        $('#peerTransfer').text('--');
                     }
-                }
-        
-                updateUI(data);
-            } catch (error) {
-                console.error('Error fetching Wireguard status:', error);
-            }
-        };
-    
-        fetchWireguardStatus();
-        setInterval(fetchWireguardStatus, {{ current_instance.peer_list_refresh_interval }} * 1000);
-    });
-    
-    const updateUI = (data) => {
-        for (const [interfaceName, peers] of Object.entries(data)) {
-            for (const [peerId, peerInfo] of Object.entries(peers)) {
-                const peerDiv = document.getElementById(`peer-${peerId}`);
-                if (peerDiv) {
-                    updatePeerInfo(peerDiv, peerId, peerInfo);
-                    updateCalloutClass(peerDiv, peerInfo['latest-handshakes']);
-                }
-            }
-        }
-    };
-    
-    const updatePeerInfo = (peerDiv, peerId, peerInfo) => {
-        const escapedPeerId = peerId.replace(/([!"#$%&'()*+,.\/:;<=>?@[\]^`{|}~])/g, '\\$1');
-        const transfer = peerDiv.querySelector(`#peer-transfer-${escapedPeerId}`);
-        const latestHandshake = peerDiv.querySelector(`#peer-latest-handshake-${escapedPeerId}`);
-        const endpoints = peerDiv.querySelector(`#peer-endpoints-${escapedPeerId}`);
-        const allowedIps = peerDiv.querySelector(`#peer-allowed-ips-${escapedPeerId}`);
-    
-        transfer.textContent = `${convertBytes(peerInfo.transfer.tx)} TX, ${convertBytes(peerInfo.transfer.rx)} RX`;
-        latestHandshake.textContent = `${peerInfo['latest-handshakes'] !== '0' ? new Date(parseInt(peerInfo['latest-handshakes']) * 1000).toLocaleString() : '0'}`;
-        endpoints.textContent = `${peerInfo.endpoints}`;
-        checkAllowedIps(allowedIps, peerInfo['allowed-ips']);
-    };
-    
-    const convertBytes = (bytes) => {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    };
-    
-    const checkAllowedIps = (allowedIpsElement, allowedIpsApiResponse) => {
-        const apiIps = allowedIpsApiResponse[0].split(' ');
-        const htmlIpsText = allowedIpsElement.textContent.trim();
-        const htmlIpsArray = htmlIpsText.match(/\b(?:\d{1,3}\.){3}\d{1,3}\/\d{1,2}\b/g);
-    
-        allowedIpsElement.innerHTML = '';
-        htmlIpsArray.forEach((ip, index, array) => {
-            const ipSpan = document.createElement('span');
-            ipSpan.textContent = ip;
-            allowedIpsElement.appendChild(ipSpan);
+                    $('#peerHandshake').text(data.latest_handshake ? new Date(parseInt(data.latest_handshake) * 1000).toLocaleString() : '--');
+                    $('#peerEndpoints').text(data.endpoints || '--');
+                    $('#peerAllowedIPs').text(data.allowed_ips || '--');
 
-            if (!apiIps.includes(ip)) {
-                ipSpan.style.color = 'red';
-                ipSpan.style.textDecoration = 'underline';
-                ipSpan.title = 'This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.';
-            }
+                    // Update the Edit button URL
+                    $('#editPeerButton').attr('href', '/peer/manage/?peer=' + uuid);
 
-            if (index < array.length - 1) {
-                allowedIpsElement.appendChild(document.createTextNode(', '));
-            }
-        });
-    };
-    
-    const updateCalloutClass = (peerDiv, latestHandshake) => {
-        const calloutDiv = peerDiv.querySelector('.callout');
-        calloutDiv.classList.remove('callout-success', 'callout-info', 'callout-warning', 'callout-danger');
-        const handshakeAge = Date.now() / 1000 - parseInt(latestHandshake);
-    
-        if (latestHandshake === '0') {
-            calloutDiv.classList.add('callout-danger');
-        } else if (handshakeAge < 600) {
-            calloutDiv.classList.add('callout-success');
-        } else if (handshakeAge < 1800) {
-            calloutDiv.classList.add('callout-info');
-        } else if (handshakeAge < 21600) {
-            calloutDiv.classList.add('callout-warning');
+                    // Open the modal
+                    $('#peerPreviewModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching peer info:", error);
+                }
+            });
         }
-    
-        calloutDiv.style.transition = 'all 5s';
-    };
     </script>
 
-<script>
-    function openImageLightbox(url) {
-      window.open(url, 'Image', 'width=500,height=500,toolbar=0,location=0,menubar=0');
-    }
-</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            //const fetchWireguardStatus = async () => {
+            //    try {
+            //        const response = await fetch('/api/wireguard_status/');
+            //        const data = await response.json();
+            //        updateUI(data);
+            //    } catch (error) {
+            //        console.error('Error fetching Wireguard status:', error);
+            //    }
+            //};
+            const fetchWireguardStatus = async () => {
+                try {
+                    const response = await fetch('/api/wireguard_status/');
+                    let data = await response.json();
 
+                    // if latest-handshakes is 0, use the stored value
+                    for (const [interfaceName, peers] of Object.entries(data)) {
+                        for (const [peerId, peerInfo] of Object.entries(peers)) {
+                            const peerElementId = `peer-stored-latest-handshake-${peerId}`;
+                            const storedHandshakeElement = document.getElementById(peerElementId);
+                            if (peerInfo['latest-handshakes'] === '0' && storedHandshakeElement) {
+                                peerInfo['latest-handshakes'] = storedHandshakeElement.textContent;
+                            }
+                        }
+                    }
 
+                    updateUI(data);
+                } catch (error) {
+                    console.error('Error fetching Wireguard status:', error);
+                }
+            };
 
+            fetchWireguardStatus();
+            setInterval(fetchWireguardStatus, {{ current_instance.peer_list_refresh_interval }} * 1000);
+        });
+
+        const updateUI = (data) => {
+            for (const [interfaceName, peers] of Object.entries(data)) {
+                for (const [peerId, peerInfo] of Object.entries(peers)) {
+                    const peerDiv = document.getElementById(`peer-${peerId}`);
+                    if (peerDiv) {
+                        updatePeerInfo(peerDiv, peerId, peerInfo);
+                        updateCalloutClass(peerDiv, peerInfo['latest-handshakes']);
+                    }
+                }
+            }
+        };
+
+        const updatePeerInfo = (peerDiv, peerId, peerInfo) => {
+            const escapedPeerId = peerId.replace(/([!"#$%&'()*+,.\/:;<=>?@[\]^`{|}~])/g, '\\$1');
+            const transfer = peerDiv.querySelector(`#peer-transfer-${escapedPeerId}`);
+            const latestHandshake = peerDiv.querySelector(`#peer-latest-handshake-${escapedPeerId}`);
+            const endpoints = peerDiv.querySelector(`#peer-endpoints-${escapedPeerId}`);
+            const allowedIps = peerDiv.querySelector(`#peer-allowed-ips-${escapedPeerId}`);
+
+            transfer.textContent = `${convertBytes(peerInfo.transfer.tx)} TX, ${convertBytes(peerInfo.transfer.rx)} RX`;
+            latestHandshake.textContent = `${peerInfo['latest-handshakes'] !== '0' ? new Date(parseInt(peerInfo['latest-handshakes']) * 1000).toLocaleString() : '0'}`;
+            endpoints.textContent = `${peerInfo.endpoints}`;
+            checkAllowedIps(allowedIps, peerInfo['allowed-ips']);
+        };
+
+        const convertBytes = (bytes) => {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        };
+
+        const checkAllowedIps = (allowedIpsElement, allowedIpsApiResponse) => {
+            const apiIps = allowedIpsApiResponse[0].split(' ');
+            const htmlIpsText = allowedIpsElement.textContent.trim();
+            const htmlIpsArray = htmlIpsText.match(/\b(?:\d{1,3}\.){3}\d{1,3}\/\d{1,2}\b/g);
+
+            allowedIpsElement.innerHTML = '';
+            htmlIpsArray.forEach((ip, index, array) => {
+                const ipSpan = document.createElement('span');
+                ipSpan.textContent = ip;
+                allowedIpsElement.appendChild(ipSpan);
+
+                if (!apiIps.includes(ip)) {
+                    ipSpan.style.color = 'red';
+                    ipSpan.style.textDecoration = 'underline';
+                    ipSpan.title = 'This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.';
+                }
+
+                if (index < array.length - 1) {
+                    allowedIpsElement.appendChild(document.createTextNode(', '));
+                }
+            });
+        };
+
+        const updateCalloutClass = (peerDiv, latestHandshake) => {
+            const calloutDiv = peerDiv.querySelector('.callout');
+            calloutDiv.classList.remove('callout-success', 'callout-info', 'callout-warning', 'callout-danger');
+            const handshakeAge = Date.now() / 1000 - parseInt(latestHandshake);
+
+            if (latestHandshake === '0') {
+                calloutDiv.classList.add('callout-danger');
+            } else if (handshakeAge < 600) {
+                calloutDiv.classList.add('callout-success');
+            } else if (handshakeAge < 1800) {
+                calloutDiv.classList.add('callout-info');
+            } else if (handshakeAge < 21600) {
+                calloutDiv.classList.add('callout-warning');
+            }
+
+            calloutDiv.style.transition = 'all 5s';
+        };
+    </script>
+
+    <script>
+        function openImageLightbox(url) {
+            window.open(url, 'Image', 'width=500,height=500,toolbar=0,location=0,menubar=0');
+        }
+    </script>
 
 {% endblock %}
