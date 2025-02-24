@@ -17,54 +17,57 @@
                     <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
                         <div class="row">
                             {% for peer in peer_list %}
-                                <div class="col-md-6" id="peer-{{ peer.public_key }}">
+                                <div class="col-md-6" id="peer-{{ peer.public_key }}" data-uuid="{{ peer.uuid }}">
                                     <div class="callout">
                                         <div class="d-flex justify-content-between align-items-start">
-                                            <h5><a href="#" onclick="openPeerModal('{{ peer.uuid }}');" style="text-decoration: none">{{ peer }}</a></h5>
+                                            <h5>
+                                                <a href="#" onclick="openPeerModal('{{ peer.uuid }}');" style="text-decoration: none">
+                                                    {{ peer }}
+                                                </a>
+                                            </h5>
                                             <span>
-                                    {% if user_acl.user_level >= 30 %}
-                                        <div class="d-inline-flex flex-column">
-                                        <a href="/peer/sort/?peer={{ peer.uuid }}&direction=up" style="line-height:0px">
-                                            <i class="fas fa-sort-up"></i>
-                                        </a>
-                                        <div style="overflow:hidden;margin-top: -9px">
-                                            <a href="/peer/sort/?peer={{ peer.uuid }}&direction=down" style="position:relative;top:-11px">
-                                                <i class="fas fa-sort-down"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    {% endif %}
+                  {% if user_acl.user_level >= 30 %}
+                      <div class="d-inline-flex flex-column">
+                    <a href="/peer/sort/?peer={{ peer.uuid }}&direction=up" style="line-height:0px">
+                      <i class="fas fa-sort-up"></i>
+                    </a>
+                    <div style="overflow:hidden;margin-top: -9px">
+                      <a href="/peer/sort/?peer={{ peer.uuid }}&direction=down" style="position:relative;top:-11px">
+                        <i class="fas fa-sort-down"></i>
+                      </a>
+                    </div>
+                  </div>
+                  {% endif %}
                                                 <a href="javascript:void(0);" onclick="openImageLightbox('/tools/download_peer_config/?uuid={{ peer.uuid }}&format=qrcode');">
-                                        <i class="fas fa-qrcode"></i>
-                                    </a>
-                                    <a href="/tools/download_peer_config/?uuid={{ peer.uuid }}">
-                                        <i class="fas fa-download"></i>
-                                    </a>
-                                    <a href="/peer/manage/?peer={{ peer.uuid }}">
-                                        <i class="far fa-edit"></i>
-                                    </a>
-                                </span>
+                    <i class="fas fa-qrcode"></i>
+                  </a>
+                  <a href="/tools/download_peer_config/?uuid={{ peer.uuid }}">
+                    <i class="fas fa-download"></i>
+                  </a>
+                  <a href="/peer/manage/?peer={{ peer.uuid }}">
+                    <i class="far fa-edit"></i>
+                  </a>
+                </span>
                                         </div>
                                         <p>
                                             <b>Transfer:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br>
                                             <b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span>
-                                            <span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">
-                                    {% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}
-                                </span><br>
+                                            <span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">{% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}</span><br>
+
                                             <b>Endpoints:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br>
                                             <b>Allowed IPs:</b>
                                             <span id="peer-allowed-ips-{{ peer.public_key }}">
-                                    {% for address in peer.peerallowedip_set.all %}
-                                        {% if address.priority == 0 and address.config_file == 'server' %}
-                                            {{ address }}
-                                        {% endif %}
-                                    {% endfor %}
+                                                 {% for address in peer.peerallowedip_set.all %}
+                                                     {% if address.priority == 0 and address.config_file == 'server' %}
+                                                         {{ address }}
+                                                     {% endif %}
+                                                 {% endfor %}
                                                 {% for address in peer.peerallowedip_set.all %}
                                                     {% if address.priority >= 1 and address.config_file == 'server' %}
                                                         {{ address }}
                                                     {% endif %}
                                                 {% endfor %}
-                                </span>
+                                            </span>
                                         </p>
                                     </div>
                                 </div>
@@ -91,20 +94,42 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!-- Peer Information -->
-                        <h3 id="peerName">Peer Name Placeholder</h3>
-                        <p><b>Transfer:</b> <span id="peerTransfer">--</span></p>
-                        <p><b>Latest Handshake:</b> <span id="peerHandshake">--</span></p>
-                        <p><b>Endpoints:</b> <span id="peerEndpoints">--</span></p>
-                        <p><b>Allowed IPs:</b> <span id="peerAllowedIPs">--</span></p>
-                        <!-- Consumption graph placeholder -->
-                        <div>
-                            <canvas id="peerGraph" width="400" height="200"></canvas>
+                        <!-- Details copied from the peer card -->
+                        <p><b><i class="fas fa-dolly nav-icon"></i> Transfer:</b> <span id="peerTransfer">--</span></p>
+                        <p><b><i class="far fa-handshake nav-icon"></i> Latest Handshake:</b> <span id="peerHandshake">--</span></p>
+                        <p><b><i class="far fa-address-card nav-icon"></i> Endpoints:</b> <span id="peerEndpoints">--</span></p>
+                        <p><b><i class="fas fa-network-wired nav-icon"></i> Allowed IPs:</b> <span id="peerAllowedIPs">--</span></p>
+
+                        <!-- Traffic Graph -->
+                        <div class="graph-container" style="margin-top:20px;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label>
+                                    <i class="fas fa-chart-area nav-icon"></i>
+                                    Peer Traffic
+                                </label>
+                                <div class="btn-group" role="group" aria-label="Graph interval">
+                                    <a href="#" data-period="1h" class="btn btn-outline-primary btn-xs">1h</a>
+                                    <a href="#" data-period="3h" class="btn btn-outline-primary btn-xs">3h</a>
+                                    <a href="#" data-period="6h" class="btn btn-outline-primary btn-xs">6h</a>
+                                    <a href="#" data-period="1d" class="btn btn-outline-primary btn-xs">1d</a>
+                                    <a href="#" data-period="7d" class="btn btn-outline-primary btn-xs">7d</a>
+                                    <a href="#" data-period="30d" class="btn btn-outline-primary btn-xs">1m</a>
+                                    <a href="#" data-period="90d" class="btn btn-outline-primary btn-xs">3m</a>
+                                    <a href="#" data-period="180d" class="btn btn-outline-primary btn-xs">6m</a>
+                                    <a href="#" data-period="365d" class="btn btn-outline-primary btn-xs">1y</a>
+                                </div>
+                            </div>
+                            <center style="margin-top:10px;">
+                                <img id="graphImg" src="" class="img-fluid" alt="No traffic history, please wait a few minutes" style="display:block;">
+                            </center>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <!-- Action buttons -->
                         <a href="#" class="btn btn-primary" id="editPeerButton">Edit</a>
+                        <a href="#" class="btn btn-info" id="downloadConfigButton">Download Config</a>
+                        <a href="#" class="btn btn-info" id="qrcodeButton">QR Code</a>
                     </div>
                 </div>
             </div>
@@ -124,36 +149,58 @@
 {% block custom_page_scripts %}
 
     <script>
-        // Function to open the peer preview modal and fetch its details
+        // Function to open the peer preview modal using data from the peer card
         function openPeerModal(uuid) {
-            $.ajax({
-                url: '/api/peer_info/',
-                data: { uuid: uuid },
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    // Update modal placeholders with fetched data
-                    $('#peerName').text(data.name || 'Unnamed Peer');
-                    if (data.transfer) {
-                        $('#peerTransfer').text(convertBytes(data.transfer.tx) + ' TX, ' + convertBytes(data.transfer.rx) + ' RX');
-                    } else {
-                        $('#peerTransfer').text('--');
+            // Find the peer element by its data-uuid attribute
+            var peerElem = document.querySelector('[data-uuid="' + uuid + '"]');
+            if (peerElem) {
+                // Copy the details from the peer card (which is updated by your routine)
+                var peerNameFromCard = peerElem.querySelector('h5').innerText;
+                var peerTransfer = peerElem.querySelector('[id^="peer-transfer-"]').innerText;
+                var peerHandshake = peerElem.querySelector('[id^="peer-latest-handshake-"]').innerText;
+                var peerEndpoints = peerElem.querySelector('[id^="peer-endpoints-"]').innerText;
+                var peerAllowedIPs = peerElem.querySelector('[id^="peer-allowed-ips-"]').innerText;
+
+                // Update the modal fields with the card values
+                $('#peerPreviewModalLabel').text(peerNameFromCard);
+                $('#peerTransfer').text(peerTransfer);
+                $('#peerHandshake').text(peerHandshake);
+                $('#peerEndpoints').text(peerEndpoints);
+                $('#peerAllowedIPs').text(peerAllowedIPs);
+                $('#editPeerButton').attr('href', '/peer/manage/?peer=' + uuid);
+                $('#downloadConfigButton').attr('href', '/tools/download_peer_config/?uuid=' + uuid);
+                $('#qrcodeButton').attr('href', '/tools/download_peer_config/?uuid=' + uuid + '&format=qrcode');
+                $('#graphImg').attr('src', '/rrd/graph/?peer=' + uuid).show();
+                $('#peerPreviewModal').data('peer-uuid', uuid);
+
+                $.ajax({
+                    url: '/api/peer_info/',
+                    data: { uuid: uuid },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.name) {
+                            $('#peerPreviewModalLabel').text(data.name);
+                        }
+                        // Future additional peer information can be handled here.
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching peer info:", error);
                     }
-                    $('#peerHandshake').text(data.latest_handshake ? new Date(parseInt(data.latest_handshake) * 1000).toLocaleString() : '--');
-                    $('#peerEndpoints').text(data.endpoints || '--');
-                    $('#peerAllowedIPs').text(data.allowed_ips || '--');
-
-                    // Update the Edit button URL
-                    $('#editPeerButton').attr('href', '/peer/manage/?peer=' + uuid);
-
-                    // Open the modal
-                    $('#peerPreviewModal').modal('show');
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error fetching peer info:", error);
-                }
-            });
+                });
+                $('#peerPreviewModal').modal('show');
+            } else {
+                console.error('Peer element not found for uuid: ' + uuid);
+            }
         }
+
+        $(document).on('click', '.graph-container .btn-group a', function(e) {
+            e.preventDefault();
+            var period = $(this).data('period');
+            var uuid = $('#peerPreviewModal').data('peer-uuid');
+            var newSrc = '/rrd/graph/?peer=' + uuid + '&period=' + period;
+            $('#graphImg').attr('src', newSrc);
+        });
     </script>
 
     <script>
