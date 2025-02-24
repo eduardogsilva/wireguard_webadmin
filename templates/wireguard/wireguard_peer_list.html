@@ -26,28 +26,24 @@
                                                 </a>
                                             </h5>
                                             <span>
-                  {% if user_acl.user_level >= 30 %}
-                      <div class="d-inline-flex flex-column">
-                    <a href="/peer/sort/?peer={{ peer.uuid }}&direction=up" style="line-height:0px">
-                      <i class="fas fa-sort-up"></i>
-                    </a>
-                    <div style="overflow:hidden;margin-top: -9px">
-                      <a href="/peer/sort/?peer={{ peer.uuid }}&direction=down" style="position:relative;top:-11px">
-                        <i class="fas fa-sort-down"></i>
-                      </a>
-                    </div>
-                  </div>
-                  {% endif %}
-                                                <a href="javascript:void(0);" onclick="openImageLightbox('/tools/download_peer_config/?uuid={{ peer.uuid }}&format=qrcode');">
-                    <i class="fas fa-qrcode"></i>
-                  </a>
-                  <a href="/tools/download_peer_config/?uuid={{ peer.uuid }}">
-                    <i class="fas fa-download"></i>
-                  </a>
-                  <a href="/peer/manage/?peer={{ peer.uuid }}">
-                    <i class="far fa-edit"></i>
-                  </a>
-                </span>
+                                              {% if user_acl.user_level >= 30 %}
+                                                  <div class="d-inline-flex flex-column">
+                                                <a href="/peer/sort/?peer={{ peer.uuid }}&direction=up" style="line-height:0px">
+                                                  <i class="fas fa-sort-up"></i>
+                                                </a>
+                                                <div style="overflow:hidden;margin-top: -9px">
+                                                  <a href="/peer/sort/?peer={{ peer.uuid }}&direction=down" style="position:relative;top:-11px">
+                                                    <i class="fas fa-sort-down"></i>
+                                                  </a>
+                                                </div>
+                                              </div>
+                                              {% endif %}
+                                                {% comment %}
+                                                <a href="/peer/manage/?peer={{ peer.uuid }}">
+                                                    <i class="far fa-edit"></i>
+                                                </a>
+                                                {% endcomment %}
+                                            </span>
                                         </div>
                                         <p>
                                             <b>Transfer:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br>
@@ -94,46 +90,56 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!-- Details copied from the peer card -->
-                        <p><b><i class="fas fa-dolly nav-icon"></i> Transfer:</b> <span id="peerTransfer">--</span></p>
-                        <p><b><i class="far fa-handshake nav-icon"></i> Latest Handshake:</b> <span id="peerHandshake">--</span></p>
-                        <p><b><i class="far fa-address-card nav-icon"></i> Endpoints:</b> <span id="peerEndpoints">--</span></p>
-                        <p><b><i class="fas fa-network-wired nav-icon"></i> Allowed IPs:</b> <span id="peerAllowedIPs">--</span></p>
+                        <!-- Info content section -->
+                        <div class="info-content">
+                            <p><b><i class="fas fa-dolly nav-icon"></i> Transfer:</b> <span id="peerTransfer">--</span></p>
+                            <p><b><i class="far fa-clock nav-icon"></i></i> Latest Handshake:</b> <span id="peerHandshake">--</span></p>
+                            <p><b><i class="far fa-address-card nav-icon"></i> Endpoints:</b> <span id="peerEndpoints">--</span></p>
+                            <p><b><i class="fas fa-network-wired nav-icon"></i> Allowed IPs:</b> <span id="peerAllowedIPs">--</span></p>
 
-                        <!-- Traffic Graph -->
-                        <div class="graph-container" style="margin-top:20px;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <label>
-                                    <i class="fas fa-chart-area nav-icon"></i>
-                                    Peer Traffic
-                                </label>
-                                <div class="btn-group" role="group" aria-label="Graph interval">
-                                    <a href="#" data-period="1h" class="btn btn-outline-primary btn-xs">1h</a>
-                                    <a href="#" data-period="3h" class="btn btn-outline-primary btn-xs">3h</a>
-                                    <a href="#" data-period="6h" class="btn btn-outline-primary btn-xs">6h</a>
-                                    <a href="#" data-period="1d" class="btn btn-outline-primary btn-xs">1d</a>
-                                    <a href="#" data-period="7d" class="btn btn-outline-primary btn-xs">7d</a>
-                                    <a href="#" data-period="30d" class="btn btn-outline-primary btn-xs">1m</a>
-                                    <a href="#" data-period="90d" class="btn btn-outline-primary btn-xs">3m</a>
-                                    <a href="#" data-period="180d" class="btn btn-outline-primary btn-xs">6m</a>
-                                    <a href="#" data-period="365d" class="btn btn-outline-primary btn-xs">1y</a>
+                            <!-- Traffic Graph -->
+                            <div class="graph-container" style="margin-top:20px;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <label>
+                                        <i class="fas fa-chart-area nav-icon"></i>
+                                        Peer Traffic
+                                    </label>
+                                    <div class="btn-group" role="group" aria-label="Graph interval">
+                                        <a href="#" data-period="1h" class="btn btn-outline-primary btn-xs">1h</a>
+                                        <a href="#" data-period="3h" class="btn btn-outline-primary btn-xs">3h</a>
+                                        <a href="#" data-period="6h" class="btn btn-outline-primary btn-xs">6h</a>
+                                        <a href="#" data-period="1d" class="btn btn-outline-primary btn-xs">1d</a>
+                                        <a href="#" data-period="7d" class="btn btn-outline-primary btn-xs">7d</a>
+                                        <a href="#" data-period="30d" class="btn btn-outline-primary btn-xs">1m</a>
+                                        <a href="#" data-period="90d" class="btn btn-outline-primary btn-xs">3m</a>
+                                        <a href="#" data-period="180d" class="btn btn-outline-primary btn-xs">6m</a>
+                                        <a href="#" data-period="365d" class="btn btn-outline-primary btn-xs">1y</a>
+                                    </div>
                                 </div>
+                                <center style="margin-top:10px;">
+                                    <img id="graphImg" src="" class="img-fluid" alt="No traffic history, please wait a few minutes" style="display:block;">
+                                </center>
                             </div>
-                            <center style="margin-top:10px;">
-                                <img id="graphImg" src="" class="img-fluid" alt="No traffic history, please wait a few minutes" style="display:block;">
-                            </center>
+                        </div>
+
+                        <!-- QR Code content section (initially hidden) -->
+                        <div class="qr-code-content" style="display:none; ">
+                            <button class="btn btn-secondary" id="backButton"><i class="fas fa-times"></i> Close QR Code</button><br>
+                            <div style="text-align: center;">
+                                <img id="qrCodeImg" src="" alt="QR Code" class="img-fluid" style="max-width: 400px" />
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <!-- Action buttons -->
-                        <a href="#" class="btn btn-primary" id="editPeerButton">Edit</a>
-                        <a href="#" class="btn btn-info" id="downloadConfigButton">Download Config</a>
-                        <a href="#" class="btn btn-info" id="qrcodeButton">QR Code</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i>  Close</button>
+                        <a href="#" class="btn btn-info" id="downloadConfigButton"><i class="fas fa-download"></i> Config</a>
+                        <a href="#" class="btn btn-info" id="qrcodeButton"><i class="fas fa-qrcode"></i> QR Code</a>
+                        <a href="#" class="btn btn-outline-primary" id="editPeerButton"><i class="far fa-edit"></i> Edit</a>
                     </div>
                 </div>
             </div>
         </div>
+
     {% else %}
         <div class="alert alert-warning" role="alert">
             <h4 class="alert-heading">No WireGuard Instances Found</h4>
@@ -147,14 +153,33 @@
 
 
 {% block custom_page_scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            $("#qrcodeButton").on("click", function(e) {
+                e.preventDefault();
+                var uuid = $("#peerPreviewModal").data("peer-uuid");
+                $("#qrCodeImg").attr("src", "/tools/download_peer_config/?uuid=" + uuid + "&format=qrcode");
+                $(".info-content").hide();
+                $(".qr-code-content").show();
+            });
+
+            $("#backButton").on("click", function(e) {
+                e.preventDefault();
+                $(".qr-code-content").hide();
+                $(".info-content").show();
+            });
+        });
+    </script>
+
 
     <script>
-        // Function to open the peer preview modal using data from the peer card
         function openPeerModal(uuid) {
+            $(".qr-code-content").hide();
+            $(".info-content").show();
+            $("#qrCodeImg").attr("src", "");
             // Find the peer element by its data-uuid attribute
             var peerElem = document.querySelector('[data-uuid="' + uuid + '"]');
             if (peerElem) {
-                // Copy the details from the peer card (which is updated by your routine)
                 var peerNameFromCard = peerElem.querySelector('h5').innerText;
                 var peerTransfer = peerElem.querySelector('[id^="peer-transfer-"]').innerText;
                 var peerHandshake = peerElem.querySelector('[id^="peer-latest-handshake-"]').innerText;
@@ -205,15 +230,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            //const fetchWireguardStatus = async () => {
-            //    try {
-            //        const response = await fetch('/api/wireguard_status/');
-            //        const data = await response.json();
-            //        updateUI(data);
-            //    } catch (error) {
-            //        console.error('Error fetching Wireguard status:', error);
-            //    }
-            //};
             const fetchWireguardStatus = async () => {
                 try {
                     const response = await fetch('/api/wireguard_status/');
@@ -313,12 +329,6 @@
 
             calloutDiv.style.transition = 'all 5s';
         };
-    </script>
-
-    <script>
-        function openImageLightbox(url) {
-            window.open(url, 'Image', 'width=500,height=500,toolbar=0,location=0,menubar=0');
-        }
     </script>
 
 {% endblock %}
