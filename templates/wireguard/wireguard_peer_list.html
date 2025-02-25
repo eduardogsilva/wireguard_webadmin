@@ -173,7 +173,6 @@
         });
     </script>
 
-
     <script>
         function openPeerModal(uuid) {
             $(".qr-code-content").hide();
@@ -184,7 +183,7 @@
             var peerElem = document.querySelector('[data-uuid="' + uuid + '"]');
             if (peerElem) {
                 var peerNameFromCard = peerElem.querySelector('h5').innerText;
-                var peerThroughput = peerElem.querySelector('[id^="peer-throughput-"]').innerText;
+                var peerThroughput = peerElem.querySelector('[id^="peer-throughput-"]').innerHTML;
                 var peerTransfer = peerElem.querySelector('[id^="peer-transfer-"]').innerText;
                 var peerHandshake = peerElem.querySelector('[id^="peer-latest-handshake-"]').innerText;
                 var peerEndpoints = peerElem.querySelector('[id^="peer-endpoints-"]').innerText;
@@ -192,7 +191,7 @@
 
                 // Update the modal fields with the card values
                 $('#peerPreviewModalLabel').text(peerNameFromCard);
-                $('#peerThroughput').text(peerThroughput);
+                $('#peerThroughput').html(peerThroughput);
                 $('#peerTransfer').text(peerTransfer);
                 $('#peerHandshake').text(peerHandshake);
                 $('#peerEndpoints').text(peerEndpoints);
@@ -234,106 +233,195 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const fetchWireguardStatus = async () => {
-                try {
-                    const response = await fetch('/api/wireguard_status/');
-                    let data = await response.json();
+    var previousMeasurements = {};
+    var toastShownThisCycle = false;
 
-                    // if latest-handshakes is 0, use the stored value
-                    for (const [interfaceName, peers] of Object.entries(data)) {
-                        for (const [peerId, peerInfo] of Object.entries(peers)) {
-                            const peerElementId = `peer-stored-latest-handshake-${peerId}`;
-                            const storedHandshakeElement = document.getElementById(peerElementId);
-                            if (peerInfo['latest-handshakes'] === '0' && storedHandshakeElement) {
-                                peerInfo['latest-handshakes'] = storedHandshakeElement.textContent;
-                            }
+    const updateThroughput = (peerId, peerInfo) => {
+        const throughputElement = document.getElementById(`peer-throughput-${peerId}`);
+        const currentTime = Date.now() / 1000; // current timestamp in seconds
+        let formattedThroughput = '';
+
+        if (previousMeasurements[peerId]) {
+            const prev = previousMeasurements[peerId];
+            const timeDiff = currentTime - prev.timestamp; // time difference in seconds
+
+            // For peer perspective: download corresponds to tx and upload to rx
+            let downloadDiff = peerInfo.transfer.tx - prev.transfer.tx;
+            let uploadDiff = peerInfo.transfer.rx - prev.transfer.rx;
+
+            // If counters have been reset (current < previous), show toast (only once per cycle)
+            if (downloadDiff < 0 || uploadDiff < 0) {
+                if (!toastShownThisCycle) {
+                    $(document).Toasts('create', {
+                        class: 'bg-info',
+                        title: 'info',
+                        body: 'Throughput discarded due to counter reset',
+                        delay: 10000,
+                        autohide: true
+                    });
+                    toastShownThisCycle = true;
+                }
+                downloadDiff = 0;
+                uploadDiff = 0;
+            }
+
+            // Calculate throughput in bytes per second
+            const downloadThroughput = downloadDiff / timeDiff;
+            const uploadThroughput = uploadDiff / timeDiff;
+
+            // Format throughput values (using convertBytes function)
+            let downloadDisplay = convertBytes(downloadThroughput) + '/s';
+            let uploadDisplay = convertBytes(uploadThroughput) + '/s';
+            // Threshold: 1mb (1 megabit/s = 125000 bytes per second)
+            const threshold = 125000;
+
+            if (downloadThroughput > threshold) {
+                downloadDisplay = `<strong>${downloadDisplay}</strong>`;
+            }
+            if (uploadThroughput > threshold) {
+                uploadDisplay = `<strong>${uploadDisplay}</strong>`;
+            }
+
+            formattedThroughput = `<i class="fas fa-arrow-down"></i> ${downloadDisplay}, <i class="fas fa-arrow-up"></i> ${uploadDisplay}`;
+            throughputElement.innerHTML = formattedThroughput;
+        } else {
+            // First cycle: no previous measurement available.
+            formattedThroughput = `<i class="fas fa-arrow-down"></i> -.- B/s, <i class="fas fa-arrow-up"></i> -.- B/s`;
+            throughputElement.innerHTML = formattedThroughput;
+        }
+
+        previousMeasurements[peerId] = {
+            timestamp: currentTime,
+            transfer: {
+                tx: peerInfo.transfer.tx,
+                rx: peerInfo.transfer.rx
+            }
+        };
+
+        return formattedThroughput;
+    };
+
+    // Convert bytes to human-readable format with abbreviated units
+    const convertBytes = (bytes) => {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    };
+
+    // Fetch Wireguard status and update UI
+    document.addEventListener('DOMContentLoaded', function() {
+        const fetchWireguardStatus = async () => {
+            try {
+                const response = await fetch('/api/wireguard_status/');
+                let data = await response.json();
+
+                // If latest-handshakes is 0, use the stored value
+                for (const [interfaceName, peers] of Object.entries(data)) {
+                    for (const [peerId, peerInfo] of Object.entries(peers)) {
+                        const peerElementId = `peer-stored-latest-handshake-${peerId}`;
+                        const storedHandshakeElement = document.getElementById(peerElementId);
+                        if (peerInfo['latest-handshakes'] === '0' && storedHandshakeElement) {
+                            peerInfo['latest-handshakes'] = storedHandshakeElement.textContent;
                         }
                     }
-
-                    updateUI(data);
-                } catch (error) {
-                    console.error('Error fetching Wireguard status:', error);
                 }
-            };
 
-            fetchWireguardStatus();
-            setInterval(fetchWireguardStatus, {{ current_instance.peer_list_refresh_interval }} * 1000);
-        });
+                updateUI(data);
+            } catch (error) {
+                console.error('Error fetching Wireguard status:', error);
+            }
+        };
 
-        const updateUI = (data) => {
-            for (const [interfaceName, peers] of Object.entries(data)) {
-                for (const [peerId, peerInfo] of Object.entries(peers)) {
-                    const peerDiv = document.getElementById(`peer-${peerId}`);
-                    if (peerDiv) {
-                        updatePeerInfo(peerDiv, peerId, peerInfo);
-                        updateCalloutClass(peerDiv, peerInfo['latest-handshakes']);
+        fetchWireguardStatus();
+        setInterval(fetchWireguardStatus, {{ current_instance.peer_list_refresh_interval }} * 1000);
+    });
+
+    const updateUI = (data) => {
+        // Reset the toast flag for this update cycle
+        toastShownThisCycle = false;
+
+        for (const [interfaceName, peers] of Object.entries(data)) {
+            for (const [peerId, peerInfo] of Object.entries(peers)) {
+                const peerDiv = document.getElementById(`peer-${peerId}`);
+                if (peerDiv) {
+                    updatePeerInfo(peerDiv, peerId, peerInfo);
+                    updateCalloutClass(peerDiv, peerInfo['latest-handshakes']);
+                    // Calculate throughput and update the card
+                    const throughputHTML = updateThroughput(peerId, peerInfo);
+
+                    // If the modal is active for this peer, update its fields as well
+                    const peerUuid = peerDiv.getAttribute("data-uuid");
+                    if ($('#peerPreviewModal').is(':visible') && $('#peerPreviewModal').data('peer-uuid') === peerUuid) {
+                        $('#peerThroughput').html(throughputHTML);
+                        $('#peerTransfer').text(`${convertBytes(peerInfo.transfer.tx)} TX, ${convertBytes(peerInfo.transfer.rx)} RX`);
+                        $('#peerHandshake').text(
+                            peerInfo['latest-handshakes'] !== '0'
+                                ? new Date(parseInt(peerInfo['latest-handshakes']) * 1000).toLocaleString()
+                                : '0'
+                        );
+                        $('#peerEndpoints').text(peerInfo.endpoints);
+                        const allowedIpsModalElement = document.getElementById('peerAllowedIPs');
+                        checkAllowedIps(allowedIpsModalElement, peerInfo['allowed-ips']);
                     }
                 }
             }
-        };
+        }
+    };
 
-        const updatePeerInfo = (peerDiv, peerId, peerInfo) => {
-            const escapedPeerId = peerId.replace(/([!"#$%&'()*+,.\/:;<=>?@[\]^`{|}~])/g, '\\$1');
-            const transfer = peerDiv.querySelector(`#peer-transfer-${escapedPeerId}`);
-            const latestHandshake = peerDiv.querySelector(`#peer-latest-handshake-${escapedPeerId}`);
-            const endpoints = peerDiv.querySelector(`#peer-endpoints-${escapedPeerId}`);
-            const allowedIps = peerDiv.querySelector(`#peer-allowed-ips-${escapedPeerId}`);
+    const updatePeerInfo = (peerDiv, peerId, peerInfo) => {
+        const escapedPeerId = peerId.replace(/([!"#$%&'()*+,.\/:;<=>?@[\]^`{|}~])/g, '\\$1');
+        const transfer = peerDiv.querySelector(`#peer-transfer-${escapedPeerId}`);
+        const latestHandshake = peerDiv.querySelector(`#peer-latest-handshake-${escapedPeerId}`);
+        const endpoints = peerDiv.querySelector(`#peer-endpoints-${escapedPeerId}`);
+        const allowedIps = peerDiv.querySelector(`#peer-allowed-ips-${escapedPeerId}`);
 
-            transfer.textContent = `${convertBytes(peerInfo.transfer.tx)} TX, ${convertBytes(peerInfo.transfer.rx)} RX`;
-            latestHandshake.textContent = `${peerInfo['latest-handshakes'] !== '0' ? new Date(parseInt(peerInfo['latest-handshakes']) * 1000).toLocaleString() : '0'}`;
-            endpoints.textContent = `${peerInfo.endpoints}`;
-            checkAllowedIps(allowedIps, peerInfo['allowed-ips']);
-        };
+        transfer.textContent = `${convertBytes(peerInfo.transfer.tx)} TX, ${convertBytes(peerInfo.transfer.rx)} RX`;
+        latestHandshake.textContent = `${peerInfo['latest-handshakes'] !== '0' ? new Date(parseInt(peerInfo['latest-handshakes']) * 1000).toLocaleString() : '0'}`;
+        endpoints.textContent = `${peerInfo.endpoints}`;
+        checkAllowedIps(allowedIps, peerInfo['allowed-ips']);
+    };
 
-        const convertBytes = (bytes) => {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        };
+    const checkAllowedIps = (allowedIpsElement, allowedIpsApiResponse) => {
+        const apiIps = allowedIpsApiResponse[0].split(' ');
+        const htmlIpsText = allowedIpsElement.textContent.trim();
+        const htmlIpsArray = htmlIpsText.match(/\b(?:\d{1,3}\.){3}\d{1,3}\/\d{1,2}\b/g) || [];
 
-        const checkAllowedIps = (allowedIpsElement, allowedIpsApiResponse) => {
-            const apiIps = allowedIpsApiResponse[0].split(' ');
-            const htmlIpsText = allowedIpsElement.textContent.trim();
-            const htmlIpsArray = htmlIpsText.match(/\b(?:\d{1,3}\.){3}\d{1,3}\/\d{1,2}\b/g);
+        allowedIpsElement.innerHTML = '';
+        htmlIpsArray.forEach((ip, index, array) => {
+            const ipSpan = document.createElement('span');
+            ipSpan.textContent = ip;
+            allowedIpsElement.appendChild(ipSpan);
 
-            allowedIpsElement.innerHTML = '';
-            htmlIpsArray.forEach((ip, index, array) => {
-                const ipSpan = document.createElement('span');
-                ipSpan.textContent = ip;
-                allowedIpsElement.appendChild(ipSpan);
-
-                if (!apiIps.includes(ip)) {
-                    ipSpan.style.color = 'red';
-                    ipSpan.style.textDecoration = 'underline';
-                    ipSpan.title = 'This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.';
-                }
-
-                if (index < array.length - 1) {
-                    allowedIpsElement.appendChild(document.createTextNode(', '));
-                }
-            });
-        };
-
-        const updateCalloutClass = (peerDiv, latestHandshake) => {
-            const calloutDiv = peerDiv.querySelector('.callout');
-            calloutDiv.classList.remove('callout-success', 'callout-info', 'callout-warning', 'callout-danger');
-            const handshakeAge = Date.now() / 1000 - parseInt(latestHandshake);
-
-            if (latestHandshake === '0') {
-                calloutDiv.classList.add('callout-danger');
-            } else if (handshakeAge < 600) {
-                calloutDiv.classList.add('callout-success');
-            } else if (handshakeAge < 1800) {
-                calloutDiv.classList.add('callout-info');
-            } else if (handshakeAge < 21600) {
-                calloutDiv.classList.add('callout-warning');
+            if (!apiIps.includes(ip)) {
+                ipSpan.style.color = 'red';
+                ipSpan.style.textDecoration = 'underline';
+                ipSpan.title = 'This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.';
             }
 
-            calloutDiv.style.transition = 'all 5s';
-        };
-    </script>
+            if (index < array.length - 1) {
+                allowedIpsElement.appendChild(document.createTextNode(', '));
+            }
+        });
+    };
+
+    const updateCalloutClass = (peerDiv, latestHandshake) => {
+        const calloutDiv = peerDiv.querySelector('.callout');
+        calloutDiv.classList.remove('callout-success', 'callout-info', 'callout-warning', 'callout-danger');
+        const handshakeAge = Date.now() / 1000 - parseInt(latestHandshake);
+
+        if (latestHandshake === '0') {
+            calloutDiv.classList.add('callout-danger');
+        } else if (handshakeAge < 600) {
+            calloutDiv.classList.add('callout-success');
+        } else if (handshakeAge < 1800) {
+            calloutDiv.classList.add('callout-info');
+        } else if (handshakeAge < 21600) {
+            calloutDiv.classList.add('callout-warning');
+        }
+        calloutDiv.style.transition = 'all 5s';
+    };
+</script>
 
 {% endblock %}
