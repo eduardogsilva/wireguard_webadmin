@@ -76,6 +76,7 @@
                                             </span>
                                             </span>
                                         </p>
+                                        <canvas id="chart-{{ peer.public_key }}" width="400" height="100" style="margin-top:10px;"></canvas>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -166,6 +167,69 @@
 
 
 {% block custom_page_scripts %}
+
+    <script>
+        // Global object to store Chart.js instances for each peer.
+        var charts = {};
+
+        // Initialize charts for each peer once the DOM is ready.
+        document.addEventListener('DOMContentLoaded', function() {
+            // For each canvas element matching id pattern "chart-<peer_public_key>"
+            document.querySelectorAll('canvas[id^="chart-"]').forEach(function(canvas) {
+                var peerId = canvas.id.replace('chart-', '');
+                // Create a new Chart instance
+                charts[peerId] = new Chart(canvas.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        // X-axis labels can be blank since we are only showing the last 10 points.
+                        labels: Array(10).fill(''),
+                        datasets: [
+                            {
+                                label: 'Download',
+                                data: Array(10).fill(0),
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                fill: false,
+                                tension: 0.1
+                            },
+                            {
+                                label: 'Upload',
+                                data: Array(10).fill(0),
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                fill: false,
+                                tension: 0.1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false  // Hide the legend to only show the lines
+                            }
+                        },
+                        scales: {
+                            x: {
+                                display: false // Hide the X-axis labels if not needed
+                            },
+                            y: {
+                                min: 0,
+                                beginAtZero: true,
+                                display: false,
+                                grid: { display: false }
+                            }
+                        },
+                        animation: {
+                            duration: 1000
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             $("#qrcodeButton").on("click", function(e) {
@@ -295,6 +359,22 @@
 
                 formattedThroughput = `<i class="fas fa-arrow-down"></i> ${downloadDisplay}, <i class="fas fa-arrow-up"></i> ${uploadDisplay}`;
                 throughputElement.innerHTML = formattedThroughput;
+
+                // --- Update Chart.js instance for this peer (if available) ---
+                // Note: Ensure that the chart instance key uses the same identifier as used in the canvas (peer.public_key)
+                if (charts[peerId]) {
+                    var chart = charts[peerId];
+                    // Add new values to the datasets and remove the oldest if more than 10 points.
+                    chart.data.datasets[0].data.push(downloadThroughput);
+                    if (chart.data.datasets[0].data.length > 10) {
+                        chart.data.datasets[0].data.shift();
+                    }
+                    chart.data.datasets[1].data.push(uploadThroughput);
+                    if (chart.data.datasets[1].data.length > 10) {
+                        chart.data.datasets[1].data.shift();
+                    }
+                    chart.update();
+                }
             } else {
                 // First cycle: no previous measurement available.
                 formattedThroughput = `<i class="fas fa-arrow-down"></i> -.- B/s, <i class="fas fa-arrow-up"></i> -.- B/s`;
