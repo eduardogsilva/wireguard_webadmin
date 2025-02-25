@@ -34,4 +34,4 @@ class WebadminSettingsAdmin(admin.ModelAdmin):
     list_display = ('current_version', 'latest_version', 'update_available', 'created', 'updated', 'uuid')
     search_fields = ('current_version', 'latest_version', 'update_available', 'created', 'updated', 'uuid')
 
-#admin.site.register(WebadminSettings, WebadminSettingsAdmin)
+admin.site.register(WebadminSettings, WebadminSettingsAdmin)
