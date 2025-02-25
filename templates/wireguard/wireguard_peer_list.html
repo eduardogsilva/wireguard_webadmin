@@ -1,4 +1,12 @@
 {% extends "base.html" %}
+{% block page_custom_head %}
+<style>
+.peer-extra-info {
+    display: none;
+}
+</style>
+{% endblock %}
+
 
 {% block content %}
     {% if wireguard_instances %}
@@ -46,12 +54,13 @@
                                             </span>
                                         </div>
                                         <p>
-                                            <b>Throughput: </b> <span id="peer-throughput-{{ peer.public_key }}"></span><br>
-                                            <b>Transfer:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br>
-                                            <b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span>
-                                            <span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">{% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}</span><br>
+                                            <b class="peer-extra-info">Throughput: </b> <span id="peer-throughput-{{ peer.public_key }}"></span><br>
+                                            <span class="peer-extra-info"><b>Transfer:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br></span>
+                                            <span class="peer-extra-info"><b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span></span>
+                                            <span class="peer-extra-info"><span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">{% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}</span><br></span>
 
-                                            <b>Endpoints:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br>
+                                            <span class="peer-extra-info"><b>Endpoints:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br></span>
+                                            <span class="peer-extra-info" id="peer-extra-info-allowed-ips-{{ peer.public_key }}">
                                             <b>Allowed IPs:</b>
                                             <span id="peer-allowed-ips-{{ peer.public_key }}">
                                                  {% for address in peer.peerallowedip_set.all %}
@@ -65,6 +74,7 @@
                                                     {% endif %}
                                                 {% endfor %}
                                             </span>
+                                            </span>
                                         </p>
                                     </div>
                                 </div>
@@ -75,6 +85,7 @@
                         {% else %}
                             <a class="btn btn-primary disabled" href="">Create Peer</a>
                         {% endif %}
+                        <button id="toggleExtraInfo" class="btn btn-outline-primary">Show extras</button>
                     </div>
                 </div>
             </div>
@@ -187,7 +198,7 @@
                 var peerTransfer = peerElem.querySelector('[id^="peer-transfer-"]').innerText;
                 var peerHandshake = peerElem.querySelector('[id^="peer-latest-handshake-"]').innerText;
                 var peerEndpoints = peerElem.querySelector('[id^="peer-endpoints-"]').innerText;
-                var peerAllowedIPs = peerElem.querySelector('[id^="peer-allowed-ips-"]').innerText;
+                var peerAllowedIPs = peerElem.querySelector('[id^="peer-allowed-ips-"]').innerHTML;
 
                 // Update the modal fields with the card values
                 $('#peerPreviewModalLabel').text(peerNameFromCard);
@@ -195,7 +206,7 @@
                 $('#peerTransfer').text(peerTransfer);
                 $('#peerHandshake').text(peerHandshake);
                 $('#peerEndpoints').text(peerEndpoints);
-                $('#peerAllowedIPs').text(peerAllowedIPs);
+                $('#peerAllowedIPs').html(peerAllowedIPs);
                 $('#editPeerButton').attr('href', '/peer/manage/?peer=' + uuid);
                 $('#downloadConfigButton').attr('href', '/tools/download_peer_config/?uuid=' + uuid);
                 $('#qrcodeButton').attr('href', '/tools/download_peer_config/?uuid=' + uuid + '&format=qrcode');
@@ -384,27 +395,39 @@
     };
 
     const checkAllowedIps = (allowedIpsElement, allowedIpsApiResponse) => {
-        const apiIps = allowedIpsApiResponse[0].split(' ');
-        const htmlIpsText = allowedIpsElement.textContent.trim();
-        const htmlIpsArray = htmlIpsText.match(/\b(?:\d{1,3}\.){3}\d{1,3}\/\d{1,2}\b/g) || [];
+    const apiIps = allowedIpsApiResponse[0].split(' ');
+    const htmlIpsText = allowedIpsElement.textContent.trim();
+    const htmlIpsArray = htmlIpsText.match(/\b(?:\d{1,3}\.){3}\d{1,3}\/\d{1,2}\b/g) || [];
 
-        allowedIpsElement.innerHTML = '';
-        htmlIpsArray.forEach((ip, index, array) => {
-            const ipSpan = document.createElement('span');
-            ipSpan.textContent = ip;
-            allowedIpsElement.appendChild(ipSpan);
+    allowedIpsElement.innerHTML = '';
+    let showExtraInfo = false;
 
-            if (!apiIps.includes(ip)) {
-                ipSpan.style.color = 'red';
-                ipSpan.style.textDecoration = 'underline';
-                ipSpan.title = 'This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.';
-            }
+    htmlIpsArray.forEach((ip, index, array) => {
+        const ipSpan = document.createElement('span');
+        ipSpan.textContent = ip;
+        allowedIpsElement.appendChild(ipSpan);
 
-            if (index < array.length - 1) {
-                allowedIpsElement.appendChild(document.createTextNode(', '));
-            }
-        });
-    };
+        if (!apiIps.includes(ip)) {
+            ipSpan.style.color = 'red';
+            ipSpan.style.textDecoration = 'underline';
+            ipSpan.title = 'This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.';
+            showExtraInfo = true;
+        }
+
+        if (index < array.length - 1) {
+            allowedIpsElement.appendChild(document.createTextNode(', '));
+        }
+    });
+
+    if (showExtraInfo) {
+        const extraInfoContainerId = allowedIpsElement.id.replace('peer-allowed-ips-', 'peer-extra-info-allowed-ips-');
+        const extraInfoContainer = document.getElementById(extraInfoContainerId);
+        if (extraInfoContainer) {
+            extraInfoContainer.style.display = 'block';
+        }
+    }
+};
+
 
     const updateCalloutClass = (peerDiv, latestHandshake) => {
         const calloutDiv = peerDiv.querySelector('.callout');
@@ -423,5 +446,19 @@
         calloutDiv.style.transition = 'all 5s';
     };
 </script>
+
+    <script>
+        $(document).ready(function(){
+            $("#toggleExtraInfo").click(function(){
+                $(".peer-extra-info").toggle();
+                if($(".peer-extra-info").is(":visible")){
+                    $(this).text("Hide extras");
+                } else {
+                    $(this).text("Show extras");
+                }
+            });
+        });
+    </script>
+
 
 {% endblock %}
