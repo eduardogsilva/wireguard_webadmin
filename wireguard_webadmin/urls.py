@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.views.generic import RedirectView
 
 from wireguard.views import view_wireguard_status, view_wireguard_manage_instance, view_apply_db_patches
 from wireguard_peer.views import view_wireguard_peer_list, view_wireguard_peer_manage, view_manage_ip_address, view_wireguard_peer_sort
