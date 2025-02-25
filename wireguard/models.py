@@ -32,6 +32,7 @@ NETMASK_CHOICES = (
 
 class WebadminSettings(models.Model):
     name = models.CharField(default='webadmin_settings', max_length=20, unique=True)
+    db_patch_version = models.IntegerField(default=0)
     update_available = models.BooleanField(default=False)
     current_version = models.PositiveIntegerField(default=0)
     latest_version = models.PositiveIntegerField(default=0)
@@ -56,7 +57,7 @@ class WireGuardInstance(models.Model):
     netmask = models.IntegerField(default=24, choices=NETMASK_CHOICES)
     post_up = models.TextField(blank=True, null=True)
     post_down = models.TextField(blank=True, null=True)
-    peer_list_refresh_interval = models.IntegerField(default=20)
+    peer_list_refresh_interval = models.IntegerField(default=10)
     dns_primary = models.GenericIPAddressField(unique=False, protocol='IPv4', default='1.1.1.1', blank=True, null=True)
     dns_secondary = models.GenericIPAddressField(unique=False, protocol='IPv4', default='1.0.0.1', blank=True, null=True)
     pending_changes = models.BooleanField(default=True)
