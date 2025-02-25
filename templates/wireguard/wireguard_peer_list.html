@@ -203,23 +203,24 @@
                         ]
                     },
                     options: {
+                        legend: {
+                            display: false
+                        },
+
                         responsive: true,
-                        plugins: {
-                            legend: {
-                                display: false  // Hide the legend to only show the lines
-                            }
-                        },
                         scales: {
-                            x: {
-                                display: false // Hide the X-axis labels if not needed
-                            },
-                            y: {
-                                min: 0,
-                                beginAtZero: true,
+                            xAxes: [{
                                 display: false,
-                                grid: { display: false }
-                            }
+                                ticks: { display: false },
+                                gridLines: { display: false }
+                            }],
+                            yAxes: [{
+                                display: false,
+                                ticks: { display: false, beginAtZero: true },
+                                gridLines: { display: false }
+                            }]
                         },
+
                         animation: {
                             duration: 1000
                         }
