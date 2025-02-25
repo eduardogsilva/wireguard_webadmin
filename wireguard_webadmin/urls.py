@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import RedirectView
 
-from wireguard.views import view_wireguard_status, view_wireguard_manage_instance
+from wireguard.views import view_wireguard_status, view_wireguard_manage_instance, view_apply_db_patches
 from wireguard_peer.views import view_wireguard_peer_list, view_wireguard_peer_manage, view_manage_ip_address, view_wireguard_peer_sort
 from console.views import view_console
 from user_manager.views import view_user_list, view_manage_user, view_peer_group_list, view_peer_group_manage
@@ -31,7 +31,7 @@ from wgrrd.views import view_rrd_graph
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', RedirectView.as_view(url='/status/', permanent=False), name='redirect_to_status'),
+    path('', view_apply_db_patches, name='apply_db_patches'),
     path('status/', view_wireguard_status, name='wireguard_status'),
     path('dns/', view_static_host_list, name='static_host_list'),
     path('dns/apply_config/', view_apply_dns_config, name='apply_dns_config'),

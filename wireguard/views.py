@@ -174,3 +174,42 @@ def view_wireguard_manage_instance(request):
             form = WireGuardInstanceForm(instance=current_instance)  
     context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'form': form, 'pending_changes_warning': pending_changes_warning}
     return render(request, 'wireguard/wireguard_manage_server.html', context)
+
+
+@login_required
+def view_apply_db_patches(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return redirect('/status/')
+    webadmin_settings, webadmin_settings_created = WebadminSettings.objects.get_or_create(name='webadmin_settings')
+    update_applied = False
+    update_list = []
+
+    if webadmin_settings.db_patch_version < 1:
+        print('Applying DB patch 1')
+        object_list = []
+        for wg_instance in WireGuardInstance.objects.filter(peer_list_refresh_interval__gt=10):
+            object_list.append(f'wg{wg_instance.instance_id}')
+            wg_instance.peer_list_refresh_interval = 10
+            wg_instance.save()
+
+        if object_list:
+            update_applied = True
+            update_list.append({
+                'patch_version': 1, 'object_list': object_list,
+                'field': 'peer_list_refresh_interval', 'new_value': '10',
+                'reason': 'The interval has been reduced to improve the user experience on the peer list. This <b>may impact server performance</b> in larger environments. You can modify this interval in "Server Settings."'
+            })
+        webadmin_settings.db_patch_version = 1
+        webadmin_settings.save()
+
+    data = {
+        'update_applied': update_applied,
+        'update_list': update_list,
+    }
+    if update_applied:
+        return render(request, 'wireguard/welcome.html', context=data)
+    else:
+        return redirect('/status/')
+
+
+

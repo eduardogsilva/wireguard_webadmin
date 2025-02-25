@@ -2,17 +2,33 @@
 
 {% block content %}
 
-<h1>Welcome to WireGuard WebAdmin</h1>
-<p>WireGuard WebAdmin is a web-based interface designed for managing WireGuard VPN, a remarkably simple, fast, and modern VPN that employs cutting-edge cryptography.</p>
-<p>I have dedicated significant effort to this project over the past few weeks and am thrilled to announce that we are now close to version 1.0</p>
+    <h1>Database settings updated</h1>
+    <p>The following modifications have been applied to your database:</p>
+    <table class="table table-bordered">
+        <th>Patch</th>
+        <th>Field</th>
+        <th>Value</th>
+        <th>Objects</th>
+        <th>Reason</th>
+        <thead>
+        </thead>
+        <tbody>
+        {% for update in update_list  %}
+            <tr>
+                <td>{{ update.patch_version}}</td>
+                <td>{{ update.field }}</td>
+                <td>{{ update.new_value }}</td>
+                <td>
+                    <ul>
+                        {% for object in update.object_list %}<li>{{ object }}</li>{% endfor %}
+                    </ul>
+                </td>
+                <td>{{ update.reason|safe }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-<br>
-<h3>Upcoming Enhancements</h3>
-<ul>
-    <li>Improving "Pending changes" notification and separation (WireGuard from Firewall)</li>
-</ul>
-
-<p>Stay tuned to our GitHub page for imminent updates to this project.</p>
 
 
 {% endblock %}
