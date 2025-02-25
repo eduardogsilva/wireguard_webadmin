@@ -46,6 +46,7 @@
                                             </span>
                                         </div>
                                         <p>
+                                            <b>Throughput: </b> <span id="peer-throughput-{{ peer.public_key }}"></span><br>
                                             <b>Transfer:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br>
                                             <b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span>
                                             <span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">{% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}</span><br>
@@ -92,6 +93,7 @@
                     <div class="modal-body">
                         <!-- Info content section -->
                         <div class="info-content">
+                            <p><b><i class="fas fa-arrows-alt-v nav-icon"></i> Throughput:</b> <span id="peerThroughput">--</span></p>
                             <p><b><i class="fas fa-dolly nav-icon"></i> Transfer:</b> <span id="peerTransfer">--</span></p>
                             <p><b><i class="far fa-clock nav-icon"></i></i> Latest Handshake:</b> <span id="peerHandshake">--</span></p>
                             <p><b><i class="far fa-address-card nav-icon"></i> Endpoints:</b> <span id="peerEndpoints">--</span></p>
@@ -182,6 +184,7 @@
             var peerElem = document.querySelector('[data-uuid="' + uuid + '"]');
             if (peerElem) {
                 var peerNameFromCard = peerElem.querySelector('h5').innerText;
+                var peerThroughput = peerElem.querySelector('[id^="peer-throughput-"]').innerText;
                 var peerTransfer = peerElem.querySelector('[id^="peer-transfer-"]').innerText;
                 var peerHandshake = peerElem.querySelector('[id^="peer-latest-handshake-"]').innerText;
                 var peerEndpoints = peerElem.querySelector('[id^="peer-endpoints-"]').innerText;
@@ -189,6 +192,7 @@
 
                 // Update the modal fields with the card values
                 $('#peerPreviewModalLabel').text(peerNameFromCard);
+                $('#peerThroughput').text(peerThroughput);
                 $('#peerTransfer').text(peerTransfer);
                 $('#peerHandshake').text(peerHandshake);
                 $('#peerEndpoints').text(peerEndpoints);
