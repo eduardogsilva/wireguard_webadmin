@@ -9,10 +9,10 @@
             padding: 0 !important;
         }
         @keyframes blink {
-          50% { opacity: 0; }
+            50% { opacity: 0; }
         }
         .blinking-icon {
-          animation: blink 1s step-start infinite;
+            animation: blink 1s step-start infinite;
         }
     </style>
 {% endblock %}
@@ -64,7 +64,6 @@
                                             <span class="peer-extra-info"><b>Transfer:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br></span>
                                             <span class="peer-extra-info"><b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span></span>
                                             <span class="peer-extra-info"><span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">{% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}</span><br></span>
-
                                             <span class="peer-extra-info"><b>Endpoints:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br></span>
                                             <span class="peer-extra-info" id="peer-extra-info-allowed-ips-{{ peer.public_key }}">
                                             <b>Allowed IPs:</b>
@@ -331,11 +330,11 @@
                 const prev = previousMeasurements[peerId];
                 const timeDiff = currentTime - prev.timestamp; // time difference in seconds
 
-                // For peer perspective: download corresponds to tx and upload to rx
+                // For the peer: download corresponds to tx and upload to rx
                 let downloadDiff = peerInfo.transfer.tx - prev.transfer.tx;
                 let uploadDiff = peerInfo.transfer.rx - prev.transfer.rx;
 
-                // If counters have been reset (current < previous), show toast (only once per cycle)
+                // If counters have been reset (current value < previous), show a toast (only once per cycle)
                 if (downloadDiff < 0 || uploadDiff < 0) {
                     if (!toastShownThisCycle) {
                         $(document).Toasts('create', {
@@ -355,29 +354,59 @@
                 const downloadThroughput = downloadDiff / timeDiff;
                 const uploadThroughput = uploadDiff / timeDiff;
 
-                // Format throughput values (using convertBytes function)
-                let downloadDisplay = convertBytes(downloadThroughput) + '/s';
-                let uploadDisplay = convertBytes(uploadThroughput) + '/s';
-                // Threshold: 1mb (1 megabit/s = 125000 bytes per second)
-                const threshold = 125000;
+                // Convert bytes per second to bits per second
+                const downloadBps = downloadThroughput * 8;
+                const uploadBps = uploadThroughput * 8;
 
-                if (downloadThroughput > threshold) {
+                // Calculate Mbps and Kbps values
+                const downloadMbps = downloadBps / 1000000;
+                const uploadMbps = uploadBps / 1000000;
+                const downloadKbps = downloadBps / 1000;
+                const uploadKbps = uploadBps / 1000;
+
+                // Determine display unit and formatting
+                let downloadDisplay, uploadDisplay;
+                if (downloadMbps < 1) {
+                    // Below 1 Mbps, display in Kbps
+                    if (downloadKbps < 100) {
+                        downloadDisplay = downloadKbps.toFixed(2) + ' Kbps';
+                    } else {
+                        downloadDisplay = downloadKbps.toFixed(0) + ' Kbps';
+                    }
+                } else {
+                    // 1 Mbps and above: if above 10 Mbps, show no decimals; else, show 2 decimals
+                    downloadDisplay = (downloadMbps > 10 ? downloadMbps.toFixed(0) : downloadMbps.toFixed(2)) + ' Mbps';
+                }
+                if (uploadMbps < 1) {
+                    if (uploadKbps < 10) {
+                        uploadDisplay = uploadKbps.toFixed(2) + ' Kbps';
+                    } else {
+                        uploadDisplay = uploadKbps.toFixed(0) + ' Kbps';
+                    }
+                } else {
+                    uploadDisplay = (uploadMbps > 10 ? uploadMbps.toFixed(0) : uploadMbps.toFixed(2)) + ' Mbps';
+                }
+
+                // Highlight values above a threshold
+                const threshold = 100.0;
+                if (downloadMbps > threshold) {
                     downloadDisplay = `<strong>${downloadDisplay}</strong>`;
                 }
-                if (uploadThroughput > threshold) {
+                if (uploadMbps > threshold) {
                     uploadDisplay = `<strong>${uploadDisplay}</strong>`;
                 }
 
                 formattedThroughput = `<i class="fas fa-arrow-down"></i> ${downloadDisplay}, <i class="fas fa-arrow-up"></i> ${uploadDisplay}`;
                 throughputElement.innerHTML = formattedThroughput;
 
+                // Update Chart.js graphs with raw Mbps values (always using Mbps for consistency)
                 if (charts[peerId]) {
                     var chart = charts[peerId];
-                    chart.data.datasets[0].data.push(downloadThroughput);
+                    chart.data.datasets[0].data.push(downloadMbps);
                     if (chart.data.datasets[0].data.length > 10) {
                         chart.data.datasets[0].data.shift();
                     }
-                    chart.data.datasets[1].data.push(uploadThroughput);
+                    chart.data.datasets[1].data.push(uploadMbps);
                     if (chart.data.datasets[1].data.length > 10) {
                         chart.data.datasets[1].data.shift();
                     }
@@ -385,7 +414,7 @@
                 }
             } else {
                 // First cycle: no previous measurement available.
-                formattedThroughput = `<i class="fas fa-arrow-down"></i> -.- B/s, <i class="fas fa-arrow-up"></i> -.- B/s`;
+                formattedThroughput = `<i class="fas fa-arrow-down"></i> 0.00 Kbps, <i class="fas fa-arrow-up"></i> 0.00 Kbps`;
                 throughputElement.innerHTML = formattedThroughput;
             }
 
