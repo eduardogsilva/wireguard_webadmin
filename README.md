@@ -4,6 +4,7 @@ wireguard_webadmin is a full-featured yet easy-to-configure web interface for ma
 
 ## Features
 
+- **Individual Peer Transfer History**: Track individual download and upload volumes for each peer.
 - **Advanced Firewall Management**: Experience effortless and comprehensive VPN firewall management, designed for simplicity and effectiveness.
 - **Port Forwarding**: Seamlessly redirect TCP or UDP ports to peers or networks located beyond those peers with ease!
 - **DNS Server**: DNS Service included for static DNS entries and improved privacy.
@@ -22,6 +23,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Peer List
 Displays a comprehensive list of peers, including their status and other details, allowing for easy monitoring and management of WireGuard VPN connections.
 ![Wireguard Peer List](screenshots/peerlist.png)
+
+### Peer Details: 
+Displays key peer information, detailed metrics, and a complete traffic volume history. Also includes a QR code for easy configuration.
+![WireGuard Peer Details](screenshots/peerinfo.png)
 ### Firewall Management
 Offers a comprehensive interface for managing VPN firewall rules, enabling users to easily create, edit, and delete rules with iptables-style syntax. This feature ensures precise control over network traffic, enhancing security and connectivity for WireGuard VPN instances.
 ![Firewall Rule List](screenshots/firewall-rule-list.png)
@@ -134,7 +139,15 @@ Begin by navigating to your wireguard_webadmin directory:
    docker compose down
    ```
 
-3.**Backup Your Data:**
+3.**Pull latest images:**
+   
+   Update your local images
+   ```bash
+   docker compose pull
+   ```
+
+
+4.**Backup Your Data:**
 
    Before making any changes, back up your database and any other important data. This step is crucial for restoring your setup if needed.
    
@@ -146,7 +159,7 @@ Begin by navigating to your wireguard_webadmin directory:
    Replace `/var/lib/docker/volumes/wireguard_webadmin_wireguard/_data/` with the actual path to your Docker volume data if it's different. This command saves the backup to the current directory.
 
 
-4.**Deploy Using Docker Compose:**
+5.**Deploy Using Docker Compose:**
    
    Follow the previously outlined [Deployment Instructions](#deployment-instructions).
 
