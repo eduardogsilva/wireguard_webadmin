@@ -8,6 +8,12 @@
         .callout.position-relative {
             padding: 0 !important;
         }
+        @keyframes blink {
+          50% { opacity: 0; }
+        }
+        .blinking-icon {
+          animation: blink 1s step-start infinite;
+        }
     </style>
 {% endblock %}
 
@@ -29,12 +35,12 @@
                     <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
                         <div class="row" style="padding-top: 15px">
                             {% for peer in peer_list %}
-                                <div class="col-md-6" id="peer-{{ peer.public_key }}" data-uuid="{{ peer.uuid }}">
+                                <div class="col-xl-6" id="peer-{{ peer.public_key }}" data-uuid="{{ peer.uuid }}">
                                     <div class="callout position-relative">
                                         {% comment %}background: linear-gradient(to right, white 50%, transparent 50%);{% endcomment %}
                                         <div class="position-absolute p-3 div-peer-text-information" style="top: 0; left: 0; background: linear-gradient(to right, white, transparent); width: 100%; height: 100%; ">
                                             <div class="d-flex justify-content-between align-items-start">
-                                                <h5>
+                                                <h5 id="peer-name-{{ peer.public_key }}">
                                                     <a href="#" onclick="openPeerModal('{{ peer.uuid }}');" style="text-decoration: none">
                                                         {{ peer }}
                                                     </a>
@@ -76,7 +82,7 @@
                                             </span>
                                             </span>
                                         </div>
-                                        <canvas class="" id="chart-{{ peer.public_key }}" width="800" height="130"></canvas>
+                                        <canvas class="" id="chart-{{ peer.public_key }}" width="800" height="130" style="min-height: 85px"></canvas>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -482,7 +488,7 @@
             const htmlIpsArray = htmlIpsText.match(/\b(?:\d{1,3}\.){3}\d{1,3}\/\d{1,2}\b/g) || [];
 
             allowedIpsElement.innerHTML = '';
-            let showExtraInfo = false;
+            let allowedIpsIssue = false;
 
             htmlIpsArray.forEach((ip, index, array) => {
                 const ipSpan = document.createElement('span');
@@ -493,7 +499,7 @@
                     ipSpan.style.color = 'red';
                     ipSpan.style.textDecoration = 'underline';
                     ipSpan.title = 'This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.';
-                    showExtraInfo = true;
+                    allowedIpsIssue = true;
                 }
 
                 if (index < array.length - 1) {
@@ -501,11 +507,14 @@
                 }
             });
 
-            if (showExtraInfo) {
-                const extraInfoContainerId = allowedIpsElement.id.replace('peer-allowed-ips-', 'peer-extra-info-allowed-ips-');
-                const extraInfoContainer = document.getElementById(extraInfoContainerId);
-                if (extraInfoContainer) {
-                    extraInfoContainer.style.display = 'block';
+            if (allowedIpsIssue) {
+                const peerId = allowedIpsElement.id.replace('peer-allowed-ips-', '');
+                const h5Element = document.getElementById('peer-name-' + peerId);
+                if (h5Element && !h5Element.querySelector('.fa-exclamation-triangle')) {
+                    const icon = document.createElement('i');
+                    icon.className = 'fas fa-exclamation-triangle text-danger blinking-icon';
+                    icon.title = 'At least one address does not appear in the wg show command output, which may indicate that another peer is using an overlapping IP or that the configuration file is outdated.';
+                    h5Element.appendChild(icon);
                 }
             }
         };
