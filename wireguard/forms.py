@@ -34,8 +34,8 @@ class WireGuardInstanceForm(forms.ModelForm):
         post_down = cleaned_data.get('post_down')
 
         peer_list_refresh_interval = cleaned_data.get('peer_list_refresh_interval')
-        if peer_list_refresh_interval < 10:
-            raise forms.ValidationError('Peer List Refresh Interval must be at least 10 seconds')
+        if peer_list_refresh_interval < 5:
+            raise forms.ValidationError('Peer List Refresh Interval must be at least 5 seconds')
 
         if not is_valid_ip_or_hostname(hostname):
             raise forms.ValidationError('Invalid hostname or IP Address')
