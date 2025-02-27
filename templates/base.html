@@ -59,224 +59,224 @@
 <body class="hold-transition sidebar-mini layout-boxed {% if request.COOKIES.sidebarState == 'collapsed' %}sidebar-collapse{% endif %}">
 <div class="wrapper">
 
-  <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-  </div>
+    <!-- Preloader -->
+    <div class="preloader flex-column justify-content-center align-items-center">
+    </div>
 
-  <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="/status/" class="nav-link">Status</a>
-      </li>
-    </ul>
-
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a href="/accounts/logout/" class="nav-link">
-            <i class="fas fa-sign-out-alt"></i>
-        </a>
-      </li>
-    </ul>
-  </nav>
-  <!-- /.navbar -->
-
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="/" class="brand-link">
-      <span class="brand-text font-weight-light">wireguard-webadmin</span>
-    </a>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-
-                <li class="nav-item">
-                    <a href="/status/" class="nav-link {% if '/status/' in request.path %}active{% endif %}">
-                      <i class="fas fa-tachometer-alt nav-icon"></i>
-                      <p>
-                        Status
-                      </p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="/peer/list/" class="nav-link {% if '/peer/' in request.path %}active{% endif %}">
-                      <i class="fas fa-users-cog nav-icon"></i>
-                      <p>
-                        Peers
-                      </p>
-                    </a>
-                </li>
-        
-                <li class="nav-item">
-                    <a href="/dns/" class="nav-link {% if '/dns/' in request.path %}active{% endif %}">
-                      <i class="fas fa-address-book nav-icon"></i>
-                      <p>
-                        DNS
-                      </p>
-                    </a>
-                </li>
-
-              <li class="nav-item">
-                  <a href="/firewall/rule_list/" class="nav-link {% if '/firewall/' in request.path %}active{% endif %}">
-                    <i class="fas fa-shield-alt nav-icon"></i>
-                    <p>
-                      Firewall
-                      
-                    </p>
-                  </a>
-              </li>
-
-                <li class="nav-item">
-                    <a href="/console/" class="nav-link {% if '/console/' in request.path %}active{% endif %}">
-                      <i class="fas fa-terminal nav-icon"></i>
-                      <p>
-                        Console
-                      </p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="/user/list/" class="nav-link {% if '/user/' in request.path %}active{% endif %}">
-                      <i class="fas fa-users nav-icon"></i>
-                      <p>
-                        User Manager
-                      </p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                  <a href="/server/manage/" class="nav-link {% if '/server/' in request.path %}active{% endif %}">
-                    <i class="fas fa-cogs nav-icon"></i>
-                    <p>
-                      Server Settings
-                    </p>
-                  </a>
-              </li>
-
-                <li class="nav-item">
-                  <a href="/vpn_invite/settings/" class="nav-link {% if '/vpn_invite/' in request.path %}active{% endif %}">
-                    <i class="fas fa-share-square nav-icon"></i>
-                    <p>
-                      Invite Settings
-                    </p>
-                  </a>
-              </li>
-                
-          
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="/status/" class="nav-link">Status</a>
+            </li>
         </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        {% if page_title %}
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">{{ page_title }}</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="/">Home</a></li>
-              {% if breadcrumb %}
-                <li class="breadcrumb-item active">
-                    {%if breadcrumb.level2.href%}
-                        <a href="{{ breadcrumb.level2.href }}">{{ breadcrumb.level2.title }}</a>
-                    {%else%}
-                        {{breadcrumb.level2.title}}
-                    {%endif%}
-                </li>
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a href="/accounts/logout/" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <!-- /.navbar -->
 
-            {% endif %}
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="/" class="brand-link">
+            <span class="brand-text font-weight-light">wireguard-webadmin</span>
+        </a>
 
-              <li class="breadcrumb-item active">{{ page_title }}</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-        {% endif %}
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
 
-<!-- Generic Modal Structure -->
-<div class="modal fade" id="genericModal" tabindex="-1" aria-labelledby="genericModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="genericModalLabel">Modal Title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="genericModalBody">
-        <!-- Content will be loaded here -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="genericModalCloseButton">Close</button>
-        <a href="#" class="btn btn-primary" id="genericModalActionButton">Action</a>
-      </div>
-    </div>
-  </div>
-</div>
+                    <li class="nav-item">
+                        <a href="/status/" class="nav-link {% if '/status/' in request.path %}active{% endif %}">
+                            <i class="fas fa-tachometer-alt nav-icon"></i>
+                            <p>
+                                Status
+                            </p>
+                        </a>
+                    </li>
 
-<!-- End modal -->
+                    <li class="nav-item">
+                        <a href="/peer/list/" class="nav-link {% if '/peer/' in request.path %}active{% endif %}">
+                            <i class="fas fa-users-cog nav-icon"></i>
+                            <p>
+                                Peers
+                            </p>
+                        </a>
+                    </li>
 
-    <!-- Main content -->
+                    <li class="nav-item">
+                        <a href="/dns/" class="nav-link {% if '/dns/' in request.path %}active{% endif %}">
+                            <i class="fas fa-address-book nav-icon"></i>
+                            <p>
+                                DNS
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/firewall/rule_list/" class="nav-link {% if '/firewall/' in request.path %}active{% endif %}">
+                            <i class="fas fa-shield-alt nav-icon"></i>
+                            <p>
+                                Firewall
+
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/console/" class="nav-link {% if '/console/' in request.path %}active{% endif %}">
+                            <i class="fas fa-terminal nav-icon"></i>
+                            <p>
+                                Console
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/user/list/" class="nav-link {% if '/user/' in request.path %}active{% endif %}">
+                            <i class="fas fa-users nav-icon"></i>
+                            <p>
+                                User Manager
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/server/manage/" class="nav-link {% if '/server/' in request.path %}active{% endif %}">
+                            <i class="fas fa-cogs nav-icon"></i>
+                            <p>
+                                Server Settings
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/vpn_invite/settings/" class="nav-link {% if '/vpn_invite/' in request.path %}active{% endif %}">
+                            <i class="fas fa-share-square nav-icon"></i>
+                            <p>
+                                Invite Settings
+                            </p>
+                        </a>
+                    </li>
 
 
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>
 
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                {% if page_title %}
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">{{ page_title }}</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                {% if breadcrumb %}
+                                    <li class="breadcrumb-item active">
+                                        {%if breadcrumb.level2.href%}
+                                            <a href="{{ breadcrumb.level2.href }}">{{ breadcrumb.level2.title }}</a>
+                                        {%else%}
+                                            {{breadcrumb.level2.title}}
+                                        {%endif%}
+                                    </li>
 
-    <section class="content">
-        <div class="container-fluid">
-          {% if pending_changes_warning %}
-            <div class="alert alert-warning" role="alert">
-                <h4 class="alert-heading">Update Required</h4>
-                <p>Your WireGuard settings have been modified. To apply these changes, please update the configuration and reload the WireGuard service.
-                </p>
-                <p>
-                  <a href="/tools/export_wireguard_config/?action=update_and_restart" class="btn btn-secondary">Update and restart service</a>
-              </p>
-              
+                                {% endif %}
+
+                                <li class="breadcrumb-item active">{{ page_title }}</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                {% endif %}
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Generic Modal Structure -->
+        <div class="modal fade" id="genericModal" tabindex="-1" aria-labelledby="genericModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="genericModalLabel">Modal Title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="genericModalBody">
+                        <!-- Content will be loaded here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="genericModalCloseButton">Close</button>
+                        <a href="#" class="btn btn-primary" id="genericModalActionButton">Action</a>
+                    </div>
+                </div>
             </div>
-          {% endif %}
-        
-        
-          
+        </div>
 
-            {% block content %}{% endblock %}
-        </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    {% if webadmin_version.update_available %}<a class='btn btn-sm btn-danger' id="btn_update_changelog">Update Available</a>{% else %}wireguard-webadmin {% endif %}
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> {{ webadmin_version.current_version }} 
+        <!-- End modal -->
+
+        <!-- Main content -->
+
+
+
+
+        <section class="content">
+            <div class="container-fluid">
+                {% if pending_changes_warning %}
+                    <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading">Update Required</h4>
+                        <p>Your WireGuard settings have been modified. To apply these changes, please update the configuration and reload the WireGuard service.
+                        </p>
+                        <p>
+                            <a href="/tools/export_wireguard_config/?action=update_and_restart" class="btn btn-secondary">Update and restart service</a>
+                        </p>
+
+                    </div>
+                {% endif %}
+
+
+
+
+                {% block content %}{% endblock %}
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
     </div>
-  </footer>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        {% if webadmin_version.update_available %}<a class='btn btn-sm btn-danger' id="btn_update_changelog">Update Available</a>{% else %}wireguard-webadmin {% endif %}
+        <div class="float-right d-none d-sm-inline-block">
+            <b>Version</b> {{ webadmin_version.current_version }}
+        </div>
+    </footer>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
 
@@ -286,7 +286,7 @@
 <script src="/static/AdminLTE-3.2.0/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
-  $.widget.bridge('uibutton', $.ui.button)
+    $.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Bootstrap 4 -->
 <script src="/static/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -312,46 +312,46 @@
 <script src="/static/AdminLTE-3.2.0/dist/js/adminlte.js"></script>
 
 <script>
-  $(document).ready(function() {
-    const webadminVersion = '{{ webadmin_version.current_version }}'; 
+    $(document).ready(function() {
+        const webadminVersion = '{{ webadmin_version.current_version }}';
 
-    $('#btn_update_changelog').on('click', function() {
-        $.ajax({
-            url: `https://updates.eth0.com.br/api/application_changelog/?app=wireguard_webadmin&version=${webadminVersion}`,
-            type: 'GET',
-            success: function(response) {
-                const updates = response.updates.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
-                let updatesHtml = '';
-                updates.forEach(update => {
-                    updatesHtml += `<div class="update">
+        $('#btn_update_changelog').on('click', function() {
+            $.ajax({
+                url: `https://updates.eth0.com.br/api/application_changelog/?app=wireguard_webadmin&version=${webadminVersion}`,
+                type: 'GET',
+                success: function(response) {
+                    const updates = response.updates.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+                    let updatesHtml = '';
+                    updates.forEach(update => {
+                        updatesHtml += `<div class="update">
                                         <h5>Version ${update.version}</h5>
                                         <p>${update.release_notes.replace(/\r\n/g, "<br>")}</p>
                                     </div>`;
-                });
+                    });
 
-                // Update modal content
-                $('#genericModalLabel').text('Wireguard Webadmin Updates');
-                $('#genericModalBody').html(updatesHtml);
-                $('#genericModalCloseButton').text('Close');
-                $('#genericModalActionButton').text('Update Instructions').attr('href', 'https://github.com/eduardogsilva/wireguard_webadmin').attr('target', '_blank');
-                
-                // Show modal
-                $('#genericModal').modal('show');
-            },
-            error: function(xhr, status, error) {
-                // Update modal for error display
-                $('#genericModalLabel').text('Error');
-                $('#genericModalBody').html('<p>An error occurred while fetching the update information. Please try again later.</p>');
-                $('#genericModalCloseButton').text('Close');
-                $('#genericModalActionButton').hide(); // Hide the action button in case of error
-                
-                // Show modal
-                $('#genericModal').modal('show');
-                console.error("An error occurred while fetching updates: ", error);
-            }
+                    // Update modal content
+                    $('#genericModalLabel').text('Wireguard Webadmin Updates');
+                    $('#genericModalBody').html(updatesHtml);
+                    $('#genericModalCloseButton').text('Close');
+                    $('#genericModalActionButton').text('Update Instructions').attr('href', 'https://github.com/eduardogsilva/wireguard_webadmin').attr('target', '_blank');
+
+                    // Show modal
+                    $('#genericModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    // Update modal for error display
+                    $('#genericModalLabel').text('Error');
+                    $('#genericModalBody').html('<p>An error occurred while fetching the update information. Please try again later.</p>');
+                    $('#genericModalCloseButton').text('Close');
+                    $('#genericModalActionButton').hide(); // Hide the action button in case of error
+
+                    // Show modal
+                    $('#genericModal').modal('show');
+                    console.error("An error occurred while fetching updates: ", error);
+                }
+            });
         });
     });
-});
 
 
 </script>
