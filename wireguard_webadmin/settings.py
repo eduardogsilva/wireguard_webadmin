@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'user_manager',
     'wireguard_tools',
     'firewall',
-    'dns'
+    'dns',
+    'vpn_invite'
 ]
 
 MIDDLEWARE = [
