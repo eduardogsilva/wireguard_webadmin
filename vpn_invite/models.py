@@ -7,6 +7,9 @@ class InviteSettings(models.Model):
     name = models.CharField(max_length=16, default='default_settings', unique=True)
     default_password = models.CharField(max_length=32, default='', blank=True, null=True)
     enforce_random_password = models.BooleanField(default=True)
+    required_user_level = models.PositiveIntegerField(default=50, choices=(
+        (20, 'View Only User'), (30, 'Peer Manager'), (40, 'Wireguard Manager'), (50, 'Administrator'),
+    ))
     random_password_length = models.IntegerField(default=6)
     random_password_complexity = models.CharField(
         max_length=22, default='letters_digits', choices=(
@@ -38,11 +41,14 @@ class InviteSettings(models.Model):
     download_instructions = models.TextField(default='Download the WireGuard app for your device using one of the links below. After installation, you can scan the QR code or download the configuration file to import on your device.')
 
     invite_url = models.URLField(default='')
+
+    invite_text_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}. The link expires in {expire_minutes} minutes.')
+
     invite_email_subject = models.CharField(max_length=64, default='WireGuard VPN Invite', blank=True, null=True)
-    invite_email_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}', blank=True, null=True)
+    invite_email_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}. The link expires in {expire_minutes} minutes.')
     invite_email_enabled = models.BooleanField(default=True)
 
-    invite_whatsapp_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}', blank=True, null=True)
+    invite_whatsapp_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}. The link expires in {expire_minutes} minutes.')
     invite_whatsapp_enabled = models.BooleanField(default=True)
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
