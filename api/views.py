@@ -253,8 +253,7 @@ def cron_update_peer_latest_handshake(request):
 
 def cron_check_updates(request):
     webadmin_settings, webadmin_settings_created = WebadminSettings.objects.get_or_create(name='webadmin_settings')
-
-    if webadmin_settings.last_checked is None or timezone.now() - webadmin_settings.last_checked > timezone.timedelta(hours=1):
+    if webadmin_settings.last_checked is None or timezone.now() > (webadmin_settings.last_checked + datetime.timedelta(hours=1)):
         try:
             version = settings.WIREGUARD_WEBADMIN_VERSION / 10000
             url = f'https://updates.eth0.com.br/api/check_updates/?app=wireguard_webadmin&version={version}'
