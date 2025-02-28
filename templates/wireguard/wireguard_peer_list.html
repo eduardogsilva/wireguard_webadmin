@@ -14,6 +14,13 @@
         .blinking-icon {
             animation: blink 1s step-start infinite;
         }
+        /* Estilo para diferenciar o texto de invite */
+        #inviteTextContainer {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
     </style>
 {% endblock %}
 
@@ -38,7 +45,7 @@
                                 <div class="col-xl-6" id="peer-{{ peer.public_key }}" data-uuid="{{ peer.uuid }}">
                                     <div class="callout position-relative">
                                         {% comment %}background: linear-gradient(to right, white 50%, transparent 50%);{% endcomment %}
-                                        <div class="position-absolute p-3 div-peer-text-information" style="top: 0; left: 0; background: linear-gradient(to right, white, transparent); width: 100%; height: 100%; ">
+                                        <div class="position-absolute p-3 div-peer-text-information" style="top: 0; left: 0; background: linear-gradient(to right, white, transparent); width: 100%; height: 100%;">
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <h5 id="peer-name-{{ peer.public_key }}">
                                                     <a href="#" onclick="openPeerModal('{{ peer.uuid }}');" style="text-decoration: none">
@@ -46,19 +53,19 @@
                                                     </a>
                                                 </h5>
                                                 <span>
-                                              {% if user_acl.user_level >= 30 %}
-                                                  <div class="d-inline-flex flex-column">
-                                                <a href="/peer/sort/?peer={{ peer.uuid }}&direction=up" style="line-height:0px">
-                                                  <i class="fas fa-sort-up"></i>
-                                                </a>
-                                                <div style="overflow:hidden;margin-top: -9px">
-                                                  <a href="/peer/sort/?peer={{ peer.uuid }}&direction=down" style="position:relative;top:-11px">
-                                                    <i class="fas fa-sort-down"></i>
-                                                  </a>
-                                                </div>
-                                              </div>
-                                              {% endif %}
-                                            </span>
+                                                  {% if user_acl.user_level >= 30 %}
+                                                      <div class="d-inline-flex flex-column">
+                                                        <a href="/peer/sort/?peer={{ peer.uuid }}&direction=up" style="line-height:0px">
+                                                          <i class="fas fa-sort-up"></i>
+                                                        </a>
+                                                        <div style="overflow:hidden;margin-top: -9px">
+                                                          <a href="/peer/sort/?peer={{ peer.uuid }}&direction=down" style="position:relative;top:-11px">
+                                                            <i class="fas fa-sort-down"></i>
+                                                          </a>
+                                                        </div>
+                                                      </div>
+                                                  {% endif %}
+                                                </span>
                                             </div>
                                             <b class="peer-extra-info">Throughput: </b> <span id="peer-throughput-{{ peer.public_key }}"></span><br>
                                             <span class="peer-extra-info"><b>Transfer:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br></span>
@@ -66,19 +73,19 @@
                                             <span class="peer-extra-info"><span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">{% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}</span><br></span>
                                             <span class="peer-extra-info"><b>Endpoints:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br></span>
                                             <span class="peer-extra-info" id="peer-extra-info-allowed-ips-{{ peer.public_key }}">
-                                            <b>Allowed IPs:</b>
-                                            <span id="peer-allowed-ips-{{ peer.public_key }}">
-                                                 {% for address in peer.peerallowedip_set.all %}
-                                                     {% if address.priority == 0 and address.config_file == 'server' %}
-                                                         {{ address }}
-                                                     {% endif %}
-                                                 {% endfor %}
-                                                {% for address in peer.peerallowedip_set.all %}
-                                                    {% if address.priority >= 1 and address.config_file == 'server' %}
-                                                        {{ address }}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </span>
+                                                <b>Allowed IPs:</b>
+                                                <span id="peer-allowed-ips-{{ peer.public_key }}">
+                                                    {% for address in peer.peerallowedip_set.all %}
+                                                        {% if address.priority == 0 and address.config_file == 'server' %}
+                                                            {{ address }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% for address in peer.peerallowedip_set.all %}
+                                                        {% if address.priority >= 1 and address.config_file == 'server' %}
+                                                            {{ address }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </span>
                                             </span>
                                         </div>
                                         <canvas class="" id="chart-{{ peer.public_key }}" width="800" height="130" style="min-height: 85px"></canvas>
@@ -148,11 +155,38 @@
                                 <img id="qrCodeImg" src="" alt="QR Code" class="img-fluid" style="max-width: 400px" />
                             </div>
                         </div>
+
+                        <!-- VPN Invite content section (initially hidden) -->
+                        <div class="invite-content" style="display:none;">
+                            <button class="btn btn-secondary" id="backFromInviteButton"><i class="fas fa-arrow-left"></i> Back</button><br>
+                            <div style="text-align: center; margin-top: 10px;">
+                                <h5>VPN Invite Details</h5>
+                                <!-- Container com moldura para o texto do invite -->
+                                <div id="inviteTextContainer">
+                                    <p id="inviteText"></p>
+                                </div>
+                                <!-- Botão para copiar o texto do invite -->
+                                <button class="btn btn-outline-secondary" id="copyInviteTextButton"><i class="fas fa-copy"></i> Copy Invite Text</button>
+                                <p id="invitePassword"></p>
+                                <p>Expires on: <span id="inviteExpiration"></span></p>
+                                <div class="form-group">
+                                    <label for="inviteContactInput">Enter Email or WhatsApp Number:</label>
+                                    <input type="text" class="form-control" id="inviteContactInput" placeholder="Email or phone number">
+                                </div>
+                                <div>
+                                    <button class="btn btn-success" id="sendInviteEmailButton"><i class="fas fa-envelope"></i> Send via Email</button>
+                                    <button class="btn btn-success" id="sendInviteWhatsappButton"><i class="fab fa-whatsapp"></i> Send via WhatsApp</button>
+                                    <button class="btn btn-secondary" id="closeInviteButton"><i class="fas fa-times"></i> Close Invite</button>
+                                </div>
+                                <div id="inviteMessage" style="margin-top: 10px;"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i>  Close</button>
                         <a href="#" class="btn btn-info" id="downloadConfigButton"><i class="fas fa-download"></i> Config</a>
                         <a href="#" class="btn btn-info" id="qrcodeButton"><i class="fas fa-qrcode"></i> QR Code</a>
+                        <a href="#" class="btn btn-outline-primary" id="inviteButton"><i class="fas fa-share"></i> VPN Invite</a>
                         <a href="#" class="btn btn-outline-primary" id="editPeerButton"><i class="far fa-edit"></i> Edit</a>
                     </div>
                 </div>
@@ -215,7 +249,6 @@
                         legend: {
                             display: false
                         },
-
                         responsive: true,
                         scales: {
                             xAxes: [{
@@ -229,7 +262,6 @@
                                 gridLines: { display: false }
                             }]
                         },
-
                         animation: {
                             duration: 0
                         }
@@ -247,6 +279,7 @@
                 var uuid = $("#peerPreviewModal").data("peer-uuid");
                 $("#qrCodeImg").attr("src", "/tools/download_peer_config/?uuid=" + uuid + "&format=qrcode");
                 $(".info-content").hide();
+                $(".invite-content").hide();
                 $(".qr-code-content").show();
             });
 
@@ -261,6 +294,7 @@
     <script>
         function openPeerModal(uuid) {
             $(".qr-code-content").hide();
+            $(".invite-content").hide();
             $(".info-content").show();
             $("#qrCodeImg").attr("src", "");
             $('#graphImg').attr('src', '').hide();
@@ -479,7 +513,7 @@
                         // Calculate throughput and update the card
                         const throughputHTML = updateThroughput(peerId, peerInfo);
 
-                        // If the modal is active for this peer, update its fields as well
+                        // If the modal is active for this peer, update its fields as well.
                         const peerUuid = peerDiv.getAttribute("data-uuid");
                         if ($('#peerPreviewModal').is(':visible') && $('#peerPreviewModal').data('peer-uuid') === peerUuid) {
                             $('#peerThroughput').html(throughputHTML);
@@ -548,7 +582,6 @@
             }
         };
 
-
         const updateCalloutClass = (peerDiv, latestHandshake) => {
             const calloutDiv = peerDiv.querySelector('.callout');
             calloutDiv.classList.remove('callout-success', 'callout-info', 'callout-warning', 'callout-danger');
@@ -573,14 +606,172 @@
                 $(".peer-extra-info").toggle();
                 if($(".peer-extra-info").is(":visible")){
                     $(this).text("Hide extras");
-                    $(".div-peer-text-information").removeClass('position-absolute') //.removeClass('p-3');
+                    $(".div-peer-text-information").removeClass('position-absolute');
                 } else {
                     $(this).text("Show extras");
-                    $(".div-peer-text-information").addClass('position-absolute') //.addClass('p-3');
+                    $(".div-peer-text-information").addClass('position-absolute');
                 }
             });
         });
     </script>
 
+    <!-- VPN Invite functionality with adjustments -->
+    <script>
+    $(document).ready(function(){
+        var inviteData = null; // Store invite details
+
+        // Function to detect mobile device
+        function isMobileDevice() {
+            return /Mobi|Android/i.test(navigator.userAgent);
+        }
+
+        // Handler for VPN Invite button click
+        $("#inviteButton").on("click", function(e) {
+            e.preventDefault();
+            var peerUuid = $('#peerPreviewModal').data('peer-uuid');
+            // Hide other content sections
+            $(".info-content").hide();
+            $(".qr-code-content").hide();
+            $(".invite-content").show();
+
+            // Clear previous invite message and input field
+            $("#inviteMessage").html("");
+            $("#inviteContactInput").val("");
+
+            // Create the invite by calling the API endpoint
+            $.ajax({
+                url: '/api/peer_invite/',
+                data: { peer: peerUuid },
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if(response.status === "success") {
+                        inviteData = response.invite_data;
+                        // Populate invite details in the modal
+                        $("#inviteText").text(inviteData.text_body);
+                        $("#invitePassword").html("Access Password: <strong>" + inviteData.password + "</strong> (Share this password via a separate secure channel)");
+                        $("#inviteExpiration").text(new Date(inviteData.expiration).toLocaleString());
+                    } else {
+                        $("#inviteMessage").html("<div class='alert alert-danger'>" + response.message + "</div>");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $("#inviteMessage").html("<div class='alert alert-danger'>Error creating invite: " + error + "</div>");
+                }
+            });
+        });
+
+        // Back button in the invite section
+        $("#backFromInviteButton").on("click", function(e) {
+            e.preventDefault();
+            $(".invite-content").hide();
+            $(".info-content").show();
+        });
+
+        // Validate email function
+        function isValidEmail(email) {
+            var re = /^\S+@\S+\.\S+$/;
+            return re.test(email);
+        }
+
+        // Validate phone number function (simple check)
+        function isValidPhone(phone) {
+            var re = /^\+?\d{10,15}$/;
+            return re.test(phone);
+        }
+
+        // Handler for copying the invite text to clipboard
+        $("#copyInviteTextButton").on("click", function(e) {
+            e.preventDefault();
+            var textToCopy = $("#inviteText").text();
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(textToCopy).then(function() {
+                    $("#inviteMessage").html("<div class='alert alert-success'>Invite text copied to clipboard.</div>");
+                }, function(err) {
+                    $("#inviteMessage").html("<div class='alert alert-danger'>Failed to copy text.</div>");
+                });
+            } else {
+                $("#inviteMessage").html("<div class='alert alert-danger'>Clipboard API not supported.</div>");
+            }
+        });
+
+        // Handler for sending invite via WhatsApp with device detection
+        $("#sendInviteWhatsappButton").on("click", function(e) {
+            e.preventDefault();
+            var contact = $("#inviteContactInput").val().trim();
+            if(!isValidPhone(contact)) {
+                $("#inviteMessage").html("<div class='alert alert-danger'>Please enter a valid phone number for WhatsApp.</div>");
+                return;
+            }
+            if(inviteData && inviteData.whatsapp_body) {
+                var whatsappUrl;
+                if(isMobileDevice()){
+                    whatsappUrl = "https://api.whatsapp.com/send?phone=" + encodeURIComponent(contact) + "&text=" + encodeURIComponent(inviteData.whatsapp_body);
+                } else {
+                    whatsappUrl = "https://web.whatsapp.com/send?phone=" + encodeURIComponent(contact) + "&text=" + encodeURIComponent(inviteData.whatsapp_body);
+                }
+                window.open(whatsappUrl, '_blank');
+            } else {
+                $("#inviteMessage").html("<div class='alert alert-danger'>Invite data is not available.</div>");
+            }
+        });
+
+        // Handler for sending invite via Email
+        $("#sendInviteEmailButton").on("click", function(e) {
+            e.preventDefault();
+            var contact = $("#inviteContactInput").val().trim();
+            if(!isValidEmail(contact)) {
+                $("#inviteMessage").html("<div class='alert alert-danger'>Please enter a valid email address.</div>");
+                return;
+            }
+            if(inviteData && inviteData.uuid) {
+                // Send invite email via API call
+                $.ajax({
+                    url: '/api/peer_invite/',
+                    data: { invite: inviteData.uuid, action: 'email', address: contact },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if(response.status === "success") {
+                            $("#inviteMessage").html("<div class='alert alert-success'>Email sent successfully.</div>");
+                        } else {
+                            $("#inviteMessage").html("<div class='alert alert-danger'>" + response.message + "</div>");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#inviteMessage").html("<div class='alert alert-danger'>Error sending email: " + error + "</div>");
+                    }
+                });
+            } else {
+                $("#inviteMessage").html("<div class='alert alert-danger'>Invite data is not available.</div>");
+            }
+        });
+
+        // Handler for Close Invite button (which deletes the invite)
+        $("#closeInviteButton").on("click", function(e) {
+            e.preventDefault();
+            if(inviteData && inviteData.uuid) {
+                $.ajax({
+                    url: '/api/peer_invite/',
+                    data: { invite: inviteData.uuid, action: 'delete' },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        // Hide invite section and show info content regardless of API response
+                        $(".invite-content").hide();
+                        $(".info-content").show();
+                        inviteData = null;
+                    },
+                    error: function(xhr, status, error) {
+                        $("#inviteMessage").html("<div class='alert alert-danger'>Error closing invite: " + error + "</div>");
+                    }
+                });
+            } else {
+                $(".invite-content").hide();
+                $(".info-content").show();
+            }
+        });
+    });
+    </script>
 
 {% endblock %}
