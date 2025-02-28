@@ -11,8 +11,9 @@ from django.conf import settings
 from django.utils import timezone
 
 from user_manager.models import UserAcl, AuthenticationToken
+from vpn_invite.models import InviteSettings, PeerInvite
 from wireguard.models import WebadminSettings, Peer, PeerStatus, WireGuardInstance
-from wgwadmlibrary.tools import user_allowed_peers, user_has_access_to_peer
+from wgwadmlibrary.tools import user_allowed_peers, user_has_access_to_peer, get_peer_invite_data, create_peer_invite
 import requests
 import subprocess
 import datetime
@@ -283,3 +284,46 @@ def cron_check_updates(request):
             return JsonResponse({'update_available': False})
     
     return JsonResponse({'update_available': webadmin_settings.update_available})
+
+
+
+@login_required
+def api_peer_invite(request):
+    user_acl = get_object_or_404(UserAcl, user=request.user)
+    data = {'status': '', 'message': '', 'invite_data': {}}
+    peer_invite = PeerInvite.objects.none()
+    invite_settings = InviteSettings.objects.filter(name='default_settings').first()
+    if not invite_settings:
+        data['status'] = 'error'
+        data['message'] = 'Default settings not found'
+        return JsonResponse(data, status=400)
+
+    if user_acl.user_level < invite_settings.required_user_level:
+        data['status'] = 'error'
+        data['message'] = 'Permission denied'
+        return JsonResponse(data, status=403)
+
+    if request.GET.get('peer'):
+        peer = get_object_or_404(Peer, uuid=request.GET.get('peer'))
+        if not user_has_access_to_peer(user_acl, peer):
+            data['status'] = 'error'
+            data['message'] = 'Permission denied'
+            return JsonResponse(data, status=403)
+        peer_invite = create_peer_invite(peer, invite_settings)
+    elif request.GET.get('invite'):
+        peer_invite = get_object_or_404(PeerInvite, uuid=request.GET.get('invite'))
+        if request.GET.get('action') == 'refresh':
+            peer_invite.invite_expiration = timezone.now() + datetime.timedelta(minutes=invite_settings.invite_expiration)
+            peer_invite.save()
+        elif request.GET.get('action') == 'delete':
+            peer_invite.delete()
+            data['status'] = 'success'
+            data['message'] = 'Invite deleted'
+            return JsonResponse(data)
+
+    if peer_invite:
+        data['status'] = 'success'
+        data['message'] = ''
+        data['invite_data'] = get_peer_invite_data(peer_invite)
+
+    return JsonResponse(data, status=200)

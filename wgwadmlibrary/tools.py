@@ -1,8 +1,12 @@
 import ipaddress, re
 import subprocess
+from django.utils import timezone
+from datetime import timedelta
+from vpn_invite.models import PeerInvite, InviteSettings
 from wireguard.models import Peer, WireGuardInstance
 from user_manager.models import UserAcl
 from django.db.models import Max
+import random
 
 
 def user_has_access_to_instance(user_acl: UserAcl, instance: WireGuardInstance):
@@ -114,3 +118,50 @@ def check_sort_order_conflict(peer: Peer):
     if peers.exists():
         return True
     return False
+
+
+
+def create_random_password(length, complexity):
+    if complexity == 'digits':
+        characters = '0123456789'
+    elif complexity == 'letters':
+        characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    elif complexity == 'letters_digits':
+        characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    else:
+        characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()'
+    return ''.join(random.choice(characters) for _ in range(length))
+
+
+
+def replace_message_variables(message: str, peer_invite: PeerInvite, invite_settings: InviteSettings):
+    # The & at the end is to prevent the token from being concatenated with any other template text.
+    message = message.replace('{invite_url}', f'{invite_settings.invite_url}?token{peer_invite.uuid}&')
+    message = message.replace('{expire_minutes}', f'{invite_settings.invite_expiration}')
+    return message
+
+
+def get_peer_invite_data(peer_invite: PeerInvite, invite_settings: InviteSettings):
+    data = {
+        # The & at the end is to prevent the token from being concatenated with any other template text.
+        'url': f'{invite_settings.invite_url}?token{peer_invite.uuid}&',
+        'password': peer_invite.invite_password,
+        'expiration': peer_invite.invite_expiration.isoformat(),
+        'email_subject': replace_message_variables(invite_settings.invite_email_subject),
+        'email_body': replace_message_variables(invite_settings.invite_email_body),
+        'whatsapp_body': replace_message_variables(invite_settings.invite_whatsapp_body),
+        'text_body': replace_message_variables(invite_settings.invite_text_body),
+    }
+    return data
+
+
+def create_peer_invite(peer, invite_settings):
+    if invite_settings.enable_random_password or not invite_settings.default_password:
+        password = create_random_password(invite_settings.random_password_length, invite_settings.random_password_complexity)
+    else:
+        password = invite_settings.default_password
+
+    peer_invite = PeerInvite.objects.create(
+        peer=peer, password=password[32], invite_expiration=timezone.now() + timedelta(minutes=invite_settings.invite_expiration_minutes)
+    )
+    return peer_invite
