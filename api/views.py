@@ -285,13 +285,17 @@ def cron_check_updates(request):
     return JsonResponse({'update_available': webadmin_settings.update_available})
 
 
-
 @login_required
 def api_peer_invite(request):
     user_acl = get_object_or_404(UserAcl, user=request.user)
-    data = {'status': '', 'message': '', 'invite_data': {}}
-    peer_invite = PeerInvite.objects.none()
     invite_settings = InviteSettings.objects.filter(name='default_settings').first()
+    data = {
+        'status': '', 'message': '', 'invite_data': {},
+        'whatsapp_enabled': invite_settings.invite_whatsapp_enabled,
+        'email_enabled': invite_settings.invite_email_enabled,
+    }
+    peer_invite = PeerInvite.objects.none()
+
     if not invite_settings:
         data['status'] = 'error'
         data['message'] = 'Default settings not found'
@@ -308,7 +312,10 @@ def api_peer_invite(request):
             data['status'] = 'error'
             data['message'] = 'Permission denied'
             return JsonResponse(data, status=403)
-        peer_invite = create_peer_invite(peer, invite_settings)
+        peer_invite = PeerInvite.objects.filter(peer=peer).first()
+        if not peer_invite:
+            peer_invite = create_peer_invite(peer, invite_settings)
+
     elif request.GET.get('invite'):
         peer_invite = get_object_or_404(PeerInvite, uuid=request.GET.get('invite'))
         if request.GET.get('action') == 'refresh':
@@ -323,6 +330,15 @@ def api_peer_invite(request):
     if peer_invite:
         data['status'] = 'success'
         data['message'] = ''
-        data['invite_data'] = get_peer_invite_data(peer_invite)
+        data['invite_data'] = get_peer_invite_data(peer_invite, invite_settings)
 
+        if request.GET.get('action') == 'email':
+            data['status'] = 'success'
+            data['message'] = 'Email sent'
+            return JsonResponse(data)
+    else:
+        if request.GET.get('action') == 'email':
+            data['status'] = 'error'
+            data['message'] = 'Invite not found'
+            return JsonResponse(data)
     return JsonResponse(data, status=200)

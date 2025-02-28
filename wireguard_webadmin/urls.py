@@ -23,7 +23,7 @@ from console.views import view_console
 from user_manager.views import view_user_list, view_manage_user, view_peer_group_list, view_peer_group_manage
 from accounts.views import view_create_first_user, view_login, view_logout
 from wireguard_tools.views import export_wireguard_configs, download_config_or_qrcode, restart_wireguard_interfaces
-from api.views import wireguard_status, cron_check_updates, cron_update_peer_latest_handshake, routerfleet_get_user_token, routerfleet_authenticate_session, peer_info
+from api.views import wireguard_status, cron_check_updates, cron_update_peer_latest_handshake, routerfleet_get_user_token, routerfleet_authenticate_session, peer_info, api_peer_invite
 from firewall.views import view_redirect_rule_list, manage_redirect_rule, view_firewall_rule_list, manage_firewall_rule, view_manage_firewall_settings, view_generate_iptables_script, view_reset_firewall, view_firewall_migration_required
 from dns.views import view_static_host_list, view_manage_static_host, view_manage_dns_settings, view_apply_dns_config
 from wgrrd.views import view_rrd_graph
@@ -58,6 +58,7 @@ urlpatterns = [
     path('api/routerfleet_get_user_token/', routerfleet_get_user_token, name='routerfleet_get_user_token'),
     path('api/wireguard_status/', wireguard_status, name='api_wireguard_status'),
     path('api/peer_info/', peer_info, name='api_peer_info'),
+    path('api/peer_invite/', api_peer_invite, name='api_peer_invite'),
     path('api/cron_check_updates/', cron_check_updates, name='cron_check_updates'),
     path('api/cron_update_peer_latest_handshake/', cron_update_peer_latest_handshake, name='cron_update_peer_latest_handshake'),
     path('firewall/port_forward/', view_redirect_rule_list, name='redirect_rule_list'),    

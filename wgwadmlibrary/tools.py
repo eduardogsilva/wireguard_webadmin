@@ -147,21 +147,22 @@ def get_peer_invite_data(peer_invite: PeerInvite, invite_settings: InviteSetting
         'url': f'{invite_settings.invite_url}?token{peer_invite.uuid}&',
         'password': peer_invite.invite_password,
         'expiration': peer_invite.invite_expiration.isoformat(),
-        'email_subject': replace_message_variables(invite_settings.invite_email_subject),
-        'email_body': replace_message_variables(invite_settings.invite_email_body),
-        'whatsapp_body': replace_message_variables(invite_settings.invite_whatsapp_body),
-        'text_body': replace_message_variables(invite_settings.invite_text_body),
+        'email_subject': replace_message_variables(invite_settings.invite_email_subject, peer_invite, invite_settings),
+        'email_body': replace_message_variables(invite_settings.invite_email_body, peer_invite, invite_settings),
+        'whatsapp_body': replace_message_variables(invite_settings.invite_whatsapp_body, peer_invite, invite_settings),
+        'text_body': replace_message_variables(invite_settings.invite_text_body, peer_invite, invite_settings),
+        'uuid': str(peer_invite.uuid),
     }
     return data
 
 
-def create_peer_invite(peer, invite_settings):
-    if invite_settings.enable_random_password or not invite_settings.default_password:
+def create_peer_invite(peer: Peer, invite_settings: InviteSettings):
+    if invite_settings.enforce_random_password or not invite_settings.default_password:
         password = create_random_password(invite_settings.random_password_length, invite_settings.random_password_complexity)
     else:
         password = invite_settings.default_password
 
     peer_invite = PeerInvite.objects.create(
-        peer=peer, password=password[32], invite_expiration=timezone.now() + timedelta(minutes=invite_settings.invite_expiration_minutes)
+        peer=peer, invite_password=password[:32], invite_expiration=timezone.now() + timedelta(minutes=invite_settings.invite_expiration)
     )
     return peer_invite
