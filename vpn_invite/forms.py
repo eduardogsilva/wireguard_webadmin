@@ -47,21 +47,22 @@ class InviteSettingsForm(forms.ModelForm):
         bool_choices = [(True, 'Enabled'), (False, 'Disabled')]
         bool_coerce = lambda x: True if x == 'True' else False
 
-        # Override the five download_enabled fields to use a dropdown
         for field_name in [
             'download_1_enabled',
             'download_2_enabled',
             'download_3_enabled',
             'download_4_enabled',
-            'download_5_enabled'
+            'download_5_enabled',
+            'enforce_random_password',
         ]:
             self.fields[field_name] = forms.TypedChoiceField(
                 choices=bool_choices,
                 coerce=bool_coerce,
                 widget=forms.Select(),
+                required=False,
                 initial=self.instance.__dict__.get(field_name, True) if self.instance and self.instance.pk else True,
-                label='Status'
             )
+
         self.fields['download_1_url'].label = 'URL'
         self.fields['download_2_url'].label = 'URL'
         self.fields['download_3_url'].label = 'URL'
@@ -72,6 +73,11 @@ class InviteSettingsForm(forms.ModelForm):
         self.fields['download_3_label'].label = 'Text'
         self.fields['download_4_label'].label = 'Text'
         self.fields['download_5_label'].label = 'Text'
+        self.fields['download_1_enabled'].label = 'Status'
+        self.fields['download_2_enabled'].label = 'Status'
+        self.fields['download_3_enabled'].label = 'Status'
+        self.fields['download_4_enabled'].label = 'Status'
+        self.fields['download_5_enabled'].label = 'Status'
         self.fields['download_instructions'].label = 'Web Page Instructions'
         self.fields['invite_email_subject'].label = 'Email Subject'
         self.fields['invite_email_body'].label = 'Email Message'
@@ -79,43 +85,37 @@ class InviteSettingsForm(forms.ModelForm):
         self.fields['invite_whatsapp_body'].label = 'WhatsApp Message'
         self.fields['invite_whatsapp_enabled'].label = 'WhatsApp Enabled'
         self.fields['invite_text_body'].label = 'Text Message'
-
-        # Initialize Crispy Forms helper
+        self.fields['invite_expiration'].label = 'Expiration (minutes)'
+        self.fields['enforce_random_password'].label = 'Random Password'
         self.helper = FormHelper()
         self.helper.form_method = 'post'
 
-        # Define form layout
         self.helper.layout = Layout(
             Row(
                 Column(
                     HTML("<h3>General Settings</h3>"),
                     Row(
-                        Column('invite_url', css_class='form-group col-md-6 mb-0'),
+                        Column('invite_url', css_class='form-group col-md-12 mb-0'),
+                    ),
+                    Row(
                         Column('required_user_level', css_class='form-group col-md-6 mb-0'),
+                        Column('invite_expiration', css_class='form-group col-md-6 mb-0'),
                     ),
+                    HTML('<hr>'),
                     Row(
-                        Column(css_class='form-group col-md-6 mb-0'),
-                        Column(css_class='form-group col-md-6 mb-0'),
-                    ),
-
-                    Row(
-                        Column('default_password', css_class='form-group col-md-4 mb-0'),
-                        Column('enforce_random_password', css_class='form-group col-md-4 mb-0'),
-                        css_class='form-row'
-                    ),
-
-                    Row(
-
-                        Column('random_password_length', css_class='form-group col-md-4 mb-0'),
-                        Column('random_password_complexity', css_class='form-group col-md-4 mb-0'),
+                        Column(HTML("<h5>User Authentication</h5>"), css_class='form-group col-md-12 mb-0'),
+                        Column('enforce_random_password', css_class='form-group col-md-6 mb-0'),
+                        Column('default_password', css_class='form-group col-md-6 mb-0'),
                         css_class='form-row'
                     ),
                     Row(
-                        Column('invite_expiration', css_class='form-group col-md-4 mb-0'),
+                        Column('random_password_length', css_class='form-group col-md-6 mb-0'),
+                        Column('random_password_complexity', css_class='form-group col-md-6 mb-0'),
                         css_class='form-row'
                     ),
-                    HTML("<h3>Download Buttons</h3>"),
+                    HTML("<hr>"),
                     Row(
+                        Column(HTML("<h5>Download Buttons</h5>"), css_class='form-group col-md-12 mb-0'),
                         Column('download_1_label', css_class='form-group col-md-3 mb-0'),
                         Column('download_1_url', css_class='form-group col-md-6 mb-0'),
                         Column('download_1_enabled', css_class='form-group col-md-3 mb-0'),
@@ -145,7 +145,6 @@ class InviteSettingsForm(forms.ModelForm):
                         Column('download_5_enabled', css_class='form-group col-md-3 mb-0'),
                         css_class='form-row'
                     ),
-
                     Row(
                         Column(
                             Submit('submit', 'Save', css_class='btn btn-success'),
@@ -154,23 +153,16 @@ class InviteSettingsForm(forms.ModelForm):
                         ),
                         css_class='form-row'
                     ),
-
                     css_class='col-xl-6'),
-
                 Column(
                     HTML("<h3>Message templates</h3>"),
                     Column( css_class='form-group col-md-12 mb-0'),
-
-
-
                     Row(
                         Column('download_instructions', css_class='form-group col-md-12 mb-0'),
                         css_class='form-row'
                     ),
                     HTML("<hr>"),
-
                     Row(
-
                         Column(HTML("<h5>Email Message Template</h5>"), css_class='form-group col-md-12 mb-0'),
                         Column('invite_email_subject', css_class='form-group col-md-12 mb-0'),
                         Column('invite_email_body', css_class='form-group col-md-12 mb-0'),
@@ -189,14 +181,10 @@ class InviteSettingsForm(forms.ModelForm):
                     ),
                     HTML("<hr>"),
                     Row(
-
                         Column(HTML("<h5>Text Message Template</h5>"), css_class='form-group col-md-12 mb-0'),
                         Column('invite_text_body', css_class='form-group col-md-12 mb-0'),
                         css_class='form-row'
                     ),
                     css_class='col-xl-6'),
-
-
                 css_class='row'),
-
         )
