@@ -18,7 +18,7 @@ class InviteSettings(models.Model):
         )
     )
     invite_expiration = models.IntegerField(default=30) # minutes
-    download_1_label = models.CharField(max_length=32, default='iPhone', blank=True, null=True)
+    download_1_label = models.CharField(max_length=32, default='iOS', blank=True, null=True)
     download_2_label = models.CharField(max_length=32, default='Android', blank=True, null=True)
     download_3_label = models.CharField(max_length=32, default='Windows', blank=True, null=True)
     download_4_label = models.CharField(max_length=32, default='macOS', blank=True, null=True)
@@ -42,13 +42,13 @@ class InviteSettings(models.Model):
 
     invite_url = models.URLField(default='')
 
-    invite_text_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}. The link expires in {expire_minutes} minutes.')
+    invite_text_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}\n\nThis link expires in {expire_minutes} minutes.')
 
     invite_email_subject = models.CharField(max_length=64, default='WireGuard VPN Invite', blank=True, null=True)
-    invite_email_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}. The link expires in {expire_minutes} minutes.')
+    invite_email_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}\n\nThis link expires in {expire_minutes} minutes.')
     invite_email_enabled = models.BooleanField(default=True)
 
-    invite_whatsapp_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}. The link expires in {expire_minutes} minutes.')
+    invite_whatsapp_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}\n\nThis link expires in {expire_minutes} minutes.')
     invite_whatsapp_enabled = models.BooleanField(default=True)
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)

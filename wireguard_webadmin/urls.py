@@ -27,7 +27,7 @@ from api.views import wireguard_status, cron_check_updates, cron_update_peer_lat
 from firewall.views import view_redirect_rule_list, manage_redirect_rule, view_firewall_rule_list, manage_firewall_rule, view_manage_firewall_settings, view_generate_iptables_script, view_reset_firewall, view_firewall_migration_required
 from dns.views import view_static_host_list, view_manage_static_host, view_manage_dns_settings, view_apply_dns_config
 from wgrrd.views import view_rrd_graph
-from vpn_invite.views import view_vpn_invite_settings
+from vpn_invite.views import view_vpn_invite_list, view_vpn_invite_settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -68,5 +68,6 @@ urlpatterns = [
     path('firewall/generate_firewall_script/', view_generate_iptables_script, name='generate_iptables_script'),
     path('firewall/reset_to_default/', view_reset_firewall, name='reset_firewall'),
     path('firewall/migration_required/', view_firewall_migration_required, name='firewall_migration_required'),
-    path('vpn_invite/', view_vpn_invite_settings, name='vpn_invite_settings'),
+    path('vpn_invite/', view_vpn_invite_list, name='vpn_invite_list'),
+    path('vpn_invite/settings/', view_vpn_invite_settings, name='vpn_invite_settings'),
 ]

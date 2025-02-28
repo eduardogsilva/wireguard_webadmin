@@ -1,8 +1,9 @@
-from crispy_forms.templatetags.crispy_forms_field import css_class
 from django import forms
-from .models import InviteSettings
+from django.core.exceptions import ValidationError
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit, HTML
+from crispy_forms.templatetags.crispy_forms_field import css_class
+from .models import InviteSettings
 
 
 class InviteSettingsForm(forms.ModelForm):
@@ -148,7 +149,7 @@ class InviteSettingsForm(forms.ModelForm):
                     Row(
                         Column(
                             Submit('submit', 'Save', css_class='btn btn-success'),
-                            HTML(' <a class="btn btn-secondary" href="/configurations/list/">Back</a> '),
+                            HTML(' <a class="btn btn-secondary" href="/vpn_invite/">Back</a> '),
                             css_class='col-md-12'
                         ),
                         css_class='form-row'
@@ -156,7 +157,6 @@ class InviteSettingsForm(forms.ModelForm):
                     css_class='col-xl-6'),
                 Column(
                     HTML("<h3>Message templates</h3>"),
-                    Column( css_class='form-group col-md-12 mb-0'),
                     Row(
                         Column('download_instructions', css_class='form-group col-md-12 mb-0'),
                         css_class='form-row'
@@ -188,3 +188,68 @@ class InviteSettingsForm(forms.ModelForm):
                     css_class='col-xl-6'),
                 css_class='row'),
         )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Validate invite_url: it must start with 'https://' and end with '/invite/'
+        invite_url = cleaned_data.get('invite_url')
+        if invite_url:
+            if not invite_url.startswith("https://"):
+                self.add_error('invite_url', "Invite URL must start with 'https://'.")
+            if not invite_url.endswith("/invite/"):
+                self.add_error('invite_url', "Invite URL must end with '/invite/'.")
+
+        # Validate invite_expiration: must be between 1 and 1440 minutes
+        invite_expiration = cleaned_data.get('invite_expiration')
+        if invite_expiration is not None:
+            if invite_expiration < 1 or invite_expiration > 1440:
+                self.add_error('invite_expiration', "Expiration (minutes) must be between 1 and 1440.")
+
+        # Validate default_password based on enforce_random_password flag
+        default_password = cleaned_data.get('default_password', '')
+        enforce_random_password = cleaned_data.get('enforce_random_password')
+        random_password_length = cleaned_data.get('random_password_length')
+        if enforce_random_password is True:
+            if default_password:
+                self.add_error('default_password',
+                               "Default password must not be provided when random password is enabled.")
+            if random_password_length < 6:
+                self.add_error('random_password_length', "Random password length must be at least 6 characters.")
+        else:
+            # When random password is disabled, default password must be provided and have at least 6 characters.
+            if not default_password:
+                self.add_error('default_password',
+                               "Default password must be provided when random password is disabled.")
+            elif len(default_password) < 6:
+                self.add_error('default_password', "Default password must be at least 6 characters long.")
+
+        # Validate download buttons: if enabled, the respective text and url fields must not be blank.
+        for i in range(1, 6):
+            enabled = cleaned_data.get(f'download_{i}_enabled')
+            label = (cleaned_data.get(f'download_{i}_label') or '').strip()
+            url = (cleaned_data.get(f'download_{i}_url') or '').strip()
+            if enabled:
+                if not label:
+                    self.add_error(f'download_{i}_label',
+                                   "Text field must not be empty when download button is enabled.")
+                if not url:
+                    self.add_error(f'download_{i}_url', "URL field must not be empty when download button is enabled.")
+
+        # Validate that default_password is not contained in any message templates or the subject
+        message_fields = ['invite_text_body', 'invite_email_subject', 'invite_email_body', 'invite_whatsapp_body']
+        if default_password:
+            for field in message_fields:
+                content = cleaned_data.get(field, '')
+                if default_password in content:
+                    self.add_error('default_password',
+                                   f"Default password must not be contained in {field.replace('_', ' ')}.")
+
+        # Validate that all message templates include the placeholder '{invite_url}'
+        for field in message_fields:
+            if field != 'invite_email_subject':
+                content = cleaned_data.get(field, '')
+                if '{invite_url}' not in content:
+                    self.add_error(field, "The template must include the placeholder '{invite_url}'.")
+
+        return cleaned_data
