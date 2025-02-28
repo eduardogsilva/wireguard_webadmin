@@ -10,6 +10,7 @@ class EmailSettings(models.Model):
     smtp_port = models.IntegerField(default=587)
     smtp_encryption = models.CharField(default='tls', choices=(('ssl', 'SSL'), ('tls', 'TLS')), max_length=3)
     smtp_from_address = models.EmailField(blank=True, null=True)
+    enabled = models.BooleanField(default=True)
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created = models.DateTimeField(auto_now_add=True)

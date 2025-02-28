@@ -4,6 +4,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit, HTML
 from crispy_forms.templatetags.crispy_forms_field import css_class
 from .models import InviteSettings
+from wireguard_tools.models import EmailSettings
 
 
 class InviteSettingsForm(forms.ModelForm):
@@ -253,3 +254,81 @@ class InviteSettingsForm(forms.ModelForm):
                     self.add_error(field, "The template must include the placeholder '{invite_url}'.")
 
         return cleaned_data
+
+
+class EmailSettingsForm(forms.ModelForm):
+    class Meta:
+        model = EmailSettings
+        fields = [
+            'smtp_username',
+            'smtp_password',
+            'smtp_host',
+            'smtp_port',
+            'smtp_encryption',
+            'smtp_from_address',
+            'enabled',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(EmailSettingsForm, self).__init__(*args, **kwargs)
+
+        # Set custom labels for form fields
+        self.fields['smtp_username'].label = 'Username'
+        self.fields['smtp_password'].label = 'Password'
+        self.fields['smtp_host'].label = 'Host'
+        self.fields['smtp_port'].label = 'Port'
+        self.fields['smtp_encryption'].label = 'Encryption'
+        self.fields['smtp_from_address'].label = 'From Address'
+
+        self.fields['smtp_password'].required = True
+        self.fields['smtp_host'].required = True
+        self.fields['smtp_port'].required = True
+        self.fields['smtp_encryption'].required = True
+        self.fields['smtp_from_address'].required = True
+        self.fields['smtp_username'].required = True
+
+        # Use PasswordInput widget to hide the password
+        self.fields['smtp_password'].widget = forms.PasswordInput(render_value=False)
+
+        # Ensure that during edit the saved password is not displayed
+        if self.instance and self.instance.pk:
+            self.fields['smtp_password'].initial = ''
+
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.layout = Layout(
+            HTML("<h3>SMTP Settings</h3>"),
+            Row(
+                Column('smtp_username', css_class='form-group col-md-4 mb-0'),
+                Column('smtp_password', css_class='form-group col-md-4 mb-0'),
+                Column('smtp_from_address', css_class='form-group col-md-4 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('smtp_host', css_class='form-group col-md-4 mb-0'),
+                Column('smtp_port', css_class='form-group col-md-4 mb-0'),
+                Column('smtp_encryption', css_class='form-group col-md-4 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('enabled', css_class='form-group col-md-4 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column(
+                    Submit('submit', 'Save', css_class='btn btn-success'),
+                    HTML(' <a class="btn btn-secondary" href="/vpn_invite/">Back</a> '),
+                    css_class='col-md-12'
+                ),
+                css_class='form-row'
+            )
+        )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        smtp_port = cleaned_data.get('smtp_port')
+        if smtp_port is not None and smtp_port <= 0:
+            self.add_error('smtp_port', "SMTP port must be a positive integer.")
+
+        return cleaned_data
+

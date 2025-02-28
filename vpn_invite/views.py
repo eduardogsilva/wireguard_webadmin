@@ -4,8 +4,9 @@ from user_manager.models import UserAcl
 from .models import InviteSettings, PeerInvite
 from django.conf import settings
 from django.utils import timezone
-from .forms import InviteSettingsForm
+from .forms import InviteSettingsForm, EmailSettingsForm
 from django.contrib import messages
+from wireguard_tools.models import EmailSettings
 
 
 @login_required
@@ -52,6 +53,26 @@ def view_vpn_invite_settings(request):
     data = {
         'invite_settings': invite_settings,
         'page_title': 'VPN Invite Settings',
+        'form': form,
+        'form_size': 'col-lg-12'
+    }
+    return render(request, 'generic_form.html', context=data)
+
+
+@login_required
+def view_email_settings(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    email_settings, _ = EmailSettings.objects.get_or_create(name='email_settings')
+
+    form = EmailSettingsForm(request.POST or None, instance=email_settings)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Email Settings|Settings saved successfully.')
+        return redirect('/vpn_invite/')
+    data = {
+        'email_settings': email_settings,
+        'page_title': 'Email Settings',
         'form': form,
         'form_size': 'col-lg-12'
     }
