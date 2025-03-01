@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if authenticated %}VPN Invite{% else %}Authentication Required{% endif %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .error {
+            color: red;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+            text-align: center;
+        }
+        input[type="password"] {
+            width: 80%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .btn-primary {
+            background-color: #007BFF;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .instructions {
+            margin-top: 20px;
+            line-height: 1.6;
+            color: #333;
+            text-align: center;
+        }
+        {% if authenticated %}
+            .download-buttons, .button-group, .qr-code {
+                text-align: center;
+                margin-top: 20px;
+            }
+            .download-buttons a {
+                display: inline-block;
+                margin: 5px;
+                padding: 10px 15px;
+                text-decoration: none;
+                border-radius: 4px;
+                color: white;
+                background-color: #28a745;
+            }
+            .qr-code {
+                display: none;
+                margin-top: 20px;
+            }
+            .qr-code img {
+                max-width: 100%;
+                height: auto;
+            }
+        {% endif %}
+    </style>
+</head>
+<body>
+<div class="container">
+    {% if not authenticated %}
+        <h1>Authentication Required</h1>
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <label for="password">Enter Password:</label>
+            <input type="password" name="password" id="password" required>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    {% else %}
+        <h1>VPN Configuration</h1>
+        <div class="instructions">
+            {{ invite_settings.download_instructions|safe }}
+        </div>
+        <div class="download-buttons">
+            {% if invite_settings.download_1_enabled and invite_settings.download_1_url %}
+                <a href="{{ invite_settings.download_1_url }}" target="_blank">{{ invite_settings.download_1_label }}</a>
+            {% endif %}
+            {% if invite_settings.download_2_enabled and invite_settings.download_2_url %}
+                <a href="{{ invite_settings.download_2_url }}" target="_blank">{{ invite_settings.download_2_label }}</a>
+            {% endif %}
+            {% if invite_settings.download_3_enabled and invite_settings.download_3_url %}
+                <a href="{{ invite_settings.download_3_url }}" target="_blank">{{ invite_settings.download_3_label }}</a>
+            {% endif %}
+            {% if invite_settings.download_4_enabled and invite_settings.download_4_url %}
+                <a href="{{ invite_settings.download_4_url }}" target="_blank">{{ invite_settings.download_4_label }}</a>
+            {% endif %}
+            {% if invite_settings.download_5_enabled and invite_settings.download_5_url %}
+                <a href="{{ invite_settings.download_5_url }}" target="_blank">{{ invite_settings.download_5_label }}</a>
+            {% endif %}
+        </div>
+        <div class="button-group">
+            <a href="/invite/download_config/?token={{ peer_invite.uuid }}&amp;password={{ password }}" target="_blank" class="btn btn-primary">Download Config</a>
+            <a href="#" id="viewQrButton" class="btn btn-secondary">View QR Code</a>
+        </div>
+        <div class="qr-code" id="qrCodeContainer">
+            <!-- QR Code will be loaded here when the button is clicked -->
+        </div>
+    {% endif %}
+</div>
+{% if authenticated %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var viewQrButton = document.getElementById("viewQrButton");
+            var qrCodeContainer = document.getElementById("qrCodeContainer");
+            viewQrButton.addEventListener("click", function(event) {
+                event.preventDefault();
+                if (qrCodeContainer.style.display === "none" || qrCodeContainer.style.display === "") {
+                    if (qrCodeContainer.getElementsByTagName("img").length === 0) {
+                        var img = document.createElement("img");
+                        img.src = "/invite/download_config/?token={{ peer_invite.uuid }}&password={{ password }}&format=qrcode";
+                        img.alt = "QR Code";
+                        qrCodeContainer.appendChild(img);
+                    }
+                    qrCodeContainer.style.display = "block";
+                } else {
+                    qrCodeContainer.style.display = "none";
+                }
+            });
+        });
+    </script>
+
+{% endif %}
+</body>
+</html>

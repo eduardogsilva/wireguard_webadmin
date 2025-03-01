@@ -1,21 +1,23 @@
 import os
 import re
-import qrcode
 import subprocess
+from io import BytesIO
+
+import qrcode
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404, render, Http404
+from django.utils import timezone
 
 from dns.views import export_dns_configuration
+from firewall.models import RedirectRule
 from firewall.tools import generate_firewall_header, generate_firewall_footer, generate_port_forward_firewall, \
     export_user_firewall, generate_redirect_dns_rules
 from user_manager.models import UserAcl
-from wireguard.models import WireGuardInstance, Peer, PeerAllowedIP
-from firewall.models import RedirectRule
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from io import BytesIO
+from vpn_invite.models import PeerInvite
 from wgwadmlibrary.tools import user_has_access_to_peer
-
+from wireguard.models import WireGuardInstance, Peer, PeerAllowedIP
 
 
 def clean_command_field(command_field):
@@ -159,15 +161,27 @@ def export_wireguard_configs(request):
     return redirect('/status/')
 
 
-@login_required
 def download_config_or_qrcode(request):
-    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=20).exists():
-        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
-    peer = get_object_or_404(Peer, uuid=request.GET.get('uuid'))
-    user_acl = get_object_or_404(UserAcl, user=request.user)
-    
-    if not user_has_access_to_peer(user_acl, peer):
-        raise Http404
+    # This view is used for private and public use. If the user is not authenticated properly, it will return a 404 instead of 403 to avoid leaking any further information.
+    if request.GET.get('token') and request.GET.get('password'):
+        PeerInvite.objects.filter(invite_expiration__lt=timezone.now()).delete()
+        try:
+            peer_invite = get_object_or_404(PeerInvite, uuid=request.GET.get('token'), invite_password=request.GET.get('password'))
+            peer = peer_invite.peer
+        except:
+            raise Http404
+    else:
+        if not request.user.is_authenticated:
+            raise Http404
+
+        if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=20).exists():
+            return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+        peer = get_object_or_404(Peer, uuid=request.GET.get('uuid'))
+        user_acl = get_object_or_404(UserAcl, user=request.user)
+
+        if not user_has_access_to_peer(user_acl, peer):
+            raise Http404
+
     format_type = request.GET.get('format', 'conf')
 
     config_content = generate_peer_config(peer.uuid)

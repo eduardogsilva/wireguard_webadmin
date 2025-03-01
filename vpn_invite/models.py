@@ -1,7 +1,24 @@
-from django.db import models
-from wireguard.models import Peer
 import uuid
 
+from django.db import models
+
+from wireguard.models import Peer
+
+DEFAULT_INVITE_MESSAGE = '''
+Hello,
+
+You're invited to join our secure WireGuard VPN network. Please click the link below to access your personalized VPN configuration:
+
+{invite_url}
+
+Note: This invitation link will expire in {expire_minutes} minutes. If you need a new link after expiration, please request another invite.
+'''
+
+DEFAULT_HTML_MESSAGE = '''
+<h2>Welcome to Your VPN Setup</h2>
+<p>Begin by downloading the WireGuard app for your device using one of the links below.</p>
+<p>Once installed, you can either <strong>scan the QR code</strong> or <strong>download the configuration file</strong> to quickly import your settings and start using your secure VPN connection.</p>
+'''
 
 class InviteSettings(models.Model):
     name = models.CharField(max_length=16, default='default_settings', unique=True)
@@ -42,13 +59,13 @@ class InviteSettings(models.Model):
 
     invite_url = models.URLField(default='')
 
-    invite_text_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}\n\nThis link expires in {expire_minutes} minutes.')
+    invite_text_body = models.TextField(default=DEFAULT_INVITE_MESSAGE)
 
     invite_email_subject = models.CharField(max_length=64, default='WireGuard VPN Invite', blank=True, null=True)
-    invite_email_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}\n\nThis link expires in {expire_minutes} minutes.')
+    invite_email_body = models.TextField(default=DEFAULT_INVITE_MESSAGE)
     invite_email_enabled = models.BooleanField(default=True)
 
-    invite_whatsapp_body = models.TextField(default='Here is your WireGuard VPN invite link: {invite_url}\n\nThis link expires in {expire_minutes} minutes.')
+    invite_whatsapp_body = models.TextField(default=DEFAULT_INVITE_MESSAGE)
     invite_whatsapp_enabled = models.BooleanField(default=True)
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)

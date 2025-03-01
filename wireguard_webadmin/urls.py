@@ -17,17 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from wireguard.views import view_wireguard_status, view_wireguard_manage_instance, view_apply_db_patches
-from wireguard_peer.views import view_wireguard_peer_list, view_wireguard_peer_manage, view_manage_ip_address, view_wireguard_peer_sort
-from console.views import view_console
-from user_manager.views import view_user_list, view_manage_user, view_peer_group_list, view_peer_group_manage
 from accounts.views import view_create_first_user, view_login, view_logout
-from wireguard_tools.views import export_wireguard_configs, download_config_or_qrcode, restart_wireguard_interfaces
-from api.views import wireguard_status, cron_check_updates, cron_update_peer_latest_handshake, routerfleet_get_user_token, routerfleet_authenticate_session, peer_info, api_peer_invite
-from firewall.views import view_redirect_rule_list, manage_redirect_rule, view_firewall_rule_list, manage_firewall_rule, view_manage_firewall_settings, view_generate_iptables_script, view_reset_firewall, view_firewall_migration_required
+from api.views import wireguard_status, cron_check_updates, cron_update_peer_latest_handshake, \
+    routerfleet_get_user_token, routerfleet_authenticate_session, peer_info, api_peer_invite
+from console.views import view_console
 from dns.views import view_static_host_list, view_manage_static_host, view_manage_dns_settings, view_apply_dns_config
-from wgrrd.views import view_rrd_graph
+from firewall.views import view_redirect_rule_list, manage_redirect_rule, view_firewall_rule_list, manage_firewall_rule, \
+    view_manage_firewall_settings, view_generate_iptables_script, view_reset_firewall, view_firewall_migration_required
+from user_manager.views import view_user_list, view_manage_user, view_peer_group_list, view_peer_group_manage
 from vpn_invite.views import view_vpn_invite_list, view_vpn_invite_settings, view_email_settings
+from vpn_invite_public.views import view_public_vpn_invite
+from wgrrd.views import view_rrd_graph
+from wireguard.views import view_wireguard_status, view_wireguard_manage_instance, view_apply_db_patches
+from wireguard_peer.views import view_wireguard_peer_list, view_wireguard_peer_manage, view_manage_ip_address, \
+    view_wireguard_peer_sort
+from wireguard_tools.views import export_wireguard_configs, download_config_or_qrcode, restart_wireguard_interfaces
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -72,4 +76,6 @@ urlpatterns = [
     path('vpn_invite/', view_vpn_invite_list, name='vpn_invite_list'),
     path('vpn_invite/settings/', view_vpn_invite_settings, name='vpn_invite_settings'),
     path('vpn_invite/smtp_settings/', view_email_settings, name='email_settings'),
+    path('invite/', view_public_vpn_invite, name='public_vpn_invite'),
+    path('invite/download_config/', download_config_or_qrcode, name='download_config_or_qrcode'),
 ]
