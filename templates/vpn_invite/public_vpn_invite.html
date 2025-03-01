@@ -141,8 +141,8 @@
 
 <script>
     setTimeout(function() {
-        window.location.reload();
-    }, 10000);
+        window.location.href = "/invite/?token={{ peer_invite.uuid }}";
+    }, 300 * 1000);
 </script>
 
 {% if authenticated %}
