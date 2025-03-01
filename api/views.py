@@ -18,7 +18,8 @@ from django.views.decorators.http import require_http_methods
 
 from user_manager.models import UserAcl, AuthenticationToken
 from vpn_invite.models import InviteSettings, PeerInvite
-from wgwadmlibrary.tools import user_allowed_peers, user_has_access_to_peer, get_peer_invite_data, create_peer_invite
+from wgwadmlibrary.tools import user_allowed_peers, user_has_access_to_peer, get_peer_invite_data, create_peer_invite, \
+    send_email
 from wireguard.models import WebadminSettings, Peer, PeerStatus, WireGuardInstance
 
 
@@ -334,9 +335,11 @@ def api_peer_invite(request):
         data['invite_data'] = get_peer_invite_data(peer_invite, invite_settings)
 
         if request.GET.get('action') == 'email':
-            data['status'] = 'success'
-            data['message'] = 'Email sent'
-            return JsonResponse(data)
+            data['status'], data['message'] = send_email(request.GET.get('address'), data['invite_data']['email_subject'], data['invite_data']['email_body'])
+            if data['status'] == 'success':
+                return JsonResponse(data)
+            else:
+                return JsonResponse(data, status=400)
     else:
         if request.GET.get('action') == 'email':
             data['status'] = 'error'

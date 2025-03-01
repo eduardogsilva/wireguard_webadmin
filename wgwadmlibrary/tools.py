@@ -1,15 +1,20 @@
 import ipaddress
 import random
 import re
+import smtplib
 import subprocess
 from datetime import timedelta
+from email.mime.text import MIMEText
 
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.db.models import Max
 from django.utils import timezone
 
 from user_manager.models import UserAcl
 from vpn_invite.models import PeerInvite, InviteSettings
 from wireguard.models import Peer, WireGuardInstance
+from wireguard_tools.models import EmailSettings
 
 
 def user_has_access_to_instance(user_acl: UserAcl, instance: WireGuardInstance):
@@ -169,3 +174,42 @@ def create_peer_invite(peer: Peer, invite_settings: InviteSettings):
         peer=peer, invite_password=password[:32], invite_expiration=timezone.now() + timedelta(minutes=invite_settings.invite_expiration)
     )
     return peer_invite
+
+
+def send_email(destination, subject, body):
+    success = 'error'
+    message = ''
+    try:
+        validate_email(destination)
+    except ValidationError:
+        return 'error', 'Invalid email address.'
+
+    email_settings = EmailSettings.objects.filter(name='email_settings', enabled=True).first()
+    if not email_settings:
+        message = 'Email settings not configured.'
+        return success, message
+
+    try:
+        msg = MIMEText(body, 'plain')
+        msg['Subject'] = subject
+        msg['From'] = email_settings.smtp_from_address
+        msg['To'] = destination
+
+        if email_settings.smtp_encryption.lower() == 'ssl':
+            server = smtplib.SMTP_SSL(email_settings.smtp_host, email_settings.smtp_port)
+        else:
+            server = smtplib.SMTP(email_settings.smtp_host, email_settings.smtp_port)
+            server.starttls()
+
+        if email_settings.smtp_username and email_settings.smtp_password:
+            server.login(email_settings.smtp_username, email_settings.smtp_password)
+
+        server.sendmail(email_settings.smtp_from_address, destination, msg.as_string())
+        server.quit()
+        success = 'success'
+        message = 'Email sent successfully.'
+    except Exception as e:
+        success = 'error'
+        message = f'Error sending email: {str(e)}'
+
+    return success, message

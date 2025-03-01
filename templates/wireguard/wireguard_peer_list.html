@@ -653,11 +653,18 @@
                         $("#invitePassword").html("Access Password: <strong>" + inviteData.password + "</strong> (Share this password via a separate secure channel)");
                         $("#inviteExpiration").text(new Date(inviteData.expiration).toLocaleString());
                     } else {
-                        $("#inviteMessage").html("<div class='alert alert-danger'>" + response.message + "</div>");
+                        $("#inviteMessage").html("<div class='alert alert-danger'>" + (response.message || "Unknown error") + "</div>");
                     }
                 },
                 error: function(xhr, status, error) {
-                    $("#inviteMessage").html("<div class='alert alert-danger'>Error creating invite: " + error + "</div>");
+                    var message = "Error creating invite.";
+                    try {
+                        var resp = xhr.responseJSON;
+                        message = resp && resp.message ? resp.message : xhr.statusText;
+                    } catch(err) {
+                        message = xhr.statusText;
+                    }
+                    $("#inviteMessage").html("<div class='alert alert-danger'>" + message + "</div>");
                 }
             });
         });
@@ -718,7 +725,7 @@
         });
 
         // Handler for sending invite via Email
-        $("#sendInviteEmailButton").on("click", function(e) {
+        $("#sendInviteEmailButton").on("click", function(e, textStatus, xhr) {
             e.preventDefault();
             var contact = $("#inviteContactInput").val().trim();
             if(!isValidEmail(contact)) {
@@ -732,15 +739,30 @@
                     data: { invite: inviteData.uuid, action: 'email', address: contact },
                     type: 'GET',
                     dataType: 'json',
-                    success: function(response) {
+                    success: function(response, textStatus, xhr) {
+                        var message = response.message;
+                        if (!message) {
+                            message = xhr.statusText;
+                        }
                         if(response.status === "success") {
-                            $("#inviteMessage").html("<div class='alert alert-success'>Email sent successfully.</div>");
+                            $("#inviteMessage").html("<div class='alert alert-success'>" + message + "</div>");
                         } else {
-                            $("#inviteMessage").html("<div class='alert alert-danger'>" + response.message + "</div>");
+                            $("#inviteMessage").html("<div class='alert alert-danger'>" + message + "</div>");
                         }
                     },
                     error: function(xhr, status, error) {
-                        $("#inviteMessage").html("<div class='alert alert-danger'>Error sending email: " + error + "</div>");
+                        var message = "Error sending email.";
+                        try {
+                            var resp = xhr.responseJSON;
+                            if (resp && resp.message) {
+                                message = resp.message;
+                            } else {
+                                message = xhr.statusText;
+                            }
+                        } catch(err) {
+                            message = xhr.statusText;
+                        }
+                        $("#inviteMessage").html("<div class='alert alert-danger'>" + message + "</div>");
                     }
                 });
             } else {
@@ -764,13 +786,24 @@
                             $("#inviteText").text(inviteData.text_body);
                             $("#invitePassword").html("Access Password: <strong>" + inviteData.password + "</strong> (Share this password via a separate secure channel)");
                             $("#inviteExpiration").text(new Date(inviteData.expiration).toLocaleString());
-                            $("#inviteMessage").html("<div class='alert alert-success'>Invite refreshed successfully.</div>");
+                            $("#inviteMessage").html("<div class='alert alert-success'>" + (response.message || xhr.statusText) + "</div>");
                         } else {
-                            $("#inviteMessage").html("<div class='alert alert-danger'>" + response.message + "</div>");
+                            $("#inviteMessage").html("<div class='alert alert-danger'>" + (response.message || "Error refreshing invite.") + "</div>");
                         }
                     },
                     error: function(xhr, status, error) {
-                        $("#inviteMessage").html("<div class='alert alert-danger'>Error refreshing invite: " + error + "</div>");
+                        var message = "Error refreshing invite.";
+                        try {
+                            var resp = xhr.responseJSON;
+                            if (resp && resp.message) {
+                                message = resp.message;
+                            } else {
+                                message = xhr.statusText;
+                            }
+                        } catch(err) {
+                            message = xhr.statusText;
+                        }
+                        $("#inviteMessage").html("<div class='alert alert-danger'>" + message + "</div>");
                     }
                 });
             } else {
