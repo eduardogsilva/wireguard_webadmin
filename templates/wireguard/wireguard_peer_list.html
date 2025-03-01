@@ -118,7 +118,7 @@
                         <div class="info-content">
                             <p><b><i class="fas fa-arrows-alt-v nav-icon"></i> Throughput:</b> <span id="peerThroughput">--</span></p>
                             <p><b><i class="fas fa-dolly nav-icon"></i> Transfer:</b> <span id="peerTransfer">--</span></p>
-                            <p><b><i class="far fa-clock nav-icon"></i></i> Latest Handshake:</b> <span id="peerHandshake">--</span></p>
+                            <p><b><i class="far fa-clock nav-icon"></i> Latest Handshake:</b> <span id="peerHandshake">--</span></p>
                             <p><b><i class="far fa-address-card nav-icon"></i> Endpoints:</b> <span id="peerEndpoints">--</span></p>
                             <p><b><i class="fas fa-network-wired nav-icon"></i> Allowed IPs:</b> <span id="peerAllowedIPs">--</span></p>
 
@@ -165,7 +165,10 @@
                                     <p id="inviteText"></p>
                                 </div>
                                 <p id="invitePassword"></p>
-                                <p>Expires on: <span id="inviteExpiration"></span></p>
+                                <p>
+                                    Expires on: <span id="inviteExpiration"></span>
+                                    <i class="fas fa-sync-alt" id="refreshInviteButton" style="cursor: pointer;" title="Refresh Invite"></i>
+                                </p>
                                 <div class="form-group">
                                     <label for="inviteContactInput">Enter Email or WhatsApp Number:</label>
                                     <input type="text" class="form-control" id="inviteContactInput" placeholder="Email or phone number">
@@ -742,6 +745,36 @@
                 });
             } else {
                 $("#inviteMessage").html("<div class='alert alert-danger'>Invite data is not available.</div>");
+            }
+        });
+
+        // Handler for refreshing the invite (update expiration and content)
+        $("#refreshInviteButton").on("click", function(e) {
+            e.preventDefault();
+            if(inviteData && inviteData.uuid) {
+                $.ajax({
+                    url: '/api/peer_invite/',
+                    data: { invite: inviteData.uuid, action: 'refresh' },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if(response.status === "success") {
+                            // Update the invite details
+                            inviteData = response.invite_data;
+                            $("#inviteText").text(inviteData.text_body);
+                            $("#invitePassword").html("Access Password: <strong>" + inviteData.password + "</strong> (Share this password via a separate secure channel)");
+                            $("#inviteExpiration").text(new Date(inviteData.expiration).toLocaleString());
+                            $("#inviteMessage").html("<div class='alert alert-success'>Invite refreshed successfully.</div>");
+                        } else {
+                            $("#inviteMessage").html("<div class='alert alert-danger'>" + response.message + "</div>");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#inviteMessage").html("<div class='alert alert-danger'>Error refreshing invite: " + error + "</div>");
+                    }
+                });
+            } else {
+                $("#inviteMessage").html("<div class='alert alert-danger'>No invite data available to refresh.</div>");
             }
         });
 
