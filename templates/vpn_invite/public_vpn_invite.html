@@ -29,42 +29,39 @@
         }
         form {
             margin-top: 20px;
+            text-align: center;
+        }
+        form label,
+        form input[type="password"],
+        form button[type="submit"] {
+            display: block;
+            margin: 0 auto 15px auto; /* superior: 0, horizontal: auto, inferior: 15px */
         }
         label {
-            display: block;
-            margin-bottom: 8px;
             font-weight: bold;
             color: #555;
-            text-align: center;
         }
         input[type="password"] {
             width: 80%;
             padding: 8px;
-            margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 16px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
         }
         .btn {
-            display: inline-block;
             padding: 10px 20px;
-            margin: 5px 0;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             text-decoration: none;
             font-size: 14px;
+            color: #fff;
         }
         .btn-primary {
             background-color: #007BFF;
-            color: white;
         }
         .btn-secondary {
             background-color: #6c757d;
-            color: white;
         }
         .instructions {
             margin-top: 20px;
@@ -133,7 +130,7 @@
             {% endif %}
         </div>
         <div class="button-group">
-            <a href="/invite/download_config/?token={{ peer_invite.uuid }}&amp;password={{ password }}" target="_blank" class="btn btn-primary">Download Config</a>
+            <a href="/invite/download_config/?token={{ peer_invite.uuid }}&password={{ password }}" target="_blank" class="btn btn-primary">Download Config</a>
             <a href="#" id="viewQrButton" class="btn btn-secondary">View QR Code</a>
         </div>
         <div class="qr-code" id="qrCodeContainer">
@@ -141,6 +138,13 @@
         </div>
     {% endif %}
 </div>
+
+<script>
+    setTimeout(function() {
+        window.location.reload();
+    }, 10000);
+</script>
+
 {% if authenticated %}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -162,7 +166,6 @@
             });
         });
     </script>
-
 {% endif %}
 </body>
 </html>
