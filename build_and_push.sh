@@ -9,7 +9,8 @@ IMAGES=(
 )
 
 build_images() {
-  echo "Starting the build of the images..."
+  echo "=========================================================================================="
+  echo "========== Starting the build of the images..."
   docker compose -f docker-compose-build.yml build
   if [ $? -eq 0 ]; then
     echo "Build completed successfully."
@@ -20,8 +21,13 @@ build_images() {
 }
 
 push_images() {
+  echo "=========================================================================================="
+  echo "========== Pushing images"
   for IMAGE in "${IMAGES[@]}"; do
-    echo "Pushing image: $IMAGE..."
+    echo ""
+    echo ""
+    echo "=========================================================================================="
+    echo "========== Pushing image: $IMAGE..."
     docker push "$IMAGE"
     if [ $? -eq 0 ]; then
       echo "$IMAGE pushed successfully."
