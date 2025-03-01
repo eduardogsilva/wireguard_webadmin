@@ -26,6 +26,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Displays a comprehensive list of peers, including their status and other details, allowing for easy monitoring and management of WireGuard VPN connections.
 ![Wireguard Peer List](screenshots/peerlist.png)
 
+### VPN Invite
+Generates secure, time-sensitive VPN invites for easy configuration sharing via email or WhatsApp, complete with QR code and configuration file options.
+![VPN Invite](screenshots/vpninvite.png)
+
 ### Peer Details: 
 Displays key peer information, detailed metrics, and a complete traffic volume history. Also includes a QR code for easy configuration.
 ![WireGuard Peer Details](screenshots/peerinfo.png)
