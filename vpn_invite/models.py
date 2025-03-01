@@ -39,7 +39,7 @@ class InviteSettings(models.Model):
     download_2_label = models.CharField(max_length=32, default='Android', blank=True, null=True)
     download_3_label = models.CharField(max_length=32, default='Windows', blank=True, null=True)
     download_4_label = models.CharField(max_length=32, default='macOS', blank=True, null=True)
-    download_5_label = models.CharField(max_length=32, default='Desktop', blank=True, null=True)
+    download_5_label = models.CharField(max_length=32, default='Linux', blank=True, null=True)
     download_1_icon = models.CharField(max_length=32, default='fab fa-app-store-ios', blank=True, null=True)
     download_2_icon = models.CharField(max_length=32, default='fab fa-google-play', blank=True, null=True)
     download_3_icon = models.CharField(max_length=32, default='fab fa-windows', blank=True, null=True)

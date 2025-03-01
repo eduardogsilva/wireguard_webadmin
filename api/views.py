@@ -291,17 +291,17 @@ def api_peer_invite(request):
     PeerInvite.objects.filter(invite_expiration__lt=timezone.now()).delete()
     user_acl = get_object_or_404(UserAcl, user=request.user)
     invite_settings = InviteSettings.objects.filter(name='default_settings').first()
+    peer_invite = PeerInvite.objects.none()
+
+    if not invite_settings:
+        data = {'status': 'error', 'message': 'VPN Invite not configured'}
+        return JsonResponse(data, status=400)
+
     data = {
         'status': '', 'message': '', 'invite_data': {},
         'whatsapp_enabled': invite_settings.invite_whatsapp_enabled,
         'email_enabled': invite_settings.invite_email_enabled,
     }
-    peer_invite = PeerInvite.objects.none()
-
-    if not invite_settings:
-        data['status'] = 'error'
-        data['message'] = 'Default settings not found'
-        return JsonResponse(data, status=400)
 
     if user_acl.user_level < invite_settings.required_user_level:
         data['status'] = 'error'

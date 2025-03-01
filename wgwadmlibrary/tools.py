@@ -186,7 +186,7 @@ def send_email(destination, subject, body):
 
     email_settings = EmailSettings.objects.filter(name='email_settings', enabled=True).first()
     if not email_settings:
-        message = 'Email settings not configured.'
+        message = 'Email not configured.'
         return success, message
 
     try:

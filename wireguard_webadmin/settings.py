@@ -135,6 +135,6 @@ STATICFILES_DIRS = [
 DNS_CONFIG_FILE = '/etc/dnsmasq/wireguard_webadmin_dns.conf'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-WIREGUARD_WEBADMIN_VERSION = 9956
+WIREGUARD_WEBADMIN_VERSION = 9958
 
 from wireguard_webadmin.production_settings import *
