@@ -1,25 +1,25 @@
+import datetime
+import os
+import subprocess
+import uuid
+
+import pytz
+import requests
+from django.conf import settings
+from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib import auth
 from django.core.exceptions import PermissionDenied
-from django.http import JsonResponse, Http404
-from django.shortcuts import get_object_or_404, redirect
-from django.views.decorators.http import require_http_methods
 from django.http import HttpResponseForbidden
-
-from django.conf import settings
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
+from django.views.decorators.http import require_http_methods
 
 from user_manager.models import UserAcl, AuthenticationToken
 from vpn_invite.models import InviteSettings, PeerInvite
-from wireguard.models import WebadminSettings, Peer, PeerStatus, WireGuardInstance
 from wgwadmlibrary.tools import user_allowed_peers, user_has_access_to_peer, get_peer_invite_data, create_peer_invite
-import requests
-import subprocess
-import datetime
-import pytz
-import os
-import uuid
+from wireguard.models import WebadminSettings, Peer, PeerStatus, WireGuardInstance
 
 
 def get_api_key(api_name):
@@ -287,6 +287,7 @@ def cron_check_updates(request):
 
 @login_required
 def api_peer_invite(request):
+    PeerInvite.objects.filter(invite_expiration__lt=timezone.now()).delete()
     user_acl = get_object_or_404(UserAcl, user=request.user)
     invite_settings = InviteSettings.objects.filter(name='default_settings').first()
     data = {
