@@ -14,7 +14,6 @@
         .blinking-icon {
             animation: blink 1s step-start infinite;
         }
-        /* Estilo para diferenciar o texto de invite */
         #inviteTextContainer {
             border: 1px solid #ccc;
             padding: 10px;
@@ -165,8 +164,6 @@
                                 <div id="inviteTextContainer">
                                     <p id="inviteText"></p>
                                 </div>
-                                <!-- Botão para copiar o texto do invite -->
-                                <button class="btn btn-outline-secondary" id="copyInviteTextButton"><i class="fas fa-copy"></i> Copy Invite Text</button>
                                 <p id="invitePassword"></p>
                                 <p>Expires on: <span id="inviteExpiration"></span></p>
                                 <div class="form-group">
@@ -174,9 +171,10 @@
                                     <input type="text" class="form-control" id="inviteContactInput" placeholder="Email or phone number">
                                 </div>
                                 <div>
-                                    <button class="btn btn-success" id="sendInviteEmailButton"><i class="fas fa-envelope"></i> Send via Email</button>
-                                    <button class="btn btn-success" id="sendInviteWhatsappButton"><i class="fab fa-whatsapp"></i> Send via WhatsApp</button>
-                                    <button class="btn btn-secondary" id="closeInviteButton"><i class="fas fa-times"></i> Close Invite</button>
+                                    <button class="btn btn-outline-secondary" id="copyInviteTextButton"><i class="fas fa-copy"></i> Copy Text</button>
+                                    <button class="btn btn-success" id="sendInviteEmailButton"><i class="fas fa-envelope"></i> Email</button>
+                                    <button class="btn btn-success" id="sendInviteWhatsappButton"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                                    <button class="btn btn-secondary" id="closeInviteButton"><i class="far fa-trash-alt"></i> Delete</button>
                                 </div>
                                 <div id="inviteMessage" style="margin-top: 10px;"></div>
                             </div>
@@ -186,7 +184,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i>  Close</button>
                         <a href="#" class="btn btn-info" id="downloadConfigButton"><i class="fas fa-download"></i> Config</a>
                         <a href="#" class="btn btn-info" id="qrcodeButton"><i class="fas fa-qrcode"></i> QR Code</a>
-                        <a href="#" class="btn btn-outline-primary" id="inviteButton"><i class="fas fa-share"></i> VPN Invite</a>
+                        <a href="#" class="btn btn-info" id="inviteButton"><i class="fas fa-share"></i> VPN Invite</a>
                         <a href="#" class="btn btn-outline-primary" id="editPeerButton"><i class="far fa-edit"></i> Edit</a>
                     </div>
                 </div>
