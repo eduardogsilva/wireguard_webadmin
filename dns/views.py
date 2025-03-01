@@ -1,11 +1,14 @@
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
+
 from user_manager.models import UserAcl
-from .models import DNSSettings, StaticHost
+from .forms import DNSFilterListForm
 from .forms import StaticHostForm, DNSSettingsForm
 from .functions import generate_dnsmasq_config
-from django.conf import settings
+from .models import DNSSettings, DNSFilterList
+from .models import StaticHost
 
 
 def export_dns_configuration():
@@ -29,11 +32,21 @@ def view_apply_dns_config(request):
 def view_static_host_list(request):
     dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
     static_host_list = StaticHost.objects.all().order_by('hostname')
+    filter_lists = DNSFilterList.objects.all().order_by('name')
+    if not filter_lists:
+        DNSFilterList.objects.create(
+            name='stevenblack-hosts', list_url='https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts',
+            description='adware and malware domains', enabled=False
+        )
+        filter_lists = DNSFilterList.objects.all().order_by('name')
+        messages.success(request, 'Default DNS Filter List created successfully')
+
     if dns_settings.pending_changes:
         messages.warning(request, 'Pending Changes|There are pending DNS changes that have not been applied')
     context = {
         'dns_settings': dns_settings,
         'static_host_list': static_host_list,
+        'filter_lists': filter_lists
     }
     return render(request, 'dns/static_host_list.html', context=context)
 
@@ -99,5 +112,44 @@ def view_manage_static_host(request):
         'dns_settings': dns_settings,
         'form': form,
         'instance': static_dns,
+    }
+    return render(request, 'generic_form.html', context=context)
+
+
+@login_required
+def view_manage_filter_list(request):
+    if not UserAcl.objects.filter(user=request.user, user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+
+    dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
+
+    if request.GET.get('uuid'):
+        filter_list = get_object_or_404(DNSFilterList, uuid=request.GET.get('uuid'))
+        if request.GET.get('action') == 'delete':
+            if request.GET.get('confirmation') == 'delete':
+                if filter_list.enabled:
+                    messages.warning(request, 'DNS Filter List not deleted | Filter List is enabled')
+                    return redirect('/dns/')
+                filter_list.delete()
+                messages.success(request, 'DNS Filter List deleted successfully')
+                return redirect('/dns/')
+            else:
+                messages.warning(request, 'DNS Filter List not deleted | Invalid confirmation')
+                return redirect('/dns/')
+    else:
+        filter_list = None
+
+    form = DNSFilterListForm(request.POST or None, instance=filter_list)
+    if form.is_valid():
+        form.save()
+        dns_settings.pending_changes = True
+        dns_settings.save()
+        messages.success(request, 'DNS Filter List saved successfully')
+        return redirect('/dns/')
+
+    context = {
+        'dns_settings': dns_settings,
+        'form': form,
+        'instance': filter_list,
     }
     return render(request, 'generic_form.html', context=context)

@@ -1,14 +1,13 @@
-import requests
-from .models import DNSSettings, StaticHost
-
-from django import forms
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Div, Field, HTML
-from crispy_forms.bootstrap import FormActions, StrictButton
-from django.core.exceptions import ValidationError
-from datetime import datetime
-from django.core.exceptions import ValidationError
 import re
+
+from crispy_forms.bootstrap import FormActions
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset, Div, Field, Submit, HTML
+from django import forms
+from django.core.exceptions import ValidationError
+
+from .models import DNSFilterList
+from .models import DNSSettings, StaticHost
 
 
 class DNSSettingsForm(forms.ModelForm):
@@ -89,3 +88,39 @@ class StaticHostForm(forms.ModelForm):
             if not re.match(regex, hostname):
                 raise ValidationError('Invalid hostname')
         return
+
+
+class DNSFilterListForm(forms.ModelForm):
+    class Meta:
+        model = DNSFilterList
+        # Only allow editable fields
+        fields = ['name', 'description', 'list_url']
+
+    def __init__(self, *args, **kwargs):
+        super(DNSFilterListForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        # Add a delete button if editing an existing instance
+        if self.instance.pk:
+            delete_html = (
+                "<a href='javascript:void(0)' class='btn btn-outline-danger' "
+                "data-command='delete' onclick='openCommandDialog(this)'>Delete</a>"
+            )
+        else:
+            delete_html = ''
+        self.helper.layout = Layout(
+            Fieldset(
+                'DNS Filter List Details',
+                Div(
+                    Div(Field('name', css_class='form-control'), css_class='col-md-12'),
+                    Div(Field('description', css_class='form-control'), css_class='col-md-12'),
+                    Div(Field('list_url', css_class='form-control'), css_class='col-md-12'),
+                    css_class='row'
+                ),
+            ),
+            FormActions(
+                Submit('save', 'Save', css_class='btn btn-primary'),
+                HTML('<a class="btn btn-outline-primary" href="/dns/">Back</a>'),
+                HTML(delete_html),
+            )
+        )

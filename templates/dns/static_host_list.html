@@ -7,46 +7,105 @@
                 <div class="card-header">
                     <h3 class="card-title">Static Host List</h3>
                 </div>
-
                 <div class="card-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th>Hostname</th>
-                                <th>IP Address</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% if static_host_list %}
-                            {% for static_host in static_host_list %}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-hover">
+                                <thead>
                                 <tr>
-                                    <td>{{ static_host.hostname }}</td>
-                                    <td>{{ static_host.ip_address }}</td>
-                                    <td class="min-width">
-                                        <a href="/dns/manage_static_host/?uuid={{ static_host.uuid }}"><i class="fas fa-edit"></i></a>
-                                    </td>
+                                    <th>Hostname</th>
+                                    <th>IP Address</th>
+                                    <th></th>
                                 </tr>
-                            {% endfor %}
-                            {% else %}
-                                <tr>
-                                    <td colspan="3"></td>
-                                </tr>
-                            {% endif %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                {% if static_host_list %}
+                                    {% for static_host in static_host_list %}
+                                        <tr>
+                                            <td>{{ static_host.hostname }}</td>
+                                            <td>{{ static_host.ip_address }}</td>
+                                            <td class="min-width">
+                                                <a href="/dns/manage_static_host/?uuid={{ static_host.uuid }}"><i class="fas fa-edit"></i></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="3"></td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/dns/manage_static_host/" class="btn btn-primary">Add Static Host</a>
+                            <a href="/dns/manage_settings/" class="btn btn-primary">DNS Settings</a>
+                            <a href="/dns/apply_config/" class="btn btn-primary">Apply Config</a>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="row">
-                    <div class="col-lg-12">
-                        <a href="/dns/manage_static_host/" class="btn btn-primary">Add Static Host</a>
-                        <a href="/dns/manage_settings/" class="btn btn-primary">DNS Settings</a>
-                        <a href="/dns/apply_config/" class="btn btn-primary">Apply Config</a>
-                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class='col-lg-12'>
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">DNS Filter Lists</h3>
                 </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Hosts</th>
+                                    <th>Last Update</th>
+                                    <th class="min-width"></th>
+                                    <th class="min-width"></th>
+                                    <th class="min-width"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if filter_lists %}
+                                    {% for filter_list in filter_lists %}
+                                        <tr>
+                                            <td>{{ filter_list.name }}</td>
+                                            <td>{{ filter_list.description }}</td>
+                                            <td>{{ filter_list.host_count }}</td>
+                                            <td>{{ filter_list.last_updated|default_if_none:"" }}</td>
+                                            <td>
+                                                <!-- refresh -->
+                                            </td>
+                                            <td>
+                                                <!-- toggle enable/disable -->
+                                            </td>
+                                            <td class="min-width">
+                                                <a href="/dns/manage_filter_list/?uuid={{ filter_list.uuid }}"><i class="fas fa-edit"></i></a>
+                                                {% comment %}<a class="text-danger" href="/dns/manage_filter_list/?uuid={{ filter_list.uuid }}&action=delete" onclick="return confirm('Proceed removing the dns filter list: {{ filter_list.name }}?')"><i class="fas fa-trash-alt"></i></a>{% endcomment %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="7"></td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/dns/manage_filter_list/" class="btn btn-primary">Add Filter List</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

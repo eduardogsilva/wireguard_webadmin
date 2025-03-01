@@ -1,5 +1,6 @@
-from django.db import models
 import uuid
+
+from django.db import models
 
 
 class DNSSettings(models.Model):
@@ -23,3 +24,19 @@ class StaticHost(models.Model):
 
     def __str__(self):
         return self.hostname
+
+
+class DNSFilterList(models.Model):
+    name = models.SlugField(max_length=100, unique=True)
+    description = models.CharField(max_length=100)
+    enabled = models.BooleanField(default=False)
+    list_url = models.URLField()
+    last_updated = models.DateTimeField(blank=True, null=True)
+    host_count = models.IntegerField(default=0)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+
+    def __str__(self):
+        return self.name
