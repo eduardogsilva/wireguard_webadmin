@@ -1,12 +1,15 @@
-import ipaddress, re
+import ipaddress
+import random
+import re
 import subprocess
-from django.utils import timezone
 from datetime import timedelta
+
+from django.db.models import Max
+from django.utils import timezone
+
+from user_manager.models import UserAcl
 from vpn_invite.models import PeerInvite, InviteSettings
 from wireguard.models import Peer, WireGuardInstance
-from user_manager.models import UserAcl
-from django.db.models import Max
-import random
 
 
 def user_has_access_to_instance(user_acl: UserAcl, instance: WireGuardInstance):
@@ -136,7 +139,7 @@ def create_random_password(length, complexity):
 
 def replace_message_variables(message: str, peer_invite: PeerInvite, invite_settings: InviteSettings):
     # The & at the end is to prevent the token from being concatenated with any other template text.
-    message = message.replace('{invite_url}', f'{invite_settings.invite_url}?token{peer_invite.uuid}&')
+    message = message.replace('{invite_url}', f'{invite_settings.invite_url}?token={peer_invite.uuid}&')
     message = message.replace('{expire_minutes}', f'{invite_settings.invite_expiration}')
     return message
 
