@@ -63,7 +63,7 @@ def view_static_host_list(request):
             description='social', enabled=False
         )
 
-        filter_lists = DNSFilterList.objects.all().order_by('name')
+        filter_lists = DNSFilterList.objects.all().order_by('-recommended', 'name')
         messages.success(request, 'Default DNS Filter List created successfully')
 
     if dns_settings.pending_changes:
