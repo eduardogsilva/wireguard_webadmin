@@ -1,4 +1,6 @@
-from .models import DNSSettings, StaticHost
+import os
+
+from .models import DNSSettings, StaticHost, DNSFilterList
 
 
 def generate_unbound_config():
@@ -57,6 +59,7 @@ def generate_dnsdist_config():
 def generate_dnsmasq_config():
     dns_settings = DNSSettings.objects.get(name='dns_settings')
     static_hosts = StaticHost.objects.all()
+    dns_lists = DNSFilterList.objects.filter(enabled=True)
     dnsmasq_config = f'''
 no-dhcp-interface=
 listen-address=0.0.0.0
@@ -72,4 +75,10 @@ bind-interfaces
         dnsmasq_config += '\n'
         for static_host in static_hosts:
             dnsmasq_config += f'address=/{static_host.hostname}/{static_host.ip_address}\n'
+
+    if dns_lists:
+        dnsmasq_config += '\n'
+        for dns_list in dns_lists:
+            file_path = os.path.join("/etc/dnsmasq/", f"{dns_list.uuid}.conf")
+            dnsmasq_config += f'addn-hosts={file_path}\n'
     return dnsmasq_config

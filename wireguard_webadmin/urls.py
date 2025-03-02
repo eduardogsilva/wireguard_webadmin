@@ -22,7 +22,7 @@ from api.views import wireguard_status, cron_check_updates, cron_update_peer_lat
     routerfleet_get_user_token, routerfleet_authenticate_session, peer_info, api_peer_invite
 from console.views import view_console
 from dns.views import view_static_host_list, view_manage_static_host, view_manage_dns_settings, view_apply_dns_config, \
-    view_manage_filter_list
+    view_manage_filter_list, view_update_dns_list, view_toggle_dns_list
 from firewall.views import view_redirect_rule_list, manage_redirect_rule, view_firewall_rule_list, manage_firewall_rule, \
     view_manage_firewall_settings, view_generate_iptables_script, view_reset_firewall, view_firewall_migration_required
 from user_manager.views import view_user_list, view_manage_user, view_peer_group_list, view_peer_group_manage
@@ -43,6 +43,8 @@ urlpatterns = [
     path('dns/manage_static_host/', view_manage_static_host, name='manage_static_host'),
     path('dns/manage_settings/', view_manage_dns_settings, name='manage_dns_settings'),
     path('dns/manage_filter_list/', view_manage_filter_list, name='manage_filter_list'),
+    path('dns/update_dns_list/', view_update_dns_list, name='update_dns_list'),
+    path('dns/toggle_dns_list/', view_toggle_dns_list, name='toggle_dns_list'),
     path('peer/list/', view_wireguard_peer_list, name='wireguard_peer_list'),
     path('peer/sort/', view_wireguard_peer_sort, name='wireguard_peer_sort'),
     path('peer/manage/', view_wireguard_peer_manage, name='wireguard_peer_manage'),

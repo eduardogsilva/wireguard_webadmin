@@ -63,28 +63,36 @@
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
+                                    <th class="min-width"></th>
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>Hosts</th>
                                     <th>Last Update</th>
-                                    <th class="min-width"></th>
-                                    <th class="min-width"></th>
-                                    <th class="min-width"></th>
+                                    <th class="min-width">Status</th>
+                                    <th class="min-width">Update</th>
+                                    <th class="min-width">Edit</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% if filter_lists %}
                                     {% for filter_list in filter_lists %}
                                         <tr>
+                                            <td>{% if filter_list.recommended %}
+                                                <i class="far fa-star" title="This is a recommended filter list"></i>
+                                            {% endif %}</td>
                                             <td>{{ filter_list.name }}</td>
                                             <td>{{ filter_list.description }}</td>
                                             <td>{{ filter_list.host_count }}</td>
                                             <td>{{ filter_list.last_updated|default_if_none:"" }}</td>
                                             <td>
-                                                <!-- refresh -->
+                                                {% if filter_list.enabled %}
+                                                    <a class="text-green"  href="/dns/toggle_dns_list/?uuid={{ filter_list.uuid }}&action=disable"><i class="fas fa-toggle-on"></i></a>
+                                                {% else %}
+                                                    <a class="text-gray" href="/dns/toggle_dns_list/?uuid={{ filter_list.uuid }}&action=enable"><i class="fas fa-toggle-off"></i></a>
+                                                {% endif %}
                                             </td>
                                             <td>
-                                                <!-- toggle enable/disable -->
+                                                <a href="/dns/update_dns_list/?uuid={{ filter_list.uuid }}"><i class="fas fa-sync"></i></a>
                                             </td>
                                             <td class="min-width">
                                                 <a href="/dns/manage_filter_list/?uuid={{ filter_list.uuid }}"><i class="fas fa-edit"></i></a>
