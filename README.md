@@ -26,7 +26,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Displays a comprehensive list of peers, including their status and other details, allowing for easy monitoring and management of WireGuard VPN connections.
 ![Wireguard Peer List](screenshots/peerlist.png)
 
-### Peer Details: 
+### Peer Details
 Displays key peer information, detailed metrics, and a complete traffic volume history. Also includes a QR code for easy configuration.
 ![WireGuard Peer Details](screenshots/peerinfo.png)
 
@@ -34,8 +34,8 @@ Displays key peer information, detailed metrics, and a complete traffic volume h
 Generates secure, time-sensitive VPN invites for easy configuration sharing via email or WhatsApp, complete with QR code and configuration file options.
 ![VPN Invite](screenshots/vpninvite.png)
 
-### DNS Server
-Provides a user-friendly interface for managing custom hosts and DNS blacklist settings, enhancing security, privacy, and ad blocking capabilities within the WireGuard VPN environment.
+### Enhanced DNS Filtering
+Block unwanted content with built-in DNS filtering lists. Predefined categories such as porn, gambling, fakenews, adware, and malware are included, with the ability to add custom categories for a tailored security experience.
 ![DNS Server](screenshots/dns.png)
 
 
