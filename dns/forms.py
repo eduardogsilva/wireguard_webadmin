@@ -106,6 +106,7 @@ class DNSFilterListForm(forms.ModelForm):
                 "<a href='javascript:void(0)' class='btn btn-outline-danger' "
                 "data-command='delete' onclick='openCommandDialog(this)'>Delete</a>"
             )
+            self.fields['name'].widget.attrs['readonly'] = True
         else:
             delete_html = ''
         self.helper.layout = Layout(

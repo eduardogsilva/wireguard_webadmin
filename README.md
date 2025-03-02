@@ -7,7 +7,7 @@ wireguard_webadmin is a full-featured yet easy-to-configure web interface for ma
 - **Individual Peer Transfer History**: Track individual download and upload volumes for each peer.
 - **Advanced Firewall Management**: Experience effortless and comprehensive VPN firewall management, designed for simplicity and effectiveness.
 - **Port Forwarding**: Seamlessly redirect TCP or UDP ports to peers or networks located beyond those peers with ease!
-- **DNS Server**: DNS Service included for static DNS entries and improved privacy.
+- **DNS Server**: Custom hosts and DNS blacklist support for enhanced security, and improved privacy.
 - **Multi-User Support**: Manage access with different permission levels for each user.
 - **Multiple WireGuard Instances**: Enables separate management for peers across multiple instances.
 - **Crypto Key Routing**: Simplifies the configuration for site-to-site interconnections.
@@ -34,10 +34,16 @@ Displays key peer information, detailed metrics, and a complete traffic volume h
 Generates secure, time-sensitive VPN invites for easy configuration sharing via email or WhatsApp, complete with QR code and configuration file options.
 ![VPN Invite](screenshots/vpninvite.png)
 
+### DNS Server
+Provides a user-friendly interface for managing custom hosts and DNS blacklist settings, enhancing security, privacy, and ad blocking capabilities within the WireGuard VPN environment.
+![DNS Server](screenshots/dns.png)
+
+
 ### Firewall Management
 Offers a comprehensive interface for managing VPN firewall rules, enabling users to easily create, edit, and delete rules with iptables-style syntax. This feature ensures precise control over network traffic, enhancing security and connectivity for WireGuard VPN instances.
 ![Firewall Rule List](screenshots/firewall-rule-list.png)
 ![Firewall Rule Manager](screenshots/firewall-manage-rule.png)
+
 ### WireGuard Instance Settings
 A central hub for managing settings across one or multiple WireGuard instances, enabling straightforward configuration adjustments for VPN interfaces.
 ![Wireguard Server Configuration](screenshots/serverconfig.png) 

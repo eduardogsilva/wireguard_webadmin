@@ -33,6 +33,7 @@ class DNSFilterList(models.Model):
     list_url = models.URLField()
     last_updated = models.DateTimeField(blank=True, null=True)
     host_count = models.IntegerField(default=0)
+    recommended = models.BooleanField(default=False)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
