@@ -2,164 +2,151 @@
 
 {% block content %}
 
-<div class="container mt-3">
-    <div class="card card-primary card-outline">
-        <div class="card-header">
-            <h3 class="card-title">{{ form.instance.pk|yesno:"Edit User,Create New User" }}</h3>
+    <div class="container mt-3">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">{{ form.instance.pk|yesno:"Edit User,Create New User" }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="id_description">Description</label>
+                                <input type="text" class="form-control" id="id_description" name="description" placeholder="Description" value="{{ form.description.value|default_if_none:'' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="id_protocol">Protocol</label>
+                                <select class="form-control" id="id_protocol" name="protocol">
+                                    <option value="tcp" {% if form.protocol.value == "tcp" %}selected{% endif %}>TCP</option>
+                                    <option value="udp" {% if form.protocol.value == "udp" %}selected{% endif %}>UDP</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id_port">Port</label>
+                                <input type="number" class="form-control" id="id_port" name="port" value="{{ form.port.value|default_if_none:'' }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id_port_forward">Destination Port</label>
+                                <input type="number" class="form-control" id="id_port_forward" name="port_forward" value="{{ form.port_forward.value|default_if_none:'' }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="destinationType">Destination Type</label>
+                                <select class="form-control" name="destinationType" id="destinationType">
+                                    <option value="peer">Peer</option>
+                                    <option value="ipAddress" {% if instance.ip_address %}selected{% endif %}>IP Address</option>
+                                </select>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="id_peer">Peer</label>
+                                <select class="form-control" id="id_peer" name="peer">
+                                    <option value="">---------</option>
+                                    {% for peer in form.fields.peer.queryset %}
+                                        <option value="{{ peer.pk }}" {% if form.instance.peer_id == peer.pk %}selected{% endif %}>{{ peer }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_wireguard_instance">WireGuard Instance</label>
+                                <select class="form-control" id="id_wireguard_instance" name="wireguard_instance">
+                                    {% comment %}<option value="">---------</option>{% endcomment %}
+                                    {% for instance in form.fields.wireguard_instance.queryset %}
+                                        <option value="{{ instance.pk }}" {% if form.instance.wireguard_instance_id == instance.pk %}selected{% endif %}>{{ instance }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_ip_address">IP Address</label>
+                                <input type="text" class="form-control" id="id_ip_address" name="ip_address" placeholder="IP Address" value="{{ form.ip_address.value|default_if_none:'' }}">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="id_add_forward_rule" name="add_forward_rule" {% if form.add_forward_rule.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="id_add_forward_rule">Add Forward Rule (allow)</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="id_masquerade_source" name="masquerade_source" {% if form.masquerade_source.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="id_masquerade_source">Masquerade Source</label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a href="/firewall/port_forward/" class="btn btn-outline-secondary">Back</a>
+                            {% if instance %}<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete Rule</a>{% endif %}
+
+                        </form>
+                    </div>
+                    <div class="col-md-8">
+                        <h5>Default Ports</h5>
+                        <p>The default <code>docker-compose.yml</code> file specifies the <b>TCP</b> port range <b>8080-8089</b>. If you wish to change the port forwarding to a different range, you must manually edit the <code>docker-compose.yml</code> file and rerun the Docker Compose step outlined in the <a href="https://github.com/eduardogsilva/wireguard_webadmin?tab=readme-ov-file#deployment">deployment instructions</a>.</p>
+
+                        <h5>Destination Type: Peer</h5>
+                        <p>Port redirection will prioritize the first Peer IP address assigned a priority of Zero.</p>
+
+                        <h5>Destination Type: IP Address</h5>
+                        <p>Port forwarding rules will redirect to the specified IP address. Remember to allocate the IP address or network to a Peer.</p>
+
+                        <h5>Adding a Forward Rule</h5>
+                        <p>Automatically generates a forwarding rule to accommodate stricter firewall settings.</p>
+
+                        <h5>Masquerade Source</h5>
+                        <p>This serves as a temporary solution when a peer does not use the VPN as its default gateway. It's important to note that this configuration is not recommended, as it alters the source address of all connections to match the IP address of the WireGuard instance.</p>
+
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-<div class="row">
-    <div class="col-md-4">
-
-<form method="post">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="id_description">Description</label>
-        <input type="text" class="form-control" id="id_description" name="description" placeholder="Description" value="{{ form.description.value|default_if_none:'' }}">
     </div>
-        <div class="form-group">
-            <label for="id_protocol">Protocol</label>
-            <select class="form-control" id="id_protocol" name="protocol">
-                <option value="tcp" {% if form.protocol.value == "tcp" %}selected{% endif %}>TCP</option>
-                <option value="udp" {% if form.protocol.value == "udp" %}selected{% endif %}>UDP</option>
-            </select>
-        </div>
-
-    
-        <div class="form-group">
-            <label for="id_port">Port</label>
-            <input type="number" class="form-control" id="id_port" name="port" value="{{ form.port.value|default_if_none:'' }}">
-        </div>
-
-        <div class="form-group">
-            <label for="id_port_forward">Destination Port</label>
-            <input type="number" class="form-control" id="id_port_forward" name="port_forward" value="{{ form.port_forward.value|default_if_none:'' }}">
-        </div>
-
-    <div class="form-group">
-        <label for="destinationType">Destination Type</label>
-        <select class="form-control" name="destinationType" id="destinationType">
-            <option value="peer">Peer</option>
-            <option value="ipAddress" {% if instance.ip_address %}selected{% endif %}>IP Address</option>
-        </select>
-
-
-    </div>
-    <div class="form-group">
-        <label for="id_peer">Peer</label>
-        <select class="form-control" id="id_peer" name="peer">
-            <option value="">---------</option>
-            {% for peer in form.fields.peer.queryset %}
-            <option value="{{ peer.pk }}" {% if form.instance.peer_id == peer.pk %}selected{% endif %}>{{ peer }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="id_wireguard_instance">WireGuard Instance</label>
-        <select class="form-control" id="id_wireguard_instance" name="wireguard_instance">
-            {% comment %}<option value="">---------</option>{% endcomment %}
-            {% for instance in form.fields.wireguard_instance.queryset %}
-            <option value="{{ instance.pk }}" {% if form.instance.wireguard_instance_id == instance.pk %}selected{% endif %}>{{ instance }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="id_ip_address">IP Address</label>
-        <input type="text" class="form-control" id="id_ip_address" name="ip_address" placeholder="IP Address" value="{{ form.ip_address.value|default_if_none:'' }}">
-    </div>
-
-    <div class="form-group">
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="id_add_forward_rule" name="add_forward_rule" {% if form.add_forward_rule.value %}checked{% endif %}>
-            <label class="form-check-label" for="id_add_forward_rule">Add Forward Rule (allow)</label>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="id_masquerade_source" name="masquerade_source" {% if form.masquerade_source.value %}checked{% endif %}>
-            <label class="form-check-label" for="id_masquerade_source">Masquerade Source</label>
-        </div>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-    <a href="/firewall/port_forward/" class="btn btn-outline-secondary">Back</a>
-    {% if instance %}<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete Rule</a>{% endif %}
-    
-</form>
-
-        
-    </div>
-        
-    
-    <div class="col-md-8">
-        <h5>Default Ports</h5>
-        <p>The default <code>docker-compose.yml</code> file specifies the <b>TCP</b> port range <b>8080-8089</b>. If you wish to change the port forwarding to a different range, you must manually edit the <code>docker-compose.yml</code> file and rerun the Docker Compose step outlined in the <a href="https://github.com/eduardogsilva/wireguard_webadmin?tab=readme-ov-file#deployment">deployment instructions</a>.</p>
-
-        <h5>Destination Type: Peer</h5>
-        <p>Port redirection will prioritize the first Peer IP address assigned a priority of Zero.</p>
-
-        <h5>Destination Type: IP Address</h5>
-        <p>Port forwarding rules will redirect to the specified IP address. Remember to allocate the IP address or network to a Peer.</p>
-
-        <h5>Adding a Forward Rule</h5>
-        <p>Automatically generates a forwarding rule to accommodate stricter firewall settings.</p>
-
-        <h5>Masquerade Source</h5>
-        <p>This serves as a temporary solution when a peer does not use the VPN as its default gateway. It's important to note that this configuration is not recommended, as it alters the source address of all connections to match the IP address of the WireGuard instance.</p>        
-
-    </div>
-
-
-</div>
-        
-    </div>
-    </div>
-</div>
-
-
 
 {% endblock %}
 
 {% block custom_page_scripts %}
-<script>
-    function adjustVisibilityBasedOnDestinationType() {
-        var selectedType = document.getElementById("destinationType").value;
-        var peerField = document.getElementById("id_peer").closest(".form-group");
-        var wireguardInstanceField = document.getElementById("id_wireguard_instance").closest(".form-group");
-        var ipAddressField = document.getElementById("id_ip_address").closest(".form-group");
+    <script>
+        function adjustVisibilityBasedOnDestinationType() {
+            var selectedType = document.getElementById("destinationType").value;
+            var peerField = document.getElementById("id_peer").closest(".form-group");
+            var wireguardInstanceField = document.getElementById("id_wireguard_instance").closest(".form-group");
+            var ipAddressField = document.getElementById("id_ip_address").closest(".form-group");
 
-        if (selectedType === "peer") {
-            peerField.style.display = "";
-            wireguardInstanceField.style.display = "none";
-            ipAddressField.style.display = "none";
-            //document.getElementById("id_wireguard_instance").value = "";
-            document.getElementById("id_ip_address").value = "";
-        } else if (selectedType === "ipAddress") {
-            peerField.style.display = "none";
-            wireguardInstanceField.style.display = "";
-            ipAddressField.style.display = "";
-            document.getElementById("id_peer").value = "";
+            if (selectedType === "peer") {
+                peerField.style.display = "";
+                wireguardInstanceField.style.display = "none";
+                ipAddressField.style.display = "none";
+                //document.getElementById("id_wireguard_instance").value = "";
+                document.getElementById("id_ip_address").value = "";
+            } else if (selectedType === "ipAddress") {
+                peerField.style.display = "none";
+                wireguardInstanceField.style.display = "";
+                ipAddressField.style.display = "";
+                document.getElementById("id_peer").value = "";
+            }
         }
-    }
 
-    // Chama a função no carregamento da página
-    document.addEventListener("DOMContentLoaded", adjustVisibilityBasedOnDestinationType);
+        // Chama a função no carregamento da página
+        document.addEventListener("DOMContentLoaded", adjustVisibilityBasedOnDestinationType);
 
-    // E também na mudança do campo
-    document.getElementById("destinationType").addEventListener("change", adjustVisibilityBasedOnDestinationType);
-</script>
+        // E também na mudança do campo
+        document.getElementById("destinationType").addEventListener("change", adjustVisibilityBasedOnDestinationType);
+    </script>
 
-
-
-<script>
-    function openCommandDialog(element) {
-        var command = element.getAttribute('data-command');
-        var confirmation = prompt("Please type '{{ instance.protocol }}{{ instance.port }}' to remove this rule.");
-        if (confirmation) {
-            var url = "?uuid={{ instance.uuid }}&action=delete&confirmation=" + encodeURIComponent(confirmation);
-            window.location.href = url;
+    <script>
+        function openCommandDialog(element) {
+            var command = element.getAttribute('data-command');
+            var confirmation = prompt("Please type '{{ instance.protocol }}{{ instance.port }}' to remove this rule.");
+            if (confirmation) {
+                var url = "?uuid={{ instance.uuid }}&action=delete&confirmation=" + encodeURIComponent(confirmation);
+                window.location.href = url;
+            }
         }
-    }
-</script>
+    </script>
 
 {% endblock %}
