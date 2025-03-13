@@ -30,9 +30,13 @@ push_images() {
     echo "========== Pushing image: $IMAGE..."
     docker push "$IMAGE"
     if [ $? -eq 0 ]; then
-      echo "$IMAGE pushed successfully."
+      echo ""
+      echo "=== $IMAGE pushed successfully."
+      echo ""
     else
-      echo "Error pushing the image: $IMAGE"
+      echo ""
+      echo "=== ERROR PUSHING THE IMAGE: $IMAGE"
+      echo ""
       exit 1
     fi
   done
@@ -42,4 +46,5 @@ docker system prune -a
 build_images
 push_images
 
-echo "Build and push operations completed successfully."
+echo "=========================================================================================="
+echo "========== Build and push operations completed successfully."
