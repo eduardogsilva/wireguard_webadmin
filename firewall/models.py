@@ -1,13 +1,17 @@
-from django.db import models
-from wireguard.models import Peer, WireGuardInstance
-from wireguard.models import NETMASK_CHOICES
 import uuid
+
+from django.db import models
+
+from wireguard.models import NETMASK_CHOICES
+from wireguard.models import Peer, WireGuardInstance
 
 
 class RedirectRule(models.Model):
     description = models.CharField(max_length=100, blank=True, null=True)
     protocol = models.CharField(max_length=3, default='tcp', choices=[('tcp', 'TCP'), ('udp', 'UDP')])
     port = models.PositiveIntegerField(default=8080)
+    port_forward = models.CharField(max_length=5, blank=True, null=True)
+
     add_forward_rule = models.BooleanField(default=True)
     masquerade_source = models.BooleanField(default=False)
     peer = models.ForeignKey(Peer, on_delete=models.CASCADE, blank=True, null=True)

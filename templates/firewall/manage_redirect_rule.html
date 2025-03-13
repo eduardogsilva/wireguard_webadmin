@@ -31,11 +31,13 @@
             <input type="number" class="form-control" id="id_port" name="port" value="{{ form.port.value|default_if_none:'' }}">
         </div>
 
-    
-    
-    
+        <div class="form-group">
+            <label for="id_port_forward">Destination Port</label>
+            <input type="number" class="form-control" id="id_port_forward" name="port_forward" value="{{ form.port_forward.value|default_if_none:'' }}">
+        </div>
+
     <div class="form-group">
-        <label for="destinationType">Destination Type:</label>
+        <label for="destinationType">Destination Type</label>
         <select class="form-control" name="destinationType" id="destinationType">
             <option value="peer">Peer</option>
             <option value="ipAddress" {% if instance.ip_address %}selected{% endif %}>IP Address</option>

@@ -1,14 +1,17 @@
-from firewall.models import RedirectRule, FirewallRule, FirewallSettings
-from wireguard.models import Peer, WireGuardInstance, NETMASK_CHOICES
-from wgwadmlibrary.tools import list_network_interfaces
-from django import forms
 import re
+
+from django import forms
+
+from firewall.models import FirewallRule, FirewallSettings, RedirectRule
+from wgwadmlibrary.tools import list_network_interfaces
+from wireguard.models import Peer, WireGuardInstance
 
 
 class RedirectRuleForm(forms.ModelForm):
     description = forms.CharField(label='Description', required=False)
     protocol = forms.ChoiceField(label='Protocol', choices=[('tcp', 'TCP'), ('udp', 'UDP')], initial='tcp')
     port = forms.IntegerField(label='Port', initial=8080, min_value=1, max_value=65535)
+    port_forward = forms.IntegerField(label='Port Forward', required=False, min_value=1, max_value=65535)
     add_forward_rule = forms.BooleanField(label='Add Forward Rule', required=False, initial=True)
     masquerade_source = forms.BooleanField(label='Masquerade Source (not recommended)', required=False)
     peer = forms.ModelChoiceField(label='Peer', queryset=Peer.objects.all(), required=False)
@@ -17,7 +20,7 @@ class RedirectRuleForm(forms.ModelForm):
 
     class Meta:
         model = RedirectRule
-        fields = ['description', 'protocol', 'port', 'add_forward_rule', 'masquerade_source', 'peer', 'wireguard_instance', 'ip_address']
+        fields = ['description', 'protocol', 'port', 'add_forward_rule', 'masquerade_source', 'peer', 'wireguard_instance', 'ip_address', 'port_forward']
     
     def __init__(self, *args, **kwargs):
         super(RedirectRuleForm, self).__init__(*args, **kwargs)
@@ -31,6 +34,7 @@ class RedirectRuleForm(forms.ModelForm):
         peer = cleaned_data.get('peer')
         ip_address = cleaned_data.get('ip_address')
         wireguard_instance = cleaned_data.get('wireguard_instance')
+        port_forward = cleaned_data.get('port_forward')
 
         if port == 8000 and protocol == 'tcp':
             raise forms.ValidationError("Port 8000 (tcp) is reserved for wireguard-webadmin.")
