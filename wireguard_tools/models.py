@@ -1,5 +1,6 @@
-from django.db import models
 import uuid
+
+from django.db import models
 
 
 class EmailSettings(models.Model):
@@ -8,7 +9,7 @@ class EmailSettings(models.Model):
     smtp_password = models.CharField(max_length=100, blank=True, null=True)
     smtp_host = models.CharField(max_length=100, blank=True, null=True)
     smtp_port = models.IntegerField(default=587)
-    smtp_encryption = models.CharField(default='tls', choices=(('ssl', 'SSL'), ('tls', 'TLS')), max_length=3)
+    smtp_encryption = models.CharField(default='tls', choices=(('ssl', 'SSL'), ('tls', 'TLS'), ('none', 'None (Insecure)'), ('noauth', 'No authentication (Insecure)')), max_length=6)
     smtp_from_address = models.EmailField(blank=True, null=True)
     enabled = models.BooleanField(default=True)
 

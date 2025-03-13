@@ -12,7 +12,7 @@ from django.db.models import Max
 from django.utils import timezone
 
 from user_manager.models import UserAcl
-from vpn_invite.models import PeerInvite, InviteSettings
+from vpn_invite.models import InviteSettings, PeerInvite
 from wireguard.models import Peer, WireGuardInstance
 from wireguard_tools.models import EmailSettings
 
@@ -197,11 +197,13 @@ def send_email(destination, subject, body):
 
         if email_settings.smtp_encryption.lower() == 'ssl':
             server = smtplib.SMTP_SSL(email_settings.smtp_host, email_settings.smtp_port)
+        elif email_settings.smtp_encryption.lower() in ['none', 'noauth']:
+            server = smtplib.SMTP(email_settings.smtp_host, email_settings.smtp_port)
         else:
             server = smtplib.SMTP(email_settings.smtp_host, email_settings.smtp_port)
             server.starttls()
 
-        if email_settings.smtp_username and email_settings.smtp_password:
+        if email_settings.smtp_username and email_settings.smtp_password and email_settings.smtp_encryption.lower() != 'noauth':
             server.login(email_settings.smtp_username, email_settings.smtp_password)
 
         server.sendmail(email_settings.smtp_from_address, destination, msg.as_string())
