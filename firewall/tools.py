@@ -1,6 +1,7 @@
-from firewall.models import FirewallRule, FirewallSettings, RedirectRule
-from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from django.utils import timezone
+
+from firewall.models import FirewallRule, FirewallSettings, RedirectRule
+from wireguard.models import PeerAllowedIP, WireGuardInstance
 
 
 def get_peer_addresses(peers, include_networks):
@@ -218,19 +219,27 @@ def generate_port_forward_firewall():
     for redirect_rule in RedirectRule.objects.all().order_by('port'):
         description = f" - {redirect_rule.description} " if redirect_rule.description else ""
         rule_destination = redirect_rule.ip_address
+        try:
+            if redirect_rule.port_forward:
+                destination_port = int(redirect_rule.port_forward)
+            else:
+                destination_port = redirect_rule.port
+        except:
+            destination_port = redirect_rule.port
+
         if redirect_rule.peer:
             peer_allowed_ip_address = PeerAllowedIP.objects.filter(peer=redirect_rule.peer, config_file='server', netmask=32, priority=0).first()
             if peer_allowed_ip_address:
                 rule_destination = peer_allowed_ip_address.allowed_ip
         if rule_destination:
             rule_text =  f"# {redirect_rule.port}/{redirect_rule.protocol} - {redirect_rule.uuid} - Port Forward Rule set{description}\n"
-            rule_text += f"iptables -t nat    -A WGWADM_PREROUTING  -p {redirect_rule.protocol} -d wireguard-webadmin -i {wan_interface} --dport {redirect_rule.port} -j DNAT --to-dest {rule_destination}:{redirect_rule.port}\n"
+            rule_text += f"iptables -t nat    -A WGWADM_PREROUTING  -p {redirect_rule.protocol} -d wireguard-webadmin -i {wan_interface} --dport {redirect_rule.port} -j DNAT --to-dest {rule_destination}:{destination_port}\n"
             
             if redirect_rule.masquerade_source:
-                rule_text   += f"iptables -t nat    -A WGWADM_POSTROUTING -p {redirect_rule.protocol} -d {rule_destination} -o wg+ --dport {redirect_rule.port} -j MASQUERADE\n"
+                rule_text   += f"iptables -t nat    -A WGWADM_POSTROUTING -p {redirect_rule.protocol} -d {rule_destination} -o wg+ --dport {destination_port} -j MASQUERADE\n"
             
             if redirect_rule.add_forward_rule:
-                rule_text   += f"iptables -t filter -A WGWADM_FORWARD     -p {redirect_rule.protocol} -d {rule_destination} -i {wan_interface} -o wg+  --dport {redirect_rule.port} -j ACCEPT\n"
+                rule_text   += f"iptables -t filter -A WGWADM_FORWARD     -p {redirect_rule.protocol} -d {rule_destination} -i {wan_interface} -o wg+  --dport {destination_port} -j ACCEPT\n"
             
             redirect_firewall += rule_text
 
