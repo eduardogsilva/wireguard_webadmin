@@ -1,3 +1,4 @@
+import base64
 import datetime
 import os
 import subprocess
@@ -16,11 +17,11 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 
-from user_manager.models import UserAcl, AuthenticationToken
+from user_manager.models import AuthenticationToken, UserAcl
 from vpn_invite.models import InviteSettings, PeerInvite
-from wgwadmlibrary.tools import user_allowed_peers, user_has_access_to_peer, get_peer_invite_data, create_peer_invite, \
-    send_email
-from wireguard.models import WebadminSettings, Peer, PeerStatus, WireGuardInstance
+from wgwadmlibrary.tools import create_peer_invite, get_peer_invite_data, send_email, user_allowed_peers, \
+    user_has_access_to_peer
+from wireguard.models import Peer, PeerStatus, WebadminSettings, WireGuardInstance
 
 
 def get_api_key(api_name):
@@ -129,6 +130,40 @@ def peer_info(request):
         'public_key': str(peer.public_key),
         'uuid': str(peer.uuid),
     }
+    return JsonResponse(data)
+
+
+@require_http_methods(["GET"])
+def api_peer_list(request):
+    if request.GET.get('key'):
+        api_key = get_api_key('api')
+        if api_key and api_key == request.GET.get('key'):
+            pass
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponseForbidden()
+    data = {
+        'peers': []
+    }
+    for peer in Peer.objects.all():
+        peer_allowed_ips = []
+        for allowed_ip in peer.peerallowedip_set.all().filter(config_file='server'):
+            peer_allowed_ips.append(
+                {
+                    'ip_address': allowed_ip.allowed_ip,
+                    'priority': allowed_ip.priority,
+                    'netmask': allowed_ip.netmask
+                }
+            )
+        data['peers'].append({
+            'name': str(peer),
+            'public_key': str(peer.public_key),
+            'uuid': str(peer.uuid),
+            'rrd_filename' : base64.urlsafe_b64encode(peer.public_key.encode()).decode().replace('=', '') + '.rrd',
+            'last_handshake': peer.peerstatus.last_handshake.isoformat() if hasattr(peer, 'peerstatus') and peer.peerstatus.last_handshake else '',
+            'allowed_ips': peer_allowed_ips,
+        })
     return JsonResponse(data)
 
 
