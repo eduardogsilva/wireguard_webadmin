@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     nano \
     vim-nox \
     rrdtool \
+    librrd-dev \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .

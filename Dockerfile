@@ -11,9 +11,11 @@ RUN apt-get update && apt-get install -y \
     inetutils-ping \
     inetutils-traceroute \
     nano \
+    vim-nox \
     openssl \
     dnsutils \
     rrdtool \
+    librrd-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # those are the really necessary packages
