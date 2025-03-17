@@ -143,10 +143,15 @@ def api_peer_list(request):
             return HttpResponseForbidden()
     else:
         return HttpResponseForbidden()
-    data = {
-        'peers': []
-    }
-    for peer in Peer.objects.all():
+    data = {}
+
+    requested_instance = request.GET.get('instance', 'all')
+    if requested_instance == 'all':
+        peer_list = Peer.objects.all()
+    else:
+        peer_list = Peer.objects.filter(wireguard_instance__instance_id=requested_instance.replace('wg', ''))
+
+    for peer in peer_list:
         peer_allowed_ips = []
         for allowed_ip in peer.peerallowedip_set.all().filter(config_file='server'):
             peer_allowed_ips.append(
@@ -156,7 +161,9 @@ def api_peer_list(request):
                     'netmask': allowed_ip.netmask
                 }
             )
-        data['peers'].append({
+        if f'wg{peer.wireguard_instance.instance_id}' not in data:
+            data[f'wg{peer.wireguard_instance.instance_id}'] = {'peers': []}
+        data[f'wg{peer.wireguard_instance.instance_id}']['peers'].append({
             'name': str(peer),
             'public_key': str(peer.public_key),
             'uuid': str(peer.uuid),
@@ -166,6 +173,39 @@ def api_peer_list(request):
         })
     return JsonResponse(data)
 
+
+@require_http_methods(["GET"])
+def api_instance_info(request):
+    if request.GET.get('key'):
+        api_key = get_api_key('api')
+        if api_key and api_key == request.GET.get('key'):
+            pass
+        else:
+            return HttpResponseForbidden()
+    else:
+        return HttpResponseForbidden()
+    data = {}
+    requested_instance = request.GET.get('instance', 'all')
+    if requested_instance == 'all':
+        instances = WireGuardInstance.objects.all()
+    else:
+        instances = WireGuardInstance.objects.filter(instance_id=requested_instance.replace('wg', ''))
+
+    for instance in instances:
+        data[f'wg{instance.instance_id}'] = {
+            'name': instance.name,
+            'instance_id': f'wg{instance.instance_id}',
+            'public_key': instance.public_key,
+            'listen_port': instance.listen_port,
+            'hostname': instance.hostname,
+            'address': instance.address,
+            'netmask': instance.netmask,
+            'peer_list_refresh_interval': instance.peer_list_refresh_interval,
+            'dns_primary': instance.dns_primary if instance.dns_primary else '',
+            'dns_secondary': instance.dns_secondary if instance.dns_secondary else '',
+            'uuid': str(instance.uuid),
+        }
+    return JsonResponse(data)
 
 @require_http_methods(["GET"])
 def wireguard_status(request):

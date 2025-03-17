@@ -14,12 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path
 
 from accounts.views import view_create_first_user, view_login, view_logout
-from api.views import api_peer_invite, api_peer_list, cron_check_updates, cron_update_peer_latest_handshake, peer_info, \
-    routerfleet_authenticate_session, routerfleet_get_user_token, wireguard_status
+from api.views import api_instance_info, api_peer_invite, api_peer_list, cron_check_updates, \
+    cron_update_peer_latest_handshake, peer_info, routerfleet_authenticate_session, routerfleet_get_user_token, \
+    wireguard_status
 from console.views import view_console
 from dns.views import view_apply_dns_config, view_manage_dns_settings, view_manage_filter_list, view_manage_static_host, \
     view_static_host_list, view_toggle_dns_list, view_update_dns_list
@@ -36,7 +36,7 @@ from wireguard_peer.views import view_manage_ip_address, view_wireguard_peer_lis
 from wireguard_tools.views import download_config_or_qrcode, export_wireguard_configs, restart_wireguard_interfaces
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
     path('', view_apply_db_patches, name='apply_db_patches'),
     path('status/', view_wireguard_status, name='wireguard_status'),
     path('dns/', view_static_host_list, name='static_host_list'),
@@ -67,6 +67,7 @@ urlpatterns = [
     path('api/routerfleet_get_user_token/', routerfleet_get_user_token, name='routerfleet_get_user_token'),
     path('api/wireguard_status/', wireguard_status, name='api_wireguard_status'),
     path('api/peer_list/', api_peer_list, name='api_peer_list'),
+    path('api/instance_info/', api_instance_info, name='api_instance_info'),
     path('api/peer_info/', peer_info, name='api_peer_info'),
     path('api/peer_invite/', api_peer_invite, name='api_peer_invite'),
     path('api/cron_check_updates/', cron_check_updates, name='cron_check_updates'),
