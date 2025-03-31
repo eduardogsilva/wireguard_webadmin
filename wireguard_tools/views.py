@@ -234,8 +234,7 @@ def restart_wireguard_interfaces(request):
                 filtered_lines = []
                 for line in lines:
                     stripped_line = line.strip()
-                    if stripped_line.startswith("Address") or stripped_line.startswith("ListenPort") \
-                            or stripped_line.startswith("PostUp") or stripped_line.startswith("PostDown"):
+                    if stripped_line.startswith("Address") or stripped_line.startswith("PostUp") or stripped_line.startswith("PostDown"):
                         continue
                     filtered_lines.append(line)
 
@@ -269,6 +268,7 @@ def restart_wireguard_interfaces(request):
 
     if interface_count > 0 and error_count == 0:
         if mode == 'reload':
+            messages.warning(request, "WARNING|Please note that the interface was reloaded, not restarted. Double-check if the the peers are working as expected. If you find any issues, please report them.")
             verbose_mode = 'reloaded'
         else:
             verbose_mode = 'restarted'
