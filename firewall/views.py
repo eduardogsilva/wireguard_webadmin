@@ -1,14 +1,14 @@
-from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Max
-from firewall.models import RedirectRule, FirewallRule, FirewallSettings
-from firewall.forms import RedirectRuleForm, FirewallRuleForm, FirewallSettingsForm
 from django.contrib import messages
-from wireguard.models import WireGuardInstance
-from user_manager.models import UserAcl
-from firewall.tools import export_user_firewall, generate_firewall_header, generate_firewall_footer, generate_port_forward_firewall, reset_firewall_to_default
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
+from django.db.models import Max
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+
+from firewall.forms import FirewallRuleForm, FirewallSettingsForm, RedirectRuleForm
+from firewall.models import FirewallRule, FirewallSettings, RedirectRule
+from firewall.tools import reset_firewall_to_default
+from user_manager.models import UserAcl
+from wireguard.models import WireGuardInstance
 
 
 @login_required
@@ -16,13 +16,8 @@ def view_redirect_rule_list(request):
     wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
     if wireguard_instances.filter(legacy_firewall=True).exists():
         return redirect('/firewall/migration_required/')
-    if wireguard_instances.filter(pending_changes=True).exists():
-        pending_changes_warning = True
-    else:
-        pending_changes_warning = False
     context = {
         'page_title': 'Port Forward List',
-        'pending_changes_warning': pending_changes_warning,
         'redirect_rule_list': RedirectRule.objects.all().order_by('port'),
         'current_chain': 'portforward',
         }
@@ -79,13 +74,8 @@ def view_firewall_rule_list(request):
     current_chain = request.GET.get('chain', 'forward')
     if current_chain not in ['forward', 'portforward', 'postrouting']:
         current_chain = 'forward'
-    if wireguard_instances.filter(pending_changes=True).exists():
-        pending_changes_warning = True
-    else:
-        pending_changes_warning = False
     context = {
         'page_title': 'Firewall Rule List',
-        'pending_changes_warning': pending_changes_warning,
         'firewall_rule_list': FirewallRule.objects.filter(firewall_chain=current_chain).order_by('sort_order'),
         'current_chain': current_chain,
         'port_forward_list': RedirectRule.objects.all().order_by('port'),

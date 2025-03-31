@@ -71,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'wireguard.context_processors.pending_changes_warning',
             ],
         },
     },
@@ -135,6 +136,6 @@ STATICFILES_DIRS = [
 DNS_CONFIG_FILE = '/etc/dnsmasq/wireguard_webadmin_dns.conf'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-WIREGUARD_WEBADMIN_VERSION = 9962
+WIREGUARD_WEBADMIN_VERSION = 9963
 
 from wireguard_webadmin.production_settings import *

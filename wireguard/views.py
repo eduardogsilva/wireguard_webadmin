@@ -1,15 +1,13 @@
-from decimal import Decimal, ROUND_DOWN
-from django.shortcuts import render, get_object_or_404, redirect
-from user_manager.models import UserAcl
-
-from wireguard.forms import WireGuardInstanceForm
-from .models import WireGuardInstance, WebadminSettings
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.db import models
-from django.conf import settings
-import os
 import subprocess
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db import models
+from django.shortcuts import get_object_or_404, redirect, render
+
+from user_manager.models import UserAcl
+from wireguard.forms import WireGuardInstanceForm
+from .models import WebadminSettings, WireGuardInstance
 
 
 def generate_instance_defaults():
@@ -74,10 +72,6 @@ def legacy_view_wireguard_status(request):
     user_acl = get_object_or_404(UserAcl, user=request.user)
     page_title = 'WireGuard Status'
     wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
-    if wireguard_instances.filter(pending_changes=True).exists():
-        pending_changes_warning = True
-    else:
-        pending_changes_warning = False
 
     if user_acl.enable_enhanced_filter:
         command_output = 'Enhanced filter is enabled. This command is not available.'
@@ -91,7 +85,7 @@ def legacy_view_wireguard_status(request):
             command_output = e.output.decode('utf-8')
             command_success = False
     
-    context = {'page_title': page_title, 'command_output': command_output, 'command_success': command_success, 'pending_changes_warning': pending_changes_warning, 'wireguard_instances': wireguard_instances}
+    context = {'page_title': page_title, 'command_output': command_output, 'command_success': command_success, 'wireguard_instances': wireguard_instances}
     return render(request, 'wireguard/wireguard_status.html', context)
 
 
@@ -109,15 +103,10 @@ def view_wireguard_status(request):
     else:
         wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
 
-    if WireGuardInstance.objects.filter(pending_changes=True).exists():
-        pending_changes_warning = True
-    else:
-        pending_changes_warning = False
-
     if user_acl.enable_enhanced_filter:
         pass
 
-    context = {'page_title': page_title, 'pending_changes_warning': pending_changes_warning, 'wireguard_instances': wireguard_instances}
+    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances}
     return render(request, 'wireguard/wireguard_status.html', context)
 
 
@@ -126,10 +115,6 @@ def view_wireguard_manage_instance(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
     wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
-    if wireguard_instances.filter(pending_changes=True).exists():
-        pending_changes_warning = True
-    else:
-        pending_changes_warning = False
     if request.GET.get('uuid'):
         current_instance = get_object_or_404(WireGuardInstance, uuid=request.GET.get('uuid'))
     else:
@@ -172,7 +157,7 @@ def view_wireguard_manage_instance(request):
             form = WireGuardInstanceForm(initial=generate_instance_defaults())
         else:
             form = WireGuardInstanceForm(instance=current_instance)  
-    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'form': form, 'pending_changes_warning': pending_changes_warning}
+    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'form': form}
     return render(request, 'wireguard/wireguard_manage_server.html', context)
 
 

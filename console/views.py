@@ -1,9 +1,11 @@
-from wireguard.models import WireGuardInstance
-from wgwadmlibrary.tools import is_valid_ip_or_hostname
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from user_manager.models import UserAcl
 import subprocess
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render
+
+from user_manager.models import UserAcl
+from wgwadmlibrary.tools import is_valid_ip_or_hostname
+from wireguard.models import WireGuardInstance
 
 
 @login_required
@@ -15,10 +17,6 @@ def view_console(request):
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
 
     wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
-    if wireguard_instances.filter(pending_changes=True).exists():
-        pending_changes_warning = True
-    else:
-        pending_changes_warning = False
     requested_command = request.GET.get('command')
     command_target = request.GET.get('target', '')
     if command_target:
@@ -79,5 +77,5 @@ def view_console(request):
                 command_output = e.output.decode('utf-8')
                 command_success = False
         
-    context = {'page_title': page_title, 'command_output': command_output, 'command_success': command_success, 'pending_changes_warning': pending_changes_warning}  
+    context = {'page_title': page_title, 'command_output': command_output, 'command_success': command_success}
     return render(request, 'console/console.html', context)

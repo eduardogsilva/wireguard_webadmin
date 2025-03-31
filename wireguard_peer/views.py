@@ -1,13 +1,15 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from user_manager.models import UserAcl
-from wireguard.models import WireGuardInstance, Peer, PeerAllowedIP
-from django.contrib import messages
-from django.db.models import Max
-import subprocess
 import ipaddress
-from wgwadmlibrary.tools import user_has_access_to_peer, user_has_access_to_instance, user_allowed_instances, user_allowed_peers, default_sort_peers, deduplicate_sort_order, check_sort_order_conflict
+import subprocess
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect, render
+
+from user_manager.models import UserAcl
+from wgwadmlibrary.tools import check_sort_order_conflict, deduplicate_sort_order, default_sort_peers, \
+    user_allowed_instances, user_allowed_peers, user_has_access_to_instance, user_has_access_to_peer
+from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from wireguard_peer.forms import PeerAllowedIPForm, PeerForm
 
 
@@ -47,11 +49,6 @@ def view_wireguard_peer_list(request):
     page_title = 'WireGuard Peer List'
     user_acl = get_object_or_404(UserAcl, user=request.user)
     wireguard_instances = user_allowed_instances(user_acl)
-    
-    if WireGuardInstance.objects.filter(pending_changes=True).exists():
-        pending_changes_warning = True
-    else:
-        pending_changes_warning = False
 
     if wireguard_instances:
         if request.GET.get('uuid'):
@@ -71,7 +68,7 @@ def view_wireguard_peer_list(request):
         if user_has_access_to_instance(user_acl, current_instance):
             add_peer_enabled = True
         
-    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'peer_list': peer_list, 'pending_changes_warning': pending_changes_warning, 'add_peer_enabled': add_peer_enabled, 'user_acl': user_acl}
+    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'peer_list': peer_list, 'add_peer_enabled': add_peer_enabled, 'user_acl': user_acl}
     return render(request, 'wireguard/wireguard_peer_list.html', context)
 
 
