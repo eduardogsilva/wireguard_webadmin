@@ -247,10 +247,12 @@
                 {% if pending_changes_warning %}
                     <div class="alert alert-warning" role="alert">
                         <h4 class="alert-heading">Update Required</h4>
-                        <p>Your WireGuard settings have been modified. To apply these changes, please update the configuration and reload the WireGuard service.
+                        <p>
+                            Your WireGuard settings have been modified. To apply these changes, please update the configuration and reload the WireGuard service.
                         </p>
                         <p>
                             <a href="/tools/export_wireguard_config/?action=update_and_restart" class="btn btn-secondary">Update and restart service</a>
+                            <a href="/tools/export_wireguard_config/?action=update_and_reload" class="btn btn-secondary">Update and reload service</a>
                         </p>
 
                     </div>
