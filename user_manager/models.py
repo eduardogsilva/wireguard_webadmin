@@ -1,6 +1,8 @@
-from django.db import models
-from django.contrib.auth.models import User
 import uuid
+
+from django.contrib.auth.models import User
+from django.db import models
+
 from wireguard.models import PeerGroup
 
 
@@ -16,6 +18,8 @@ class UserAcl(models.Model):
     peer_groups = models.ManyToManyField(PeerGroup, blank=True)
     enable_console = models.BooleanField(default=True)
     enable_enhanced_filter = models.BooleanField(default=False)
+    enable_reload = models.BooleanField(default=True)
+    enable_restart = models.BooleanField(default=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

@@ -251,15 +251,25 @@
                             Your WireGuard settings have been modified. To apply these changes, please update the configuration and reload the WireGuard service.
                         </p>
                         <p>
-                            <a href="/tools/export_wireguard_config/?action=update_and_restart" class="btn btn-secondary">Update and restart service</a>
-                            <a href="/tools/export_wireguard_config/?action=update_and_reload" class="btn btn-secondary">Update and reload service</a>
+                            <a
+                                    {% if user_acl.enable_restart %}
+                                    href="/tools/export_wireguard_config/?action=update_and_restart" class="btn btn-secondary"
+                                    {% else %}
+                                    href="#" class="btn btn-secondary disabled"
+                                    {% endif %}
+                            >Update and restart service</a>
+
+                            <a
+                                    {% if user_acl.enable_reload %}
+                                    href="/tools/export_wireguard_config/?action=update_and_reload" class="btn btn-secondary"
+                                    {% else %}
+                                    href="#" class="btn btn-secondary disabled"
+                                    {% endif %}
+                            >Update and reload service</a>
                         </p>
 
                     </div>
                 {% endif %}
-
-
-
 
                 {% block content %}{% endblock %}
             </div><!-- /.container-fluid -->

@@ -1,11 +1,11 @@
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from .models import UserAcl
-from django.core.exceptions import ValidationError
-from wireguard.models import PeerGroup
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, Submit, HTML
+from crispy_forms.layout import Column, HTML, Layout, Row, Submit
+from django import forms
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
+from wireguard.models import PeerGroup
+from .models import UserAcl
 
 
 class UserAclForm(forms.Form):
@@ -13,6 +13,8 @@ class UserAclForm(forms.Form):
     password1 = forms.CharField(widget=forms.PasswordInput, required=False, label="Password")
     password2 = forms.CharField(widget=forms.PasswordInput, required=False, label="Password confirmation")
     enable_console = forms.BooleanField(required=False, label="Enable Console")
+    enable_reload = forms.BooleanField(required=False, label="Enable Reload")
+    enable_restart = forms.BooleanField(required=False, label="Enable Restart")
     enable_enhanced_filter = forms.BooleanField(required=False, label="Enable Enhanced Filter")
     user_level = forms.ChoiceField(choices=UserAcl.user_level.field.choices, required=True, label="User Level")
     peer_groups = forms.ModelMultipleChoiceField(
@@ -30,14 +32,20 @@ class UserAclForm(forms.Form):
             self.fields['username'].widget.attrs['readonly'] = True
             self.fields['peer_groups'].initial = self.instance.useracl.peer_groups.all()
             self.fields['enable_console'].initial = self.instance.useracl.enable_console
+            self.fields['enable_reload'].initial = self.instance.useracl.enable_reload
+            self.fields['enable_restart'].initial = self.instance.useracl.enable_restart
             self.fields['enable_enhanced_filter'].initial = self.instance.useracl.enable_enhanced_filter
         else:
             self.fields['password1'].required = True
             self.fields['password2'].required = True
             self.fields['enable_console'].initial = True
+            self.fields['enable_reload'].initial = True
+            self.fields['enable_restart'].initial = True
             self.fields['enable_enhanced_filter'].initial = False
         
         self.fields['enable_console'].label = "Console"
+        self.fields['enable_reload'].label = "Reload"
+        self.fields['enable_restart'].label = "Restart"
         self.fields['enable_enhanced_filter'].label = "Enhanced Filter"
 
         self.helper = FormHelper()
@@ -71,6 +79,14 @@ class UserAclForm(forms.Form):
             ),
             Row(
                 Column('enable_console', css_class='form-group col-md-12 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('enable_reload', css_class='form-group col-md-12 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('enable_restart', css_class='form-group col-md-12 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -118,6 +134,8 @@ class UserAclForm(forms.Form):
         user_level = self.cleaned_data['user_level']
         peer_groups = self.cleaned_data.get('peer_groups', [])
         enable_console = self.cleaned_data.get('enable_console', False)
+        enable_reload = self.cleaned_data.get('enable_reload', False)
+        enable_restart = self.cleaned_data.get('enable_restart', False)
         enable_enhanced_filter = self.cleaned_data.get('enable_enhanced_filter', False)
 
         if self.instance:
@@ -136,6 +154,8 @@ class UserAclForm(forms.Form):
             defaults={
                 'user_level': user_level,
                 'enable_console': enable_console,
+                'enable_reload': enable_reload,
+                'enable_restart': enable_restart,
                 'enable_enhanced_filter': enable_enhanced_filter
             }
         )

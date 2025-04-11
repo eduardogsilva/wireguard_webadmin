@@ -218,7 +218,8 @@ def download_config_or_qrcode(request):
 
 @login_required
 def restart_wireguard_interfaces(request):
-    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
+    user_acl = UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).first()
+    if not user_acl:
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
     mode = request.GET.get('mode', 'restart')
     config_dir = "/etc/wireguard"
@@ -228,6 +229,9 @@ def restart_wireguard_interfaces(request):
         if filename.endswith(".conf"):
             interface_name = filename[:-5]
             if mode == "reload":
+                if not user_acl.enable_reload:
+                    return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+
                 config_path = os.path.join(config_dir, filename)
                 with open(config_path, 'r') as f:
                     lines = f.readlines()
@@ -253,6 +257,9 @@ def restart_wireguard_interfaces(request):
                     interface_count += 1
 
             else:
+                if not user_acl.enable_restart:
+                    return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+
                 stop_command = f"wg-quick down {interface_name}"
                 stop_result = subprocess.run(stop_command, shell=True, capture_output=True, text=True)
                 if stop_result.returncode != 0:
