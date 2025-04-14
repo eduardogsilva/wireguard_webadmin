@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 15:34-0300\n"
+"POT-Creation-Date: 2025-04-14 16:18-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,6 +25,21 @@ msgstr "Idioma"
 #: intl_tools/forms.py:22 templates/base.html:80
 msgid "Change Language"
 msgstr "Alterar Idioma"
+
+#: templates/access_denied.html:9
+msgid "Access Denied"
+msgstr "Acesso Negado"
+
+#: templates/access_denied.html:12
+msgid "Sorry, you do not have permission to access this page."
+msgstr "Desculpe, você não tem permissão para acessar esta página."
+
+#: templates/access_denied.html:12
+msgid ""
+"Please contact your system administrator if you believe this is an error."
+msgstr ""
+"Por favor, entre em contato com o administrador do sistema se você acredita "
+"que isto é um erro."
 
 #: templates/accounts/login.html:14
 msgid "Username"
@@ -85,3 +100,90 @@ msgstr "Atualização Disponível"
 #: templates/base.html:288
 msgid "Version"
 msgstr "Versão"
+
+#: templates/wireguard/wireguard_status.html:9
+msgid "Update Configuration"
+msgstr "Atualizar Configuração"
+
+#: templates/wireguard/wireguard_status.html:16
+msgid "Restart Wireguard service"
+msgstr "Reiniciar o serviço Wireguard"
+
+#: templates/wireguard/wireguard_status.html:24
+msgid "Reload Wireguard service"
+msgstr "Recarregar o serviço Wireguard"
+
+#: templates/wireguard/wireguard_status.html:42
+msgid "Instance Traffic"
+msgstr "Tráfego da Instância"
+
+#: templates/wireguard/wireguard_status.html:45
+msgid "IP Address"
+msgstr "Endereço IP"
+
+#: templates/wireguard/wireguard_status.html:46
+msgid "Public Address"
+msgstr "Endereço Público"
+
+#: templates/wireguard/wireguard_status.html:47
+msgid "Port"
+msgstr "Porta"
+
+#: templates/wireguard/wireguard_status.html:48
+msgid "Peers"
+msgstr "Peers"
+
+#: wireguard/views.py:96
+msgid "WireGuard Status"
+msgstr "Estado do WireGuard"
+
+#: wireguard_tools/views.py:160
+msgid ""
+"Export successful!|WireGuard configuration files have been exported to /etc/"
+"wireguard/."
+msgstr ""
+"Exportação bem-sucedida!|Os arquivos de configuração do WireGuard foram "
+"exportados para /etc/wireguard/."
+
+#: wireguard_tools/views.py:162
+msgid ""
+"Export successful!|WireGuard configuration files have been exported to /etc/"
+"wireguard/. Don't forget to restart the interfaces."
+msgstr ""
+"Exportação bem-sucedida!|Os arquivos de configuração do WireGuard foram "
+"exportados para /etc/wireguard/. Não se esqueça de reiniciar as interfaces."
+
+#: wireguard_tools/views.py:255
+msgid "Error reloading"
+msgstr "Erro ao recarregar"
+
+#: wireguard_tools/views.py:267
+msgid "Error stopping"
+msgstr "Erro ao parar"
+
+#: wireguard_tools/views.py:272
+msgid "Error starting"
+msgstr "Erro ao iniciar"
+
+#: wireguard_tools/views.py:279
+msgid ""
+"WARNING|Please note that the interface was reloaded, not restarted. Double-"
+"check if the the peers are working as expected. If you find any issues, "
+"please report them."
+msgstr "Aviso|Por favor, note que a interface foi recarregada, sem ser reiniciada. Verifique se os peers estão funcionando como esperado. Se você encontrar algum problema, por favor, relate-o."
+
+#: wireguard_tools/views.py:280
+msgid "WireGuard reloaded|The WireGuard service has been reloaded."
+msgstr "WireGuard recarregado|O serviço WireGuard foi recarregado."
+
+#: wireguard_tools/views.py:282
+msgid "WireGuard restarted|The WireGuard service has been restarted."
+msgstr "WireGuard reiniciado|O serviço WireGuard foi reiniciado."
+
+#: wireguard_tools/views.py:285
+msgid "Errors encountered|Error processing one or more interfaces."
+msgstr "Erros encontrados|Erro ao processar uma ou mais interfaces."
+
+#: wireguard_tools/views.py:288
+msgid "No interfaces found|No WireGuard interfaces were found to process."
+msgstr "Nenhuma interface encontrada|Nenhuma interface WireGuard foi encontrada para processar."

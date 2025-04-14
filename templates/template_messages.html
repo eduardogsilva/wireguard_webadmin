@@ -6,7 +6,7 @@
         if (parts.length > 1) {
             $(document).Toasts('create', {
                 {% if message.tags %}
-                class: 'bg-{{ message.tags }}',
+                class: '{% if message.tags == 'error' %}bg-danger{% else %}bg-{{ message.tags }}{% endif %}',
                 {% endif %}
                 title: parts[0],
                 subtitle: '{{ message.tags }}',
@@ -17,7 +17,7 @@
         } else {
             $(document).Toasts('create', {
                 {% if message.tags %}
-                class: 'bg-{{ message.tags }}',
+                class: '{% if message.tags == 'error' %}bg-danger{% else %}bg-{{ message.tags }}{% endif %}',
                 {% endif %}
                 subtitle: '{{ message.tags }}',
                 body: parts[0],

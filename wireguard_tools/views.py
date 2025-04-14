@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import Http404, get_object_or_404, redirect, render
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from dns.views import export_dns_configuration
 from firewall.models import RedirectRule
@@ -156,9 +157,9 @@ def export_wireguard_configs(request):
         with open(config_path, "w") as config_file:
             config_file.write(config_content)
     if request.GET.get('action') == 'update_and_restart' or request.GET.get('action') == 'update_and_reload':
-        messages.success(request, "Export successful!|WireGuard configuration files have been exported to /etc/wireguard/.")
+        messages.success(request, _("Export successful!|WireGuard configuration files have been exported to /etc/wireguard/."))
     else:
-        messages.success(request, "Export successful!|WireGuard configuration files have been exported to /etc/wireguard/. Don't forget to restart the interfaces.")
+        messages.success(request, _("Export successful!|WireGuard configuration files have been exported to /etc/wireguard/. Don't forget to restart the interfaces."))
     if request.GET.get('action') == 'update_and_restart':
         return redirect('/tools/restart_wireguard/?action=dismiss_warning')
     elif request.GET.get('action') == 'update_and_reload':
@@ -251,7 +252,7 @@ def restart_wireguard_interfaces(request):
                 os.remove(temp_config_path)
 
                 if result.returncode != 0:
-                    messages.warning(request, f"Error reloading {interface_name}|{result.stderr}")
+                    messages.warning(request, _('Error reloading') + f" {interface_name}|{result.stderr}")
                     error_count += 1
                 else:
                     interface_count += 1
@@ -263,31 +264,28 @@ def restart_wireguard_interfaces(request):
                 stop_command = f"wg-quick down {interface_name}"
                 stop_result = subprocess.run(stop_command, shell=True, capture_output=True, text=True)
                 if stop_result.returncode != 0:
-                    messages.warning(request, f"Error stopping {interface_name}|{stop_result.stderr}")
+                    messages.warning(request, _("Error stopping") + f" {interface_name}|{stop_result.stderr}")
                     error_count += 1
                 start_command = f"wg-quick up {interface_name}"
                 start_result = subprocess.run(start_command, shell=True, capture_output=True, text=True)
                 if start_result.returncode != 0:
-                    messages.warning(request, f"Error starting {interface_name}|{start_result.stderr}")
+                    messages.warning(request, _("Error starting") + f" {interface_name}|{start_result.stderr}")
                     error_count += 1
                 else:
                     interface_count += 1
 
     if interface_count > 0 and error_count == 0:
         if mode == 'reload':
-            messages.warning(request, "WARNING|Please note that the interface was reloaded, not restarted. Double-check if the the peers are working as expected. If you find any issues, please report them.")
-            verbose_mode = 'reloaded'
+            messages.warning(request, _("WARNING|Please note that the interface was reloaded, not restarted. Double-check if the the peers are working as expected. If you find any issues, please report them."))
+            messages.success(request, _("WireGuard reloaded|The WireGuard service has been reloaded."))
         else:
-            verbose_mode = 'restarted'
-        if interface_count == 1:
-            messages.success(request, f"Interface {verbose_mode}|The WireGuard interface has been {verbose_mode}.")
-        else:
-            messages.success(request, f"Interfaces {verbose_mode}|{interface_count} WireGuard interfaces have been {verbose_mode}.")
+            messages.success(request, _("WireGuard restarted|The WireGuard service has been restarted."))
+
     elif error_count > 0:
-        messages.warning(request, f"Errors encountered|There were errors {mode}ing some interfaces. See warnings for details.")
+        messages.error(request, _("Errors encountered|Error processing one or more interfaces."))
 
     if interface_count == 0 and error_count == 0:
-        messages.info(request, f"No interfaces found|No WireGuard interfaces were found to {mode}.")
+        messages.info(request, _("No interfaces found|No WireGuard interfaces were found to process."))
     if request.GET.get('action') == 'dismiss_warning':
         for wireguard_instancee in WireGuardInstance.objects.filter(pending_changes=True):
             wireguard_instancee.pending_changes = False

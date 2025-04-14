@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext_lazy as _
 
 from user_manager.models import UserAcl
 from wireguard.forms import WireGuardInstanceForm
@@ -92,7 +93,7 @@ def legacy_view_wireguard_status(request):
 @login_required
 def view_wireguard_status(request):
     user_acl = get_object_or_404(UserAcl, user=request.user)
-    page_title = 'WireGuard Status'
+    page_title = _("WireGuard Status")
 
     if user_acl.peer_groups.exists():
         wireguard_instances = []
