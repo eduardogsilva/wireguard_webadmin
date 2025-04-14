@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block page_custom_head %}
     <style>
         .peer-extra-info {
@@ -71,13 +71,13 @@
                                                   {% endif %}
                                                 </span>
                                             </div>
-                                            <b class="peer-extra-info">Throughput: </b> <span id="peer-throughput-{{ peer.public_key }}"></span><br>
-                                            <span class="peer-extra-info"><b>Transfer:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br></span>
-                                            <span class="peer-extra-info"><b>Latest Handshake:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span></span>
+                                            <b class="peer-extra-info">{% trans 'Throughput' %}: </b> <span id="peer-throughput-{{ peer.public_key }}"></span><br>
+                                            <span class="peer-extra-info"><b>{% trans 'Transfer' %}:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br></span>
+                                            <span class="peer-extra-info"><b>{% trans 'Latest Handshake' %}:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span></span>
                                             <span class="peer-extra-info"><span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">{% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}</span><br></span>
-                                            <span class="peer-extra-info"><b>Endpoints:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br></span>
+                                            <span class="peer-extra-info"><b>{% trans 'Endpoints' %}:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br></span>
                                             <span class="peer-extra-info" id="peer-extra-info-allowed-ips-{{ peer.public_key }}">
-                                                <b>Allowed IPs:</b>
+                                                <b>{% trans 'Allowed IPs' %}:</b>
                                                 <span id="peer-allowed-ips-{{ peer.public_key }}">
                                                     {% for address in peer.peerallowedip_set.all %}
                                                         {% if address.priority == 0 and address.config_file == 'server' %}
@@ -98,11 +98,11 @@
                             {% endfor %}
                         </div>
                         {% if add_peer_enabled %}
-                            <a class="btn btn-primary" href="/peer/manage/?instance={{ current_instance.uuid }}" onclick="return confirm('Are you sure you want to create a new peer?');">Create Peer</a>
+                            <a class="btn btn-primary" href="/peer/manage/?instance={{ current_instance.uuid }}" onclick="return confirm('{% trans 'Are you sure you want to create a new peer?' %}');">{% trans 'Create Peer' %}</a>
                         {% else %}
-                            <a class="btn btn-primary disabled" href="">Create Peer</a>
+                            <a class="btn btn-primary disabled" href="">{% trans 'Create Peer' %}</a>
                         {% endif %}
-                        <button id="toggleExtraInfo" class="btn btn-outline-primary">Show extras</button>
+                        <button id="toggleExtraInfo" class="btn btn-outline-primary">{% trans 'Show extras' %}</button>
                     </div>
                 </div>
             </div>
@@ -121,18 +121,18 @@
                     <div class="modal-body">
                         <!-- Info content section -->
                         <div class="info-content">
-                            <p><b><i class="fas fa-arrows-alt-v nav-icon"></i> Throughput:</b> <span id="peerThroughput">--</span></p>
-                            <p><b><i class="fas fa-dolly nav-icon"></i> Transfer:</b> <span id="peerTransfer">--</span></p>
-                            <p><b><i class="far fa-clock nav-icon"></i> Latest Handshake:</b> <span id="peerHandshake">--</span></p>
-                            <p><b><i class="far fa-address-card nav-icon"></i> Endpoints:</b> <span id="peerEndpoints">--</span></p>
-                            <p><b><i class="fas fa-network-wired nav-icon"></i> Allowed IPs:</b> <span id="peerAllowedIPs">--</span></p>
+                            <p><b><i class="fas fa-arrows-alt-v nav-icon"></i> {% trans 'Throughput' %}:</b> <span id="peerThroughput">--</span></p>
+                            <p><b><i class="fas fa-dolly nav-icon"></i> {% trans 'Transfer' %}:</b> <span id="peerTransfer">--</span></p>
+                            <p><b><i class="far fa-clock nav-icon"></i> {% trans 'Latest Handshake' %}:</b> <span id="peerHandshake">--</span></p>
+                            <p><b><i class="far fa-address-card nav-icon"></i> {% trans 'Endpoints' %}:</b> <span id="peerEndpoints">--</span></p>
+                            <p><b><i class="fas fa-network-wired nav-icon"></i> {% trans 'Allowed IPs' %}:</b> <span id="peerAllowedIPs">--</span></p>
 
                             <!-- Traffic Graph -->
                             <div class="graph-container" style="margin-top:20px;">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <label>
                                         <i class="fas fa-chart-area nav-icon"></i>
-                                        Peer Traffic
+                                        {% trans 'Peer Traffic' %}
                                     </label>
                                     <div class="btn-group" role="group" aria-label="Graph interval">
                                         <a href="#" data-period="1h" class="btn btn-outline-primary btn-xs">1h</a>
@@ -147,14 +147,14 @@
                                     </div>
                                 </div>
                                 <center style="margin-top:10px;">
-                                    <img id="graphImg" src="" class="img-fluid" alt="No traffic history, please wait a few minutes" style="display:block;">
+                                    <img id="graphImg" src="" class="img-fluid" alt="{% trans 'No traffic history, please wait a few minutes' %}" style="display:block;">
                                 </center>
                             </div>
                         </div>
 
                         <!-- QR Code content section (initially hidden) -->
                         <div class="qr-code-content" style="display:none; ">
-                            <button class="btn btn-secondary" id="backButton"><i class="fas fa-times"></i> Close QR Code</button><br>
+                            <button class="btn btn-secondary" id="backButton"><i class="fas fa-times"></i> {% trans 'Close QR Code' %}</button><br>
                             <div style="text-align: center;">
                                 <img id="qrCodeImg" src="" alt="QR Code" class="img-fluid" style="max-width: 400px" />
                             </div>
@@ -162,10 +162,9 @@
 
                         <!-- VPN Invite content section (initially hidden) -->
                         <div class="invite-content" style="display:none;">
-                            <button class="btn btn-secondary" id="backFromInviteButton"><i class="fas fa-arrow-left"></i> Back</button><br>
+                            <button class="btn btn-secondary" id="backFromInviteButton"><i class="fas fa-arrow-left"></i> {% trans 'Back' %}</button><br>
                             <div style="text-align: center; margin-top: 10px;">
-                                <h5>VPN Invite Details</h5>
-                                <!-- Container com moldura para o texto do invite -->
+                                <h5>{% trans 'VPN Invite Details' %}</h5>
                                 <div id="inviteTextContainer">
                                     <p id="inviteText"></p>
                                 </div>
@@ -175,25 +174,25 @@
                                     <i class="fas fa-sync-alt" id="refreshInviteButton" style="cursor: pointer;" title="Refresh Invite"></i>
                                 </p>
                                 <div class="form-group">
-                                    <label for="inviteContactInput">Enter Email or WhatsApp Number:</label>
-                                    <input type="text" class="form-control" id="inviteContactInput" placeholder="Email or phone number">
+                                    <label for="inviteContactInput">{% trans 'Enter Email or WhatsApp Number' %}:</label>
+                                    <input type="text" class="form-control" id="inviteContactInput" placeholder="{% trans 'Email or phone number' %}">
                                 </div>
                                 <div>
-                                    <button class="btn btn-outline-secondary" id="copyInviteTextButton"><i class="fas fa-copy"></i> Copy Text</button>
-                                    <button class="btn btn-success" id="sendInviteEmailButton"><i class="fas fa-envelope"></i> Email</button>
-                                    <button class="btn btn-success" id="sendInviteWhatsappButton"><i class="fab fa-whatsapp"></i> WhatsApp</button>
-                                    <button class="btn btn-secondary" id="closeInviteButton"><i class="far fa-trash-alt"></i> Delete</button>
+                                    <button class="btn btn-outline-secondary" id="copyInviteTextButton"><i class="fas fa-copy"></i> {% trans 'Copy Text' %}</button>
+                                    <button class="btn btn-success" id="sendInviteEmailButton"><i class="fas fa-envelope"></i> {% trans 'Email' %}</button>
+                                    <button class="btn btn-success" id="sendInviteWhatsappButton"><i class="fab fa-whatsapp"></i> {% trans 'WhatsApp' %}</button>
+                                    <button class="btn btn-secondary" id="closeInviteButton"><i class="far fa-trash-alt"></i> {% trans 'Delete' %}</button>
                                 </div>
                                 <div id="inviteMessage" style="margin-top: 10px;"></div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i>  Close</button>
-                        <a href="#" class="btn btn-info" id="downloadConfigButton"><i class="fas fa-download"></i> Config</a>
-                        <a href="#" class="btn btn-info" id="qrcodeButton"><i class="fas fa-qrcode"></i> QR Code</a>
-                        <a href="#" class="btn btn-info" id="inviteButton"><i class="fas fa-share"></i> VPN Invite</a>
-                        <a href="#" class="btn btn-outline-primary" id="editPeerButton"><i class="far fa-edit"></i> Edit</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i>  {% trans 'Close' %}</button>
+                        <a href="#" class="btn btn-info" id="downloadConfigButton"><i class="fas fa-download"></i> {% trans 'Config' %}</a>
+                        <a href="#" class="btn btn-info" id="qrcodeButton"><i class="fas fa-qrcode"></i> {% trans 'QR Code' %}</a>
+                        <a href="#" class="btn btn-info" id="inviteButton"><i class="fas fa-share"></i> {% trans 'VPN Invite' %}</a>
+                        <a href="#" class="btn btn-outline-primary" id="editPeerButton"><i class="far fa-edit"></i> {% trans 'Edit' %}</a>
                     </div>
                 </div>
             </div>
@@ -201,11 +200,11 @@
 
     {% else %}
         <div class="alert alert-warning" role="alert">
-            <h4 class="alert-heading">No WireGuard Instances Found</h4>
-            <p>There are no WireGuard instances configured. You can add a new instance by clicking the button below.</p>
+            <h4 class="alert-heading">{% trans 'No WireGuard Instances Found' %}</h4>
+            <p>{% trans 'There are no WireGuard instances configured. You can add a new instance by clicking the button below.' %}</p>
         </div>
         <p>
-            <a href="/server/manage/" class="btn btn-primary">Add WireGuard Instance</a>
+            <a href="/server/manage/" class="btn btn-primary">{% trans 'Add WireGuard Instance' %}</a>
         </p>
     {% endif %}
 {% endblock %}
@@ -567,7 +566,7 @@
                 if (!apiIps.includes(ip)) {
                     ipSpan.style.color = 'red';
                     ipSpan.style.textDecoration = 'underline';
-                    ipSpan.title = 'This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.';
+                    ipSpan.title = '{% trans 'This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.' %}';
                     allowedIpsIssue = true;
                 }
 
@@ -582,7 +581,7 @@
                 if (h5Element && !h5Element.querySelector('.fa-exclamation-triangle')) {
                     const icon = document.createElement('i');
                     icon.className = 'fas fa-exclamation-triangle text-danger blinking-icon';
-                    icon.title = 'At least one address does not appear in the wg show command output, which may indicate that another peer is using an overlapping IP or that the configuration file is outdated.';
+                    icon.title = '{% trans 'At least one address does not appear in the wg show command output, which may indicate that another peer is using an overlapping IP or that the configuration file is outdated.' %}';
                     h5Element.appendChild(icon);
                 }
             }
@@ -611,10 +610,10 @@
             $("#toggleExtraInfo").click(function(){
                 $(".peer-extra-info").toggle();
                 if($(".peer-extra-info").is(":visible")){
-                    $(this).text("Hide extras");
+                    $(this).text("{% trans 'Hide extras' %}");
                     $(".div-peer-text-information").removeClass('position-absolute');
                 } else {
-                    $(this).text("Show extras");
+                    $(this).text("{% trans 'Show extras' %}");
                     $(".div-peer-text-information").addClass('position-absolute');
                 }
             });
@@ -655,14 +654,14 @@
                         inviteData = response.invite_data;
                         // Populate invite details in the modal
                         $("#inviteText").text(inviteData.text_body);
-                        $("#invitePassword").html("Access Password: <strong>" + inviteData.password + "</strong> (Share this password via a separate secure channel)");
+                        $("#invitePassword").html("{% trans 'Access Password' %}: <strong>" + inviteData.password + "</strong> {% trans '(Share this password via a separate secure channel)' %}");
                         $("#inviteExpiration").text(new Date(inviteData.expiration).toLocaleString());
                     } else {
-                        $("#inviteMessage").html("<div class='alert alert-danger'>" + (response.message || "Unknown error") + "</div>");
+                        $("#inviteMessage").html("<div class='alert alert-danger'>" + (response.message || "{% trans 'Unknown error' %}") + "</div>");
                     }
                 },
                 error: function(xhr, status, error) {
-                    var message = "Error creating invite.";
+                    var message = "{% trans 'Error creating invite.' %}";
                     try {
                         var resp = xhr.responseJSON;
                         message = resp && resp.message ? resp.message : xhr.statusText;
@@ -699,12 +698,12 @@
             var textToCopy = $("#inviteText").text();
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(textToCopy).then(function() {
-                    $("#inviteMessage").html("<div class='alert alert-success'>Invite text copied to clipboard.</div>");
+                    $("#inviteMessage").html("<div class='alert alert-success'>{% trans 'Invite text copied to clipboard.' %}</div>");
                 }, function(err) {
-                    $("#inviteMessage").html("<div class='alert alert-danger'>Failed to copy text.</div>");
+                    $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Failed to copy text.' %}</div>");
                 });
             } else {
-                $("#inviteMessage").html("<div class='alert alert-danger'>Clipboard API not supported.</div>");
+                $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Clipboard API not supported.' %}</div>");
             }
         });
 
@@ -713,7 +712,7 @@
             e.preventDefault();
             var contact = $("#inviteContactInput").val().trim();
             if(!isValidPhone(contact)) {
-                $("#inviteMessage").html("<div class='alert alert-danger'>Please enter a valid phone number for WhatsApp.</div>");
+                $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Please enter a valid phone number for WhatsApp.' %}</div>");
                 return;
             }
             if(inviteData && inviteData.whatsapp_body) {
@@ -725,7 +724,7 @@
                 }
                 window.open(whatsappUrl, '_blank');
             } else {
-                $("#inviteMessage").html("<div class='alert alert-danger'>Invite data is not available.</div>");
+                $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Invite data is not available.' %}</div>");
             }
         });
 
@@ -734,7 +733,7 @@
             e.preventDefault();
             var contact = $("#inviteContactInput").val().trim();
             if(!isValidEmail(contact)) {
-                $("#inviteMessage").html("<div class='alert alert-danger'>Please enter a valid email address.</div>");
+                $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Please enter a valid email address.' %}</div>");
                 return;
             }
             if(inviteData && inviteData.uuid) {
@@ -756,7 +755,7 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        var message = "Error sending email.";
+                        var message = "{% trans 'Error sending email.' %}";
                         try {
                             var resp = xhr.responseJSON;
                             if (resp && resp.message) {
@@ -771,7 +770,7 @@
                     }
                 });
             } else {
-                $("#inviteMessage").html("<div class='alert alert-danger'>Invite data is not available.</div>");
+                $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Invite data is not available.' %}</div>");
             }
         });
 
@@ -789,15 +788,15 @@
                             // Update the invite details
                             inviteData = response.invite_data;
                             $("#inviteText").text(inviteData.text_body);
-                            $("#invitePassword").html("Access Password: <strong>" + inviteData.password + "</strong> (Share this password via a separate secure channel)");
+                            $("#invitePassword").html("{% trans 'Access Password' %}: <strong>" + inviteData.password + "</strong> {% trans '(Share this password via a separate secure channel)' %}");
                             $("#inviteExpiration").text(new Date(inviteData.expiration).toLocaleString());
                             $("#inviteMessage").html("<div class='alert alert-success'>" + (response.message || xhr.statusText) + "</div>");
                         } else {
-                            $("#inviteMessage").html("<div class='alert alert-danger'>" + (response.message || "Error refreshing invite.") + "</div>");
+                            $("#inviteMessage").html("<div class='alert alert-danger'>" + (response.message || "{% trans 'Error refreshing invite.' %}") + "</div>");
                         }
                     },
                     error: function(xhr, status, error) {
-                        var message = "Error refreshing invite.";
+                        var message = "{% trans 'Error refreshing invite.' %}";
                         try {
                             var resp = xhr.responseJSON;
                             if (resp && resp.message) {
@@ -812,7 +811,7 @@
                     }
                 });
             } else {
-                $("#inviteMessage").html("<div class='alert alert-danger'>No invite data available to refresh.</div>");
+                $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'No invite data available to refresh.' %}</div>");
             }
         });
 
@@ -832,7 +831,7 @@
                         inviteData = null;
                     },
                     error: function(xhr, status, error) {
-                        $("#inviteMessage").html("<div class='alert alert-danger'>Error closing invite: " + error + "</div>");
+                        $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Error closing invite:' %} " + error + "</div>");
                     }
                 });
             } else {

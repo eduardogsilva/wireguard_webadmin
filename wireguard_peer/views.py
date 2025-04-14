@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext_lazy as _
 
 from user_manager.models import UserAcl
 from wgwadmlibrary.tools import check_sort_order_conflict, deduplicate_sort_order, default_sort_peers, \
@@ -46,7 +47,7 @@ def generate_peer_default(wireguard_instance):
 
 @login_required
 def view_wireguard_peer_list(request):
-    page_title = 'WireGuard Peer List'
+    page_title = _('WireGuard Peer List')
     user_acl = get_object_or_404(UserAcl, user=request.user)
     wireguard_instances = user_allowed_instances(user_acl)
 

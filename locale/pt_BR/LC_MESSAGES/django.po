@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 16:18-0300\n"
+"POT-Creation-Date: 2025-04-14 17:19-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,7 +69,7 @@ msgstr "Estado"
 msgid "User Manager"
 msgstr "Configurar Usuários"
 
-#: templates/base.html:176
+#: templates/base.html:176 templates/wireguard/wireguard_peer_list.html:195
 msgid "VPN Invite"
 msgstr "Convite para VPN"
 
@@ -100,6 +100,205 @@ msgstr "Atualização Disponível"
 #: templates/base.html:288
 msgid "Version"
 msgstr "Versão"
+
+#: templates/wireguard/wireguard_peer_list.html:75
+#: templates/wireguard/wireguard_peer_list.html:125
+msgid "Throughput"
+msgstr "Taxa de transferência"
+
+#: templates/wireguard/wireguard_peer_list.html:76
+#: templates/wireguard/wireguard_peer_list.html:126
+msgid "Transfer"
+msgstr "Transferência"
+
+#: templates/wireguard/wireguard_peer_list.html:77
+#: templates/wireguard/wireguard_peer_list.html:127
+msgid "Latest Handshake"
+msgstr "Último Handshake"
+
+#: templates/wireguard/wireguard_peer_list.html:79
+#: templates/wireguard/wireguard_peer_list.html:128
+msgid "Endpoints"
+msgstr "Endereço Remoto"
+
+#: templates/wireguard/wireguard_peer_list.html:81
+#: templates/wireguard/wireguard_peer_list.html:129
+msgid "Allowed IPs"
+msgstr "IPs Permitidos"
+
+#: templates/wireguard/wireguard_peer_list.html:102
+msgid "Are you sure you want to create a new peer?"
+msgstr "Você tem certeza que deseja criar um novo peer?"
+
+#: templates/wireguard/wireguard_peer_list.html:102
+#: templates/wireguard/wireguard_peer_list.html:104
+msgid "Create Peer"
+msgstr "Criar Peer"
+
+#: templates/wireguard/wireguard_peer_list.html:106
+#: templates/wireguard/wireguard_peer_list.html:617
+msgid "Show extras"
+msgstr "Exibir extras"
+
+#: templates/wireguard/wireguard_peer_list.html:136
+msgid "Peer Traffic"
+msgstr "Tráfego do Peer"
+
+#: templates/wireguard/wireguard_peer_list.html:151
+msgid "No traffic history, please wait a few minutes"
+msgstr "Sem histórico de tráfego, por favor aguarde alguns minutos"
+
+#: templates/wireguard/wireguard_peer_list.html:158
+msgid "Close QR Code"
+msgstr "Fechar QR Code"
+
+#: templates/wireguard/wireguard_peer_list.html:166
+msgid "Back"
+msgstr "Voltar"
+
+#: templates/wireguard/wireguard_peer_list.html:168
+msgid "VPN Invite Details"
+msgstr "Detalhes do Convite para VPN"
+
+#: templates/wireguard/wireguard_peer_list.html:178
+msgid "Enter Email or WhatsApp Number"
+msgstr "Digite o Email ou Número do WhatsApp"
+
+#: templates/wireguard/wireguard_peer_list.html:179
+msgid "Email or phone number"
+msgstr "Email ou número de telefone"
+
+#: templates/wireguard/wireguard_peer_list.html:182
+msgid "Copy Text"
+msgstr "Copiar Texto"
+
+#: templates/wireguard/wireguard_peer_list.html:183
+msgid "Email"
+msgstr "Email"
+
+#: templates/wireguard/wireguard_peer_list.html:184
+msgid "WhatsApp"
+msgstr "WhatsApp"
+
+#: templates/wireguard/wireguard_peer_list.html:185
+msgid "Delete"
+msgstr "Excluir"
+
+#: templates/wireguard/wireguard_peer_list.html:192
+msgid "Close"
+msgstr "Fechar"
+
+#: templates/wireguard/wireguard_peer_list.html:193
+msgid "Config"
+msgstr "Configuração"
+
+#: templates/wireguard/wireguard_peer_list.html:194
+msgid "QR Code"
+msgstr "Código QR"
+
+#: templates/wireguard/wireguard_peer_list.html:196
+msgid "Edit"
+msgstr "Editar"
+
+#: templates/wireguard/wireguard_peer_list.html:204
+msgid "No WireGuard Instances Found"
+msgstr "Nenhuma Instância do WireGuard Encontrada"
+
+#: templates/wireguard/wireguard_peer_list.html:205
+msgid ""
+"There are no WireGuard instances configured. You can add a new instance by "
+"clicking the button below."
+msgstr ""
+"Não há instâncias do WireGuard configuradas. Você pode adicionar uma nova "
+"instância clicando no botão abaixo."
+
+#: templates/wireguard/wireguard_peer_list.html:208
+msgid "Add WireGuard Instance"
+msgstr "Adicionar Instância do WireGuard"
+
+#: templates/wireguard/wireguard_peer_list.html:570
+msgid ""
+"This address does not appear in the wg show command output, likely "
+"indicating that another peer has an IP overlapping this network or that the "
+"configuration file is outdated."
+msgstr ""
+"Este endereço não aparece na saída do comando wg show, provavelmente "
+"indicando que outro peer tem um IP sobrepondo esta rede ou que o arquivo de "
+"configuração está desatualizado."
+
+#: templates/wireguard/wireguard_peer_list.html:585
+msgid ""
+"At least one address does not appear in the wg show command output, which "
+"may indicate that another peer is using an overlapping IP or that the "
+"configuration file is outdated."
+msgstr ""
+"Ao menos um endereço não aparece na saída do comando wg show, o que pode "
+"indicar que outro peer está usando um IP sobreposto ou que o arquivo de "
+"configuração está desatualizado."
+
+#: templates/wireguard/wireguard_peer_list.html:614
+msgid "Hide extras"
+msgstr "Ocultar extras"
+
+#: templates/wireguard/wireguard_peer_list.html:658
+#: templates/wireguard/wireguard_peer_list.html:792
+msgid "Access Password"
+msgstr "Senha de Acesso"
+
+#: templates/wireguard/wireguard_peer_list.html:658
+#: templates/wireguard/wireguard_peer_list.html:792
+msgid "(Share this password via a separate secure channel)"
+msgstr "(Compartilhe esta senha por um canal seguro separado)"
+
+#: templates/wireguard/wireguard_peer_list.html:661
+msgid "Unknown error"
+msgstr "Erro desconhecido"
+
+#: templates/wireguard/wireguard_peer_list.html:665
+msgid "Error creating invite."
+msgstr "Erro ao criar convite."
+
+#: templates/wireguard/wireguard_peer_list.html:702
+msgid "Invite text copied to clipboard."
+msgstr "Texto do convite copiado para a área de transferência."
+
+#: templates/wireguard/wireguard_peer_list.html:704
+msgid "Failed to copy text."
+msgstr "Falha ao copiar o texto."
+
+#: templates/wireguard/wireguard_peer_list.html:707
+msgid "Clipboard API not supported."
+msgstr "A API de área de transferência não é suportada."
+
+#: templates/wireguard/wireguard_peer_list.html:716
+msgid "Please enter a valid phone number for WhatsApp."
+msgstr "Por favor, insira um número de telefone válido para o WhatsApp."
+
+#: templates/wireguard/wireguard_peer_list.html:728
+#: templates/wireguard/wireguard_peer_list.html:774
+msgid "Invite data is not available."
+msgstr "Dados do convite não estão disponíveis."
+
+#: templates/wireguard/wireguard_peer_list.html:737
+msgid "Please enter a valid email address."
+msgstr "Por favor, insira um endereço de email válido."
+
+#: templates/wireguard/wireguard_peer_list.html:759
+msgid "Error sending email."
+msgstr "Erro ao enviar o email."
+
+#: templates/wireguard/wireguard_peer_list.html:796
+#: templates/wireguard/wireguard_peer_list.html:800
+msgid "Error refreshing invite."
+msgstr "Erro ao atualizar o convite."
+
+#: templates/wireguard/wireguard_peer_list.html:815
+msgid "No invite data available to refresh."
+msgstr "Não há dados de convite disponíveis para atualizar."
+
+#: templates/wireguard/wireguard_peer_list.html:835
+msgid "Error closing invite:"
+msgstr "Erro ao fechar o convite:"
 
 #: templates/wireguard/wireguard_status.html:9
 msgid "Update Configuration"
@@ -137,6 +336,10 @@ msgstr "Peers"
 msgid "WireGuard Status"
 msgstr "Estado do WireGuard"
 
+#: wireguard_peer/views.py:49
+msgid "WireGuard Peer List"
+msgstr "Lista de Peers do WireGuard"
+
 #: wireguard_tools/views.py:160
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
@@ -170,7 +373,10 @@ msgid ""
 "WARNING|Please note that the interface was reloaded, not restarted. Double-"
 "check if the the peers are working as expected. If you find any issues, "
 "please report them."
-msgstr "Aviso|Por favor, note que a interface foi recarregada, sem ser reiniciada. Verifique se os peers estão funcionando como esperado. Se você encontrar algum problema, por favor, relate-o."
+msgstr ""
+"Aviso|Por favor, note que a interface foi recarregada, sem ser reiniciada. "
+"Verifique se os peers estão funcionando como esperado. Se você encontrar "
+"algum problema, por favor, relate-o."
 
 #: wireguard_tools/views.py:280
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
@@ -186,4 +392,6 @@ msgstr "Erros encontrados|Erro ao processar uma ou mais interfaces."
 
 #: wireguard_tools/views.py:288
 msgid "No interfaces found|No WireGuard interfaces were found to process."
-msgstr "Nenhuma interface encontrada|Nenhuma interface WireGuard foi encontrada para processar."
+msgstr ""
+"Nenhuma interface encontrada|Nenhuma interface WireGuard foi encontrada para "
+"processar."
