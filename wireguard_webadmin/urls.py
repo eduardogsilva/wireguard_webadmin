@@ -26,6 +26,7 @@ from dns.views import view_apply_dns_config, view_manage_dns_settings, view_mana
 from firewall.views import manage_firewall_rule, manage_redirect_rule, view_firewall_migration_required, \
     view_firewall_rule_list, view_generate_iptables_script, view_manage_firewall_settings, view_redirect_rule_list, \
     view_reset_firewall
+from intl_tools.views import view_change_language
 from user_manager.views import view_manage_user, view_peer_group_list, view_peer_group_manage, view_user_list
 from vpn_invite.views import view_email_settings, view_vpn_invite_list, view_vpn_invite_settings
 from vpn_invite_public.views import view_public_vpn_invite
@@ -85,4 +86,5 @@ urlpatterns = [
     path('vpn_invite/smtp_settings/', view_email_settings, name='email_settings'),
     path('invite/', view_public_vpn_invite, name='public_vpn_invite'),
     path('invite/download_config/', download_config_or_qrcode, name='download_config_or_qrcode'),
+    path('change_language/', view_change_language, name='change_language'),
 ]

@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-14 15:34-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: intl_tools/forms.py:11 templates/accounts/login.html:36
+msgid "Language"
+msgstr "Idioma"
+
+#: intl_tools/forms.py:22 templates/base.html:80
+msgid "Change Language"
+msgstr "Alterar Idioma"
+
+#: templates/accounts/login.html:14
+msgid "Username"
+msgstr "Usuário"
+
+#: templates/accounts/login.html:23
+msgid "Password"
+msgstr "Senha"
+
+#: templates/accounts/login.html:32
+msgid "Login"
+msgstr "Acessar"
+
+#: templates/accounts/logout.html:11
+msgid "You have been successfully logged out."
+msgstr "Você foi desconectado com sucesso."
+
+#: templates/accounts/logout.html:14
+msgid "Login again"
+msgstr "Acessar novamente"
+
+#: templates/base.html:112
+msgid "Status"
+msgstr "Estado"
+
+#: templates/base.html:158
+msgid "User Manager"
+msgstr "Configurar Usuários"
+
+#: templates/base.html:176
+msgid "VPN Invite"
+msgstr "Convite para VPN"
+
+#: templates/base.html:254
+msgid "Update Required"
+msgstr "Atualização Necessária"
+
+#: templates/base.html:256
+msgid ""
+"Your WireGuard settings have been modified. To apply these changes, please "
+"update the configuration and reload the WireGuard service."
+msgstr ""
+"Suas configurações do WireGuard foram modificadas. Para aplicar essas "
+"mudanças, atualize a configuração e recarregue o serviço WireGuard."
+
+#: templates/base.html:265
+msgid "Update and restart service"
+msgstr "Atualizar e reiniciar o serviço"
+
+#: templates/base.html:273
+msgid "Update and reload service"
+msgstr "Atualizar e recarregar o serviço"
+
+#: templates/base.html:286
+msgid "Update Available"
+msgstr "Atualização Disponível"
+
+#: templates/base.html:288
+msgid "Version"
+msgstr "Versão"

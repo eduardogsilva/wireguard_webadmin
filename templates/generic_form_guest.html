@@ -1,4 +1,5 @@
 {% extends "base_login.html" %}
+{% load crispy_forms_tags %}
 {% load i18n %}
 
 {% block content %}
@@ -8,12 +9,8 @@
         </div>
         <div class="card">
             <div class="card-body register-card-body">
-                <p class="login-box-msg">{% trans 'You have been successfully logged out.' %}</p>
-                <div class="row">
-                    <div class="col-12">
-                        <a href="/accounts/login/" class="btn btn-primary btn-block">{% trans 'Login again' %}</a>
-                    </div>
-                </div>
+                {% csrf_token %}
+                {% crispy form %}
             </div>
         </div>
     </div>

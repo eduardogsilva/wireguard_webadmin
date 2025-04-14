@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load i18n %}
+{% get_current_language as CURRENT_LANGUAGE %}
+<html lang="{{ CURRENT_LANGUAGE }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -70,13 +72,16 @@
             <li class="nav-item">
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="/status/" class="nav-link">Status</a>
-            </li>
         </ul>
 
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a href="/change_language/" class="nav-link" title="{% trans 'Change Language' %}">
+                    <i class="fas fa-language"></i>
+                </a>
+            </li>
+
             <li class="nav-item">
                 <a href="/accounts/logout/" class="nav-link">
                     <i class="fas fa-sign-out-alt"></i>
@@ -104,7 +109,7 @@
                         <a href="/status/" class="nav-link {% if '/status/' in request.path %}active{% endif %}">
                             <i class="fas fa-tachometer-alt nav-icon"></i>
                             <p>
-                                Status
+                                {% trans 'Status' %}
                             </p>
                         </a>
                     </li>
@@ -150,7 +155,7 @@
                         <a href="/user/list/" class="nav-link {% if '/user/' in request.path %}active{% endif %}">
                             <i class="fas fa-users nav-icon"></i>
                             <p>
-                                User Manager
+                                {% trans 'User Manager' %}
                             </p>
                         </a>
                     </li>
@@ -159,7 +164,7 @@
                         <a href="/server/manage/" class="nav-link {% if '/server/' in request.path %}active{% endif %}">
                             <i class="fas fa-cogs nav-icon"></i>
                             <p>
-                                Server Settings
+                                WireGuard
                             </p>
                         </a>
                     </li>
@@ -168,7 +173,7 @@
                         <a href="/vpn_invite/" class="nav-link {% if '/vpn_invite/' in request.path %}active{% endif %}">
                             <i class="fas fa-share-square nav-icon"></i>
                             <p>
-                                VPN Invite
+                                {% trans 'VPN Invite' %}
                             </p>
                         </a>
                     </li>
@@ -246,9 +251,9 @@
             <div class="container-fluid">
                 {% if pending_changes_warning %}
                     <div class="alert alert-warning" role="alert">
-                        <h4 class="alert-heading">Update Required</h4>
+                        <h4 class="alert-heading">{% trans 'Update Required' %}</h4>
                         <p>
-                            Your WireGuard settings have been modified. To apply these changes, please update the configuration and reload the WireGuard service.
+                            {% trans 'Your WireGuard settings have been modified. To apply these changes, please update the configuration and reload the WireGuard service.' %}
                         </p>
                         <p>
                             <a
@@ -257,7 +262,7 @@
                                     {% else %}
                                     href="#" class="btn btn-secondary disabled"
                                     {% endif %}
-                            >Update and restart service</a>
+                            >{% trans 'Update and restart service' %}</a>
 
                             <a
                                     {% if user_acl.enable_reload %}
@@ -265,7 +270,7 @@
                                     {% else %}
                                     href="#" class="btn btn-secondary disabled"
                                     {% endif %}
-                            >Update and reload service</a>
+                            >{% trans 'Update and reload service' %}</a>
                         </p>
 
                     </div>
@@ -278,9 +283,9 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-        {% if webadmin_version.update_available %}<a class='btn btn-sm btn-danger' id="btn_update_changelog">Update Available</a>{% else %}wireguard-webadmin {% endif %}
+        {% if webadmin_version.update_available %}<a class='btn btn-sm btn-danger' id="btn_update_changelog">{% trans 'Update Available' %}</a>{% else %}wireguard-webadmin {% endif %}
         <div class="float-right d-none d-sm-inline-block">
-            <b>Version</b> {{ webadmin_version.current_version }}
+            <b>{% trans 'Version' %}</b> {{ webadmin_version.current_version }}
         </div>
     </footer>
 
