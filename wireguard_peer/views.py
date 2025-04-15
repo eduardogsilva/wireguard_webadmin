@@ -126,7 +126,7 @@ def view_wireguard_peer_manage(request):
         if not user_has_access_to_instance(user_acl, current_instance):
             raise Http404
         current_peer = None
-        page_title = 'Create a new Peer for instance wg' + str(current_instance.instance_id)
+        page_title = _('Create a new Peer for instance wg') + str(current_instance.instance_id)
         new_peer_data = generate_peer_default(current_instance)
 
         if new_peer_data['allowed_ip']:
@@ -145,12 +145,12 @@ def view_wireguard_peer_manage(request):
                 priority=0,
                 netmask=32,
             )
-            messages.success(request, 'Peer created|Peer for instance wg' + str(current_instance.instance_id) + ' created successfully with IP ' + new_peer_data['allowed_ip'] + '/32.')
+            messages.success(request, _('Peer created|Peer created successfully.'))
             new_peer.wireguard_instance.pending_changes = True
             new_peer.wireguard_instance.save()
             return redirect('/peer/manage/?peer=' + str(new_peer.uuid))
         else:
-            messages.warning(request, 'Error creating peer|No available IP address found for peer creation.')
+            messages.warning(request, _('Error creating peer|No available IP address found for peer creation.'))
             return redirect('/peer/list/')
             
     elif request.GET.get('peer'):
@@ -163,12 +163,12 @@ def view_wireguard_peer_manage(request):
                 current_peer.wireguard_instance.pending_changes = True
                 current_peer.wireguard_instance.save()
                 current_peer.delete()
-                messages.success(request, 'Peer deleted|Peer deleted successfully.')
+                messages.success(request, _('Peer deleted|Peer deleted successfully.'))
                 return redirect('/peer/list/?uuid=' + str(current_instance.uuid))
             else:
-                messages.warning(request, 'Error deleting peer|Invalid confirmation message. Type "delete" to confirm.')
+                messages.warning(request, _('Error deleting peer|Invalid confirmation message. Type "delete" to confirm.'))
                 return redirect('/peer/manage/?peer=' + str(current_peer.uuid))
-        page_title = 'Update Peer '
+        page_title = _('Update Peer: ')
         peer_ip_list = current_peer.peerallowedip_set.filter(config_file='server').order_by('priority')
         peer_client_ip_list = current_peer.peerallowedip_set.filter(config_file='client').order_by('priority')
         if current_peer.name:
@@ -179,7 +179,7 @@ def view_wireguard_peer_manage(request):
             form = PeerForm(request.POST, instance=current_peer)
             if form.is_valid():
                 form.save()
-                messages.success(request, 'Peer updated|Peer updated successfully.')
+                messages.success(request, _('Peer updated|Peer updated successfully.'))
                 current_peer.wireguard_instance.pending_changes = True
                 current_peer.wireguard_instance.save()
                 return redirect('/peer/list/?uuid=' + str(current_peer.wireguard_instance.uuid))
@@ -217,19 +217,19 @@ def view_manage_ip_address(request):
         if request.GET.get('action') == 'delete':
             if request.GET.get('confirmation') == 'delete':
                 current_ip.delete()
-                messages.success(request, 'IP address deleted|IP address deleted successfully.')
+                messages.success(request, _('IP address deleted|IP address deleted successfully.'))
                 current_peer.wireguard_instance.pending_changes = True
                 current_peer.wireguard_instance.save()
                 return redirect('/peer/manage/?peer=' + str(current_peer.uuid))
             else:
-                messages.warning(request, 'Error deleting IP address|Invalid confirmation message. Type "delete" to confirm.')
-                return redirect('/peer/ip/?ip=' + str(current_ip.uuid))
+                messages.warning(request, _('Error deleting IP address|Invalid confirmation message. Type "delete" to confirm.'))
+                return redirect('/peer/manage_ip_address/?ip=' + str(current_ip.uuid))
     if config_file not in ['client', 'server']:
         config_file = 'server'
     if config_file == 'client':
-        page_title = 'Manage client route'
+        page_title = _('Manage client route')
     else:
-        page_title = 'Manage IP address or Network'
+        page_title = _('Manage IP address or Network')
 
     if request.method == 'POST':
         form = PeerAllowedIPForm(request.POST or None, instance=current_ip, current_peer=current_peer, config_file=config_file)
@@ -242,9 +242,9 @@ def view_manage_ip_address(request):
             current_peer.wireguard_instance.pending_changes = True
             current_peer.wireguard_instance.save()
             if current_ip:
-                messages.success(request, 'IP address updated|IP address updated successfully.')
+                messages.success(request, _('IP address updated|IP address updated successfully.'))
             else:
-                messages.success(request, 'IP address added|IP address added successfully.')
+                messages.success(request, _('IP address added|IP address added successfully.'))
             return redirect('/peer/manage/?peer=' + str(current_peer.uuid))
     else:
         form = PeerAllowedIPForm(instance=current_ip, current_peer=current_peer)

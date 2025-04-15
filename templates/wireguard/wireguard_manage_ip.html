@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
 
 <div class='row'>
@@ -15,7 +15,7 @@
                 <!-- Allowed IP -->
                 <div class="form-group">
                     <label for="{{ form.allowed_ip.id_for_label }}">{{ form.allowed_ip.label }}</label>
-                    <input type="text" class="form-control" id="{{ form.allowed_ip.id_for_label }}" name="{{ form.allowed_ip.html_name }}" placeholder="Enter Allowed IP" value="{{ form.allowed_ip.value|default_if_none:'' }}" required>
+                    <input type="text" class="form-control" id="{{ form.allowed_ip.id_for_label }}" name="{{ form.allowed_ip.html_name }}" placeholder="{% trans 'Enter Allowed IP' %}" value="{{ form.allowed_ip.value|default_if_none:'' }}" required>
                 </div>
 
                 <!-- Netmask -->
@@ -31,16 +31,16 @@
                 <!-- Priority -->
                 <div class="form-group">
                     <label for="{{ form.priority.id_for_label }}">{{ form.priority.label }}</label>
-                    <input type="number" class="form-control" id="{{ form.priority.id_for_label }}" name="{{ form.priority.html_name }}" placeholder="Priority" value="{{ form.priority.value|default_if_none:'' }}" required>
+                    <input type="number" class="form-control" id="{{ form.priority.id_for_label }}" name="{{ form.priority.html_name }}" placeholder="{% trans 'Priority' %}" value="{{ form.priority.value|default_if_none:'' }}" required>
                 </div>
 
 
             </div>
         </div>
         <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a class="btn btn-outline-secondary" href="/peer/manage/?peer={{ current_peer.uuid }}">Back</a>
-            {% if current_ip %}<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete IP</a>{% endif %}
+            <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+            <a class="btn btn-outline-secondary" href="/peer/manage/?peer={{ current_peer.uuid }}">{% trans 'Back' %}</a>
+            {% if current_ip %}<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{% trans 'Delete' %}</a>{% endif %}
         </div>
     </form>
 </div>
@@ -55,7 +55,7 @@
 <script>
     function openCommandDialog(element) {
         var command = element.getAttribute('data-command');
-        var confirmation = prompt("Please type 'delete' to remove this IP address.");
+        var confirmation = prompt("{% trans 'Please type \"delete\" to remove this IP address.' %}");
         if (confirmation) {
             var url = "?ip={{ current_ip.uuid }}&action=delete&confirmation=" + encodeURIComponent(confirmation);
             window.location.href = url;

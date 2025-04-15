@@ -1,10 +1,11 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 
 <div class="card card-primary card-outline">
     <div class="card-header">
-        <h3 class="card-title">Configure Peer</h3>
+        <h3 class="card-title">{% trans 'Peer Configuration' %}</h3>
     </div>
     <form method="post">
         {% csrf_token %}
@@ -13,26 +14,26 @@
                 <!-- Name -->
                 <div class="form-group">
                     <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
-                    <input type="text" class="form-control" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" placeholder="Enter Name" value="{{ form.name.value|default_if_none:'' }}">
+                    <input type="text" class="form-control" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" placeholder="{% trans 'Enter Name' %}" value="{{ form.name.value|default_if_none:'' }}">
                 </div>
 
                 <!-- Persistent Keepalive -->
                 <div class="form-group">
                     <label for="{{ form.persistent_keepalive.id_for_label }}">{{ form.persistent_keepalive.label }}</label>
-                    <input type="number" class="form-control" id="{{ form.persistent_keepalive.id_for_label }}" name="{{ form.persistent_keepalive.html_name }}" placeholder="Persistent Keepalive" value="{{ form.persistent_keepalive.value|default_if_none:'' }}" required>
+                    <input type="number" class="form-control" id="{{ form.persistent_keepalive.id_for_label }}" name="{{ form.persistent_keepalive.html_name }}" placeholder="{% trans 'Persistent Keepalive' %}" value="{{ form.persistent_keepalive.value|default_if_none:'' }}" required>
                 </div>
 
                 <!-- Public Key -->
                 <div class="form-group">
                     <label for="{{ form.public_key.id_for_label }}">{{ form.public_key.label }}</label>
-                    <input type="text" class="form-control" id="{{ form.public_key.id_for_label }}" name="{{ form.public_key.html_name }}" placeholder="Public Key" value="{{ form.public_key.value|default_if_none:'' }}" required>
+                    <input type="text" class="form-control" id="{{ form.public_key.id_for_label }}" name="{{ form.public_key.html_name }}" placeholder="{% trans 'Public Key' %}" value="{{ form.public_key.value|default_if_none:'' }}" required>
                 </div>
 
                 <!-- Private Key -->
                 <div class="form-group">
                     <label for="{{ form.private_key.id_for_label }}">{{ form.private_key.label }}</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="{{ form.private_key.id_for_label }}" name="{{ form.private_key.html_name }}" placeholder="Private Key" value="{{ form.private_key.value|default_if_none:'' }}" required>
+                        <input type="password" class="form-control" id="{{ form.private_key.id_for_label }}" name="{{ form.private_key.html_name }}" placeholder="{% trans 'Private Key' %}" value="{{ form.private_key.value|default_if_none:'' }}" required>
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary toggle-password" type="button"><i class="fas fa-eye"></i></button>
                         </div>
@@ -42,7 +43,7 @@
                 <!-- Pre-Shared Key -->
                 <div class="form-group">
                     <label for="{{ form.pre_shared_key.id_for_label }}">{{ form.pre_shared_key.label }}</label>
-                    <input type="text" class="form-control" id="{{ form.pre_shared_key.id_for_label }}" name="{{ form.pre_shared_key.html_name }}" placeholder="Pre-Shared Key" value="{{ form.pre_shared_key.value|default_if_none:'' }}" required>
+                    <input type="text" class="form-control" id="{{ form.pre_shared_key.id_for_label }}" name="{{ form.pre_shared_key.html_name }}" placeholder="{% trans 'Pre-Shared Key' %}" value="{{ form.pre_shared_key.value|default_if_none:'' }}" required>
                 </div>
 
             </div>
@@ -53,7 +54,7 @@
                     <div class="d-flex justify-content-between align-items-center ">
                             <label>
                                 <i class="fas fa-chart-area"></i>
-                                Peer Traffic
+                                {% trans 'Peer Traffic' %}
                             </label>
                             <div class="btn-group" role="group" aria-label="Graph interval">
                                 <a href="#" data-period="1h" class="btn btn-outline-primary btn-xs">1h</a>
@@ -69,7 +70,7 @@
                     </div>
 
                     <center>
-                        <img id="graphImg" src="/rrd/graph/?peer={{ current_peer.uuid }}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}" class="img-fluid" alt="No traffic history, please wait a few minutes" onerror="this.onerror=null; this.style.display='none'; this.insertAdjacentHTML('afterend', this.alt);">
+                        <img id="graphImg" src="/rrd/graph/?peer={{ current_peer.uuid }}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}" class="img-fluid" alt="{% trans 'No traffic history, please wait a few minutes' %}" onerror="this.onerror=null; this.style.display='none'; this.insertAdjacentHTML('afterend', this.alt);">
                     </center>
 
                     <div class="d-flex justify-content-between align-items-center border-bottom mb-3" style="padding-top: 16px;"></div>
@@ -81,10 +82,10 @@
                     <div class="col-md-12">
                         <div class="d-flex justify-content-between align-items-center">
                             <label>
-                                <i class="fas fa-info-circle" title="AllowedIPs at Peer section of wg{{ current_peer.wireguard_instance.instance_id }}.conf"></i>
-                                Peer IP Addresses and networks
+                                <i class="fas fa-info-circle" title="{% trans 'AllowedIPs at Peer section of wg' %}{{ current_peer.wireguard_instance.instance_id }}.conf"></i>
+                                {% trans 'Peer IP Addresses and networks' %}
                             </label>
-                            <a class="btn btn-outline-primary btn-xs" href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}&config=server" >Add IP Address</a>
+                            <a class="btn btn-outline-primary btn-xs" href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}&config=server" >{% trans 'Add IP Address' %}</a>
                         </div>
                     
                         {% for ip_address in peer_ip_list %}
@@ -94,15 +95,12 @@
                                         <i class="fas fa-network-wired"></i>
                                         {{ ip_address}}
                                     </a>
-
-
-
                                 </p>
                                 <p class="d-flex flex-column text-right small">
                                     {% if ip_address.priority == 0 %}
-                                        Main ip address
+                                        {% trans 'Main ip address' %}
                                     {% else %}
-                                        Priority: {{ ip_address.priority }}
+                                        {% trans 'Priority' %}: {{ ip_address.priority }}
                                     {% endif %}
                                 </p>
                             </div>
@@ -115,18 +113,18 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <label>
                                 <i class="fas fa-info-circle" title="AllowedIPs at client configuration file"></i> 
-                                Client Routing Configuration
+                                {% trans 'Client Routing Configuration' %}
                             </label>
-                            <a class="btn btn-outline-primary btn-xs" href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}&config=client" >Add Client route</a>
+                            <a class="btn btn-outline-primary btn-xs" href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}&config=client" >{% trans 'Add Client route' %}</a>
                         </div>
                         <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
                                 <p>
                                     <a href="#"
                                        {% if peer_client_ip_list %}
-                                            onclick="alert('The client is not configured to use the VPN as the default gateway.\n\nOnly the specific networks listed below are routed through the VPN.\n\nNote: These routes are not automatically pushed to the client. You will need to manually update the client configuration file to reflect these settings.');"
+                                            onclick="alert('{% trans 'The client is not configured to use the VPN as the default gateway.\n\nOnly the specific networks listed below are routed through the VPN.\n\nNote: These routes are not automatically pushed to the client. You will need to manually update the client configuration file to reflect these settings.' %}');"
                                        style="text-decoration: line-through;"
                                        {% else %}
-                                            onclick="alert('The client is configured to use the VPN as the default gateway. \n\nThis setting routes all client internet traffic through the VPN, enhancing privacy and security across all connections.');"
+                                            onclick="alert('{% trans 'The client is configured to use the VPN as the default gateway. \n\nThis setting routes all client internet traffic through the VPN, enhancing privacy and security across all connections.' %}');"
                                         {% endif %}
                                         
                                     >
@@ -135,7 +133,7 @@
                                     </a>
                                 </p>
                                 <p class="d-flex flex-column text-right small">
-                                    default route
+                                    {% trans 'default route' %}
                                 </p>
                         </div>
 
@@ -150,9 +148,9 @@
                                 </p>
                                 <p class="d-flex flex-column text-right small">
                                     {% if ip_address.priority == 0 %}
-                                        Main ip address
+                                        {% trans 'Main ip address' %}
                                     {% else %}
-                                        Priority: {{ ip_address.priority }}
+                                        {% trans 'Priority' %}: {{ ip_address.priority }}
                                     {% endif %}
                                 </p>
                             </div>
@@ -167,10 +165,10 @@
             </div>
         </div>
         <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}" class="btn btn-outline-primary">Add IP Address</a>
-            <a class="btn btn-outline-secondary" href="/peer/list/?uuid={{ current_peer.wireguard_instance.uuid }}#peer-{{ current_peer.public_key }}">Back</a>
-            <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete Peer</a>
+            <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+            <a href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}" class="btn btn-outline-primary">{% trans 'Add IP Address' %}</a>
+            <a class="btn btn-outline-secondary" href="/peer/list/?uuid={{ current_peer.wireguard_instance.uuid }}#peer-{{ current_peer.public_key }}">{% trans 'Back' %}</a>
+            <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{% trans 'Delete Peer' %}</a>
 
         </div>
     </form>
@@ -187,9 +185,8 @@
             if (!alertShown) { 
                 $(document).Toasts('create', {
                     class: 'bg-warning', 
-                    title: 'Action Required!',
-                    body: 'When manually updating the "Public Key", "Pre-Shared Key", or "Private Key", please ensure the configuration is correct.',
-                    
+                    title: '{% trans 'Action Required!' %}',
+                    body: '{% trans 'When manually updating the "Public Key", "Pre-Shared Key", or "Private Key", please ensure the configuration is correct.' %}',
                 });
                 alertShown = true; 
             }
@@ -209,7 +206,7 @@
 <script>
     function openCommandDialog(element) {
         var command = element.getAttribute('data-command');
-        var confirmation = prompt("Please type 'delete' to remove peer configuration.");
+        var confirmation = prompt("{% trans 'Please type \"delete\" to remove peer configuration.' %}");
         if (confirmation) {
             var url = "?peer={{ current_peer.uuid }}&action=delete&confirmation=" + encodeURIComponent(confirmation);
             window.location.href = url;
