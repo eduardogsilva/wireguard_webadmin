@@ -19,8 +19,8 @@ class DNSSettingsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(DNSSettingsForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.fields['dns_primary'].label = _('Primary Resolver')
-        self.fields['dns_secondary'].label = _('Secondary Resolver')
+        self.fields['dns_primary'].label = _('Primary DNS')
+        self.fields['dns_secondary'].label = _('Secondary DNS')
         self.fields['dns_primary'].required = True
         back_label = _('Back')
         self.helper.form_method = 'post'

@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy as _
 
 from user_manager.models import UserAcl
@@ -125,25 +126,25 @@ def view_wireguard_manage_instance(request):
             current_instance = wireguard_instances.first()
     if current_instance:
         page_title = f'wg{current_instance.instance_id}'
-        message_title = 'Update WireGuard Instance'
+        message_title = _('Update WireGuard Instance')
         if current_instance.name:
             page_title += f' ({current_instance.name})'
         if request.GET.get('action') == 'delete':
-            message_title = 'Delete WireGuard Instance'
+            message_title = _('Delete WireGuard Instance')
             if request.GET.get('confirmation') == 'delete wg' + str(current_instance.instance_id):
                 if current_instance.peer_set.all().count() > 0:
-                    messages.warning(request, 'Error removing wg' +str(current_instance.instance_id) + '|Cannot delete WireGuard instance wg' + str(current_instance.instance_id) + '. There are still peers associated with this instance.')
+                    messages.warning(request, _('Error removing instance: wg') + str(current_instance.instance_id) + _('|Cannot delete the requested WireGuard instance. There are still peers associated with this instance.'))
                     return redirect('/server/manage/?uuid=' + str(current_instance.uuid))
                 current_instance.delete()
-                messages.success(request, message_title + '|WireGuard instance wg' + str(current_instance.instance_id) + ' deleted successfully.')
+                messages.success(request, message_title + _('|WireGuard instance deleted: wg') + str(current_instance.instance_id))
                 return redirect('/server/manage/')
             else:
-                messages.warning(request, 'Invalid confirmation' + '|Please confirm deletion of WireGuard instance wg' + str(current_instance.instance_id))
+                messages.warning(request, _('Invalid confirmation|Please confirm deletion of WireGuard instance: wg') + str(current_instance.instance_id))
             return redirect('/server/manage/?uuid=' + str(current_instance.uuid))
 
     else:
-        page_title = 'Create a new WireGuard Instance'
-        message_title = 'New WireGuard Instance'
+        page_title = _('Create a new WireGuard Instance')
+        message_title = _('New WireGuard Instance')
     
     if request.method == 'POST':
         form = WireGuardInstanceForm(request.POST, instance=current_instance)
@@ -151,7 +152,7 @@ def view_wireguard_manage_instance(request):
             this_form = form.save(commit=False)
             this_form.pending_changes = True
             this_form.save()
-            messages.success(request, message_title + '|WireGuard instance wg' + str(form.instance.instance_id) + ' saved successfully.')
+            messages.success(request, message_title + '|WireGuard instance updated: wg' + str(form.instance.instance_id))
             return redirect('/server/manage/?uuid=' + str(form.instance.uuid))
     else:
         if not current_instance:

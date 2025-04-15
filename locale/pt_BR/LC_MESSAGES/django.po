@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-15 12:13-0300\n"
+"POT-Creation-Date: 2025-04-15 13:18-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,13 +58,13 @@ msgstr "Destino inválido"
 msgid "Enhanced filter is enabled. This command is not available."
 msgstr "Filtro aprimorado está habilitado. Este comando não está disponível."
 
-#: dns/forms.py:22
-msgid "Primary Resolver"
-msgstr "Servidor Primário"
+#: dns/forms.py:22 wireguard/forms.py:19
+msgid "Primary DNS"
+msgstr "DNS Primário"
 
-#: dns/forms.py:23
-msgid "Secondary Resolver"
-msgstr "Servidor Secundário"
+#: dns/forms.py:23 wireguard/forms.py:20
+msgid "Secondary DNS"
+msgstr "DNS Secundário"
 
 #: dns/forms.py:25 dns/forms.py:67 dns/forms.py:109
 #: templates/wireguard/wireguard_peer_list.html:166 user_manager/forms.py:49
@@ -76,8 +76,9 @@ msgstr "Voltar"
 msgid "Resolver Settings"
 msgstr "Resolução de DNS"
 
-#: dns/forms.py:37 dns/forms.py:83 dns/forms.py:134 user_manager/forms.py:98
-#: user_manager/forms.py:205
+#: dns/forms.py:37 dns/forms.py:83 dns/forms.py:134
+#: templates/wireguard/wireguard_manage_server.html:130
+#: user_manager/forms.py:98 user_manager/forms.py:205
 msgid "Save"
 msgstr "Salvar"
 
@@ -140,9 +141,8 @@ msgid ""
 "All DNS queries will be forwarded to the primary resolver. If the primary "
 "resolver is not available, the secondary resolver will be used."
 msgstr ""
-"Todas as consultas DNS serão encaminhadas para o resolvedor primário. Se o "
-"resolvedor primário não estiver disponível, o resolvedor secundário será "
-"usado."
+"Todas as consultas DNS serão encaminhadas para o DNS primário. Se ele não "
+"estiver disponível, o DNS secundário será usado."
 
 #: dns/views.py:118
 msgid "Static DNS deleted successfully"
@@ -400,6 +400,14 @@ msgstr "Instância do WireGuard"
 msgid "Users"
 msgstr "Usuários"
 
+#: templates/wireguard/wireguard_manage_server.html:18
+msgid "Create Instance"
+msgstr "Criar Instância"
+
+#: templates/wireguard/wireguard_manage_server.html:132
+msgid "Delete Configuration"
+msgstr "Excluir Configuração"
+
 #: templates/wireguard/wireguard_peer_list.html:75
 #: templates/wireguard/wireguard_peer_list.html:125
 msgid "Throughput"
@@ -603,7 +611,7 @@ msgstr "Recarregar o serviço Wireguard"
 msgid "Instance Traffic"
 msgstr "Tráfego da Instância"
 
-#: templates/wireguard/wireguard_status.html:46
+#: templates/wireguard/wireguard_status.html:46 wireguard/forms.py:12
 msgid "Public Address"
 msgstr "Endereço Público"
 
@@ -819,9 +827,99 @@ msgstr ""
 msgid "Please type the username to proceed."
 msgstr "Por favor, digite o nome de usuário para prosseguir."
 
-#: wireguard/views.py:96
+#: wireguard/forms.py:8
+msgid "Display Name"
+msgstr "Nome de Exibição"
+
+#: wireguard/forms.py:9
+msgid "Instance ID"
+msgstr "Instância"
+
+#: wireguard/forms.py:10
+msgid "Private Key"
+msgstr "Chave Privada"
+
+#: wireguard/forms.py:11
+msgid "Public Key"
+msgstr "Chave Pública"
+
+#: wireguard/forms.py:13
+msgid "Listen Port"
+msgstr "Porta"
+
+#: wireguard/forms.py:14
+msgid "Internal IP Address"
+msgstr "Endereço IP Interno"
+
+#: wireguard/forms.py:15
+msgid "Netmask"
+msgstr "Máscara de Rede"
+
+#: wireguard/forms.py:16
+msgid "Post Up"
+msgstr "Post Up"
+
+#: wireguard/forms.py:17
+msgid "Post Down"
+msgstr "Post Down"
+
+#: wireguard/forms.py:18
+msgid "Web Refresh Interval"
+msgstr "Intervalo de Atualização Web"
+
+#: wireguard/forms.py:39
+msgid "Peer List Refresh Interval must be at least 5 seconds"
+msgstr "Intervalo de Atualização da Lista de Peers deve ser de pelo menos 5 segundos"
+
+#: wireguard/forms.py:42
+msgid "Invalid hostname or IP Address"
+msgstr "Endereço ou IP inválido"
+
+#: wireguard/forms.py:51
+msgid "The selected network range overlaps with another instance."
+msgstr "A faixa de rede selecionada se sobrepõe a outra instância."
+
+#: wireguard/views.py:97
 msgid "WireGuard Status"
 msgstr "Estado do WireGuard"
+
+#: wireguard/views.py:129
+msgid "Update WireGuard Instance"
+msgstr "Atualizar Instância do WireGuard"
+
+#: wireguard/views.py:133
+msgid "Delete WireGuard Instance"
+msgstr "Excluir Instância do WireGuard"
+
+#: wireguard/views.py:136
+msgid "Error removing instance: wg"
+msgstr "Erro ao remover a instância: wg"
+
+#: wireguard/views.py:136
+msgid ""
+"|Cannot delete the requested WireGuard instance. There are still peers "
+"associated with this instance."
+msgstr ""
+"|Não é possível excluir a instância do WireGuard solicitada. Existem peers "
+"associados a esta instância."
+
+#: wireguard/views.py:139
+msgid "|WireGuard instance deleted: wg"
+msgstr "|Instância do WireGuard excluída: wg"
+
+#: wireguard/views.py:142
+msgid "Invalid confirmation|Please confirm deletion of WireGuard instance: wg"
+msgstr ""
+"Confirmação inválida|Por favor, confirme a exclusão da instância do "
+"WireGuard: wg"
+
+#: wireguard/views.py:146
+msgid "Create a new WireGuard Instance"
+msgstr "Adicionar uma nova Instância do WireGuard"
+
+#: wireguard/views.py:147
+msgid "New WireGuard Instance"
+msgstr "Nova Instância do WireGuard"
 
 #: wireguard_peer/views.py:50
 msgid "WireGuard Peer List"

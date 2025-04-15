@@ -1,22 +1,26 @@
-from django import forms
-from .models import WireGuardInstance, NETMASK_CHOICES
-from wgwadmlibrary.tools import is_valid_ip_or_hostname
 import ipaddress
 
+from django import forms
+from django.utils.translation import gettext_lazy as _
+
+from wgwadmlibrary.tools import is_valid_ip_or_hostname
+from .models import NETMASK_CHOICES, WireGuardInstance
+
+
 class WireGuardInstanceForm(forms.ModelForm):
-    name = forms.CharField(label='Display Name', required=False)
-    instance_id = forms.IntegerField(label='Instance ID')
-    private_key = forms.CharField(label='Private Key')
-    public_key = forms.CharField(label='Public Key')
-    hostname = forms.CharField(label='Public Address')
-    listen_port = forms.IntegerField(label='Listen Port')
-    address = forms.GenericIPAddressField(label='VPN IP Address')
-    netmask = forms.ChoiceField(choices=NETMASK_CHOICES, label='Netmask')
-    post_up = forms.CharField(label='Post Up', required=False)
-    post_down = forms.CharField(label='Post Down', required=False)
-    peer_list_refresh_interval = forms.IntegerField(label='Web Refresh Interval', initial=20)
-    dns_primary = forms.GenericIPAddressField(label='Primary DNS', initial='1.1.1.1', required=False)
-    dns_secondary = forms.GenericIPAddressField(label='Secondary DNS', initial='', required=False)
+    name = forms.CharField(label=_('Display Name'), required=False)
+    instance_id = forms.IntegerField(label=_('Instance ID'))
+    private_key = forms.CharField(label=_('Private Key'))
+    public_key = forms.CharField(label=_('Public Key'))
+    hostname = forms.CharField(label=_('Public Address'))
+    listen_port = forms.IntegerField(label=_('Listen Port'))
+    address = forms.GenericIPAddressField(label=_('Internal IP Address'))
+    netmask = forms.ChoiceField(choices=NETMASK_CHOICES, label=_('Netmask'))
+    post_up = forms.CharField(label=_('Post Up'), required=False)
+    post_down = forms.CharField(label=_('Post Down'), required=False)
+    peer_list_refresh_interval = forms.IntegerField(label=_('Web Refresh Interval'), initial=10)
+    dns_primary = forms.GenericIPAddressField(label=_('Primary DNS'), initial='1.1.1.1', required=False)
+    dns_secondary = forms.GenericIPAddressField(label=_('Secondary DNS'), initial='', required=False)
 
     class Meta:
         model = WireGuardInstance
@@ -35,10 +39,10 @@ class WireGuardInstanceForm(forms.ModelForm):
 
         peer_list_refresh_interval = cleaned_data.get('peer_list_refresh_interval')
         if peer_list_refresh_interval < 5:
-            raise forms.ValidationError('Peer List Refresh Interval must be at least 5 seconds')
+            raise forms.ValidationError(_('Peer List Refresh Interval must be at least 5 seconds'))
 
         if not is_valid_ip_or_hostname(hostname):
-            raise forms.ValidationError('Invalid hostname or IP Address')
+            raise forms.ValidationError(_('Invalid hostname or IP Address'))
 
         current_network = ipaddress.ip_network(f"{address}/{netmask}", strict=False)
         all_other_instances = WireGuardInstance.objects.all()
@@ -47,7 +51,7 @@ class WireGuardInstanceForm(forms.ModelForm):
         for instance in all_other_instances:
             other_network = ipaddress.ip_network(f"{instance.address}/{instance.netmask}", strict=False)
             if current_network.overlaps(other_network):
-                raise forms.ValidationError(f"The network range {current_network} overlaps with another instance's network range {other_network}.")
+                raise forms.ValidationError(_('The selected network range overlaps with another instance.'))
 
         #if self.instance:
         #    if post_up or post_down:

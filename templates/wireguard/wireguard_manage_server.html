@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 
@@ -14,7 +15,7 @@
             </li>
             {% endfor %}
             <li class="nav-item">
-                <a class="nav-link {%if not current_instance%}active{%endif%}" href="/server/manage/?action=create" role="tab" >Create Instance</a>
+                <a class="nav-link {%if not current_instance%}active{%endif%}" href="/server/manage/?action=create" role="tab" >{% trans 'Create Instance' %}</a>
             </li>
 
           </ul>
@@ -125,9 +126,9 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
                         {% if current_instance.uuid %}
-                        <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete Configuration</a>
+                        <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{% trans 'Delete Configuration' %}</a>
                         {% endif %}
                     </div>
                 </form>            
