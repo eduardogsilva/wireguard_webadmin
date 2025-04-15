@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-15 10:45-0300\n"
+"POT-Creation-Date: 2025-04-15 12:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,43 +18,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: console/views.py:24 console/views.py:56
+#: console/views.py:25 console/views.py:57 user_manager/forms.py:16
 msgid "Console"
 msgstr "Console"
 
-#: console/views.py:26
+#: console/views.py:27
 msgid "iptables list"
 msgstr "Lista de regras do iptables"
 
-#: console/views.py:32
+#: console/views.py:33
 msgid "running processes"
 msgstr "Processos em execução"
 
-#: console/views.py:35
+#: console/views.py:36
 msgid "WireGuard show"
 msgstr "Estado do WireGuard"
 
-#: console/views.py:38
+#: console/views.py:39
 msgid "Memory usage"
 msgstr "Uso de Memória"
 
-#: console/views.py:41
+#: console/views.py:42
 msgid "Routing table"
 msgstr "Tabela de Roteamento"
 
-#: console/views.py:53
+#: console/views.py:54
 msgid "DNS container test script"
 msgstr "Script de teste do contêiner DNS"
 
-#: console/views.py:56
+#: console/views.py:57
 msgid "Invalid command"
 msgstr "Comando inválido"
 
-#: console/views.py:63
+#: console/views.py:64
 msgid "Invalid target"
 msgstr "Destino inválido"
 
-#: console/views.py:68
+#: console/views.py:69
 msgid "Enhanced filter is enabled. This command is not available."
 msgstr "Filtro aprimorado está habilitado. Este comando não está disponível."
 
@@ -67,7 +67,8 @@ msgid "Secondary Resolver"
 msgstr "Servidor Secundário"
 
 #: dns/forms.py:25 dns/forms.py:67 dns/forms.py:109
-#: templates/wireguard/wireguard_peer_list.html:166
+#: templates/wireguard/wireguard_peer_list.html:166 user_manager/forms.py:49
+#: user_manager/forms.py:180
 msgid "Back"
 msgstr "Voltar"
 
@@ -75,7 +76,8 @@ msgstr "Voltar"
 msgid "Resolver Settings"
 msgstr "Resolução de DNS"
 
-#: dns/forms.py:37 dns/forms.py:83 dns/forms.py:134
+#: dns/forms.py:37 dns/forms.py:83 dns/forms.py:134 user_manager/forms.py:98
+#: user_manager/forms.py:205
 msgid "Save"
 msgstr "Salvar"
 
@@ -89,7 +91,8 @@ msgid "IP Address"
 msgstr "Endereço IP"
 
 #: dns/forms.py:68 dns/forms.py:110
-#: templates/wireguard/wireguard_peer_list.html:185
+#: templates/wireguard/wireguard_peer_list.html:185 user_manager/forms.py:48
+#: user_manager/forms.py:181
 msgid "Delete"
 msgstr "Excluir"
 
@@ -98,6 +101,7 @@ msgid "Static DNS"
 msgstr "DNS Estático"
 
 #: dns/forms.py:111 templates/dns/static_host_list.html:68
+#: templates/user_manager/peer_group_list.html:8 user_manager/forms.py:177
 msgid "Name"
 msgstr "Nome"
 
@@ -223,11 +227,12 @@ msgstr ""
 "Por favor, entre em contato com o administrador do sistema se você acredita "
 "que isto é um erro."
 
-#: templates/accounts/login.html:14
+#: templates/accounts/login.html:14 templates/user_manager/list.html:8
+#: user_manager/forms.py:13
 msgid "Username"
 msgstr "Usuário"
 
-#: templates/accounts/login.html:23
+#: templates/accounts/login.html:23 user_manager/forms.py:14
 msgid "Password"
 msgstr "Senha"
 
@@ -247,7 +252,7 @@ msgstr "Acessar novamente"
 msgid "Status"
 msgstr "Estado"
 
-#: templates/base.html:158
+#: templates/base.html:158 user_manager/views.py:74
 msgid "User Manager"
 msgstr "Configurar Usuários"
 
@@ -323,7 +328,8 @@ msgstr "Última Atualização"
 msgid "Update"
 msgstr "Atualizar"
 
-#: templates/dns/static_host_list.html:74
+#: templates/dns/static_host_list.html:74 templates/user_manager/list.html:53
+#: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/wireguard_peer_list.html:196
 msgid "Edit"
 msgstr "Editar"
@@ -331,6 +337,68 @@ msgstr "Editar"
 #: templates/dns/static_host_list.html:116
 msgid "Add Filter List"
 msgstr "Adicionar Lista de Filtro"
+
+#: templates/user_manager/list.html:9 user_manager/forms.py:20
+msgid "User Level"
+msgstr "Nível de Acesso"
+
+#: templates/user_manager/list.html:10 user_manager/forms.py:24
+#: user_manager/views.py:17
+msgid "Peer Groups"
+msgstr "Grupos de Peers"
+
+#: templates/user_manager/list.html:11
+msgid "Permissions"
+msgstr "Permissões"
+
+#: templates/user_manager/list.html:26
+msgid "All"
+msgstr "Todos"
+
+#: templates/user_manager/list.html:31
+msgid "Restart Enabled"
+msgstr "Reiniciar Habilitado"
+
+#: templates/user_manager/list.html:36
+msgid "Reload Enabled"
+msgstr "Recarregar Habilitado"
+
+#: templates/user_manager/list.html:42
+msgid "Console Enabled"
+msgstr "Console Habilitado"
+
+#: templates/user_manager/list.html:48
+msgid "Enhanced Filter Enabled"
+msgstr "Filtro Aprimorado Habilitado"
+
+#: templates/user_manager/list_buttons.html:2 user_manager/views.py:111
+msgid "Add User"
+msgstr "Adicionar Usuário"
+
+#: templates/user_manager/list_buttons.html:3
+msgid "List Users"
+msgstr "Lista de Usuários"
+
+#: templates/user_manager/list_buttons.html:4
+msgid "List Peer Groups"
+msgstr "Lista de Grupos de Peers"
+
+#: templates/user_manager/list_buttons.html:5 user_manager/views.py:43
+msgid "Add Peer Group"
+msgstr "Adicionar Grupo de Peers"
+
+#: templates/user_manager/peer_group_list.html:9
+#: templates/wireguard/wireguard_status.html:48
+msgid "Peers"
+msgstr "Peers"
+
+#: templates/user_manager/peer_group_list.html:10 user_manager/forms.py:179
+msgid "Server Instance"
+msgstr "Instância do WireGuard"
+
+#: templates/user_manager/peer_group_list.html:11
+msgid "Users"
+msgstr "Usuários"
 
 #: templates/wireguard/wireguard_peer_list.html:75
 #: templates/wireguard/wireguard_peer_list.html:125
@@ -543,9 +611,213 @@ msgstr "Endereço Público"
 msgid "Port"
 msgstr "Porta"
 
-#: templates/wireguard/wireguard_status.html:48
-msgid "Peers"
-msgstr "Peers"
+#: user_manager/forms.py:15
+msgid "Password Confirmation"
+msgstr "Confirmação de Senha"
+
+#: user_manager/forms.py:17
+msgid "Reload WireGuard"
+msgstr "Recarregar o WireGuard"
+
+#: user_manager/forms.py:18
+msgid "Restart WireGuard"
+msgstr "Reiniciar o WireGuard"
+
+#: user_manager/forms.py:19
+msgid "Enhanced Filter"
+msgstr "Filtro Aprimorado"
+
+#: user_manager/forms.py:119
+msgid "Password is required for new users."
+msgstr "Senha é obrigatória para novos usuários."
+
+#: user_manager/forms.py:121
+msgid "Password confirmation is required for new users."
+msgstr "Confirmação de senha é obrigatória para novos usuários."
+
+#: user_manager/forms.py:125
+msgid "The two password fields didn't match."
+msgstr "As duas senhas não coincidem."
+
+#: user_manager/forms.py:127
+msgid "Password must be at least 8 characters long."
+msgstr "Senha deve ter pelo menos 8 caracteres."
+
+#: user_manager/forms.py:178
+msgid "Peer"
+msgstr "Peer"
+
+#: user_manager/forms.py:220
+msgid "A peer group with that name already exists."
+msgstr "Um grupo de peers com esse nome já existe."
+
+#: user_manager/models.py:13
+msgid "Debugging Analyst"
+msgstr "Analista de Debug"
+
+#: user_manager/models.py:14
+msgid "View Only"
+msgstr "Somente Visualização"
+
+#: user_manager/models.py:15
+msgid "Peer Manager"
+msgstr "Gerente de Peers"
+
+#: user_manager/models.py:16
+msgid "WireGuard Manager"
+msgstr "Gerente do WireGuard"
+
+#: user_manager/models.py:17
+msgid "Administrator"
+msgstr "Administrador"
+
+#: user_manager/views.py:31
+msgid "Edit Peer Group: "
+msgstr "Editar Grupo de Peers: "
+
+#: user_manager/views.py:36
+msgid "Peer Group deleted|Peer Group deleted: "
+msgstr "Grupo de Peers excluído|Grupo de Peers excluído: "
+
+#: user_manager/views.py:39
+msgid "Peer Group not deleted|Invalid confirmation."
+msgstr "Grupo de Peers não excluído|Confirmação inválida."
+
+#: user_manager/views.py:58
+msgid ""
+"\n"
+"        <h5>Peers</h5>\n"
+"        <p>Select which peers can be managed by users with this peer group.</"
+"p>\n"
+"\n"
+"        <h5>WireGuard Instances</h5>\n"
+"        <p>All peers in this WireGuard instance can be managed by users with "
+"this peer group, including adding or removing peers.</p>\n"
+"        "
+msgstr ""
+"\n"
+"        <h5>Peers</h5>\n"
+"        <p>Selecione quais peers podem ser gerenciados por usuários com este "
+"grupo de peers.</p>\n"
+"\n"
+"        <h5>Instâncias do WireGuard</h5>\n"
+"        <p>Todos os peers nesta instância do WireGuard podem ser gerenciados "
+"por usuários com este grupo de peers, incluindo a adição ou remoção de peers."
+"</p>\n"
+"        "
+
+#: user_manager/views.py:98
+msgid "Edit User"
+msgstr "Editar Usuário"
+
+#: user_manager/views.py:104
+msgid "User deleted|User deleted: "
+msgstr "Usuário excluído|Usuário excluído: "
+
+#: user_manager/views.py:107
+msgid "User not deleted|Invalid confirmation."
+msgstr "Usuário não foi excluído|Confirmação inválida."
+
+#: user_manager/views.py:128
+msgid "User Disconnected|User Disconnected: "
+msgstr "Usuário Desconectado|Usuário Desconectado: "
+
+#: user_manager/views.py:132
+msgid "User updated|User updated: "
+msgstr "Usuário atualizado|Usuário atualizado: "
+
+#: user_manager/views.py:134
+msgid "User created|User created: "
+msgstr "Usuário criado|Usuário criado: "
+
+#: user_manager/views.py:139
+msgid ""
+"\n"
+"        <h4>User Levels</h4>\n"
+"        <h5>Debugging Analyst</h5>\n"
+"        <p>Access to basic system information and logs for troubleshooting. "
+"No access to modify settings or view sensitive data such as peer keys.</p>\n"
+"\n"
+"        <h5>View Only</h5>\n"
+"        <p>Full view access, including peer keys and configuration files. "
+"Cannot modify any settings or configurations.</p>\n"
+"\n"
+"        <h5>Peer Manager</h5>\n"
+"        <p>Permissions to add, edit, and remove peers and IP addresses. Does "
+"not include access to modify WireGuard instance configurations or higher-"
+"level settings.</p>\n"
+"\n"
+"        <h5>Wireguard Manager</h5>\n"
+"        <p>Authority to add, edit, and remove configurations of WireGuard "
+"instances.</p>\n"
+"\n"
+"        <h5>Administrator</h5>\n"
+"        <p>Full access across the system. Can view and modify all settings, "
+"configurations and manage users. </p>\n"
+"\n"
+"        <br>\n"
+"        <h4>Peer Groups</h4>\n"
+"        <p>Select which peer groups this user can access. If no peer groups "
+"are selected, the user will have access to all peers.</p>\n"
+"\n"
+"        <h4>Console</h4>\n"
+"        <p>Enable or disable web console access for this user.</p>\n"
+"\n"
+"        <h4>Enhanced Filter</h4>\n"
+"        <p>This option filters the API status response to include only peers "
+"that the user has access to. Depending on the size of your environment, "
+"enabling this option may impact performance. To mitigate this, consider "
+"increasing the \"Web Refresh Interval\" to reduce the number of requests.</"
+"p>\n"
+"\n"
+"        "
+msgstr ""
+"\n"
+"        <h4>Níveis de Usuário</h4>\n"
+"        <h5>Analista de Debug</h5>\n"
+"        <p>Acesso a informações básicas do sistema e logs para solução de "
+"problemas. Sem acesso para modificar configurações ou visualizar dados "
+"sensíveis, como chaves de peer.</p>\n"
+"\n"
+"        <h5>Somente Visualização</h5>\n"
+"        <p>Acesso total de visualização, incluindo chaves de peer e arquivos "
+"de configuração. Não pode modificar nenhuma configuração ou ajuste.</p>\n"
+"\n"
+"        <h5>Gerente de Peers</h5>\n"
+"        <p>Permissões para adicionar, editar e remover peers e endereços IP. "
+"Não inclui acesso para modificar configurações de instâncias do WireGuard ou "
+"configurações de nível superior.</p>\n"
+"\n"
+"        <h5>Gerente do WireGuard</h5>\n"
+"        <p>Autoridade para adicionar, editar e remover configurações de "
+"instâncias do WireGuard.</p>\n"
+"\n"
+"        <h5>Administrador</h5>\n"
+"        <p>Acesso total ao sistema. Pode visualizar e modificar todas as "
+"configurações, ajustes e gerenciar usuários.</p>\n"
+"\n"
+"        <br>\n"
+"        <h4>Grupos de Peers</h4>\n"
+"        <p>Selecione quais grupos de peers este usuário pode acessar. Se "
+"nenhum grupo de peers for selecionado, o usuário terá acesso a todos os "
+"peers.</p>\n"
+"\n"
+"        <h4>Console</h4>\n"
+"        <p>Ativar ou desativar o acesso ao console web para este usuário.</"
+"p>\n"
+"\n"
+"        <h4>Filtro Aprimorado</h4>\n"
+"        <p>Esta opção filtra a resposta do status da API para incluir apenas "
+"os peers aos quais o usuário tem acesso. Dependendo do tamanho do seu "
+"ambiente, ativar esta opção pode impactar o desempenho. Para mitigar isso, "
+"considere aumentar o \"Intervalo de Atualização da Web\" para reduzir o "
+"número de requisições.</p>\n"
+"\n"
+"        "
+
+#: user_manager/views.py:175
+msgid "Please type the username to proceed."
+msgstr "Por favor, digite o nome de usuário para prosseguir."
 
 #: wireguard/views.py:96
 msgid "WireGuard Status"

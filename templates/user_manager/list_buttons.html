@@ -1,4 +1,5 @@
-<a href="/user/manage/" class="btn btn-primary">Add User</a>
-<a href="/user/list/" class="btn {% if request.path == '/user/list/' %}btn-outline-primary{% else %}btn-primary{% endif %}">List Users</a>
-<a href="/user/peer-group/list/" class="btn {% if request.path == '/user/peer-group/list/' %}btn-outline-primary{% else %}btn-primary{% endif %}">List Peer Groups</a>
-<a href="/user/peer-group/manage/" class="btn btn-primary">Add Peer Group</a>
+{% load i18n %}
+<a href="/user/manage/" class="btn btn-primary">{% trans 'Add User' %}</a>
+<a href="/user/list/" class="btn {% if request.path == '/user/list/' %}btn-outline-primary{% else %}btn-primary{% endif %}">{% trans 'List Users' %}</a>
+<a href="/user/peer-group/list/" class="btn {% if request.path == '/user/peer-group/list/' %}btn-outline-primary{% else %}btn-primary{% endif %}">{% trans 'List Peer Groups' %}</a>
+<a href="/user/peer-group/manage/" class="btn btn-primary">{% trans 'Add Peer Group' %}</a>

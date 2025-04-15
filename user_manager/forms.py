@@ -3,23 +3,25 @@ from crispy_forms.layout import Column, HTML, Layout, Row, Submit
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from wireguard.models import PeerGroup
 from .models import UserAcl
 
 
 class UserAclForm(forms.Form):
-    username = forms.CharField(max_length=150)
-    password1 = forms.CharField(widget=forms.PasswordInput, required=False, label="Password")
-    password2 = forms.CharField(widget=forms.PasswordInput, required=False, label="Password confirmation")
-    enable_console = forms.BooleanField(required=False, label="Enable Console")
-    enable_reload = forms.BooleanField(required=False, label="Enable Reload")
-    enable_restart = forms.BooleanField(required=False, label="Enable Restart")
-    enable_enhanced_filter = forms.BooleanField(required=False, label="Enable Enhanced Filter")
-    user_level = forms.ChoiceField(choices=UserAcl.user_level.field.choices, required=True, label="User Level")
+    username = forms.CharField(max_length=150, label=_("Username"))
+    password1 = forms.CharField(widget=forms.PasswordInput, required=False, label=_("Password"))
+    password2 = forms.CharField(widget=forms.PasswordInput, required=False, label=_("Password Confirmation"))
+    enable_console = forms.BooleanField(required=False, label=_("Console"))
+    enable_reload = forms.BooleanField(required=False, label=_("Reload WireGuard"))
+    enable_restart = forms.BooleanField(required=False, label=_("Restart WireGuard"))
+    enable_enhanced_filter = forms.BooleanField(required=False, label=_("Enhanced Filter"))
+    user_level = forms.ChoiceField(choices=UserAcl.user_level.field.choices, required=True, label=_("User Level"))
     peer_groups = forms.ModelMultipleChoiceField(
         queryset=PeerGroup.objects.all(),
         required=False,
+        label=_("Peer Groups"),
     )
 
     def __init__(self, *args, **kwargs):
@@ -42,17 +44,15 @@ class UserAclForm(forms.Form):
             self.fields['enable_reload'].initial = True
             self.fields['enable_restart'].initial = True
             self.fields['enable_enhanced_filter'].initial = False
-        
-        self.fields['enable_console'].label = "Console"
-        self.fields['enable_reload'].label = "Reload"
-        self.fields['enable_restart'].label = "Restart"
-        self.fields['enable_enhanced_filter'].label = "Enhanced Filter"
+
+        delete_label = _("Delete")
+        back_label = _("Back")
 
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         
         if self.instance:
-            delete_html = "<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete</a>"
+            delete_html = f"<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{delete_label}</a>"
         else:
             delete_html = ''
             
@@ -95,8 +95,8 @@ class UserAclForm(forms.Form):
             ),
             Row(
                 Column(
-                    Submit('submit', 'Save', css_class='btn btn-success'),
-                    HTML(' <a class="btn btn-secondary" href="/user/list/">Back</a> '),
+                    Submit('submit', _('Save'), css_class='btn btn-success'),
+                    HTML(f' <a class="btn btn-secondary" href="/user/list/">{back_label}</a> '),
                     HTML(delete_html),
                     css_class='col-md-12'),
                 css_class='form-row'
@@ -116,15 +116,15 @@ class UserAclForm(forms.Form):
 
         if not self.instance:  
             if not password1:
-                raise ValidationError("Password is required for new users.")
+                raise ValidationError(_("Password is required for new users."))
             if not password2:
-                raise ValidationError("Password confirmation is required for new users.")
+                raise ValidationError(_("Password confirmation is required for new users."))
 
         if password1 or password2: 
             if password1 != password2:
-                raise ValidationError("The two password fields didn't match.")
+                raise ValidationError(_("The two password fields didn't match."))
             if len(password1) < 8:
-                raise ValidationError("Password must be at least 8 characters long.")
+                raise ValidationError(_("Password must be at least 8 characters long."))
 
         return cleaned_data
 
@@ -174,11 +174,16 @@ class PeerGroupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user_id = kwargs.pop('user_id', None)
         super().__init__(*args, **kwargs)
+        self.fields['name'].label = _("Name")
+        self.fields['peer'].label = _("Peer")
+        self.fields['server_instance'].label = _("Server Instance")
+        back_label = _("Back")
+        delete_label = _("Delete")
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         
         if self.instance.pk:
-            delete_html = "<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete</a>"
+            delete_html = f"<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{delete_label}</a>"
         else:
             delete_html = ''
             
@@ -197,8 +202,8 @@ class PeerGroupForm(forms.ModelForm):
             ),
             Row(
                 Column(
-                    Submit('submit', 'Save', css_class='btn btn-success'),
-                    HTML(' <a class="btn btn-secondary" href="/user/peer-group/list/">Back</a> '),
+                    Submit('submit', _('Save'), css_class='btn btn-success'),
+                    HTML(f' <a class="btn btn-secondary" href="/user/peer-group/list/">{back_label}</a> '),
                     HTML(delete_html),
                     css_class='col-md-12'),
                 css_class='form-row'
@@ -212,7 +217,7 @@ class PeerGroupForm(forms.ModelForm):
         server_instances = cleaned_data.get('server_instance')
 
         if PeerGroup.objects.filter(name=name).exclude(pk=self.instance.pk if self.instance else None).exists():
-            raise ValidationError("A peer group with that name already exists.")
+            raise ValidationError(_("A peer group with that name already exists."))
 
         return cleaned_data
     

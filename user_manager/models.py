@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from wireguard.models import PeerGroup
 
@@ -9,11 +10,11 @@ from wireguard.models import PeerGroup
 class UserAcl(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_level = models.PositiveIntegerField(default=0, choices=(
-        (10, 'Debugging Analyst'),
-        (20, 'View Only User'),
-        (30, 'Peer Manager'),
-        (40, 'Wireguard Manager'),
-        (50, 'Administrator'),
+        (10, _('Debugging Analyst')),
+        (20, _('View Only')),
+        (30, _('Peer Manager')),
+        (40, _('WireGuard Manager')),
+        (50, _('Administrator')),
     ))
     peer_groups = models.ManyToManyField(PeerGroup, blank=True)
     enable_console = models.BooleanField(default=True)

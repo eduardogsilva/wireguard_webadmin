@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Peers</th>
-            <th>Server Instance</th>
-            <th>Users</th>
+            <th>{% trans 'Name' %}</th>
+            <th>{% trans 'Peers' %}</th>
+            <th>{% trans 'Server Instance' %}</th>
+            <th>{% trans 'Users' %}</th>
             <th></th>
         </tr>
     </thead>
@@ -31,7 +32,7 @@
                 {% endfor %}
             </td>
             <td style="width: 1%; white-space: nowrap;">
-                <a href="/user/peer-group/manage/?uuid={{ peer_group.uuid }}" ><i class="far fa-edit"></i></a>
+                <a href="/user/peer-group/manage/?uuid={{ peer_group.uuid }}" title="{% trans 'Edit' %}"><i class="far fa-edit"></i></a>
             </td>
         </tr>
         {% endfor %}
