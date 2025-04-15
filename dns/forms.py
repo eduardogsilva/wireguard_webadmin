@@ -2,9 +2,10 @@ import re
 
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, Div, Field, Submit, HTML
+from crispy_forms.layout import Div, Field, Fieldset, HTML, Layout, Submit
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from .models import DNSFilterList
 from .models import DNSSettings, StaticHost
@@ -18,13 +19,14 @@ class DNSSettingsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(DNSSettingsForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.fields['dns_primary'].label = 'Primary Resolver'
-        self.fields['dns_secondary'].label = 'Secondary Resolver'
+        self.fields['dns_primary'].label = _('Primary Resolver')
+        self.fields['dns_secondary'].label = _('Secondary Resolver')
         self.fields['dns_primary'].required = True
+        back_label = _('Back')
         self.helper.form_method = 'post'
         self.helper.layout = Layout(
             Fieldset(
-                'Resolver Settings',
+                _('Resolver Settings'),
                 Div(
                     Field('dns_primary', css_class='form-control'),
                     Field('dns_secondary', css_class='form-control'),
@@ -32,8 +34,8 @@ class DNSSettingsForm(forms.ModelForm):
                 ),
             ),
             FormActions(
-                Submit('save', 'Save', css_class='btn btn-primary'),
-                HTML('<a class="btn btn-outline-primary" href="/dns/">Back</a>'),
+                Submit('save', _('Save'), css_class='btn btn-primary'),
+                HTML(f'<a class="btn btn-outline-primary" href="/dns/">{back_label}</a>'),
             )
         )
 
@@ -60,13 +62,17 @@ class StaticHostForm(forms.ModelForm):
         super(StaticHostForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
+        self.fields['hostname'].label = _('Hostname')
+        self.fields['ip_address'].label = _('IP Address')
+        back_label = _('Back')
+        delete_label = _('Delete')
         if self.instance.pk:
-            delete_html = "<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete</a>"
+            delete_html = f"<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{delete_label}</a>"
         else:
             delete_html = ''
         self.helper.layout = Layout(
             Fieldset(
-                'Static DNS',
+                _('Static DNS'),
                 Div(
                     Field('hostname', css_class='form-control'),
                     Field('ip_address', css_class='form-control'),
@@ -74,8 +80,8 @@ class StaticHostForm(forms.ModelForm):
                 ),
             ),
             FormActions(
-                Submit('save', 'Save', css_class='btn btn-primary'),
-                HTML('<a class="btn btn-outline-primary" href="/dns/">Back</a> '),
+                Submit('save', _('Save'), css_class='btn btn-primary'),
+                HTML(f'<a class="btn btn-outline-primary" href="/dns/">{back_label}</a> '),
                 HTML(delete_html),
             )
         )
@@ -100,18 +106,23 @@ class DNSFilterListForm(forms.ModelForm):
         super(DNSFilterListForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        # Add a delete button if editing an existing instance
+        back_label = _('Back')
+        delete_label = _('Delete')
+        self.fields['name'].label = _('Name')
+        self.fields['description'].label = _('Description')
+        self.fields['list_url'].label = _('List URL')
+
         if self.instance.pk:
             delete_html = (
                 "<a href='javascript:void(0)' class='btn btn-outline-danger' "
-                "data-command='delete' onclick='openCommandDialog(this)'>Delete</a>"
+                f"data-command='delete' onclick='openCommandDialog(this)'>{delete_label}</a>"
             )
             self.fields['name'].widget.attrs['readonly'] = True
         else:
             delete_html = ''
         self.helper.layout = Layout(
             Fieldset(
-                'DNS Filter List Details',
+                _('DNS Filter List Details'),
                 Div(
                     Div(Field('name', css_class='form-control'), css_class='col-md-12'),
                     Div(Field('description', css_class='form-control'), css_class='col-md-12'),
@@ -120,8 +131,8 @@ class DNSFilterListForm(forms.ModelForm):
                 ),
             ),
             FormActions(
-                Submit('save', 'Save', css_class='btn btn-primary'),
-                HTML('<a class="btn btn-outline-primary" href="/dns/">Back</a>'),
+                Submit('save', _('Save'), css_class='btn btn-primary'),
+                HTML(f'<a class="btn btn-outline-primary" href="/dns/">{back_label}</a>'),
                 HTML(delete_html),
             )
         )

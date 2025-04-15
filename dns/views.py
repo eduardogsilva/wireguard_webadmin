@@ -5,12 +5,13 @@ import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from user_manager.models import UserAcl
 from .forms import DNSFilterListForm
-from .forms import StaticHostForm, DNSSettingsForm
+from .forms import DNSSettingsForm, StaticHostForm
 from .functions import generate_dnsmasq_config
 from .models import DNSFilterList, DNSSettings
 from .models import StaticHost
@@ -29,13 +30,13 @@ def export_dns_configuration():
 @login_required
 def view_apply_dns_config(request):
     export_dns_configuration()
-    messages.success(request, 'DNS settings applied successfully')
+    messages.success(request, _('DNS settings applied successfully'))
     return redirect('/dns/')
 
 
 @login_required
 def view_static_host_list(request):
-    dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
+    dns_settings, dns_settings_created = DNSSettings.objects.get_or_create(name='dns_settings')
     static_host_list = StaticHost.objects.all().order_by('hostname')
     filter_lists = DNSFilterList.objects.all().order_by('-recommended', 'name')
     if not filter_lists:
@@ -64,10 +65,10 @@ def view_static_host_list(request):
         )
 
         filter_lists = DNSFilterList.objects.all().order_by('-recommended', 'name')
-        messages.success(request, 'Default DNS Filter List created successfully')
+        messages.success(request, _('Default DNS Filter List created successfully'))
 
     if dns_settings.pending_changes:
-        messages.warning(request, 'Pending Changes|There are pending DNS changes that have not been applied')
+        messages.warning(request, _('Pending Changes|There are pending DNS changes that have not been applied'))
     context = {
         'dns_settings': dns_settings,
         'static_host_list': static_host_list,
@@ -80,19 +81,16 @@ def view_static_host_list(request):
 def view_manage_dns_settings(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
-    dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
+    dns_settings, dns_settings_created = DNSSettings.objects.get_or_create(name='dns_settings')
     form = DNSSettingsForm(request.POST or None, instance=dns_settings)
     if form.is_valid():
         form.save()
         return redirect('/dns/apply_config/')
 
-    form_description_content = '''
-        <strong>DNS Forwarders</strong>
-        <p>
-        All DNS queries will be forwarded to the primary resolver. If the primary resolver is not available, the secondary resolver will be used.
-        </p>
-        
-        '''
+    description_title = _('DNS Forwarders')
+    description_message = _('All DNS queries will be forwarded to the primary resolver. If the primary resolver is not available, the secondary resolver will be used.')
+    form_description_content = f'<strong>{description_title}</strong><p>{description_message}</p>'
+
 
     context = {
         'dns_settings': dns_settings,
@@ -109,7 +107,7 @@ def view_manage_dns_settings(request):
 def view_manage_static_host(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=40).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
-    dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
+    dns_settings, dns_settings_created = DNSSettings.objects.get_or_create(name='dns_settings')
     if request.GET.get('uuid'):
         static_dns = get_object_or_404(StaticHost, uuid=request.GET.get('uuid'))
         if request.GET.get('action') == 'delete':
@@ -117,10 +115,10 @@ def view_manage_static_host(request):
                 static_dns.delete()
                 dns_settings.pending_changes = True
                 dns_settings.save()
-                messages.success(request, 'Static DNS deleted successfully')
+                messages.success(request, _('Static DNS deleted successfully'))
                 return redirect('/dns/')
             else:
-                messages.warning(request, 'Static DNS not deleted|Invalid confirmation')
+                messages.warning(request, _('Static DNS not deleted|Invalid confirmation'))
                 return redirect('/dns/')
     else:
         static_dns = None
@@ -130,7 +128,7 @@ def view_manage_static_host(request):
         form.save()
         dns_settings.pending_changes = True
         dns_settings.save()
-        messages.success(request, 'Static DNS saved successfully')
+        messages.success(request, _('Static DNS saved successfully'))
         return redirect('/dns/')
 
     context = {
@@ -146,27 +144,27 @@ def view_manage_filter_list(request):
     if not UserAcl.objects.filter(user=request.user, user_level__gte=40).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
 
-    dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
+    dns_settings, dns_settings_created = DNSSettings.objects.get_or_create(name='dns_settings')
 
     if request.GET.get('uuid'):
         filter_list = get_object_or_404(DNSFilterList, uuid=request.GET.get('uuid'))
         if request.GET.get('action') == 'delete':
             if request.GET.get('confirmation') == 'delete':
                 if filter_list.enabled:
-                    messages.warning(request, 'DNS Filter List not deleted | Filter List is enabled')
+                    messages.warning(request, _('DNS Filter List not deleted | Filter List is enabled'))
                     return redirect('/dns/')
                 file_path = os.path.join("/etc/dnsmasq/", f"{filter_list.uuid}.conf")
                 if os.path.exists(file_path):
                     try:
                         os.remove(file_path)
                     except Exception as e:
-                        messages.error(request, f"Error removing config file: {e}")
+                        messages.error(request, _("Error removing config file: ") + e)
                         return redirect('/dns/')
                 filter_list.delete()
-                messages.success(request, 'DNS Filter List deleted successfully')
+                messages.success(request, _('DNS Filter List deleted successfully'))
                 return redirect('/dns/')
             else:
-                messages.warning(request, 'DNS Filter List not deleted | Invalid confirmation')
+                messages.warning(request, _('DNS Filter List not deleted | Invalid confirmation'))
                 return redirect('/dns/')
     else:
         filter_list = None
@@ -176,7 +174,7 @@ def view_manage_filter_list(request):
         form.save()
         dns_settings.pending_changes = True
         dns_settings.save()
-        messages.success(request, 'DNS Filter List saved successfully')
+        messages.success(request, _('DNS Filter List saved successfully'))
         return redirect('/dns/')
 
     context = {
@@ -193,7 +191,7 @@ def view_update_dns_list(request):
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
 
     dns_list = get_object_or_404(DNSFilterList, uuid=request.GET.get('uuid'))
-    dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
+    dns_settings, dns_settings_created = DNSSettings.objects.get_or_create(name='dns_settings')
     file_path = os.path.join("/etc/dnsmasq/", f"{dns_list.uuid}.conf")
 
     old_checksum = None
@@ -203,7 +201,7 @@ def view_update_dns_list(request):
                 old_content = f.read()
             old_checksum = hashlib.sha256(old_content).hexdigest()
         except Exception as e:
-            messages.error(request, f"Failed to read existing config file: {e}")
+            messages.error(request, _("Failed to read existing config file: ") + e)
             if dns_list.enabled:
                 dns_list.enabled = False
                 dns_list.save()
@@ -221,7 +219,7 @@ def view_update_dns_list(request):
             dns_list.save()
             dns_settings.pending_changes = True
             dns_settings.save()
-        messages.error(request, f"Failed to fetch the host list: {e}")
+        messages.error(request, _("Failed to fetch the host list: ") + e)
         return redirect('/dns/')
 
     new_checksum = hashlib.sha256(content.encode('utf-8')).hexdigest()
@@ -231,7 +229,7 @@ def view_update_dns_list(request):
         with open(file_path, "w") as f:
             f.write(content)
     except Exception as e:
-        messages.error(request, f"Failed to write config file: {e}")
+        messages.error(request, _("Failed to write config file: ") + e)
         if dns_list.enabled:
             dns_list.enabled = False
             dns_list.save()
@@ -256,7 +254,7 @@ def view_update_dns_list(request):
     # Save changes to the DNSFilterList instance.
     dns_list.save()
 
-    messages.success(request, 'DNS Filter List updated successfully')
+    messages.success(request, _('DNS Filter List updated successfully'))
     return redirect('/dns/')
 
 
@@ -265,7 +263,7 @@ def view_toggle_dns_list(request):
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
 
     dns_list = get_object_or_404(DNSFilterList, uuid=request.GET.get('uuid'))
-    dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
+    dns_settings, dns_settings_created = DNSSettings.objects.get_or_create(name='dns_settings')
     file_path = os.path.join("/etc/dnsmasq/", f"{dns_list.uuid}.conf")
 
     if request.GET.get('action') == 'enable':
@@ -273,12 +271,12 @@ def view_toggle_dns_list(request):
             dns_list.enabled = True
             dns_list.save()
             export_dns_configuration()
-            messages.success(request, 'DNS Filter List enabled successfully')
+            messages.success(request, _('DNS Filter List enabled successfully'))
         else:
-            messages.error(request, 'DNS Filter List not enabled | No valid hosts found')
+            messages.error(request, _('DNS Filter List not enabled | No valid hosts found'))
     else:
         dns_list.enabled = False
         dns_list.save()
         export_dns_configuration()
-        messages.success(request, 'DNS Filter List disabled successfully')
+        messages.success(request, _('DNS Filter List disabled successfully'))
     return redirect('/dns/')

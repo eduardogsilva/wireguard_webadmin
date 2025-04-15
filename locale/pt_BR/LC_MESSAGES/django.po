@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 17:19-0300\n"
+"POT-Creation-Date: 2025-04-15 10:21-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,148 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: dns/forms.py:22
+msgid "Primary Resolver"
+msgstr "Servidor Primário"
+
+#: dns/forms.py:23
+msgid "Secondary Resolver"
+msgstr "Servidor Secundário"
+
+#: dns/forms.py:25 dns/forms.py:67 dns/forms.py:109
+#: templates/wireguard/wireguard_peer_list.html:166
+msgid "Back"
+msgstr "Voltar"
+
+#: dns/forms.py:29
+msgid "Resolver Settings"
+msgstr "Resolução de DNS"
+
+#: dns/forms.py:37 dns/forms.py:83 dns/forms.py:134
+msgid "Save"
+msgstr "Salvar"
+
+#: dns/forms.py:65 templates/dns/static_host_list.html:17
+msgid "Hostname"
+msgstr "Endereço do Host"
+
+#: dns/forms.py:66 templates/dns/static_host_list.html:18
+#: templates/wireguard/wireguard_status.html:45
+msgid "IP Address"
+msgstr "Endereço IP"
+
+#: dns/forms.py:68 dns/forms.py:110
+#: templates/wireguard/wireguard_peer_list.html:185
+msgid "Delete"
+msgstr "Excluir"
+
+#: dns/forms.py:75
+msgid "Static DNS"
+msgstr "DNS Estático"
+
+#: dns/forms.py:111 templates/dns/static_host_list.html:68
+msgid "Name"
+msgstr "Nome"
+
+#: dns/forms.py:112 templates/dns/static_host_list.html:69
+msgid "Description"
+msgstr "Descrição"
+
+#: dns/forms.py:113
+msgid "List URL"
+msgstr "Endereço da Lista"
+
+#: dns/forms.py:125
+msgid "DNS Filter List Details"
+msgstr "Detalhes da Lista de Filtro de DNS"
+
+#: dns/views.py:33
+msgid "DNS settings applied successfully"
+msgstr "Configurações de DNS aplicadas com sucesso"
+
+#: dns/views.py:68
+msgid "Default DNS Filter List created successfully"
+msgstr "Lista de Filtro de DNS padrão criada com sucesso"
+
+#: dns/views.py:71
+msgid ""
+"Pending Changes|There are pending DNS changes that have not been applied"
+msgstr ""
+"Alterações Pendentes|Há alterações de DNS pendentes que não foram aplicadas"
+
+#: dns/views.py:90
+msgid "DNS Forwarders"
+msgstr "Servidores DNS"
+
+#: dns/views.py:91
+msgid ""
+"All DNS queries will be forwarded to the primary resolver. If the primary "
+"resolver is not available, the secondary resolver will be used."
+msgstr ""
+"Todas as consultas DNS serão encaminhadas para o resolvedor primário. Se o "
+"resolvedor primário não estiver disponível, o resolvedor secundário será "
+"usado."
+
+#: dns/views.py:118
+msgid "Static DNS deleted successfully"
+msgstr "DNS Estático excluído com sucesso"
+
+#: dns/views.py:121
+msgid "Static DNS not deleted|Invalid confirmation"
+msgstr "DNS Estático não excluído|Confirmação inválida"
+
+#: dns/views.py:131
+msgid "Static DNS saved successfully"
+msgstr "DNS Estático salvo com sucesso"
+
+#: dns/views.py:154
+msgid "DNS Filter List not deleted | Filter List is enabled"
+msgstr "Lista de Filtro de DNS não excluída | Lista de Filtro está habilitada"
+
+#: dns/views.py:161
+msgid "Error removing config file: "
+msgstr "Erro ao remover o arquivo de configuração: "
+
+#: dns/views.py:164
+msgid "DNS Filter List deleted successfully"
+msgstr "Lista de Filtro de DNS excluída com sucesso"
+
+#: dns/views.py:167
+msgid "DNS Filter List not deleted | Invalid confirmation"
+msgstr "Lista de Filtro de DNS não excluída | Confirmação inválida"
+
+#: dns/views.py:177
+msgid "DNS Filter List saved successfully"
+msgstr "Lista de Filtro de DNS salva com sucesso"
+
+#: dns/views.py:204
+msgid "Failed to read existing config file: "
+msgstr "Erro ao ler o arquivo de configuração existente: "
+
+#: dns/views.py:222
+msgid "Failed to fetch the host list: "
+msgstr "Erro ao buscar a lista de hosts: "
+
+#: dns/views.py:232
+msgid "Failed to write config file: "
+msgstr "Falha ao escrever o arquivo de configuração: "
+
+#: dns/views.py:257
+msgid "DNS Filter List updated successfully"
+msgstr "Lista de Filtro de DNS atualizada com sucesso"
+
+#: dns/views.py:274
+msgid "DNS Filter List enabled successfully"
+msgstr "Lista de Filtro de DNS habilitada com sucesso"
+
+#: dns/views.py:276
+msgid "DNS Filter List not enabled | No valid hosts found"
+msgstr "Lista de Filtro de DNS não habilitada | Nenhum host válido encontrado"
+
+#: dns/views.py:281
+msgid "DNS Filter List disabled successfully"
+msgstr "Lista de Filtro de DNS desabilitada com sucesso"
 
 #: intl_tools/forms.py:11 templates/accounts/login.html:36
 msgid "Language"
@@ -61,7 +203,7 @@ msgstr "Você foi desconectado com sucesso."
 msgid "Login again"
 msgstr "Acessar novamente"
 
-#: templates/base.html:112
+#: templates/base.html:112 templates/dns/static_host_list.html:72
 msgid "Status"
 msgstr "Estado"
 
@@ -100,6 +242,47 @@ msgstr "Atualização Disponível"
 #: templates/base.html:288
 msgid "Version"
 msgstr "Versão"
+
+#: templates/dns/static_host_list.html:9
+msgid "Static Host List"
+msgstr "Lista de Endereços Estáticos"
+
+#: templates/dns/static_host_list.html:45
+msgid "Add"
+msgstr "Adicionar"
+
+#: templates/dns/static_host_list.html:46
+msgid "Settings"
+msgstr "Configurações"
+
+#: templates/dns/static_host_list.html:47
+msgid "Apply"
+msgstr "Aplicar"
+
+#: templates/dns/static_host_list.html:59
+msgid "DNS Filter Lists"
+msgstr "Listas de Filtro de DNS"
+
+#: templates/dns/static_host_list.html:70
+msgid "Hosts"
+msgstr "Endereços"
+
+#: templates/dns/static_host_list.html:71
+msgid "Last Update"
+msgstr "Última Atualização"
+
+#: templates/dns/static_host_list.html:73
+msgid "Update"
+msgstr "Atualizar"
+
+#: templates/dns/static_host_list.html:74
+#: templates/wireguard/wireguard_peer_list.html:196
+msgid "Edit"
+msgstr "Editar"
+
+#: templates/dns/static_host_list.html:116
+msgid "Add Filter List"
+msgstr "Adicionar Lista de Filtro"
 
 #: templates/wireguard/wireguard_peer_list.html:75
 #: templates/wireguard/wireguard_peer_list.html:125
@@ -152,10 +335,6 @@ msgstr "Sem histórico de tráfego, por favor aguarde alguns minutos"
 msgid "Close QR Code"
 msgstr "Fechar QR Code"
 
-#: templates/wireguard/wireguard_peer_list.html:166
-msgid "Back"
-msgstr "Voltar"
-
 #: templates/wireguard/wireguard_peer_list.html:168
 msgid "VPN Invite Details"
 msgstr "Detalhes do Convite para VPN"
@@ -180,10 +359,6 @@ msgstr "Email"
 msgid "WhatsApp"
 msgstr "WhatsApp"
 
-#: templates/wireguard/wireguard_peer_list.html:185
-msgid "Delete"
-msgstr "Excluir"
-
 #: templates/wireguard/wireguard_peer_list.html:192
 msgid "Close"
 msgstr "Fechar"
@@ -195,10 +370,6 @@ msgstr "Configuração"
 #: templates/wireguard/wireguard_peer_list.html:194
 msgid "QR Code"
 msgstr "Código QR"
-
-#: templates/wireguard/wireguard_peer_list.html:196
-msgid "Edit"
-msgstr "Editar"
 
 #: templates/wireguard/wireguard_peer_list.html:204
 msgid "No WireGuard Instances Found"
@@ -316,10 +487,6 @@ msgstr "Recarregar o serviço Wireguard"
 msgid "Instance Traffic"
 msgstr "Tráfego da Instância"
 
-#: templates/wireguard/wireguard_status.html:45
-msgid "IP Address"
-msgstr "Endereço IP"
-
 #: templates/wireguard/wireguard_status.html:46
 msgid "Public Address"
 msgstr "Endereço Público"
@@ -336,7 +503,7 @@ msgstr "Peers"
 msgid "WireGuard Status"
 msgstr "Estado do WireGuard"
 
-#: wireguard_peer/views.py:49
+#: wireguard_peer/views.py:50
 msgid "WireGuard Peer List"
 msgstr "Lista de Peers do WireGuard"
 

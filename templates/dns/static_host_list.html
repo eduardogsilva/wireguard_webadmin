@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %}
     <div class='row'>
         <div class='col-lg-6'>
             <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h3 class="card-title">Static Host List</h3>
+                    <h3 class="card-title">{% trans 'Static Host List' %}</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -13,8 +14,8 @@
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
-                                    <th>Hostname</th>
-                                    <th>IP Address</th>
+                                    <th>{% trans 'Hostname' %}</th>
+                                    <th>{% trans 'IP Address' %}</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -41,9 +42,9 @@
 
                     <div class="row">
                         <div class="col-lg-12">
-                            <a href="/dns/manage_static_host/" class="btn btn-primary">Add Static Host</a>
-                            <a href="/dns/manage_settings/" class="btn btn-primary">DNS Settings</a>
-                            <a href="/dns/apply_config/" class="btn btn-primary">Apply Config</a>
+                            <a href="/dns/manage_static_host/" class="btn btn-primary">{% trans 'Add' %}</a>
+                            <a href="/dns/manage_settings/" class="btn btn-primary">{% trans 'Settings' %}</a>
+                            <a href="/dns/apply_config/" class="btn btn-primary">{% trans 'Apply' %}</a>
                         </div>
                     </div>
                 </div>
@@ -55,7 +56,7 @@
         <div class='col-lg-12'>
             <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h3 class="card-title">DNS Filter Lists</h3>
+                    <h3 class="card-title">{% trans 'DNS Filter Lists' %}</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -64,13 +65,13 @@
                                 <thead>
                                 <tr>
                                     <th class="min-width"></th>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Hosts</th>
-                                    <th>Last Update</th>
-                                    <th class="min-width">Status</th>
-                                    <th class="min-width">Update</th>
-                                    <th class="min-width">Edit</th>
+                                    <th>{% trans 'Name' %}</th>
+                                    <th>{% trans 'Description' %}</th>
+                                    <th>{% trans 'Hosts' %}</th>
+                                    <th>{% trans 'Last Update' %}</th>
+                                    <th class="min-width">{% trans 'Status' %}</th>
+                                    <th class="min-width">{% trans 'Update' %}</th>
+                                    <th class="min-width">{% trans 'Edit' %}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -111,7 +112,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <a href="/dns/manage_filter_list/" class="btn btn-primary">Add Filter List</a>
+                            <a href="/dns/manage_filter_list/" class="btn btn-primary">{% trans 'Add Filter List' %}</a>
                         </div>
                     </div>
                 </div>
