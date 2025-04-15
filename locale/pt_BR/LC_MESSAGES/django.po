@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-15 10:21-0300\n"
+"POT-Creation-Date: 2025-04-15 10:45-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: console/views.py:24 console/views.py:56
+msgid "Console"
+msgstr "Console"
+
+#: console/views.py:26
+msgid "iptables list"
+msgstr "Lista de regras do iptables"
+
+#: console/views.py:32
+msgid "running processes"
+msgstr "Processos em execução"
+
+#: console/views.py:35
+msgid "WireGuard show"
+msgstr "Estado do WireGuard"
+
+#: console/views.py:38
+msgid "Memory usage"
+msgstr "Uso de Memória"
+
+#: console/views.py:41
+msgid "Routing table"
+msgstr "Tabela de Roteamento"
+
+#: console/views.py:53
+msgid "DNS container test script"
+msgstr "Script de teste do contêiner DNS"
+
+#: console/views.py:56
+msgid "Invalid command"
+msgstr "Comando inválido"
+
+#: console/views.py:63
+msgid "Invalid target"
+msgstr "Destino inválido"
+
+#: console/views.py:68
+msgid "Enhanced filter is enabled. This command is not available."
+msgstr "Filtro aprimorado está habilitado. Este comando não está disponível."
 
 #: dns/forms.py:22
 msgid "Primary Resolver"
@@ -242,6 +282,14 @@ msgstr "Atualização Disponível"
 #: templates/base.html:288
 msgid "Version"
 msgstr "Versão"
+
+#: templates/console/console.html:12
+msgid "Clear"
+msgstr "Limpar"
+
+#: templates/console/console.html:27
+msgid "Destination Hostname or IP Address"
+msgstr "Endereço ou IP do Destino"
 
 #: templates/dns/static_host_list.html:9
 msgid "Static Host List"

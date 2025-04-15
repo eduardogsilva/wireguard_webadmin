@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 
@@ -8,7 +9,7 @@
       <div class="card-title">
         <div class='row'>
             <div class='col-md-12'>
-                <a href='/console/' class='btn btn-outline-primary'>Clear</a>
+                <a href='/console/' class='btn btn-outline-primary'>{% trans 'Clear' %}</a>
                 <a href='?command=iptables' class='btn btn-outline-primary'>iptables</a>
                 <a href='?command=ifconfig' class='btn btn-outline-primary'>ifconfig</a>
                 <a href='?command=ps' class='btn btn-outline-primary'>processes</a>
@@ -23,7 +24,7 @@
                 <script>
                 function openCommandDialog(element) {
                     var command = element.getAttribute('data-command');
-                    var destination = prompt("Host or IP address to " + command);
+                    var destination = prompt("{% trans 'Destination Hostname or IP Address' %}");
                     if (destination) {
                         var url = "?command=" + command + "&target=" + encodeURIComponent(destination);
                         window.location.href = url;
