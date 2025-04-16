@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from firewall.models import FirewallRule, FirewallSettings, RedirectRule
 from wireguard.models import PeerAllowedIP, WireGuardInstance
@@ -40,7 +41,7 @@ def reset_firewall_to_default():
 
     FirewallRule.objects.create(
         firewall_chain='postrouting', sort_order=0, out_interface=firewall_settings.wan_interface, rule_action='masquerade', 
-        description='Masquerade traffic from VPN to WAN',
+        description=_('Masquerade traffic from VPN to WAN'),
     )
 
     # This rule will now be fixed in the firewall header
@@ -50,19 +51,19 @@ def reset_firewall_to_default():
     #    )
 
     FirewallRule.objects.create(
-        firewall_chain='forward', sort_order=1, rule_action='reject', description='Reject traffic to private networks exiting on WAN interface',
+        firewall_chain='forward', sort_order=1, rule_action='reject', description=_('Reject traffic to private networks exiting on WAN interface'),
         in_interface='wg+', out_interface=firewall_settings.wan_interface, destination_ip='10.0.0.0', destination_netmask=8
         )
     FirewallRule.objects.create(
-        firewall_chain='forward', sort_order=2, rule_action='reject', description='Reject traffic to private networks exiting on WAN interface',
+        firewall_chain='forward', sort_order=2, rule_action='reject', description=_('Reject traffic to private networks exiting on WAN interface'),
         in_interface='wg+', out_interface=firewall_settings.wan_interface, destination_ip='172.16.0.0', destination_netmask=12
         )
     FirewallRule.objects.create(
-        firewall_chain='forward', sort_order=3, rule_action='reject', description='Reject traffic to private networks exiting on WAN interface',
+        firewall_chain='forward', sort_order=3, rule_action='reject', description=_('Reject traffic to private networks exiting on WAN interface'),
         in_interface='wg+', out_interface=firewall_settings.wan_interface, destination_ip='192.168.0.0', destination_netmask=16
         )
     FirewallRule.objects.create(
-        firewall_chain='forward', sort_order=10, rule_action='accept', description='Allow traffic from VPN to WAN', 
+        firewall_chain='forward', sort_order=10, rule_action='accept', description=_('Allow traffic from VPN to WAN'),
         in_interface='wg+', out_interface=firewall_settings.wan_interface
         )
     return

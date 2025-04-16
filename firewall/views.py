@@ -76,7 +76,7 @@ def view_firewall_rule_list(request):
     if current_chain not in ['forward', 'portforward', 'postrouting']:
         current_chain = 'forward'
     context = {
-        'page_title': 'Firewall Rule List',
+        'page_title': _('Firewall Rule List'),
         'firewall_rule_list': FirewallRule.objects.filter(firewall_chain=current_chain).order_by('sort_order'),
         'current_chain': current_chain,
         'port_forward_list': RedirectRule.objects.all().order_by('port'),
@@ -90,7 +90,7 @@ def view_firewall_rule_list(request):
 def manage_firewall_rule(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=40).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
-    context = {'page_title': 'Manage Firewall Rule'}
+    context = {'page_title': _('Manage Firewall Rule')}
     instance = None
     uuid = request.GET.get('uuid', None)
     if uuid:
@@ -108,9 +108,9 @@ def manage_firewall_rule(request):
                 if wireguard_instance:
                     wireguard_instance.pending_changes = True
                     wireguard_instance.save()
-                messages.success(request, 'Firewall rule deleted successfully')
+                messages.success(request, _('Firewall rule deleted successfully'))
             else:
-                messages.warning(request, 'Error deleting Firewall rule|Confirmation did not match. Firewall rule was not deleted.')
+                messages.warning(request, _('Error deleting Firewall rule|Confirmation did not match. Firewall rule was not deleted.'))
             return redirect('/firewall/rule_list/')
     else:
         current_chain = request.GET.get('chain', 'forward')
@@ -122,7 +122,7 @@ def manage_firewall_rule(request):
             firewall_settings.pending_changes = True
             firewall_settings.save()
             form.save()
-            messages.success(request, 'Firewall rule saved successfully')
+            messages.success(request, _('Firewall rule saved successfully'))
             # Marking wireguard_instance as having pending changes, not the best way to do this, but it works for now.
             # I will improve it later.
             wireguard_instance = WireGuardInstance.objects.all().first()
@@ -154,7 +154,7 @@ def manage_firewall_rule(request):
 def view_manage_firewall_settings(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=40).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
-    context = {'page_title': 'Manage Firewall Settings'}
+    context = {'page_title': _('Manage Firewall Settings')}
     previous_firewall_chain = request.GET.get('chain')
     if previous_firewall_chain not in ['forward', 'portforward', 'postrouting']:
         previous_firewall_chain = 'forward'
@@ -170,7 +170,7 @@ def view_manage_firewall_settings(request):
         form = FirewallSettingsForm(request.POST, instance=firewall_settings)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Firewall settings saved successfully')
+            messages.success(request, _('Firewall settings saved successfully'))
             # Marking wireguard_instance as having pending changes, not the best way to do this, but it works for now.
             # I will improve it later.
             wireguard_instance = WireGuardInstance.objects.all().first()

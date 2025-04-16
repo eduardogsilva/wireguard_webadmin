@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from wireguard.models import NETMASK_CHOICES
 from wireguard.models import Peer, WireGuardInstance
@@ -58,7 +59,7 @@ class FirewallRule(models.Model):
     state_untracked = models.BooleanField(default=False)
     not_state = models.BooleanField(default=False)
 
-    rule_action = models.CharField(max_length=10, default='accept', choices=[('accept', 'ACCEPT'), ('reject', 'REJECT'), ('drop', 'DROP'), ('masquerade', 'MASQUERADE')])
+    rule_action = models.CharField(max_length=10, default='accept', choices=[('accept', _('ACCEPT')), ('reject', _('REJECT')), ('drop', _('DROP')), ('masquerade', _('MASQUERADE'))])
     
     sort_order = models.PositiveIntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
@@ -71,8 +72,8 @@ class FirewallRule(models.Model):
 
 class FirewallSettings(models.Model):
     name = models.CharField(max_length=6, default='global', unique=True)
-    default_forward_policy = models.CharField(max_length=6, default='accept', choices=[('accept', 'ACCEPT'), ('reject', 'REJECT'), ('drop', 'DROP')])
-    default_output_policy = models.CharField(max_length=6, default='accept', choices=[('accept', 'ACCEPT'), ('reject', 'REJECT'), ('drop', 'DROP')])
+    default_forward_policy = models.CharField(max_length=6, default='accept', choices=[('accept', _('ACCEPT')), ('reject', _('REJECT')), ('drop', _('DROP'))])
+    default_output_policy = models.CharField(max_length=6, default='accept', choices=[('accept', _('ACCEPT')), ('reject', _('REJECT')), ('drop', _('DROP'))])
     allow_peer_to_peer = models.BooleanField(default=True)
     allow_instance_to_instance = models.BooleanField(default=True)
     wan_interface = models.CharField(max_length=12, default='eth0')

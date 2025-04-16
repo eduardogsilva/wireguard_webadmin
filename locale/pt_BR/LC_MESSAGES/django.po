@@ -6,9 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
+
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 11:43-0300\n"
+"POT-Creation-Date: 2025-04-16 12:32-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -251,6 +252,25 @@ msgstr ""
 msgid "Default Forward Policy"
 msgstr "Política Padrão (Forward)"
 
+#: firewall/forms.py:156 firewall/models.py:62 firewall/models.py:75
+#: firewall/models.py:76 templates/firewall/firewall_rule_list.html:63
+#: templates/firewall/firewall_rule_list.html:91
+#: templates/firewall/firewall_rule_list.html:168
+#: templates/firewall/firewall_rule_list.html:187
+msgid "ACCEPT"
+msgstr "ACEITA"
+
+#: firewall/forms.py:156 firewall/models.py:62 firewall/models.py:75
+#: firewall/models.py:76 templates/firewall/firewall_rule_list.html:170
+#: templates/firewall/firewall_rule_list.html:187
+msgid "REJECT"
+msgstr "REJEITA"
+
+#: firewall/forms.py:156 firewall/models.py:62 firewall/models.py:75
+#: firewall/models.py:76
+msgid "DROP"
+msgstr "DESCARTA"
+
 #: firewall/forms.py:157
 msgid "Allow Peer to Peer"
 msgstr "Permitir tráfego entre Peers"
@@ -262,6 +282,22 @@ msgstr "Permitir tráfego entre Instâncias"
 #: firewall/forms.py:159
 msgid "WAN Interface"
 msgstr "Interface WAN"
+
+#: firewall/models.py:62
+msgid "MASQUERADE"
+msgstr "MASCARAR"
+
+#: firewall/tools.py:44
+msgid "Masquerade traffic from VPN to WAN"
+msgstr "Mascarar tráfego da VPN para a WAN"
+
+#: firewall/tools.py:54 firewall/tools.py:58 firewall/tools.py:62
+msgid "Reject traffic to private networks exiting on WAN interface"
+msgstr "Rejeitar tráfego para redes privadas saindo pela interface WAN"
+
+#: firewall/tools.py:66
+msgid "Allow traffic from VPN to WAN"
+msgstr "Permitir tráfego da VPN para a WAN"
 
 #: firewall/views.py:21
 msgid "Port Forward List"
@@ -466,6 +502,101 @@ msgstr "Encaminhamento de Porta"
 msgid "Default Policy"
 msgstr "Política Padrão"
 
+#: templates/firewall/firewall_rule_list.html:40
+msgid "In"
+msgstr "Entrada"
+
+#: templates/firewall/firewall_rule_list.html:41
+msgid "Out"
+msgstr "Saída"
+
+#: templates/firewall/firewall_rule_list.html:42
+msgid "Source"
+msgstr "Origem"
+
+#: templates/firewall/firewall_rule_list.html:43
+#: templates/firewall/redirect_rule_list.html:15
+msgid "Destination"
+msgstr "Destino"
+
+#: templates/firewall/firewall_rule_list.html:44
+#: templates/firewall/manage_redirect_rule.html:22
+#: templates/firewall/redirect_rule_list.html:13
+msgid "Protocol"
+msgstr "Protocolo"
+
+#: templates/firewall/firewall_rule_list.html:45
+#: templates/firewall/manage_redirect_rule.html:30
+#: templates/firewall/redirect_rule_list.html:14
+#: templates/wireguard/wireguard_status.html:47 vpn_invite/forms.py:284
+msgid "Port"
+msgstr "Porta"
+
+#: templates/firewall/firewall_rule_list.html:46
+msgid "State"
+msgstr "Estado"
+
+#: templates/firewall/firewall_rule_list.html:47
+msgid "Action"
+msgstr "Ação"
+
+#: templates/firewall/firewall_rule_list.html:53
+msgid "Automatic rule: Allow established/related traffic"
+msgstr "Regra Automática: Permitir tráfego estabelecido/relacionado"
+
+#: templates/firewall/firewall_rule_list.html:58
+#: templates/firewall/firewall_rule_list.html:138
+msgid "all"
+msgstr "Todos"
+
+#: templates/firewall/firewall_rule_list.html:60
+#: templates/firewall/firewall_rule_list.html:142
+msgid "Related"
+msgstr "Relacionado"
+
+#: templates/firewall/firewall_rule_list.html:61
+#: templates/firewall/firewall_rule_list.html:143
+msgid "Established"
+msgstr "Estabelecido"
+
+#: templates/firewall/firewall_rule_list.html:71
+#: templates/firewall/firewall_rule_list.html:97
+msgid "Automatic Rule: Port forward."
+msgstr "Regra Automática: Encaminhamento de Porta."
+
+#: templates/firewall/firewall_rule_list.html:141
+msgid "New"
+msgstr "Novo"
+
+#: templates/firewall/firewall_rule_list.html:144
+msgid "Invalid"
+msgstr "Inválido"
+
+#: templates/firewall/firewall_rule_list.html:145
+msgid "Untracked"
+msgstr "Não rastreado"
+
+#: templates/firewall/firewall_rule_list.html:158
+msgid "Automatic Rule: Firewall Settings Peer to Peer traffic"
+msgstr "Regra Automática: Configurações de Firewall tráfego entre Peers"
+
+#: templates/firewall/firewall_rule_list.html:179
+msgid "Automatic Rule: Firewall Settings Instance to Instance"
+msgstr "Regra Automática: permitir tráfego entre Instâncias"
+
+#: templates/firewall/firewall_rule_list.html:194
+msgid "Create Firewall Rule"
+msgstr "Criar Regra de Firewall"
+
+#: templates/firewall/firewall_rule_list.html:195
+#: templates/firewall/redirect_rule_list.html:59
+msgid "Firewall Settings"
+msgstr "Configuração de Firewall"
+
+#: templates/firewall/firewall_rule_list.html:196
+msgid "Display automatic rules"
+msgstr "Mostrar regras automáticas"
+
 #: templates/firewall/manage_firewall_settings.html:61
 msgid "Reset firewall to default"
 msgstr "Redefinir firewall para o padrão"
@@ -479,17 +610,6 @@ msgstr ""
 "Redefinir o firewall para o padrão removerá todas as regras e configurações. "
 "Você tem certeza que deseja continuar?\\n\\nDigite 'delete all rules and "
 "reset firewall' para confirmar."
-
-#: templates/firewall/manage_redirect_rule.html:22
-#: templates/firewall/redirect_rule_list.html:13
-msgid "Protocol"
-msgstr "Protocolo"
-
-#: templates/firewall/manage_redirect_rule.html:30
-#: templates/firewall/redirect_rule_list.html:14
-#: templates/wireguard/wireguard_status.html:47 vpn_invite/forms.py:284
-msgid "Port"
-msgstr "Porta"
 
 #: templates/firewall/manage_redirect_rule.html:35
 msgid "Destination Port"
@@ -580,10 +700,6 @@ msgstr "Para excluir esta regra, digite:"
 msgid "Instance"
 msgstr "Instância"
 
-#: templates/firewall/redirect_rule_list.html:15
-msgid "Destination"
-msgstr "Destino"
-
 #: templates/firewall/redirect_rule_list.html:16
 msgid "Allow Forward"
 msgstr "Permitir Encaminhamento"
@@ -603,10 +719,6 @@ msgstr ""
 #: templates/firewall/redirect_rule_list.html:58
 msgid "Create Port forwarding Rule"
 msgstr "Criar Regra de Encaminhamento de Porta"
-
-#: templates/firewall/redirect_rule_list.html:59
-msgid "Firewall Settings"
-msgstr "Configuração de Firewall"
 
 #: templates/user_manager/list.html:9 user_manager/forms.py:20
 msgid "User Level"

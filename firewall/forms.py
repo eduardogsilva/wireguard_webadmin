@@ -153,10 +153,10 @@ class FirewallSettingsForm(forms.ModelForm):
         if not interface.startswith('wg') and interface != 'lo':
             interface_choices.append((interface, interface))
 
-    default_forward_policy = forms.ChoiceField(label='Default Forward Policy', choices=[('accept', 'ACCEPT'), ('reject', 'REJECT'), ('drop', 'DROP')], initial='accept')
-    allow_peer_to_peer = forms.BooleanField(label='Allow Peer to Peer', required=False)
-    allow_instance_to_instance = forms.BooleanField(label='Allow Instance to Instance', required=False)
-    wan_interface = forms.ChoiceField(label='WAN Interface', choices=interface_choices, initial='eth0')
+    default_forward_policy = forms.ChoiceField(label=_('Default Forward Policy'), choices=[('accept', _('ACCEPT')), ('reject', _('REJECT')), ('drop', _('DROP'))], initial='accept')
+    allow_peer_to_peer = forms.BooleanField(label=_('Allow Peer to Peer'), required=False)
+    allow_instance_to_instance = forms.BooleanField(label=_('Allow Instance to Instance'), required=False)
+    wan_interface = forms.ChoiceField(label=_('WAN Interface'), choices=interface_choices, initial='eth0')
 
     class Meta:
         model = FirewallSettings
