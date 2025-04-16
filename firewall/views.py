@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext_lazy as _
 
 from firewall.forms import FirewallRuleForm, FirewallSettingsForm, RedirectRuleForm
 from firewall.models import FirewallRule, FirewallSettings, RedirectRule
@@ -17,7 +18,7 @@ def view_redirect_rule_list(request):
     if wireguard_instances.filter(legacy_firewall=True).exists():
         return redirect('/firewall/migration_required/')
     context = {
-        'page_title': 'Port Forward List',
+        'page_title': _('Port Forward List'),
         'redirect_rule_list': RedirectRule.objects.all().order_by('port'),
         'current_chain': 'portforward',
         }
@@ -28,7 +29,7 @@ def view_redirect_rule_list(request):
 def manage_redirect_rule(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=40).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
-    context = {'page_title': 'Manage Port Forward'}
+    context = {'page_title': _('Manage Port Forward')}
     instance = None
     uuid = request.GET.get('uuid', None)
     if uuid:
@@ -38,9 +39,9 @@ def manage_redirect_rule(request):
                 instance.wireguard_instance.pending_changes = True
                 instance.wireguard_instance.save()
                 instance.delete()
-                messages.success(request, 'Port Forward rule deleted successfully')
+                messages.success(request, _('Port Forward rule deleted successfully'))
             else:
-                messages.warning(request, 'Error deleting Port Forward rule|Confirmation did not match. Port Forward rule was not deleted.')
+                messages.warning(request, _('Error deleting Port Forward rule|Confirmation did not match. Port Forward rule was not deleted.'))
             return redirect('/firewall/port_forward/')
 
     if request.method == 'POST':
@@ -50,7 +51,7 @@ def manage_redirect_rule(request):
             wireguard_instance.pending_changes = True
             wireguard_instance.save()
             form.save()
-            messages.success(request, 'Port Forward rule saved successfully')
+            messages.success(request, _('Port Forward rule saved successfully'))
             return redirect('/firewall/port_forward/')
     else:
         form = RedirectRuleForm(instance=instance)

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block content %}
     <div class="card card-primary card-outline">
         <div class="card-body">
@@ -9,12 +9,12 @@
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
-                            <th>Instance</th>
-                            <th>Protocol</th>
-                            <th>Port</th>
-                            <th>Destination</th>
-                            <th>Allow Forward</th>
-                            <th>Masquerade Source</th>
+                            <th>{% trans 'Instance' %}</th>
+                            <th>{% trans 'Protocol' %}</th>
+                            <th>{% trans 'Port' %}</th>
+                            <th>{% trans 'Destination' %}</th>
+                            <th>{% trans 'Allow Forward' %}</th>
+                            <th>{% trans 'Masquerade Source' %}</th>
                             <th><i class="far fa-edit"></i></th>
                         </tr>
                         </thead>
@@ -43,7 +43,7 @@
                                 <td>
                                     {% if redirect_rule.masquerade_source %}
                                         <i class="fas fa-check"></i>
-                                        <i class="fas fa-exclamation-triangle" title="This serves as a temporary solution when a peer does not use the VPN as its default gateway. It's important to note that this configuration is not recommended, as it alters the source address of all connections to match the IP address of the WireGuard instance."></i>
+                                        <i class="fas fa-exclamation-triangle" title="{% trans "This serves as a temporary solution when a peer does not use the VPN as its default gateway. It's important to note that this configuration is not recommended, as it alters the source address of all connections to match the IP address of the WireGuard instance." %}"></i>
                                     {% else %}
                                         <i class="fas fa-times"></i>
                                     {% endif %}
@@ -55,8 +55,8 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                    <a href="/firewall/manage_port_forward_rule/" class='btn btn-primary'>Create Port forwarding Rule</a>
-                    <a href="/firewall/firewall_settings/?chain=porforward" class='btn btn-outline-primary'>Firewall Settings</a>
+                    <a href="/firewall/manage_port_forward_rule/" class='btn btn-primary'>{% trans 'Create Port forwarding Rule' %}</a>
+                    <a href="/firewall/firewall_settings/?chain=porforward" class='btn btn-outline-primary'>{% trans 'Firewall Settings' %}</a>
                 </div>
             </div>
         </div>

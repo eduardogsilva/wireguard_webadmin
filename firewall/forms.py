@@ -1,6 +1,7 @@
 import re
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from firewall.models import FirewallRule, FirewallSettings, RedirectRule
 from wgwadmlibrary.tools import list_network_interfaces
@@ -36,18 +37,24 @@ class RedirectRuleForm(forms.ModelForm):
         wireguard_instance = cleaned_data.get('wireguard_instance')
         port_forward = cleaned_data.get('port_forward')
 
+        if not port:
+            raise forms.ValidationError(_("Port is required."))
+
         if port == 8000 and protocol == 'tcp':
-            raise forms.ValidationError("Port 8000 (tcp) is reserved for wireguard-webadmin.")
+            raise forms.ValidationError(_("Port 8000 (tcp) is reserved for wireguard-webadmin."))
         
         if protocol == 'udp':
             if WireGuardInstance.objects.filter(listen_port=port).exists():
-                raise forms.ValidationError("Port " + str(port) + " (udp) is already in use by a WireGuard instance.")
+                raise forms.ValidationError(_("Port %s is already in use by another WireGuard instance.") % port)
+
+        if not peer and not ip_address:
+            raise forms.ValidationError(_("Invalid Destination. Either Peer or IP Address must be informed."))
 
         if peer and ip_address:
-            raise forms.ValidationError("Peer and IP Address cannot be selected at the same time.")
+            raise forms.ValidationError(_("Peer and IP Address cannot be selected at the same time."))
         
         if ip_address and not wireguard_instance:
-            raise forms.ValidationError("IP Address cannot be used without selecting a WireGuard instance.")
+            raise forms.ValidationError(_("IP Address cannot be used without selecting a WireGuard instance."))
         
         if peer:
             cleaned_data['wireguard_instance'] = peer.wireguard_instance

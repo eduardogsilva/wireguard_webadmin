@@ -1,3 +1,4 @@
+{% load i18n %}
 <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item">
         <a class="nav-link {% if current_chain == "forward" %}active{% endif %}" href="/firewall/rule_list/?chain=forward" role="tab">Forward</a>
@@ -7,11 +8,11 @@
         <a class="nav-link {% if current_chain == "postrouting" %}active{% endif %}" href="/firewall/rule_list/?chain=postrouting" role="tab">Post Routing</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {% if current_chain == "portforward" %}active{% endif %}" href="/firewall/port_forward/" role="tab">Port Forward</a>
+        <a class="nav-link {% if current_chain == "portforward" %}active{% endif %}" href="/firewall/port_forward/" role="tab">{% trans 'Port Forward' %}</a>
     </li>
     {% if current_chain == 'forward' %}
     <li class="nav-item ml-auto">
-        <a class="nav-link" role="">Default Policy: <b>{{ firewall_settings.get_default_forward_policy_display }}</b></a>
+        <a class="nav-link" role="">{% trans 'Default Policy' %}: <b>{{ firewall_settings.get_default_forward_policy_display }}</b></a>
     </li>
     {% endif %}
     
