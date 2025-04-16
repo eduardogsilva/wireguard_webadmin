@@ -9,7 +9,7 @@ msgstr ""
 
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 12:32-0300\n"
+"POT-Creation-Date: 2025-04-16 14:32-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,6 +68,7 @@ msgid "Secondary DNS"
 msgstr "DNS Secundário"
 
 #: dns/forms.py:25 dns/forms.py:67 dns/forms.py:109
+#: templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
 #: templates/wireguard/wireguard_manage_ip.html:42
@@ -82,6 +83,7 @@ msgid "Resolver Settings"
 msgstr "Resolução de DNS"
 
 #: dns/forms.py:37 dns/forms.py:83 dns/forms.py:134
+#: templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
 #: templates/wireguard/wireguard_manage_ip.html:41
@@ -105,6 +107,7 @@ msgid "IP Address"
 msgstr "Endereço IP"
 
 #: dns/forms.py:68 dns/forms.py:110
+#: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
 #: templates/wireguard/wireguard_manage_ip.html:43
 #: templates/wireguard/wireguard_peer_list.html:185 user_manager/forms.py:48
@@ -122,7 +125,8 @@ msgstr "DNS Estático"
 msgid "Name"
 msgstr "Nome"
 
-#: dns/forms.py:112 templates/dns/static_host_list.html:69
+#: dns/forms.py:112 firewall/forms.py:111
+#: templates/dns/static_host_list.html:69
 #: templates/firewall/manage_redirect_rule.html:18
 #: templates/firewall/manage_redirect_rule.html:19
 msgid "Description"
@@ -248,11 +252,109 @@ msgid "IP Address cannot be used without selecting a WireGuard instance."
 msgstr ""
 "Endereço IP não pode ser usado sem selecionar uma instância do WireGuard."
 
-#: firewall/forms.py:156
+#: firewall/forms.py:81
+msgid "wg+ (Any WireGuard Interface)"
+msgstr "wg+ (Qualquer Interface do WireGuard)"
+
+#: firewall/forms.py:112
+msgid "Firewall Chain"
+msgstr "Cadeia do Firewall"
+
+#: firewall/forms.py:113
+msgid "In Interface"
+msgstr "Interface de Entrada"
+
+#: firewall/forms.py:114
+msgid "Out Interface"
+msgstr "Interface de Saída"
+
+#: firewall/forms.py:115
+msgid "Source IP"
+msgstr "IP de Origem"
+
+#: firewall/forms.py:116 firewall/forms.py:121 wireguard/forms.py:18
+#: wireguard_peer/forms.py:30
+msgid "Netmask"
+msgstr "Máscara de Rede"
+
+#: firewall/forms.py:117
+msgid "Source Peer"
+msgstr "Peer de Origem"
+
+#: firewall/forms.py:118
+msgid "Source Peer Include Networks"
+msgstr "Incluir Redes do Peer de Origem"
+
+#: firewall/forms.py:119
+msgid "Not Source"
+msgstr "Não Origem"
+
+#: firewall/forms.py:120
+msgid "Destination IP"
+msgstr "IP de Destino"
+
+#: firewall/forms.py:122
+msgid "Destination Peer"
+msgstr "Peer de Destino"
+
+#: firewall/forms.py:123
+msgid "Destination Peer Include Networks"
+msgstr "Incluir Redes do Peer de Destino"
+
+#: firewall/forms.py:124
+msgid "Not Destination"
+msgstr "Não Destino"
+
+#: firewall/forms.py:125 templates/firewall/firewall_rule_list.html:44
+#: templates/firewall/manage_firewall_rule.html:263
+#: templates/firewall/manage_redirect_rule.html:22
+#: templates/firewall/redirect_rule_list.html:13
+msgid "Protocol"
+msgstr "Protocolo"
+
+#: firewall/forms.py:126 templates/firewall/manage_redirect_rule.html:35
+msgid "Destination Port"
+msgstr "Porta de Destino"
+
+#: firewall/forms.py:127 templates/firewall/firewall_rule_list.html:141
+msgid "New"
+msgstr "Novo"
+
+#: firewall/forms.py:128 templates/firewall/firewall_rule_list.html:60
+#: templates/firewall/firewall_rule_list.html:142
+msgid "Related"
+msgstr "Relacionado"
+
+#: firewall/forms.py:129 templates/firewall/firewall_rule_list.html:61
+#: templates/firewall/firewall_rule_list.html:143
+msgid "Established"
+msgstr "Estabelecido"
+
+#: firewall/forms.py:130 templates/firewall/firewall_rule_list.html:144
+msgid "Invalid"
+msgstr "Inválido"
+
+#: firewall/forms.py:131 templates/firewall/firewall_rule_list.html:145
+msgid "Untracked"
+msgstr "Não rastreado"
+
+#: firewall/forms.py:132
+msgid "Not State"
+msgstr "Não Estado"
+
+#: firewall/forms.py:133
+msgid "Rule Action"
+msgstr "Ação da Regra"
+
+#: firewall/forms.py:134
+msgid "Sort Order"
+msgstr "Ordem de Classificação"
+
+#: firewall/forms.py:182
 msgid "Default Forward Policy"
 msgstr "Política Padrão (Forward)"
 
-#: firewall/forms.py:156 firewall/models.py:62 firewall/models.py:75
+#: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
 #: firewall/models.py:76 templates/firewall/firewall_rule_list.html:63
 #: templates/firewall/firewall_rule_list.html:91
 #: templates/firewall/firewall_rule_list.html:168
@@ -260,26 +362,26 @@ msgstr "Política Padrão (Forward)"
 msgid "ACCEPT"
 msgstr "ACEITA"
 
-#: firewall/forms.py:156 firewall/models.py:62 firewall/models.py:75
+#: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
 #: firewall/models.py:76 templates/firewall/firewall_rule_list.html:170
 #: templates/firewall/firewall_rule_list.html:187
 msgid "REJECT"
 msgstr "REJEITA"
 
-#: firewall/forms.py:156 firewall/models.py:62 firewall/models.py:75
+#: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
 #: firewall/models.py:76
 msgid "DROP"
 msgstr "DESCARTA"
 
-#: firewall/forms.py:157
+#: firewall/forms.py:183
 msgid "Allow Peer to Peer"
 msgstr "Permitir tráfego entre Peers"
 
-#: firewall/forms.py:158
+#: firewall/forms.py:184
 msgid "Allow Instance to Instance"
 msgstr "Permitir tráfego entre Instâncias"
 
-#: firewall/forms.py:159
+#: firewall/forms.py:185
 msgid "WAN Interface"
 msgstr "Interface WAN"
 
@@ -511,19 +613,15 @@ msgid "Out"
 msgstr "Saída"
 
 #: templates/firewall/firewall_rule_list.html:42
+#: templates/firewall/manage_firewall_rule.html:141
 msgid "Source"
 msgstr "Origem"
 
 #: templates/firewall/firewall_rule_list.html:43
+#: templates/firewall/manage_firewall_rule.html:202
 #: templates/firewall/redirect_rule_list.html:15
 msgid "Destination"
 msgstr "Destino"
-
-#: templates/firewall/firewall_rule_list.html:44
-#: templates/firewall/manage_redirect_rule.html:22
-#: templates/firewall/redirect_rule_list.html:13
-msgid "Protocol"
-msgstr "Protocolo"
 
 #: templates/firewall/firewall_rule_list.html:45
 #: templates/firewall/manage_redirect_rule.html:30
@@ -537,6 +635,7 @@ msgid "State"
 msgstr "Estado"
 
 #: templates/firewall/firewall_rule_list.html:47
+#: templates/firewall/manage_firewall_rule.html:360
 msgid "Action"
 msgstr "Ação"
 
@@ -549,32 +648,10 @@ msgstr "Regra Automática: Permitir tráfego estabelecido/relacionado"
 msgid "all"
 msgstr "Todos"
 
-#: templates/firewall/firewall_rule_list.html:60
-#: templates/firewall/firewall_rule_list.html:142
-msgid "Related"
-msgstr "Relacionado"
-
-#: templates/firewall/firewall_rule_list.html:61
-#: templates/firewall/firewall_rule_list.html:143
-msgid "Established"
-msgstr "Estabelecido"
-
 #: templates/firewall/firewall_rule_list.html:71
 #: templates/firewall/firewall_rule_list.html:97
 msgid "Automatic Rule: Port forward."
 msgstr "Regra Automática: Encaminhamento de Porta."
-
-#: templates/firewall/firewall_rule_list.html:141
-msgid "New"
-msgstr "Novo"
-
-#: templates/firewall/firewall_rule_list.html:144
-msgid "Invalid"
-msgstr "Inválido"
-
-#: templates/firewall/firewall_rule_list.html:145
-msgid "Untracked"
-msgstr "Não rastreado"
 
 #: templates/firewall/firewall_rule_list.html:158
 msgid "Automatic Rule: Firewall Settings Peer to Peer traffic"
@@ -597,6 +674,156 @@ msgstr "Configuração de Firewall"
 msgid "Display automatic rules"
 msgstr "Mostrar regras automáticas"
 
+#: templates/firewall/manage_firewall_rule.html:18
+msgid "General"
+msgstr "Geral"
+
+#: templates/firewall/manage_firewall_rule.html:79
+msgid ""
+"\n"
+"                                    <h5>Advanced VPN Firewall Configuration</"
+"h5>\n"
+"                                    <p>\n"
+"                                        This interface serves as a "
+"comprehensive tool for managing firewall rules, enabling users to implement "
+"advanced traffic policies between VPN peers and networks. It simplifies "
+"establishing firewall rules, packet filtering, and NAT configurations, "
+"allowing for precise control over network security. Users can define source "
+"and destination IP addresses, ports, protocols, and actions to tailor "
+"traffic flow, ensuring a secure and efficient networking environment.\n"
+"                                    </p>\n"
+"                                    "
+msgstr ""
+"\n"
+"                                    <h5>Configuração Avançada do Firewall da "
+"VPN</h5>\n"
+"                                    <p>\n"
+"                                        Esta interface serve como uma "
+"ferramenta abrangente para gerenciar regras de firewall, permitindo que os "
+"usuários implementem políticas de tráfego avançadas entre peers de VPN e "
+"redes. Ela simplifica o estabelecimento de regras de firewall, o filtro de "
+"pacotes e as configurações de NAT, possibilitando um controle preciso sobre "
+"a segurança da rede. Os usuários podem definir endereços IP de origem e "
+"destino, portas, protocolos e ações para ajustar o fluxo de tráfego, "
+"garantindo um ambiente de rede seguro e eficiente.\n"
+"                                    </p>\n"
+"                                    "
+
+#: templates/firewall/manage_firewall_rule.html:100
+msgid "Interface"
+msgstr "Interface"
+
+#: templates/firewall/manage_firewall_rule.html:179
+msgid ""
+"\n"
+"                                    <h5>Source Selection</h5>\n"
+"                                    <p>\n"
+"                                        You have the option to apply this "
+"rule to a specific IP address or network and/or to multiple peers.<br><br>\n"
+"                                        Enabling the \"Include peer "
+"networks\" option will automatically include all Allowed IPs associated with "
+"each selected peer.<br><br>\n"
+"                                        Please note that selecting multiple "
+"peers with included networks on both the source and destination ends may "
+"result in a rapid increase in the number of firewall rules generated, "
+"depending on your configuration.<br><br>\n"
+"                                        The \"Not Source\" option negates "
+"the selected source IP, network, or peer(s).\n"
+"                                    </p>\n"
+"                                    "
+msgstr ""
+"\n"
+"                                    <h5>Seleção de Origem</h5>\n"
+"                                    <p>\n"
+"                                        Você tem a opção de aplicar esta "
+"regra a um endereço IP ou rede específica e/ou a múltiplos peers.<br><br>\n"
+"                                        Habilitar a opção \"Include peer "
+"networks\" irá incluir automaticamente todos os IPs permitidos associados a "
+"cada peer selecionado.<br><br>\n"
+"                                        Por favor, note que selecionar "
+"múltiplos peers com redes incluídas tanto na origem quanto no destino pode "
+"resultar em um rápido aumento no número de regras de firewall geradas, "
+"dependendo da sua configuração.<br><br>\n"
+"                                        A opção \"Not Source\" nega o "
+"endereço IP, rede ou peer(s) selecionado(s).\n"
+"                                    </p>\n"
+"                                    "
+
+#: templates/firewall/manage_firewall_rule.html:240
+msgid ""
+"\n"
+"                                    <h5>Destination Selection</h5>\n"
+"                                    <p>\n"
+"                                        You have the option to apply this "
+"rule to a specific IP address or network and/or to multiple peers as the "
+"destination.<br><br>\n"
+"                                        Enabling the \"Include peer "
+"networks\" option will automatically include all Allowed IPs associated with "
+"each selected peer as the destination.<br><br>\n"
+"                                        Please note that selecting multiple "
+"peers with included networks on both the source and destination ends may "
+"result in a rapid increase in the number of firewall rules generated, "
+"depending on your configuration.<br><br>\n"
+"                                        The \"Not Destination\" option "
+"negates the selected destination IP, network, or peer(s).\n"
+"                                    </p>\n"
+"                                    "
+msgstr ""
+"\n"
+"                                    <h5>Seleção de Destino</h5>\n"
+"                                    <p>\n"
+"                                        Você tem a opção de aplicar esta "
+"regra a um endereço IP ou rede específica e/ou a múltiplos peers como "
+"destino.<br><br>\n"
+"                                        Habilitar a opção \"Include peer "
+"networks\" irá incluir automaticamente todos os IPs permitidos associados a "
+"cada peer selecionado como destino.<br><br>\n"
+"                                        Por favor, note que selecionar "
+"múltiplos peers com redes incluídas tanto na origem quanto no destino pode "
+"resultar em um rápido aumento no número de regras de firewall geradas, "
+"dependendo da sua configuração.<br><br>\n"
+"                                        A opção \"Not Destination\" nega o "
+"endereço IP, rede ou peer(s) selecionado(s).\n"
+"                                    </p>\n"
+"                                    "
+
+#: templates/firewall/manage_firewall_rule.html:297
+msgid ""
+"\n"
+"                                    <h5>Protocol and Port</h5>\n"
+"                                    <p>\n"
+"                                        Only the most commonly used "
+"protocols are listed here. If you require a specific protocol, please open "
+"an issue on GitHub.<br><br>\n"
+"                                        Selecting TCP+UDP will result in the "
+"duplication of generated rules.<br><br>\n"
+"                                        Ports can be specified as single "
+"numbers (e.g., 8080) or as ranges (e.g., 8001:8999).\n"
+"                                    </p>\n"
+"                                    "
+msgstr ""
+"\n"
+"                                    <h5>Protocolo e Porta</h5>\n"
+"                                    <p>\n"
+"                                        Apenas os protocolos mais comumente "
+"utilizados estão listados aqui. Se você precisar de um protocolo específico, "
+"por favor, abra uma issue no GitHub.<br><br>\n"
+"                                        Selecionar TCP+UDP resultará na "
+"duplicação das regras geradas.<br><br>\n"
+"                                        As portas podem ser especificadas "
+"como números individuais (por exemplo, 8080) ou como intervalos (por "
+"exemplo, 8001:8999).\n"
+"                                    </p>\n"
+"                                    "
+
+#: templates/firewall/manage_firewall_rule.html:320
+msgid "Packet State"
+msgstr "Estado do Pacote"
+
+#: templates/firewall/manage_firewall_rule.html:471
+msgid "Please type 'delete' to remove this firewall rule."
+msgstr "Por favor, digite 'delete' para remover esta regra de firewall."
+
 #: templates/firewall/manage_firewall_settings.html:61
 msgid "Reset firewall to default"
 msgstr "Redefinir firewall para o padrão"
@@ -610,10 +837,6 @@ msgstr ""
 "Redefinir o firewall para o padrão removerá todas as regras e configurações. "
 "Você tem certeza que deseja continuar?\\n\\nDigite 'delete all rules and "
 "reset firewall' para confirmar."
-
-#: templates/firewall/manage_redirect_rule.html:35
-msgid "Destination Port"
-msgstr "Porta de Destino"
 
 #: templates/firewall/manage_redirect_rule.html:40
 msgid "Destination Type"
@@ -1608,10 +1831,6 @@ msgstr "Porta"
 #: wireguard/forms.py:17
 msgid "Internal IP Address"
 msgstr "Endereço IP Interno"
-
-#: wireguard/forms.py:18 wireguard_peer/forms.py:30
-msgid "Netmask"
-msgstr "Máscara de Rede"
 
 #: wireguard/forms.py:19
 msgid "Post Up"

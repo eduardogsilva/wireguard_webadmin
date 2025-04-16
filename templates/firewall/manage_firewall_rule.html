@@ -1,10 +1,11 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-3">
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Manage Firewall Rule</h3>
+            <h3 class="card-title">{{ page_title }}</h3>
         </div>
         <form method="post" action="">
             {% csrf_token %}
@@ -14,7 +15,7 @@
                     <div class="card-header" id="headingGeneral">
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseGeneral" aria-expanded="true" aria-controls="collapseGeneral">
-                                <i class="fas fa-cogs"></i> General
+                                <i class="fas fa-cogs"></i> {% trans 'General' %}
                             </button>
                         </h2>
                     </div>
@@ -74,10 +75,12 @@
                                 </div>
                         
                                 <div class="col-md-6">
+                                    {% blocktrans %}
                                     <h5>Advanced VPN Firewall Configuration</h5>
                                     <p>
                                         This interface serves as a comprehensive tool for managing firewall rules, enabling users to implement advanced traffic policies between VPN peers and networks. It simplifies establishing firewall rules, packet filtering, and NAT configurations, allowing for precise control over network security. Users can define source and destination IP addresses, ports, protocols, and actions to tailor traffic flow, ensuring a secure and efficient networking environment.
                                     </p>
+                                    {% endblocktrans %}
                                 </div>
                             </div>
                         </div>
@@ -93,7 +96,7 @@
                     <div class="card-header" id="headingInterface">
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseInterface" aria-expanded="false" aria-controls="collapseInterface">
-                                <i class="fas fa-network-wired"></i>  Interface
+                                <i class="fas fa-network-wired"></i>  {% trans 'Interface' %}
                             </button>
                         </h2>
                     </div>
@@ -134,7 +137,7 @@
                     <div class="card-header" id="headingSource">
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseSource" aria-expanded="false" aria-controls="collapseSource">
-                                <i class="fas fa-plane-departure"></i> Source
+                                <i class="fas fa-plane-departure"></i> {% trans 'Source' %}
                             </button>
                         </h2>
                     </div>
@@ -172,6 +175,7 @@
                                 </div>
                         
                                 <div class="col-md-6">
+                                    {% blocktrans %}
                                     <h5>Source Selection</h5>
                                     <p>
                                         You have the option to apply this rule to a specific IP address or network and/or to multiple peers.<br><br>
@@ -179,6 +183,7 @@
                                         Please note that selecting multiple peers with included networks on both the source and destination ends may result in a rapid increase in the number of firewall rules generated, depending on your configuration.<br><br>
                                         The "Not Source" option negates the selected source IP, network, or peer(s).
                                     </p>
+                                    {% endblocktrans %}
 
                                 </div>
                             </div>
@@ -193,7 +198,7 @@
                     <div class="card-header" id="headingDestination">
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseDestination" aria-expanded="false" aria-controls="collapseDestination">
-                                <i class="fas fa-plane-arrival"></i> Destination
+                                <i class="fas fa-plane-arrival"></i> {% trans 'Destination' %}
                             </button>
                         </h2>
                     </div>
@@ -231,6 +236,7 @@
                                 </div>
                         
                                 <div class="col-md-6">
+                                    {% blocktrans %}
                                     <h5>Destination Selection</h5>
                                     <p>
                                         You have the option to apply this rule to a specific IP address or network and/or to multiple peers as the destination.<br><br>
@@ -238,6 +244,7 @@
                                         Please note that selecting multiple peers with included networks on both the source and destination ends may result in a rapid increase in the number of firewall rules generated, depending on your configuration.<br><br>
                                         The "Not Destination" option negates the selected destination IP, network, or peer(s).
                                     </p>
+                                    {% endblocktrans %}
 
                                 </div>
                             </div>
@@ -252,7 +259,7 @@
                     <div class="card-header" id="headingProtocol">
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseProtocol" aria-expanded="false" aria-controls="collapseProtocol">
-                                <i class="fas fa-book"></i> Protocol
+                                <i class="fas fa-book"></i> {% trans 'Protocol' %}
                             </button>
                         </h2>
                     </div>
@@ -286,15 +293,14 @@
                                 </div>
 
                                 <div class="col-md-6">
+                                    {% blocktrans %}
                                     <h5>Protocol and Port</h5>
                                     <p>
                                         Only the most commonly used protocols are listed here. If you require a specific protocol, please open an issue on GitHub.<br><br>
                                         Selecting TCP+UDP will result in the duplication of generated rules.<br><br>
                                         Ports can be specified as single numbers (e.g., 8080) or as ranges (e.g., 8001:8999).
                                     </p>
-
-
-
+                                    {% endblocktrans %}
                                 </div>
                             </div>
                             
@@ -310,7 +316,7 @@
                     <div class="card-header" id="headingPacketState">
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapsePacketState" aria-expanded="false" aria-controls="collapsePacketState">
-                                <i class="fas fa-boxes"></i> Packet State
+                                <i class="fas fa-boxes"></i> {% trans 'Packet State' %}
                             </button>
                         </h2>
                     </div>
@@ -350,7 +356,7 @@
                     <div class="card-header" id="headingAction">
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseAction" aria-expanded="false" aria-controls="collapseAction">
-                                <i class="fas fa-directions"></i> Action
+                                <i class="fas fa-directions"></i> {% trans 'Action' %}
                             </button>
                         </h2>
                     </div>
@@ -369,10 +375,10 @@
                 </div>
             </div>
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <a class="btn btn-outline-secondary" href="/firewall/rule_list/?chain={{ current_chain }}">Back</a>
+                <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+                <a class="btn btn-outline-secondary" href="/firewall/rule_list/?chain={{ current_chain }}">{% trans 'Back' %}</a>
                 {% if instance %}
-                <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>Delete Rule</a>
+                <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{% trans 'Delete' %}</a>
                 {% endif %}
             </div>
         </form>
@@ -461,7 +467,7 @@
 <script>
     function openCommandDialog(element) {
         var command = element.getAttribute('data-command');
-        var confirmation = prompt("Please type 'delete' to remove this firewall rule.");
+        var confirmation = prompt("{% trans "Please type 'delete' to remove this firewall rule." %}");
         if (confirmation) {
             var url = "?uuid={{ instance.uuid }}&action=delete&confirmation=" + encodeURIComponent(confirmation);
             window.location.href = url;
