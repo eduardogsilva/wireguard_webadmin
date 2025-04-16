@@ -1,12 +1,14 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from user_manager.models import UserAcl
-from .models import InviteSettings, PeerInvite
 from django.conf import settings
-from django.utils import timezone
-from .forms import InviteSettingsForm, EmailSettingsForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+
+from user_manager.models import UserAcl
 from wireguard_tools.models import EmailSettings
+from .forms import EmailSettingsForm, InviteSettingsForm
+from .models import InviteSettings, PeerInvite
 
 
 @login_required
@@ -22,7 +24,7 @@ def view_vpn_invite_list(request):
     except:
         default_invite_url = 'https://wireguard-webadmin.example.com/invite/'
 
-    invite_settings, _ = InviteSettings.objects.get_or_create(
+    invite_settings, invite_settings_created = InviteSettings.objects.get_or_create(
         name='default_settings', defaults={'invite_url': default_invite_url,}
     )
 
@@ -32,7 +34,7 @@ def view_vpn_invite_list(request):
     peer_invite_list = PeerInvite.objects.all().order_by('invite_expiration')
     peer_invite_list.filter(invite_expiration__lt=timezone.now()).delete()
     data = {
-        'page_title': 'VPN Invite',
+        'page_title': _('VPN Invite'),
         'peer_invite_list': peer_invite_list,
     }
 
@@ -48,11 +50,11 @@ def view_vpn_invite_settings(request):
     form = InviteSettingsForm(request.POST or None, instance=invite_settings)
     if form.is_valid():
         form.save()
-        messages.success(request, 'Invite Settings|Settings saved successfully.')
+        messages.success(request, _('Invite Settings|Settings saved successfully.'))
         return redirect('/vpn_invite/')
     data = {
         'invite_settings': invite_settings,
-        'page_title': 'VPN Invite Settings',
+        'page_title': _('VPN Invite Settings'),
         'form': form,
         'form_size': 'col-lg-12'
     }
@@ -63,16 +65,16 @@ def view_vpn_invite_settings(request):
 def view_email_settings(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
-    email_settings, _ = EmailSettings.objects.get_or_create(name='email_settings')
+    email_settings, email_settings_created = EmailSettings.objects.get_or_create(name='email_settings')
 
     form = EmailSettingsForm(request.POST or None, instance=email_settings)
     if form.is_valid():
         form.save()
-        messages.success(request, 'Email Settings|Settings saved successfully.')
+        messages.success(request, _('Email Settings|Settings saved successfully.'))
         return redirect('/vpn_invite/')
     data = {
         'email_settings': email_settings,
-        'page_title': 'Email Settings',
+        'page_title': _('Email Settings'),
         'form': form,
         'form_size': 'col-lg-12'
     }

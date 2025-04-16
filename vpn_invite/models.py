@@ -1,37 +1,34 @@
 import uuid
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from wireguard.models import Peer
 
-DEFAULT_INVITE_MESSAGE = '''
-Hello,
+DEFAULT_INVITE_MESSAGE = _('''Hello,
 
 You're invited to join our secure WireGuard VPN network. Please click the link below to access your personalized VPN configuration:
 
 {invite_url}
 
-Note: This invitation link will expire in {expire_minutes} minutes. If you need a new link after expiration, please request another invite.
-'''
+Note: This invitation link will expire in {expire_minutes} minutes. If you need a new link after expiration, please request another invite.''')
 
-DEFAULT_HTML_MESSAGE = '''
-<h2>Welcome to Your VPN Setup</h2>
+DEFAULT_HTML_MESSAGE = _('''<h2>Welcome to Your VPN Setup</h2>
 <p>Begin by downloading the WireGuard app for your device using one of the links below.</p>
-<p>Once installed, you can either <strong>scan the QR code</strong> or <strong>download the configuration file</strong> to quickly import your settings and start using your secure VPN connection.</p>
-'''
+<p>Once installed, you can either <strong>scan the QR code</strong> or <strong>download the configuration file</strong> to quickly import your settings and start using your secure VPN connection.</p>''')
 
 class InviteSettings(models.Model):
     name = models.CharField(max_length=16, default='default_settings', unique=True)
     default_password = models.CharField(max_length=32, default='', blank=True, null=True)
     enforce_random_password = models.BooleanField(default=True)
     required_user_level = models.PositiveIntegerField(default=50, choices=(
-        (20, 'View Only User'), (30, 'Peer Manager'), (40, 'Wireguard Manager'), (50, 'Administrator'),
+        (20, _('View Only')), (30, _('Peer Manager')), (40, _('WireGuard Manager')), (50, _('Administrator')),
     ))
     random_password_length = models.IntegerField(default=6)
     random_password_complexity = models.CharField(
         max_length=22, default='letters_digits', choices=(
-            ('letters_digits_special', 'Letters, Digits, Special Characters'),
-            ('letters_digits', 'Letters, Digits'), ('letters', 'Letters'), ('digits', 'Digits')
+            ('letters_digits_special', _('Letters, Digits, Special Characters')),
+            ('letters_digits', _('Letters, Digits')), ('letters', _('Letters')), ('digits', _('Digits'))
         )
     )
     invite_expiration = models.IntegerField(default=30) # minutes
@@ -55,13 +52,13 @@ class InviteSettings(models.Model):
     download_3_enabled = models.BooleanField(default=True)
     download_4_enabled = models.BooleanField(default=True)
     download_5_enabled = models.BooleanField(default=True)
-    download_instructions = models.TextField(default='Download the WireGuard app for your device using one of the links below. After installation, you can scan the QR code or download the configuration file to import on your device.')
+    download_instructions = models.TextField(default=_('Download the WireGuard app for your device using one of the links below. After installation, you can scan the QR code or download the configuration file to import on your device.'))
 
     invite_url = models.URLField(default='')
 
     invite_text_body = models.TextField(default=DEFAULT_INVITE_MESSAGE)
 
-    invite_email_subject = models.CharField(max_length=64, default='WireGuard VPN Invite', blank=True, null=True)
+    invite_email_subject = models.CharField(max_length=64, default=_('WireGuard VPN Invite'), blank=True, null=True)
     invite_email_body = models.TextField(default=DEFAULT_INVITE_MESSAGE)
     invite_email_enabled = models.BooleanField(default=True)
 

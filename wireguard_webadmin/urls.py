@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.contrib import admin
 from django.urls import path
 
 from accounts.views import view_create_first_user, view_login, view_logout
@@ -37,7 +38,7 @@ from wireguard_peer.views import view_manage_ip_address, view_wireguard_peer_lis
 from wireguard_tools.views import download_config_or_qrcode, export_wireguard_configs, restart_wireguard_interfaces
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', view_apply_db_patches, name='apply_db_patches'),
     path('status/', view_wireguard_status, name='wireguard_status'),
     path('dns/', view_static_host_list, name='static_host_list'),
