@@ -6,10 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 11:25-0300\n"
+"POT-Creation-Date: 2025-04-16 11:43-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,6 +67,7 @@ msgid "Secondary DNS"
 msgstr "DNS Secundário"
 
 #: dns/forms.py:25 dns/forms.py:67 dns/forms.py:109
+#: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
 #: templates/wireguard/wireguard_manage_ip.html:42
 #: templates/wireguard/wireguard_manage_peer.html:170
@@ -81,6 +81,7 @@ msgid "Resolver Settings"
 msgstr "Resolução de DNS"
 
 #: dns/forms.py:37 dns/forms.py:83 dns/forms.py:134
+#: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
 #: templates/wireguard/wireguard_manage_ip.html:41
 #: templates/wireguard/wireguard_manage_peer.html:168
@@ -243,7 +244,24 @@ msgstr "Peer e Endereço IP não podem ser selecionados ao mesmo tempo."
 
 #: firewall/forms.py:57
 msgid "IP Address cannot be used without selecting a WireGuard instance."
-msgstr "Endereço IP não pode ser usado sem selecionar uma instância do WireGuard."
+msgstr ""
+"Endereço IP não pode ser usado sem selecionar uma instância do WireGuard."
+
+#: firewall/forms.py:156
+msgid "Default Forward Policy"
+msgstr "Política Padrão (Forward)"
+
+#: firewall/forms.py:157
+msgid "Allow Peer to Peer"
+msgstr "Permitir tráfego entre Peers"
+
+#: firewall/forms.py:158
+msgid "Allow Instance to Instance"
+msgstr "Permitir tráfego entre Instâncias"
+
+#: firewall/forms.py:159
+msgid "WAN Interface"
+msgstr "Interface WAN"
 
 #: firewall/views.py:21
 msgid "Port Forward List"
@@ -268,6 +286,38 @@ msgstr ""
 #: firewall/views.py:54
 msgid "Port Forward rule saved successfully"
 msgstr "Regra de Encaminhamento de porta salva com sucesso"
+
+#: firewall/views.py:79
+msgid "Firewall Rule List"
+msgstr "Lista de Regras de Firewall"
+
+#: firewall/views.py:93
+msgid "Manage Firewall Rule"
+msgstr "Gerenciar Regra de Firewall"
+
+#: firewall/views.py:111
+msgid "Firewall rule deleted successfully"
+msgstr "Regra de Firewall excluída com sucesso"
+
+#: firewall/views.py:113
+msgid ""
+"Error deleting Firewall rule|Confirmation did not match. Firewall rule was "
+"not deleted."
+msgstr ""
+"Erro ao excluir a regra de Firewall|Confirmação inválida. A regra de "
+"Firewall não foi removida."
+
+#: firewall/views.py:125
+msgid "Firewall rule saved successfully"
+msgstr "Regra de Firewall salva com sucesso"
+
+#: firewall/views.py:157
+msgid "Manage Firewall Settings"
+msgstr "Gerenciar Configurações de Firewall"
+
+#: firewall/views.py:173
+msgid "Firewall settings saved successfully"
+msgstr "Configurações de Firewall salvas com sucesso"
 
 #: intl_tools/forms.py:11 templates/accounts/login.html:36
 msgid "Language"
@@ -415,6 +465,20 @@ msgstr "Encaminhamento de Porta"
 #: templates/firewall/firewall_nav_tabs.html:15
 msgid "Default Policy"
 msgstr "Política Padrão"
+
+#: templates/firewall/manage_firewall_settings.html:61
+msgid "Reset firewall to default"
+msgstr "Redefinir firewall para o padrão"
+
+#: templates/firewall/manage_firewall_settings.html:77
+msgid ""
+"Reseting the firewall to default will remove all rules and settings. Are you "
+"sure you want to continue?\\n\\nType 'delete all rules and reset firewall' "
+"to confirm."
+msgstr ""
+"Redefinir o firewall para o padrão removerá todas as regras e configurações. "
+"Você tem certeza que deseja continuar?\\n\\nDigite 'delete all rules and "
+"reset firewall' para confirmar."
 
 #: templates/firewall/manage_redirect_rule.html:22
 #: templates/firewall/redirect_rule_list.html:13
