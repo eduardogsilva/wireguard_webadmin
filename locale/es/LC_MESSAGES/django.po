@@ -6,65 +6,66 @@
 #, fuzzy
 msgid ""
 msgstr ""
+
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 15:41-0300\n"
+"POT-Creation-Date: 2025-04-16 15:55-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
-"1 : 2;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: console/views.py:25 console/views.py:57 user_manager/forms.py:16
 msgid "Console"
-msgstr ""
+msgstr "Consola"
 
 #: console/views.py:27
 msgid "iptables list"
-msgstr ""
+msgstr "Lista de reglas de iptables"
 
 #: console/views.py:33
 msgid "running processes"
-msgstr ""
+msgstr "Procesos en ejecución"
 
 #: console/views.py:36
 msgid "WireGuard show"
-msgstr ""
+msgstr "Estado de WireGuard"
 
 #: console/views.py:39
 msgid "Memory usage"
-msgstr ""
+msgstr "Uso de memoria"
 
 #: console/views.py:42
 msgid "Routing table"
-msgstr ""
+msgstr "Tabla de enrutamiento"
 
 #: console/views.py:54
 msgid "DNS container test script"
-msgstr ""
+msgstr "Script de prueba del contenedor DNS"
 
 #: console/views.py:57
 msgid "Invalid command"
-msgstr ""
+msgstr "Comando inválido"
 
 #: console/views.py:64
 msgid "Invalid target"
-msgstr ""
+msgstr "Destino inválido"
 
 #: console/views.py:69
 msgid "Enhanced filter is enabled. This command is not available."
-msgstr ""
+msgstr "El filtro mejorado está habilitado. Este comando no está disponible."
 
 #: dns/forms.py:22 wireguard/forms.py:22
 msgid "Primary DNS"
-msgstr ""
+msgstr "DNS primario"
 
 #: dns/forms.py:23 wireguard/forms.py:23
 msgid "Secondary DNS"
-msgstr ""
+msgstr "DNS secundario"
 
 #: dns/forms.py:25 dns/forms.py:67 dns/forms.py:109
 #: templates/firewall/manage_firewall_rule.html:380
@@ -75,11 +76,11 @@ msgstr ""
 #: templates/wireguard/wireguard_peer_list.html:166 user_manager/forms.py:49
 #: user_manager/forms.py:180 vpn_invite/forms.py:192 vpn_invite/forms.py:326
 msgid "Back"
-msgstr ""
+msgstr "Volver"
 
 #: dns/forms.py:29
 msgid "Resolver Settings"
-msgstr ""
+msgstr "Configuración de resolución"
 
 #: dns/forms.py:37 dns/forms.py:83 dns/forms.py:134
 #: templates/firewall/manage_firewall_rule.html:379
@@ -91,11 +92,11 @@ msgstr ""
 #: user_manager/forms.py:98 user_manager/forms.py:205 vpn_invite/forms.py:191
 #: vpn_invite/forms.py:325
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: dns/forms.py:65 templates/dns/static_host_list.html:17
 msgid "Hostname"
-msgstr ""
+msgstr "Nombre de host"
 
 #: dns/forms.py:66 templates/dns/static_host_list.html:18
 #: templates/firewall/manage_redirect_rule.html:43
@@ -103,7 +104,7 @@ msgstr ""
 #: templates/firewall/manage_redirect_rule.html:68
 #: templates/wireguard/wireguard_status.html:45
 msgid "IP Address"
-msgstr ""
+msgstr "Dirección IP"
 
 #: dns/forms.py:68 dns/forms.py:110
 #: templates/firewall/manage_firewall_rule.html:382
@@ -112,242 +113,245 @@ msgstr ""
 #: templates/wireguard/wireguard_peer_list.html:185 user_manager/forms.py:48
 #: user_manager/forms.py:181
 msgid "Delete"
-msgstr ""
+msgstr "Eliminar"
 
 #: dns/forms.py:75
 msgid "Static DNS"
-msgstr ""
+msgstr "DNS estático"
 
 #: dns/forms.py:111 templates/dns/static_host_list.html:68
 #: templates/user_manager/peer_group_list.html:8 user_manager/forms.py:177
 #: wireguard_peer/forms.py:10
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: dns/forms.py:112 firewall/forms.py:111
 #: templates/dns/static_host_list.html:69
 #: templates/firewall/manage_redirect_rule.html:18
 #: templates/firewall/manage_redirect_rule.html:19
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #: dns/forms.py:113
 msgid "List URL"
-msgstr ""
+msgstr "URL de la lista"
 
 #: dns/forms.py:125
 msgid "DNS Filter List Details"
-msgstr ""
+msgstr "Detalles de la lista de filtro DNS"
 
 #: dns/views.py:33
 msgid "DNS settings applied successfully"
-msgstr ""
+msgstr "Configuración DNS aplicada correctamente"
 
 #: dns/views.py:68
 msgid "Default DNS Filter List created successfully"
-msgstr ""
+msgstr "Lista de filtro DNS predeterminada creada correctamente"
 
 #: dns/views.py:71
 msgid ""
 "Pending Changes|There are pending DNS changes that have not been applied"
-msgstr ""
+msgstr "Cambios pendientes|Hay cambios DNS pendientes que no se han aplicado"
 
 #: dns/views.py:90
 msgid "DNS Forwarders"
-msgstr ""
+msgstr "Encaminadores DNS"
 
 #: dns/views.py:91
 msgid ""
 "All DNS queries will be forwarded to the primary resolver. If the primary "
 "resolver is not available, the secondary resolver will be used."
 msgstr ""
+"Todas las consultas DNS se enviarán al resolvedor primario. Si el primario "
+"no está disponible, se usará el secundario."
 
 #: dns/views.py:118
 msgid "Static DNS deleted successfully"
-msgstr ""
+msgstr "DNS estático eliminado correctamente"
 
 #: dns/views.py:121
 msgid "Static DNS not deleted|Invalid confirmation"
-msgstr ""
+msgstr "DNS estático no eliminado|Confirmación inválida"
 
 #: dns/views.py:131
 msgid "Static DNS saved successfully"
-msgstr ""
+msgstr "DNS estático guardado correctamente"
 
 #: dns/views.py:154
 msgid "DNS Filter List not deleted | Filter List is enabled"
-msgstr ""
+msgstr "Lista de filtro DNS no eliminada | La lista está habilitada"
 
 #: dns/views.py:161
 msgid "Error removing config file: "
-msgstr ""
+msgstr "Error al eliminar archivo de configuración: "
 
 #: dns/views.py:164
 msgid "DNS Filter List deleted successfully"
-msgstr ""
+msgstr "Lista de filtro DNS eliminada correctamente"
 
 #: dns/views.py:167
 msgid "DNS Filter List not deleted | Invalid confirmation"
-msgstr ""
+msgstr "Lista de filtro DNS no eliminada | Confirmación inválida"
 
 #: dns/views.py:177
 msgid "DNS Filter List saved successfully"
-msgstr ""
+msgstr "Lista de filtro DNS guardada correctamente"
 
 #: dns/views.py:204
 msgid "Failed to read existing config file: "
-msgstr ""
+msgstr "Error al leer archivo de configuración existente: "
 
 #: dns/views.py:222
 msgid "Failed to fetch the host list: "
-msgstr ""
+msgstr "Error al obtener lista de hosts: "
 
 #: dns/views.py:232
 msgid "Failed to write config file: "
-msgstr ""
+msgstr "Error al escribir archivo de configuración: "
 
 #: dns/views.py:257
 msgid "DNS Filter List updated successfully"
-msgstr ""
+msgstr "Lista de filtro DNS actualizada correctamente"
 
 #: dns/views.py:274
 msgid "DNS Filter List enabled successfully"
-msgstr ""
+msgstr "Lista de filtro DNS habilitada correctamente"
 
 #: dns/views.py:276
 msgid "DNS Filter List not enabled | No valid hosts found"
-msgstr ""
+msgstr "Lista de filtro DNS no habilitada | No se encontraron hosts válidos"
 
 #: dns/views.py:281
 msgid "DNS Filter List disabled successfully"
-msgstr ""
+msgstr "Lista de filtro DNS deshabilitada correctamente"
 
 #: firewall/forms.py:41
 msgid "Port is required."
-msgstr ""
+msgstr "Puerto es obligatorio."
 
 #: firewall/forms.py:44
 msgid "Port 8000 (tcp) is reserved for wireguard-webadmin."
-msgstr ""
+msgstr "El puerto 8000 (TCP) está reservado para wireguard-webadmin."
 
 #: firewall/forms.py:48
 #, python-format
 msgid "Port %s is already in use by another WireGuard instance."
-msgstr ""
+msgstr "El puerto %s ya está en uso por otra instancia de WireGuard."
 
 #: firewall/forms.py:51
 msgid "Invalid Destination. Either Peer or IP Address must be informed."
-msgstr ""
+msgstr "Destino inválido. Debe indicar Peer o Dirección IP."
 
 #: firewall/forms.py:54
 msgid "Peer and IP Address cannot be selected at the same time."
-msgstr ""
+msgstr "Peer y Dirección IP no se pueden seleccionar simultáneamente."
 
 #: firewall/forms.py:57
 msgid "IP Address cannot be used without selecting a WireGuard instance."
 msgstr ""
+"No se puede usar Dirección IP sin seleccionar una instancia de WireGuard."
 
 #: firewall/forms.py:81
 msgid "wg+ (Any WireGuard Interface)"
-msgstr ""
+msgstr "wg+ (Cualquier interfaz WireGuard)"
 
 #: firewall/forms.py:112
 msgid "Firewall Chain"
-msgstr ""
+msgstr "Cadena de firewall"
 
 #: firewall/forms.py:113
 msgid "In Interface"
-msgstr ""
+msgstr "Interfaz de entrada"
 
 #: firewall/forms.py:114
 msgid "Out Interface"
-msgstr ""
+msgstr "Interfaz de salida"
 
 #: firewall/forms.py:115
 msgid "Source IP"
-msgstr ""
+msgstr "IP origen"
 
 #: firewall/forms.py:116 firewall/forms.py:121 wireguard/forms.py:18
 #: wireguard_peer/forms.py:30
 msgid "Netmask"
-msgstr ""
+msgstr "Máscara de red"
 
 #: firewall/forms.py:117
 msgid "Source Peer"
-msgstr ""
+msgstr "Peer de origen"
 
 #: firewall/forms.py:118
 msgid "Source Peer Include Networks"
-msgstr ""
+msgstr "Incluir redes del peer de origen"
 
 #: firewall/forms.py:119
 msgid "Not Source"
-msgstr ""
+msgstr "No origen"
 
 #: firewall/forms.py:120
 msgid "Destination IP"
-msgstr ""
+msgstr "IP destino"
 
 #: firewall/forms.py:122
 msgid "Destination Peer"
-msgstr ""
+msgstr "Peer de destino"
 
 #: firewall/forms.py:123
 msgid "Destination Peer Include Networks"
-msgstr ""
+msgstr "Incluir redes del peer de destino"
 
 #: firewall/forms.py:124
 msgid "Not Destination"
-msgstr ""
+msgstr "No destino"
 
 #: firewall/forms.py:125 templates/firewall/firewall_rule_list.html:44
 #: templates/firewall/manage_firewall_rule.html:263
 #: templates/firewall/manage_redirect_rule.html:22
 #: templates/firewall/redirect_rule_list.html:13
 msgid "Protocol"
-msgstr ""
+msgstr "Protocolo"
 
 #: firewall/forms.py:126 templates/firewall/manage_redirect_rule.html:35
 msgid "Destination Port"
-msgstr ""
+msgstr "Puerto de destino"
 
 #: firewall/forms.py:127 templates/firewall/firewall_rule_list.html:141
 msgid "New"
-msgstr ""
+msgstr "Nuevo"
 
 #: firewall/forms.py:128 templates/firewall/firewall_rule_list.html:60
 #: templates/firewall/firewall_rule_list.html:142
 msgid "Related"
-msgstr ""
+msgstr "Relacionado"
 
 #: firewall/forms.py:129 templates/firewall/firewall_rule_list.html:61
 #: templates/firewall/firewall_rule_list.html:143
 msgid "Established"
-msgstr ""
+msgstr "Establecido"
 
 #: firewall/forms.py:130 templates/firewall/firewall_rule_list.html:144
 msgid "Invalid"
-msgstr ""
+msgstr "Inválido"
 
 #: firewall/forms.py:131 templates/firewall/firewall_rule_list.html:145
 msgid "Untracked"
-msgstr ""
+msgstr "Sin seguimiento"
 
 #: firewall/forms.py:132
 msgid "Not State"
-msgstr ""
+msgstr "No estado"
 
 #: firewall/forms.py:133
 msgid "Rule Action"
-msgstr ""
+msgstr "Acción de la regla"
 
 #: firewall/forms.py:134
 msgid "Sort Order"
-msgstr ""
+msgstr "Orden"
 
 #: firewall/forms.py:182
 msgid "Default Forward Policy"
-msgstr ""
+msgstr "Política predeterminada de reenvío"
 
 #: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
 #: firewall/models.py:76 templates/firewall/firewall_rule_list.html:63
@@ -355,315 +359,323 @@ msgstr ""
 #: templates/firewall/firewall_rule_list.html:168
 #: templates/firewall/firewall_rule_list.html:187
 msgid "ACCEPT"
-msgstr ""
+msgstr "ACEPTAR"
 
 #: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
 #: firewall/models.py:76 templates/firewall/firewall_rule_list.html:170
 #: templates/firewall/firewall_rule_list.html:187
 msgid "REJECT"
-msgstr ""
+msgstr "RECHAZAR"
 
 #: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
 #: firewall/models.py:76
 msgid "DROP"
-msgstr ""
+msgstr "DESCARTAR"
 
 #: firewall/forms.py:183
 msgid "Allow Peer to Peer"
-msgstr ""
+msgstr "Permitir tráfico entre peers"
 
 #: firewall/forms.py:184
 msgid "Allow Instance to Instance"
-msgstr ""
+msgstr "Permitir tráfico entre instancias"
 
 #: firewall/forms.py:185
 msgid "WAN Interface"
-msgstr ""
+msgstr "Interfaz WAN"
 
 #: firewall/models.py:62
 msgid "MASQUERADE"
-msgstr ""
+msgstr "MASCARAR"
 
 #: firewall/tools.py:44
 msgid "Masquerade traffic from VPN to WAN"
-msgstr ""
+msgstr "Mascarar tráfico de VPN a WAN"
 
 #: firewall/tools.py:54 firewall/tools.py:58 firewall/tools.py:62
 msgid "Reject traffic to private networks exiting on WAN interface"
-msgstr ""
+msgstr "Rechazar tráfico a redes privadas saliendo por la interfaz WAN"
 
 #: firewall/tools.py:66
 msgid "Allow traffic from VPN to WAN"
-msgstr ""
+msgstr "Permitir tráfico de VPN a WAN"
 
 #: firewall/views.py:21
 msgid "Port Forward List"
-msgstr ""
+msgstr "Lista de redirecciones de puerto"
 
 #: firewall/views.py:32
 msgid "Manage Port Forward"
-msgstr ""
+msgstr "Gestionar redirección de puerto"
 
 #: firewall/views.py:42
 msgid "Port Forward rule deleted successfully"
-msgstr ""
+msgstr "Regla de redirección eliminada correctamente"
 
 #: firewall/views.py:44
 msgid ""
 "Error deleting Port Forward rule|Confirmation did not match. Port Forward "
 "rule was not deleted."
 msgstr ""
+"Error al eliminar regla de redirección|Confirmación inválida. La regla no se "
+"eliminó."
 
 #: firewall/views.py:54
 msgid "Port Forward rule saved successfully"
-msgstr ""
+msgstr "Regla de redirección guardada correctamente"
 
 #: firewall/views.py:79
 msgid "Firewall Rule List"
-msgstr ""
+msgstr "Lista de reglas de firewall"
 
 #: firewall/views.py:93
 msgid "Manage Firewall Rule"
-msgstr ""
+msgstr "Gestionar regla de firewall"
 
 #: firewall/views.py:111
 msgid "Firewall rule deleted successfully"
-msgstr ""
+msgstr "Regla de firewall eliminada correctamente"
 
 #: firewall/views.py:113
 msgid ""
 "Error deleting Firewall rule|Confirmation did not match. Firewall rule was "
 "not deleted."
 msgstr ""
+"Error al eliminar regla de firewall|Confirmación inválida. La regla no se "
+"eliminó."
 
 #: firewall/views.py:125
 msgid "Firewall rule saved successfully"
-msgstr ""
+msgstr "Regla de firewall guardada correctamente"
 
 #: firewall/views.py:157
 msgid "Manage Firewall Settings"
-msgstr ""
+msgstr "Gestionar configuración de firewall"
 
 #: firewall/views.py:173
 msgid "Firewall settings saved successfully"
-msgstr ""
+msgstr "Configuración de firewall guardada correctamente"
 
 #: intl_tools/forms.py:11 templates/accounts/login.html:36
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 #: intl_tools/forms.py:22 templates/base.html:80
 msgid "Change Language"
-msgstr ""
+msgstr "Cambiar idioma"
 
 #: templates/access_denied.html:9
 msgid "Access Denied"
-msgstr ""
+msgstr "Acceso denegado"
 
 #: templates/access_denied.html:12
 msgid "Sorry, you do not have permission to access this page."
-msgstr ""
+msgstr "Lo siento, no tienes permiso para acceder a esta página."
 
 #: templates/access_denied.html:12
 msgid ""
 "Please contact your system administrator if you believe this is an error."
 msgstr ""
+"Por favor, contacta a tu administrador del sistema si crees que esto es un "
+"error."
 
 #: templates/accounts/login.html:14 templates/user_manager/list.html:8
 #: user_manager/forms.py:13 vpn_invite/forms.py:281
 msgid "Username"
-msgstr ""
+msgstr "Usuario"
 
 #: templates/accounts/login.html:23
 #: templates/vpn_invite/invite_settings.html:19 user_manager/forms.py:14
 #: vpn_invite/forms.py:282
 msgid "Password"
-msgstr ""
+msgstr "Contraseña"
 
 #: templates/accounts/login.html:32
 msgid "Login"
-msgstr ""
+msgstr "Iniciar sesión"
 
 #: templates/accounts/logout.html:11
 msgid "You have been successfully logged out."
-msgstr ""
+msgstr "Has cerrado sesión correctamente."
 
 #: templates/accounts/logout.html:14
 msgid "Login again"
-msgstr ""
+msgstr "Iniciar sesión de nuevo"
 
 #: templates/base.html:112 templates/dns/static_host_list.html:72
 #: vpn_invite/forms.py:78 vpn_invite/forms.py:79 vpn_invite/forms.py:80
 #: vpn_invite/forms.py:81 vpn_invite/forms.py:82
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: templates/base.html:158 user_manager/views.py:74
 msgid "User Manager"
-msgstr ""
+msgstr "Gestión de usuarios"
 
 #: templates/base.html:176 templates/wireguard/wireguard_peer_list.html:195
 #: vpn_invite/views.py:37
 msgid "VPN Invite"
-msgstr ""
+msgstr "Invitación VPN"
 
 #: templates/base.html:254
 msgid "Update Required"
-msgstr ""
+msgstr "Actualización requerida"
 
 #: templates/base.html:256
 msgid ""
 "Your WireGuard settings have been modified. To apply these changes, please "
 "update the configuration and reload the WireGuard service."
 msgstr ""
+"Tus ajustes de WireGuard han sido modificados. Para aplicar los cambios, "
+"actualiza la configuración y recarga el servicio WireGuard."
 
 #: templates/base.html:265
 msgid "Update and restart service"
-msgstr ""
+msgstr "Actualizar y reiniciar servicio"
 
 #: templates/base.html:273
 msgid "Update and reload service"
-msgstr ""
+msgstr "Actualizar y recargar servicio"
 
 #: templates/base.html:286
 msgid "Update Available"
-msgstr ""
+msgstr "Actualización disponible"
 
 #: templates/base.html:288
 msgid "Version"
-msgstr ""
+msgstr "Versión"
 
 #: templates/console/console.html:12
 msgid "Clear"
-msgstr ""
+msgstr "Limpiar"
 
 #: templates/console/console.html:27
 msgid "Destination Hostname or IP Address"
-msgstr ""
+msgstr "Nombre de host o IP de destino"
 
 #: templates/dns/static_host_list.html:9
 msgid "Static Host List"
-msgstr ""
+msgstr "Lista de hosts estáticos"
 
 #: templates/dns/static_host_list.html:45
 msgid "Add"
-msgstr ""
+msgstr "Añadir"
 
 #: templates/dns/static_host_list.html:46
 msgid "Settings"
-msgstr ""
+msgstr "Configuración"
 
 #: templates/dns/static_host_list.html:47
 msgid "Apply"
-msgstr ""
+msgstr "Aplicar"
 
 #: templates/dns/static_host_list.html:59
 msgid "DNS Filter Lists"
-msgstr ""
+msgstr "Listas de filtros DNS"
 
 #: templates/dns/static_host_list.html:70
 msgid "Hosts"
-msgstr ""
+msgstr "Hosts"
 
 #: templates/dns/static_host_list.html:71
 msgid "Last Update"
-msgstr ""
+msgstr "Última actualización"
 
 #: templates/dns/static_host_list.html:73
 msgid "Update"
-msgstr ""
+msgstr "Actualizar"
 
 #: templates/dns/static_host_list.html:74 templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/wireguard_peer_list.html:196
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: templates/dns/static_host_list.html:116
 msgid "Add Filter List"
-msgstr ""
+msgstr "Añadir lista de filtro"
 
 #: templates/firewall/firewall_nav_tabs.html:11
 msgid "Port Forward"
-msgstr ""
+msgstr "Redirección de puerto"
 
 #: templates/firewall/firewall_nav_tabs.html:15
 msgid "Default Policy"
-msgstr ""
+msgstr "Política predeterminada"
 
 #: templates/firewall/firewall_rule_list.html:40
 msgid "In"
-msgstr ""
+msgstr "Entrada"
 
 #: templates/firewall/firewall_rule_list.html:41
 msgid "Out"
-msgstr ""
+msgstr "Salida"
 
 #: templates/firewall/firewall_rule_list.html:42
 #: templates/firewall/manage_firewall_rule.html:141
 msgid "Source"
-msgstr ""
+msgstr "Origen"
 
 #: templates/firewall/firewall_rule_list.html:43
 #: templates/firewall/manage_firewall_rule.html:202
 #: templates/firewall/redirect_rule_list.html:15
 msgid "Destination"
-msgstr ""
+msgstr "Destino"
 
 #: templates/firewall/firewall_rule_list.html:45
 #: templates/firewall/manage_redirect_rule.html:30
 #: templates/firewall/redirect_rule_list.html:14
 #: templates/wireguard/wireguard_status.html:47 vpn_invite/forms.py:284
 msgid "Port"
-msgstr ""
+msgstr "Puerto"
 
 #: templates/firewall/firewall_rule_list.html:46
 msgid "State"
-msgstr ""
+msgstr "Estado"
 
 #: templates/firewall/firewall_rule_list.html:47
 #: templates/firewall/manage_firewall_rule.html:360
 msgid "Action"
-msgstr ""
+msgstr "Acción"
 
 #: templates/firewall/firewall_rule_list.html:53
 msgid "Automatic rule: Allow established/related traffic"
-msgstr ""
+msgstr "Regla automática: permitir tráfico establecido/relacionado"
 
 #: templates/firewall/firewall_rule_list.html:58
 #: templates/firewall/firewall_rule_list.html:138
 msgid "all"
-msgstr ""
+msgstr "todos"
 
 #: templates/firewall/firewall_rule_list.html:71
 #: templates/firewall/firewall_rule_list.html:97
 msgid "Automatic Rule: Port forward."
-msgstr ""
+msgstr "Regla automática: redirección de puerto."
 
 #: templates/firewall/firewall_rule_list.html:158
 msgid "Automatic Rule: Firewall Settings Peer to Peer traffic"
-msgstr ""
+msgstr "Regla automática: tráfico peer-to-peer"
 
 #: templates/firewall/firewall_rule_list.html:179
 msgid "Automatic Rule: Firewall Settings Instance to Instance"
-msgstr ""
+msgstr "Regla automática: tráfico entre instancias"
 
 #: templates/firewall/firewall_rule_list.html:194
 msgid "Create Firewall Rule"
-msgstr ""
+msgstr "Crear regla de firewall"
 
 #: templates/firewall/firewall_rule_list.html:195
 #: templates/firewall/redirect_rule_list.html:59
 msgid "Firewall Settings"
-msgstr ""
+msgstr "Configuración de firewall"
 
 #: templates/firewall/firewall_rule_list.html:196
 msgid "Display automatic rules"
-msgstr ""
+msgstr "Mostrar reglas automáticas"
 
 #: templates/firewall/manage_firewall_rule.html:18
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: templates/firewall/manage_firewall_rule.html:79
 msgid ""
@@ -681,10 +693,24 @@ msgid ""
 "                                    </p>\n"
 "                                    "
 msgstr ""
+"\n"
+"                                    <h5>Configuración avanzada del firewall "
+"VPN</h5>\n"
+"                                    <p>\n"
+"                                        Esta interfaz sirve como una "
+"herramienta completa para gestionar reglas de firewall, permitiendo a los "
+"usuarios implementar políticas de tráfico avanzadas entre peers de VPN y "
+"redes. Simplifica el establecimiento de reglas de firewall, el filtrado de "
+"paquetes y las configuraciones de NAT, posibilitando un control preciso de "
+"la seguridad de la red. Los usuarios pueden definir direcciones IP de origen "
+"y destino, puertos, protocolos y acciones para ajustar el flujo de tráfico, "
+"asegurando un entorno de red seguro y eficiente.\n"
+"                                    </p>\n"
+"                                    "
 
 #: templates/firewall/manage_firewall_rule.html:100
 msgid "Interface"
-msgstr ""
+msgstr "Interfaz"
 
 #: templates/firewall/manage_firewall_rule.html:179
 msgid ""
@@ -705,6 +731,22 @@ msgid ""
 "                                    </p>\n"
 "                                    "
 msgstr ""
+"\n"
+"                                    <h5>Selección de origen</h5>\n"
+"                                    <p>\n"
+"                                        Puedes aplicar esta regla a una "
+"dirección IP o red específica y/o a múltiples peers.<br><br>\n"
+"                                        Habilitar \"Include peer networks\" "
+"incluirá automáticamente todas las IPs permitidas asociadas a cada peer "
+"seleccionado.<br><br>\n"
+"                                        Ten en cuenta que seleccionar "
+"múltiples peers con redes incluidas tanto en origen como en destino puede "
+"incrementar rápidamente el número de reglas generadas, dependiendo de tu "
+"configuración.<br><br>\n"
+"                                        La opción \"Not Source\" niega la "
+"IP, red o peer(s) seleccionado(s).\n"
+"                                    </p>\n"
+"                                    "
 
 #: templates/firewall/manage_firewall_rule.html:240
 msgid ""
@@ -726,6 +768,22 @@ msgid ""
 "                                    </p>\n"
 "                                    "
 msgstr ""
+"\n"
+"                                    <h5>Selección de destino</h5>\n"
+"                                    <p>\n"
+"                                        Puedes aplicar esta regla a una "
+"dirección IP o red específica y/o a múltiples peers como destino.<br><br>\n"
+"                                        Habilitar \"Include peer networks\" "
+"incluirá automáticamente todas las IPs permitidas asociadas a cada peer "
+"seleccionado como destino.<br><br>\n"
+"                                        Ten en cuenta que seleccionar "
+"múltiples peers con redes incluidas tanto en origen como en destino puede "
+"incrementar rápidamente el número de reglas generadas, dependiendo de tu "
+"configuración.<br><br>\n"
+"                                        La opción \"Not Destination\" niega "
+"la IP, red o peer(s) seleccionado(s).\n"
+"                                    </p>\n"
+"                                    "
 
 #: templates/firewall/manage_firewall_rule.html:297
 msgid ""
@@ -742,18 +800,29 @@ msgid ""
 "                                    </p>\n"
 "                                    "
 msgstr ""
+"\n"
+"                                    <h5>Protocolo y puerto</h5>\n"
+"                                    <p>\n"
+"                                        Solo se listan los protocolos más "
+"comunes. Si necesitas uno específico, abre un issue en GitHub.<br><br>\n"
+"                                        Seleccionar TCP+UDP duplicará las "
+"reglas generadas.<br><br>\n"
+"                                        Puedes especificar puertos como "
+"números individuales (por ejemplo, 8080) o rangos (por ejemplo, 8001:8999).\n"
+"                                    </p>\n"
+"                                    "
 
 #: templates/firewall/manage_firewall_rule.html:320
 msgid "Packet State"
-msgstr ""
+msgstr "Estado del paquete"
 
 #: templates/firewall/manage_firewall_rule.html:471
 msgid "Please type 'delete' to remove this firewall rule."
-msgstr ""
+msgstr "Por favor escribe 'delete' para eliminar esta regla de firewall."
 
 #: templates/firewall/manage_firewall_settings.html:61
 msgid "Reset firewall to default"
-msgstr ""
+msgstr "Restablecer firewall a valores predeterminados"
 
 #: templates/firewall/manage_firewall_settings.html:77
 msgid ""
@@ -761,29 +830,31 @@ msgid ""
 "sure you want to continue?\\n\\nType 'delete all rules and reset firewall' "
 "to confirm."
 msgstr ""
+"Restablecer el firewall eliminará todas las reglas y ajustes. ¿Deseas "
+"continuar?\\n\\nEscribe 'delete all rules and reset firewall' para confirmar."
 
 #: templates/firewall/manage_redirect_rule.html:40
 msgid "Destination Type"
-msgstr ""
+msgstr "Tipo de destino"
 
 #: templates/firewall/manage_redirect_rule.html:42
 #: templates/firewall/manage_redirect_rule.html:48
 #: templates/vpn_invite/invite_settings.html:17 user_manager/forms.py:178
 msgid "Peer"
-msgstr ""
+msgstr "Peer"
 
 #: templates/firewall/manage_redirect_rule.html:57
 msgid "WireGuard Instance"
-msgstr ""
+msgstr "Instancia de WireGuard"
 
 #: templates/firewall/manage_redirect_rule.html:74
 msgid "Add Forward Rule (allow)"
-msgstr ""
+msgstr "Añadir regla de reenvío (permitir)"
 
 #: templates/firewall/manage_redirect_rule.html:80
 #: templates/firewall/redirect_rule_list.html:17
 msgid "Masquerade Source"
-msgstr ""
+msgstr "Enmascarar origen"
 
 #: templates/firewall/manage_redirect_rule.html:91
 msgid ""
@@ -813,18 +884,40 @@ msgid ""
 "all connections to match the IP address of the WireGuard instance.</p>\n"
 "                        "
 msgstr ""
+"\n"
+"                        <h5>Puertos predeterminados</h5>\n"
+"                        <p>El archivo <code>docker-compose.yml</code> "
+"predeterminado especifica el rango de puertos <b>TCP</b> <b>8080-8089</b>. "
+"Si deseas cambiarlo, edita manualmente el archivo <code>docker-compose.yml</"
+"code> y vuelve a ejecutar Docker Compose según las <a href=\"https://github."
+"com/eduardogsilva/wireguard_webadmin?tab=readme-ov-"
+"file#deployment\">instrucciones de despliegue</a>.</p>\n"
+"                        <h5>Tipo de destino: Peer</h5>\n"
+"                        <p>La redirección de puerto dará prioridad a la "
+"primera IP del peer con prioridad cero.</p>\n"
+"                        <h5>Tipo de destino: Dirección IP</h5>\n"
+"                        <p>Las reglas redirigirán al IP especificado. "
+"Recuerda asignar esa IP o red a un peer.</p>\n"
+"                        <h5>Añadir regla de reenvío</h5>\n"
+"                        <p>Genera automáticamente una regla de reenvío para "
+"ajustarse a configuraciones más estrictas de firewall.</p>\n"
+"                        <h5>Enmascarar origen</h5>\n"
+"                        <p>Solución temporal cuando un peer no usa la VPN "
+"como puerta predeterminada. No se recomienda: cambia la IP de origen de "
+"todas las conexiones por la de la instancia WireGuard.</p>\n"
+"                        "
 
 #: templates/firewall/manage_redirect_rule.html:143
 msgid "To delete this rule, please type:"
-msgstr ""
+msgstr "Para eliminar esta regla, escribe:"
 
 #: templates/firewall/redirect_rule_list.html:12
 msgid "Instance"
-msgstr ""
+msgstr "Instancia"
 
 #: templates/firewall/redirect_rule_list.html:16
 msgid "Allow Forward"
-msgstr ""
+msgstr "Permitir reenvío"
 
 #: templates/firewall/redirect_rule_list.html:46
 msgid ""
@@ -833,169 +926,172 @@ msgid ""
 "recommended, as it alters the source address of all connections to match the "
 "IP address of the WireGuard instance."
 msgstr ""
+"Solución temporal cuando un peer no usa la VPN como puerta predeterminada. "
+"No se recomienda, ya que altera la IP de origen de todas las conexiones a la "
+"de la instancia WireGuard."
 
 #: templates/firewall/redirect_rule_list.html:58
 msgid "Create Port forwarding Rule"
-msgstr ""
+msgstr "Crear regla de reenvío de puerto"
 
 #: templates/user_manager/list.html:9 user_manager/forms.py:20
 msgid "User Level"
-msgstr ""
+msgstr "Nivel de acceso"
 
 #: templates/user_manager/list.html:10 user_manager/forms.py:24
 #: user_manager/views.py:17
 msgid "Peer Groups"
-msgstr ""
+msgstr "Grupos de peers"
 
 #: templates/user_manager/list.html:11
 msgid "Permissions"
-msgstr ""
+msgstr "Permisos"
 
 #: templates/user_manager/list.html:26
 msgid "All"
-msgstr ""
+msgstr "Todos"
 
 #: templates/user_manager/list.html:31
 msgid "Restart Enabled"
-msgstr ""
+msgstr "Reinicio habilitado"
 
 #: templates/user_manager/list.html:36
 msgid "Reload Enabled"
-msgstr ""
+msgstr "Recarga habilitada"
 
 #: templates/user_manager/list.html:42
 msgid "Console Enabled"
-msgstr ""
+msgstr "Consola habilitada"
 
 #: templates/user_manager/list.html:48
 msgid "Enhanced Filter Enabled"
-msgstr ""
+msgstr "Filtro mejorado habilitado"
 
 #: templates/user_manager/list_buttons.html:2 user_manager/views.py:111
 msgid "Add User"
-msgstr ""
+msgstr "Añadir usuario"
 
 #: templates/user_manager/list_buttons.html:3
 msgid "List Users"
-msgstr ""
+msgstr "Listar usuarios"
 
 #: templates/user_manager/list_buttons.html:4
 msgid "List Peer Groups"
-msgstr ""
+msgstr "Listar grupos de peers"
 
 #: templates/user_manager/list_buttons.html:5 user_manager/views.py:43
 msgid "Add Peer Group"
-msgstr ""
+msgstr "Añadir grupo de peers"
 
 #: templates/user_manager/peer_group_list.html:9
 #: templates/wireguard/wireguard_status.html:48
 msgid "Peers"
-msgstr ""
+msgstr "Peers"
 
 #: templates/user_manager/peer_group_list.html:10 user_manager/forms.py:179
 msgid "Server Instance"
-msgstr ""
+msgstr "Instancia de WireGuard"
 
 #: templates/user_manager/peer_group_list.html:11
 msgid "Users"
-msgstr ""
+msgstr "Usuarios"
 
 #: templates/vpn_invite/invite_settings.html:18
 msgid "Expiration"
-msgstr ""
+msgstr "Caduca en"
 
 #: templates/vpn_invite/invite_settings.html:31
 msgid "Remove VPN invitation for peer"
-msgstr ""
+msgstr "Eliminar invitación VPN del peer"
 
 #: templates/vpn_invite/invite_settings.html:38
 msgid "No active VPN invitations"
-msgstr ""
+msgstr "No hay invitaciones VPN activas"
 
 #: templates/vpn_invite/invite_settings.html:49 vpn_invite/views.py:77
 msgid "Email Settings"
-msgstr ""
+msgstr "Configuración de correo"
 
 #: templates/vpn_invite/invite_settings.html:50
 msgid "Invite Settings"
-msgstr ""
+msgstr "Configuración de invitación"
 
 #: templates/wireguard/wireguard_manage_ip.html:18
 msgid "Enter Allowed IP"
-msgstr ""
+msgstr "Ingresar IP permitida"
 
 #: templates/wireguard/wireguard_manage_ip.html:34
 #: templates/wireguard/wireguard_manage_peer.html:103
 #: templates/wireguard/wireguard_manage_peer.html:153
 #: wireguard_peer/forms.py:31
 msgid "Priority"
-msgstr ""
+msgstr "Prioridad"
 
 #: templates/wireguard/wireguard_manage_ip.html:58
 msgid "Please type \\\"delete\\\" to remove this IP address."
-msgstr ""
+msgstr "Por favor escribe \\\"delete\\\" para eliminar esta IP."
 
 #: templates/wireguard/wireguard_manage_peer.html:8
 msgid "Peer Configuration"
-msgstr ""
+msgstr "Configuración de peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:17
 msgid "Enter Name"
-msgstr ""
+msgstr "Ingresar nombre"
 
 #: templates/wireguard/wireguard_manage_peer.html:23 wireguard_peer/forms.py:14
 msgid "Persistent Keepalive"
-msgstr ""
+msgstr "Keepalive persistente"
 
 #: templates/wireguard/wireguard_manage_peer.html:29 wireguard/forms.py:14
 #: wireguard_peer/forms.py:11
 msgid "Public Key"
-msgstr ""
+msgstr "Clave pública"
 
 #: templates/wireguard/wireguard_manage_peer.html:36 wireguard/forms.py:13
 #: wireguard_peer/forms.py:12
 msgid "Private Key"
-msgstr ""
+msgstr "Clave privada"
 
 #: templates/wireguard/wireguard_manage_peer.html:46 wireguard_peer/forms.py:13
 msgid "Pre-Shared Key"
-msgstr ""
+msgstr "Clave precompartida"
 
 #: templates/wireguard/wireguard_manage_peer.html:57
 #: templates/wireguard/wireguard_peer_list.html:136
 msgid "Peer Traffic"
-msgstr ""
+msgstr "Tráfico del peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:73
 #: templates/wireguard/wireguard_peer_list.html:151
 msgid "No traffic history, please wait a few minutes"
-msgstr ""
+msgstr "Sin historial de tráfico, espera unos minutos"
 
 #: templates/wireguard/wireguard_manage_peer.html:85
 msgid "AllowedIPs at Peer section of wg"
-msgstr ""
+msgstr "AllowedIPs en sección peer de wg"
 
 #: templates/wireguard/wireguard_manage_peer.html:86
 msgid "Peer IP Addresses and networks"
-msgstr ""
+msgstr "IPs y redes del peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:88
 #: templates/wireguard/wireguard_manage_peer.html:169
 msgid "Add IP Address"
-msgstr ""
+msgstr "Añadir IP"
 
 #: templates/wireguard/wireguard_manage_peer.html:101
 #: templates/wireguard/wireguard_manage_peer.html:151
 msgid "Main ip address"
-msgstr ""
+msgstr "IP principal"
 
 #: templates/wireguard/wireguard_manage_peer.html:116
 msgid "Client Routing Configuration"
-msgstr ""
+msgstr "Configuración de rutas cliente"
 
 #: templates/wireguard/wireguard_manage_peer.html:118
 msgid "Add Client route"
-msgstr ""
+msgstr "Añadir ruta cliente"
 
 #: templates/wireguard/wireguard_manage_peer.html:124
 msgid ""
@@ -1005,6 +1101,10 @@ msgid ""
 "will need to manually update the client configuration file to reflect these "
 "settings."
 msgstr ""
+"El cliente no está configurado para usar la VPN como puerta predeterminada."
+"\\n\\nSolo las redes específicas listadas abajo se enrutan por la VPN."
+"\\n\\nNota: Estas rutas no se envían automáticamente al cliente. Debes "
+"actualizar manualmente su archivo de configuración para reflejarlas."
 
 #: templates/wireguard/wireguard_manage_peer.html:127
 msgid ""
@@ -1012,133 +1112,141 @@ msgid ""
 "setting routes all client internet traffic through the VPN, enhancing "
 "privacy and security across all connections."
 msgstr ""
+"El cliente está configurado para usar la VPN como puerta predeterminada."
+"\\n\\nEsta opción enruta todo el tráfico de Internet del cliente por la VPN, "
+"mejorando privacidad y seguridad."
 
 #: templates/wireguard/wireguard_manage_peer.html:136
 msgid "default route"
-msgstr ""
+msgstr "ruta predeterminada"
 
 #: templates/wireguard/wireguard_manage_peer.html:171
 msgid "Delete Peer"
-msgstr ""
+msgstr "Eliminar peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:188
 msgid "Action Required!"
-msgstr ""
+msgstr "¡Acción requerida!"
 
 #: templates/wireguard/wireguard_manage_peer.html:189
 msgid ""
 "When manually updating the \"Public Key\", \"Pre-Shared Key\", or \"Private "
 "Key\", please ensure the configuration is correct."
 msgstr ""
+"Al actualizar manualmente \"Clave pública\", \"Clave precompartida\" o "
+"\"Clave privada\", asegúrate de que la configuración sea correcta."
 
 #: templates/wireguard/wireguard_manage_peer.html:209
 msgid "Please type \\\"delete\\\" to remove peer configuration."
 msgstr ""
+"Por favor escribe \\\"delete\\\" para eliminar la configuración del peer."
 
 #: templates/wireguard/wireguard_manage_server.html:18
 msgid "Create Instance"
-msgstr ""
+msgstr "Crear instancia"
 
 #: templates/wireguard/wireguard_manage_server.html:132
 msgid "Delete Configuration"
-msgstr ""
+msgstr "Eliminar configuración"
 
 #: templates/wireguard/wireguard_peer_list.html:75
 #: templates/wireguard/wireguard_peer_list.html:125
 msgid "Throughput"
-msgstr ""
+msgstr "Rendimiento"
 
 #: templates/wireguard/wireguard_peer_list.html:76
 #: templates/wireguard/wireguard_peer_list.html:126
 msgid "Transfer"
-msgstr ""
+msgstr "Transferencia"
 
 #: templates/wireguard/wireguard_peer_list.html:77
 #: templates/wireguard/wireguard_peer_list.html:127
 msgid "Latest Handshake"
-msgstr ""
+msgstr "Último handshake"
 
 #: templates/wireguard/wireguard_peer_list.html:79
 #: templates/wireguard/wireguard_peer_list.html:128
 msgid "Endpoints"
-msgstr ""
+msgstr "Endpoints"
 
 #: templates/wireguard/wireguard_peer_list.html:81
 #: templates/wireguard/wireguard_peer_list.html:129
 msgid "Allowed IPs"
-msgstr ""
+msgstr "IPs permitidas"
 
 #: templates/wireguard/wireguard_peer_list.html:102
 msgid "Are you sure you want to create a new peer?"
-msgstr ""
+msgstr "¿Seguro que quieres crear un nuevo peer?"
 
 #: templates/wireguard/wireguard_peer_list.html:102
 #: templates/wireguard/wireguard_peer_list.html:104
 msgid "Create Peer"
-msgstr ""
+msgstr "Crear peer"
 
 #: templates/wireguard/wireguard_peer_list.html:106
 #: templates/wireguard/wireguard_peer_list.html:617
 msgid "Show extras"
-msgstr ""
+msgstr "Mostrar extras"
 
 #: templates/wireguard/wireguard_peer_list.html:158
 msgid "Close QR Code"
-msgstr ""
+msgstr "Cerrar código QR"
 
 #: templates/wireguard/wireguard_peer_list.html:168
 msgid "VPN Invite Details"
-msgstr ""
+msgstr "Detalles de invitación VPN"
 
 #: templates/wireguard/wireguard_peer_list.html:174
 msgid "Expires on"
-msgstr ""
+msgstr "Caduca el"
 
 #: templates/wireguard/wireguard_peer_list.html:178
 msgid "Enter Email or WhatsApp Number"
-msgstr ""
+msgstr "Ingresa email o número de WhatsApp"
 
 #: templates/wireguard/wireguard_peer_list.html:179
 msgid "Email or phone number"
-msgstr ""
+msgstr "Email o teléfono"
 
 #: templates/wireguard/wireguard_peer_list.html:182
 msgid "Copy Text"
-msgstr ""
+msgstr "Copiar texto"
 
 #: templates/wireguard/wireguard_peer_list.html:183
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: templates/wireguard/wireguard_peer_list.html:184
 msgid "WhatsApp"
-msgstr ""
+msgstr "WhatsApp"
 
 #: templates/wireguard/wireguard_peer_list.html:192
 msgid "Close"
-msgstr ""
+msgstr "Cerrar"
 
 #: templates/wireguard/wireguard_peer_list.html:193
 msgid "Config"
-msgstr ""
+msgstr "Configuración"
 
 #: templates/wireguard/wireguard_peer_list.html:194
 msgid "QR Code"
-msgstr ""
+msgstr "Código QR"
 
 #: templates/wireguard/wireguard_peer_list.html:204
 msgid "No WireGuard Instances Found"
-msgstr ""
+msgstr "No se encontraron instancias WireGuard"
 
 #: templates/wireguard/wireguard_peer_list.html:205
 msgid ""
 "There are no WireGuard instances configured. You can add a new instance by "
 "clicking the button below."
 msgstr ""
+"No hay instancias WireGuard configuradas. Puedes añadir una nueva haciendo "
+"clic en el botón abajo."
 
 #: templates/wireguard/wireguard_peer_list.html:208
 msgid "Add WireGuard Instance"
-msgstr ""
+msgstr "Añadir instancia WireGuard"
 
 #: templates/wireguard/wireguard_peer_list.html:570
 msgid ""
@@ -1146,6 +1254,8 @@ msgid ""
 "indicating that another peer has an IP overlapping this network or that the "
 "configuration file is outdated."
 msgstr ""
+"Esta dirección no aparece en la salida de 'wg show', lo que indica que otro "
+"peer tiene una IP solapada o el archivo de configuración está desactualizado."
 
 #: templates/wireguard/wireguard_peer_list.html:585
 msgid ""
@@ -1153,158 +1263,160 @@ msgid ""
 "may indicate that another peer is using an overlapping IP or that the "
 "configuration file is outdated."
 msgstr ""
+"Al menos una dirección no aparece en la salida de 'wg show', lo cual puede "
+"indicar un IP solapada o un archivo desactualizado."
 
 #: templates/wireguard/wireguard_peer_list.html:614
 msgid "Hide extras"
-msgstr ""
+msgstr "Ocultar extras"
 
 #: templates/wireguard/wireguard_peer_list.html:658
 #: templates/wireguard/wireguard_peer_list.html:792
 msgid "Access Password"
-msgstr ""
+msgstr "Contraseña de acceso"
 
 #: templates/wireguard/wireguard_peer_list.html:658
 #: templates/wireguard/wireguard_peer_list.html:792
 msgid "(Share this password via a separate secure channel)"
-msgstr ""
+msgstr "(Comparte esta contraseña por un canal seguro separado)"
 
 #: templates/wireguard/wireguard_peer_list.html:661
 msgid "Unknown error"
-msgstr ""
+msgstr "Error desconocido"
 
 #: templates/wireguard/wireguard_peer_list.html:665
 msgid "Error creating invite."
-msgstr ""
+msgstr "Error al crear invitación."
 
 #: templates/wireguard/wireguard_peer_list.html:702
 msgid "Invite text copied to clipboard."
-msgstr ""
+msgstr "Texto de invitación copiado al portapapeles."
 
 #: templates/wireguard/wireguard_peer_list.html:704
 msgid "Failed to copy text."
-msgstr ""
+msgstr "Error al copiar texto."
 
 #: templates/wireguard/wireguard_peer_list.html:707
 msgid "Clipboard API not supported."
-msgstr ""
+msgstr "API del portapapeles no soportada."
 
 #: templates/wireguard/wireguard_peer_list.html:716
 msgid "Please enter a valid phone number for WhatsApp."
-msgstr ""
+msgstr "Ingresa un número de WhatsApp válido."
 
 #: templates/wireguard/wireguard_peer_list.html:728
 #: templates/wireguard/wireguard_peer_list.html:774
 msgid "Invite data is not available."
-msgstr ""
+msgstr "Datos de invitación no disponibles."
 
 #: templates/wireguard/wireguard_peer_list.html:737
 msgid "Please enter a valid email address."
-msgstr ""
+msgstr "Ingresa un email válido."
 
 #: templates/wireguard/wireguard_peer_list.html:759
 msgid "Error sending email."
-msgstr ""
+msgstr "Error al enviar email."
 
 #: templates/wireguard/wireguard_peer_list.html:796
 #: templates/wireguard/wireguard_peer_list.html:800
 msgid "Error refreshing invite."
-msgstr ""
+msgstr "Error al actualizar invitación."
 
 #: templates/wireguard/wireguard_peer_list.html:815
 msgid "No invite data available to refresh."
-msgstr ""
+msgstr "No hay datos de invitación para actualizar."
 
 #: templates/wireguard/wireguard_peer_list.html:835
 msgid "Error closing invite:"
-msgstr ""
+msgstr "Error al cerrar invitación:"
 
 #: templates/wireguard/wireguard_status.html:9
 msgid "Update Configuration"
-msgstr ""
+msgstr "Actualizar configuración"
 
 #: templates/wireguard/wireguard_status.html:16
 msgid "Restart Wireguard service"
-msgstr ""
+msgstr "Reiniciar servicio WireGuard"
 
 #: templates/wireguard/wireguard_status.html:24
 msgid "Reload Wireguard service"
-msgstr ""
+msgstr "Recargar servicio WireGuard"
 
 #: templates/wireguard/wireguard_status.html:42
 msgid "Instance Traffic"
-msgstr ""
+msgstr "Tráfico de la instancia"
 
 #: templates/wireguard/wireguard_status.html:46 wireguard/forms.py:15
 msgid "Public Address"
-msgstr ""
+msgstr "Dirección pública"
 
 #: user_manager/forms.py:15
 msgid "Password Confirmation"
-msgstr ""
+msgstr "Confirmación de contraseña"
 
 #: user_manager/forms.py:17
 msgid "Reload WireGuard"
-msgstr ""
+msgstr "Recargar WireGuard"
 
 #: user_manager/forms.py:18
 msgid "Restart WireGuard"
-msgstr ""
+msgstr "Reiniciar WireGuard"
 
 #: user_manager/forms.py:19
 msgid "Enhanced Filter"
-msgstr ""
+msgstr "Filtro mejorado"
 
 #: user_manager/forms.py:119
 msgid "Password is required for new users."
-msgstr ""
+msgstr "Contraseña obligatoria para nuevos usuarios."
 
 #: user_manager/forms.py:121
 msgid "Password confirmation is required for new users."
-msgstr ""
+msgstr "Confirmación de contraseña obligatoria para nuevos usuarios."
 
 #: user_manager/forms.py:125
 msgid "The two password fields didn't match."
-msgstr ""
+msgstr "Las contraseñas no coinciden."
 
 #: user_manager/forms.py:127
 msgid "Password must be at least 8 characters long."
-msgstr ""
+msgstr "La contraseña debe tener al menos 8 caracteres."
 
 #: user_manager/forms.py:220
 msgid "A peer group with that name already exists."
-msgstr ""
+msgstr "Ya existe un grupo de peers con ese nombre."
 
 #: user_manager/models.py:13
 msgid "Debugging Analyst"
-msgstr ""
+msgstr "Analista de depuración"
 
 #: user_manager/models.py:14 vpn_invite/models.py:25
 msgid "View Only"
-msgstr ""
+msgstr "Solo lectura"
 
 #: user_manager/models.py:15 vpn_invite/models.py:25
 msgid "Peer Manager"
-msgstr ""
+msgstr "Gestor de peers"
 
 #: user_manager/models.py:16 vpn_invite/models.py:25
 msgid "WireGuard Manager"
-msgstr ""
+msgstr "Gestor de WireGuard"
 
 #: user_manager/models.py:17 vpn_invite/models.py:25
 msgid "Administrator"
-msgstr ""
+msgstr "Administrador"
 
 #: user_manager/views.py:31
 msgid "Edit Peer Group: "
-msgstr ""
+msgstr "Editar grupo de peers: "
 
 #: user_manager/views.py:36
 msgid "Peer Group deleted|Peer Group deleted: "
-msgstr ""
+msgstr "Grupo de peers eliminado|Grupo eliminado: "
 
 #: user_manager/views.py:39
 msgid "Peer Group not deleted|Invalid confirmation."
-msgstr ""
+msgstr "Grupo de peers no eliminado|Confirmación inválida."
 
 #: user_manager/views.py:58
 msgid ""
@@ -1318,30 +1430,40 @@ msgid ""
 "this peer group, including adding or removing peers.</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Peers</h5>\n"
+"        <p>Selecciona los peers que pueden gestionar los usuarios de este "
+"grupo.</p>\n"
+"\n"
+"        <h5>Instancias de WireGuard</h5>\n"
+"        <p>Todos los peers en esta instancia de WireGuard pueden ser "
+"gestionados por usuarios de este grupo, incluyendo añadir o eliminar peers.</"
+"p>\n"
+"        "
 
 #: user_manager/views.py:98
 msgid "Edit User"
-msgstr ""
+msgstr "Editar usuario"
 
 #: user_manager/views.py:104
 msgid "User deleted|User deleted: "
-msgstr ""
+msgstr "Usuario eliminado|Usuario eliminado: "
 
 #: user_manager/views.py:107
 msgid "User not deleted|Invalid confirmation."
-msgstr ""
+msgstr "Usuario no eliminado|Confirmación inválida."
 
 #: user_manager/views.py:128
 msgid "User Disconnected|User Disconnected: "
-msgstr ""
+msgstr "Usuario desconectado|Usuario desconectado: "
 
 #: user_manager/views.py:132
 msgid "User updated|User updated: "
-msgstr ""
+msgstr "Usuario actualizado|Usuario actualizado: "
 
 #: user_manager/views.py:134
 msgid "User created|User created: "
-msgstr ""
+msgstr "Usuario creado|Usuario creado: "
 
 #: user_manager/views.py:139
 msgid ""
@@ -1385,170 +1507,216 @@ msgid ""
 "\n"
 "        "
 msgstr ""
+"\n"
+"        <h4>Niveles de usuario</h4>\n"
+"        <h5>Analista de depuración</h5>\n"
+"        <p>Acceso a información básica y registros para depuración. Sin "
+"permiso para modificar ajustes o ver datos sensibles como claves de peer.</"
+"p>\n"
+"\n"
+"        <h5>Solo lectura</h5>\n"
+"        <p>Acceso completo de visualización, incluyendo claves y archivos de "
+"configuración. No puede modificar ajustes.</p>\n"
+"\n"
+"        <h5>Gestor de peers</h5>\n"
+"        <p>Permisos para añadir, editar y eliminar peers e IPs. No incluye "
+"modificar configuraciones de instancias WireGuard u otros ajustes.</p>\n"
+"\n"
+"        <h5>Gestor de WireGuard</h5>\n"
+"        <p>Autoridad para añadir, editar y eliminar configuraciones de "
+"instancias de WireGuard.</p>\n"
+"\n"
+"        <h5>Administrador</h5>\n"
+"        <p>Acceso total al sistema. Puede ver y modificar todas las "
+"configuraciones y gestionar usuarios.</p>\n"
+"\n"
+"        <br>\n"
+"        <h4>Grupos de peers</h4>\n"
+"        <p>Selecciona los grupos de peers a los que puede acceder este "
+"usuario. Si no seleccionas ninguno, tendrá acceso a todos.</p>\n"
+"\n"
+"        <h4>Consola</h4>\n"
+"        <p>Habilitar o deshabilitar acceso a la consola web para este "
+"usuario.</p>\n"
+"\n"
+"        <h4>Filtro mejorado</h4>\n"
+"        <p>Este filtro muestra solo los peers a los que el usuario tiene "
+"acceso. Según el tamaño de tu entorno, puede impactar rendimiento. Para "
+"mitigarlo, aumenta el \"Intervalo de actualización web\" para reducir las "
+"solicitudes.</p>\n"
+"\n"
+"        "
 
 #: user_manager/views.py:175
 msgid "Please type the username to proceed."
-msgstr ""
+msgstr "Por favor escribe el nombre de usuario para continuar."
 
 #: vpn_invite/forms.py:49 vpn_invite/forms.py:294
 msgid "Enabled"
-msgstr ""
+msgstr "Habilitado"
 
 #: vpn_invite/forms.py:49
 msgid "Disabled"
-msgstr ""
+msgstr "Deshabilitado"
 
 #: vpn_invite/forms.py:68 vpn_invite/forms.py:69 vpn_invite/forms.py:70
 #: vpn_invite/forms.py:71 vpn_invite/forms.py:72
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: vpn_invite/forms.py:73 vpn_invite/forms.py:74 vpn_invite/forms.py:75
 #: vpn_invite/forms.py:76 vpn_invite/forms.py:77
 msgid "Text"
-msgstr ""
+msgstr "Texto"
 
 #: vpn_invite/forms.py:83
 msgid "Web Page Instructions"
-msgstr ""
+msgstr "Instrucciones en página web"
 
 #: vpn_invite/forms.py:84
 msgid "Email Subject"
-msgstr ""
+msgstr "Asunto del correo"
 
 #: vpn_invite/forms.py:85
 msgid "Email Message"
-msgstr ""
+msgstr "Mensaje de correo"
 
 #: vpn_invite/forms.py:86
 msgid "Email Enabled"
-msgstr ""
+msgstr "Correo habilitado"
 
 #: vpn_invite/forms.py:87
 msgid "WhatsApp Message"
-msgstr ""
+msgstr "Mensaje de WhatsApp"
 
 #: vpn_invite/forms.py:88
 msgid "WhatsApp Enabled"
-msgstr ""
+msgstr "WhatsApp habilitado"
 
 #: vpn_invite/forms.py:89
 msgid "Text Message"
-msgstr ""
+msgstr "Mensaje de texto"
 
 #: vpn_invite/forms.py:90
 msgid "Expiration (minutes)"
-msgstr ""
+msgstr "Expira en (minutos)"
 
 #: vpn_invite/forms.py:91
 msgid "Random Password"
-msgstr ""
+msgstr "Contraseña aleatoria"
 
 #: vpn_invite/forms.py:92
 msgid "Invite URL"
-msgstr ""
+msgstr "URL de invitación"
 
 #: vpn_invite/forms.py:93
 msgid "Required User Level"
-msgstr ""
+msgstr "Nivel de acceso requerido"
 
 #: vpn_invite/forms.py:94
 msgid "Default Password"
-msgstr ""
+msgstr "Contraseña predeterminada"
 
 #: vpn_invite/forms.py:95
 msgid "Random Password Length"
-msgstr ""
+msgstr "Longitud de contraseña aleatoria"
 
 #: vpn_invite/forms.py:96
 msgid "Random Password Complexity"
-msgstr ""
+msgstr "Complejidad de contraseña aleatoria"
 
 #: vpn_invite/forms.py:103
 msgid "General Settings"
-msgstr ""
+msgstr "Ajustes generales"
 
 #: vpn_invite/forms.py:125
 msgid "Download Buttons"
-msgstr ""
+msgstr "Botones de descarga"
 
 #: vpn_invite/forms.py:158
 msgid "Message templates"
-msgstr ""
+msgstr "Plantillas de mensaje"
 
 #: vpn_invite/forms.py:165
 msgid "Email Message Template"
-msgstr ""
+msgstr "Plantilla de correo"
 
 #: vpn_invite/forms.py:176
 msgid "WhatsApp Message Template"
-msgstr ""
+msgstr "Plantilla de WhatsApp"
 
 #: vpn_invite/forms.py:183
 msgid "Text Message Template"
-msgstr ""
+msgstr "Plantilla de mensaje de texto"
 
 #: vpn_invite/forms.py:205
 msgid "Invite URL must start with 'https://'."
-msgstr ""
+msgstr "La URL debe empezar con 'https://'."
 
 #: vpn_invite/forms.py:207
 msgid "Invite URL must end with '/invite/'."
-msgstr ""
+msgstr "La URL debe terminar con '/invite/'."
 
 #: vpn_invite/forms.py:213
 msgid "Expiration (minutes) must be between 1 and 1440."
-msgstr ""
+msgstr "La expiración (minutos) debe estar entre 1 y 1440."
 
 #: vpn_invite/forms.py:222
 msgid "Default password must not be provided when random password is enabled."
 msgstr ""
+"No proporciones contraseña predeterminada si la aleatoria está habilitada."
 
 #: vpn_invite/forms.py:224
 msgid "Random password length must be at least 6 characters."
-msgstr ""
+msgstr "La contraseña aleatoria debe tener al menos 6 caracteres."
 
 #: vpn_invite/forms.py:229
 msgid "Default password must be provided when random password is disabled."
 msgstr ""
+"Proporciona contraseña predeterminada si la aleatoria está deshabilitada."
 
 #: vpn_invite/forms.py:231
 msgid "Default password must be at least 6 characters long."
-msgstr ""
+msgstr "La contraseña predeterminada debe tener al menos 6 caracteres."
 
 #: vpn_invite/forms.py:241
 msgid "Text field must not be empty when download button is enabled."
 msgstr ""
+"El campo de texto no puede estar vacío si el botón de descarga está "
+"habilitado."
 
 #: vpn_invite/forms.py:243
 msgid "URL field must not be empty when download button is enabled."
 msgstr ""
+"El campo URL no puede estar vacío si el botón de descarga está habilitado."
 
 #: vpn_invite/forms.py:252
 msgid ""
 "Default password must not be contained in any message template. Found at: "
 msgstr ""
+"La contraseña predeterminada no debe estar en ninguna plantilla. Encontrado "
+"en: "
 
 #: vpn_invite/forms.py:259
 #, python-brace-format
 msgid "The template must include the placeholder '{invite_url}'."
-msgstr ""
+msgstr "La plantilla debe incluir el marcador '{invite_url}'."
 
 #: vpn_invite/forms.py:283
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 #: vpn_invite/forms.py:285
 msgid "Encryption"
-msgstr ""
+msgstr "Cifrado"
 
 #: vpn_invite/forms.py:286
 msgid "From Address"
-msgstr ""
+msgstr "Dirección de origen"
 
 #: vpn_invite/forms.py:337
 msgid "SMTP port must be between 1 and 65535."
-msgstr ""
+msgstr "El puerto SMTP debe estar entre 1 y 65535."
 
 #: vpn_invite/models.py:8
 #, python-brace-format
@@ -1563,6 +1731,15 @@ msgid ""
 "Note: This invitation link will expire in {expire_minutes} minutes. If you "
 "need a new link after expiration, please request another invite."
 msgstr ""
+"Hola,\n"
+"\n"
+"Estás invitado a unirte a nuestra red VPN WireGuard segura. Haz clic en el "
+"enlace para acceder a tu configuración VPN personalizada:\n"
+"\n"
+"{invite_url}\n"
+"\n"
+"Nota: Este enlace expirará en {expire_minutes} minutos. Si necesitas uno "
+"nuevo, solicita otra invitación."
 
 #: vpn_invite/models.py:16
 msgid ""
@@ -1573,22 +1750,28 @@ msgid ""
 "<strong>download the configuration file</strong> to quickly import your "
 "settings and start using your secure VPN connection.</p>"
 msgstr ""
+"<h2>Bienvenido a la configuración de tu VPN</h2>\n"
+"<p>Descarga la app WireGuard para tu dispositivo desde uno de los enlaces.</"
+"p>\n"
+"<p>Tras instalar, puedes <strong>escanear el código QR</strong> o "
+"<strong>descargar el archivo de configuración</strong> para importarlo y "
+"usar tu VPN segura.</p>"
 
 #: vpn_invite/models.py:30
 msgid "Letters, Digits, Special Characters"
-msgstr ""
+msgstr "Letras, dígitos, caracteres especiales"
 
 #: vpn_invite/models.py:31
 msgid "Letters, Digits"
-msgstr ""
+msgstr "Letras, dígitos"
 
 #: vpn_invite/models.py:31
 msgid "Letters"
-msgstr ""
+msgstr "Letras"
 
 #: vpn_invite/models.py:31
 msgid "Digits"
-msgstr ""
+msgstr "Dígitos"
 
 #: vpn_invite/models.py:55
 msgid ""
@@ -1596,227 +1779,243 @@ msgid ""
 "After installation, you can scan the QR code or download the configuration "
 "file to import on your device."
 msgstr ""
+"Descarga la app WireGuard para tu dispositivo desde uno de los enlaces. Tras "
+"la instalación, puedes escanear el código QR o descargar el archivo de "
+"configuración para importarlo."
 
 #: vpn_invite/models.py:61
 msgid "WireGuard VPN Invite"
-msgstr ""
+msgstr "Invitación VPN WireGuard"
 
 #: vpn_invite/views.py:53
 msgid "Invite Settings|Settings saved successfully."
-msgstr ""
+msgstr "Configuración de invitación|Configuración guardada correctamente."
 
 #: vpn_invite/views.py:57
 msgid "VPN Invite Settings"
-msgstr ""
+msgstr "Configuración de invitación VPN"
 
 #: vpn_invite/views.py:73
 msgid "Email Settings|Settings saved successfully."
-msgstr ""
+msgstr "Configuración de correo|Configuración guardada correctamente."
 
 #: wireguard/forms.py:11
 msgid "Display Name"
-msgstr ""
+msgstr "Nombre para mostrar"
 
 #: wireguard/forms.py:12
 msgid "Instance ID"
-msgstr ""
+msgstr "Instancia"
 
 #: wireguard/forms.py:16
 msgid "Listen Port"
-msgstr ""
+msgstr "Puerto"
 
 #: wireguard/forms.py:17
 msgid "Internal IP Address"
-msgstr ""
+msgstr "Dirección IP interna"
 
 #: wireguard/forms.py:19
 msgid "Post Up"
-msgstr ""
+msgstr "Post Up"
 
 #: wireguard/forms.py:20
 msgid "Post Down"
-msgstr ""
+msgstr "Post Down"
 
 #: wireguard/forms.py:21
 msgid "Web Refresh Interval"
-msgstr ""
+msgstr "Intervalo de actualización web"
 
 #: wireguard/forms.py:42
 msgid "Peer List Refresh Interval must be at least 5 seconds"
-msgstr ""
+msgstr "El intervalo de actualización de peers debe ser al menos 5 segundos"
 
 #: wireguard/forms.py:45
 msgid "Invalid hostname or IP Address"
-msgstr ""
+msgstr "Nombre de host o IP inválido"
 
 #: wireguard/forms.py:54
 msgid "The selected network range overlaps with another instance."
-msgstr ""
+msgstr "El rango de red seleccionado se solapa con otra instancia."
 
 #: wireguard/views.py:97
 msgid "WireGuard Status"
-msgstr ""
+msgstr "Estado de WireGuard"
 
 #: wireguard/views.py:129
 msgid "Update WireGuard Instance"
-msgstr ""
+msgstr "Actualizar instancia WireGuard"
 
 #: wireguard/views.py:133
 msgid "Delete WireGuard Instance"
-msgstr ""
+msgstr "Eliminar instancia WireGuard"
 
 #: wireguard/views.py:136
 msgid "Error removing instance: wg"
-msgstr ""
+msgstr "Error al eliminar instancia: wg"
 
 #: wireguard/views.py:136
 msgid ""
 "|Cannot delete the requested WireGuard instance. There are still peers "
 "associated with this instance."
 msgstr ""
+"|No se puede eliminar la instancia solicitada. Aún hay peers asociados."
 
 #: wireguard/views.py:139
 msgid "|WireGuard instance deleted: wg"
-msgstr ""
+msgstr "|Instancia WireGuard eliminada: wg"
 
 #: wireguard/views.py:142
 msgid "Invalid confirmation|Please confirm deletion of WireGuard instance: wg"
-msgstr ""
+msgstr "Confirmación inválida|Por favor confirma eliminación de instancia: wg"
 
 #: wireguard/views.py:146
 msgid "Create a new WireGuard Instance"
-msgstr ""
+msgstr "Crear nueva instancia WireGuard"
 
 #: wireguard/views.py:147
 msgid "New WireGuard Instance"
-msgstr ""
+msgstr "Nueva instancia WireGuard"
 
 #: wireguard_peer/forms.py:29
 msgid "Allowed IP or Network"
-msgstr ""
+msgstr "IP o red permitida"
 
 #: wireguard_peer/forms.py:39
 msgid "Please provide a valid IP address."
-msgstr ""
+msgstr "Por favor proporciona una IP válida."
 
 #: wireguard_peer/forms.py:48
 msgid "A peer can have only one IP with priority zero."
-msgstr ""
+msgstr "Un peer solo puede tener una IP con prioridad cero."
 
 #: wireguard_peer/forms.py:54
 msgid "This IP is already in use by another peer."
-msgstr ""
+msgstr "Esta IP ya la usa otro peer."
 
 #: wireguard_peer/forms.py:56
 msgid ""
 "The IP address does not belong to the Peer's WireGuard instance network "
 "range. Please check the IP address or change the priority."
 msgstr ""
+"La IP no pertenece al rango de la instancia WireGuard del peer. Verifica la "
+"IP o cambia la prioridad."
 
 #: wireguard_peer/forms.py:58
 msgid "The netmask for priority 0 IP must be 32."
-msgstr ""
+msgstr "La máscara para IP con prioridad 0 debe ser 32."
 
 #: wireguard_peer/forms.py:60
 msgid "The IP address is the same as the Peer's WireGuard instance address."
-msgstr ""
+msgstr "La IP es la misma que la instancia WireGuard del peer."
 
 #: wireguard_peer/forms.py:63
 msgid ""
 "The IP address belongs to the Peer's WireGuard instance network range. "
 "Please check the IP address or change use priority 0 instead."
 msgstr ""
+"La IP pertenece al rango de la instancia WireGuard del peer. Verifica la IP "
+"o usa prioridad 0."
 
 #: wireguard_peer/forms.py:66
 msgid "Priority must be greater than or equal to 1"
-msgstr ""
+msgstr "La prioridad debe ser ≥ 1"
 
 #: wireguard_peer/forms.py:68
 msgid "Invalid config file"
-msgstr ""
+msgstr "Archivo de configuración inválido"
 
 #: wireguard_peer/views.py:50
 msgid "WireGuard Peer List"
-msgstr ""
+msgstr "Lista de peers WireGuard"
 
 #: wireguard_peer/views.py:129
 msgid "Create a new Peer for instance wg"
-msgstr ""
+msgstr "Crear nuevo peer para instancia wg"
 
 #: wireguard_peer/views.py:148
 msgid "Peer created|Peer created successfully."
-msgstr ""
+msgstr "Peer creado|Peer creado correctamente."
 
 #: wireguard_peer/views.py:153
 msgid "Error creating peer|No available IP address found for peer creation."
-msgstr ""
+msgstr "Error al crear peer|No hay IP disponible para asignar."
 
 #: wireguard_peer/views.py:166
 msgid "Peer deleted|Peer deleted successfully."
-msgstr ""
+msgstr "Peer eliminado|Peer eliminado correctamente."
 
 #: wireguard_peer/views.py:169
 msgid ""
 "Error deleting peer|Invalid confirmation message. Type \"delete\" to confirm."
 msgstr ""
+"Error al eliminar peer|Confirmación inválida. Escribe \"delete\" para "
+"confirmar."
 
 #: wireguard_peer/views.py:171
 msgid "Update Peer: "
-msgstr ""
+msgstr "Actualizar peer: "
 
 #: wireguard_peer/views.py:182
 msgid "Peer updated|Peer updated successfully."
-msgstr ""
+msgstr "Peer actualizado|Peer actualizado correctamente."
 
 #: wireguard_peer/views.py:220
 msgid "IP address deleted|IP address deleted successfully."
-msgstr ""
+msgstr "IP eliminada|IP eliminada correctamente."
 
 #: wireguard_peer/views.py:225
 msgid ""
 "Error deleting IP address|Invalid confirmation message. Type \"delete\" to "
 "confirm."
 msgstr ""
+"Error al eliminar IP|Confirmación inválida. Escribe \"delete\" para "
+"confirmar."
 
 #: wireguard_peer/views.py:230
 msgid "Manage client route"
-msgstr ""
+msgstr "Gestionar ruta cliente"
 
 #: wireguard_peer/views.py:232
 msgid "Manage IP address or Network"
-msgstr ""
+msgstr "Gestionar IP o red"
 
 #: wireguard_peer/views.py:245
 msgid "IP address updated|IP address updated successfully."
-msgstr ""
+msgstr "IP actualizada|IP actualizada correctamente."
 
 #: wireguard_peer/views.py:247
 msgid "IP address added|IP address added successfully."
-msgstr ""
+msgstr "IP añadida|IP añadida correctamente."
 
 #: wireguard_tools/views.py:160
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/."
 msgstr ""
+"Exportación exitosa!|Los archivos de configuración se exportaron a /etc/"
+"wireguard/."
 
 #: wireguard_tools/views.py:162
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/. Don't forget to restart the interfaces."
 msgstr ""
+"Exportación exitosa!|Los archivos de configuración se exportaron a /etc/"
+"wireguard/. No olvides reiniciar las interfaces."
 
 #: wireguard_tools/views.py:255
 msgid "Error reloading"
-msgstr ""
+msgstr "Error al recargar"
 
 #: wireguard_tools/views.py:267
 msgid "Error stopping"
-msgstr ""
+msgstr "Error al detener"
 
 #: wireguard_tools/views.py:272
 msgid "Error starting"
-msgstr ""
+msgstr "Error al iniciar"
 
 #: wireguard_tools/views.py:279
 msgid ""
@@ -1824,19 +2023,22 @@ msgid ""
 "check if the the peers are working as expected. If you find any issues, "
 "please report them."
 msgstr ""
+"ADVERTENCIA|La interfaz se recargó, no reinició. Verifica que los peers "
+"funcionen correctamente. Si hay problemas, repórtalos."
 
 #: wireguard_tools/views.py:280
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
-msgstr ""
+msgstr "WireGuard recargado|El servicio WireGuard se ha recargado."
 
 #: wireguard_tools/views.py:282
 msgid "WireGuard restarted|The WireGuard service has been restarted."
-msgstr ""
+msgstr "WireGuard reiniciado|El servicio WireGuard se ha reiniciado."
 
 #: wireguard_tools/views.py:285
 msgid "Errors encountered|Error processing one or more interfaces."
-msgstr ""
+msgstr "Errores encontrados|Error al procesar una o más interfaces."
 
 #: wireguard_tools/views.py:288
 msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
+"No se encontraron interfaces|No hay interfaces WireGuard para procesar."
