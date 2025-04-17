@@ -1,3 +1,13 @@
+## 🌍 Read this in other languages:
+- 🇬🇧 [English](README.md)
+- 🇧🇷 [Português](docs/README.pt-br.md)
+- 🇪🇸 [Español](docs/README.es.md)
+- 🇫🇷 [Français](docs/README.fr.md)
+- 🇩🇪 [Deutsch](docs/README.de.md)
+
+✨ If you find any issues with the translation or would like to request a new language, please open an [issue](https://github.com/eduardogsilva/wireguard_webadmin/issues). 
+
+
 # wireguard_webadmin
 
 wireguard_webadmin is a full-featured yet easy-to-configure web interface for managing WireGuard VPN instances. Designed to simplify the administration of WireGuard networks, it provides a user-friendly interface that supports multiple users with varying access levels, multiple WireGuard instances with individual peer management, and support for crypto key routing for site-to-site interconnections.
