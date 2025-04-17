@@ -6,10 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-17 09:04-0300\n"
+"POT-Creation-Date: 2025-04-17 12:38-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -462,9 +461,15 @@ msgstr "Paramètres du pare‑feu enregistrés avec succès"
 msgid "Language"
 msgstr "Langue"
 
-#: intl_tools/forms.py:22 templates/base.html:80
+#: intl_tools/forms.py:24 templates/base.html:80
 msgid "Change Language"
 msgstr "Changer de langue"
+
+#: intl_tools/forms.py:28
+msgid ""
+"If you find any issues with the translation or would like to request a new "
+"language, please open an"
+msgstr "Si vous constatez un problème dans la traduction ou souhaitez demander une nouvelle langue, veuillez ouvrir une"
 
 #: templates/access_denied.html:9
 msgid "Access Denied"
@@ -660,8 +665,7 @@ msgstr "Règle automatique: trafic Peer ↔ Peer (paramètres du pare‑feu)"
 
 #: templates/firewall/firewall_rule_list.html:179
 msgid "Automatic Rule: Firewall Settings Instance to Instance"
-msgstr ""
-"Règle automatique: trafic Instance ↔ Instance (paramètres du pare‑feu)"
+msgstr "Règle automatique: trafic Instance ↔ Instance (paramètres du pare‑feu)"
 
 #: templates/firewall/firewall_rule_list.html:194
 msgid "Create Firewall Rule"
@@ -889,13 +893,12 @@ msgid ""
 msgstr ""
 "\n"
 "                        <h5>Ports par défaut</h5>\n"
-"                        <p>Le fichier <code>docker-compose.yml</code> "
-"par défaut définit la plage de ports <b>TCP</b> <b>8080‑8089</b>. "
-"Si vous souhaitez rediriger vers une autre plage, modifiez ce "
-"fichier manuellement, puis relancez l’étape Docker Compose décrite dans les "
-"<a href=\"https://github.com/eduardogsilva/"
-"wireguard_webadmin?tab=readme-ov-file#deployment\">instructions de "
-"déploiement</a>.</p>\n"
+"                        <p>Le fichier <code>docker-compose.yml</code> par "
+"défaut définit la plage de ports <b>TCP</b> <b>8080‑8089</b>. Si vous "
+"souhaitez rediriger vers une autre plage, modifiez ce fichier manuellement, "
+"puis relancez l’étape Docker Compose décrite dans les <a href=\"https://"
+"github.com/eduardogsilva/wireguard_webadmin?tab=readme-ov-"
+"file#deployment\">instructions de déploiement</a>.</p>\n"
 "                        <h5>Type de destination: Peer</h5>\n"
 "                        <p>La redirection de port privilégiera la première "
 "adresse IP du peer dont la priorité est zéro.</p>\n"
@@ -1551,9 +1554,8 @@ msgstr ""
 "        <h4>Filtre avancé</h4>\n"
 "        <p>Limite la réponse de l’API aux seuls peers autorisés pour "
 "l’utilisateur. Selon la taille de votre environnement, cette option peut "
-"affecter les performances. Pour compenser, augmentez éventuellement "
-"l’« intervalle d’actualisation Web » afin de réduire le nombre de requêtes.</"
-"p>\n"
+"affecter les performances. Pour compenser, augmentez éventuellement l’« "
+"intervalle d’actualisation Web » afin de réduire le nombre de requêtes.</p>\n"
 "\n"
 "        "
 
@@ -1673,15 +1675,20 @@ msgstr "L’expiration (en minutes) doit être comprise entre 1 et 1440."
 
 #: vpn_invite/forms.py:222
 msgid "Default password must not be provided when random password is enabled."
-msgstr "Le mot de passe par défaut ne doit pas être fourni lorsque le mot de passe aléatoire est activé."
+msgstr ""
+"Le mot de passe par défaut ne doit pas être fourni lorsque le mot de passe "
+"aléatoire est activé."
 
 #: vpn_invite/forms.py:224
 msgid "Random password length must be at least 6 characters."
-msgstr "La longueur du mot de passe aléatoire doit être d’au moins 6 caractères."
+msgstr ""
+"La longueur du mot de passe aléatoire doit être d’au moins 6 caractères."
 
 #: vpn_invite/forms.py:229
 msgid "Default password must be provided when random password is disabled."
-msgstr "Un mot de passe par défaut doit être fourni lorsque le mot de passe aléatoire est désactivé."
+msgstr ""
+"Un mot de passe par défaut doit être fourni lorsque le mot de passe "
+"aléatoire est désactivé."
 
 #: vpn_invite/forms.py:231
 msgid "Default password must be at least 6 characters long."
@@ -1689,16 +1696,22 @@ msgstr "Le mot de passe par défaut doit comporter au moins 6 caractères."
 
 #: vpn_invite/forms.py:241
 msgid "Text field must not be empty when download button is enabled."
-msgstr "Le champ texte ne doit pas être vide lorsque le bouton de téléchargement est activé."
+msgstr ""
+"Le champ texte ne doit pas être vide lorsque le bouton de téléchargement est "
+"activé."
 
 #: vpn_invite/forms.py:243
 msgid "URL field must not be empty when download button is enabled."
-msgstr "Le champ URL ne doit pas être vide lorsque le bouton de téléchargement est activé."
+msgstr ""
+"Le champ URL ne doit pas être vide lorsque le bouton de téléchargement est "
+"activé."
 
 #: vpn_invite/forms.py:252
 msgid ""
 "Default password must not be contained in any message template. Found at: "
-msgstr "Le mot de passe par défaut ne doit figurer dans aucun modèle de message. Trouvé dans: "
+msgstr ""
+"Le mot de passe par défaut ne doit figurer dans aucun modèle de message. "
+"Trouvé dans: "
 
 #: vpn_invite/forms.py:259
 #, python-brace-format
@@ -1737,13 +1750,14 @@ msgstr ""
 "Bonjour,\n"
 "\n"
 "Vous êtes invité·e à rejoindre notre réseau VPN WireGuard sécurisé. Cliquez "
-"sur le lien ci‑dessous pour accéder à votre configuration VPN personnalisée:\n"
+"sur le lien ci‑dessous pour accéder à votre configuration VPN "
+"personnalisée:\n"
 "\n"
 "{invite_url}\n"
 "\n"
-"Remarque: ce lien d’invitation expirera dans {expire_minutes} minutes. "
-"Si vous avez besoin d’un nouveau lien après expiration, veuillez demander "
-"une nouvelle invitation."
+"Remarque: ce lien d’invitation expirera dans {expire_minutes} minutes. Si "
+"vous avez besoin d’un nouveau lien après expiration, veuillez demander une "
+"nouvelle invitation."
 
 #: vpn_invite/models.py:16
 msgid ""
@@ -1833,7 +1847,9 @@ msgstr "Intervalle d’actualisation Web"
 
 #: wireguard/forms.py:42
 msgid "Peer List Refresh Interval must be at least 5 seconds"
-msgstr "L’intervalle d’actualisation de la liste des peers doit être d’au moins 5 secondes."
+msgstr ""
+"L’intervalle d’actualisation de la liste des peers doit être d’au moins 5 "
+"secondes."
 
 #: wireguard/forms.py:45
 msgid "Invalid hostname or IP Address"
@@ -1860,8 +1876,12 @@ msgid "Error removing instance: wg"
 msgstr "Erreur lors de la suppression de l’instance: wg"
 
 #: wireguard/views.py:136
-msgid "|Cannot delete the requested WireGuard instance. There are still peers associated with this instance."
-msgstr "|Impossible de supprimer l’instance WireGuard demandée ; des peers y sont encore associés."
+msgid ""
+"|Cannot delete the requested WireGuard instance. There are still peers "
+"associated with this instance."
+msgstr ""
+"|Impossible de supprimer l’instance WireGuard demandée ; des peers y sont "
+"encore associés."
 
 #: wireguard/views.py:139
 msgid "|WireGuard instance deleted: wg"
@@ -1869,7 +1889,9 @@ msgstr "|Instance WireGuard supprimée: wg"
 
 #: wireguard/views.py:142
 msgid "Invalid confirmation|Please confirm deletion of WireGuard instance: wg"
-msgstr "Confirmation invalide | Veuillez confirmer la suppression de l’instance WireGuard: wg"
+msgstr ""
+"Confirmation invalide | Veuillez confirmer la suppression de l’instance "
+"WireGuard: wg"
 
 #: wireguard/views.py:146
 msgid "Create a new WireGuard Instance"
@@ -1909,7 +1931,8 @@ msgstr "Le masque de sous‑réseau pour une IP de priorité 0 doit être 32."
 
 #: wireguard_peer/forms.py:60
 msgid "The IP address is the same as the Peer's WireGuard instance address."
-msgstr "Cette adresse IP est identique à celle de l’instance WireGuard du peer."
+msgstr ""
+"Cette adresse IP est identique à celle de l’instance WireGuard du peer."
 
 #: wireguard_peer/forms.py:63
 msgid ""
@@ -1971,8 +1994,8 @@ msgid ""
 "Error deleting IP address|Invalid confirmation message. Type \"delete\" to "
 "confirm."
 msgstr ""
-"Erreur de suppression de l’IP | Message de confirmation invalide. Tapez "
-"« delete » pour confirmer."
+"Erreur de suppression de l’IP | Message de confirmation invalide. Tapez « "
+"delete » pour confirmer."
 
 #: wireguard_peer/views.py:230
 msgid "Manage client route"
@@ -2018,15 +2041,14 @@ msgstr "Erreur à l’arrêt"
 msgid "Error starting"
 msgstr "Erreur au démarrage"
 
-
 #: wireguard_tools/views.py:279
 msgid ""
 "WARNING|Please note that the interface was reloaded, not restarted. Double-"
 "check if the the peers are working as expected. If you find any issues, "
 "please report them."
 msgstr ""
-"AVERTISSEMENT | L’interface a été rechargée, pas redémarrée. Vérifiez que les "
-"peers fonctionnent comme prévu ; signalez tout problème rencontré."
+"AVERTISSEMENT | L’interface a été rechargée, pas redémarrée. Vérifiez que "
+"les peers fonctionnent comme prévu ; signalez tout problème rencontré."
 
 #: wireguard_tools/views.py:280
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
@@ -2038,7 +2060,9 @@ msgstr "WireGuard redémarré | Le service WireGuard a été redémarré."
 
 #: wireguard_tools/views.py:285
 msgid "Errors encountered|Error processing one or more interfaces."
-msgstr "Erreurs rencontrées | Problème lors du traitement d’une ou plusieurs interfaces."
+msgstr ""
+"Erreurs rencontrées | Problème lors du traitement d’une ou plusieurs "
+"interfaces."
 
 #: wireguard_tools/views.py:288
 msgid "No interfaces found|No WireGuard interfaces were found to process."

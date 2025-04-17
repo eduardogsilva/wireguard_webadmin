@@ -6,10 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 15:55-0300\n"
+"POT-Creation-Date: 2025-04-17 12:38-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -460,9 +459,15 @@ msgstr "Configuración de firewall guardada correctamente"
 msgid "Language"
 msgstr "Idioma"
 
-#: intl_tools/forms.py:22 templates/base.html:80
+#: intl_tools/forms.py:24 templates/base.html:80
 msgid "Change Language"
 msgstr "Cambiar idioma"
+
+#: intl_tools/forms.py:28
+msgid ""
+"If you find any issues with the translation or would like to request a new "
+"language, please open an"
+msgstr "Si encuentra algún problema con la traducción o desea solicitar un nuevo idioma, por favor abra un"
 
 #: templates/access_denied.html:9
 msgid "Access Denied"
