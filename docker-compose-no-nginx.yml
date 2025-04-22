@@ -5,10 +5,11 @@ services:
     restart: unless-stopped
     image: eduardosilva/wireguard_webadmin:latest
     environment:
-      - SERVER_ADDRESS=127.0.0.1
+      - SERVER_ADDRESS=${SERVER_ADDRESS}
       - DEBUG_MODE=True
       - COMPOSE_VERSION=02r
       - TZ=${TIMEZONE}
+      - EXTRA_ALLOWED_HOSTS=${EXTRA_ALLOWED_HOSTS}
     volumes:
       - wireguard:/etc/wireguard
       - static_volume:/app_static_files/

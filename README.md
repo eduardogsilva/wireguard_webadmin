@@ -104,9 +104,16 @@ This mode is recommended for running the web admin interface. The container depl
 
    ```env
    # Configure SERVER_ADDRESS to match the address of the server. If you don't have a DNS name, you can use the IP address.
-   # A misconfigured SERVER_ADDRESS will cause the app to have CSRF errors.
+   # A missconfigured SERVER_ADDRESS will cause the app to have CSRF errors.
    SERVER_ADDRESS=my_server_address
    DEBUG_MODE=False
+   
+   # Choose a timezone from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+   TIMEZONE=America/Sao_Paulo
+   
+   # If you need additional hosts to be allowed, you can specify them here.
+   # The SERVER_ADDRESS will always be allowed.
+   #EXTRA_ALLOWED_HOSTS=app1.example.com,app2.example.com:8443,app3.example.com
    ```
 
    Replace `my_server_address` with your actual server address.

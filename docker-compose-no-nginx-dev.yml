@@ -6,10 +6,11 @@ services:
     build:
       context: .
     environment:
-      - SERVER_ADDRESS=127.0.0.1
-      - DEBUG_MODE=True
+      - SERVER_ADDRESS=${SERVER_ADDRESS}
+      - DEBUG_MODE=${DEBUG_MODE}
       - COMPOSE_VERSION=02r
       - TZ=${TIMEZONE}
+      - EXTRA_ALLOWED_HOSTS=${EXTRA_ALLOWED_HOSTS}
     volumes:
       - wireguard:/etc/wireguard
       - static_volume:/app_static_files/
