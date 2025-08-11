@@ -8,3 +8,5 @@ wireguard_webadmin/production_settings.py
 .idea/
 containers/*/.venv
 .env
+.junie/
+build_and_push_multi.sh
