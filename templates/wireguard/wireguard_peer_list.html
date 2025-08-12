@@ -281,6 +281,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             $("#qrcodeButton").on("click", function(e) {
                 e.preventDefault();
+                if ($(this).hasClass('disabled')) {
+                    return false;
+                }
                 var uuid = $("#peerPreviewModal").data("peer-uuid");
                 $("#qrCodeImg").attr("src", "/tools/download_peer_config/?uuid=" + uuid + "&format=qrcode");
                 $(".info-content").hide();
@@ -292,6 +295,16 @@
                 e.preventDefault();
                 $(".qr-code-content").hide();
                 $(".info-content").show();
+            });
+
+            $("#downloadConfigButton").on("click", function(e) {
+                var hasPrivateKey = $("#peerPreviewModal").data("has-private-key");
+                if (!hasPrivateKey) {
+                    if (!confirm("{% trans 'This configuration does not contain a private key. You must add the private key manually in your client before using it.' %}")) {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
             });
         });
     </script>
@@ -335,7 +348,14 @@
                         if (data.name) {
                             $('#peerPreviewModalLabel').text(data.name);
                         }
-                        // Future additional peer information can be handled here.
+                        // Check if peer has private_key and enable/disable buttons accordingly
+                        if (!data.private_key_exists) {
+                            $('#qrcodeButton').addClass('disabled').attr('aria-disabled', 'true');
+                            $('#peerPreviewModal').data('has-private-key', false);
+                        } else {
+                            $('#qrcodeButton').removeClass('disabled').removeAttr('aria-disabled');
+                            $('#peerPreviewModal').data('has-private-key', true);
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.error("Error fetching peer info:", error);

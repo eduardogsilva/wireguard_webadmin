@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-12 10:36-0300\n"
+"POT-Creation-Date: 2025-08-12 11:30-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1200,7 +1200,7 @@ msgid "Create Peer"
 msgstr "Crear peer"
 
 #: templates/wireguard/wireguard_peer_list.html:106
-#: templates/wireguard/wireguard_peer_list.html:617
+#: templates/wireguard/wireguard_peer_list.html:637
 msgid "Show extras"
 msgstr "Mostrar extras"
 
@@ -1264,7 +1264,15 @@ msgstr ""
 msgid "Add WireGuard Instance"
 msgstr "Añadir instancia WireGuard"
 
-#: templates/wireguard/wireguard_peer_list.html:570
+#: templates/wireguard/wireguard_peer_list.html:304
+msgid ""
+"This configuration does not contain a private key. You must add the private "
+"key manually in your client before using it."
+msgstr ""
+"Esta configuración no contiene una clave privada. Debes agregar la clave "
+"privada manualmente en tu cliente antes de usarla."
+
+#: templates/wireguard/wireguard_peer_list.html:590
 msgid ""
 "This address does not appear in the wg show command output, likely "
 "indicating that another peer has an IP overlapping this network or that the "
@@ -1273,7 +1281,7 @@ msgstr ""
 "Esta dirección no aparece en la salida de 'wg show', lo que indica que otro "
 "peer tiene una IP solapada o el archivo de configuración está desactualizado."
 
-#: templates/wireguard/wireguard_peer_list.html:585
+#: templates/wireguard/wireguard_peer_list.html:605
 msgid ""
 "At least one address does not appear in the wg show command output, which "
 "may indicate that another peer is using an overlapping IP or that the "
@@ -1282,67 +1290,67 @@ msgstr ""
 "Al menos una dirección no aparece en la salida de 'wg show', lo cual puede "
 "indicar un IP solapada o un archivo desactualizado."
 
-#: templates/wireguard/wireguard_peer_list.html:614
+#: templates/wireguard/wireguard_peer_list.html:634
 msgid "Hide extras"
 msgstr "Ocultar extras"
 
-#: templates/wireguard/wireguard_peer_list.html:658
-#: templates/wireguard/wireguard_peer_list.html:792
+#: templates/wireguard/wireguard_peer_list.html:678
+#: templates/wireguard/wireguard_peer_list.html:812
 msgid "Access Password"
 msgstr "Contraseña de acceso"
 
-#: templates/wireguard/wireguard_peer_list.html:658
-#: templates/wireguard/wireguard_peer_list.html:792
+#: templates/wireguard/wireguard_peer_list.html:678
+#: templates/wireguard/wireguard_peer_list.html:812
 msgid "(Share this password via a separate secure channel)"
 msgstr "(Comparte esta contraseña por un canal seguro separado)"
 
-#: templates/wireguard/wireguard_peer_list.html:661
+#: templates/wireguard/wireguard_peer_list.html:681
 msgid "Unknown error"
 msgstr "Error desconocido"
 
-#: templates/wireguard/wireguard_peer_list.html:665
+#: templates/wireguard/wireguard_peer_list.html:685
 msgid "Error creating invite."
 msgstr "Error al crear invitación."
 
-#: templates/wireguard/wireguard_peer_list.html:702
+#: templates/wireguard/wireguard_peer_list.html:722
 msgid "Invite text copied to clipboard."
 msgstr "Texto de invitación copiado al portapapeles."
 
-#: templates/wireguard/wireguard_peer_list.html:704
+#: templates/wireguard/wireguard_peer_list.html:724
 msgid "Failed to copy text."
 msgstr "Error al copiar texto."
 
-#: templates/wireguard/wireguard_peer_list.html:707
+#: templates/wireguard/wireguard_peer_list.html:727
 msgid "Clipboard API not supported."
 msgstr "API del portapapeles no soportada."
 
-#: templates/wireguard/wireguard_peer_list.html:716
+#: templates/wireguard/wireguard_peer_list.html:736
 msgid "Please enter a valid phone number for WhatsApp."
 msgstr "Ingresa un número de WhatsApp válido."
 
-#: templates/wireguard/wireguard_peer_list.html:728
-#: templates/wireguard/wireguard_peer_list.html:774
+#: templates/wireguard/wireguard_peer_list.html:748
+#: templates/wireguard/wireguard_peer_list.html:794
 msgid "Invite data is not available."
 msgstr "Datos de invitación no disponibles."
 
-#: templates/wireguard/wireguard_peer_list.html:737
+#: templates/wireguard/wireguard_peer_list.html:757
 msgid "Please enter a valid email address."
 msgstr "Ingresa un email válido."
 
-#: templates/wireguard/wireguard_peer_list.html:759
+#: templates/wireguard/wireguard_peer_list.html:779
 msgid "Error sending email."
 msgstr "Error al enviar email."
 
-#: templates/wireguard/wireguard_peer_list.html:796
-#: templates/wireguard/wireguard_peer_list.html:800
+#: templates/wireguard/wireguard_peer_list.html:816
+#: templates/wireguard/wireguard_peer_list.html:820
 msgid "Error refreshing invite."
 msgstr "Error al actualizar invitación."
 
-#: templates/wireguard/wireguard_peer_list.html:815
+#: templates/wireguard/wireguard_peer_list.html:835
 msgid "No invite data available to refresh."
 msgstr "No hay datos de invitación para actualizar."
 
-#: templates/wireguard/wireguard_peer_list.html:835
+#: templates/wireguard/wireguard_peer_list.html:855
 msgid "Error closing invite:"
 msgstr "Error al cerrar invitación:"
 

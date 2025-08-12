@@ -130,8 +130,8 @@
             {% endif %}
         </div>
         <div class="button-group">
-            <a href="/invite/download_config/?token={{ peer_invite.uuid }}&password={{ password }}" target="_blank" class="btn btn-primary">Download Config</a>
-            <a href="#" id="viewQrButton" class="btn btn-secondary">View QR Code</a>
+            <a href="/invite/download_config/?token={{ peer_invite.uuid }}&password={{ password }}" target="_blank" class="btn btn-primary" id="downloadConfigButton">Download Config</a>
+            <a href="#" id="viewQrButton" class="btn btn-secondary"{% if not peer_invite.peer.private_key %} style="opacity: 0.5; cursor: not-allowed;"{% endif %}>View QR Code</a>
         </div>
         <div class="qr-code" id="qrCodeContainer">
             <!-- QR Code will be loaded here when the button is clicked -->
@@ -149,9 +149,15 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var viewQrButton = document.getElementById("viewQrButton");
+            var downloadConfigButton = document.getElementById("downloadConfigButton");
             var qrCodeContainer = document.getElementById("qrCodeContainer");
+            var hasPrivateKey = {% if peer_invite.peer.private_key %}true{% else %}false{% endif %};
+            
             viewQrButton.addEventListener("click", function(event) {
                 event.preventDefault();
+                if (!hasPrivateKey) {
+                    return false;
+                }
                 if (qrCodeContainer.style.display === "none" || qrCodeContainer.style.display === "") {
                     if (qrCodeContainer.getElementsByTagName("img").length === 0) {
                         var img = document.createElement("img");
@@ -162,6 +168,15 @@
                     qrCodeContainer.style.display = "block";
                 } else {
                     qrCodeContainer.style.display = "none";
+                }
+            });
+            
+            downloadConfigButton.addEventListener("click", function(event) {
+                if (!hasPrivateKey) {
+                    if (!confirm("This configuration does not contain a private key. You must add the private key manually in your client before using it.")) {
+                        event.preventDefault();
+                        return false;
+                    }
                 }
             });
         });

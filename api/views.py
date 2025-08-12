@@ -129,6 +129,7 @@ def peer_info(request):
         'name': str(peer),
         'public_key': str(peer.public_key),
         'uuid': str(peer.uuid),
+        'private_key_exists': bool(peer.private_key),
     }
     return JsonResponse(data)
 
