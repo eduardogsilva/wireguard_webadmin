@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-17 12:38-0300\n"
+"POT-Creation-Date: 2025-08-12 10:36-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -467,7 +466,9 @@ msgstr "Cambiar idioma"
 msgid ""
 "If you find any issues with the translation or would like to request a new "
 "language, please open an"
-msgstr "Si encuentra algún problema con la traducción o desea solicitar un nuevo idioma, por favor abra un"
+msgstr ""
+"Si encuentra algún problema con la traducción o desea solicitar un nuevo "
+"idioma, por favor abra un"
 
 #: templates/access_denied.html:9
 msgid "Access Denied"
@@ -1145,6 +1146,16 @@ msgstr ""
 msgid "Please type \\\"delete\\\" to remove peer configuration."
 msgstr ""
 "Por favor escribe \\\"delete\\\" para eliminar la configuración del peer."
+
+#: templates/wireguard/wireguard_manage_peer.html:257
+msgid ""
+"The private key is empty. The peer’s configuration file and QR code will be "
+"generated without the private key.\\n It must be inserted manually when "
+"importing.\\n\\n Do you want to continue?"
+msgstr ""
+"La clave privada está vacía. El archivo de configuración y el código QR del "
+"peer se generarán sin la clave privada.\\n Debe insertarse manualmente al "
+"importar.\\n\\n ¿Deseas continuar?"
 
 #: templates/wireguard/wireguard_manage_server.html:18
 msgid "Create Instance"

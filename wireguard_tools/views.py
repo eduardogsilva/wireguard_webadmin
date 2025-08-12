@@ -48,7 +48,7 @@ def generate_peer_config(peer_uuid):
 
     config_lines = [
         "[Interface]",
-        f"PrivateKey = {peer.private_key}" if peer.private_key else "",
+        f"PrivateKey = {peer.private_key}",
         f"Address = {client_address}",
         f"DNS = {dns_line}" if dns_line else "",
         "\n[Peer]",

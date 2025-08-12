@@ -33,7 +33,7 @@
                 <div class="form-group">
                     <label for="{{ form.private_key.id_for_label }}">{{ form.private_key.label }}</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="{{ form.private_key.id_for_label }}" name="{{ form.private_key.html_name }}" placeholder="{% trans 'Private Key' %}" value="{{ form.private_key.value|default_if_none:'' }}" required>
+                        <input type="password" class="form-control" id="{{ form.private_key.id_for_label }}" name="{{ form.private_key.html_name }}" placeholder="{% trans 'Private Key' %}" value="{{ form.private_key.value|default_if_none:'' }}">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary toggle-password" type="button"><i class="fas fa-eye"></i></button>
                         </div>
@@ -244,6 +244,24 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         });
     });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var form = document.querySelector('form[method="post"]');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            var privateKeyField = document.getElementById('{{ form.private_key.id_for_label }}');
+            if (privateKeyField && privateKeyField.value.trim() === '') {
+                var confirmed = confirm('{% trans "The private key is empty. The peer’s configuration file and QR code will be generated without the private key.\n It must be inserted manually when importing.\n\n Do you want to continue?" %}');
+                if (!confirmed) {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        });
+    }
 });
 </script>
 
