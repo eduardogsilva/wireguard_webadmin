@@ -64,7 +64,6 @@ Offers quick access to common debugging tools, facilitating the diagnosis and re
 Supports multi-user environments by allowing the assignment of varying permission levels, from restricted access to full administrative rights, ensuring secure and tailored access control.
 ![User Manager](screenshots/usermanager.png)
 
-Based on your requirements, here's an updated set of deployment instructions incorporating the use of `wget` for fetching the latest `docker-compose.yml` files directly from your GitHub repository, and guidance on creating a `.env` file for environment variables. These instructions ensure users always have the most current version of your deployment configuration and clarify the setup process.
 
 ## Deployment Instructions
 
