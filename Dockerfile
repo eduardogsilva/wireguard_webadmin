@@ -1,5 +1,5 @@
 # Build stage: install build dependencies and Python packages
-FROM python:3.12-slim AS builder
+FROM python:3.12-bookworm AS builder
 WORKDIR /app
 
 # Install build dependencies required for compiling C extensions
