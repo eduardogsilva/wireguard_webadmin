@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>{% trans 'Name' %}</th>
+            <th>{% trans 'Status' %}</th>
+            <th>{% trans 'IP Address' %}</th>
+            <th>{% trans 'Location' %}</th>
+            <th>{% trans 'Last Seen' %}</th>
+            <th>{% trans 'Config Version' %}</th>
+            <th colspan="2">{% trans 'Options' %}</th>
+            <th><i class="far fa-edit"></i></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for worker in workers %}
+        <tr>
+            <td>{{ worker.name }}</td>
+            <td style="width: 1%; white-space: nowrap;">
+                {% if worker.enabled %}
+                    <span class="badge badge-success">{% trans 'Enabled' %}</span>
+                {% else %}
+                    <span class="badge badge-secondary">{% trans 'Disabled' %}</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if worker.ip_address %}
+                    {{ worker.ip_address }}
+                    {% if worker.ip_lock %}
+                        <i class="fas fa-lock text-warning" title="{% trans 'IP Lock Enabled' %}"></i>
+                    {% endif %}
+                {% else %}
+                    <span class="text-muted">{% trans 'Not set' %}</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if worker.country or worker.city %}
+                    {% if worker.city %}{{ worker.city }}{% endif %}{% if worker.city and worker.country %}, {% endif %}{% if worker.country %}{{ worker.country }}{% endif %}
+                {% else %}
+                    <span class="text-muted">{% trans 'Not set' %}</span>
+                {% endif %}
+            </td>
+            <td style="width: 1%; white-space: nowrap;">
+                {% if worker.workerstatus %}
+                    {{ worker.workerstatus.last_seen|date:"M d, H:i" }}
+                {% else %}
+                    <span class="text-muted">{% trans 'Never' %}</span>
+                {% endif %}
+            </td>
+            <td style="width: 1%; white-space: nowrap;">
+                {% if worker.workerstatus %}
+                    {{ worker.workerstatus.config_version }}
+                    {% if worker.workerstatus.config_pending %}
+                        <i class="fas fa-clock text-warning" title="{% trans 'Config Pending' %}"></i>
+                    {% endif %}
+                {% else %}
+                    <span class="text-muted">0</span>
+                {% endif %}
+            </td>
+            <td style="width: 1%; white-space: nowrap;">
+                {% if worker.force_reload %}
+                    <i class="fas fa-sync-alt text-info" title="{% trans 'Force Reload' %}"></i>
+                {% endif %}
+            </td>
+            <td style="width: 1%; white-space: nowrap;">
+                {% if worker.force_restart %}
+                    <i class="fas fa-power-off text-danger" title="{% trans 'Force Restart' %}"></i>
+                {% endif %}
+            </td>
+            <td style="width: 1%; white-space: nowrap;">
+                <a href="/cluster/worker/manage/?uuid={{ worker.uuid }}" title="{% trans 'Edit' %}"><i class="far fa-edit"></i></a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="9" class="text-center text-muted">{% trans 'No workers configured' %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="/cluster/worker/manage/" class="btn btn-primary">{% trans 'Add Worker' %}</a>
+<a href="/cluster/settings/" class="btn btn-secondary">{% trans 'Cluster Settings' %}</a>
+{% endblock %}

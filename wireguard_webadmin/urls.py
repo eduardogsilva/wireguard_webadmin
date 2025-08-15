@@ -21,6 +21,7 @@ from accounts.views import view_create_first_user, view_login, view_logout
 from api.views import api_instance_info, api_peer_invite, api_peer_list, cron_check_updates, \
     cron_update_peer_latest_handshake, peer_info, routerfleet_authenticate_session, routerfleet_get_user_token, \
     wireguard_status
+from cluster.views import cluster_main, cluster_settings, worker_manage
 from console.views import view_console
 from dns.views import view_apply_dns_config, view_manage_dns_settings, view_manage_filter_list, view_manage_static_host, \
     view_static_host_list, view_toggle_dns_list, view_update_dns_list
@@ -87,5 +88,8 @@ urlpatterns = [
     path('vpn_invite/smtp_settings/', view_email_settings, name='email_settings'),
     path('invite/', view_public_vpn_invite, name='public_vpn_invite'),
     path('invite/download_config/', download_config_or_qrcode, name='download_config_or_qrcode'),
+    path('cluster/', cluster_main, name='cluster_main'),
+    path('cluster/worker/manage/', worker_manage, name='worker_manage'),
+    path('cluster/settings/', cluster_settings, name='cluster_settings'),
     path('change_language/', view_change_language, name='change_language'),
 ]
