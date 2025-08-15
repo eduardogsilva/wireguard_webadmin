@@ -41,7 +41,6 @@ class Worker(models.Model):
     city = models.CharField(max_length=100, blank=True, null=True)
     hostname = models.CharField(max_length=100, blank=True, null=True)
 
-
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -54,6 +53,8 @@ class WorkerStatus(models.Model):
     last_restart = models.DateTimeField(blank=True, null=True)
     config_version = models.PositiveIntegerField(default=0)
     config_pending = models.BooleanField(default=False)
+    active_peers = models.PositiveIntegerField(default=0)
+    wireguard_status = models.JSONField(default=dict)
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
