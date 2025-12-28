@@ -16,4 +16,4 @@ fi
 # Django startup
 python manage.py migrate --noinput
 python manage.py collectstatic --noinput
-exec python manage.py runserver 0.0.0.0:8000
+exec gunicorn wireguard_webadmin.wsgi:application --bind 0.0.0.0:8000 --workers 2 --threads 2 --timeout 60 --log-level info --capture-output --access-logfile - --error-logfile -
