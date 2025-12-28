@@ -11,6 +11,7 @@ IMAGES=(
 build_images() {
   echo "=========================================================================================="
   echo "========== Starting the build of the images..."
+  cat .gitignore > .dockerignore
   docker compose -f docker-compose-build.yml build
   if [ $? -eq 0 ]; then
     echo "Build completed successfully."
