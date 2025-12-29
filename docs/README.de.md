@@ -79,58 +79,59 @@ Folge diesen Schritten, um WireGuard WebAdmin bereitzustellen:
 
    ```bash
    mkdir wireguard_webadmin && cd wireguard_webadmin
-   ```
+1.  **Umgebung vorbereiten**
 
-2. **Docker‑Compose‑Datei herunterladen**
+    Erstelle zunächst ein Verzeichnis für WireGuard WebAdmin und wechsle hinein:
 
-   Wähle je nach Szenario einen der folgenden Befehle, um die passende `docker-compose.yml` herunterzuladen. So nutzt du stets die aktuelle Version der Deployment‑Datei.
+    ```bash
+    mkdir wireguard_webadmin && cd wireguard_webadmin
+    ```
 
-   ### Mit NGINX (empfohlen)
+2.  **Docker‑Compose‑Datei herunterladen**
 
-   Für eine produktionsreife Bereitstellung mit NGINX als Reverse‑Proxy (empfohlen):
+    Wähle je nach Szenario einen der folgenden Befehle, um die passende `docker-compose.yml` herunterzuladen. So nutzt du stets die aktuelle Version der Deployment‑Datei.
 
-   ```bash
-   wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose.yml
-   ```
+    ### Option 1: Mit NGINX (empfohlen)
 
-   Im Standard generiert der Container ein selbstsigniertes Zertifikat. Eigene Zertifikate können durch Ersetzen von `nginx.pem` und `nginx.key` im Volume `certificates` hinterlegt werden.
+    Für eine produktionsreife Bereitstellung mit NGINX als Reverse‑Proxy (empfohlen):
 
-   ### Ohne NGINX (nur Debug/Test)
+    ```bash
+    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose.yml
+    ```
 
-   Für eine reine Testumgebung ohne NGINX (nicht für Produktion empfohlen):
+    Im Standard generiert der Container ein selbstsigniertes Zertifikat. Eigene Zertifikate können durch Ersetzen von `nginx.pem` und `nginx.key` im Volume `certificates` hinterlegt werden.
 
-   ```bash
-   wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-nginx.yml
-   ```
+    ### Option 2: Ohne NGINX
 
-3. **`.env`‑Datei erstellen**
+    Wenn Sie Ihren eigenen Reverse-Proxy verwenden oder das System ohne einen solchen betreiben möchten, nutzen Sie:
 
-   Erstelle eine `.env`‑Datei im selben Verzeichnis wie deine `docker-compose.yml` und passe `my_server_address` an die DNS‑Adresse oder IP deines Servers an:
+    ```bash
+    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-nginx.yml
+    ```
 
-   ```env
-   # SERVER_ADDRESS muss auf den Server zeigen. Ohne DNS‑Namen kann die IP genutzt werden.
-   # Ein falsch konfigurierter SERVER_ADDRESS führt zu CSRF‑Fehlern.
-   SERVER_ADDRESS=my_server_address
-   DEBUG_MODE=False
-   ```
+> [!CAUTION]
+> Es wird nicht empfohlen, das System ohne HTTPS (NGINX) zu betreiben, da dies Sicherheitsrisiken birgt. Wenn Sie diese Option wählen, stellen Sie sicher, dass Sie eine sichere Verbindung verwenden (z. B. über Ihren eigenen Reverse-Proxy mit SSL).
 
-4. **Docker Compose ausführen**
+3.  **`.env`‑Datei erstellen**
 
-   ### Mit NGINX (empfohlen)
+    Erstelle eine `.env`‑Datei im selben Verzeichnis wie deine `docker-compose.yml` und passe `my_server_address` an die DNS‑Adresse oder IP deines Servers an:
 
-   ```bash
-   docker compose up -d
-   ```
+    ```env
+    # SERVER_ADDRESS muss auf den Server zeigen. Ohne DNS‑Namen kann die IP genutzt werden.
+    # Ein falsch konfigurierter SERVER_ADDRESS führt zu CSRF‑Fehlern.
+    SERVER_ADDRESS=my_server_address
+    DEBUG_MODE=False
+    ```
 
-   Web‑Interface unter `https://yourserver.example.com` öffnen. Bei selbstsigniertem Zertifikat muss die Ausnahme akzeptiert werden.
+4.  **Docker Compose ausführen**
+ 
+    Führen Sie den Docker Compose-Befehl aus, um Ihr Deployment zu starten:
 
-   ### Ohne NGINX (nur Debug/Test)
-
-   ```bash
-   docker compose -f docker-compose-no-nginx.yml up -d
-   ```
-
-   Web‑Interface unter `http://127.0.0.1:8000` öffnen.
+    ```bash
+    docker compose up -d
+    ```
+ 
+    Web‑Interface unter `https://yourserver.example.com` öffnen. Bei selbstsigniertem Zertifikat muss die Ausnahme akzeptiert werden.
 
 Nach diesen Schritten sollte WireGuard WebAdmin laufen. Konfiguriere anschließend deine Instanzen über das Web‑Interface.
 
@@ -140,15 +141,11 @@ Regelmäßige Upgrades stellen sicher, dass du die neuesten Funktionen, Sicherhe
 
 ### Vorbereitung
 
-1. **Vom Git‑Clone‑Workflow umsteigen**
-
-   ```bash
-   cd /pfad/zu/wireguard_webadmin
-   ```
-   Befindet sich deine Installation in einem Git‑Clone‑Verzeichnis, wechsle dorthin:
-   ```bash
-   cd /pfad/zu/wireguard_webadmin_git_clone
-   ```
+ 1. **In das Projektverzeichnis wechseln**
+ 
+    ```bash
+    cd wireguard_webadmin
+    ```
 
 2. **Dienste stoppen**
 

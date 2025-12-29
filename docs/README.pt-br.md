@@ -81,23 +81,26 @@ Siga estes passos para implantar o WireGuard WebAdmin:
 
    Dependendo do seu cenário de implantação, escolha um dos comandos a seguir para baixar o arquivo `docker-compose.yml` apropriado diretamente no seu diretório de trabalho. Esse método garante que você está usando a versão mais recente da configuração de implantação.
 
-   ### Com NGINX (Recomendado)
-
-   Para uma implantação pronta para produção com NGINX como *reverse proxy* (recomendado para a maioria dos usuários), use:
-
-   ```bash
-   wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose.yml
-   ```
-
-   Este modo é recomendado para executar a interface web de administração. O *deployment* do contêiner gerará automaticamente um certificado autoassinado para você. Se desejar atualizar seus certificados, basta acessar o volume `certificates` e substituir `nginx.pem` e `nginx.key` pelos seus próprios certificados.
-
-   ### Sem NGINX (Somente para Debug e Testes)
-
-   Para um ambiente de depuração sem NGINX, adequado apenas para testes (não recomendado em produção), use:
-
-   ```bash
-   wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-nginx.yml
-   ```
+   ### Opção 1: Com NGINX (Recomendado)
+ 
+    Para uma implantação pronta para produção com NGINX como *reverse proxy* (recomendado para a maioria dos usuários), use:
+ 
+    ```bash
+    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose.yml
+    ```
+ 
+    Este modo é recomendado para executar a interface web de administração. O *deployment* do contêiner gerará automaticamente um certificado autoassinado para você. Se desejar atualizar seus certificados, basta acessar o volume `certificates` e substituir `nginx.pem` e `nginx.key` pelos seus próprios certificados.
+ 
+    ### Opção 2: Sem NGINX
+ 
+    Se você preferir usar seu próprio proxy reverso ou rodar sem um, use:
+ 
+    ```bash
+    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-nginx.yml
+    ```
+ 
+> [!CAUTION]
+> Não é recomendado servir o sistema sem HTTPS (NGINX) devido a riscos de segurança. Se optar por esta opção, certifique-se de estar utilizando uma conexão segura (ex: através de seu próprio proxy reverso com SSL).
 
 3. **Crie o Arquivo `.env`:**
 
@@ -112,25 +115,15 @@ Siga estes passos para implantar o WireGuard WebAdmin:
 
    Substitua `my_server_address` pelo endereço real do seu servidor.
 
-4. **Execute o Docker Compose:**
+ 4. **Execute o Docker Compose:**
+ 
+    Execute o comando Docker Compose para iniciar sua implantação.
 
-   ### Com NGINX (Recomendado)
-
-   ```bash
-   docker compose up -d
-   ```
-
-   Acesse a interface web em `https://seuservidor.exemplo.com`. Se estiver usando um certificado autoassinado, será necessário aceitar a exceção de certificado apresentada pelo navegador.
-
-   ### Sem NGINX (Somente para Debug e Testes)
-
-   Caso tenha optado pela configuração sem NGINX, simplesmente execute o arquivo `docker-compose-no-nginx.yml` obtido anteriormente:
-
-   ```bash
-   docker compose -f docker-compose-no-nginx.yml up -d
-   ```
-
-   Acesse a interface web em `http://127.0.0.1:8000`.
+    ```bash
+    docker compose up -d
+    ```
+ 
+    Acesse a interface web em `https://seuservidor.exemplo.com`. Se estiver usando um certificado autoassinado, será necessário aceitar a exceção de certificado apresentada pelo navegador.
 
 Após concluir esses passos, o WireGuard WebAdmin deverá estar em execução. Inicie a configuração acessando a interface web do seu servidor.
 
@@ -142,19 +135,13 @@ Manter sua instalação do WireGuard WebAdmin atualizada garante acesso aos recu
 
 ### Preparação para o Upgrade:
 
-1. **Transição de um Workflow *git clone*:**
-
-   Navegue até o diretório `wireguard_webadmin`:
-
-   ```bash
-   cd path/to/wireguard_webadmin
-   ```
-
-   Se estiver atualizando a partir de uma instalação existente via *git clone*, navegue até o diretório do projeto atual.
-
-   ```bash
-   cd /path/to/wireguard_webadmin_git_clone
-   ```
+ 1. **Navegue até o Diretório do Projeto:**
+ 
+    Navegue até o diretório `wireguard_webadmin`:
+ 
+    ```bash
+    cd wireguard_webadmin
+    ```
 
 2. **Desligue os Serviços:**
 

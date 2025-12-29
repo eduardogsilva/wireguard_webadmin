@@ -81,7 +81,7 @@ Follow these steps to deploy the WireGuard WebAdmin:
 
    Depending on your deployment scenario, choose one of the following commands to download the appropriate `docker-compose.yml` file directly into your working directory. This approach ensures you're using the latest version of the deployment configuration.
 
-   ### With NGINX (Recommended)
+   ### Option 1: With NGINX (Recommended)
    
    For a production-ready deployment with NGINX as a reverse proxy (recommended for most users), use:
 
@@ -89,13 +89,17 @@ Follow these steps to deploy the WireGuard WebAdmin:
    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose.yml
    ```
 This mode is recommended for running the web admin interface. The container deployment will automatically generate a self-signed certificate for you. If you want to update your certificates, simply navigate to the `certificates` volume and replace `nginx.pem` and `nginx.key` with your own certificates.
-   ### Without NGINX (Debug Mode and Testing Only)
+
+   ### Option 2: Without NGINX
    
-   For a debug environment without NGINX, suitable only for testing (not recommended for production), use:
+   If you prefer to use your own reverse proxy or run without one, use:
 
    ```bash
    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-nginx.yml
    ```
+
+> [!CAUTION]
+> Running the system without HTTPS (NGINX) is not recommended due to security risks. If you choose this option, ensure you are using a secure connection (e.g., through your own reverse proxy with SSL).
 
 3.**Create the `.env` File:**
 
@@ -121,23 +125,11 @@ This mode is recommended for running the web admin interface. The container depl
 
    Execute the Docker Compose command to start your deployment.
 
-   ### With NGINX (Recommended)
-   
    ```bash
    docker compose up -d
    ```
    
    Access the web interface using `https://yourserver.example.com`. If you are using a self-signed certificate, you must accept the certificate exception that your browser will present.
-
-   ### Without NGINX (Debug Mode and Testing Only)
-   
-   If you opted for the non-NGINX setup, simply run the previously fetched `docker-compose-no-nginx.yml` with:
-
-   ```bash
-   docker compose -f docker-compose-no-nginx.yml up -d
-   ```
-   
-   Access the web interface using `http://127.0.0.1:8000`.
 
 After completing these steps, your WireGuard WebAdmin should be up and running. Begin the configuration by accessing your server's web interface.
 
@@ -150,15 +142,11 @@ Upgrading your WireGuard WebAdmin installation ensures you have access to the la
 
 ### Preparing for Upgrade:
 
-1.**Transitioning from a Git Clone Workflow:**
-  
-Begin by navigating to your wireguard_webadmin directory:
+ 1.**Navigate to the Project Directory:**
+   
+   Navigate to your `wireguard_webadmin` directory:
    ```bash
-   cd path/to/wireguard_webadmin
-   ```
-   If you're upgrading from an existing git clone installation, navigate to your current project directory. 
-   ```bash
-   cd /path/to/wireguard_webadmin_git_clone
+   cd wireguard_webadmin
    ```
 
 2.**Shutdown Services:**

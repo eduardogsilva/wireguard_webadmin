@@ -81,23 +81,26 @@ Siga estos pasos para desplegar WireGuard WebAdmin:
 
    Según su escenario de despliegue, elija uno de los siguientes comandos para descargar el archivo `docker-compose.yml` correspondiente directamente en su directorio de trabajo. Este método garantiza que utilice la versión más reciente de la configuración.
 
-   ### Con NGINX (Recomendado)
-
-   Para un despliegue de producción con NGINX como *reverse proxy* (recomendado para la mayoría), use:
-
-   ```bash
-   wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose.yml
-   ```
-
-   Este modo es el recomendado para ejecutar la interfaz web de administración. El despliegue del contenedor generará automáticamente un certificado autofirmado. Si desea actualizar sus certificados, acceda al volumen `certificates` y sustituya `nginx.pem` y `nginx.key` por sus propios certificados.
-
-   ### Sin NGINX (Solo para Depuración y Pruebas)
-
-   Para un entorno de depuración sin NGINX (no recomendado en producción), use:
-
-   ```bash
-   wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-nginx.yml
-   ```
+   ### Opción 1: Con NGINX (Recomendado)
+ 
+    Para un despliegue de producción con NGINX como *reverse proxy* (recomendado para la mayoría), use:
+ 
+    ```bash
+    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose.yml
+    ```
+ 
+    Este modo es el recomendado para ejecutar la interfaz web de administración. El despliegue del contenedor generará automáticamente un certificado autofirmado para usted. Si desea actualizar sus certificados, acceda al volumen `certificates` y sustituya `nginx.pem` y `nginx.key` por sus propios certificados.
+ 
+    ### Opción 2: Sin NGINX
+ 
+    Si prefiere usar su propio proxy inverso o ejecutar el sistema sin uno, use:
+ 
+    ```bash
+    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-nginx.yml
+    ```
+ 
+> [!CAUTION]
+> No se recomienda servir el sistema sin HTTPS (NGINX) debido a riesgos de seguridad. Si elige esta opción, asegúrese de utilizar una conexión segura (por ejemplo, a través de su propio proxy inverso con SSL).
 
 3. **Cree el Archivo `.env`:**
 
@@ -113,24 +116,14 @@ Siga estos pasos para desplegar WireGuard WebAdmin:
    Sustituya `my_server_address` por la dirección real de su servidor.
 
 4. **Ejecute Docker Compose:**
-
-   ### Con NGINX (Recomendado)
-
-   ```bash
-   docker compose up -d
-   ```
-
-   Acceda a la interfaz web en `https://suserver.ejemplo.com`. Si utiliza un certificado autofirmado, acepte la excepción de seguridad en su navegador.
-
-   ### Sin NGINX (Solo para Depuración y Pruebas)
-
-   Si eligió la configuración sin NGINX, ejecute el archivo descargado `docker-compose-no-nginx.yml`:
-
-   ```bash
-   docker compose -f docker-compose-no-nginx.yml up -d
-   ```
-
-   Acceda a la interfaz en `http://127.0.0.1:8000`.
+ 
+    Ejecute el comando Docker Compose para iniciar su despliegue.
+ 
+    ```bash
+    docker compose up -d
+    ```
+ 
+    Acceda a la interfaz web en `https://suserver.ejemplo.com`. Si utiliza un certificado autofirmado, acepte la excepción de seguridad en su navegador.
 
 Tras completar estos pasos, WireGuard WebAdmin estará en funcionamiento. Comience la configuración accediendo a la interfaz web de su servidor.
 
@@ -142,19 +135,13 @@ Actualizar su instalación de WireGuard WebAdmin garantiza acceso a nuevas funci
 
 ### Preparación para la Actualización:
 
-1. **Transición desde un flujo de trabajo *git clone*:**
-
-   Acceda al directorio `wireguard_webadmin`:
-
-   ```bash
-   cd path/to/wireguard_webadmin
-   ```
-
-   Si actualiza desde una instalación realizada con *git clone*, vaya al directorio del proyecto:
-
-   ```bash
-   cd /path/to/wireguard_webadmin_git_clone
-   ```
+1. **Vaya al Directorio del Proyecto:**
+ 
+    Acceda al directorio `wireguard_webadmin`:
+ 
+    ```bash
+    cd wireguard_webadmin
+    ```
 
 2. **Detenga los Servicios:**
 
