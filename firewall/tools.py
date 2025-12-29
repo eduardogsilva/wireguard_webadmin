@@ -200,7 +200,10 @@ def generate_firewall_footer():
 
     footer = '# The following rules come from Firewall settings\n'
     footer += '# Default FORWARD policy\n'
-    footer += f'iptables -t filter -P FORWARD {firewall_settings.default_forward_policy.upper()}\n'
+    if firewall_settings.default_forward_policy:
+        footer += f'iptables -t filter -P FORWARD {firewall_settings.default_forward_policy.upper()}\n'
+    else:
+        footer += f'iptables -t filter -P FORWARD DROP\n'
 
     footer += '# Same instance Peer to Peer traffic\n'
     for wireguard_instance in WireGuardInstance.objects.all().order_by('instance_id'):

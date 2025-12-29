@@ -72,8 +72,8 @@ class FirewallRule(models.Model):
 
 class FirewallSettings(models.Model):
     name = models.CharField(max_length=6, default='global', unique=True)
-    default_forward_policy = models.CharField(max_length=6, default='accept', choices=[('accept', _('ACCEPT')), ('reject', _('REJECT')), ('drop', _('DROP'))])
-    default_output_policy = models.CharField(max_length=6, default='accept', choices=[('accept', _('ACCEPT')), ('reject', _('REJECT')), ('drop', _('DROP'))])
+    default_forward_policy = models.CharField(max_length=6, default='accept', choices=[('accept', _('ACCEPT')), ('drop', _('DROP'))])
+    default_output_policy = models.CharField(max_length=6, default='accept', choices=[('accept', _('ACCEPT')), ('drop', _('DROP'))])
     allow_peer_to_peer = models.BooleanField(default=True)
     allow_instance_to_instance = models.BooleanField(default=True)
     wan_interface = models.CharField(max_length=12, default='eth0')
