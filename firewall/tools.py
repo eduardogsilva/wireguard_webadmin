@@ -194,16 +194,14 @@ iptables -t filter -A WGWADM_FORWARD -m state --state RELATED,ESTABLISHED -j ACC
 
 def generate_firewall_footer():
     firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
-    deny_policy = 'REJECT'
-    if firewall_settings.default_forward_policy == 'drop':
-        deny_policy = 'DROP'
+    if firewall_settings.default_forward_policy == 'reject':
+        firewall_settings.default_forward_policy = 'drop'
+        firewall_settings.save()
+    deny_policy = 'DROP'
 
     footer = '# The following rules come from Firewall settings\n'
     footer += '# Default FORWARD policy\n'
-    if firewall_settings.default_forward_policy:
-        footer += f'iptables -t filter -P FORWARD {firewall_settings.default_forward_policy.upper()}\n'
-    else:
-        footer += f'iptables -t filter -P FORWARD DROP\n'
+    footer += f'iptables -t filter -P FORWARD {firewall_settings.default_forward_policy.upper()}\n'
 
     footer += '# Same instance Peer to Peer traffic\n'
     for wireguard_instance in WireGuardInstance.objects.all().order_by('instance_id'):
