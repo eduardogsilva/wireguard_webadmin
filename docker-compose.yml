@@ -7,7 +7,7 @@ services:
     environment:
       - SERVER_ADDRESS=${SERVER_ADDRESS}
       - DEBUG_MODE=${DEBUG_MODE}
-      - COMPOSE_VERSION=02r
+      - COMPOSE_VERSION=03r
       - TZ=${TIMEZONE}
       - EXTRA_ALLOWED_HOSTS=${EXTRA_ALLOWED_HOSTS}
     volumes:

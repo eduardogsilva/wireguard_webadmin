@@ -6,8 +6,8 @@ services:
     image: eduardosilva/wireguard_webadmin:latest
     environment:
       - SERVER_ADDRESS=${SERVER_ADDRESS}
-      - DEBUG_MODE=True
-      - COMPOSE_VERSION=02r
+      - DEBUG_MODE=${DEBUG_MODE}
+      - COMPOSE_VERSION=03r
       - TZ=${TIMEZONE}
       - EXTRA_ALLOWED_HOSTS=${EXTRA_ALLOWED_HOSTS}
     volumes:
