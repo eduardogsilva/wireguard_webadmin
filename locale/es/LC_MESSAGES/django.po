@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 22:07-0300\n"
+"POT-Creation-Date: 2025-12-29 18:15-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,14 +24,13 @@ msgstr ""
 msgid "Name"
 msgstr "Nombre"
 
-#: cluster/forms.py:18 templates/cluster/workers_list.html:24
-#: vpn_invite/forms.py:49 vpn_invite/forms.py:294
+#: cluster/forms.py:18 vpn_invite/forms.py:49 vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Habilitado"
 
 #: cluster/forms.py:19
 msgid "IP Lock"
-msgstr ""
+msgstr "Bloqueo de IP"
 
 #: cluster/forms.py:20 dns/forms.py:66 templates/cluster/workers_list.html:10
 #: templates/dns/static_host_list.html:18
@@ -44,17 +43,21 @@ msgstr "Dirección IP"
 
 #: cluster/forms.py:21
 msgid "Country"
-msgstr ""
+msgstr "País"
 
 #: cluster/forms.py:22
 msgid "City"
-msgstr ""
+msgstr "Ciudad"
 
 #: cluster/forms.py:23 dns/forms.py:65 templates/dns/static_host_list.html:17
 msgid "Hostname"
 msgstr "Nombre de host"
 
-#: cluster/forms.py:25 cluster/forms.py:95 dns/forms.py:25 dns/forms.py:67
+#: cluster/forms.py:24
+msgid "Token"
+msgstr "Token"
+
+#: cluster/forms.py:26 cluster/forms.py:107 dns/forms.py:25 dns/forms.py:67
 #: dns/forms.py:109 templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
@@ -65,7 +68,7 @@ msgstr "Nombre de host"
 msgid "Back"
 msgstr "Volver"
 
-#: cluster/forms.py:26 dns/forms.py:68 dns/forms.py:110
+#: cluster/forms.py:27 dns/forms.py:68 dns/forms.py:110
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
 #: templates/wireguard/wireguard_manage_ip.html:43
@@ -74,7 +77,7 @@ msgstr "Volver"
 msgid "Delete"
 msgstr "Eliminar"
 
-#: cluster/forms.py:54 cluster/forms.py:121 dns/forms.py:37 dns/forms.py:83
+#: cluster/forms.py:66 cluster/forms.py:133 dns/forms.py:37 dns/forms.py:83
 #: dns/forms.py:134 templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
@@ -86,49 +89,49 @@ msgstr "Eliminar"
 msgid "Save"
 msgstr "Guardar"
 
-#: cluster/forms.py:69
+#: cluster/forms.py:81
 msgid "A worker with that name already exists."
 msgstr "Ya existe un worker con ese nombre."
 
-#: cluster/forms.py:72
+#: cluster/forms.py:84
 msgid "IP Address is required when IP Lock is enabled."
-msgstr ""
+msgstr "La dirección IP es obligatoria cuando el bloqueo de IP está habilitado."
 
-#: cluster/forms.py:87
+#: cluster/forms.py:99
 msgid "Cluster Enabled"
 msgstr "Cluster habilitado"
 
-#: cluster/forms.py:88
+#: cluster/forms.py:100
 msgid "Primary Enable WireGuard"
-msgstr ""
+msgstr "Habilitar WireGuard primario"
 
-#: cluster/forms.py:89
+#: cluster/forms.py:101
 msgid "Stats Sync Interval (seconds)"
-msgstr ""
+msgstr "Intervalo de sincronización de estadísticas (segundos)"
 
-#: cluster/forms.py:90
+#: cluster/forms.py:102
 msgid "Stats Cache Interval (seconds)"
-msgstr ""
+msgstr "Intervalo de caché de estadísticas (segundos)"
 
-#: cluster/forms.py:91
+#: cluster/forms.py:103
 msgid "Cluster Mode"
-msgstr ""
+msgstr "Modo de cluster"
 
-#: cluster/forms.py:92
+#: cluster/forms.py:104
 msgid "Restart Mode"
 msgstr "Modo de reinicio"
 
-#: cluster/forms.py:93
+#: cluster/forms.py:105
 msgid "Worker Display"
-msgstr ""
+msgstr "Visualización del worker"
 
-#: cluster/forms.py:134
-msgid "Stats sync interval must be at least 10 seconds."
-msgstr "El intervalo de sincronización de estadísticas debe ser de al menos 10 segundos."
+#: cluster/forms.py:146
+msgid "Stats sync interval must be at least 60 seconds."
+msgstr "El intervalo de sincronización de estadísticas debe ser de al menos 60 segundos."
 
-#: cluster/forms.py:137
-msgid "Stats cache interval must be at least 10 seconds."
-msgstr "El intervalo de caché de estadísticas debe ser de al menos 10 segundos."
+#: cluster/forms.py:149
+msgid "Stats cache interval must be at least 60 seconds."
+msgstr "El intervalo de caché de estadísticas debe ser de al menos 60 segundos."
 
 #: cluster/views.py:15 cluster/views.py:27 cluster/views.py:96
 #: templates/access_denied.html:9
@@ -137,7 +140,7 @@ msgstr "Acceso denegado"
 
 #: cluster/views.py:17 templates/base.html:185
 msgid "Cluster"
-msgstr ""
+msgstr "Cluster"
 
 #: cluster/views.py:33
 msgid "Edit Worker: "
@@ -151,7 +154,7 @@ msgstr "Worker eliminado|Worker eliminado: "
 msgid "Worker not deleted|Invalid confirmation."
 msgstr "Worker no eliminado|Confirmación inválida."
 
-#: cluster/views.py:46 templates/cluster/list_buttons.html:2
+#: cluster/views.py:46 templates/cluster/workers_list.html:78
 msgid "Add Worker"
 msgstr "Agregar Worker"
 
@@ -186,8 +189,28 @@ msgid ""
 "hostname).</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Configuración del Worker</h5>\n"
+"        <p>Configure un nodo worker del cluster que se sincronizará con esta "
+"instancia primaria.</p>\n"
+"        \n"
+"        <h5>Nombre</h5>\n"
+"        <p>Un nombre único para identificar este worker.</p>\n"
+"        \n"
+"        <h5>Dirección IP</h5>\n"
+"        <p>La dirección IP del nodo worker. Deje vacío si el bloqueo de IP "
+"está deshabilitado.</p>\n"
+"        \n"
+"        <h5>Bloqueo de IP</h5>\n"
+"        <p>Cuando está habilitado, el worker solo puede conectarse desde la "
+"dirección IP especificada.</p>\n"
+"        \n"
+"        <h5>Información de ubicación</h5>\n"
+"        <p>Detalles de ubicación opcionales para este worker (país, ciudad, "
+"nombre de host).</p>\n"
+"        "
 
-#: cluster/views.py:99 templates/cluster/list_buttons.html:3
+#: cluster/views.py:99 templates/cluster/workers_list.html:79
 msgid "Cluster Settings"
 msgstr "Configuración del Cluster"
 
@@ -216,6 +239,24 @@ msgid ""
 "name, server address, location, or a combination.</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Modo de Cluster</h5>\n"
+"        <p>Configure cómo opera el cluster y sincroniza las configuraciones "
+"entre nodos.</p>\n"
+"        \n"
+"        <h5>Intervalos de sincronización</h5>\n"
+"        <p>Configure con qué frecuencia se sincronizan las estadísticas y "
+"los datos de caché entre los nodos del cluster.</p>\n"
+"        \n"
+"        <h5>Modo de reinicio</h5>\n"
+"        <p>Elija si los servicios WireGuard deben reiniciarse "
+"automáticamente cuando cambien las configuraciones, o si se requiere "
+"intervención manual.</p>\n"
+"        \n"
+"        <h5>Visualización del worker</h5>\n"
+"        <p>Seleccione cómo deben identificarse los workers en la interfaz: "
+"por nombre, dirección del servidor, ubicación o una combinación.</p>\n"
+"        "
 
 #: console/views.py:25 console/views.py:57 user_manager/forms.py:16
 msgid "Console"
@@ -509,8 +550,8 @@ msgstr "Política predeterminada de reenvío"
 msgid "ACCEPT"
 msgstr "ACEPTAR"
 
-#: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
-#: firewall/models.py:76 templates/firewall/firewall_rule_list.html:170
+#: firewall/forms.py:182 firewall/models.py:62
+#: templates/firewall/firewall_rule_list.html:170
 #: templates/firewall/firewall_rule_list.html:187
 msgid "REJECT"
 msgstr "RECHAZAR"
@@ -710,14 +751,6 @@ msgstr "Visto por última vez"
 msgid "Config Version"
 msgstr "Versión de configuración"
 
-#: templates/cluster/workers_list.html:14
-msgid "Options"
-msgstr "Opciones"
-
-#: templates/cluster/workers_list.html:26 vpn_invite/forms.py:49
-msgid "Disabled"
-msgstr "Deshabilitado"
-
 #: templates/cluster/workers_list.html:33
 msgid "IP Lock Enabled"
 msgstr "Bloqueo de IP habilitado"
@@ -729,30 +762,30 @@ msgstr "No establecido"
 
 #: templates/cluster/workers_list.html:50
 msgid "Never"
-msgstr ""
+msgstr "Nunca"
 
 #: templates/cluster/workers_list.html:57
 msgid "Config Pending"
 msgstr "Configuración pendiente"
 
-#: templates/cluster/workers_list.html:65
+#: templates/cluster/workers_list.html:66
 msgid "Force Reload"
-msgstr ""
+msgstr "Forzar recarga"
 
-#: templates/cluster/workers_list.html:70
+#: templates/cluster/workers_list.html:67
 msgid "Force Restart"
-msgstr ""
+msgstr "Forzar reinicio"
 
-#: templates/cluster/workers_list.html:74
+#: templates/cluster/workers_list.html:68
 #: templates/dns/static_host_list.html:74 templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/wireguard_peer_list.html:196
 msgid "Edit"
 msgstr "Editar"
 
-#: templates/cluster/workers_list.html:79
+#: templates/cluster/workers_list.html:73
 msgid "No workers configured"
-msgstr ""
+msgstr "No hay workers configurados"
 
 #: templates/console/console.html:12
 msgid "Clear"
@@ -1772,6 +1805,10 @@ msgstr ""
 msgid "Please type the username to proceed."
 msgstr "Por favor escribe el nombre de usuario para continuar."
 
+#: vpn_invite/forms.py:49
+msgid "Disabled"
+msgstr "Deshabilitado"
+
 #: vpn_invite/forms.py:68 vpn_invite/forms.py:69 vpn_invite/forms.py:70
 #: vpn_invite/forms.py:71 vpn_invite/forms.py:72
 msgid "URL"
@@ -2202,7 +2239,7 @@ msgstr "IP actualizada|IP actualizada correctamente."
 msgid "IP address added|IP address added successfully."
 msgstr "IP añadida|IP añadida correctamente."
 
-#: wireguard_tools/views.py:160
+#: wireguard_tools/views.py:167
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/."
@@ -2210,7 +2247,7 @@ msgstr ""
 "Exportación exitosa!|Los archivos de configuración se exportaron a /etc/"
 "wireguard/."
 
-#: wireguard_tools/views.py:162
+#: wireguard_tools/views.py:169
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/. Don't forget to restart the interfaces."
@@ -2218,19 +2255,19 @@ msgstr ""
 "Exportación exitosa!|Los archivos de configuración se exportaron a /etc/"
 "wireguard/. No olvides reiniciar las interfaces."
 
-#: wireguard_tools/views.py:255
+#: wireguard_tools/views.py:262
 msgid "Error reloading"
 msgstr "Error al recargar"
 
-#: wireguard_tools/views.py:267
+#: wireguard_tools/views.py:274
 msgid "Error stopping"
 msgstr "Error al detener"
 
-#: wireguard_tools/views.py:272
+#: wireguard_tools/views.py:279
 msgid "Error starting"
 msgstr "Error al iniciar"
 
-#: wireguard_tools/views.py:279
+#: wireguard_tools/views.py:286
 msgid ""
 "WARNING|Please note that the interface was reloaded, not restarted. Double-"
 "check if the the peers are working as expected. If you find any issues, "
@@ -2239,19 +2276,22 @@ msgstr ""
 "ADVERTENCIA|La interfaz se recargó, no reinició. Verifica que los peers "
 "funcionen correctamente. Si hay problemas, repórtalos."
 
-#: wireguard_tools/views.py:280
+#: wireguard_tools/views.py:287
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
 msgstr "WireGuard recargado|El servicio WireGuard se ha recargado."
 
-#: wireguard_tools/views.py:282
+#: wireguard_tools/views.py:289
 msgid "WireGuard restarted|The WireGuard service has been restarted."
 msgstr "WireGuard reiniciado|El servicio WireGuard se ha reiniciado."
 
-#: wireguard_tools/views.py:285
+#: wireguard_tools/views.py:292
 msgid "Errors encountered|Error processing one or more interfaces."
 msgstr "Errores encontrados|Error al procesar una o más interfaces."
 
-#: wireguard_tools/views.py:288
+#: wireguard_tools/views.py:295
 msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "No se encontraron interfaces|No hay interfaces WireGuard para procesar."
+
+#~ msgid "Options"
+#~ msgstr "Opciones"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 22:07-0300\n"
+"POT-Creation-Date: 2025-12-29 18:15-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,14 +25,13 @@ msgstr ""
 msgid "Name"
 msgstr "Názov"
 
-#: cluster/forms.py:18 templates/cluster/workers_list.html:24
-#: vpn_invite/forms.py:49 vpn_invite/forms.py:294
+#: cluster/forms.py:18 vpn_invite/forms.py:49 vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Povolené"
 
 #: cluster/forms.py:19
 msgid "IP Lock"
-msgstr ""
+msgstr "IP zámok"
 
 #: cluster/forms.py:20 dns/forms.py:66 templates/cluster/workers_list.html:10
 #: templates/dns/static_host_list.html:18
@@ -45,17 +44,21 @@ msgstr "IP adresa"
 
 #: cluster/forms.py:21
 msgid "Country"
-msgstr ""
+msgstr "Krajina"
 
 #: cluster/forms.py:22
 msgid "City"
-msgstr ""
+msgstr "Mesto"
 
 #: cluster/forms.py:23 dns/forms.py:65 templates/dns/static_host_list.html:17
 msgid "Hostname"
 msgstr "Názov hostiteľa"
 
-#: cluster/forms.py:25 cluster/forms.py:95 dns/forms.py:25 dns/forms.py:67
+#: cluster/forms.py:24
+msgid "Token"
+msgstr "Token"
+
+#: cluster/forms.py:26 cluster/forms.py:107 dns/forms.py:25 dns/forms.py:67
 #: dns/forms.py:109 templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
@@ -66,7 +69,7 @@ msgstr "Názov hostiteľa"
 msgid "Back"
 msgstr "Späť"
 
-#: cluster/forms.py:26 dns/forms.py:68 dns/forms.py:110
+#: cluster/forms.py:27 dns/forms.py:68 dns/forms.py:110
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
 #: templates/wireguard/wireguard_manage_ip.html:43
@@ -75,7 +78,7 @@ msgstr "Späť"
 msgid "Delete"
 msgstr "Vymazať"
 
-#: cluster/forms.py:54 cluster/forms.py:121 dns/forms.py:37 dns/forms.py:83
+#: cluster/forms.py:66 cluster/forms.py:133 dns/forms.py:37 dns/forms.py:83
 #: dns/forms.py:134 templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
@@ -87,49 +90,49 @@ msgstr "Vymazať"
 msgid "Save"
 msgstr "Uložiť"
 
-#: cluster/forms.py:69
+#: cluster/forms.py:81
 msgid "A worker with that name already exists."
 msgstr "Worker s týmto názvom už existuje."
 
-#: cluster/forms.py:72
+#: cluster/forms.py:84
 msgid "IP Address is required when IP Lock is enabled."
-msgstr ""
+msgstr "IP adresa je povinná, keď je povolený IP zámok."
 
-#: cluster/forms.py:87
+#: cluster/forms.py:99
 msgid "Cluster Enabled"
 msgstr "Cluster povolený"
 
-#: cluster/forms.py:88
+#: cluster/forms.py:100
 msgid "Primary Enable WireGuard"
-msgstr ""
+msgstr "Primárne povolenie WireGuard"
 
-#: cluster/forms.py:89
+#: cluster/forms.py:101
 msgid "Stats Sync Interval (seconds)"
-msgstr ""
+msgstr "Interval synchronizácie štatistík (sekundy)"
 
-#: cluster/forms.py:90
+#: cluster/forms.py:102
 msgid "Stats Cache Interval (seconds)"
-msgstr ""
+msgstr "Interval cache štatistík (sekundy)"
 
-#: cluster/forms.py:91
+#: cluster/forms.py:103
 msgid "Cluster Mode"
-msgstr ""
+msgstr "Režim clustra"
 
-#: cluster/forms.py:92
+#: cluster/forms.py:104
 msgid "Restart Mode"
 msgstr "Režim reštartu"
 
-#: cluster/forms.py:93
+#: cluster/forms.py:105
 msgid "Worker Display"
-msgstr ""
+msgstr "Zobrazenie workera"
 
-#: cluster/forms.py:134
-msgid "Stats sync interval must be at least 10 seconds."
-msgstr "Interval synchronizácie štatistík musí byť aspoň 10 sekúnd."
+#: cluster/forms.py:146
+msgid "Stats sync interval must be at least 60 seconds."
+msgstr "Interval synchronizácie štatistík musí byť aspoň 60 sekúnd."
 
-#: cluster/forms.py:137
-msgid "Stats cache interval must be at least 10 seconds."
-msgstr "Interval cache štatistík musí byť aspoň 10 sekúnd."
+#: cluster/forms.py:149
+msgid "Stats cache interval must be at least 60 seconds."
+msgstr "Interval cache štatistík musí byť aspoň 60 sekúnd."
 
 #: cluster/views.py:15 cluster/views.py:27 cluster/views.py:96
 #: templates/access_denied.html:9
@@ -138,7 +141,7 @@ msgstr "Prístup zamietnutý"
 
 #: cluster/views.py:17 templates/base.html:185
 msgid "Cluster"
-msgstr ""
+msgstr "Cluster"
 
 #: cluster/views.py:33
 msgid "Edit Worker: "
@@ -152,7 +155,7 @@ msgstr "Worker vymazaný|Worker vymazaný: "
 msgid "Worker not deleted|Invalid confirmation."
 msgstr "Worker nebol vymazaný|Neplatné potvrdenie."
 
-#: cluster/views.py:46 templates/cluster/list_buttons.html:2
+#: cluster/views.py:46 templates/cluster/workers_list.html:78
 msgid "Add Worker"
 msgstr "Pridať Worker"
 
@@ -187,8 +190,27 @@ msgid ""
 "hostname).</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Konfigurácia workera</h5>\n"
+"        <p>Nakonfigurujte worker uzol clustra, ktorý sa bude synchronizovať s touto "
+"primárnou inštanciou.</p>\n"
+"        \n"
+"        <h5>Názov</h5>\n"
+"        <p>Jedinečný názov na identifikáciu tohto workera.</p>\n"
+"        \n"
+"        <h5>IP adresa</h5>\n"
+"        <p>IP adresa worker uzla. Ak je IP zámok zakázaný, nechajte prázdne.</p>\n"
+"        \n"
+"        <h5>IP zámok</h5>\n"
+"        <p>Keď je povolený, worker sa môže pripojiť iba zo špecifikovanej IP "
+"adresy.</p>\n"
+"        \n"
+"        <h5>Informácie o umiestnení</h5>\n"
+"        <p>Voliteľné podrobnosti o umiestnení pre tohto workera (krajina, mesto, "
+"názov hostiteľa).</p>\n"
+"        "
 
-#: cluster/views.py:99 templates/cluster/list_buttons.html:3
+#: cluster/views.py:99 templates/cluster/workers_list.html:79
 msgid "Cluster Settings"
 msgstr "Nastavenia Clustra"
 
@@ -217,6 +239,23 @@ msgid ""
 "name, server address, location, or a combination.</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Režim clustra</h5>\n"
+"        <p>Nakonfigurujte, ako cluster funguje a ako sa synchronizujú "
+"konfigurácie medzi uzlami.</p>\n"
+"        \n"
+"        <h5>Intervaly synchronizácie</h5>\n"
+"        <p>Nakonfigurujte, ako často sa synchronizujú štatistiky a údaje vyrovnávacej pamäte "
+"medzi uzlami clustra.</p>\n"
+"        \n"
+"        <h5>Režim reštartu</h5>\n"
+"        <p>Vyberte, či sa majú služby WireGuard automaticky reštartovať "
+"pri zmene konfigurácie, alebo či je potrebný manuálny zásah.</p>\n"
+"        \n"
+"        <h5>Zobrazenie workera</h5>\n"
+"        <p>Vyberte, ako sa majú workery identifikovať v rozhraní – podľa "
+"názvu, adresy servera, umiestnenia alebo ich kombinácie.</p>\n"
+"        "
 
 #: console/views.py:25 console/views.py:57 user_manager/forms.py:16
 msgid "Console"
@@ -509,8 +548,8 @@ msgstr "Predvolená politika presmerovania"
 msgid "ACCEPT"
 msgstr "PRIJAŤ"
 
-#: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
-#: firewall/models.py:76 templates/firewall/firewall_rule_list.html:170
+#: firewall/forms.py:182 firewall/models.py:62
+#: templates/firewall/firewall_rule_list.html:170
 #: templates/firewall/firewall_rule_list.html:187
 msgid "REJECT"
 msgstr "ODMIETNUŤ"
@@ -708,14 +747,6 @@ msgstr "Naposledy videný"
 msgid "Config Version"
 msgstr "Verzia konfigurácie"
 
-#: templates/cluster/workers_list.html:14
-msgid "Options"
-msgstr "Možnosti"
-
-#: templates/cluster/workers_list.html:26 vpn_invite/forms.py:49
-msgid "Disabled"
-msgstr "Zakázané"
-
 #: templates/cluster/workers_list.html:33
 msgid "IP Lock Enabled"
 msgstr "IP zámok povolený"
@@ -727,30 +758,30 @@ msgstr "Nenastavené"
 
 #: templates/cluster/workers_list.html:50
 msgid "Never"
-msgstr ""
+msgstr "Nikdy"
 
 #: templates/cluster/workers_list.html:57
 msgid "Config Pending"
 msgstr "Konfigurácia čaká"
 
-#: templates/cluster/workers_list.html:65
+#: templates/cluster/workers_list.html:66
 msgid "Force Reload"
-msgstr ""
+msgstr "Vynútiť načítanie"
 
-#: templates/cluster/workers_list.html:70
+#: templates/cluster/workers_list.html:67
 msgid "Force Restart"
-msgstr ""
+msgstr "Vynútiť reštart"
 
-#: templates/cluster/workers_list.html:74
+#: templates/cluster/workers_list.html:68
 #: templates/dns/static_host_list.html:74 templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/wireguard_peer_list.html:196
 msgid "Edit"
 msgstr "Upraviť"
 
-#: templates/cluster/workers_list.html:79
+#: templates/cluster/workers_list.html:73
 msgid "No workers configured"
-msgstr ""
+msgstr "Nie sú nakonfigurovaní žiadni workery"
 
 #: templates/console/console.html:12
 msgid "Clear"
@@ -1781,6 +1812,10 @@ msgstr ""
 msgid "Please type the username to proceed."
 msgstr "Prosím zadajte používateľské meno na pokračovanie."
 
+#: vpn_invite/forms.py:49
+msgid "Disabled"
+msgstr "Zakázané"
+
 #: vpn_invite/forms.py:68 vpn_invite/forms.py:69 vpn_invite/forms.py:70
 #: vpn_invite/forms.py:71 vpn_invite/forms.py:72
 msgid "URL"
@@ -2210,7 +2245,7 @@ msgstr "IP adresa aktualizovaná|IP adresa bola úspešne aktualizovaná."
 msgid "IP address added|IP address added successfully."
 msgstr "IP adresa pridaná|IP adresa bola úspešne pridaná."
 
-#: wireguard_tools/views.py:160
+#: wireguard_tools/views.py:167
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/."
@@ -2218,7 +2253,7 @@ msgstr ""
 "Export úspešný!|WireGuard konfiguračné súbory boli exportované do /etc/"
 "wireguard/."
 
-#: wireguard_tools/views.py:162
+#: wireguard_tools/views.py:169
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/. Don't forget to restart the interfaces."
@@ -2226,19 +2261,19 @@ msgstr ""
 "Export úspešný!|WireGuard konfiguračné súbory boli exportované do /etc/"
 "wireguard/. Nezabudnite reštartovať rozhrania."
 
-#: wireguard_tools/views.py:255
+#: wireguard_tools/views.py:262
 msgid "Error reloading"
 msgstr "Chyba pri opätovnom načítaní"
 
-#: wireguard_tools/views.py:267
+#: wireguard_tools/views.py:274
 msgid "Error stopping"
 msgstr "Chyba pri zastavovaní"
 
-#: wireguard_tools/views.py:272
+#: wireguard_tools/views.py:279
 msgid "Error starting"
 msgstr "Chyba pri spúšťaní"
 
-#: wireguard_tools/views.py:279
+#: wireguard_tools/views.py:286
 msgid ""
 "WARNING|Please note that the interface was reloaded, not restarted. Double-"
 "check if the the peers are working as expected. If you find any issues, "
@@ -2248,21 +2283,24 @@ msgstr ""
 "reštartované. Dôkladne skontrolujte či peeri fungujú podľa očakávania. Ak "
 "nájdete problémy, prosím nahláste ich."
 
-#: wireguard_tools/views.py:280
+#: wireguard_tools/views.py:287
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
 msgstr "WireGuard znovu načítaný|Služba WireGuard bola znovu načítaná."
 
-#: wireguard_tools/views.py:282
+#: wireguard_tools/views.py:289
 msgid "WireGuard restarted|The WireGuard service has been restarted."
 msgstr "WireGuard reštartovaný|Služba WireGuard bola reštartovaná."
 
-#: wireguard_tools/views.py:285
+#: wireguard_tools/views.py:292
 msgid "Errors encountered|Error processing one or more interfaces."
 msgstr ""
 "Vyskytli sa chyby|Chyba pri spracovaní jedného alebo viacerých rozhraní."
 
-#: wireguard_tools/views.py:288
+#: wireguard_tools/views.py:295
 msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Neboli nájdené rozhrania|Neboli nájdené žiadne WireGuard rozhrania na "
 "spracovanie."
+
+#~ msgid "Options"
+#~ msgstr "Možnosti"
