@@ -20,6 +20,7 @@ env.bak/
 .ipynb_checkpoints
 *.iws
 .junie/
+.gemini/
 local_settings.py
 *.log
 media/
