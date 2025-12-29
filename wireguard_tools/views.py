@@ -11,6 +11,7 @@ from django.shortcuts import Http404, get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from cluster.models import ClusterSettings
 from dns.views import export_dns_configuration
 from firewall.models import RedirectRule
 from firewall.tools import export_user_firewall, generate_firewall_footer, generate_firewall_header, \
@@ -78,6 +79,12 @@ def export_firewall_configuration():
 def export_wireguard_configs(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    cluster_settings = ClusterSettings.objects.filter(name='cluster_settings', enabled=True).first()
+    if cluster_settings:
+        if WireGuardInstance.objects.filter(pending_changes=True).exists():
+            cluster_settings.config_version += 1
+            cluster_settings.save()
+
     instances = WireGuardInstance.objects.all()
     base_dir = "/etc/wireguard"
 
