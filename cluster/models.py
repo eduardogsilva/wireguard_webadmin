@@ -30,7 +30,7 @@ class ClusterSettings(models.Model):
 class Worker(models.Model):
     name = models.CharField(max_length=100, unique=True)
     enabled = models.BooleanField(default=True)
-    token = models.UUIDField(default=uuid.uuid4)
+    token = models.UUIDField(default=uuid.uuid4, unique=True)
     ip_lock = models.BooleanField(default=False)
     ip_address = models.GenericIPAddressField(blank=True, null=True)
 

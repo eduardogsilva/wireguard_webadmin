@@ -10,7 +10,7 @@ from .models import ClusterSettings, Worker
 class WorkerForm(forms.ModelForm):
     class Meta:
         model = Worker
-        fields = ['name', 'enabled', 'ip_lock', 'ip_address', 'country', 'city', 'hostname']
+        fields = ['name', 'enabled', 'ip_lock', 'ip_address', 'country', 'city', 'hostname', 'token']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,6 +21,7 @@ class WorkerForm(forms.ModelForm):
         self.fields['country'].label = _("Country")
         self.fields['city'].label = _("City")
         self.fields['hostname'].label = _("Hostname")
+        self.fields['token'].label = _("Token")
         
         back_label = _("Back")
         delete_label = _("Delete")
@@ -35,18 +36,29 @@ class WorkerForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Column('name', css_class='form-group col-md-6 mb-0'),
-                Column('enabled', css_class='form-group col-md-6 mb-0'),
+                Column('hostname', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
-                Column('ip_lock', css_class='form-group col-md-6 mb-0'),
+                Column('country', css_class='form-group col-md-6 mb-0'),
+                Column('city', css_class='form-group col-md-6 mb-0'),
+
+            ),
+            Row(
+
+                Column('token', css_class='form-group col-md-12 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column(css_class='form-group col-md-6 mb-0'),
                 Column('ip_address', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
-                Column('country', css_class='form-group col-md-4 mb-0'),
-                Column('city', css_class='form-group col-md-4 mb-0'),
-                Column('hostname', css_class='form-group col-md-4 mb-0'),
+
+                Column('enabled', css_class='form-group col-md-6 mb-0'),
+                Column('ip_lock', css_class='form-group col-md-6 mb-0'),
+
                 css_class='form-row'
             ),
             Row(
@@ -67,7 +79,7 @@ class WorkerForm(forms.ModelForm):
 
         if Worker.objects.filter(name=name).exclude(pk=self.instance.pk if self.instance else None).exists():
             raise ValidationError(_("A worker with that name already exists."))
-        
+
         if ip_lock and not ip_address:
             raise ValidationError(_("IP Address is required when IP Lock is enabled."))
 
@@ -78,7 +90,7 @@ class ClusterSettingsForm(forms.ModelForm):
     class Meta:
         model = ClusterSettings
         fields = [
-            'enabled', 'primary_enable_wireguard', 'stats_sync_interval', 
+            'enabled', 'primary_enable_wireguard', 'stats_sync_interval',
             'stats_cache_interval', 'cluster_mode', 'restart_mode', 'worker_display'
         ]
 
@@ -91,11 +103,11 @@ class ClusterSettingsForm(forms.ModelForm):
         self.fields['cluster_mode'].label = _("Cluster Mode")
         self.fields['restart_mode'].label = _("Restart Mode")
         self.fields['worker_display'].label = _("Worker Display")
-        
+
         back_label = _("Back")
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-            
+
         self.helper.layout = Layout(
             Row(
                 Column('enabled', css_class='form-group col-md-6 mb-0'),
@@ -130,10 +142,10 @@ class ClusterSettingsForm(forms.ModelForm):
         stats_sync_interval = cleaned_data.get('stats_sync_interval')
         stats_cache_interval = cleaned_data.get('stats_cache_interval')
 
-        if stats_sync_interval and stats_sync_interval < 10:
-            raise ValidationError(_("Stats sync interval must be at least 10 seconds."))
+        if stats_sync_interval and stats_sync_interval < 60:
+            raise ValidationError(_("Stats sync interval must be at least 60 seconds."))
             
-        if stats_cache_interval and stats_cache_interval < 10:
-            raise ValidationError(_("Stats cache interval must be at least 10 seconds."))
+        if stats_cache_interval and stats_cache_interval < 60:
+            raise ValidationError(_("Stats cache interval must be at least 60 seconds."))
 
         return cleaned_data

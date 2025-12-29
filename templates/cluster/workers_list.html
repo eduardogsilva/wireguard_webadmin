@@ -8,10 +8,10 @@
             <th>{% trans 'Name' %}</th>
             <th>{% trans 'Status' %}</th>
             <th>{% trans 'IP Address' %}</th>
-            <th>{% trans 'Location' %}</th>
-            <th>{% trans 'Last Seen' %}</th>
-            <th>{% trans 'Config Version' %}</th>
-            <th colspan="2">{% trans 'Options' %}</th>
+            <th><i class="fas fa-map-marker-alt" title="{% trans 'Location' %}"></i></th>
+            <th><i class="far fa-clock" title="{% trans 'Last Seen' %}"></i></th>
+            <th><i class="fas fa-cogs" title="{% trans 'Config Version' %}"></i></th>
+
             <th><i class="far fa-edit"></i></th>
         </tr>
     </thead>
@@ -21,9 +21,9 @@
             <td>{{ worker.name }}</td>
             <td style="width: 1%; white-space: nowrap;">
                 {% if worker.enabled %}
-                    <span class="badge badge-success">{% trans 'Enabled' %}</span>
+                    <i class="fas fa-check text-green"></i>
                 {% else %}
-                    <span class="badge badge-secondary">{% trans 'Disabled' %}</span>
+                    <i class="fas fa-times text-gray"></i>
                 {% endif %}
             </td>
             <td>
@@ -57,26 +57,20 @@
                         <i class="fas fa-clock text-warning" title="{% trans 'Config Pending' %}"></i>
                     {% endif %}
                 {% else %}
-                    <span class="text-muted">0</span>
+
                 {% endif %}
             </td>
+
+
             <td style="width: 1%; white-space: nowrap;">
-                {% if worker.force_reload %}
-                    <i class="fas fa-sync-alt text-info" title="{% trans 'Force Reload' %}"></i>
-                {% endif %}
-            </td>
-            <td style="width: 1%; white-space: nowrap;">
-                {% if worker.force_restart %}
-                    <i class="fas fa-power-off text-danger" title="{% trans 'Force Restart' %}"></i>
-                {% endif %}
-            </td>
-            <td style="width: 1%; white-space: nowrap;">
+                <i class="fas fa-sync-alt text-info" title="{% trans 'Force Reload' %}"></i>
+                <i class="fas fa-power-off text-danger" title="{% trans 'Force Restart' %}"></i>
                 <a href="/cluster/worker/manage/?uuid={{ worker.uuid }}" title="{% trans 'Edit' %}"><i class="far fa-edit"></i></a>
             </td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="9" class="text-center text-muted">{% trans 'No workers configured' %}</td>
+            <td colspan="8" class="text-center text-muted">{% trans 'No workers configured' %}</td>
         </tr>
         {% endfor %}
     </tbody>
