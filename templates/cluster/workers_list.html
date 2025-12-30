@@ -20,10 +20,17 @@
         <tr>
             <td>{{ worker.name }}</td>
             <td style="width: 1%; white-space: nowrap;">
-                {% if worker.enabled %}
-                    <i class="fas fa-check text-green"></i>
+                {% if worker.error_status %}
+                    <i class="fas fa-exclamation-triangle text-danger blink" title="{{ worker.get_error_status_display }}"></i>
                 {% else %}
-                    <i class="fas fa-times text-gray"></i>
+                    {% if worker.enabled %}
+                        <i class="fas fa-check text-green"></i>
+                    {% else %}
+                        <i class="fas fa-times text-gray"></i>
+                    {% endif %}
+                {% endif %}
+                {% if worker_version > worker.workerstatus.worker_version %}
+                    <i class="fas fa-cloud-download-alt text-primary blink" title="{% trans 'The worker is outdated. Please update it to the latest version.' %}"></i>
                 {% endif %}
             </td>
             <td>

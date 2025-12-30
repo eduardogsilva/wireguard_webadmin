@@ -14,12 +14,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.contrib import admin
 from django.urls import path
 
 from accounts.views import view_create_first_user, view_login, view_logout
 from api.views import api_instance_info, api_peer_invite, api_peer_list, cron_check_updates, \
     cron_update_peer_latest_handshake, peer_info, routerfleet_authenticate_session, routerfleet_get_user_token, \
     wireguard_status
+from cluster.cluster_api import api_cluster_status, api_get_worker_config_files
 from cluster.views import cluster_main, cluster_settings, worker_manage
 from console.views import view_console
 from dns.views import view_apply_dns_config, view_manage_dns_settings, view_manage_filter_list, view_manage_static_host, \
@@ -38,7 +40,7 @@ from wireguard_peer.views import view_manage_ip_address, view_wireguard_peer_lis
 from wireguard_tools.views import download_config_or_qrcode, export_wireguard_configs, restart_wireguard_interfaces
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', view_apply_db_patches, name='apply_db_patches'),
     path('status/', view_wireguard_status, name='wireguard_status'),
     path('dns/', view_static_host_list, name='static_host_list'),
@@ -74,6 +76,8 @@ urlpatterns = [
     path('api/peer_invite/', api_peer_invite, name='api_peer_invite'),
     path('api/cron_check_updates/', cron_check_updates, name='cron_check_updates'),
     path('api/cron_update_peer_latest_handshake/', cron_update_peer_latest_handshake, name='cron_update_peer_latest_handshake'),
+    path('api/cluster/status/', api_cluster_status, name='api_cluster_status'),
+    path('api/cluster/worker/get_config_files/', api_get_worker_config_files, name='api_get_worker_config_files'),
     path('firewall/port_forward/', view_redirect_rule_list, name='redirect_rule_list'),    
     path('firewall/manage_port_forward_rule/', manage_redirect_rule, name='manage_redirect_rule'),
     path('firewall/rule_list/', view_firewall_rule_list, name='firewall_rule_list'),

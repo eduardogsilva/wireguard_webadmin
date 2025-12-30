@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class ClusterSettings(models.Model):
@@ -41,6 +42,15 @@ class Worker(models.Model):
     city = models.CharField(max_length=100, blank=True, null=True)
     hostname = models.CharField(max_length=100, blank=True, null=True)
 
+    error_status = models.CharField(default='', max_length=32, choices=(
+        ('', ''),
+        ('ip_lock', _('IP lock is enabled, but the worker is attempting to access from a different IP address.')),
+        ('worker_disabled', _('Worker is not enabled')),
+        ('cluster_disabled', _('Cluster is not enabled')),
+        ('missing_version', _('Please report worker_config_version and worker_version in the API request.')),
+        ('update_required', _('Worker update is required.'))
+    ))
+
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -53,6 +63,7 @@ class WorkerStatus(models.Model):
     last_restart = models.DateTimeField(blank=True, null=True)
     config_version = models.PositiveIntegerField(default=0)
     config_pending = models.BooleanField(default=False)
+    worker_version = models.PositiveIntegerField(default=0)
     active_peers = models.PositiveIntegerField(default=0)
     wireguard_status = models.JSONField(default=dict)
 

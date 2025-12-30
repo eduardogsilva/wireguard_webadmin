@@ -16,7 +16,7 @@ def cluster_main(request):
     
     page_title = _('Cluster')
     workers = Worker.objects.all().order_by('name')
-    context = {'page_title': page_title, 'workers': workers}
+    context = {'page_title': page_title, 'workers': workers, 'worker_version': 10}
     return render(request, 'cluster/workers_list.html', context)
 
 
