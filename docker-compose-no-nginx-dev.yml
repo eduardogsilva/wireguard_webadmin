@@ -20,7 +20,7 @@ services:
       - rrd_data:/rrd_data/
     ports:
       # Do not directly expose the Django port to the internet, use some kind of reverse proxy with SSL.
-      - "127.0.0.1:8000:8000"
+      - "8000:8000"
       # Warning: Docker will have a hard time handling large amount of ports. Expose only the ports that you need.
       # Ports for multiple WireGuard instances. (Probably, you just need one)
       - "51820-51839:51820-51839/udp"
