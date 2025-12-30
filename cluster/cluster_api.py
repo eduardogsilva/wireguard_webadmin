@@ -115,11 +115,20 @@ def api_get_worker_config_files(request):
         filename = os.path.basename(path)
         with open(path, 'r') as f:
             files[filename] = f.read()
-
+    cluster_settings, created = ClusterSettings.objects.get_or_create(name='cluster_settings')
     return JsonResponse(
         {
             'status': 'success',
             'files': files,
+            'cluster_settings': {
+                'enabled': cluster_settings.enabled,
+                'primary_enable_wireguard': cluster_settings.primary_enable_wireguard,
+                'stats_sync_interval': cluster_settings.stats_sync_interval,
+                'stats_cache_interval': cluster_settings.stats_cache_interval,
+                'cluster_mode': cluster_settings.cluster_mode,
+                'restart_mode': cluster_settings.restart_mode,
+                'config_version': cluster_settings.config_version,
+            },
         },
         status=200
     )
