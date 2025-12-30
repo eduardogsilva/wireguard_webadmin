@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-29 18:15-0300\n"
+"POT-Creation-Date: 2025-12-30 11:31-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -134,12 +134,39 @@ msgstr "Interval synchronizácie štatistík musí byť aspoň 60 sekúnd."
 msgid "Stats cache interval must be at least 60 seconds."
 msgstr "Interval cache štatistík musí byť aspoň 60 sekúnd."
 
+#: cluster/models.py:47
+msgid ""
+"IP lock is enabled, but the worker is attempting to access from a different "
+"IP address."
+msgstr ""
+
+#: cluster/models.py:48
+msgid "Worker is not enabled"
+msgstr ""
+
+#: cluster/models.py:49
+#, fuzzy
+#| msgid "Cluster Enabled"
+msgid "Cluster is not enabled"
+msgstr "Cluster povolený"
+
+#: cluster/models.py:50
+msgid ""
+"Please report worker_config_version and worker_version in the API request."
+msgstr ""
+
+#: cluster/models.py:51
+#, fuzzy
+#| msgid "Port is required."
+msgid "Worker update is required."
+msgstr "Port je povinný."
+
 #: cluster/views.py:15 cluster/views.py:27 cluster/views.py:96
 #: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Prístup zamietnutý"
 
-#: cluster/views.py:17 templates/base.html:185
+#: cluster/views.py:17 templates/base.html:162
 msgid "Cluster"
 msgstr "Cluster"
 
@@ -155,7 +182,7 @@ msgstr "Worker vymazaný|Worker vymazaný: "
 msgid "Worker not deleted|Invalid confirmation."
 msgstr "Worker nebol vymazaný|Neplatné potvrdenie."
 
-#: cluster/views.py:46 templates/cluster/workers_list.html:78
+#: cluster/views.py:46 templates/cluster/workers_list.html:85
 msgid "Add Worker"
 msgstr "Pridať Worker"
 
@@ -192,25 +219,26 @@ msgid ""
 msgstr ""
 "\n"
 "        <h5>Konfigurácia workera</h5>\n"
-"        <p>Nakonfigurujte worker uzol clustra, ktorý sa bude synchronizovať s touto "
-"primárnou inštanciou.</p>\n"
+"        <p>Nakonfigurujte worker uzol clustra, ktorý sa bude synchronizovať "
+"s touto primárnou inštanciou.</p>\n"
 "        \n"
 "        <h5>Názov</h5>\n"
 "        <p>Jedinečný názov na identifikáciu tohto workera.</p>\n"
 "        \n"
 "        <h5>IP adresa</h5>\n"
-"        <p>IP adresa worker uzla. Ak je IP zámok zakázaný, nechajte prázdne.</p>\n"
+"        <p>IP adresa worker uzla. Ak je IP zámok zakázaný, nechajte prázdne."
+"</p>\n"
 "        \n"
 "        <h5>IP zámok</h5>\n"
 "        <p>Keď je povolený, worker sa môže pripojiť iba zo špecifikovanej IP "
 "adresy.</p>\n"
 "        \n"
 "        <h5>Informácie o umiestnení</h5>\n"
-"        <p>Voliteľné podrobnosti o umiestnení pre tohto workera (krajina, mesto, "
-"názov hostiteľa).</p>\n"
+"        <p>Voliteľné podrobnosti o umiestnení pre tohto workera (krajina, "
+"mesto, názov hostiteľa).</p>\n"
 "        "
 
-#: cluster/views.py:99 templates/cluster/workers_list.html:79
+#: cluster/views.py:99 templates/cluster/workers_list.html:86
 msgid "Cluster Settings"
 msgstr "Nastavenia Clustra"
 
@@ -245,12 +273,12 @@ msgstr ""
 "konfigurácie medzi uzlami.</p>\n"
 "        \n"
 "        <h5>Intervaly synchronizácie</h5>\n"
-"        <p>Nakonfigurujte, ako často sa synchronizujú štatistiky a údaje vyrovnávacej pamäte "
-"medzi uzlami clustra.</p>\n"
+"        <p>Nakonfigurujte, ako často sa synchronizujú štatistiky a údaje "
+"vyrovnávacej pamäte medzi uzlami clustra.</p>\n"
 "        \n"
 "        <h5>Režim reštartu</h5>\n"
-"        <p>Vyberte, či sa majú služby WireGuard automaticky reštartovať "
-"pri zmene konfigurácie, alebo či je potrebný manuálny zásah.</p>\n"
+"        <p>Vyberte, či sa majú služby WireGuard automaticky reštartovať pri "
+"zmene konfigurácie, alebo či je potrebný manuálny zásah.</p>\n"
 "        \n"
 "        <h5>Zobrazenie workera</h5>\n"
 "        <p>Vyberte, ako sa majú workery identifikovať v rozhraní – podľa "
@@ -647,7 +675,7 @@ msgstr "Nastavenia firewall boli úspešne uložené"
 msgid "Language"
 msgstr "Jazyk"
 
-#: intl_tools/forms.py:24 templates/base.html:80
+#: intl_tools/forms.py:24 templates/base.html:57
 msgid "Change Language"
 msgstr "Zmeniť jazyk"
 
@@ -691,27 +719,27 @@ msgstr "Boli ste úspešne odhlásený."
 msgid "Login again"
 msgstr "Prihlásiť sa znovu"
 
-#: templates/base.html:112 templates/cluster/workers_list.html:9
+#: templates/base.html:89 templates/cluster/workers_list.html:9
 #: templates/dns/static_host_list.html:72 vpn_invite/forms.py:78
 #: vpn_invite/forms.py:79 vpn_invite/forms.py:80 vpn_invite/forms.py:81
 #: vpn_invite/forms.py:82
 msgid "Status"
 msgstr "Stav"
 
-#: templates/base.html:158 user_manager/views.py:74
+#: templates/base.html:135 user_manager/views.py:74
 msgid "User Manager"
 msgstr "Správa používateľov"
 
-#: templates/base.html:176 templates/wireguard/wireguard_peer_list.html:195
+#: templates/base.html:153 templates/wireguard/wireguard_peer_list.html:195
 #: vpn_invite/views.py:37
 msgid "VPN Invite"
 msgstr "VPN pozvánka"
 
-#: templates/base.html:263
+#: templates/base.html:240
 msgid "Update Required"
 msgstr "Aktualizácia potrebná"
 
-#: templates/base.html:265
+#: templates/base.html:242
 msgid ""
 "Your WireGuard settings have been modified. To apply these changes, please "
 "update the configuration and reload the WireGuard service."
@@ -719,19 +747,19 @@ msgstr ""
 "Vaše WireGuard nastavenia boli zmenené. Pre aplikovanie týchto zmien, prosím "
 "aktualizujte konfiguráciu a reštartujte WireGuard službu."
 
-#: templates/base.html:274
+#: templates/base.html:251
 msgid "Update and restart service"
 msgstr "Aktualizovať a reštartovať službu"
 
-#: templates/base.html:282
+#: templates/base.html:259
 msgid "Update and reload service"
 msgstr "Aktualizovať a znovu načítať službu"
 
-#: templates/base.html:295
+#: templates/base.html:272
 msgid "Update Available"
 msgstr "Aktualizácia dostupná"
 
-#: templates/base.html:297
+#: templates/base.html:274
 msgid "Version"
 msgstr "Verzia"
 
@@ -748,38 +776,42 @@ msgid "Config Version"
 msgstr "Verzia konfigurácie"
 
 #: templates/cluster/workers_list.html:33
+msgid "The worker is outdated. Please update it to the latest version."
+msgstr ""
+
+#: templates/cluster/workers_list.html:40
 msgid "IP Lock Enabled"
 msgstr "IP zámok povolený"
 
-#: templates/cluster/workers_list.html:36
 #: templates/cluster/workers_list.html:43
+#: templates/cluster/workers_list.html:50
 msgid "Not set"
 msgstr "Nenastavené"
 
-#: templates/cluster/workers_list.html:50
+#: templates/cluster/workers_list.html:57
 msgid "Never"
 msgstr "Nikdy"
 
-#: templates/cluster/workers_list.html:57
+#: templates/cluster/workers_list.html:64
 msgid "Config Pending"
 msgstr "Konfigurácia čaká"
 
-#: templates/cluster/workers_list.html:66
+#: templates/cluster/workers_list.html:73
 msgid "Force Reload"
 msgstr "Vynútiť načítanie"
 
-#: templates/cluster/workers_list.html:67
+#: templates/cluster/workers_list.html:74
 msgid "Force Restart"
 msgstr "Vynútiť reštart"
 
-#: templates/cluster/workers_list.html:68
+#: templates/cluster/workers_list.html:75
 #: templates/dns/static_host_list.html:74 templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/wireguard_peer_list.html:196
 msgid "Edit"
 msgstr "Upraviť"
 
-#: templates/cluster/workers_list.html:73
+#: templates/cluster/workers_list.html:80
 msgid "No workers configured"
 msgstr "Nie sú nakonfigurovaní žiadni workery"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-29 18:15-0300\n"
+"POT-Creation-Date: 2025-12-30 11:31-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,7 +95,8 @@ msgstr "Ya existe un worker con ese nombre."
 
 #: cluster/forms.py:84
 msgid "IP Address is required when IP Lock is enabled."
-msgstr "La dirección IP es obligatoria cuando el bloqueo de IP está habilitado."
+msgstr ""
+"La dirección IP es obligatoria cuando el bloqueo de IP está habilitado."
 
 #: cluster/forms.py:99
 msgid "Cluster Enabled"
@@ -127,18 +128,48 @@ msgstr "Visualización del worker"
 
 #: cluster/forms.py:146
 msgid "Stats sync interval must be at least 60 seconds."
-msgstr "El intervalo de sincronización de estadísticas debe ser de al menos 60 segundos."
+msgstr ""
+"El intervalo de sincronización de estadísticas debe ser de al menos 60 "
+"segundos."
 
 #: cluster/forms.py:149
 msgid "Stats cache interval must be at least 60 seconds."
-msgstr "El intervalo de caché de estadísticas debe ser de al menos 60 segundos."
+msgstr ""
+"El intervalo de caché de estadísticas debe ser de al menos 60 segundos."
+
+#: cluster/models.py:47
+msgid ""
+"IP lock is enabled, but the worker is attempting to access from a different "
+"IP address."
+msgstr ""
+
+#: cluster/models.py:48
+msgid "Worker is not enabled"
+msgstr ""
+
+#: cluster/models.py:49
+#, fuzzy
+#| msgid "Cluster Enabled"
+msgid "Cluster is not enabled"
+msgstr "Cluster habilitado"
+
+#: cluster/models.py:50
+msgid ""
+"Please report worker_config_version and worker_version in the API request."
+msgstr ""
+
+#: cluster/models.py:51
+#, fuzzy
+#| msgid "Port is required."
+msgid "Worker update is required."
+msgstr "Puerto es obligatorio."
 
 #: cluster/views.py:15 cluster/views.py:27 cluster/views.py:96
 #: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Acceso denegado"
 
-#: cluster/views.py:17 templates/base.html:185
+#: cluster/views.py:17 templates/base.html:162
 msgid "Cluster"
 msgstr "Cluster"
 
@@ -154,7 +185,7 @@ msgstr "Worker eliminado|Worker eliminado: "
 msgid "Worker not deleted|Invalid confirmation."
 msgstr "Worker no eliminado|Confirmación inválida."
 
-#: cluster/views.py:46 templates/cluster/workers_list.html:78
+#: cluster/views.py:46 templates/cluster/workers_list.html:85
 msgid "Add Worker"
 msgstr "Agregar Worker"
 
@@ -210,7 +241,7 @@ msgstr ""
 "nombre de host).</p>\n"
 "        "
 
-#: cluster/views.py:99 templates/cluster/workers_list.html:79
+#: cluster/views.py:99 templates/cluster/workers_list.html:86
 msgid "Cluster Settings"
 msgstr "Configuración del Cluster"
 
@@ -649,7 +680,7 @@ msgstr "Configuración de firewall guardada correctamente"
 msgid "Language"
 msgstr "Idioma"
 
-#: intl_tools/forms.py:24 templates/base.html:80
+#: intl_tools/forms.py:24 templates/base.html:57
 msgid "Change Language"
 msgstr "Cambiar idioma"
 
@@ -695,27 +726,27 @@ msgstr "Has cerrado sesión correctamente."
 msgid "Login again"
 msgstr "Iniciar sesión de nuevo"
 
-#: templates/base.html:112 templates/cluster/workers_list.html:9
+#: templates/base.html:89 templates/cluster/workers_list.html:9
 #: templates/dns/static_host_list.html:72 vpn_invite/forms.py:78
 #: vpn_invite/forms.py:79 vpn_invite/forms.py:80 vpn_invite/forms.py:81
 #: vpn_invite/forms.py:82
 msgid "Status"
 msgstr "Estado"
 
-#: templates/base.html:158 user_manager/views.py:74
+#: templates/base.html:135 user_manager/views.py:74
 msgid "User Manager"
 msgstr "Gestión de usuarios"
 
-#: templates/base.html:176 templates/wireguard/wireguard_peer_list.html:195
+#: templates/base.html:153 templates/wireguard/wireguard_peer_list.html:195
 #: vpn_invite/views.py:37
 msgid "VPN Invite"
 msgstr "Invitación VPN"
 
-#: templates/base.html:263
+#: templates/base.html:240
 msgid "Update Required"
 msgstr "Actualización requerida"
 
-#: templates/base.html:265
+#: templates/base.html:242
 msgid ""
 "Your WireGuard settings have been modified. To apply these changes, please "
 "update the configuration and reload the WireGuard service."
@@ -723,19 +754,19 @@ msgstr ""
 "Tus ajustes de WireGuard han sido modificados. Para aplicar los cambios, "
 "actualiza la configuración y recarga el servicio WireGuard."
 
-#: templates/base.html:274
+#: templates/base.html:251
 msgid "Update and restart service"
 msgstr "Actualizar y reiniciar servicio"
 
-#: templates/base.html:282
+#: templates/base.html:259
 msgid "Update and reload service"
 msgstr "Actualizar y recargar servicio"
 
-#: templates/base.html:295
+#: templates/base.html:272
 msgid "Update Available"
 msgstr "Actualización disponible"
 
-#: templates/base.html:297
+#: templates/base.html:274
 msgid "Version"
 msgstr "Versión"
 
@@ -752,38 +783,42 @@ msgid "Config Version"
 msgstr "Versión de configuración"
 
 #: templates/cluster/workers_list.html:33
+msgid "The worker is outdated. Please update it to the latest version."
+msgstr ""
+
+#: templates/cluster/workers_list.html:40
 msgid "IP Lock Enabled"
 msgstr "Bloqueo de IP habilitado"
 
-#: templates/cluster/workers_list.html:36
 #: templates/cluster/workers_list.html:43
+#: templates/cluster/workers_list.html:50
 msgid "Not set"
 msgstr "No establecido"
 
-#: templates/cluster/workers_list.html:50
+#: templates/cluster/workers_list.html:57
 msgid "Never"
 msgstr "Nunca"
 
-#: templates/cluster/workers_list.html:57
+#: templates/cluster/workers_list.html:64
 msgid "Config Pending"
 msgstr "Configuración pendiente"
 
-#: templates/cluster/workers_list.html:66
+#: templates/cluster/workers_list.html:73
 msgid "Force Reload"
 msgstr "Forzar recarga"
 
-#: templates/cluster/workers_list.html:67
+#: templates/cluster/workers_list.html:74
 msgid "Force Restart"
 msgstr "Forzar reinicio"
 
-#: templates/cluster/workers_list.html:68
+#: templates/cluster/workers_list.html:75
 #: templates/dns/static_host_list.html:74 templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/wireguard_peer_list.html:196
 msgid "Edit"
 msgstr "Editar"
 
-#: templates/cluster/workers_list.html:73
+#: templates/cluster/workers_list.html:80
 msgid "No workers configured"
 msgstr "No hay workers configurados"
 
