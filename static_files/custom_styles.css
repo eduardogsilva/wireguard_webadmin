@@ -1,0 +1,29 @@
+.min-width {
+    width: 1%;
+    white-space: nowrap;
+}
+.preloader{
+    display: none;
+}
+.wrapper {
+    max-width: 1400px !important;
+    margin: 0 auto;
+}
+
+body.layout-boxed {
+    background: radial-gradient(circle at center, #444 0%, #ccc 80%, #fff 100%);
+}
+body.layout-boxed .wrapper {
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.blink {
+    animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+    0%   { opacity: 1; transform: scale(1); }
+    50%  { opacity: 0.3; transform: scale(1.1); }
+    100% { opacity: 1; transform: scale(1); }
+}
