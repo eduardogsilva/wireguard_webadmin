@@ -139,27 +139,25 @@ msgid ""
 "IP lock is enabled, but the worker is attempting to access from a different "
 "IP address."
 msgstr ""
+"Die IP-Sperre ist aktiviert, aber der Worker versucht von einer anderen IP-Adresse zuzugreifen."
 
 #: cluster/models.py:48
 msgid "Worker is not enabled"
-msgstr ""
+msgstr "Worker ist nicht aktiviert"
 
 #: cluster/models.py:49
-#, fuzzy
-#| msgid "Cluster Enabled"
 msgid "Cluster is not enabled"
-msgstr "Cluster aktiviert"
+msgstr "Cluster ist nicht aktiviert"
 
 #: cluster/models.py:50
 msgid ""
 "Please report worker_config_version and worker_version in the API request."
 msgstr ""
+"Bitte geben Sie worker_config_version und worker_version in der API-Anfrage an."
 
 #: cluster/models.py:51
-#, fuzzy
-#| msgid "Port is required."
 msgid "Worker update is required."
-msgstr "Port ist erforderlich."
+msgstr "Ein Worker-Update ist erforderlich."
 
 #: cluster/views.py:15 cluster/views.py:27 cluster/views.py:96
 #: templates/access_denied.html:9
@@ -785,7 +783,7 @@ msgstr "Konfigurationsversion"
 
 #: templates/cluster/workers_list.html:33
 msgid "The worker is outdated. Please update it to the latest version."
-msgstr ""
+msgstr "Der Worker ist veraltet. Bitte aktualisieren Sie ihn auf die neueste Version."
 
 #: templates/cluster/workers_list.html:40
 msgid "IP Lock Enabled"

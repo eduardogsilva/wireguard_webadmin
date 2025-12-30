@@ -139,27 +139,25 @@ msgid ""
 "IP lock is enabled, but the worker is attempting to access from a different "
 "IP address."
 msgstr ""
+"IP zámok je povolený, ale worker sa pokúša o prístup z inej IP adresy."
 
 #: cluster/models.py:48
 msgid "Worker is not enabled"
-msgstr ""
+msgstr "Worker nie je povolený"
 
 #: cluster/models.py:49
-#, fuzzy
-#| msgid "Cluster Enabled"
 msgid "Cluster is not enabled"
-msgstr "Cluster povolený"
+msgstr "Cluster nie je povolený"
 
 #: cluster/models.py:50
 msgid ""
 "Please report worker_config_version and worker_version in the API request."
 msgstr ""
+"Prosím, uveďte worker_config_version a worker_version v požiadavke API."
 
 #: cluster/models.py:51
-#, fuzzy
-#| msgid "Port is required."
 msgid "Worker update is required."
-msgstr "Port je povinný."
+msgstr "Vyžaduje sa aktualizácia workera."
 
 #: cluster/views.py:15 cluster/views.py:27 cluster/views.py:96
 #: templates/access_denied.html:9
@@ -777,7 +775,7 @@ msgstr "Verzia konfigurácie"
 
 #: templates/cluster/workers_list.html:33
 msgid "The worker is outdated. Please update it to the latest version."
-msgstr ""
+msgstr "Tento worker je zastaraný. Prosím aktualizujte ho na najnovšiu verziu."
 
 #: templates/cluster/workers_list.html:40
 msgid "IP Lock Enabled"
