@@ -1,6 +1,26 @@
 import os
+import tarfile
 
+from cluster.models import ClusterSettings
 from .models import DNSSettings, StaticHost, DNSFilterList
+
+
+def compress_dnsmasq_config():
+    output_file = "/etc/dnsmasq/dnsmasq_config.tar.gz"
+    base_dir = "/etc/dnsmasq"
+
+    if not ClusterSettings.objects.filter(enabled=True, name='cluster_settings').exists():
+        if os.path.exists(output_file):
+            os.remove(output_file)
+        return None
+
+    with tarfile.open(output_file, "w:gz") as tar:
+        for filename in os.listdir(base_dir):
+            if filename.endswith(".conf"):
+                fullpath = os.path.join(base_dir, filename)
+                tar.add(fullpath, arcname=filename)
+
+    return output_file
 
 
 def generate_unbound_config():
@@ -82,3 +102,4 @@ bind-interfaces
             file_path = os.path.join("/etc/dnsmasq/", f"{dns_list.uuid}.conf")
             dnsmasq_config += f'addn-hosts={file_path}\n'
     return dnsmasq_config
+

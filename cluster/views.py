@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from dns.functions import compress_dnsmasq_config
 from user_manager.models import UserAcl
 from .forms import WorkerForm, ClusterSettingsForm
 from .models import ClusterSettings, Worker
@@ -109,6 +110,7 @@ def cluster_settings(request):
         if form.is_valid():
             form.save()
             messages.success(request, _('Cluster settings updated successfully.'))
+            compress_dnsmasq_config()
             return redirect('/cluster/')
     else:
         form = ClusterSettingsForm(instance=cluster_settings)
