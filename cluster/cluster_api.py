@@ -1,7 +1,7 @@
 import glob
 import os
 
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
 from django.utils import timezone
 
 from .models import ClusterSettings, Worker, WorkerStatus
@@ -30,7 +30,7 @@ def get_worker(request):
     try:
         worker_config_version = int(request.GET.get('worker_config_version'))
         worker_version = int(request.GET.get('worker_version'))
-        worker_dns_version = int(request.GET.get('dns_version'))
+        worker_dns_version = int(request.GET.get('worker_dns_version'))
     except:
         worker.error_status = 'missing_version'
         worker.save()
@@ -95,6 +95,27 @@ def get_worker(request):
         success = False
 
     return worker, success
+
+
+def api_get_worker_dnsmasq_config(request):
+    dnsmasq_file = "/etc/dnsmasq/dnsmasq_config.tar.gz"
+    worker, success = get_worker(request)
+    if worker:
+        if worker.error_status or not success:
+            data = {'status': 'error', 'message': worker.error_status}
+            return JsonResponse(data, status=400)
+    else:
+        data = {'status': 'error', 'message': 'Worker not found'}
+        return JsonResponse(data, status=403)
+
+    if not os.path.exists(dnsmasq_file):
+        data = {'status': 'error', 'message': 'dnsmasq configuration not found'}
+        return JsonResponse(data, status=404)
+
+    response = FileResponse(open(dnsmasq_file, "rb"), content_type="application/gzip")
+    response["Content-Disposition"] = 'attachment; filename="dnsmasq_config.tar.gz"'
+    response["Content-Length"] = str(os.path.getsize(dnsmasq_file))
+    return response
 
 
 def api_get_worker_config_files(request):
