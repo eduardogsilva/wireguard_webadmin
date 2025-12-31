@@ -144,6 +144,19 @@ class ClusterWorker:
             logger.error(f"Error updating DNS config: {e}")
             return False
 
+    def send_ping(self):
+        params = {
+            'token': TOKEN,
+            'worker_config_version': self.config_version,
+            'worker_dns_version': self.dns_version,
+            'worker_version': WORKER_VERSION
+        }
+        try:
+            logger.info("Sending ping to Master...")
+            self.session.get(f"{self.base_url}/worker/ping/", params=params, timeout=REQUEST_TIMEOUT)
+        except Exception as e:
+            logger.error(f"Error sending ping: {e}")
+
     def apply_configs(self, data):
         logger.info("Applying new configurations...")
         files = data.get('files', {})
@@ -209,25 +222,25 @@ class ClusterWorker:
                         remote_config_version = data.get('cluster_settings', {}).get('config_version', 0)
                         
                         # Check WireGuard Config
-                        if remote_config_version != self.config_version:
+                        if int(remote_config_version) != self.config_version:
                             logger.info(f"Config version mismatch (Local: {self.config_version}, Remote: {remote_config_version}). Updating...")
                             config_data = self.download_configs()
                             if config_data:
                                 self.apply_configs(config_data)
-                                logger.info("Sending post-update status to Master...")
-                                self.get_status()
+                                self.send_ping()
+                                continue
                             else:
                                 logger.error("Failed to download config files.")
                         
                         # Check DNS Config
-                        remote_dns_version = data.get('cluster_settings', {}).get('dns_version', 0)
+                        remote_dns_version = int(data.get('cluster_settings', {}).get('dns_version', 0))
                         if remote_dns_version != self.dns_version:
                             logger.info(f"DNS version mismatch (Local: {self.dns_version}, Remote: {remote_dns_version}). Updating...")
                             if self.download_dns_config():
-                                logger.info("Sending post-update status to Master...")
-                                self.get_status()
+                                self.send_ping()
+                                continue
 
-                        if remote_config_version == self.config_version and remote_dns_version == self.dns_version:
+                        if int(remote_config_version) == self.config_version and remote_dns_version == self.dns_version:
                             logger.info(f"No changes detected. Configuration is up to date (WG: {self.config_version}, DNS: {self.dns_version}).")
 
             except Exception as e:
