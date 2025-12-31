@@ -68,11 +68,13 @@ class ClusterWorker:
             'worker_config_version': self.config_version,
             'worker_version': WORKER_VERSION
         }
+        logger.info(f"Requesting status from Master... (Config Version: {self.config_version}, Worker Version: {WORKER_VERSION})")
         try:
             response = self.session.get(f"{self.base_url}/status/", params=params, timeout=REQUEST_TIMEOUT)
+            logger.info(f"Status response received. HTTP Code: {response.status_code}")
             return response
         except requests.RequestException as e:
-            logger.error(f"Connection error: {e}")
+            logger.error(f"Connection error while getting status: {e}")
             return None
 
     def download_configs(self):
@@ -137,13 +139,19 @@ class ClusterWorker:
             try:
                 response = self.get_status()
                 
-                if response:
+                if response is not None:
                     if response.status_code == 403:
-                        logger.error("Received 403 Forbidden. Shutting down WireGuard and stopping requests.")
+                        logger.error("Received 403 Forbidden (Token invalid/deleted). Deactivating WireGuard and stopping requests permanently.")
                         self.cleanup_wireguard()
+                        self.config_version = 0
                         self.should_run = False
                         break
-                    
+
+                    if response.status_code == 400:
+                        logger.warning("Received 400 Bad Request (Worker suspended or error). Deactivating WireGuard and Firewall, but will keep retrying...")
+                        self.cleanup_wireguard()
+                        self.config_version = 0
+
                     if response.status_code == 200:
                         data = response.json()
                         remote_config_version = data.get('cluster_settings', {}).get('config_version', 0)
@@ -155,11 +163,15 @@ class ClusterWorker:
                                 self.apply_configs(config_data)
                             else:
                                 logger.error("Failed to download config files.")
+                        else:
+                            logger.info(f"No changes detected. Configuration is up to date (Version: {self.config_version}).")
 
             except Exception as e:
                 logger.error(f"Unexpected error in main loop: {e}")
 
-            time.sleep(60)
+            interval = 60
+            logger.info(f"Waiting {interval} seconds for next check...")
+            time.sleep(interval)
 
         # Final loop state if 403 was received
         while not self.should_run:
