@@ -44,6 +44,8 @@ if [ -n "$TZ" ]; then
 fi
 
 
-sed -i "/^    path('admin\/', admin.site.urls),/s/^    /    # /" /app/wireguard_webadmin/urls.py
+if [[ "${DEV_MODE,,}" != "true" ]]; then
+    sed -i "/^    path('admin\/', admin.site.urls),/s/^    /    # /" /app/wireguard_webadmin/urls.py
+fi
 
 exec "$@"
