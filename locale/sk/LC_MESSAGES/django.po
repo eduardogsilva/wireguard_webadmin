@@ -776,7 +776,7 @@ msgstr "Verzia konfigurácie"
 
 #: templates/cluster/workers_list.html:28
 msgid "Configuration sync in progress"
-msgstr ""
+msgstr "Synchronizácia konfigurácie prebieha"
 
 #: templates/cluster/workers_list.html:37
 msgid "The worker is outdated. Please update it to the latest version."
@@ -812,28 +812,20 @@ msgstr "Nie sú nakonfigurovaní žiadni workery"
 
 #: templates/cluster/workers_list.html:89
 #: templates/cluster/workers_list.html:92
-#, fuzzy
-#| msgid "Cluster Settings"
 msgid "Cluster Information"
-msgstr "Nastavenia Clustra"
+msgstr "Informácie o klastri"
 
 #: templates/cluster/workers_list.html:114
-#, fuzzy
-#| msgid "Stats Sync Interval (seconds)"
 msgid "Stats Sync Interval"
-msgstr "Interval synchronizácie štatistík (sekundy)"
+msgstr "Interval synchronizácie štatistík"
 
 #: templates/cluster/workers_list.html:118
-#, fuzzy
-#| msgid "Stats Cache Interval (seconds)"
 msgid "Stats Cache Interval"
-msgstr "Interval cache štatistík (sekundy)"
+msgstr "Interval cache štatistík"
 
 #: templates/cluster/workers_list.html:130
-#, fuzzy
-#| msgid "Primary Enable WireGuard"
 msgid "Primary WireGuard"
-msgstr "Primárne povolenie WireGuard"
+msgstr "Povoliť primárny WireGuard"
 
 #: templates/console/console.html:12
 msgid "Clear"
