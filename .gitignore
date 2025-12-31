@@ -6,6 +6,7 @@ db.sqlite3-journal
 *.egg
 *.egg-info/
 .eggs/
+.agent/
 .env
 .env.cluster_node
 env/
