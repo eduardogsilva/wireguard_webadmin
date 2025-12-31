@@ -36,6 +36,10 @@ def compress_dnsmasq_config():
         if newest_conf_mtime <= tar_mtime:
             return output_file
 
+    dns_version_file = os.path.join(base_dir, "config_version.conf")
+    with open(dns_version_file, "w", encoding="utf-8") as f:
+        f.write(f"DNS_VERSION={cluster_settings.dns_version}\n")
+
     # Create tar.gz
     tmp_output = output_file + ".tmp"
     with tarfile.open(tmp_output, "w:gz") as tar:
