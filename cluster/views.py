@@ -14,9 +14,15 @@ def cluster_main(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
     
+    cluster_settings, created = ClusterSettings.objects.get_or_create(name='cluster_settings')
     page_title = _('Cluster')
     workers = Worker.objects.all().order_by('name')
-    context = {'page_title': page_title, 'workers': workers, 'worker_version': 10}
+    context = {
+        'page_title': page_title, 
+        'workers': workers, 
+        'current_worker_version': 10,
+        'cluster_settings': cluster_settings
+    }
     return render(request, 'cluster/workers_list.html', context)
 
 

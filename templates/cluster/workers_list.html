@@ -24,12 +24,16 @@
                     <i class="fas fa-exclamation-triangle text-danger blink" title="{{ worker.get_error_status_display }}"></i>
                 {% else %}
                     {% if worker.enabled %}
-                        <i class="fas fa-check text-green"></i>
+                        {% if cluster_settings.config_version != worker.workerstatus.config_version  %}
+                            <i class="fas fa-sync text-primary blink" {% trans 'Configuration sync in progress' %}></i>
+                        {% else %}
+                            <i class="fas fa-check text-green"></i>
+                        {% endif %}
                     {% else %}
                         <i class="fas fa-times text-gray"></i>
                     {% endif %}
                 {% endif %}
-                {% if worker_version > worker.workerstatus.worker_version %}
+                {% if current_worker_version != worker.workerstatus.worker_version %}
                     <i class="fas fa-cloud-download-alt text-primary blink" title="{% trans 'The worker is outdated. Please update it to the latest version.' %}"></i>
                 {% endif %}
             </td>
@@ -70,8 +74,6 @@
 
 
             <td style="width: 1%; white-space: nowrap;">
-                <i class="fas fa-sync-alt text-info" title="{% trans 'Force Reload' %}"></i>
-                <i class="fas fa-power-off text-danger" title="{% trans 'Force Restart' %}"></i>
                 <a href="/cluster/worker/manage/?uuid={{ worker.uuid }}" title="{% trans 'Edit' %}"><i class="far fa-edit"></i></a>
             </td>
         </tr>
@@ -84,4 +86,68 @@
 </table>
 <a href="/cluster/worker/manage/" class="btn btn-primary">{% trans 'Add Worker' %}</a>
 <a href="/cluster/settings/" class="btn btn-secondary">{% trans 'Cluster Settings' %}</a>
+<button id="btn-cluster-info" class="btn btn-outline-info float-right">{% trans 'Cluster Information' %}</button>
+
+<div id="cluster-info-table" style="display: none; margin-top: 20px;">
+    <h4>{% trans 'Cluster Information' %}</h4>
+    <table class="table table-bordered" style="width: 50%;">
+        <tbody>
+            <tr>
+                <th>{% trans 'Enabled' %}</th>
+                <td>
+                    {% if cluster_settings.enabled %}
+                    <i class="fas fa-check text-green"></i>
+                    {% else %}
+                    <i class="fas fa-times text-gray"></i>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{% trans 'Cluster Mode' %}</th>
+                <td>{{ cluster_settings.get_cluster_mode_display }}</td>
+            </tr>
+            <tr>
+                <th>{% trans 'Config Version' %}</th>
+                <td>{{ cluster_settings.config_version }}</td>
+            </tr>
+            <tr>
+                <th>{% trans 'Stats Sync Interval' %}</th>
+                <td>{{ cluster_settings.stats_sync_interval }}s</td>
+            </tr>
+            <tr>
+                <th>{% trans 'Stats Cache Interval' %}</th>
+                <td>{{ cluster_settings.stats_cache_interval }}s</td>
+            </tr>
+            <tr>
+                <th>{% trans 'Restart Mode' %}</th>
+                <td>{{ cluster_settings.get_restart_mode_display }}</td>
+            </tr>
+            <tr>
+                <th>{% trans 'Worker Display' %}</th>
+                <td>{{ cluster_settings.get_worker_display_display }}</td>
+            </tr>
+            <tr>
+                <th>{% trans 'Primary WireGuard' %}</th>
+                <td>
+                    {% if cluster_settings.primary_enable_wireguard %}
+                        <i class="fas fa-check text-green"></i>
+                    {% else %}
+                        <i class="fas fa-times text-gray"></i>
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+{% block custom_page_scripts %}
+    <script>
+        $(document).ready(function () {
+            $('#btn-cluster-info').click(function () {
+                $('#cluster-info-table').slideToggle();
+            });
+        });
+    </script>
 {% endblock %}
