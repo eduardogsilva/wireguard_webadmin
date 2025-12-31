@@ -159,6 +159,24 @@ def api_get_worker_config_files(request):
     )
 
 
+def api_worker_ping(request):
+    worker, success = get_worker(request)
+    if worker:
+        if worker.error_status or not success:
+            data = {'status': 'error', 'message': worker.error_status}
+            return JsonResponse(data, status=400)
+    else:
+        data = {'status': 'error', 'message': 'Worker not found'}
+        return JsonResponse(data, status=403)
+
+    data = {
+        'status': 'success',
+        'worker_error_status': worker.error_status,
+    }
+
+    return JsonResponse(data, status=200)
+
+
 def api_cluster_status(request):
     worker, success = get_worker(request)
     if worker:

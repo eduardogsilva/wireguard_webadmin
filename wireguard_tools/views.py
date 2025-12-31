@@ -12,7 +12,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from cluster.models import ClusterSettings
-from dns.views import export_dns_configuration
 from firewall.models import RedirectRule
 from firewall.tools import export_user_firewall, generate_firewall_footer, generate_firewall_header, \
     generate_port_forward_firewall, generate_redirect_dns_rules
@@ -89,7 +88,6 @@ def export_wireguard_configs(request):
     base_dir = "/etc/wireguard"
 
     export_firewall_configuration()
-    export_dns_configuration()
     
     firewall_inserted = False
     for instance in instances:

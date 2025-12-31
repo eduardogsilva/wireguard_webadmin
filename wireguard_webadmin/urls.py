@@ -21,7 +21,8 @@ from accounts.views import view_create_first_user, view_login, view_logout
 from api.views import api_instance_info, api_peer_invite, api_peer_list, cron_check_updates, \
     cron_update_peer_latest_handshake, peer_info, routerfleet_authenticate_session, routerfleet_get_user_token, \
     wireguard_status
-from cluster.cluster_api import api_cluster_status, api_get_worker_config_files, api_get_worker_dnsmasq_config
+from cluster.cluster_api import api_cluster_status, api_get_worker_config_files, api_get_worker_dnsmasq_config, \
+    api_worker_ping
 from cluster.views import cluster_main, cluster_settings, worker_manage
 from console.views import view_console
 from dns.views import view_apply_dns_config, view_manage_dns_settings, view_manage_filter_list, view_manage_static_host, \
@@ -79,6 +80,7 @@ urlpatterns = [
     path('api/cluster/status/', api_cluster_status, name='api_cluster_status'),
     path('api/cluster/worker/get_config_files/', api_get_worker_config_files, name='api_get_worker_config_files'),
     path('api/cluster/worker/get_dnsmasq_config/', api_get_worker_dnsmasq_config, name='api_get_worker_dnsmasq_config'),
+    path('api/cluster/worker/ping/', api_worker_ping, name='api_worker_ping'),
     path('firewall/port_forward/', view_redirect_rule_list, name='redirect_rule_list'),    
     path('firewall/manage_port_forward_rule/', manage_redirect_rule, name='manage_redirect_rule'),
     path('firewall/rule_list/', view_firewall_rule_list, name='firewall_rule_list'),
