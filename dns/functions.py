@@ -14,12 +14,33 @@ def compress_dnsmasq_config():
             os.remove(output_file)
         return None
 
-    with tarfile.open(output_file, "w:gz") as tar:
-        for filename in os.listdir(base_dir):
-            if filename.endswith(".conf"):
-                fullpath = os.path.join(base_dir, filename)
-                tar.add(fullpath, arcname=filename)
+    if not os.path.isdir(base_dir):
+        if os.path.exists(output_file):
+            os.remove(output_file)
+        return None
 
+    conf_files = [
+        fn for fn in os.listdir(base_dir)
+        if fn.endswith(".conf") and os.path.isfile(os.path.join(base_dir, fn))
+    ]
+
+    # If tar exists and is newer (or equal) than all .conf, do not recompile
+    if os.path.exists(output_file):
+        tar_mtime = os.path.getmtime(output_file)
+        newest_conf_mtime = max(
+            os.path.getmtime(os.path.join(base_dir, fn)) for fn in conf_files
+        )
+        if newest_conf_mtime <= tar_mtime:
+            return output_file
+
+    # Create tar.gz
+    tmp_output = output_file + ".tmp"
+    with tarfile.open(tmp_output, "w:gz") as tar:
+        for fn in conf_files:
+            fullpath = os.path.join(base_dir, fn)
+            tar.add(fullpath, arcname=fn)
+
+    os.replace(tmp_output, output_file)
     return output_file
 
 
