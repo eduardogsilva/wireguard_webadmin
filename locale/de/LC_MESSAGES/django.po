@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-30 11:31-0300\n"
+"POT-Creation-Date: 2025-12-31 11:37-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,8 @@ msgstr ""
 msgid "Name"
 msgstr "Name"
 
-#: cluster/forms.py:18 vpn_invite/forms.py:49 vpn_invite/forms.py:294
+#: cluster/forms.py:18 templates/cluster/workers_list.html:96
+#: vpn_invite/forms.py:49 vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Aktiviert"
 
@@ -113,15 +114,15 @@ msgstr "Statistik-Sync-Intervall (Sekunden)"
 msgid "Stats Cache Interval (seconds)"
 msgstr "Statistik-Cache-Intervall (Sekunden)"
 
-#: cluster/forms.py:103
+#: cluster/forms.py:103 templates/cluster/workers_list.html:106
 msgid "Cluster Mode"
 msgstr "Cluster-Modus"
 
-#: cluster/forms.py:104
+#: cluster/forms.py:104 templates/cluster/workers_list.html:122
 msgid "Restart Mode"
 msgstr "Neustart-Modus"
 
-#: cluster/forms.py:105
+#: cluster/forms.py:105 templates/cluster/workers_list.html:126
 msgid "Worker Display"
 msgstr "Worker-Anzeige"
 
@@ -139,7 +140,8 @@ msgid ""
 "IP lock is enabled, but the worker is attempting to access from a different "
 "IP address."
 msgstr ""
-"Die IP-Sperre ist aktiviert, aber der Worker versucht von einer anderen IP-Adresse zuzugreifen."
+"Die IP-Sperre ist aktiviert, aber der Worker versucht von einer anderen IP-"
+"Adresse zuzugreifen."
 
 #: cluster/models.py:48
 msgid "Worker is not enabled"
@@ -153,46 +155,47 @@ msgstr "Cluster ist nicht aktiviert"
 msgid ""
 "Please report worker_config_version and worker_version in the API request."
 msgstr ""
-"Bitte geben Sie worker_config_version und worker_version in der API-Anfrage an."
+"Bitte geben Sie worker_config_version und worker_version in der API-Anfrage "
+"an."
 
 #: cluster/models.py:51
 msgid "Worker update is required."
 msgstr "Ein Worker-Update ist erforderlich."
 
-#: cluster/views.py:15 cluster/views.py:27 cluster/views.py:96
+#: cluster/views.py:15 cluster/views.py:33 cluster/views.py:102
 #: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Zugriff verweigert"
 
-#: cluster/views.py:17 templates/base.html:162
+#: cluster/views.py:18 templates/base.html:162
 msgid "Cluster"
 msgstr "Cluster"
 
-#: cluster/views.py:33
+#: cluster/views.py:39
 msgid "Edit Worker: "
 msgstr "Worker bearbeiten: "
 
-#: cluster/views.py:39
+#: cluster/views.py:45
 msgid "Worker deleted|Worker deleted: "
 msgstr "Worker gelöscht|Worker gelöscht: "
 
-#: cluster/views.py:42
+#: cluster/views.py:48
 msgid "Worker not deleted|Invalid confirmation."
 msgstr "Worker nicht gelöscht|Ungültige Bestätigung."
 
-#: cluster/views.py:46 templates/cluster/workers_list.html:85
+#: cluster/views.py:52 templates/cluster/workers_list.html:87
 msgid "Add Worker"
 msgstr "Worker hinzufügen"
 
-#: cluster/views.py:57
+#: cluster/views.py:63
 msgid "Worker updated|Worker updated: "
 msgstr "Worker aktualisiert|Worker aktualisiert: "
 
-#: cluster/views.py:59
+#: cluster/views.py:65
 msgid "Worker created|Worker created: "
 msgstr "Worker erstellt|Worker erstellt: "
 
-#: cluster/views.py:64
+#: cluster/views.py:70
 msgid ""
 "\n"
 "        <h5>Worker Configuration</h5>\n"
@@ -236,15 +239,15 @@ msgstr ""
 "Hostname).</p>\n"
 "        "
 
-#: cluster/views.py:99 templates/cluster/workers_list.html:86
+#: cluster/views.py:105 templates/cluster/workers_list.html:88
 msgid "Cluster Settings"
 msgstr "Cluster-Einstellungen"
 
-#: cluster/views.py:105
+#: cluster/views.py:111
 msgid "Cluster settings updated successfully."
 msgstr "Cluster-Einstellungen erfolgreich aktualisiert."
 
-#: cluster/views.py:112
+#: cluster/views.py:118
 msgid ""
 "\n"
 "        <h5>Cluster Mode</h5>\n"
@@ -778,48 +781,71 @@ msgid "Last Seen"
 msgstr "Zuletzt gesehen"
 
 #: templates/cluster/workers_list.html:13
+#: templates/cluster/workers_list.html:110
 msgid "Config Version"
 msgstr "Konfigurationsversion"
 
-#: templates/cluster/workers_list.html:33
-msgid "The worker is outdated. Please update it to the latest version."
-msgstr "Der Worker ist veraltet. Bitte aktualisieren Sie ihn auf die neueste Version."
+#: templates/cluster/workers_list.html:28
+msgid "Configuration sync in progress"
+msgstr ""
 
-#: templates/cluster/workers_list.html:40
+#: templates/cluster/workers_list.html:37
+msgid "The worker is outdated. Please update it to the latest version."
+msgstr ""
+"Der Worker ist veraltet. Bitte aktualisieren Sie ihn auf die neueste Version."
+
+#: templates/cluster/workers_list.html:44
 msgid "IP Lock Enabled"
 msgstr "IP-Sperre aktiviert"
 
-#: templates/cluster/workers_list.html:43
-#: templates/cluster/workers_list.html:50
+#: templates/cluster/workers_list.html:47
+#: templates/cluster/workers_list.html:54
 msgid "Not set"
 msgstr "Nicht gesetzt"
 
-#: templates/cluster/workers_list.html:57
+#: templates/cluster/workers_list.html:61
 msgid "Never"
 msgstr "Niemals"
 
-#: templates/cluster/workers_list.html:64
+#: templates/cluster/workers_list.html:68
 msgid "Config Pending"
 msgstr "Konfiguration ausstehend"
 
-#: templates/cluster/workers_list.html:73
-msgid "Force Reload"
-msgstr "Neu laden erzwingen"
-
-#: templates/cluster/workers_list.html:74
-msgid "Force Restart"
-msgstr "Neustart erzwingen"
-
-#: templates/cluster/workers_list.html:75
+#: templates/cluster/workers_list.html:77
 #: templates/dns/static_host_list.html:74 templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/wireguard_peer_list.html:196
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: templates/cluster/workers_list.html:80
+#: templates/cluster/workers_list.html:82
 msgid "No workers configured"
 msgstr "Keine Worker konfiguriert"
+
+#: templates/cluster/workers_list.html:89
+#: templates/cluster/workers_list.html:92
+#, fuzzy
+#| msgid "Cluster Settings"
+msgid "Cluster Information"
+msgstr "Cluster-Einstellungen"
+
+#: templates/cluster/workers_list.html:114
+#, fuzzy
+#| msgid "Stats Sync Interval (seconds)"
+msgid "Stats Sync Interval"
+msgstr "Statistik-Sync-Intervall (Sekunden)"
+
+#: templates/cluster/workers_list.html:118
+#, fuzzy
+#| msgid "Stats Cache Interval (seconds)"
+msgid "Stats Cache Interval"
+msgstr "Statistik-Cache-Intervall (Sekunden)"
+
+#: templates/cluster/workers_list.html:130
+#, fuzzy
+#| msgid "Primary Enable WireGuard"
+msgid "Primary WireGuard"
+msgstr "WireGuard primär aktivieren"
 
 #: templates/console/console.html:12
 msgid "Clear"
@@ -2351,6 +2377,12 @@ msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Keine Schnittstellen gefunden|Es wurden keine WireGuard‑Schnittstellen "
 "gefunden."
+
+#~ msgid "Force Reload"
+#~ msgstr "Neu laden erzwingen"
+
+#~ msgid "Force Restart"
+#~ msgstr "Neustart erzwingen"
 
 #~ msgid "Options"
 #~ msgstr "Optionen"
