@@ -222,25 +222,26 @@ class ClusterWorker:
                         remote_config_version = data.get('cluster_settings', {}).get('config_version', 0)
                         
                         # Check WireGuard Config
+                        updated = False
                         if int(remote_config_version) != self.config_version:
                             logger.info(f"Config version mismatch (Local: {self.config_version}, Remote: {remote_config_version}). Updating...")
                             config_data = self.download_configs()
                             if config_data:
                                 self.apply_configs(config_data)
                                 self.send_ping()
-                                continue
+                                updated = True
                             else:
                                 logger.error("Failed to download config files.")
                         
                         # Check DNS Config
                         remote_dns_version = int(data.get('cluster_settings', {}).get('dns_version', 0))
-                        if remote_dns_version != self.dns_version:
+                        if not updated and remote_dns_version != self.dns_version:
                             logger.info(f"DNS version mismatch (Local: {self.dns_version}, Remote: {remote_dns_version}). Updating...")
                             if self.download_dns_config():
                                 self.send_ping()
-                                continue
+                                updated = True
 
-                        if int(remote_config_version) == self.config_version and remote_dns_version == self.dns_version:
+                        if not updated and int(remote_config_version) == self.config_version and remote_dns_version == self.dns_version:
                             logger.info(f"No changes detected. Configuration is up to date (WG: {self.config_version}, DNS: {self.dns_version}).")
 
             except Exception as e:
