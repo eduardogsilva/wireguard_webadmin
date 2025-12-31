@@ -6,9 +6,6 @@ if [ -n "$TZ" ]; then
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 fi
 
-# Enable IP forwarding
-sysctl -w net.ipv4.ip_forward=1 > /dev/null 2>&1 || echo "Warning: Could not set net.ipv4.ip_forward"
-
 # Check required variables
 if [ -z "$MASTER_SERVER_ADDRESS" ]; then
     echo "ERROR: MASTER_SERVER_ADDRESS is not set."
