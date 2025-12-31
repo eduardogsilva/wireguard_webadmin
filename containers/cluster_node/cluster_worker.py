@@ -105,6 +105,8 @@ class ClusterWorker:
 
         # 2. Write new files
         for filename, content in files.items():
+            if filename == 'wg-firewall.sh' and isinstance(content, str):
+                content = content.replace('wireguard-webadmin-dns', 'cluster-node-dns')
             filepath = os.path.join(WIREGUARD_DIR, filename)
             with open(filepath, 'w') as f:
                 f.write(content)
