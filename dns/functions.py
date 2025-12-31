@@ -8,8 +8,11 @@ from .models import DNSSettings, StaticHost, DNSFilterList
 def compress_dnsmasq_config():
     output_file = "/etc/dnsmasq/dnsmasq_config.tar.gz"
     base_dir = "/etc/dnsmasq"
-
-    if not ClusterSettings.objects.filter(enabled=True, name='cluster_settings').exists():
+    cluster_settings = ClusterSettings.objects.filter(enabled=True, name='cluster_settings').first()
+    if cluster_settings:
+        cluster_settings.dns_version += 1
+        cluster_settings.save()
+    else:
         if os.path.exists(output_file):
             os.remove(output_file)
         return None

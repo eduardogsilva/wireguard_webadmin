@@ -17,6 +17,6 @@ class WorkerAdmin(admin.ModelAdmin):
 
 @admin.register(WorkerStatus)
 class WorkerStatusAdmin(admin.ModelAdmin):
-    list_display = ('worker', 'last_seen', 'config_version', 'config_pending', 'last_reload', 'last_restart')
-    list_filter = ('config_pending', 'last_seen', 'last_reload', 'last_restart')
+    list_display = ('worker', 'last_seen', 'config_version', 'last_reload', 'last_restart')
+    list_filter = ('last_seen', 'last_reload', 'last_restart')
 

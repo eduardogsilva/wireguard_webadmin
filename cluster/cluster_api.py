@@ -30,6 +30,7 @@ def get_worker(request):
     try:
         worker_config_version = int(request.GET.get('worker_config_version'))
         worker_version = int(request.GET.get('worker_version'))
+        worker_dns_version = int(request.GET.get('dns_version'))
     except:
         worker.error_status = 'missing_version'
         worker.save()
@@ -51,6 +52,8 @@ def get_worker(request):
         worker_status.config_version = worker_config_version
     if worker_status.worker_version != worker_version:
         worker_status.worker_version = worker_version
+    if worker_status.dns_version != worker_dns_version:
+        worker_status.dns_version = worker_dns_version
     worker_status.last_seen = timezone.now()
     worker_status.save()
     
@@ -128,6 +131,7 @@ def api_get_worker_config_files(request):
                 'cluster_mode': cluster_settings.cluster_mode,
                 'restart_mode': cluster_settings.restart_mode,
                 'config_version': cluster_settings.config_version,
+                'dns_version': cluster_settings.dns_version,
             },
         },
         status=200
@@ -155,6 +159,7 @@ def api_cluster_status(request):
             'cluster_mode': cluster_settings.cluster_mode,
             'restart_mode': cluster_settings.restart_mode,
             'config_version': cluster_settings.config_version,
+            'dns_version': cluster_settings.dns_version,
         },
     }
 

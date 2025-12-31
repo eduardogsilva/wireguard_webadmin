@@ -24,7 +24,7 @@
                     <i class="fas fa-exclamation-triangle text-danger blink" title="{{ worker.get_error_status_display }}"></i>
                 {% else %}
                     {% if worker.enabled %}
-                        {% if cluster_settings.config_version != worker.workerstatus.config_version  %}
+                        {% if cluster_settings.config_version != worker.workerstatus.config_version or cluster_settings.dns_version != worker.workerstatus.dns_version %}
                             <i class="fas fa-sync text-primary blink" {% trans 'Configuration sync in progress' %}></i>
                         {% else %}
                             <i class="fas fa-check text-green"></i>
@@ -63,10 +63,7 @@
             </td>
             <td style="width: 1%; white-space: nowrap;">
                 {% if worker.workerstatus %}
-                    {{ worker.workerstatus.config_version }}
-                    {% if worker.workerstatus.config_pending %}
-                        <i class="fas fa-clock text-warning" title="{% trans 'Config Pending' %}"></i>
-                    {% endif %}
+                    {{ worker.workerstatus.config_version }}/{{ worker.workerstatus.dns_version }}
                 {% else %}
 
                 {% endif %}
@@ -110,6 +107,11 @@
                 <th>{% trans 'Config Version' %}</th>
                 <td>{{ cluster_settings.config_version }}</td>
             </tr>
+            <tr>
+                <th>{% trans 'DNS Version' %}</th>
+                <td>{{ cluster_settings.dns_version }}</td>
+            </tr>
+
             <tr>
                 <th>{% trans 'Stats Sync Interval' %}</th>
                 <td>{{ cluster_settings.stats_sync_interval }}s</td>

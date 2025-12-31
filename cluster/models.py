@@ -19,6 +19,7 @@ class ClusterSettings(models.Model):
         )
     )
     config_version = models.PositiveIntegerField(default=0)
+    dns_version = models.PositiveIntegerField(default=0)
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -47,7 +48,7 @@ class Worker(models.Model):
         ('ip_lock', _('IP lock is enabled, but the worker is attempting to access from a different IP address.')),
         ('worker_disabled', _('Worker is not enabled')),
         ('cluster_disabled', _('Cluster is not enabled')),
-        ('missing_version', _('Please report worker_config_version and worker_version in the API request.')),
+        ('missing_version', _('Please report worker_config_version, worker_dns_version and worker_version in the API request.')),
         ('update_required', _('Worker update is required.'))
     ))
 
@@ -61,8 +62,8 @@ class WorkerStatus(models.Model):
     last_seen = models.DateTimeField(auto_now=True)
     last_reload = models.DateTimeField(blank=True, null=True)
     last_restart = models.DateTimeField(blank=True, null=True)
+    dns_version = models.PositiveIntegerField(default=0)
     config_version = models.PositiveIntegerField(default=0)
-    config_pending = models.BooleanField(default=False)
     worker_version = models.PositiveIntegerField(default=0)
     active_peers = models.PositiveIntegerField(default=0)
     wireguard_status = models.JSONField(default=dict)
