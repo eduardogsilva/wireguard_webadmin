@@ -785,7 +785,7 @@ msgstr "Versão da Configuração"
 
 #: templates/cluster/workers_list.html:28
 msgid "Configuration sync in progress"
-msgstr ""
+msgstr "Sincronização de configuração em andamento"
 
 #: templates/cluster/workers_list.html:37
 msgid "The worker is outdated. Please update it to the latest version."
@@ -823,28 +823,20 @@ msgstr "Nenhum worker configurado"
 
 #: templates/cluster/workers_list.html:89
 #: templates/cluster/workers_list.html:92
-#, fuzzy
-#| msgid "Cluster Settings"
 msgid "Cluster Information"
-msgstr "Configurações do Cluster"
+msgstr "Informações do Cluster"
 
 #: templates/cluster/workers_list.html:114
-#, fuzzy
-#| msgid "Stats Sync Interval (seconds)"
 msgid "Stats Sync Interval"
-msgstr "Intervalo de Sincronização de Estatísticas (segundos)"
+msgstr "Intervalo de Sincronização de Estatísticas"
 
 #: templates/cluster/workers_list.html:118
-#, fuzzy
-#| msgid "Stats Cache Interval (seconds)"
 msgid "Stats Cache Interval"
-msgstr "Intervalo de Cache de Estatísticas (segundos)"
+msgstr "Intervalo de Cache de Estatísticas"
 
 #: templates/cluster/workers_list.html:130
-#, fuzzy
-#| msgid "Primary Enable WireGuard"
 msgid "Primary WireGuard"
-msgstr "Habilitar WireGuard Principal"
+msgstr "WireGuard Principal"
 
 #: templates/console/console.html:12
 msgid "Clear"
