@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-31 11:37-0300\n"
+"POT-Creation-Date: 2026-01-01 11:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Name"
 msgstr "Nom"
 
-#: cluster/forms.py:18 templates/cluster/workers_list.html:96
+#: cluster/forms.py:18 templates/cluster/workers_list.html:93
 #: vpn_invite/forms.py:49 vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Activé"
@@ -114,30 +114,34 @@ msgstr "Intervalle de synchronisation des stats (secondes)"
 msgid "Stats Cache Interval (seconds)"
 msgstr "Intervalle de cache des stats (secondes)"
 
-#: cluster/forms.py:103 templates/cluster/workers_list.html:106
+#: cluster/forms.py:103 templates/cluster/workers_list.html:103
 msgid "Cluster Mode"
 msgstr "Mode du cluster"
 
-#: cluster/forms.py:104 templates/cluster/workers_list.html:122
+#: cluster/forms.py:104 templates/cluster/workers_list.html:124
 msgid "Restart Mode"
 msgstr "Mode de redémarrage"
 
-#: cluster/forms.py:105 templates/cluster/workers_list.html:126
+#: cluster/forms.py:105 templates/cluster/workers_list.html:128
 msgid "Worker Display"
 msgstr "Affichage du Worker"
 
-#: cluster/forms.py:146
+#: cluster/forms.py:147
 msgid "Stats sync interval must be at least 60 seconds."
 msgstr ""
 "L'intervalle de synchronisation des statistiques doit être d'au moins 60 "
 "secondes."
 
-#: cluster/forms.py:149
+#: cluster/forms.py:150
 msgid "Stats cache interval must be at least 60 seconds."
 msgstr ""
 "L'intervalle de cache des statistiques doit être d'au moins 60 secondes."
 
-#: cluster/models.py:47
+#: cluster/forms.py:153
+msgid "Disabling WireGuard on the master server is currently not supported."
+msgstr ""
+
+#: cluster/models.py:48
 msgid ""
 "IP lock is enabled, but the worker is attempting to access from a different "
 "IP address."
@@ -145,59 +149,63 @@ msgstr ""
 "Le verrouillage IP est activé, mais le worker tente d'accéder à partir d'une "
 "adresse IP différente."
 
-#: cluster/models.py:48
+#: cluster/models.py:49
 msgid "Worker is not enabled"
 msgstr "Le worker n'est pas activé"
 
-#: cluster/models.py:49
+#: cluster/models.py:50
 msgid "Cluster is not enabled"
 msgstr "Le cluster n'est pas activé"
 
-#: cluster/models.py:50
+#: cluster/models.py:51
+#, fuzzy
+#| msgid ""
+#| "Please report worker_config_version and worker_version in the API request."
 msgid ""
-"Please report worker_config_version and worker_version in the API request."
+"Please report worker_config_version, worker_dns_version and worker_version "
+"in the API request."
 msgstr ""
 "Veuillez indiquer worker_config_version et worker_version dans la requête "
 "API."
 
-#: cluster/models.py:51
+#: cluster/models.py:52
 msgid "Worker update is required."
 msgstr "La mise à jour du worker est requise."
 
-#: cluster/views.py:15 cluster/views.py:33 cluster/views.py:102
+#: cluster/views.py:16 cluster/views.py:34 cluster/views.py:103
 #: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Accès refusé"
 
-#: cluster/views.py:18 templates/base.html:162
+#: cluster/views.py:19 templates/base.html:162
 msgid "Cluster"
 msgstr "Cluster"
 
-#: cluster/views.py:39
+#: cluster/views.py:40
 msgid "Edit Worker: "
 msgstr "Modifier Worker : "
 
-#: cluster/views.py:45
+#: cluster/views.py:46
 msgid "Worker deleted|Worker deleted: "
 msgstr "Worker supprimé|Worker supprimé : "
 
-#: cluster/views.py:48
+#: cluster/views.py:49
 msgid "Worker not deleted|Invalid confirmation."
 msgstr "Worker non supprimé|Confirmation invalide."
 
-#: cluster/views.py:52 templates/cluster/workers_list.html:87
+#: cluster/views.py:53 templates/cluster/workers_list.html:84
 msgid "Add Worker"
 msgstr "Ajouter Worker"
 
-#: cluster/views.py:63
+#: cluster/views.py:64
 msgid "Worker updated|Worker updated: "
 msgstr "Worker mis à jour|Worker mis à jour : "
 
-#: cluster/views.py:65
+#: cluster/views.py:66
 msgid "Worker created|Worker created: "
 msgstr "Worker créé|Worker créé : "
 
-#: cluster/views.py:70
+#: cluster/views.py:71
 msgid ""
 "\n"
 "        <h5>Worker Configuration</h5>\n"
@@ -241,15 +249,15 @@ msgstr ""
 "nom d’hôte).</p>\n"
 "        "
 
-#: cluster/views.py:105 templates/cluster/workers_list.html:88
+#: cluster/views.py:106 templates/cluster/workers_list.html:85
 msgid "Cluster Settings"
 msgstr "Paramètres du Cluster"
 
-#: cluster/views.py:111
+#: cluster/views.py:112
 msgid "Cluster settings updated successfully."
 msgstr "Paramètres du cluster mis à jour avec succès."
 
-#: cluster/views.py:118
+#: cluster/views.py:120
 msgid ""
 "\n"
 "        <h5>Cluster Mode</h5>\n"
@@ -361,25 +369,25 @@ msgstr "URL de la liste"
 msgid "DNS Filter List Details"
 msgstr "Détails de la liste de filtres DNS"
 
-#: dns/views.py:33
+#: dns/views.py:34
 msgid "DNS settings applied successfully"
 msgstr "Paramètres DNS appliqués avec succès"
 
-#: dns/views.py:68
+#: dns/views.py:69
 msgid "Default DNS Filter List created successfully"
 msgstr "Liste de filtres DNS par défaut créée avec succès"
 
-#: dns/views.py:71
+#: dns/views.py:72
 msgid ""
 "Pending Changes|There are pending DNS changes that have not been applied"
 msgstr ""
 "Modifications en attente|Des changements DNS n’ont pas encore été appliqués"
 
-#: dns/views.py:90
+#: dns/views.py:91
 msgid "DNS Forwarders"
 msgstr "Redirecteurs DNS"
 
-#: dns/views.py:91
+#: dns/views.py:92
 msgid ""
 "All DNS queries will be forwarded to the primary resolver. If the primary "
 "resolver is not available, the secondary resolver will be used."
@@ -387,63 +395,63 @@ msgstr ""
 "Toutes les requêtes DNS seront transmises au résolveur primaire. Si celui‑ci "
 "est indisponible, le résolveur secondaire sera utilisé."
 
-#: dns/views.py:118
+#: dns/views.py:119
 msgid "Static DNS deleted successfully"
 msgstr "Entrée DNS statique supprimée avec succès"
 
-#: dns/views.py:121
+#: dns/views.py:122
 msgid "Static DNS not deleted|Invalid confirmation"
 msgstr "DNS statique non supprimé|Confirmation invalide"
 
-#: dns/views.py:131
+#: dns/views.py:132
 msgid "Static DNS saved successfully"
 msgstr "DNS statique enregistré avec succès"
 
-#: dns/views.py:154
+#: dns/views.py:155
 msgid "DNS Filter List not deleted | Filter List is enabled"
 msgstr "Liste de filtres DNS non supprimée | La liste est activée"
 
-#: dns/views.py:161
+#: dns/views.py:162
 msgid "Error removing config file: "
 msgstr "Erreur lors de la suppression du fichier de configuration: "
 
-#: dns/views.py:164
+#: dns/views.py:165
 msgid "DNS Filter List deleted successfully"
 msgstr "Liste de filtres DNS supprimée avec succès"
 
-#: dns/views.py:167
+#: dns/views.py:168
 msgid "DNS Filter List not deleted | Invalid confirmation"
 msgstr "Liste de filtres DNS non supprimée | Confirmation invalide"
 
-#: dns/views.py:177
+#: dns/views.py:178
 msgid "DNS Filter List saved successfully"
 msgstr "Liste de filtres DNS enregistrée avec succès"
 
-#: dns/views.py:204
+#: dns/views.py:205
 msgid "Failed to read existing config file: "
 msgstr "Impossible de lire le fichier de configuration existant: "
 
-#: dns/views.py:222
+#: dns/views.py:223
 msgid "Failed to fetch the host list: "
 msgstr "Échec du téléchargement de la liste d’hôtes: "
 
-#: dns/views.py:232
+#: dns/views.py:233
 msgid "Failed to write config file: "
 msgstr "Impossible d’écrire le fichier de configuration: "
 
-#: dns/views.py:257
+#: dns/views.py:258
 msgid "DNS Filter List updated successfully"
 msgstr "Liste de filtres DNS mise à jour avec succès"
 
-#: dns/views.py:274
+#: dns/views.py:275
 msgid "DNS Filter List enabled successfully"
 msgstr "Liste de filtres DNS activée avec succès"
 
-#: dns/views.py:276
+#: dns/views.py:277
 msgid "DNS Filter List not enabled | No valid hosts found"
 msgstr "Liste de filtres DNS non activée | Aucun hôte valide trouvé"
 
-#: dns/views.py:281
+#: dns/views.py:282
 msgid "DNS Filter List disabled successfully"
 msgstr "Liste de filtres DNS désactivée avec succès"
 
@@ -782,7 +790,7 @@ msgid "Last Seen"
 msgstr "Dernière connexion"
 
 #: templates/cluster/workers_list.html:13
-#: templates/cluster/workers_list.html:110
+#: templates/cluster/workers_list.html:107
 msgid "Config Version"
 msgstr "Version de configuration"
 
@@ -808,37 +816,106 @@ msgstr "Non défini"
 msgid "Never"
 msgstr "Jamais"
 
-#: templates/cluster/workers_list.html:68
-msgid "Config Pending"
-msgstr "Configuration en attente"
-
-#: templates/cluster/workers_list.html:77
+#: templates/cluster/workers_list.html:74
 #: templates/dns/static_host_list.html:74 templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/wireguard_peer_list.html:196
 msgid "Edit"
 msgstr "Modifier"
 
-#: templates/cluster/workers_list.html:82
+#: templates/cluster/workers_list.html:79
 msgid "No workers configured"
 msgstr "Aucun worker configuré"
 
+#: templates/cluster/workers_list.html:86
 #: templates/cluster/workers_list.html:89
-#: templates/cluster/workers_list.html:92
 msgid "Cluster Information"
 msgstr "Informations sur le cluster"
 
-#: templates/cluster/workers_list.html:114
+#: templates/cluster/workers_list.html:111
+#, fuzzy
+#| msgid "Version"
+msgid "DNS Version"
+msgstr "Version"
+
+#: templates/cluster/workers_list.html:116
 msgid "Stats Sync Interval"
 msgstr "Intervalle de synchronisation des statistiques"
 
-#: templates/cluster/workers_list.html:118
+#: templates/cluster/workers_list.html:120
 msgid "Stats Cache Interval"
 msgstr "Intervalle de cache des statistiques"
 
-#: templates/cluster/workers_list.html:130
+#: templates/cluster/workers_list.html:132
 msgid "Primary WireGuard"
 msgstr "Activer WireGuard principal"
+
+#: templates/cluster/workers_list.html:150
+#, fuzzy
+#| msgid "Cluster Settings"
+msgid "Cluster Feature – Testing Phase"
+msgstr "Paramètres du Cluster"
+
+#: templates/cluster/workers_list.html:157
+msgid "The cluster functionality is currently released as experimental."
+msgstr ""
+
+#: templates/cluster/workers_list.html:158
+msgid "At this stage, only core features are implemented:"
+msgstr ""
+
+#: templates/cluster/workers_list.html:160
+#, fuzzy
+#| msgid "Configuration sync in progress"
+msgid "Configuration synchronization service"
+msgstr "Synchronisation de la configuration en cours"
+
+#: templates/cluster/workers_list.html:161
+msgid "Primary node mirroring (WireGuard and firewall rules)"
+msgstr ""
+
+#: templates/cluster/workers_list.html:162
+msgid "DNS rules mirroring"
+msgstr ""
+
+#: templates/cluster/workers_list.html:165
+msgid "Warning:"
+msgstr ""
+
+#: templates/cluster/workers_list.html:167
+msgid ""
+"In the current version, peer state information is not collected by the "
+"master server."
+msgstr ""
+
+#: templates/cluster/workers_list.html:168
+msgid ""
+"Traffic data, IP address, handshake status, and online/offline state will "
+"not be visible for peers connected to cluster nodes."
+msgstr ""
+
+#: templates/cluster/workers_list.html:170
+msgid "Next priority features (coming soon):"
+msgstr ""
+
+#: templates/cluster/workers_list.html:172
+msgid "Traffic data synchronization"
+msgstr ""
+
+#: templates/cluster/workers_list.html:173
+msgid ""
+"Server selection dropdown before downloading peer configs or VPN invites"
+msgstr ""
+
+#: templates/cluster/workers_list.html:177
+msgid "For more information, please visit:"
+msgstr ""
+
+#: templates/cluster/workers_list.html:181
+#, fuzzy
+#| msgid "Instance"
+msgid "I Understand"
+msgstr "Instance"
 
 #: templates/console/console.html:12
 msgid "Clear"
@@ -2309,7 +2386,7 @@ msgstr "Adresse IP mise à jour | Mise à jour réussie."
 msgid "IP address added|IP address added successfully."
 msgstr "Adresse IP ajoutée | Ajout réussi."
 
-#: wireguard_tools/views.py:167
+#: wireguard_tools/views.py:165
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/."
@@ -2317,7 +2394,7 @@ msgstr ""
 "Exportation réussie! | Les fichiers de configuration WireGuard ont été "
 "exportés vers /etc/wireguard/."
 
-#: wireguard_tools/views.py:169
+#: wireguard_tools/views.py:167
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/. Don't forget to restart the interfaces."
@@ -2325,19 +2402,19 @@ msgstr ""
 "Exportation réussie! | Les fichiers WireGuard ont été exportés vers /etc/"
 "wireguard/. N’oubliez pas de redémarrer les interfaces."
 
-#: wireguard_tools/views.py:262
+#: wireguard_tools/views.py:260
 msgid "Error reloading"
 msgstr "Erreur de rechargement"
 
-#: wireguard_tools/views.py:274
+#: wireguard_tools/views.py:272
 msgid "Error stopping"
 msgstr "Erreur à l’arrêt"
 
-#: wireguard_tools/views.py:279
+#: wireguard_tools/views.py:277
 msgid "Error starting"
 msgstr "Erreur au démarrage"
 
-#: wireguard_tools/views.py:286
+#: wireguard_tools/views.py:284
 msgid ""
 "WARNING|Please note that the interface was reloaded, not restarted. Double-"
 "check if the the peers are working as expected. If you find any issues, "
@@ -2346,23 +2423,26 @@ msgstr ""
 "AVERTISSEMENT | L’interface a été rechargée, pas redémarrée. Vérifiez que "
 "les peers fonctionnent comme prévu ; signalez tout problème rencontré."
 
-#: wireguard_tools/views.py:287
+#: wireguard_tools/views.py:285
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
 msgstr "WireGuard rechargé | Le service WireGuard a été rechargé."
 
-#: wireguard_tools/views.py:289
+#: wireguard_tools/views.py:287
 msgid "WireGuard restarted|The WireGuard service has been restarted."
 msgstr "WireGuard redémarré | Le service WireGuard a été redémarré."
 
-#: wireguard_tools/views.py:292
+#: wireguard_tools/views.py:290
 msgid "Errors encountered|Error processing one or more interfaces."
 msgstr ""
 "Erreurs rencontrées | Problème lors du traitement d’une ou plusieurs "
 "interfaces."
 
-#: wireguard_tools/views.py:295
+#: wireguard_tools/views.py:293
 msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr "Aucune interface trouvée | Aucune interface WireGuard à traiter."
+
+#~ msgid "Config Pending"
+#~ msgstr "Configuration en attente"
 
 #~ msgid "Force Reload"
 #~ msgstr "Forcer le rechargement"

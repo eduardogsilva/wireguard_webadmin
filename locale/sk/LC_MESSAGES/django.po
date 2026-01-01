@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-31 11:37-0300\n"
+"POT-Creation-Date: 2026-01-01 11:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Name"
 msgstr "Názov"
 
-#: cluster/forms.py:18 templates/cluster/workers_list.html:96
+#: cluster/forms.py:18 templates/cluster/workers_list.html:93
 #: vpn_invite/forms.py:49 vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Povolené"
@@ -115,84 +115,92 @@ msgstr "Interval synchronizácie štatistík (sekundy)"
 msgid "Stats Cache Interval (seconds)"
 msgstr "Interval cache štatistík (sekundy)"
 
-#: cluster/forms.py:103 templates/cluster/workers_list.html:106
+#: cluster/forms.py:103 templates/cluster/workers_list.html:103
 msgid "Cluster Mode"
 msgstr "Režim clustra"
 
-#: cluster/forms.py:104 templates/cluster/workers_list.html:122
+#: cluster/forms.py:104 templates/cluster/workers_list.html:124
 msgid "Restart Mode"
 msgstr "Režim reštartu"
 
-#: cluster/forms.py:105 templates/cluster/workers_list.html:126
+#: cluster/forms.py:105 templates/cluster/workers_list.html:128
 msgid "Worker Display"
 msgstr "Zobrazenie workera"
 
-#: cluster/forms.py:146
+#: cluster/forms.py:147
 msgid "Stats sync interval must be at least 60 seconds."
 msgstr "Interval synchronizácie štatistík musí byť aspoň 60 sekúnd."
 
-#: cluster/forms.py:149
+#: cluster/forms.py:150
 msgid "Stats cache interval must be at least 60 seconds."
 msgstr "Interval cache štatistík musí byť aspoň 60 sekúnd."
 
-#: cluster/models.py:47
+#: cluster/forms.py:153
+msgid "Disabling WireGuard on the master server is currently not supported."
+msgstr ""
+
+#: cluster/models.py:48
 msgid ""
 "IP lock is enabled, but the worker is attempting to access from a different "
 "IP address."
 msgstr "IP zámok je povolený, ale worker sa pokúša o prístup z inej IP adresy."
 
-#: cluster/models.py:48
+#: cluster/models.py:49
 msgid "Worker is not enabled"
 msgstr "Worker nie je povolený"
 
-#: cluster/models.py:49
+#: cluster/models.py:50
 msgid "Cluster is not enabled"
 msgstr "Cluster nie je povolený"
 
-#: cluster/models.py:50
+#: cluster/models.py:51
+#, fuzzy
+#| msgid ""
+#| "Please report worker_config_version and worker_version in the API request."
 msgid ""
-"Please report worker_config_version and worker_version in the API request."
+"Please report worker_config_version, worker_dns_version and worker_version "
+"in the API request."
 msgstr ""
 "Prosím, uveďte worker_config_version a worker_version v požiadavke API."
 
-#: cluster/models.py:51
+#: cluster/models.py:52
 msgid "Worker update is required."
 msgstr "Vyžaduje sa aktualizácia workera."
 
-#: cluster/views.py:15 cluster/views.py:33 cluster/views.py:102
+#: cluster/views.py:16 cluster/views.py:34 cluster/views.py:103
 #: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Prístup zamietnutý"
 
-#: cluster/views.py:18 templates/base.html:162
+#: cluster/views.py:19 templates/base.html:162
 msgid "Cluster"
 msgstr "Cluster"
 
-#: cluster/views.py:39
+#: cluster/views.py:40
 msgid "Edit Worker: "
 msgstr "Upraviť Worker: "
 
-#: cluster/views.py:45
+#: cluster/views.py:46
 msgid "Worker deleted|Worker deleted: "
 msgstr "Worker vymazaný|Worker vymazaný: "
 
-#: cluster/views.py:48
+#: cluster/views.py:49
 msgid "Worker not deleted|Invalid confirmation."
 msgstr "Worker nebol vymazaný|Neplatné potvrdenie."
 
-#: cluster/views.py:52 templates/cluster/workers_list.html:87
+#: cluster/views.py:53 templates/cluster/workers_list.html:84
 msgid "Add Worker"
 msgstr "Pridať Worker"
 
-#: cluster/views.py:63
+#: cluster/views.py:64
 msgid "Worker updated|Worker updated: "
 msgstr "Worker aktualizovaný|Worker aktualizovaný: "
 
-#: cluster/views.py:65
+#: cluster/views.py:66
 msgid "Worker created|Worker created: "
 msgstr "Worker vytvorený|Worker vytvorený: "
 
-#: cluster/views.py:70
+#: cluster/views.py:71
 msgid ""
 "\n"
 "        <h5>Worker Configuration</h5>\n"
@@ -236,15 +244,15 @@ msgstr ""
 "mesto, názov hostiteľa).</p>\n"
 "        "
 
-#: cluster/views.py:105 templates/cluster/workers_list.html:88
+#: cluster/views.py:106 templates/cluster/workers_list.html:85
 msgid "Cluster Settings"
 msgstr "Nastavenia Clustra"
 
-#: cluster/views.py:111
+#: cluster/views.py:112
 msgid "Cluster settings updated successfully."
 msgstr "Nastavenia clustra úspešne aktualizované."
 
-#: cluster/views.py:118
+#: cluster/views.py:120
 msgid ""
 "\n"
 "        <h5>Cluster Mode</h5>\n"
@@ -354,24 +362,24 @@ msgstr "URL zoznamu"
 msgid "DNS Filter List Details"
 msgstr "Podrobnosti DNS filter zoznamu"
 
-#: dns/views.py:33
+#: dns/views.py:34
 msgid "DNS settings applied successfully"
 msgstr "DNS nastavenia boli úspešne aplikované"
 
-#: dns/views.py:68
+#: dns/views.py:69
 msgid "Default DNS Filter List created successfully"
 msgstr "Predvolený DNS filter zoznam bol úspešne vytvorený"
 
-#: dns/views.py:71
+#: dns/views.py:72
 msgid ""
 "Pending Changes|There are pending DNS changes that have not been applied"
 msgstr "Čakajúce zmeny|Existujú čakajúce DNS zmeny, ktoré neboli aplikované"
 
-#: dns/views.py:90
+#: dns/views.py:91
 msgid "DNS Forwarders"
 msgstr "DNS servery"
 
-#: dns/views.py:91
+#: dns/views.py:92
 msgid ""
 "All DNS queries will be forwarded to the primary resolver. If the primary "
 "resolver is not available, the secondary resolver will be used."
@@ -379,63 +387,63 @@ msgstr ""
 "Všetky DNS dotazy budú presmerované na primárny DNS server. Ak primárny "
 "server nebude dostupný, použije sa sekundárny DNS server."
 
-#: dns/views.py:118
+#: dns/views.py:119
 msgid "Static DNS deleted successfully"
 msgstr "Statický DNS bol úspešne vymazaný"
 
-#: dns/views.py:121
+#: dns/views.py:122
 msgid "Static DNS not deleted|Invalid confirmation"
 msgstr "Statický DNS nebol vymazaný|Neplatné potvrdenie"
 
-#: dns/views.py:131
+#: dns/views.py:132
 msgid "Static DNS saved successfully"
 msgstr "Statický DNS bol úspešne uložený"
 
-#: dns/views.py:154
+#: dns/views.py:155
 msgid "DNS Filter List not deleted | Filter List is enabled"
 msgstr "DNS filter zoznam nebol vymazaný | Filter zoznam je povolený"
 
-#: dns/views.py:161
+#: dns/views.py:162
 msgid "Error removing config file: "
 msgstr "Chyba pri odstraňovaní konfiguračného súboru: "
 
-#: dns/views.py:164
+#: dns/views.py:165
 msgid "DNS Filter List deleted successfully"
 msgstr "DNS filter zoznam bol úspešne vymazaný"
 
-#: dns/views.py:167
+#: dns/views.py:168
 msgid "DNS Filter List not deleted | Invalid confirmation"
 msgstr "DNS filter zoznam nebol vymazaný | Neplatné potvrdenie"
 
-#: dns/views.py:177
+#: dns/views.py:178
 msgid "DNS Filter List saved successfully"
 msgstr "DNS filter zoznam bol úspešne uložený"
 
-#: dns/views.py:204
+#: dns/views.py:205
 msgid "Failed to read existing config file: "
 msgstr "Nepodarilo sa čítať existujúci konfiguračný súbor: "
 
-#: dns/views.py:222
+#: dns/views.py:223
 msgid "Failed to fetch the host list: "
 msgstr "Nepodarilo sa získať zoznam hostiteľov: "
 
-#: dns/views.py:232
+#: dns/views.py:233
 msgid "Failed to write config file: "
 msgstr "Nepodarilo sa zapísať konfiguračný súbor: "
 
-#: dns/views.py:257
+#: dns/views.py:258
 msgid "DNS Filter List updated successfully"
 msgstr "DNS filter zoznam bol úspešne aktualizovaný"
 
-#: dns/views.py:274
+#: dns/views.py:275
 msgid "DNS Filter List enabled successfully"
 msgstr "DNS filter zoznam bol úspešne povolený"
 
-#: dns/views.py:276
+#: dns/views.py:277
 msgid "DNS Filter List not enabled | No valid hosts found"
 msgstr "DNS filter zoznam nebol povolený | Neboli nájdení platní hostiteľia"
 
-#: dns/views.py:281
+#: dns/views.py:282
 msgid "DNS Filter List disabled successfully"
 msgstr "DNS filter zoznam bol úspešne zakázaný"
 
@@ -770,7 +778,7 @@ msgid "Last Seen"
 msgstr "Naposledy videný"
 
 #: templates/cluster/workers_list.html:13
-#: templates/cluster/workers_list.html:110
+#: templates/cluster/workers_list.html:107
 msgid "Config Version"
 msgstr "Verzia konfigurácie"
 
@@ -795,37 +803,106 @@ msgstr "Nenastavené"
 msgid "Never"
 msgstr "Nikdy"
 
-#: templates/cluster/workers_list.html:68
-msgid "Config Pending"
-msgstr "Konfigurácia čaká"
-
-#: templates/cluster/workers_list.html:77
+#: templates/cluster/workers_list.html:74
 #: templates/dns/static_host_list.html:74 templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/wireguard_peer_list.html:196
 msgid "Edit"
 msgstr "Upraviť"
 
-#: templates/cluster/workers_list.html:82
+#: templates/cluster/workers_list.html:79
 msgid "No workers configured"
 msgstr "Nie sú nakonfigurovaní žiadni workery"
 
+#: templates/cluster/workers_list.html:86
 #: templates/cluster/workers_list.html:89
-#: templates/cluster/workers_list.html:92
 msgid "Cluster Information"
 msgstr "Informácie o klastri"
 
-#: templates/cluster/workers_list.html:114
+#: templates/cluster/workers_list.html:111
+#, fuzzy
+#| msgid "Version"
+msgid "DNS Version"
+msgstr "Verzia"
+
+#: templates/cluster/workers_list.html:116
 msgid "Stats Sync Interval"
 msgstr "Interval synchronizácie štatistík"
 
-#: templates/cluster/workers_list.html:118
+#: templates/cluster/workers_list.html:120
 msgid "Stats Cache Interval"
 msgstr "Interval cache štatistík"
 
-#: templates/cluster/workers_list.html:130
+#: templates/cluster/workers_list.html:132
 msgid "Primary WireGuard"
 msgstr "Povoliť primárny WireGuard"
+
+#: templates/cluster/workers_list.html:150
+#, fuzzy
+#| msgid "Cluster Settings"
+msgid "Cluster Feature – Testing Phase"
+msgstr "Nastavenia Clustra"
+
+#: templates/cluster/workers_list.html:157
+msgid "The cluster functionality is currently released as experimental."
+msgstr ""
+
+#: templates/cluster/workers_list.html:158
+msgid "At this stage, only core features are implemented:"
+msgstr ""
+
+#: templates/cluster/workers_list.html:160
+#, fuzzy
+#| msgid "Configuration sync in progress"
+msgid "Configuration synchronization service"
+msgstr "Synchronizácia konfigurácie prebieha"
+
+#: templates/cluster/workers_list.html:161
+msgid "Primary node mirroring (WireGuard and firewall rules)"
+msgstr ""
+
+#: templates/cluster/workers_list.html:162
+msgid "DNS rules mirroring"
+msgstr ""
+
+#: templates/cluster/workers_list.html:165
+msgid "Warning:"
+msgstr ""
+
+#: templates/cluster/workers_list.html:167
+msgid ""
+"In the current version, peer state information is not collected by the "
+"master server."
+msgstr ""
+
+#: templates/cluster/workers_list.html:168
+msgid ""
+"Traffic data, IP address, handshake status, and online/offline state will "
+"not be visible for peers connected to cluster nodes."
+msgstr ""
+
+#: templates/cluster/workers_list.html:170
+msgid "Next priority features (coming soon):"
+msgstr ""
+
+#: templates/cluster/workers_list.html:172
+msgid "Traffic data synchronization"
+msgstr ""
+
+#: templates/cluster/workers_list.html:173
+msgid ""
+"Server selection dropdown before downloading peer configs or VPN invites"
+msgstr ""
+
+#: templates/cluster/workers_list.html:177
+msgid "For more information, please visit:"
+msgstr ""
+
+#: templates/cluster/workers_list.html:181
+#, fuzzy
+#| msgid "Instance"
+msgid "I Understand"
+msgstr "Inštancia"
 
 #: templates/console/console.html:12
 msgid "Clear"
@@ -2289,7 +2366,7 @@ msgstr "IP adresa aktualizovaná|IP adresa bola úspešne aktualizovaná."
 msgid "IP address added|IP address added successfully."
 msgstr "IP adresa pridaná|IP adresa bola úspešne pridaná."
 
-#: wireguard_tools/views.py:167
+#: wireguard_tools/views.py:165
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/."
@@ -2297,7 +2374,7 @@ msgstr ""
 "Export úspešný!|WireGuard konfiguračné súbory boli exportované do /etc/"
 "wireguard/."
 
-#: wireguard_tools/views.py:169
+#: wireguard_tools/views.py:167
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/. Don't forget to restart the interfaces."
@@ -2305,19 +2382,19 @@ msgstr ""
 "Export úspešný!|WireGuard konfiguračné súbory boli exportované do /etc/"
 "wireguard/. Nezabudnite reštartovať rozhrania."
 
-#: wireguard_tools/views.py:262
+#: wireguard_tools/views.py:260
 msgid "Error reloading"
 msgstr "Chyba pri opätovnom načítaní"
 
-#: wireguard_tools/views.py:274
+#: wireguard_tools/views.py:272
 msgid "Error stopping"
 msgstr "Chyba pri zastavovaní"
 
-#: wireguard_tools/views.py:279
+#: wireguard_tools/views.py:277
 msgid "Error starting"
 msgstr "Chyba pri spúšťaní"
 
-#: wireguard_tools/views.py:286
+#: wireguard_tools/views.py:284
 msgid ""
 "WARNING|Please note that the interface was reloaded, not restarted. Double-"
 "check if the the peers are working as expected. If you find any issues, "
@@ -2327,24 +2404,27 @@ msgstr ""
 "reštartované. Dôkladne skontrolujte či peeri fungujú podľa očakávania. Ak "
 "nájdete problémy, prosím nahláste ich."
 
-#: wireguard_tools/views.py:287
+#: wireguard_tools/views.py:285
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
 msgstr "WireGuard znovu načítaný|Služba WireGuard bola znovu načítaná."
 
-#: wireguard_tools/views.py:289
+#: wireguard_tools/views.py:287
 msgid "WireGuard restarted|The WireGuard service has been restarted."
 msgstr "WireGuard reštartovaný|Služba WireGuard bola reštartovaná."
 
-#: wireguard_tools/views.py:292
+#: wireguard_tools/views.py:290
 msgid "Errors encountered|Error processing one or more interfaces."
 msgstr ""
 "Vyskytli sa chyby|Chyba pri spracovaní jedného alebo viacerých rozhraní."
 
-#: wireguard_tools/views.py:295
+#: wireguard_tools/views.py:293
 msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Neboli nájdené rozhrania|Neboli nájdené žiadne WireGuard rozhrania na "
 "spracovanie."
+
+#~ msgid "Config Pending"
+#~ msgstr "Konfigurácia čaká"
 
 #~ msgid "Force Reload"
 #~ msgstr "Vynútiť načítanie"
