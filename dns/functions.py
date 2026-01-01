@@ -9,10 +9,7 @@ def compress_dnsmasq_config():
     output_file = "/etc/dnsmasq/dnsmasq_config.tar.gz"
     base_dir = "/etc/dnsmasq"
     cluster_settings = ClusterSettings.objects.filter(enabled=True, name='cluster_settings').first()
-    if cluster_settings:
-        cluster_settings.dns_version += 1
-        cluster_settings.save()
-    else:
+    if not cluster_settings:
         if os.path.exists(output_file):
             os.remove(output_file)
         return None
@@ -36,9 +33,14 @@ def compress_dnsmasq_config():
         if newest_conf_mtime <= tar_mtime:
             return output_file
 
+    # If we reach here, we need to increment DNS version and recompile the tar.gz
+    cluster_settings.dns_version += 1
+    cluster_settings.save()
     dns_version_file = os.path.join(base_dir, "config_version.conf")
     with open(dns_version_file, "w", encoding="utf-8") as f:
         f.write(f"DNS_VERSION={cluster_settings.dns_version}\n")
+    if "config_version.conf" not in conf_files:
+        conf_files.append("config_version.conf")
 
     # Create tar.gz
     tmp_output = output_file + ".tmp"

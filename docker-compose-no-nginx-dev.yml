@@ -24,7 +24,7 @@ services:
       - "8000:8000"
       # Warning: Docker will have a hard time handling large amount of ports. Expose only the ports that you need.
       # Ports for multiple WireGuard instances. (Probably, you just need one)
-      - "51820-51839:51820-51839/udp"
+      #- "51820-51839:51820-51839/udp"
       # Ports for port forwarding rules. Add your own ports here if you need them.
       - "8080-8089:8080-8089/tcp"
       
