@@ -3,7 +3,9 @@ services:
   cluster-node:
     container_name: cluster-node
     restart: unless-stopped
-    image: eduardosilva/wireguard-webadmin-cluster-node:latest
+    build:
+      context: containers/cluster_node
+      dockerfile: Dockerfile-cluster_node
     environment:
       - MASTER_SERVER_ADDRESS=${MASTER_SERVER_ADDRESS}
       - DEBUG_MODE=${DEBUG_MODE}
@@ -13,9 +15,9 @@ services:
     volumes:
       - cluster_node_wireguard:/etc/wireguard
       - cluster_node_dnsmasq_conf:/etc/dnsmasq/
-    ports:
+    #ports:
       # Ports for WireGuard instances.
-      - "51820-51839:51820-51839/udp"
+      #- "51820-51839:51820-51839/udp"
     cap_add:
       - NET_ADMIN
       - SYS_MODULE

@@ -28,3 +28,9 @@ services:
     build:
       context: ./containers/rrdtool
       dockerfile: Dockerfile-rrdtool
+
+  wireguard-webadmin-cluster-node:
+    image: eduardosilva/wireguard-webadmin-cluster-node:latest
+    build:
+      context: ./containers/cluster_node
+      dockerfile: Dockerfile-cluster_node
