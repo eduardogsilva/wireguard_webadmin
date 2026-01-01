@@ -139,7 +139,7 @@ msgstr ""
 
 #: cluster/forms.py:153
 msgid "Disabling WireGuard on the master server is currently not supported."
-msgstr ""
+msgstr "La désactivation de WireGuard sur le serveur maître n'est pas prise en charge pour le moment."
 
 #: cluster/models.py:48
 msgid ""
@@ -158,15 +158,12 @@ msgid "Cluster is not enabled"
 msgstr "Le cluster n'est pas activé"
 
 #: cluster/models.py:51
-#, fuzzy
-#| msgid ""
-#| "Please report worker_config_version and worker_version in the API request."
 msgid ""
 "Please report worker_config_version, worker_dns_version and worker_version "
 "in the API request."
 msgstr ""
-"Veuillez indiquer worker_config_version et worker_version dans la requête "
-"API."
+"Veuillez indiquer worker_config_version, worker_dns_version et "
+"worker_version dans la requête API."
 
 #: cluster/models.py:52
 msgid "Worker update is required."
@@ -833,10 +830,8 @@ msgid "Cluster Information"
 msgstr "Informations sur le cluster"
 
 #: templates/cluster/workers_list.html:111
-#, fuzzy
-#| msgid "Version"
 msgid "DNS Version"
-msgstr "Version"
+msgstr "Version du DNS"
 
 #: templates/cluster/workers_list.html:116
 msgid "Stats Sync Interval"
@@ -851,71 +846,72 @@ msgid "Primary WireGuard"
 msgstr "Activer WireGuard principal"
 
 #: templates/cluster/workers_list.html:150
-#, fuzzy
-#| msgid "Cluster Settings"
 msgid "Cluster Feature – Testing Phase"
-msgstr "Paramètres du Cluster"
+msgstr "Fonctionnalité de Cluster – Phase de test"
 
 #: templates/cluster/workers_list.html:157
 msgid "The cluster functionality is currently released as experimental."
-msgstr ""
+msgstr "La fonctionnalité de cluster est actuellement en phase expérimentale."
 
 #: templates/cluster/workers_list.html:158
 msgid "At this stage, only core features are implemented:"
-msgstr ""
+msgstr "À ce stade, seules les fonctionnalités de base sont implémentées :"
 
 #: templates/cluster/workers_list.html:160
-#, fuzzy
-#| msgid "Configuration sync in progress"
 msgid "Configuration synchronization service"
-msgstr "Synchronisation de la configuration en cours"
+msgstr "Service de synchronisation de la configuration"
 
 #: templates/cluster/workers_list.html:161
 msgid "Primary node mirroring (WireGuard and firewall rules)"
-msgstr ""
+msgstr "Mise en miroir du nœud primaire (WireGuard et règles de pare-feu)"
 
 #: templates/cluster/workers_list.html:162
 msgid "DNS rules mirroring"
-msgstr ""
+msgstr "Mise en miroir des règles DNS"
 
 #: templates/cluster/workers_list.html:165
 msgid "Warning:"
-msgstr ""
+msgstr "Avertissement :"
 
 #: templates/cluster/workers_list.html:167
 msgid ""
 "In the current version, peer state information is not collected by the "
 "master server."
 msgstr ""
+"Dans la version actuelle, les informations d'état des pairs ne sont pas "
+"collectées par le serveur maître."
 
 #: templates/cluster/workers_list.html:168
 msgid ""
 "Traffic data, IP address, handshake status, and online/offline state will "
 "not be visible for peers connected to cluster nodes."
 msgstr ""
+"Les données de trafic, l'adresse IP, le statut du handshake et l'état en "
+"ligne/hors ligne ne seront pas visibles pour les pairs connectés aux nœuds "
+"du cluster."
 
 #: templates/cluster/workers_list.html:170
 msgid "Next priority features (coming soon):"
-msgstr ""
+msgstr "Prochaines fonctionnalités prioritaires (bientôt) :"
 
 #: templates/cluster/workers_list.html:172
 msgid "Traffic data synchronization"
-msgstr ""
+msgstr "Synchronisation des données de trafic"
 
 #: templates/cluster/workers_list.html:173
 msgid ""
 "Server selection dropdown before downloading peer configs or VPN invites"
 msgstr ""
+"Menu déroulant de sélection de serveur avant de télécharger les "
+"configurations des pairs ou les invitations VPN"
 
 #: templates/cluster/workers_list.html:177
 msgid "For more information, please visit:"
-msgstr ""
+msgstr "Pour plus d'informations, veuillez visiter :"
 
 #: templates/cluster/workers_list.html:181
-#, fuzzy
-#| msgid "Instance"
 msgid "I Understand"
-msgstr "Instance"
+msgstr "Je comprends"
 
 #: templates/console/console.html:12
 msgid "Clear"

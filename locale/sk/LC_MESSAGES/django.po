@@ -137,7 +137,7 @@ msgstr "Interval cache štatistík musí byť aspoň 60 sekúnd."
 
 #: cluster/forms.py:153
 msgid "Disabling WireGuard on the master server is currently not supported."
-msgstr ""
+msgstr "Zakázanie WireGuard na hlavnom serveri momentálne nie je podporované."
 
 #: cluster/models.py:48
 msgid ""
@@ -154,14 +154,12 @@ msgid "Cluster is not enabled"
 msgstr "Cluster nie je povolený"
 
 #: cluster/models.py:51
-#, fuzzy
-#| msgid ""
-#| "Please report worker_config_version and worker_version in the API request."
 msgid ""
 "Please report worker_config_version, worker_dns_version and worker_version "
 "in the API request."
 msgstr ""
-"Prosím, uveďte worker_config_version a worker_version v požiadavke API."
+"Prosím, uveďte worker_config_version, worker_dns_version a worker_version v "
+"požiadavke API."
 
 #: cluster/models.py:52
 msgid "Worker update is required."
@@ -820,10 +818,8 @@ msgid "Cluster Information"
 msgstr "Informácie o klastri"
 
 #: templates/cluster/workers_list.html:111
-#, fuzzy
-#| msgid "Version"
 msgid "DNS Version"
-msgstr "Verzia"
+msgstr "Verzia DNS"
 
 #: templates/cluster/workers_list.html:116
 msgid "Stats Sync Interval"
@@ -838,71 +834,70 @@ msgid "Primary WireGuard"
 msgstr "Povoliť primárny WireGuard"
 
 #: templates/cluster/workers_list.html:150
-#, fuzzy
-#| msgid "Cluster Settings"
 msgid "Cluster Feature – Testing Phase"
-msgstr "Nastavenia Clustra"
+msgstr "Funkcia klastra – testovacia fáza"
 
 #: templates/cluster/workers_list.html:157
 msgid "The cluster functionality is currently released as experimental."
-msgstr ""
+msgstr "Funkcia klastra je v súčasnosti vydaná ako experimentálna."
 
 #: templates/cluster/workers_list.html:158
 msgid "At this stage, only core features are implemented:"
-msgstr ""
+msgstr "V tejto fáze sú implementované iba základné funkcie:"
 
 #: templates/cluster/workers_list.html:160
-#, fuzzy
-#| msgid "Configuration sync in progress"
 msgid "Configuration synchronization service"
-msgstr "Synchronizácia konfigurácie prebieha"
+msgstr "Služba synchronizácie konfigurácie"
 
 #: templates/cluster/workers_list.html:161
 msgid "Primary node mirroring (WireGuard and firewall rules)"
-msgstr ""
+msgstr "Zrkadlenie primárneho uzla (WireGuard a pravidlá firewallu)"
 
 #: templates/cluster/workers_list.html:162
 msgid "DNS rules mirroring"
-msgstr ""
+msgstr "Zrkadlenie pravidiel DNS"
 
 #: templates/cluster/workers_list.html:165
 msgid "Warning:"
-msgstr ""
+msgstr "Upozornenie:"
 
 #: templates/cluster/workers_list.html:167
 msgid ""
 "In the current version, peer state information is not collected by the "
 "master server."
 msgstr ""
+"V súčasnej verzii master server nezhromažďuje informácie o stave peerov."
 
 #: templates/cluster/workers_list.html:168
 msgid ""
 "Traffic data, IP address, handshake status, and online/offline state will "
 "not be visible for peers connected to cluster nodes."
 msgstr ""
+"Údaje o návštevnosti, IP adresa, stav handshake a online/offline stav "
+"nebudú viditeľné pre peerov pripojených k uzlom klastra."
 
 #: templates/cluster/workers_list.html:170
 msgid "Next priority features (coming soon):"
-msgstr ""
+msgstr "Ďalšie prioritné funkcie (už čoskoro):"
 
 #: templates/cluster/workers_list.html:172
 msgid "Traffic data synchronization"
-msgstr ""
+msgstr "Synchronizácia údajov o návštevnosti"
 
 #: templates/cluster/workers_list.html:173
 msgid ""
 "Server selection dropdown before downloading peer configs or VPN invites"
 msgstr ""
+"Rozbaľovací zoznam výberu servera pred stiahnutím konfigurácií peerov alebo "
+"pozvánok VPN"
 
 #: templates/cluster/workers_list.html:177
 msgid "For more information, please visit:"
-msgstr ""
+msgstr "Pre viac informácií navštívte prosím:"
 
 #: templates/cluster/workers_list.html:181
-#, fuzzy
-#| msgid "Instance"
 msgid "I Understand"
-msgstr "Inštancia"
+msgstr "Rozumiem"
 
 #: templates/console/console.html:12
 msgid "Clear"

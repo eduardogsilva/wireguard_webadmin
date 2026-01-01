@@ -138,7 +138,7 @@ msgstr "Intervalo de cache de estatísticas deve ser de pelo menos 60 segundos."
 
 #: cluster/forms.py:153
 msgid "Disabling WireGuard on the master server is currently not supported."
-msgstr ""
+msgstr "Desativar o WireGuard no servidor mestre não é suportado no momento."
 
 #: cluster/models.py:48
 msgid ""
@@ -157,15 +157,12 @@ msgid "Cluster is not enabled"
 msgstr "Cluster não está habilitado"
 
 #: cluster/models.py:51
-#, fuzzy
-#| msgid ""
-#| "Please report worker_config_version and worker_version in the API request."
 msgid ""
 "Please report worker_config_version, worker_dns_version and worker_version "
 "in the API request."
 msgstr ""
-"Por favor, informe worker_config_version e worker_version na requisição da "
-"API."
+"Por favor, informe worker_config_version, worker_dns_version e "
+"worker_version na requisição da API."
 
 #: cluster/models.py:52
 msgid "Worker update is required."
@@ -831,10 +828,8 @@ msgid "Cluster Information"
 msgstr "Informações do Cluster"
 
 #: templates/cluster/workers_list.html:111
-#, fuzzy
-#| msgid "Version"
 msgid "DNS Version"
-msgstr "Versão"
+msgstr "Versão do DNS"
 
 #: templates/cluster/workers_list.html:116
 msgid "Stats Sync Interval"
@@ -849,71 +844,70 @@ msgid "Primary WireGuard"
 msgstr "WireGuard Principal"
 
 #: templates/cluster/workers_list.html:150
-#, fuzzy
-#| msgid "Cluster Settings"
 msgid "Cluster Feature – Testing Phase"
-msgstr "Configurações do Cluster"
+msgstr "Recurso de Cluster – Fase de Testes"
 
 #: templates/cluster/workers_list.html:157
 msgid "The cluster functionality is currently released as experimental."
-msgstr ""
+msgstr "A funcionalidade de cluster está em fase experimental."
 
 #: templates/cluster/workers_list.html:158
 msgid "At this stage, only core features are implemented:"
-msgstr ""
+msgstr "Nesta fase, apenas os recursos principais estão implementados:"
 
 #: templates/cluster/workers_list.html:160
-#, fuzzy
-#| msgid "Configuration sync in progress"
 msgid "Configuration synchronization service"
-msgstr "Sincronização de configuração em andamento"
+msgstr "Serviço de sincronização de configuração"
 
 #: templates/cluster/workers_list.html:161
 msgid "Primary node mirroring (WireGuard and firewall rules)"
-msgstr ""
+msgstr "Espelhamento do nó primário (WireGuard e regras de firewall)"
 
 #: templates/cluster/workers_list.html:162
 msgid "DNS rules mirroring"
-msgstr ""
+msgstr "Espelhamento de regras de DNS"
 
 #: templates/cluster/workers_list.html:165
 msgid "Warning:"
-msgstr ""
+msgstr "Aviso:"
 
 #: templates/cluster/workers_list.html:167
 msgid ""
 "In the current version, peer state information is not collected by the "
 "master server."
 msgstr ""
+"Na versão atual, as informações de estado dos peers não são coletadas pelo "
+"servidor mestre."
 
 #: templates/cluster/workers_list.html:168
 msgid ""
 "Traffic data, IP address, handshake status, and online/offline state will "
 "not be visible for peers connected to cluster nodes."
 msgstr ""
+"Dados de tráfego, endereço IP, status de handshake e estado online/offline "
+"não estarão visíveis para peers conectados aos nós do cluster."
 
 #: templates/cluster/workers_list.html:170
 msgid "Next priority features (coming soon):"
-msgstr ""
+msgstr "Recursos prioritários (em breve):"
 
 #: templates/cluster/workers_list.html:172
 msgid "Traffic data synchronization"
-msgstr ""
+msgstr "Sincronização de dados de tráfego"
 
 #: templates/cluster/workers_list.html:173
 msgid ""
 "Server selection dropdown before downloading peer configs or VPN invites"
 msgstr ""
+"Seleção de servidor antes de baixar configurações de peer ou convites de VPN"
 
 #: templates/cluster/workers_list.html:177
 msgid "For more information, please visit:"
-msgstr ""
+msgstr "Para mais informações, visite:"
 
 #: templates/cluster/workers_list.html:181
-#, fuzzy
-#| msgid "Instance"
 msgid "I Understand"
-msgstr "Instância"
+msgstr "Eu Entendo"
 
 #: templates/console/console.html:12
 msgid "Clear"
