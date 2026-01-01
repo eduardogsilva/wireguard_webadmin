@@ -111,6 +111,9 @@ def cluster_settings(request):
             form.save()
             messages.success(request, _('Cluster settings updated successfully.'))
             compress_dnsmasq_config()
+            if cluster_settings.enabled and cluster_settings.config_version == 0:
+                cluster_settings.config_version += 1
+                cluster_settings.save()
             return redirect('/cluster/')
     else:
         form = ClusterSettingsForm(instance=cluster_settings)
