@@ -142,14 +142,68 @@
     </table>
 </div>
 
+<div class="modal fade" id="clusterFeatureModal" tabindex="-1" role="dialog" aria-labelledby="clusterFeatureModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clusterFeatureModalLabel">⚠️ {% trans "Cluster Feature – Testing Phase" %}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>{% trans "The cluster functionality is currently released as experimental." %}<br>
+                    {% trans "At this stage, only core features are implemented:" %}</p>
+                <ul>
+                    <li>{% trans "Configuration synchronization service" %}</li>
+                    <li>{% trans "Primary node mirroring (WireGuard and firewall rules)" %}</li>
+                    <li>{% trans "DNS rules mirroring" %}</li>
+                </ul>
+                <hr>
+                <p class="mb-0"><strong>{% trans "Warning:" %}</strong></p>
+                <p>
+                    {% trans "In the current version, peer state information is not collected by the master server." %}<br>
+                    {% trans "Traffic data, IP address, handshake status, and online/offline state will not be visible for peers connected to cluster nodes." %}</p>
+                <hr>
+                <p class="mb-0"><strong>{% trans "Next priority features (coming soon):" %}</strong></p>
+                <ul>
+                    <li>{% trans "Traffic data synchronization" %}</li>
+                    <li>{% trans "Server selection dropdown before downloading peer configs or VPN invites" %}</li>
+                </ul>
+                <br>
+                <p>
+                    {% trans "For more information, please visit:" %}
+                    <a href="https://github.com/eduardogsilva/wireguard_webadmin/discussions" target="_blank">https://github.com/eduardogsilva/wireguard_webadmin/discussions</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn-dismiss-cluster-modal">{% trans "I Understand" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block custom_page_scripts %}
-    <script>
-        $(document).ready(function () {
-            $('#btn-cluster-info').click(function () {
-                $('#cluster-info-table').slideToggle();
-            });
+<script>
+    $(document).ready(function () {
+        // Cluster Info Button Logic
+        $('#btn-cluster-info').click(function () {
+            $('#cluster-info-table').slideToggle();
         });
-    </script>
+
+        // Cluster Feature Modal Logic
+        if (!sessionStorage.getItem('cluster_modal_dismissed')) {
+            $('#clusterFeatureModal').modal('show');
+        }
+
+        // "I Understand" button persists dismissal
+        $('#btn-dismiss-cluster-modal').click(function () {
+            $('#clusterFeatureModal').modal('hide');
+            sessionStorage.setItem('cluster_modal_dismissed', 'true');
+        });
+    });
+</script>
 {% endblock %}
