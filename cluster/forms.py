@@ -141,11 +141,15 @@ class ClusterSettingsForm(forms.ModelForm):
         cleaned_data = super().clean()
         stats_sync_interval = cleaned_data.get('stats_sync_interval')
         stats_cache_interval = cleaned_data.get('stats_cache_interval')
+        primary_enable_wireguard = cleaned_data.get('primary_enable_wireguard')
 
         if stats_sync_interval and stats_sync_interval < 60:
             raise ValidationError(_("Stats sync interval must be at least 60 seconds."))
             
         if stats_cache_interval and stats_cache_interval < 60:
             raise ValidationError(_("Stats cache interval must be at least 60 seconds."))
+
+        if not primary_enable_wireguard:
+            raise ValidationError(_("Disabling WireGuard on the master server is currently not supported."))
 
         return cleaned_data
