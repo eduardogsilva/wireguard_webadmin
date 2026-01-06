@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'firewall',
     'dns',
     'vpn_invite',
-    'cluster'
+    'cluster',
+    'api'
 ]
 
 MIDDLEWARE = [
