@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-import os
-import sys
-import uuid
 import base64
-import time
-import requests
+import os
 import subprocess
+import sys
+import time
+import uuid
+
+import requests
 
 # Global variables
 DEBUG = True
@@ -211,6 +212,10 @@ def main_loop():
 
         # Process each interface and its peers, aggregate tx and rx for the interface
         for interface, peers in data.items():
+            if not isinstance(interface, str) or not interface.startswith("wg"):
+                if interface not in ['cache_information', 'status', 'message']:
+                    debug_log(f"Skipping non-wg root key: {interface}")
+                continue
             debug_log(f"Processing interface: {interface}")
             total_tx = 0
             total_rx = 0
