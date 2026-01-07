@@ -157,6 +157,9 @@ STATICFILES_DIRS = [
 
 WIREGUARD_STATUS_CACHE_ENABLED = True
 WIREGUARD_STATUS_CACHE_MAX_AGE = 600
+WIREGUARD_STATUS_CACHE_REFRESH = 60
+WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT = 10
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 DNS_CONFIG_FILE = '/etc/dnsmasq/wireguard_webadmin_dns.conf'
