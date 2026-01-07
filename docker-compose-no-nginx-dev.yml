@@ -40,7 +40,7 @@ services:
     container_name: wireguard-webadmin-cron
     restart: unless-stopped
     build:
-      context: ./cron
+      context: containers/cron
       dockerfile: Dockerfile-cron
     environment:
       - TZ=${TIMEZONE}

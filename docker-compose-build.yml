@@ -8,7 +8,7 @@ services:
   wireguard-webadmin-cron:
     image: eduardosilva/wireguard_webadmin_cron:latest
     build:
-      context: ./cron
+      context: containers/cron
       dockerfile: Dockerfile-cron
 
   wireguard-webadmin-dns:
