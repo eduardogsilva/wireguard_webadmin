@@ -273,9 +273,17 @@ def func_apply_enhanced_filter(data: dict, user_acl: UserAcl):
     return data
 
 
-def func_get_wireguard_status():
+def func_get_wireguard_status(cache_previous: int = 0):
     if settings.WIREGUARD_STATUS_CACHE_ENABLED:
-        cache_entry = WireguardStatusCache.objects.filter(cache_type='master').order_by('-created').first()
+        cache_objects = WireguardStatusCache.objects.filter(cache_type='master').order_by('-created')
+        if cache_previous > 0:
+            try:
+                cache_entry = cache_objects[cache_previous]
+            except IndexError:
+                cache_entry = None
+        else:
+            cache_entry = cache_objects.first()
+
         if cache_entry:
             data = cache_entry.data
             data['cache_information'] = {
@@ -285,6 +293,7 @@ def func_get_wireguard_status():
                 'cache_hit': True,
                 'cache_enabled': True,
                 'cache_uuid': str(cache_entry.uuid),
+                'cache_previous_requested': cache_previous,
             }
             data['status'] = 'success'
             data['message'] = 'WireGuard status retrieved from cache'
@@ -295,6 +304,7 @@ def func_get_wireguard_status():
                 'cache_information': {
                     'cache_hit': False,
                     'cache_enabled': True,
+                    'cache_previous_requested': cache_previous,
                 }
             }
     else:
@@ -328,6 +338,11 @@ def wireguard_status(request):
     enhanced_filter = False
     filter_peer_list = []
 
+    try:
+        cache_previous = int(request.GET.get('cache_previous', 0))
+    except:
+        cache_previous = 0
+
     if request.user.is_authenticated:
         user_acl = get_object_or_404(UserAcl, user=request.user)
         if user_acl.enable_enhanced_filter and user_acl.peer_groups.count() > 0:
@@ -347,7 +362,7 @@ def wireguard_status(request):
     else:
         return HttpResponseForbidden()
 
-    data = func_get_wireguard_status()
+    data = func_get_wireguard_status(cache_previous)
     return JsonResponse(data)
 
 
