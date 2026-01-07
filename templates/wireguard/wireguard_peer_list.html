@@ -171,7 +171,7 @@
                                 <p id="invitePassword"></p>
                                 <p>
                                     {% trans 'Expires on' %}: <span id="inviteExpiration"></span>
-                                    <i class="fas fa-sync-alt" id="refreshInviteButton" style="cursor: pointer;" title="Refresh Invite"></i>
+                                    <i class="fas fa-sync-alt" id="refreshInviteButton" style="cursor: pointer;" title="{% trans 'Refresh Invite' %}"></i>
                                 </p>
                                 <div class="form-group">
                                     <label for="inviteContactInput">{% trans 'Enter Email or WhatsApp Number' %}:</label>
@@ -522,7 +522,7 @@
             };
 
             fetchWireguardStatus();
-            setInterval(fetchWireguardStatus, {{ current_instance.peer_list_refresh_interval }} * 1000);
+            setInterval(fetchWireguardStatus, {{ refresh_interval }} * 1000);
         });
 
         const updateUI = (data) => {

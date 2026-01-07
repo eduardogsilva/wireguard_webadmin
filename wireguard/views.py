@@ -1,5 +1,6 @@
 import subprocess
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import models
@@ -158,8 +159,12 @@ def view_wireguard_manage_instance(request):
         if not current_instance:
             form = WireGuardInstanceForm(initial=generate_instance_defaults())
         else:
-            form = WireGuardInstanceForm(instance=current_instance)  
-    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'form': form}
+            form = WireGuardInstanceForm(instance=current_instance)
+    if settings.WIREGUARD_STATUS_CACHE_ENABLED:
+        force_cache_refresh = settings.WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL
+    else:
+        force_cache_refresh = 0
+    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'form': form, 'force_cache_refresh': force_cache_refresh}
     return render(request, 'wireguard/wireguard_manage_server.html', context)
 
 

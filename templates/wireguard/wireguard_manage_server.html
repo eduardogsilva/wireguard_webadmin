@@ -34,7 +34,7 @@
                                 
                                 <div class="form-group col-md-6">
                                     <label for="{{ form.peer_list_refresh_interval.id_for_label }}">{{ form.peer_list_refresh_interval.label }}</label>
-                                    <input type="number" class="form-control" id="{{ form.peer_list_refresh_interval.id_for_label }}" name="{{ form.peer_list_refresh_interval.html_name }}" placeholder="Persistent Keepalive" value="{{ form.peer_list_refresh_interval.value|default_if_none:'' }}" required>
+                                    <input type="number" class="form-control" id="{{ form.peer_list_refresh_interval.id_for_label }}" name="{{ form.peer_list_refresh_interval.html_name }}" placeholder="Persistent Keepalive" value="{% if force_cache_refresh > 0 %}{{ force_cache_refresh }}{% else %}{{ form.peer_list_refresh_interval.value|default_if_none:'' }}{% endif %}" required {% if force_cache_refresh > 0 %}readonly{% endif %}>
                                 </div>
 
 

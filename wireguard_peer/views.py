@@ -1,6 +1,7 @@
 import ipaddress
 import subprocess
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -50,6 +51,7 @@ def view_wireguard_peer_list(request):
     page_title = _('WireGuard Peer List')
     user_acl = get_object_or_404(UserAcl, user=request.user)
     wireguard_instances = user_allowed_instances(user_acl)
+    refresh_interval = 120
 
     if wireguard_instances:
         if request.GET.get('uuid'):
@@ -66,10 +68,14 @@ def view_wireguard_peer_list(request):
 
     add_peer_enabled = False
     if current_instance:
+        refresh_interval = current_instance.peer_list_refresh_interval
         if user_has_access_to_instance(user_acl, current_instance):
             add_peer_enabled = True
-        
-    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'peer_list': peer_list, 'add_peer_enabled': add_peer_enabled, 'user_acl': user_acl}
+
+    if settings.WIREGUARD_STATUS_CACHE_ENABLED:
+        refresh_interval = settings.WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL
+
+    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'peer_list': peer_list, 'add_peer_enabled': add_peer_enabled, 'user_acl': user_acl, 'refresh_interval': refresh_interval}
     return render(request, 'wireguard/wireguard_peer_list.html', context)
 
 
