@@ -79,13 +79,7 @@ Folge diesen Schritten, um WireGuard WebAdmin bereitzustellen:
 
    ```bash
    mkdir wireguard_webadmin && cd wireguard_webadmin
-1.  **Umgebung vorbereiten**
-
-    Erstelle zunächst ein Verzeichnis für WireGuard WebAdmin und wechsle hinein:
-
-    ```bash
-    mkdir wireguard_webadmin && cd wireguard_webadmin
-    ```
+   ```
 
 2.  **Docker‑Compose‑Datei herunterladen**
 
@@ -112,7 +106,7 @@ Folge diesen Schritten, um WireGuard WebAdmin bereitzustellen:
 > [!CAUTION]
 > Es wird nicht empfohlen, das System ohne HTTPS (NGINX) zu betreiben, da dies Sicherheitsrisiken birgt. Wenn Sie diese Option wählen, stellen Sie sicher, dass Sie eine sichere Verbindung verwenden (z. B. über Ihren eigenen Reverse-Proxy mit SSL).
 
-3.  **`.env`‑Datei erstellen**
+3.  **.env‑Datei erstellen**
 
     Erstelle eine `.env`‑Datei im selben Verzeichnis wie deine `docker-compose.yml` und passe `my_server_address` an die DNS‑Adresse oder IP deines Servers an:
 
@@ -121,6 +115,24 @@ Folge diesen Schritten, um WireGuard WebAdmin bereitzustellen:
     # Ein falsch konfigurierter SERVER_ADDRESS führt zu CSRF‑Fehlern.
     SERVER_ADDRESS=my_server_address
     DEBUG_MODE=False
+
+    # Wähle eine Zeitzone aus https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+    TIMEZONE=Europe/Berlin
+
+    # WireGuard‑Status‑Caching‑Einstellungen
+    # Dies verbessert die Leistung, indem die Anzahl der Aufrufe des `wg`-Befehls reduziert und aktuelle Ergebnisse gespeichert werden.
+    # WIREGUARD_STATUS_CACHE_ENABLED=True
+    #
+    # Wie viele zwischengespeicherte WireGuard-Status-Snapshots beim Laden der Seite vorgeladen werden sollen.
+    # Dies ermöglicht es, dass Traffic-Diagramme bereits ausgefüllt angezeigt werden, anstatt leer zu beginnen.
+    # Verringern Sie diesen Wert, wenn sich die initiale Peer-Liste langsam anfühlt.
+    # 0 = Vorladen deaktivieren, 9 = Traffic-Diagramme vollständig ausfüllen.
+    # WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT=9
+
+    # Wenn Sie zusätzliche erlaubte Hosts benötigen, können Sie diese hier angeben.
+    # Die SERVER_ADDRESS wird immer erlaubt sein.
+    # Beispiel: EXTRA_ALLOWED_HOSTS=app1.beispiel.com,app2.beispiel.com:8443,app3.beispiel.com
+    #EXTRA_ALLOWED_HOSTS=app1.beispiel.com,app2.beispiel.com:8443,app3.beispiel.com
     ```
 
 4.  **Docker Compose ausführen**
@@ -183,4 +195,3 @@ Beiträge machen die Open‑Source‑Community großartig. **Danke für jede Unt
 ## Support
 
 Bei Fragen oder Problemen eröffne bitte ein Issue auf GitHub.
-

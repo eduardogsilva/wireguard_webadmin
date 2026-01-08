@@ -111,6 +111,24 @@ Siga estes passos para implantar o WireGuard WebAdmin:
    # Um SERVER_ADDRESS configurado incorretamente causará erros de CSRF na aplicação.
    SERVER_ADDRESS=my_server_address
    DEBUG_MODE=False
+
+   # Escolha um fuso horário em https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+   TIMEZONE=America/Sao_Paulo
+
+   # Configurações de cache de status do WireGuard
+   # Isso melhora o desempenho reduzindo o número de chamadas ao comando `wg` e armazenando resultados recentes.
+   # WIREGUARD_STATUS_CACHE_ENABLED=True
+   #
+   # Quantos instantâneos (snapshots) do status do WireGuard em cache devem ser pré-carregados ao carregar a página.
+   # Isso permite que os gráficos de tráfego sejam exibidos já preenchidos em vez de começarem vazios.
+   # Diminua este valor se a lista inicial de peers parecer lenta.
+   # 0 = desativar pré-carregamento, 9 = preencher totalmente os gráficos de tráfego.
+   # WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT=9
+
+   # Se você precisar de hosts adicionais permitidos, pode especificá-los aqui.
+   # O SERVER_ADDRESS sempre será permitido.
+   # Exemplo: EXTRA_ALLOWED_HOSTS=app1.exemplo.com,app2.exemplo.com:8443,app3.exemplo.com
+   #EXTRA_ALLOWED_HOSTS=app1.exemplo.com,app2.exemplo.com:8443,app3.exemplo.com
    ```
 
    Substitua `my_server_address` pelo endereço real do seu servidor.

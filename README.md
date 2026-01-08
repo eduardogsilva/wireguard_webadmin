@@ -110,12 +110,23 @@ This mode is recommended for running the web admin interface. The container depl
    # A missconfigured SERVER_ADDRESS will cause the app to have CSRF errors.
    SERVER_ADDRESS=my_server_address
    DEBUG_MODE=False
-   
+
    # Choose a timezone from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
    TIMEZONE=America/Sao_Paulo
-   
+
+   # WireGuard status caching settings
+   # This improves performance by reducing the number of calls to `wg` command and storing recent results.
+   # WIREGUARD_STATUS_CACHE_ENABLED=True
+   #
+   # How many cached WireGuard status snapshots should be preloaded on page load.
+   # This allows traffic charts to be displayed already populated instead of starting empty.
+   # Lower this value if the initial peer list feels slow.
+   # 0 = disable preload, 9 = fully prefill traffic charts.#
+   # WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT=9
+
    # If you need additional hosts to be allowed, you can specify them here.
    # The SERVER_ADDRESS will always be allowed.
+   # Example: EXTRA_ALLOWED_HOSTS=app1.example.com,app2.example.com:8443,app3.example.com
    #EXTRA_ALLOWED_HOSTS=app1.example.com,app2.example.com:8443,app3.example.com
    ```
 

@@ -107,6 +107,24 @@ Suivez ces étapes pour déployer WireGuard WebAdmin:
    # Une mauvaise valeur provoquera des erreurs CSRF.
    SERVER_ADDRESS=my_server_address
    DEBUG_MODE=False
+
+   # Choisissez un fuseau horaire parmi https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+   TIMEZONE=Europe/Paris
+
+   # Paramètres de mise en cache de l'état WireGuard
+   # Cela améliore les performances en réduisant le nombre d'appels à la commande `wg` et en stockant les résultats récents.
+   # WIREGUARD_STATUS_CACHE_ENABLED=True
+   #
+   # Combien d'instantanés de statut WireGuard mis en cache doivent être préchargés lors du chargement de la page.
+   # Cela permet d'afficher les graphiques de trafic déjà remplis au lieu de commencer vides.
+   # Diminuez cette valeur si la liste initiale des pairs semble lente.
+   # 0 = désactiver le préchargement, 9 = pré-remplir complètement les graphiques de trafic.
+   # WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT=9
+
+   # Si vous avez besoin d'hôtes supplémentaires autorisés, vous pouvez les spécifier ici.
+   # Le SERVER_ADDRESS sera toujours autorisé.
+   # Exemple : EXTRA_ALLOWED_HOSTS=app1.exemple.com,app2.exemple.com:8443,app3.exemple.com
+   #EXTRA_ALLOWED_HOSTS=app1.exemple.com,app2.exemple.com:8443,app3.exemple.com
    ```
 
    Remplacez `my_server_address` par l’adresse réelle de votre serveur.
