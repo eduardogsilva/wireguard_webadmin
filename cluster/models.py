@@ -64,7 +64,7 @@ class WorkerStatus(models.Model):
     config_version = models.PositiveIntegerField(default=0)
     worker_version = models.PositiveIntegerField(default=0)
     active_peers = models.PositiveIntegerField(default=0)
-    wireguard_status = models.JSONField(default=dict)
+    wireguard_status = models.JSONField()
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

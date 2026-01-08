@@ -1,6 +1,7 @@
 import glob
 import os
 
+from django.conf import settings
 from django.http import JsonResponse, FileResponse
 from django.utils import timezone
 
@@ -14,6 +15,19 @@ def get_ip_address(request):
     else:
         ip_address = request.META.get('REMOTE_ADDR')
     return ip_address
+
+
+def get_cluster_settings():
+    cluster_settings, created = ClusterSettings.objects.get_or_create(name='cluster_settings')
+    return {
+        'enabled': cluster_settings.enabled,
+        'primary_enable_wireguard': cluster_settings.primary_enable_wireguard,
+        'stats_sync_interval': settings.WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL,
+        'cluster_mode': cluster_settings.cluster_mode,
+        'restart_mode': cluster_settings.restart_mode,
+        'config_version': cluster_settings.config_version,
+        'dns_version': cluster_settings.dns_version,
+    }
 
 
 def get_worker(request):
@@ -118,6 +132,20 @@ def api_get_worker_dnsmasq_config(request):
     return response
 
 
+def api_submit_worker_wireguard_stats(request):
+    worker, success = get_worker(request)
+    if worker:
+        if worker.error_status or not success:
+            data = {'status': 'error', 'message': worker.error_status}
+            return JsonResponse(data, status=400)
+    else:
+        data = {'status': 'error', 'message': 'Worker not found'}
+        return JsonResponse(data, status=403)
+    worker_status = worker.workerstatus
+    data = {'status': 'success', 'message': 'Stats received'}
+    return JsonResponse(data, status=200)
+
+
 def api_get_worker_config_files(request):
     worker, success = get_worker(request)
     if worker:
@@ -139,24 +167,9 @@ def api_get_worker_config_files(request):
         filename = os.path.basename(path)
         with open(path, 'r') as f:
             files[filename] = f.read()
-    cluster_settings, created = ClusterSettings.objects.get_or_create(name='cluster_settings')
-    return JsonResponse(
-        {
-            'status': 'success',
-            'files': files,
-            'cluster_settings': {
-                'enabled': cluster_settings.enabled,
-                'primary_enable_wireguard': cluster_settings.primary_enable_wireguard,
-                'stats_sync_interval': cluster_settings.stats_sync_interval,
-                'stats_cache_interval': cluster_settings.stats_cache_interval,
-                'cluster_mode': cluster_settings.cluster_mode,
-                'restart_mode': cluster_settings.restart_mode,
-                'config_version': cluster_settings.config_version,
-                'dns_version': cluster_settings.dns_version,
-            },
-        },
-        status=200
-    )
+
+    data = {'status': 'success', 'files': files, 'cluster_settings': get_cluster_settings()}
+    return JsonResponse(data, status=200)
 
 
 def api_worker_ping(request):
@@ -186,20 +199,5 @@ def api_cluster_status(request):
     else:
         data = {'status': 'error', 'message': 'Worker not found'}
         return JsonResponse(data, status=403)
-    cluster_settings, created = ClusterSettings.objects.get_or_create(name='cluster_settings')
-    data = {
-        'status': 'success',
-        'worker_error_status': worker.error_status,
-        'cluster_settings': {
-            'enabled': cluster_settings.enabled,
-            'primary_enable_wireguard': cluster_settings.primary_enable_wireguard,
-            'stats_sync_interval': cluster_settings.stats_sync_interval,
-            'stats_cache_interval': cluster_settings.stats_cache_interval,
-            'cluster_mode': cluster_settings.cluster_mode,
-            'restart_mode': cluster_settings.restart_mode,
-            'config_version': cluster_settings.config_version,
-            'dns_version': cluster_settings.dns_version,
-        },
-    }
-
+    data = {'status': 'success', 'worker_error_status': worker.error_status, 'cluster_settings': get_cluster_settings()}
     return JsonResponse(data, status=200)
