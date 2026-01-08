@@ -1,9 +1,11 @@
 import glob
+import json
 import os
 
 from django.conf import settings
 from django.http import JsonResponse, FileResponse
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import ClusterSettings, Worker, WorkerStatus
 
@@ -131,7 +133,7 @@ def api_get_worker_dnsmasq_config(request):
     response["Content-Length"] = str(os.path.getsize(dnsmasq_file))
     return response
 
-
+@csrf_exempt
 def api_submit_worker_wireguard_stats(request):
     worker, success = get_worker(request)
     if worker:
@@ -141,9 +143,21 @@ def api_submit_worker_wireguard_stats(request):
     else:
         data = {'status': 'error', 'message': 'Worker not found'}
         return JsonResponse(data, status=403)
-    worker_status = worker.workerstatus
-    data = {'status': 'success', 'message': 'Stats received'}
-    return JsonResponse(data, status=200)
+    
+    try:
+        if request.method == 'POST':
+            payload = json.loads(request.body)
+            worker_status = worker.workerstatus
+            worker_status.wireguard_status = payload
+            worker_status.wireguard_status_updated = timezone.now()
+            worker_status.save()
+            data = {'status': 'success', 'message': 'Stats received'}
+            return JsonResponse(data, status=200)
+    except Exception as e:
+        pass
+
+    data = {'status': 'error', 'message': 'Stats not received'}
+    return JsonResponse(data, status=400)
 
 
 def api_get_worker_config_files(request):
