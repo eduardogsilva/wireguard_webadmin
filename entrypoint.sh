@@ -39,10 +39,17 @@ CSRF_TRUSTED_ORIGINS = ['http://wireguard-webadmin', 'https://$SERVER_ADDRESS'${
 SECRET_KEY = '$(openssl rand -base64 32)'
 EOL
 
-if [ -n "$TZ" ]; then
-    echo "TIME_ZONE = '$TZ'" >> /app/wireguard_webadmin/production_settings.py
+if [ -n "${TZ:-}" ]; then
+    echo "TIME_ZONE = '${TZ}'" >> /app/wireguard_webadmin/production_settings.py
 fi
 
+if [[ "${WIREGUARD_STATUS_CACHE_ENABLED,,}" == "false" ]]; then
+    echo "WIREGUARD_STATUS_CACHE_ENABLED = False" >> /app/wireguard_webadmin/production_settings.py
+fi
+
+if [ -n "${WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT:-}" ]; then
+    echo "WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT = ${WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT}" >> /app/wireguard_webadmin/production_settings.py
+fi
 
 if [[ "${DEV_MODE,,}" != "true" ]]; then
     sed -i "/^    path('admin\/', admin.site.urls),/s/^    /    # /" /app/wireguard_webadmin/urls.py

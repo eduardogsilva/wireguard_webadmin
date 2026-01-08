@@ -52,6 +52,13 @@ def view_wireguard_peer_list(request):
     user_acl = get_object_or_404(UserAcl, user=request.user)
     wireguard_instances = user_allowed_instances(user_acl)
     refresh_interval = 120
+    if settings.WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT > 0:
+        load_from_cache = True
+        cache_previous_count = settings.WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT
+    else:
+        load_from_cache = False
+        cache_previous_count = 0
+
 
     if wireguard_instances:
         if request.GET.get('uuid'):
@@ -75,7 +82,13 @@ def view_wireguard_peer_list(request):
     if settings.WIREGUARD_STATUS_CACHE_ENABLED:
         refresh_interval = settings.WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL
 
-    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'peer_list': peer_list, 'add_peer_enabled': add_peer_enabled, 'user_acl': user_acl, 'refresh_interval': refresh_interval}
+    context = {
+        'page_title': page_title, 'wireguard_instances': wireguard_instances,
+        'current_instance': current_instance, 'peer_list': peer_list, 'add_peer_enabled': add_peer_enabled,
+        'user_acl': user_acl, 'refresh_interval': refresh_interval,
+        'load_from_cache': load_from_cache, 'cache_previous_count': cache_previous_count,
+    }
+
     return render(request, 'wireguard/wireguard_peer_list.html', context)
 
 

@@ -12,6 +12,8 @@ services:
       - COMPOSE_VERSION=03r
       - TZ=${TIMEZONE}
       - EXTRA_ALLOWED_HOSTS=${EXTRA_ALLOWED_HOSTS}
+      - WIREGUARD_STATUS_CACHE_ENABLED=${WIREGUARD_STATUS_CACHE_ENABLED}
+      - WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT=${WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT}
     volumes:
       - wireguard:/etc/wireguard
       - static_volume:/app_static_files/

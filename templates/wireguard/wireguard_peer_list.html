@@ -379,6 +379,7 @@
     <script>
         var previousMeasurements = {};
         var toastShownThisCycle = false;
+        const LOAD_FROM_CACHE = {% if load_from_cache %}true{% else %}false{% endif %};
 
         const updateThroughput = (peerId, peerInfo) => {
             const throughputElement = document.getElementById(`peer-throughput-${peerId}`);
@@ -499,9 +500,16 @@
 
         // Fetch Wireguard status and update UI
         document.addEventListener('DOMContentLoaded', function() {
-            const fetchWireguardStatus = async () => {
+            const fetchWireguardStatus = async (cachePrevious = null) => {
                 try {
-                    const response = await fetch('/api/wireguard_status/');
+                    let url = '/api/wireguard_status/';
+
+                    // cachePrevious === 0 should behave like "normal"
+                    if (cachePrevious !== null && cachePrevious !== 0) {
+                        url += '?cache_previous=' + encodeURIComponent(cachePrevious);
+                    }
+
+                    const response = await fetch(url);
                     let data = await response.json();
 
                     // If latest-handshakes is 0, use the stored value
@@ -521,8 +529,22 @@
                 }
             };
 
-            fetchWireguardStatus();
-            setInterval(fetchWireguardStatus, {{ refresh_interval }} * 1000);
+            const primeFromCache = async () => {
+                for (let i = {{ cache_previous_count }}; i >= 0; i--) {
+                        await fetchWireguardStatus(i);
+                    }
+            };
+
+            (async () => {
+                if (LOAD_FROM_CACHE) {
+                    await primeFromCache();
+                } else {
+                    await fetchWireguardStatus();
+                }
+
+                setInterval(fetchWireguardStatus, {{ refresh_interval }} * 1000);
+            })();
+
         });
 
         const updateUI = (data) => {
