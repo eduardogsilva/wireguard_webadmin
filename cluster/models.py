@@ -8,8 +8,6 @@ class ClusterSettings(models.Model):
     name = models.CharField(default='cluster_settings', max_length=16, unique=True)
     enabled = models.BooleanField(default=False)
     primary_enable_wireguard = models.BooleanField(default=True)
-    stats_sync_interval = models.IntegerField(default=60)
-    stats_cache_interval = models.IntegerField(default=60)
     cluster_mode = models.CharField(default='mirror', max_length=16, choices=(('mirror', 'Mirror'), ))
     restart_mode = models.CharField(default='auto', max_length=16, choices=(('auto', 'Automatic restart'),))
     worker_display = models.CharField(

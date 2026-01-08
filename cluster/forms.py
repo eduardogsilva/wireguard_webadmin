@@ -89,17 +89,12 @@ class WorkerForm(forms.ModelForm):
 class ClusterSettingsForm(forms.ModelForm):
     class Meta:
         model = ClusterSettings
-        fields = [
-            'enabled', 'primary_enable_wireguard', 'stats_sync_interval',
-            'stats_cache_interval', 'cluster_mode', 'restart_mode', 'worker_display'
-        ]
+        fields = ['enabled', 'primary_enable_wireguard', 'cluster_mode', 'restart_mode', 'worker_display']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['enabled'].label = _("Cluster Enabled")
         self.fields['primary_enable_wireguard'].label = _("Primary Enable WireGuard")
-        self.fields['stats_sync_interval'].label = _("Stats Sync Interval (seconds)")
-        self.fields['stats_cache_interval'].label = _("Stats Cache Interval (seconds)")
         self.fields['cluster_mode'].label = _("Cluster Mode")
         self.fields['restart_mode'].label = _("Restart Mode")
         self.fields['worker_display'].label = _("Worker Display")
@@ -112,11 +107,6 @@ class ClusterSettingsForm(forms.ModelForm):
             Row(
                 Column('enabled', css_class='form-group col-md-6 mb-0'),
                 Column('primary_enable_wireguard', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('stats_sync_interval', css_class='form-group col-md-6 mb-0'),
-                Column('stats_cache_interval', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -139,15 +129,7 @@ class ClusterSettingsForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        stats_sync_interval = cleaned_data.get('stats_sync_interval')
-        stats_cache_interval = cleaned_data.get('stats_cache_interval')
         primary_enable_wireguard = cleaned_data.get('primary_enable_wireguard')
-
-        if stats_sync_interval and stats_sync_interval < 60:
-            raise ValidationError(_("Stats sync interval must be at least 60 seconds."))
-            
-        if stats_cache_interval and stats_cache_interval < 60:
-            raise ValidationError(_("Stats cache interval must be at least 60 seconds."))
 
         if not primary_enable_wireguard:
             raise ValidationError(_("Disabling WireGuard on the master server is currently not supported."))
