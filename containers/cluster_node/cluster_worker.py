@@ -244,6 +244,28 @@ class ClusterWorker:
         self.config_version = new_config_version
         logger.info(f"Configuration updated to version {self.config_version}")
 
+    def send_stats(self):
+        try:
+            stats = self.func_process_wireguard_status()
+            params = {
+                'token': TOKEN,
+                'worker_config_version': self.config_version,
+                'worker_dns_version': self.dns_version,
+                'worker_version': WORKER_VERSION
+            }
+            logger.info("Sending WireGuard stats to Master...")
+            response = self.session.post(f"{self.base_url}/worker/submit_wireguard_stats/", json=stats, params=params, timeout=REQUEST_TIMEOUT)
+            
+            if response.status_code == 200:
+                logger.info("Stats sent successfully.")
+                return True
+            else:
+                logger.error(f"Failed to send stats. Status: {response.status_code}")
+                return False
+        except Exception as e:
+            logger.error(f"Error sending stats: {e}")
+            return False
+
     def run(self):
         if not self.should_run:
             return
@@ -253,56 +275,74 @@ class ClusterWorker:
         # Initial cleanup
         self.cleanup_wireguard()
 
+        last_config_check = 0
+        last_stats_send = 0
+        stats_sync_interval = 60 # Default initial value
+
         while True:
-            try:
-                response = self.get_status()
-                
-                if response is not None:
-                    if response.status_code == 403:
-                        logger.error("Received 403 Forbidden (Token invalid/deleted). Deactivating WireGuard and stopping requests permanently.")
-                        self.cleanup_wireguard()
-                        self.config_version = 0
-                        self.should_run = False
-                        break
+            current_time = time.time()
+            
+            # Check Config (Fixed 60s interval)
+            if current_time - last_config_check >= 60:
+                try:
+                    response = self.get_status()
+                    last_config_check = time.time()
+                    
+                    if response is not None:
+                        if response.status_code == 403:
+                            logger.error("Received 403 Forbidden (Token invalid/deleted). Deactivating WireGuard and stopping requests permanently.")
+                            self.cleanup_wireguard()
+                            self.config_version = 0
+                            self.should_run = False
+                            break
 
-                    if response.status_code == 400:
-                        logger.warning("Received 400 Bad Request (Worker suspended or error). Deactivating WireGuard and Firewall, but will keep retrying...")
-                        self.cleanup_wireguard()
-                        self.config_version = 0
+                        if response.status_code == 400:
+                            logger.warning("Received 400 Bad Request (Worker suspended or error). Deactivating WireGuard and Firewall, but will keep retrying...")
+                            self.cleanup_wireguard()
+                            self.config_version = 0
 
-                    if response.status_code == 200:
-                        data = response.json()
-                        remote_config_version = data.get('cluster_settings', {}).get('config_version', 0)
-                        
-                        # Check WireGuard Config
-                        updated = False
-                        if int(remote_config_version) != self.config_version:
-                            logger.info(f"Config version mismatch (Local: {self.config_version}, Remote: {remote_config_version}). Updating...")
-                            config_data = self.download_configs()
-                            if config_data:
-                                self.apply_configs(config_data)
-                                self.send_ping()
-                                updated = True
-                            else:
-                                logger.error("Failed to download config files.")
-                        
-                        # Check DNS Config
-                        remote_dns_version = int(data.get('cluster_settings', {}).get('dns_version', 0))
-                        if not updated and remote_dns_version != self.dns_version:
-                            logger.info(f"DNS version mismatch (Local: {self.dns_version}, Remote: {remote_dns_version}). Updating...")
-                            if self.download_dns_config():
-                                self.send_ping()
-                                updated = True
+                        if response.status_code == 200:
+                            data = response.json()
+                            
+                            # Update stats interval from master settings
+                            cluster_settings = data.get('cluster_settings', {})
+                            stats_sync_interval = cluster_settings.get('stats_sync_interval', 60)
 
-                        if not updated and int(remote_config_version) == self.config_version and remote_dns_version == self.dns_version:
-                            logger.info(f"No changes detected. Configuration is up to date (WG: {self.config_version}, DNS: {self.dns_version}).")
+                            remote_config_version = cluster_settings.get('config_version', 0)
+                            
+                            # Check WireGuard Config
+                            updated = False
+                            if int(remote_config_version) != self.config_version:
+                                logger.info(f"Config version mismatch (Local: {self.config_version}, Remote: {remote_config_version}). Updating...")
+                                config_data = self.download_configs()
+                                if config_data:
+                                    self.apply_configs(config_data)
+                                    self.send_ping()
+                                    updated = True
+                                else:
+                                    logger.error("Failed to download config files.")
+                            
+                            # Check DNS Config
+                            remote_dns_version = int(cluster_settings.get('dns_version', 0))
+                            if not updated and remote_dns_version != self.dns_version:
+                                logger.info(f"DNS version mismatch (Local: {self.dns_version}, Remote: {remote_dns_version}). Updating...")
+                                if self.download_dns_config():
+                                    self.send_ping()
+                                    updated = True
 
-            except Exception as e:
-                logger.error(f"Unexpected error in main loop: {e}")
+                            if not updated and int(remote_config_version) == self.config_version and remote_dns_version == self.dns_version:
+                                logger.info(f"No changes detected. Configuration is up to date (WG: {self.config_version}, DNS: {self.dns_version}).")
 
-            interval = 60
-            logger.info(f"Waiting {interval} seconds for next check...")
-            time.sleep(interval)
+                except Exception as e:
+                    logger.error(f"Unexpected error in config check loop: {e}")
+
+            # Check Stats Sync
+            if current_time - last_stats_send >= stats_sync_interval:
+                self.send_stats()
+                last_stats_send = time.time()
+
+            # Sleep briefly to be responsive but not busy loop
+            time.sleep(1)
 
         # Final loop state if 403 was received
         while not self.should_run:
