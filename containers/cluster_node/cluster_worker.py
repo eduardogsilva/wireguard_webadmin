@@ -39,6 +39,59 @@ class ClusterWorker:
         else:
              self.base_url = f"{MASTER_SERVER_ADDRESS}/api/cluster"
 
+
+    def func_process_wireguard_status(self):
+        # Query WireGuard status from the system and construct the data dictionary
+        commands = {
+            'latest-handshakes': "wg show all latest-handshakes | expand | tr -s ' '",
+            'allowed-ips': "wg show all allowed-ips | expand | tr -s ' '",
+            'transfer': "wg show all transfer | expand | tr -s ' '",
+            'endpoints': "wg show all endpoints | expand | tr -s ' '",
+        }
+
+        data = {}
+
+        for key, command in commands.items():
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            stdout, stderr = process.communicate()
+
+            if process.returncode != 0:
+                return {'error': stderr}
+
+            current_interface = None
+            for line in stdout.strip().split('\n'):
+                parts = line.split()
+                if len(parts) >= 3:
+                    interface, peer, value = parts[0], parts[1], " ".join(parts[2:])
+                    current_interface = interface
+                elif len(parts) == 2 and current_interface:
+                    peer, value = parts
+                else:
+                    continue
+
+                if interface not in data:
+                    data[interface] = {}
+
+                if peer not in data[interface]:
+                    data[interface][peer] = {
+                        'allowed-ips': [],
+                        'latest-handshakes': '',
+                        'transfer': {'tx': 0, 'rx': 0},
+                        'endpoints': '',
+                    }
+
+                if key == 'allowed-ips':
+                    data[interface][peer]['allowed-ips'].append(value)
+                elif key == 'transfer':
+                    rx, tx = value.split()[-2:]
+                    data[interface][peer]['transfer'] = {'tx': int(tx), 'rx': int(rx)}
+                elif key == 'endpoints':
+                    data[interface][peer]['endpoints'] = value
+                else:
+                    data[interface][peer][key] = value
+        return data
+
+
     def cleanup_wireguard(self):
         logger.info("Cleaning up WireGuard configuration...")
         # Stop all wireguard interfaces
