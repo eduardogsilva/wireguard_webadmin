@@ -52,7 +52,7 @@ def view_wireguard_peer_list(request):
     user_acl = get_object_or_404(UserAcl, user=request.user)
     wireguard_instances = user_allowed_instances(user_acl)
     refresh_interval = 120
-    if settings.WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT > 0:
+    if settings.WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT > 0 and settings.WIREGUARD_STATUS_CACHE_ENABLED:
         load_from_cache = True
         cache_previous_count = settings.WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT
     else:
