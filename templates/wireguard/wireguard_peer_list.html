@@ -593,7 +593,9 @@
         };
 
         const checkAllowedIps = (allowedIpsElement, allowedIpsApiResponse) => {
-            const apiIps = allowedIpsApiResponse[0].split(' ');
+            const apiIps = Array.isArray(allowedIpsApiResponse)
+                ? allowedIpsApiResponse.filter(Boolean)
+                : (allowedIpsApiResponse || '').split(/\s+/).filter(Boolean);
             const htmlIpsText = allowedIpsElement.textContent.trim();
             const htmlIpsArray = htmlIpsText.match(/\b(?:\d{1,3}\.){3}\d{1,3}\/\d{1,2}\b/g) || [];
 
