@@ -123,6 +123,10 @@ This mode is recommended for running the web admin interface. The container depl
    # Lower this value if the initial peer list feels slow.
    # 0 = disable preload, 9 = fully prefill traffic charts.#
    # WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT=9
+   #
+   # How often (in seconds) the cache should be refreshed.
+   # Allowed values: 30, 60, 150, 300. Default: 60.
+   # WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL=60
 
    # If you need additional hosts to be allowed, you can specify them here.
    # The SERVER_ADDRESS will always be allowed.

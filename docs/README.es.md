@@ -124,6 +124,10 @@ Siga estos pasos para desplegar WireGuard WebAdmin:
    # Reduzca este valor si la lista inicial de pares parece lenta.
    # 0 = desactivar precarga, 9 = completar totalmente los gráficos de tráfico.
    # WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT=9
+   #
+   # Con qué frecuencia (en segundos) se debe refrescar la caché.
+   # Valores permitidos: 30, 60, 150, 300. Predeterminado: 60.
+   # WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL=60
 
    # Si necesita hosts adicionales permitidos, puede especificarlos aquí.
    # El SERVER_ADDRESS siempre estará permitido.

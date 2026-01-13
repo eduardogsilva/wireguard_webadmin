@@ -128,6 +128,10 @@ Folge diesen Schritten, um WireGuard WebAdmin bereitzustellen:
     # Verringern Sie diesen Wert, wenn sich die initiale Peer-Liste langsam anfühlt.
     # 0 = Vorladen deaktivieren, 9 = Traffic-Diagramme vollständig ausfüllen.
     # WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT=9
+    #
+    # Wie oft (in Sekunden) der Cache aktualisiert werden soll.
+    # Erlaubte Werte: 30, 60, 150, 300. Standard: 60.
+    # WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL=60
 
     # Wenn Sie zusätzliche erlaubte Hosts benötigen, können Sie diese hier angeben.
     # Die SERVER_ADDRESS wird immer erlaubt sein.
