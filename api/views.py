@@ -4,6 +4,7 @@ import os
 import subprocess
 import time
 import uuid
+from datetime import timedelta
 from typing import Any, Dict
 
 import pytz
@@ -13,7 +14,6 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.db import transaction
 from django.http import HttpResponseForbidden
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -326,7 +326,6 @@ def _latest_handshake_as_int(peer_info) -> int:
         return 0
 
 
-@transaction.atomic
 def func_concatenate_cluster_wireguard_status_cache() -> None:
     start_time = time.monotonic()
 
@@ -341,7 +340,10 @@ def func_concatenate_cluster_wireguard_status_cache() -> None:
     if master_cache and isinstance(master_cache.data, dict):
         cache_entries.append({"source_name": "master", "source_uuid": "", "data": master_cache.data,})
 
-    worker_statuses = (WorkerStatus.objects.filter(worker__enabled=True).select_related("worker").all())
+    worker_statuses = (WorkerStatus.objects.filter(
+        worker__enabled=True, wireguard_status_updated__gt=timezone.now() - timedelta(minutes=10)
+    ).select_related("worker").all())
+
     for ws in worker_statuses:
         cache_entries.append(
             {
