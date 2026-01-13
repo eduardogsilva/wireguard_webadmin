@@ -399,10 +399,10 @@ def cron_refresh_wireguard_status_cache(request):
     if not settings.WIREGUARD_STATUS_CACHE_ENABLED:
         return JsonResponse(data)
     start_time = time.monotonic()
-    data = func_process_wireguard_status()
+    wireguard_status_data = func_process_wireguard_status()
     end_time = time.monotonic()
     processing_time_ms = int((end_time - start_time) * 1000)
-    WireguardStatusCache.objects.create(data=data, processing_time_ms=processing_time_ms, cache_type='master')
+    WireguardStatusCache.objects.create(data=wireguard_status_data, processing_time_ms=processing_time_ms, cache_type='master')
     if ClusterSettings.objects.filter(name='cluster_settings', enabled=True).exists():
         func_concatenate_cluster_wireguard_status_cache()
     return JsonResponse(data)
