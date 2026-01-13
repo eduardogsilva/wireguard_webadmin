@@ -14,6 +14,7 @@ services:
       - EXTRA_ALLOWED_HOSTS=${EXTRA_ALLOWED_HOSTS}
       - WIREGUARD_STATUS_CACHE_ENABLED=${WIREGUARD_STATUS_CACHE_ENABLED}
       - WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT=${WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT}
+      - WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL=${WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL}
     volumes:
       - wireguard:/etc/wireguard
       - static_volume:/app_static_files/
@@ -29,7 +30,7 @@ services:
       - "51820-51839:51820-51839/udp"
       # Ports for port forwarding rules. Add your own ports here if you need them.
       - "8080-8089:8080-8089/tcp"
-      
+
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -46,6 +47,7 @@ services:
       dockerfile: Dockerfile-cron
     environment:
       - TZ=${TIMEZONE}
+      - WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL=${WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL}
     depends_on:
       - wireguard-webadmin
 
@@ -75,7 +77,7 @@ services:
       - dnsmasq_conf:/etc/dnsmasq/
 
 volumes:
-  static_volume: 
+  static_volume:
   wireguard:
   dnsmasq_conf:
   app_secrets:

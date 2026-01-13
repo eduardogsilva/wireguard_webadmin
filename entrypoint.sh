@@ -51,6 +51,20 @@ if [ -n "${WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT:-}" ]; then
     echo "WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT = ${WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT}" >> /app/wireguard_webadmin/production_settings.py
 fi
 
+if [ -n "${WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL:-}" ]; then
+    case "${WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL}" in
+        30|60|150|300)
+            echo "WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL = ${WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL}" >> /app/wireguard_webadmin/production_settings.py
+            MAX_AGE=$((WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL * 10))
+            echo "WIREGUARD_STATUS_CACHE_MAX_AGE = ${MAX_AGE}" >> /app/wireguard_webadmin/production_settings.py
+            ;;
+        *)
+            echo "Error: Invalid WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL value: ${WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL}. Allowed values are 30, 60, 150, 300."
+            exit 1
+            ;;
+    esac
+fi
+
 if [[ "${DEV_MODE,,}" != "true" ]]; then
     sed -i "/^    path('admin\/', admin.site.urls),/s/^    /    # /" /app/wireguard_webadmin/urls.py
 fi

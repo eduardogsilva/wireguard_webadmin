@@ -4,13 +4,12 @@ FROM ubuntu:latest
 RUN apt-get update && apt-get install -y cron curl
 
 # Adicionar seus scripts de cron
-COPY cron_tasks /etc/cron.d/cron_tasks
-
-# Dar permissões apropriadas
-RUN chmod 0644 /etc/cron.d/cron_tasks
+# Adicionar apenas o entrypoint script, as tasks serão geradas lá
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Criar um arquivo de log para armazenar os resultados do cron
 RUN touch /var/log/cron.log
 
-# Executar o cron em primeiro plano
-CMD cron -f
+# Executar o entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
