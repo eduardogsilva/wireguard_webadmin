@@ -272,7 +272,11 @@ def func_apply_enhanced_filter(data: dict, user_acl: UserAcl):
 
 def func_get_wireguard_status(cache_previous: int = 0):
     if settings.WIREGUARD_STATUS_CACHE_ENABLED:
-        cache_objects = WireguardStatusCache.objects.filter(cache_type='master').order_by('-created')
+        if ClusterSettings.objects.filter(name='cluster_settings', enabled=True).exists():
+            cache_objects = WireguardStatusCache.objects.filter(cache_type='cluster').order_by('-created')
+        else:
+            cache_objects = WireguardStatusCache.objects.filter(cache_type='master').order_by('-created')
+
         if cache_previous > 0:
             try:
                 cache_entry = cache_objects[cache_previous]
