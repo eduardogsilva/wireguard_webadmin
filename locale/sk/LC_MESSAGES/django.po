@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-13 19:51-0300\n"
+"POT-Creation-Date: 2026-01-13 19:58-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -121,7 +121,7 @@ msgstr "Zobrazenie workera"
 
 #: cluster/forms.py:137
 msgid "Cluster mode requires WireGuard status cache to be enabled."
-msgstr ""
+msgstr "Režim klastra vyžaduje povolenie vyrovnávacej pamäte stavu WireGuard."
 
 #: cluster/forms.py:140
 msgid "Disabling WireGuard on the master server is currently not supported."
@@ -1515,10 +1515,8 @@ msgstr "Prenos"
 
 #: templates/wireguard/wireguard_peer_list.html:77
 #: templates/wireguard/wireguard_peer_list.html:528
-#, fuzzy
-#| msgid "Primary DNS"
 msgid "Primary Server"
-msgstr "Primárny DNS"
+msgstr "Primárny server"
 
 #: templates/wireguard/wireguard_peer_list.html:78
 #: templates/wireguard/wireguard_peer_list.html:128
@@ -1562,10 +1560,8 @@ msgid "Expires on"
 msgstr "Platí do"
 
 #: templates/wireguard/wireguard_peer_list.html:177
-#, fuzzy
-#| msgid "Web Refresh Interval"
 msgid "Refresh Invite"
-msgstr "Interval obnovenia webu"
+msgstr "Obnoviť pozvánku"
 
 #: templates/wireguard/wireguard_peer_list.html:180
 msgid "Enter Email or WhatsApp Number"

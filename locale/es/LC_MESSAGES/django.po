@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-13 19:51-0300\n"
+"POT-Creation-Date: 2026-01-13 19:58-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -122,6 +122,8 @@ msgstr "Visualización del worker"
 #: cluster/forms.py:137
 msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgstr ""
+"El modo de clúster requiere que el caché de estado de WireGuard esté "
+"habilitado."
 
 #: cluster/forms.py:140
 msgid "Disabling WireGuard on the master server is currently not supported."
@@ -1519,10 +1521,8 @@ msgstr "Transferencia"
 
 #: templates/wireguard/wireguard_peer_list.html:77
 #: templates/wireguard/wireguard_peer_list.html:528
-#, fuzzy
-#| msgid "Primary DNS"
 msgid "Primary Server"
-msgstr "DNS primario"
+msgstr "Servidor primario"
 
 #: templates/wireguard/wireguard_peer_list.html:78
 #: templates/wireguard/wireguard_peer_list.html:128
@@ -1566,10 +1566,8 @@ msgid "Expires on"
 msgstr "Caduca el"
 
 #: templates/wireguard/wireguard_peer_list.html:177
-#, fuzzy
-#| msgid "Web Refresh Interval"
 msgid "Refresh Invite"
-msgstr "Intervalo de actualización web"
+msgstr "Actualizar invitación"
 
 #: templates/wireguard/wireguard_peer_list.html:180
 msgid "Enter Email or WhatsApp Number"
