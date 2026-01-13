@@ -15,9 +15,9 @@ services:
     volumes:
       - cluster_node_wireguard:/etc/wireguard
       - cluster_node_dnsmasq_conf:/etc/dnsmasq/
-    #ports:
+    ports:
       # Ports for WireGuard instances.
-      #- "51820-51839:51820-51839/udp"
+      - "51820-51839:51820-51839/udp"
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
