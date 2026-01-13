@@ -102,6 +102,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': '/etc/wireguard/wireguard-webadmin-db.sqlite3',
+        'OPTIONS': {
+            'timeout': 20,
+        },
     }
 }
 
