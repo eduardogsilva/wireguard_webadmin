@@ -73,6 +73,7 @@
                                             </div>
                                             <b class="peer-extra-info">{% trans 'Throughput' %}: </b> <span id="peer-throughput-{{ peer.public_key }}"></span><br>
                                             <span class="peer-extra-info"><b>{% trans 'Transfer' %}:</b> <span id="peer-transfer-{{ peer.public_key }}"></span><br></span>
+                                            <span class="peer-extra-info"><b>{% trans 'Location' %}:</b> <span id="peer-location-{{ peer.public_key }}">{% trans 'Primary Server' %}</span><br></span>
                                             <span class="peer-extra-info"><b>{% trans 'Latest Handshake' %}:</b> <span id="peer-latest-handshake-{{ peer.public_key }}"></span></span>
                                             <span class="peer-extra-info"><span style="display: none;" id="peer-stored-latest-handshake-{{ peer.public_key }}">{% if peer.peerstatus.last_handshake %}{{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}</span><br></span>
                                             <span class="peer-extra-info"><b>{% trans 'Endpoints' %}:</b> <span id="peer-endpoints-{{ peer.public_key }}"></span><br></span>
@@ -124,6 +125,7 @@
                             <p><b><i class="fas fa-arrows-alt-v nav-icon"></i> {% trans 'Throughput' %}:</b> <span id="peerThroughput">--</span></p>
                             <p><b><i class="fas fa-dolly nav-icon"></i> {% trans 'Transfer' %}:</b> <span id="peerTransfer">--</span></p>
                             <p><b><i class="far fa-clock nav-icon"></i> {% trans 'Latest Handshake' %}:</b> <span id="peerHandshake">--</span></p>
+                            <p><b><i class="fas fa-map-marker-alt nav-icon"></i> {% trans 'Location' %}:</b> <span id="peerLocation">--</span></p>
                             <p><b><i class="far fa-address-card nav-icon"></i> {% trans 'Endpoints' %}:</b> <span id="peerEndpoints">--</span></p>
                             <p><b><i class="fas fa-network-wired nav-icon"></i> {% trans 'Allowed IPs' %}:</b> <span id="peerAllowedIPs">--</span></p>
 
@@ -325,6 +327,7 @@
                 var peerHandshake = peerElem.querySelector('[id^="peer-latest-handshake-"]').innerText;
                 var peerEndpoints = peerElem.querySelector('[id^="peer-endpoints-"]').innerText;
                 var peerAllowedIPs = peerElem.querySelector('[id^="peer-allowed-ips-"]').innerHTML;
+                var peerLocation = peerElem.querySelector('[id^="peer-location-"]').innerText;
 
                 // Update the modal fields with the card values
                 $('#peerPreviewModalLabel').text(peerNameFromCard);
@@ -332,6 +335,7 @@
                 $('#peerTransfer').text(peerTransfer);
                 $('#peerHandshake').text(peerHandshake);
                 $('#peerEndpoints').text(peerEndpoints);
+                $('#peerLocation').text(peerLocation);
                 $('#peerAllowedIPs').html(peerAllowedIPs);
                 $('#editPeerButton').attr('href', '/peer/manage/?peer=' + uuid);
                 $('#downloadConfigButton').attr('href', '/tools/download_peer_config/?uuid=' + uuid);
@@ -498,6 +502,13 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         };
 
+        const getPeerLocationLabel = (peerInfo) => {
+            if (peerInfo && peerInfo.source_uuid && String(peerInfo.source_uuid).trim() !== '') {
+                return peerInfo.source_name || '';
+            }
+            return "{% trans 'Primary Server' %}";
+        };
+
         // Fetch Wireguard status and update UI
         document.addEventListener('DOMContentLoaded', function() {
             const fetchWireguardStatus = async (cachePrevious = null) => {
@@ -573,6 +584,7 @@
                             $('#peerEndpoints').text(peerInfo.endpoints);
                             const allowedIpsModalElement = document.getElementById('peerAllowedIPs');
                             checkAllowedIps(allowedIpsModalElement, peerInfo['allowed-ips']);
+                            $('#peerLocation').text(getPeerLocationLabel(peerInfo));
                         }
                     }
                 }
@@ -585,11 +597,15 @@
             const latestHandshake = peerDiv.querySelector(`#peer-latest-handshake-${escapedPeerId}`);
             const endpoints = peerDiv.querySelector(`#peer-endpoints-${escapedPeerId}`);
             const allowedIps = peerDiv.querySelector(`#peer-allowed-ips-${escapedPeerId}`);
+            const location = peerDiv.querySelector(`#peer-location-${escapedPeerId}`);
 
             transfer.textContent = `${convertBytes(peerInfo.transfer.tx)} TX, ${convertBytes(peerInfo.transfer.rx)} RX`;
             latestHandshake.textContent = `${peerInfo['latest-handshakes'] !== '0' ? new Date(parseInt(peerInfo['latest-handshakes']) * 1000).toLocaleString() : '0'}`;
             endpoints.textContent = `${peerInfo.endpoints}`;
             checkAllowedIps(allowedIps, peerInfo['allowed-ips']);
+            if (location) {
+                location.textContent = getPeerLocationLabel(peerInfo);
+            }
         };
 
         const checkAllowedIps = (allowedIpsElement, allowedIpsApiResponse) => {
