@@ -385,14 +385,32 @@
         var toastShownThisCycle = false;
         const LOAD_FROM_CACHE = {% if load_from_cache %}true{% else %}false{% endif %};
 
-        const updateThroughput = (peerId, peerInfo) => {
+        const parseSnapshotTs = (data) => {
+            if (data && data.cache_information && data.cache_information.created) {
+                const ts = Date.parse(data.cache_information.created);
+                if (!Number.isNaN(ts)) {
+                    return ts / 1000; // epoch seconds
+                }
+            }
+            return Date.now() / 1000;
+        };
+
+        const updateThroughput = (peerId, peerInfo, snapshotTs) => {
             const throughputElement = document.getElementById(`peer-throughput-${peerId}`);
-            const currentTime = Date.now() / 1000; // current timestamp in seconds
+            const currentTime = snapshotTs; // snapshot timestamp (server/cache) in seconds
             let formattedThroughput = '';
 
             if (previousMeasurements[peerId]) {
                 const prev = previousMeasurements[peerId];
                 const timeDiff = currentTime - prev.timestamp; // time difference in seconds
+                // If timeDiff is invalid/small (out-of-order snapshots or same snapshot), skip throughput calc
+                if (timeDiff <= 0) {
+                    previousMeasurements[peerId] = {
+                        timestamp: currentTime,
+                        transfer: { tx: peerInfo.transfer.tx, rx: peerInfo.transfer.rx }
+                    };
+                    return formattedThroughput;
+                }
 
                 // For the peer: download corresponds to tx and upload to rx
                 let downloadDiff = peerInfo.transfer.tx - prev.transfer.tx;
@@ -534,7 +552,8 @@
                         }
                     }
 
-                    updateUI(data);
+                    const snapshotTs = parseSnapshotTs(data);
+                    updateUI(data, snapshotTs);
                 } catch (error) {
                     console.error('Error fetching Wireguard status:', error);
                 }
@@ -558,7 +577,7 @@
 
         });
 
-        const updateUI = (data) => {
+        const updateUI = (data, snapshotTs) => {
             // Reset the toast flag for this update cycle
             toastShownThisCycle = false;
 
@@ -569,7 +588,7 @@
                         updatePeerInfo(peerDiv, peerId, peerInfo);
                         updateCalloutClass(peerDiv, peerInfo['latest-handshakes']);
                         // Calculate throughput and update the card
-                        const throughputHTML = updateThroughput(peerId, peerInfo);
+                        const throughputHTML = updateThroughput(peerId, peerInfo, snapshotTs);
 
                         // If the modal is active for this peer, update its fields as well.
                         const peerUuid = peerDiv.getAttribute("data-uuid");
