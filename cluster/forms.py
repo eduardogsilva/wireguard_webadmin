@@ -1,6 +1,7 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Column, HTML, Layout, Row, Submit
 from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -130,6 +131,10 @@ class ClusterSettingsForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         primary_enable_wireguard = cleaned_data.get('primary_enable_wireguard')
+        cluster_enabled = cleaned_data.get('enabled')
+
+        if cluster_enabled and not settings.WIREGUARD_STATUS_CACHE_ENABLED:
+            raise ValidationError(_("Cluster mode requires WireGuard status cache to be enabled."))
 
         if not primary_enable_wireguard:
             raise ValidationError(_("Disabling WireGuard on the master server is currently not supported."))

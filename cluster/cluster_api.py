@@ -101,6 +101,10 @@ def get_worker(request):
         success = False
 
     cluster_settings, created = ClusterSettings.objects.get_or_create(name='cluster_settings')
+    if not settings.WIREGUARD_STATUS_CACHE_ENABLED and cluster_settings.enabled:
+        cluster_settings.enabled = False
+        cluster_settings.save()
+
     if cluster_settings.enabled:
         if worker.error_status == 'cluster_disabled':
             worker.error_status = ''
