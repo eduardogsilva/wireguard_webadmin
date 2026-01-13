@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-01 11:13-0300\n"
+"POT-Creation-Date: 2026-01-13 19:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,23 +17,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cluster/forms.py:17 dns/forms.py:111 templates/cluster/workers_list.html:8
+#: cluster/forms.py:18 dns/forms.py:111 templates/cluster/workers_list.html:8
 #: templates/dns/static_host_list.html:68
 #: templates/user_manager/peer_group_list.html:8 user_manager/forms.py:177
 #: wireguard_peer/forms.py:10
 msgid "Name"
 msgstr "Nome"
 
-#: cluster/forms.py:18 templates/cluster/workers_list.html:93
+#: cluster/forms.py:19 templates/cluster/workers_list.html:93
 #: vpn_invite/forms.py:49 vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Habilitado"
 
-#: cluster/forms.py:19
+#: cluster/forms.py:20
 msgid "IP Lock"
 msgstr "Bloqueio de IP"
 
-#: cluster/forms.py:20 dns/forms.py:66 templates/cluster/workers_list.html:10
+#: cluster/forms.py:21 dns/forms.py:66 templates/cluster/workers_list.html:10
 #: templates/dns/static_host_list.html:18
 #: templates/firewall/manage_redirect_rule.html:43
 #: templates/firewall/manage_redirect_rule.html:67
@@ -42,43 +42,43 @@ msgstr "Bloqueio de IP"
 msgid "IP Address"
 msgstr "Endereço IP"
 
-#: cluster/forms.py:21
+#: cluster/forms.py:22
 msgid "Country"
 msgstr "País"
 
-#: cluster/forms.py:22
+#: cluster/forms.py:23
 msgid "City"
 msgstr "Cidade"
 
-#: cluster/forms.py:23 dns/forms.py:65 templates/dns/static_host_list.html:17
+#: cluster/forms.py:24 dns/forms.py:65 templates/dns/static_host_list.html:17
 msgid "Hostname"
 msgstr "Endereço do Host"
 
-#: cluster/forms.py:24
+#: cluster/forms.py:25
 msgid "Token"
 msgstr "Token"
 
-#: cluster/forms.py:26 cluster/forms.py:107 dns/forms.py:25 dns/forms.py:67
+#: cluster/forms.py:27 cluster/forms.py:103 dns/forms.py:25 dns/forms.py:67
 #: dns/forms.py:109 templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
 #: templates/wireguard/wireguard_manage_ip.html:42
 #: templates/wireguard/wireguard_manage_peer.html:170
-#: templates/wireguard/wireguard_peer_list.html:166 user_manager/forms.py:49
+#: templates/wireguard/wireguard_peer_list.html:168 user_manager/forms.py:49
 #: user_manager/forms.py:180 vpn_invite/forms.py:192 vpn_invite/forms.py:326
 msgid "Back"
 msgstr "Voltar"
 
-#: cluster/forms.py:27 dns/forms.py:68 dns/forms.py:110
+#: cluster/forms.py:28 dns/forms.py:68 dns/forms.py:110
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
 #: templates/wireguard/wireguard_manage_ip.html:43
-#: templates/wireguard/wireguard_peer_list.html:185 user_manager/forms.py:48
+#: templates/wireguard/wireguard_peer_list.html:187 user_manager/forms.py:48
 #: user_manager/forms.py:181
 msgid "Delete"
 msgstr "Excluir"
 
-#: cluster/forms.py:66 cluster/forms.py:133 dns/forms.py:37 dns/forms.py:83
+#: cluster/forms.py:67 cluster/forms.py:124 dns/forms.py:37 dns/forms.py:83
 #: dns/forms.py:134 templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
@@ -90,57 +90,43 @@ msgstr "Excluir"
 msgid "Save"
 msgstr "Salvar"
 
-#: cluster/forms.py:81
+#: cluster/forms.py:82
 msgid "A worker with that name already exists."
 msgstr "Um worker com esse nome já existe."
 
-#: cluster/forms.py:84
+#: cluster/forms.py:85
 msgid "IP Address is required when IP Lock is enabled."
 msgstr "Endereço IP é obrigatório quando Bloqueio de IP está habilitado."
 
-#: cluster/forms.py:99
+#: cluster/forms.py:97
 msgid "Cluster Enabled"
 msgstr "Cluster Habilitado"
 
-#: cluster/forms.py:100
+#: cluster/forms.py:98
 msgid "Primary Enable WireGuard"
 msgstr "Habilitar WireGuard Principal"
 
-#: cluster/forms.py:101
-msgid "Stats Sync Interval (seconds)"
-msgstr "Intervalo de Sincronização de Estatísticas (segundos)"
-
-#: cluster/forms.py:102
-msgid "Stats Cache Interval (seconds)"
-msgstr "Intervalo de Cache de Estatísticas (segundos)"
-
-#: cluster/forms.py:103 templates/cluster/workers_list.html:103
+#: cluster/forms.py:99 templates/cluster/workers_list.html:103
 msgid "Cluster Mode"
 msgstr "Modo do Cluster"
 
-#: cluster/forms.py:104 templates/cluster/workers_list.html:124
+#: cluster/forms.py:100 templates/cluster/workers_list.html:124
 msgid "Restart Mode"
 msgstr "Modo de Reinicialização"
 
-#: cluster/forms.py:105 templates/cluster/workers_list.html:128
+#: cluster/forms.py:101 templates/cluster/workers_list.html:128
 msgid "Worker Display"
 msgstr "Exibição do Worker"
 
-#: cluster/forms.py:147
-msgid "Stats sync interval must be at least 60 seconds."
+#: cluster/forms.py:137
+msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgstr ""
-"Intervalo de sincronização de estatísticas deve ser de pelo menos 60 "
-"segundos."
 
-#: cluster/forms.py:150
-msgid "Stats cache interval must be at least 60 seconds."
-msgstr "Intervalo de cache de estatísticas deve ser de pelo menos 60 segundos."
-
-#: cluster/forms.py:153
+#: cluster/forms.py:140
 msgid "Disabling WireGuard on the master server is currently not supported."
 msgstr "Desativar o WireGuard no servidor mestre não é suportado no momento."
 
-#: cluster/models.py:48
+#: cluster/models.py:46
 msgid ""
 "IP lock is enabled, but the worker is attempting to access from a different "
 "IP address."
@@ -148,15 +134,15 @@ msgstr ""
 "O bloqueio de IP está habilitado, mas o worker está tentando acessar de um "
 "endereço IP diferente."
 
-#: cluster/models.py:49
+#: cluster/models.py:47
 msgid "Worker is not enabled"
 msgstr "Worker não está habilitado"
 
-#: cluster/models.py:50
+#: cluster/models.py:48
 msgid "Cluster is not enabled"
 msgstr "Cluster não está habilitado"
 
-#: cluster/models.py:51
+#: cluster/models.py:49
 msgid ""
 "Please report worker_config_version, worker_dns_version and worker_version "
 "in the API request."
@@ -164,7 +150,7 @@ msgstr ""
 "Por favor, informe worker_config_version, worker_dns_version e "
 "worker_version na requisição da API."
 
-#: cluster/models.py:52
+#: cluster/models.py:50
 msgid "Worker update is required."
 msgstr "A atualização do worker é necessária."
 
@@ -253,7 +239,7 @@ msgstr "Configurações do Cluster"
 msgid "Cluster settings updated successfully."
 msgstr "Configurações do cluster atualizadas com sucesso."
 
-#: cluster/views.py:120
+#: cluster/views.py:124
 msgid ""
 "\n"
 "        <h5>Cluster Mode</h5>\n"
@@ -742,7 +728,7 @@ msgstr "Estado"
 msgid "User Manager"
 msgstr "Configurar Usuários"
 
-#: templates/base.html:153 templates/wireguard/wireguard_peer_list.html:195
+#: templates/base.html:153 templates/wireguard/wireguard_peer_list.html:197
 #: vpn_invite/views.py:37
 msgid "VPN Invite"
 msgstr "Convite para VPN"
@@ -776,6 +762,8 @@ msgid "Version"
 msgstr "Versão"
 
 #: templates/cluster/workers_list.html:11
+#: templates/wireguard/wireguard_peer_list.html:77
+#: templates/wireguard/wireguard_peer_list.html:129
 msgid "Location"
 msgstr "Localização"
 
@@ -814,7 +802,7 @@ msgstr "Nunca"
 #: templates/cluster/workers_list.html:74
 #: templates/dns/static_host_list.html:74 templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
-#: templates/wireguard/wireguard_peer_list.html:196
+#: templates/wireguard/wireguard_peer_list.html:198
 msgid "Edit"
 msgstr "Editar"
 
@@ -1424,12 +1412,12 @@ msgid "Pre-Shared Key"
 msgstr "Chave Pré-Compartilhada"
 
 #: templates/wireguard/wireguard_manage_peer.html:57
-#: templates/wireguard/wireguard_peer_list.html:136
+#: templates/wireguard/wireguard_peer_list.html:138
 msgid "Peer Traffic"
 msgstr "Tráfego do Peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:73
-#: templates/wireguard/wireguard_peer_list.html:151
+#: templates/wireguard/wireguard_peer_list.html:153
 msgid "No traffic history, please wait a few minutes"
 msgstr "Sem histórico de tráfego, por favor aguarde alguns minutos"
 
@@ -1527,93 +1515,106 @@ msgid "Delete Configuration"
 msgstr "Excluir Configuração"
 
 #: templates/wireguard/wireguard_peer_list.html:75
-#: templates/wireguard/wireguard_peer_list.html:125
+#: templates/wireguard/wireguard_peer_list.html:126
 msgid "Throughput"
 msgstr "Taxa de transferência"
 
 #: templates/wireguard/wireguard_peer_list.html:76
-#: templates/wireguard/wireguard_peer_list.html:126
+#: templates/wireguard/wireguard_peer_list.html:127
 msgid "Transfer"
 msgstr "Transferência"
 
 #: templates/wireguard/wireguard_peer_list.html:77
-#: templates/wireguard/wireguard_peer_list.html:127
+#: templates/wireguard/wireguard_peer_list.html:528
+#, fuzzy
+#| msgid "Primary DNS"
+msgid "Primary Server"
+msgstr "DNS Primário"
+
+#: templates/wireguard/wireguard_peer_list.html:78
+#: templates/wireguard/wireguard_peer_list.html:128
 msgid "Latest Handshake"
 msgstr "Último Handshake"
 
-#: templates/wireguard/wireguard_peer_list.html:79
-#: templates/wireguard/wireguard_peer_list.html:128
+#: templates/wireguard/wireguard_peer_list.html:80
+#: templates/wireguard/wireguard_peer_list.html:130
 msgid "Endpoints"
 msgstr "Endereço Remoto"
 
-#: templates/wireguard/wireguard_peer_list.html:81
-#: templates/wireguard/wireguard_peer_list.html:129
+#: templates/wireguard/wireguard_peer_list.html:82
+#: templates/wireguard/wireguard_peer_list.html:131
 msgid "Allowed IPs"
 msgstr "IPs Permitidos"
 
-#: templates/wireguard/wireguard_peer_list.html:102
+#: templates/wireguard/wireguard_peer_list.html:103
 msgid "Are you sure you want to create a new peer?"
 msgstr "Você tem certeza que deseja criar um novo peer?"
 
-#: templates/wireguard/wireguard_peer_list.html:102
-#: templates/wireguard/wireguard_peer_list.html:104
+#: templates/wireguard/wireguard_peer_list.html:103
+#: templates/wireguard/wireguard_peer_list.html:105
 msgid "Create Peer"
 msgstr "Criar Peer"
 
-#: templates/wireguard/wireguard_peer_list.html:106
-#: templates/wireguard/wireguard_peer_list.html:637
+#: templates/wireguard/wireguard_peer_list.html:107
+#: templates/wireguard/wireguard_peer_list.html:696
 msgid "Show extras"
 msgstr "Exibir extras"
 
-#: templates/wireguard/wireguard_peer_list.html:158
+#: templates/wireguard/wireguard_peer_list.html:160
 msgid "Close QR Code"
 msgstr "Fechar QR Code"
 
-#: templates/wireguard/wireguard_peer_list.html:168
+#: templates/wireguard/wireguard_peer_list.html:170
 msgid "VPN Invite Details"
 msgstr "Detalhes do Convite para VPN"
 
-#: templates/wireguard/wireguard_peer_list.html:174
+#: templates/wireguard/wireguard_peer_list.html:176
 msgid "Expires on"
 msgstr "Expira em"
 
-#: templates/wireguard/wireguard_peer_list.html:178
+#: templates/wireguard/wireguard_peer_list.html:177
+#, fuzzy
+#| msgid "Web Refresh Interval"
+msgid "Refresh Invite"
+msgstr "Intervalo de Atualização Web"
+
+#: templates/wireguard/wireguard_peer_list.html:180
 msgid "Enter Email or WhatsApp Number"
 msgstr "Digite o Email ou Número do WhatsApp"
 
-#: templates/wireguard/wireguard_peer_list.html:179
+#: templates/wireguard/wireguard_peer_list.html:181
 msgid "Email or phone number"
 msgstr "Email ou número de telefone"
 
-#: templates/wireguard/wireguard_peer_list.html:182
+#: templates/wireguard/wireguard_peer_list.html:184
 msgid "Copy Text"
 msgstr "Copiar Texto"
 
-#: templates/wireguard/wireguard_peer_list.html:183
+#: templates/wireguard/wireguard_peer_list.html:185
 msgid "Email"
 msgstr "Email"
 
-#: templates/wireguard/wireguard_peer_list.html:184
+#: templates/wireguard/wireguard_peer_list.html:186
 msgid "WhatsApp"
 msgstr "WhatsApp"
 
-#: templates/wireguard/wireguard_peer_list.html:192
+#: templates/wireguard/wireguard_peer_list.html:194
 msgid "Close"
 msgstr "Fechar"
 
-#: templates/wireguard/wireguard_peer_list.html:193
+#: templates/wireguard/wireguard_peer_list.html:195
 msgid "Config"
 msgstr "Configuração"
 
-#: templates/wireguard/wireguard_peer_list.html:194
+#: templates/wireguard/wireguard_peer_list.html:196
 msgid "QR Code"
 msgstr "Código QR"
 
-#: templates/wireguard/wireguard_peer_list.html:204
+#: templates/wireguard/wireguard_peer_list.html:206
 msgid "No WireGuard Instances Found"
 msgstr "Nenhuma Instância do WireGuard Encontrada"
 
-#: templates/wireguard/wireguard_peer_list.html:205
+#: templates/wireguard/wireguard_peer_list.html:207
 msgid ""
 "There are no WireGuard instances configured. You can add a new instance by "
 "clicking the button below."
@@ -1621,11 +1622,11 @@ msgstr ""
 "Não há instâncias do WireGuard configuradas. Você pode adicionar uma nova "
 "instância clicando no botão abaixo."
 
-#: templates/wireguard/wireguard_peer_list.html:208
+#: templates/wireguard/wireguard_peer_list.html:210
 msgid "Add WireGuard Instance"
 msgstr "Adicionar Instância do WireGuard"
 
-#: templates/wireguard/wireguard_peer_list.html:304
+#: templates/wireguard/wireguard_peer_list.html:306
 msgid ""
 "This configuration does not contain a private key. You must add the private "
 "key manually in your client before using it."
@@ -1633,7 +1634,7 @@ msgstr ""
 "Esta configuração não contém uma chave privada. Você deve adicionar a chave "
 "privada manualmente no seu cliente antes de usá-la."
 
-#: templates/wireguard/wireguard_peer_list.html:590
+#: templates/wireguard/wireguard_peer_list.html:649
 msgid ""
 "This address does not appear in the wg show command output, likely "
 "indicating that another peer has an IP overlapping this network or that the "
@@ -1643,7 +1644,7 @@ msgstr ""
 "indicando que outro peer tem um IP sobrepondo esta rede ou que o arquivo de "
 "configuração está desatualizado."
 
-#: templates/wireguard/wireguard_peer_list.html:605
+#: templates/wireguard/wireguard_peer_list.html:664
 msgid ""
 "At least one address does not appear in the wg show command output, which "
 "may indicate that another peer is using an overlapping IP or that the "
@@ -1653,67 +1654,67 @@ msgstr ""
 "indicar que outro peer está usando um IP sobreposto ou que o arquivo de "
 "configuração está desatualizado."
 
-#: templates/wireguard/wireguard_peer_list.html:634
+#: templates/wireguard/wireguard_peer_list.html:693
 msgid "Hide extras"
 msgstr "Ocultar extras"
 
-#: templates/wireguard/wireguard_peer_list.html:678
-#: templates/wireguard/wireguard_peer_list.html:812
+#: templates/wireguard/wireguard_peer_list.html:737
+#: templates/wireguard/wireguard_peer_list.html:871
 msgid "Access Password"
 msgstr "Senha de Acesso"
 
-#: templates/wireguard/wireguard_peer_list.html:678
-#: templates/wireguard/wireguard_peer_list.html:812
+#: templates/wireguard/wireguard_peer_list.html:737
+#: templates/wireguard/wireguard_peer_list.html:871
 msgid "(Share this password via a separate secure channel)"
 msgstr "(Compartilhe esta senha por um canal seguro separado)"
 
-#: templates/wireguard/wireguard_peer_list.html:681
+#: templates/wireguard/wireguard_peer_list.html:740
 msgid "Unknown error"
 msgstr "Erro desconhecido"
 
-#: templates/wireguard/wireguard_peer_list.html:685
+#: templates/wireguard/wireguard_peer_list.html:744
 msgid "Error creating invite."
 msgstr "Erro ao criar convite."
 
-#: templates/wireguard/wireguard_peer_list.html:722
+#: templates/wireguard/wireguard_peer_list.html:781
 msgid "Invite text copied to clipboard."
 msgstr "Texto do convite copiado para a área de transferência."
 
-#: templates/wireguard/wireguard_peer_list.html:724
+#: templates/wireguard/wireguard_peer_list.html:783
 msgid "Failed to copy text."
 msgstr "Falha ao copiar o texto."
 
-#: templates/wireguard/wireguard_peer_list.html:727
+#: templates/wireguard/wireguard_peer_list.html:786
 msgid "Clipboard API not supported."
 msgstr "A API de área de transferência não é suportada."
 
-#: templates/wireguard/wireguard_peer_list.html:736
+#: templates/wireguard/wireguard_peer_list.html:795
 msgid "Please enter a valid phone number for WhatsApp."
 msgstr "Por favor, insira um número de telefone válido para o WhatsApp."
 
-#: templates/wireguard/wireguard_peer_list.html:748
-#: templates/wireguard/wireguard_peer_list.html:794
+#: templates/wireguard/wireguard_peer_list.html:807
+#: templates/wireguard/wireguard_peer_list.html:853
 msgid "Invite data is not available."
 msgstr "Dados do convite não estão disponíveis."
 
-#: templates/wireguard/wireguard_peer_list.html:757
+#: templates/wireguard/wireguard_peer_list.html:816
 msgid "Please enter a valid email address."
 msgstr "Por favor, insira um endereço de email válido."
 
-#: templates/wireguard/wireguard_peer_list.html:779
+#: templates/wireguard/wireguard_peer_list.html:838
 msgid "Error sending email."
 msgstr "Erro ao enviar o email."
 
-#: templates/wireguard/wireguard_peer_list.html:816
-#: templates/wireguard/wireguard_peer_list.html:820
+#: templates/wireguard/wireguard_peer_list.html:875
+#: templates/wireguard/wireguard_peer_list.html:879
 msgid "Error refreshing invite."
 msgstr "Erro ao atualizar o convite."
 
-#: templates/wireguard/wireguard_peer_list.html:835
+#: templates/wireguard/wireguard_peer_list.html:894
 msgid "No invite data available to refresh."
 msgstr "Não há dados de convite disponíveis para atualizar."
 
-#: templates/wireguard/wireguard_peer_list.html:855
+#: templates/wireguard/wireguard_peer_list.html:914
 msgid "Error closing invite:"
 msgstr "Erro ao fechar o convite:"
 
@@ -2228,23 +2229,23 @@ msgstr "Endereço ou IP inválido"
 msgid "The selected network range overlaps with another instance."
 msgstr "A faixa de rede selecionada se sobrepõe a outra instância."
 
-#: wireguard/views.py:97
+#: wireguard/views.py:98
 msgid "WireGuard Status"
 msgstr "Estado do WireGuard"
 
-#: wireguard/views.py:129
+#: wireguard/views.py:130
 msgid "Update WireGuard Instance"
 msgstr "Atualizar Instância do WireGuard"
 
-#: wireguard/views.py:133
+#: wireguard/views.py:134
 msgid "Delete WireGuard Instance"
 msgstr "Excluir Instância do WireGuard"
 
-#: wireguard/views.py:136
+#: wireguard/views.py:137
 msgid "Error removing instance: wg"
 msgstr "Erro ao remover a instância: wg"
 
-#: wireguard/views.py:136
+#: wireguard/views.py:137
 msgid ""
 "|Cannot delete the requested WireGuard instance. There are still peers "
 "associated with this instance."
@@ -2252,21 +2253,21 @@ msgstr ""
 "|Não é possível excluir a instância do WireGuard solicitada. Existem peers "
 "associados a esta instância."
 
-#: wireguard/views.py:139
+#: wireguard/views.py:140
 msgid "|WireGuard instance deleted: wg"
 msgstr "|Instância do WireGuard excluída: wg"
 
-#: wireguard/views.py:142
+#: wireguard/views.py:143
 msgid "Invalid confirmation|Please confirm deletion of WireGuard instance: wg"
 msgstr ""
 "Confirmação inválida|Por favor, confirme a exclusão da instância do "
 "WireGuard: wg"
 
-#: wireguard/views.py:146
+#: wireguard/views.py:147
 msgid "Create a new WireGuard Instance"
 msgstr "Adicionar uma nova Instância do WireGuard"
 
-#: wireguard/views.py:147
+#: wireguard/views.py:148
 msgid "New WireGuard Instance"
 msgstr "Nova Instância do WireGuard"
 
@@ -2318,47 +2319,47 @@ msgstr "Prioridade deve ser maior ou igual a 1"
 msgid "Invalid config file"
 msgstr "Arquivo de configuração inválido"
 
-#: wireguard_peer/views.py:50
+#: wireguard_peer/views.py:52
 msgid "WireGuard Peer List"
 msgstr "Lista de Peers do WireGuard"
 
-#: wireguard_peer/views.py:129
+#: wireguard_peer/views.py:155
 msgid "Create a new Peer for instance wg"
 msgstr "Criar um novo Peer para a instância wg"
 
-#: wireguard_peer/views.py:148
+#: wireguard_peer/views.py:174
 msgid "Peer created|Peer created successfully."
 msgstr "Peer adicionado|Peer adicionado com sucesso."
 
-#: wireguard_peer/views.py:153
+#: wireguard_peer/views.py:179
 msgid "Error creating peer|No available IP address found for peer creation."
 msgstr ""
 "Erro ao criar peer|Nenhum endereço IP disponível encontrado para alocação. "
 
-#: wireguard_peer/views.py:166
+#: wireguard_peer/views.py:192
 msgid "Peer deleted|Peer deleted successfully."
 msgstr "Peer excluído|Peer excluído com sucesso."
 
-#: wireguard_peer/views.py:169
+#: wireguard_peer/views.py:195
 msgid ""
 "Error deleting peer|Invalid confirmation message. Type \"delete\" to confirm."
 msgstr ""
 "Erro ao excluir peer|Mensagem de confirmação inválida. Digite \"delete\" "
 "para confirmar."
 
-#: wireguard_peer/views.py:171
+#: wireguard_peer/views.py:197
 msgid "Update Peer: "
 msgstr "Atualizar Peer: "
 
-#: wireguard_peer/views.py:182
+#: wireguard_peer/views.py:208
 msgid "Peer updated|Peer updated successfully."
 msgstr "Peer atualizado|Peer atualizado com sucesso."
 
-#: wireguard_peer/views.py:220
+#: wireguard_peer/views.py:246
 msgid "IP address deleted|IP address deleted successfully."
 msgstr "Endereço IP excluído|Endereço IP excluído com sucesso."
 
-#: wireguard_peer/views.py:225
+#: wireguard_peer/views.py:251
 msgid ""
 "Error deleting IP address|Invalid confirmation message. Type \"delete\" to "
 "confirm."
@@ -2366,19 +2367,19 @@ msgstr ""
 "Erro ao excluir endereço IP|Mensagem de confirmação inválida. Digite "
 "\"delete\" para confirmar."
 
-#: wireguard_peer/views.py:230
+#: wireguard_peer/views.py:256
 msgid "Manage client route"
 msgstr "Gerenciar rota do cliente"
 
-#: wireguard_peer/views.py:232
+#: wireguard_peer/views.py:258
 msgid "Manage IP address or Network"
 msgstr "Gerenciar Endereço IP ou Rede"
 
-#: wireguard_peer/views.py:245
+#: wireguard_peer/views.py:271
 msgid "IP address updated|IP address updated successfully."
 msgstr "Endereço IP atualizado|Endereço IP atualizado com sucesso."
 
-#: wireguard_peer/views.py:247
+#: wireguard_peer/views.py:273
 msgid "IP address added|IP address added successfully."
 msgstr "Endereço IP adicionado|Endereço IP adicionado com sucesso."
 
@@ -2437,6 +2438,21 @@ msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Nenhuma interface encontrada|Nenhuma interface WireGuard foi encontrada para "
 "processar."
+
+#~ msgid "Stats Sync Interval (seconds)"
+#~ msgstr "Intervalo de Sincronização de Estatísticas (segundos)"
+
+#~ msgid "Stats Cache Interval (seconds)"
+#~ msgstr "Intervalo de Cache de Estatísticas (segundos)"
+
+#~ msgid "Stats sync interval must be at least 60 seconds."
+#~ msgstr ""
+#~ "Intervalo de sincronização de estatísticas deve ser de pelo menos 60 "
+#~ "segundos."
+
+#~ msgid "Stats cache interval must be at least 60 seconds."
+#~ msgstr ""
+#~ "Intervalo de cache de estatísticas deve ser de pelo menos 60 segundos."
 
 #~ msgid "Config Pending"
 #~ msgstr "Configuração Pendente"
