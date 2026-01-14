@@ -58,6 +58,10 @@ class Worker(models.Model):
         return self.name
 
     @property
+    def server_address(self):
+        return self.hostname or self.ip_address or ''
+
+    @property
     def display_name(self):
         cluster_settings = ClusterSettings.objects.first()
         if not cluster_settings:
@@ -96,7 +100,6 @@ class Worker(models.Model):
             return self.workerstatus.is_online
         except WorkerStatus.DoesNotExist:
             return False
-
 
 
 class WorkerStatus(models.Model):

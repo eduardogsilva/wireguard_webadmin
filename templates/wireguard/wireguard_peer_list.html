@@ -190,25 +190,35 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i>  {% trans 'Close' %}</button>
-                        <a href="#" class="btn btn-info" id="downloadConfigButton"><i class="fas fa-download"></i> {% trans 'Config' %}</a>
-                        <a href="#" class="btn btn-info" id="qrcodeButton"><i class="fas fa-qrcode"></i> {% trans 'QR Code' %}</a>
-                        <a href="#" class="btn btn-info" id="inviteButton"><i class="fas fa-share"></i> {% trans 'VPN Invite' %}</a>
-                        <a href="#" class="btn btn-outline-primary" id="editPeerButton"><i class="far fa-edit"></i> {% trans 'Edit' %}</a>
-                    </div>
+                {% if cluster_settings and servers|length > 1 %}
+                <div class="mr-auto form-inline">
+                    <label class="mr-2" for="server_select">{% trans 'Server' %}:</label>
+                    <select class="form-control" id="server_select">
+                        {% for server in servers %}
+                        <option value="{{ server.address }}">{{ server.name }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
+                {% endif %}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> {% trans 'Close' %}</button>
+                <a href="#" class="btn btn-info" id="downloadConfigButton"><i class="fas fa-download"></i> {% trans 'Config' %}</a>
+                <a href="#" class="btn btn-info" id="qrcodeButton"><i class="fas fa-qrcode"></i> {% trans 'QR Code' %}</a>
+                <a href="#" class="btn btn-info" id="inviteButton"><i class="fas fa-share"></i> {% trans 'VPN Invite' %}</a>
+                <a href="#" class="btn btn-outline-primary" id="editPeerButton"><i class="far fa-edit"></i> {% trans 'Edit' %}</a>
             </div>
         </div>
+    </div>
+</div>
 
-    {% else %}
-        <div class="alert alert-warning" role="alert">
-            <h4 class="alert-heading">{% trans 'No WireGuard Instances Found' %}</h4>
-            <p>{% trans 'There are no WireGuard instances configured. You can add a new instance by clicking the button below.' %}</p>
-        </div>
-        <p>
-            <a href="/server/manage/" class="btn btn-primary">{% trans 'Add WireGuard Instance' %}</a>
-        </p>
-    {% endif %}
+{% else %}
+<div class="alert alert-warning" role="alert">
+    <h4 class="alert-heading">{% trans 'No WireGuard Instances Found' %}</h4>
+    <p>{% trans 'There are no WireGuard instances configured. You can add a new instance by clicking the button below.' %}</p>
+</div>
+<p>
+    <a href="/server/manage/" class="btn btn-primary">{% trans 'Add WireGuard Instance' %}</a>
+</p>
+{% endif %}
 {% endblock %}
 
 
@@ -279,21 +289,46 @@
     </script>
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            $("#qrcodeButton").on("click", function(e) {
-                e.preventDefault();
-                if ($(this).hasClass('disabled')) {
-                    return false;
-                }
-                var uuid = $("#peerPreviewModal").data("peer-uuid");
-                $("#qrCodeImg").attr("src", "/tools/download_peer_config/?uuid=" + uuid + "&format=qrcode");
-                $(".info-content").hide();
-                $(".invite-content").hide();
-                $(".qr-code-content").show();
-            });
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $("#qrcodeButton").on("click", function (e) {
+            e.preventDefault();
+            if ($(this).hasClass('disabled')) {
+                return false;
+            }
+            var uuid = $("#peerPreviewModal").data("peer-uuid");
+            var server = $('#server_select').val(); // Get selected server
+            var url = "/tools/download_peer_config/?uuid=" + uuid + "&format=qrcode";
+            if (server) {
+                url += "&server=" + encodeURIComponent(server);
+            }
 
-            $("#backButton").on("click", function(e) {
+            $("#qrCodeImg").attr("src", url);
+            $(".info-content").hide();
+            $(".invite-content").hide();
+            $(".qr-code-content").show();
+        });
+
+        $("#server_select").on("change", function () {
+            var uuid = $('#peerPreviewModal').data('peer-uuid');
+            var server = $(this).val();
+
+            // Update download config button
+            var downloadUrl = '/tools/download_peer_config/?uuid=' + uuid;
+            if (server) {
+                downloadUrl += '&server=' + encodeURIComponent(server);
+            }
+            $('#downloadConfigButton').attr('href', downloadUrl);
+
+            // Update QR code button (href is used for storing base url, actual action is click)
+            var qrUrl = '/tools/download_peer_config/?uuid=' + uuid + '&format=qrcode';
+            if (server) {
+                qrUrl += '&server=' + encodeURIComponent(server);
+            }
+            $('#qrcodeButton').attr('href', qrUrl);
+        });
+
+            $("#backButton").on("click", function (e) {
                 e.preventDefault();
                 $(".qr-code-content").hide();
                 $(".info-content").show();
@@ -329,19 +364,29 @@
                 var peerAllowedIPs = peerElem.querySelector('[id^="peer-allowed-ips-"]').innerHTML;
                 var peerLocation = peerElem.querySelector('[id^="peer-location-"]').innerText;
 
-                // Update the modal fields with the card values
-                $('#peerPreviewModalLabel').text(peerNameFromCard);
-                $('#peerThroughput').html(peerThroughput);
-                $('#peerTransfer').text(peerTransfer);
-                $('#peerHandshake').text(peerHandshake);
-                $('#peerEndpoints').text(peerEndpoints);
-                $('#peerLocation').text(peerLocation);
-                $('#peerAllowedIPs').html(peerAllowedIPs);
-                $('#editPeerButton').attr('href', '/peer/manage/?peer=' + uuid);
-                $('#downloadConfigButton').attr('href', '/tools/download_peer_config/?uuid=' + uuid);
-                $('#qrcodeButton').attr('href', '/tools/download_peer_config/?uuid=' + uuid + '&format=qrcode');
-                $('#graphImg').attr('src', '/rrd/graph/?peer=' + uuid).show();
-                $('#peerPreviewModal').data('peer-uuid', uuid);
+            // Update the modal fields with the card values
+            $('#peerPreviewModalLabel').text(peerNameFromCard);
+            $('#peerThroughput').html(peerThroughput);
+            $('#peerTransfer').text(peerTransfer);
+            $('#peerHandshake').text(peerHandshake);
+            $('#peerEndpoints').text(peerEndpoints);
+            $('#peerLocation').text(peerLocation);
+            $('#peerAllowedIPs').html(peerAllowedIPs);
+            $('#editPeerButton').attr('href', '/peer/manage/?peer=' + uuid);
+
+            var server = $('#server_select').val();
+            var downloadUrl = '/tools/download_peer_config/?uuid=' + uuid;
+            var qrUrl = '/tools/download_peer_config/?uuid=' + uuid + '&format=qrcode';
+
+            if (server) {
+                downloadUrl += '&server=' + encodeURIComponent(server);
+                qrUrl += '&server=' + encodeURIComponent(server);
+            }
+
+            $('#downloadConfigButton').attr('href', downloadUrl);
+            $('#qrcodeButton').attr('href', qrUrl);
+            $('#graphImg').attr('src', '/rrd/graph/?peer=' + uuid).show();
+            $('#peerPreviewModal').data('peer-uuid', uuid);
 
                 $.ajax({
                     url: '/api/peer_info/',

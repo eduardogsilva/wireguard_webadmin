@@ -27,7 +27,7 @@ def clean_command_field(command_field):
     return cleaned_field
 
 
-def generate_peer_config(peer_uuid):
+def generate_peer_config(peer_uuid, server_address=None):
     peer = get_object_or_404(Peer, uuid=peer_uuid)
     wg_instance = peer.wireguard_instance
 
@@ -46,6 +46,11 @@ def generate_peer_config(peer_uuid):
     dns_entries = [wg_instance.dns_primary, wg_instance.dns_secondary]
     dns_line = ", ".join(filter(None, dns_entries))
 
+    if server_address:
+        endpoint = server_address
+    else:
+        endpoint = f"{wg_instance.hostname}:{wg_instance.listen_port}"
+
     config_lines = [
         "[Interface]",
         f"PrivateKey = {peer.private_key}",
@@ -53,7 +58,7 @@ def generate_peer_config(peer_uuid):
         f"DNS = {dns_line}" if dns_line else "",
         "\n[Peer]",
         f"PublicKey = {wg_instance.public_key}",
-        f"Endpoint = {wg_instance.hostname}:{wg_instance.listen_port}",
+        f"Endpoint = {endpoint}",
         f"AllowedIPs = {allowed_ips_line}",
         f"PresharedKey = {peer.pre_shared_key}" if peer.pre_shared_key else "",
         f"PersistentKeepalive = {peer.persistent_keepalive}",
@@ -194,8 +199,9 @@ def download_config_or_qrcode(request):
             raise Http404
 
     format_type = request.GET.get('format', 'conf')
+    server_address = request.GET.get('server')
 
-    config_content = generate_peer_config(peer.uuid)
+    config_content = generate_peer_config(peer.uuid, server_address=server_address)
 
     if format_type == 'qrcode':
         qr = qrcode.QRCode(

@@ -129,6 +129,16 @@
                 <a href="{{ invite_settings.download_5_url }}" target="_blank">{{ invite_settings.download_5_label }}</a>
             {% endif %}
         </div>
+        {% if cluster_settings and servers|length > 1 %}
+        <div style="text-align: center; margin-bottom: 15px;">
+            <label for="server_select">Server:</label>
+            <select id="server_select" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                {% for server in servers %}
+                <option value="{{ server.address }}">{{ server.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
         <div class="button-group">
             <a href="/invite/download_config/?token={{ peer_invite.uuid }}&password={{ password }}" target="_blank" class="btn btn-primary" id="downloadConfigButton">Download Config</a>
             <a href="#" id="viewQrButton" class="btn btn-secondary"{% if not peer_invite.peer.private_key %} style="opacity: 0.5; cursor: not-allowed;"{% endif %}>View QR Code</a>
@@ -152,33 +162,65 @@
             var downloadConfigButton = document.getElementById("downloadConfigButton");
             var qrCodeContainer = document.getElementById("qrCodeContainer");
             var hasPrivateKey = {% if peer_invite.peer.private_key %}true{% else %}false{% endif %};
-            
-            viewQrButton.addEventListener("click", function(event) {
-                event.preventDefault();
-                if (!hasPrivateKey) {
+
+            viewQrButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            if (!hasPrivateKey) {
+                return false;
+            }
+            if (qrCodeContainer.style.display === "none" || qrCodeContainer.style.display === "") {
+                // Always refresh image on click to ensure current server selection is respected
+                qrCodeContainer.innerHTML = '';
+
+                var img = document.createElement("img");
+                var server = document.getElementById("server_select") ? document.getElementById("server_select").value : "";
+                var url = "/invite/download_config/?token={{ peer_invite.uuid }}&password={{ password }}&format=qrcode";
+                if (server) {
+                    url += "&server=" + encodeURIComponent(server);
+                }
+                img.src = url;
+                img.alt = "QR Code";
+                qrCodeContainer.appendChild(img);
+
+                qrCodeContainer.style.display = "block";
+            } else {
+                qrCodeContainer.style.display = "none";
+            }
+        });
+
+        downloadConfigButton.addEventListener("click", function (event) {
+            if (!hasPrivateKey) {
+                if (!confirm("This configuration does not contain a private key. You must add the private key manually in your client before using it.")) {
+                    event.preventDefault();
                     return false;
                 }
-                if (qrCodeContainer.style.display === "none" || qrCodeContainer.style.display === "") {
-                    if (qrCodeContainer.getElementsByTagName("img").length === 0) {
-                        var img = document.createElement("img");
-                        img.src = "/invite/download_config/?token={{ peer_invite.uuid }}&password={{ password }}&format=qrcode";
-                        img.alt = "QR Code";
-                        qrCodeContainer.appendChild(img);
-                    }
-                    qrCodeContainer.style.display = "block";
-                } else {
-                    qrCodeContainer.style.display = "none";
+            }
+            var server = document.getElementById("server_select") ? document.getElementById("server_select").value : "";
+            var url = "/invite/download_config/?token={{ peer_invite.uuid }}&password={{ password }}";
+            if (server) {
+                url += "&server=" + encodeURIComponent(server);
+            }
+            this.href = url;
+            });
+
+        // Update href immediately if dropdown changes (optional, but good for UX)
+        var serverSelect = document.getElementById("server_select");
+        if (serverSelect) {
+            serverSelect.addEventListener("change", function () {
+                var server = this.value;
+                var url = "/invite/download_config/?token={{ peer_invite.uuid }}&password={{ password }}";
+                if (server) {
+                    url += "&server=" + encodeURIComponent(server);
+                }
+                downloadConfigButton.href = url;
+
+                // If QR code is visible, reload it
+                if (qrCodeContainer.style.display === "block") {
+                    viewQrButton.click(); // Hide
+                    setTimeout(function () { viewQrButton.click(); }, 100); // Show again
                 }
             });
-            
-            downloadConfigButton.addEventListener("click", function(event) {
-                if (!hasPrivateKey) {
-                    if (!confirm("This configuration does not contain a private key. You must add the private key manually in your client before using it.")) {
-                        event.preventDefault();
-                        return false;
-                    }
-                }
-            });
+        }
         });
     </script>
 {% endif %}
