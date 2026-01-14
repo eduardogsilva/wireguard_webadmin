@@ -8,7 +8,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from cluster.models import ClusterSettings
+from cluster.models import ClusterSettings, Worker
 from user_manager.models import UserAcl
 from wgwadmlibrary.tools import check_sort_order_conflict, deduplicate_sort_order, default_sort_peers, \
     user_allowed_instances, user_allowed_peers, user_has_access_to_instance, user_has_access_to_peer
@@ -83,17 +83,24 @@ def view_wireguard_peer_list(request):
     if settings.WIREGUARD_STATUS_CACHE_ENABLED:
         refresh_interval = settings.WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL
 
-    if ClusterSettings.objects.filter(name='cluster_settings', enabled=True).exists():
-        cluster_enabled = True
-    else:
-        cluster_enabled = False
+    cluster_settings = ClusterSettings.objects.filter(name='cluster_settings', enabled=True).first()
+    servers = []
+    if cluster_settings:
+        if cluster_settings.primary_enable_wireguard:
+            servers.append({'name': _('Primary Server'), 'address': ''})
+        
+        for worker in Worker.objects.filter(enabled=True):
+            port = current_instance.listen_port if current_instance else 51820
+            worker_address = f"{worker.server_address}:{port}"
+            servers.append({'name': worker.display_name, 'address': worker_address})
 
     context = {
         'page_title': page_title, 'wireguard_instances': wireguard_instances,
         'current_instance': current_instance, 'peer_list': peer_list, 'add_peer_enabled': add_peer_enabled,
         'user_acl': user_acl, 'refresh_interval': refresh_interval,
         'load_from_cache': load_from_cache, 'cache_previous_count': cache_previous_count,
-        'cluster_enabled': cluster_enabled,
+        'cluster_settings': cluster_settings,
+        'servers': servers,
     }
 
     return render(request, 'wireguard/wireguard_peer_list.html', context)

@@ -189,26 +189,47 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                {% if cluster_settings and servers|length > 1 %}
-                <div class="mr-auto form-inline">
-                    <label class="mr-2" for="server_select">{% trans 'Server' %}:</label>
-                    <select class="form-control" id="server_select">
-                        {% for server in servers %}
-                        <option value="{{ server.address }}">{{ server.name }}</option>
-                        {% endfor %}
-                    </select>
+                    <div class="modal-footer d-flex flex-column align-items-stretch">
+                        <!-- Row 1: buttons -->
+                        <div class="d-flex w-100 justify-content-end flex-wrap">
+                            <button type="button" class="btn btn-secondary mb-2" data-dismiss="modal">
+                                <i class="fas fa-times"></i> {% trans 'Close' %}
+                            </button>
+
+                            <a href="#" class="btn btn-info ml-2 mb-2" id="downloadConfigButton">
+                                <i class="fas fa-download"></i> {% trans 'Config' %}
+                            </a>
+
+                            <a href="#" class="btn btn-info ml-2 mb-2" id="qrcodeButton">
+                                <i class="fas fa-qrcode"></i> {% trans 'QR Code' %}
+                            </a>
+
+                            <a href="#" class="btn btn-info ml-2 mb-2" id="inviteButton">
+                                <i class="fas fa-share"></i> {% trans 'VPN Invite' %}
+                            </a>
+
+                            <a href="#" class="btn btn-outline-primary ml-2 mb-2" id="editPeerButton">
+                                <i class="far fa-edit"></i> {% trans 'Edit' %}
+                            </a>
+                        </div>
+
+                        <!-- Row 2: server select (right aligned) -->
+                        {% if cluster_settings and servers|length > 1 %}
+                            <div class="d-flex w-100 mt-2">
+                                <div class="form-inline ml-auto">
+                                    <label class="mr-2 mb-0" for="server_select">{% trans 'Server' %}:</label>
+                                    <select class="form-control" id="server_select" style="width: 300px;">
+                                        {% for server in servers %}
+                                            <option value="{{ server.address }}">{{ server.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
-                {% endif %}
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> {% trans 'Close' %}</button>
-                <a href="#" class="btn btn-info" id="downloadConfigButton"><i class="fas fa-download"></i> {% trans 'Config' %}</a>
-                <a href="#" class="btn btn-info" id="qrcodeButton"><i class="fas fa-qrcode"></i> {% trans 'QR Code' %}</a>
-                <a href="#" class="btn btn-info" id="inviteButton"><i class="fas fa-share"></i> {% trans 'VPN Invite' %}</a>
-                <a href="#" class="btn btn-outline-primary" id="editPeerButton"><i class="far fa-edit"></i> {% trans 'Edit' %}</a>
             </div>
         </div>
-    </div>
-</div>
 
 {% else %}
 <div class="alert alert-warning" role="alert">
