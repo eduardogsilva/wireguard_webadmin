@@ -54,6 +54,42 @@ class Worker(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
+    def __str__(self):
+        return self.name
+
+    @property
+    def display_name(self):
+        cluster_settings = ClusterSettings.objects.first()
+        if not cluster_settings:
+            return self.name
+
+        mode = cluster_settings.worker_display
+
+        hostname = self.hostname or ''
+        ip_address = self.ip_address or ''
+        city = self.city or ''
+        country = self.country or ''
+
+        location_parts = [part for part in (city, country) if part]
+        location = ', '.join(location_parts)
+
+        if mode == 'name':
+            return self.name
+
+        if mode == 'server_address':
+            return hostname or ip_address or self.name
+
+        if mode == 'location':
+            return location or self.name
+
+        if mode == 'address_location':
+            address = hostname or ip_address
+            if address and location:
+                return f"{address} ({location})"
+            return address or location or self.name
+
+        return self.name
+
     @property
     def is_online(self):
         try:

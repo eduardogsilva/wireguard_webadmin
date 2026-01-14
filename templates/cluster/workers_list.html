@@ -18,7 +18,7 @@
     <tbody>
         {% for worker in workers %}
         <tr>
-            <td>{{ worker.name }}</td>
+            <td>{{ worker }}</td>
             <td style="width: 1%; white-space: nowrap;">
                 {% if worker.error_status %}
                     <i class="fas fa-exclamation-triangle text-danger blink" title="{{ worker.get_error_status_display }}"></i>
