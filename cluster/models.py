@@ -54,6 +54,14 @@ class Worker(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
+    @property
+    def is_online(self):
+        try:
+            return self.workerstatus.is_online
+        except WorkerStatus.DoesNotExist:
+            return False
+
+
 
 class WorkerStatus(models.Model):
     worker = models.OneToOneField(Worker, on_delete=models.CASCADE)
@@ -70,3 +78,11 @@ class WorkerStatus(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
+    @property
+    def is_online(self):
+        from django.utils import timezone
+        from datetime import timedelta
+        if not self.last_seen:
+            return False
+        return self.last_seen >= timezone.now() - timedelta(minutes=10)

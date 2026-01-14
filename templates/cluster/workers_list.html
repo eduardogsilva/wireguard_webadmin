@@ -54,11 +54,14 @@
                     <span class="text-muted">{% trans 'Not set' %}</span>
                 {% endif %}
             </td>
-            <td style="width: 1%; white-space: nowrap;">
+            <td style="width: 1%; white-space: nowrap;" class="{% if not worker.is_online %}text-danger blink{% endif %}">
                 {% if worker.workerstatus %}
                     {{ worker.workerstatus.last_seen|date:"M d, H:i" }}
                 {% else %}
-                    <span class="text-muted">{% trans 'Never' %}</span>
+                    <span class="{% if not worker.is_online %}text-danger blink{% endif %}">{% trans 'Never' %}</span>
+                {% endif %}
+                {% if not worker.is_online %}
+                    <i class="fas fa-exclamation-triangle text-danger blink" title="{% trans 'Last seen more than 10 minutes ago or never seen.' %}"></i>
                 {% endif %}
             </td>
             <td style="width: 1%; white-space: nowrap;">
