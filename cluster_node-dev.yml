@@ -9,7 +9,7 @@ services:
     environment:
       - MASTER_SERVER_ADDRESS=${MASTER_SERVER_ADDRESS}
       - DEBUG_MODE=${DEBUG_MODE}
-      - COMPOSE_VERSION=03r
+      - COMPOSE_VERSION=c1b
       - TZ=${TIMEZONE}
       - TOKEN=${TOKEN}
     volumes:

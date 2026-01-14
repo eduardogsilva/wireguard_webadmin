@@ -2,7 +2,7 @@
 
 set -e
 
-if [[ "$COMPOSE_VERSION" != "03r" ]]; then
+if [[ "$COMPOSE_VERSION" != "c1b" ]]; then
     echo "ERROR: Please upgrade your docker compose file. Exiting."
     exit 1
 fi
