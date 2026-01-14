@@ -116,12 +116,30 @@
             </tr>
 
             <tr>
-                <th>{% trans 'Stats Sync Interval' %}</th>
-                <td>{{ cluster_settings.stats_sync_interval }}s</td>
+                <th>{% trans 'Stats Cache Refresh Interval' %}</th>
+                <td>{{ cache_refresh_interval }}s</td>
             </tr>
             <tr>
-                <th>{% trans 'Stats Cache Interval' %}</th>
-                <td>{{ cluster_settings.stats_cache_interval }}s</td>
+                <th>{% trans 'Cache Enabled' %}</th>
+                <td>
+                    {% if cache_enabled %}
+                    <i class="fas fa-check text-green"></i>
+                    {% else %}
+                    <i class="fas fa-times text-gray"></i>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{% trans 'Cache Web Load Previous Count' %}</th>
+                <td>{{ cache_web_load_previous_count }}</td>
+            </tr>
+            <tr>
+                <th>{% trans 'Master Cache Processing Time' %}</th>
+                <td>{{ master_cache_times }}</td>
+            </tr>
+            <tr>
+                <th>{% trans 'Cluster Cache Processing Time' %}</th>
+                <td>{{ cluster_cache_times }}</td>
             </tr>
             <tr>
                 <th>{% trans 'Restart Mode' %}</th>

@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from api.models import WireguardStatusCache
 from dns.functions import compress_dnsmasq_config
 from user_manager.models import UserAcl
 from .forms import WorkerForm, ClusterSettingsForm
@@ -19,11 +20,20 @@ def cluster_main(request):
     cluster_settings, created = ClusterSettings.objects.get_or_create(name='cluster_settings')
     page_title = _('Cluster')
     workers = Worker.objects.all().order_by('name')
+
+    master_cache_times = ", ".join([str(c.processing_time_ms) for c in WireguardStatusCache.objects.filter(cache_type='master').order_by('-created')])
+    cluster_cache_times = ", ".join([str(c.processing_time_ms) for c in WireguardStatusCache.objects.filter(cache_type='cluster').order_by('-created')])
+
     context = {
-        'page_title': page_title, 
-        'workers': workers, 
+        'page_title': page_title,
+        'workers': workers,
         'current_worker_version': settings.CLUSTER_WORKER_CURRENT_VERSION,
-        'cluster_settings': cluster_settings
+        'cluster_settings': cluster_settings,
+        'cache_refresh_interval': settings.WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL,
+        'cache_enabled': settings.WIREGUARD_STATUS_CACHE_ENABLED,
+        'cache_web_load_previous_count': settings.WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT,
+        'master_cache_times': master_cache_times,
+        'cluster_cache_times': cluster_cache_times,
     }
     return render(request, 'cluster/workers_list.html', context)
 
