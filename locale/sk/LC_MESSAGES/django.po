@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-14 09:01-0300\n"
+"POT-Creation-Date: 2026-01-14 09:34-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Name"
 msgstr "Názov"
 
-#: cluster/forms.py:19 templates/cluster/workers_list.html:96
+#: cluster/forms.py:19 templates/cluster/workers_list.html:103
 #: vpn_invite/forms.py:49 vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Povolené"
@@ -107,25 +107,21 @@ msgstr "Cluster povolený"
 msgid "Primary Enable WireGuard"
 msgstr "Primárne povolenie WireGuard"
 
-#: cluster/forms.py:99 templates/cluster/workers_list.html:106
+#: cluster/forms.py:99 templates/cluster/workers_list.html:113
 msgid "Cluster Mode"
 msgstr "Režim clustra"
 
-#: cluster/forms.py:100 templates/cluster/workers_list.html:127
+#: cluster/forms.py:100 templates/cluster/workers_list.html:152
 msgid "Restart Mode"
 msgstr "Režim reštartu"
 
-#: cluster/forms.py:101 templates/cluster/workers_list.html:131
+#: cluster/forms.py:101 templates/cluster/workers_list.html:156
 msgid "Worker Display"
 msgstr "Zobrazenie workera"
 
-#: cluster/forms.py:137
+#: cluster/forms.py:136
 msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgstr "Režim klastra vyžaduje povolenie vyrovnávacej pamäte stavu WireGuard."
-
-#: cluster/forms.py:140
-msgid "Disabling WireGuard on the master server is currently not supported."
-msgstr "Zakázanie WireGuard na hlavnom serveri momentálne nie je podporované."
 
 #: cluster/models.py:46
 msgid ""
@@ -153,40 +149,40 @@ msgstr ""
 msgid "Worker update is required."
 msgstr "Vyžaduje sa aktualizácia workera."
 
-#: cluster/views.py:16 cluster/views.py:34 cluster/views.py:103
+#: cluster/views.py:18 cluster/views.py:45 cluster/views.py:114
 #: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Prístup zamietnutý"
 
-#: cluster/views.py:19 templates/base.html:162
+#: cluster/views.py:21 templates/base.html:162
 msgid "Cluster"
 msgstr "Cluster"
 
-#: cluster/views.py:40
+#: cluster/views.py:51
 msgid "Edit Worker: "
 msgstr "Upraviť Worker: "
 
-#: cluster/views.py:46
+#: cluster/views.py:57
 msgid "Worker deleted|Worker deleted: "
 msgstr "Worker vymazaný|Worker vymazaný: "
 
-#: cluster/views.py:49
+#: cluster/views.py:60
 msgid "Worker not deleted|Invalid confirmation."
 msgstr "Worker nebol vymazaný|Neplatné potvrdenie."
 
-#: cluster/views.py:53 templates/cluster/workers_list.html:87
+#: cluster/views.py:64 templates/cluster/workers_list.html:94
 msgid "Add Worker"
 msgstr "Pridať Worker"
 
-#: cluster/views.py:64
+#: cluster/views.py:75
 msgid "Worker updated|Worker updated: "
 msgstr "Worker aktualizovaný|Worker aktualizovaný: "
 
-#: cluster/views.py:66
+#: cluster/views.py:77
 msgid "Worker created|Worker created: "
 msgstr "Worker vytvorený|Worker vytvorený: "
 
-#: cluster/views.py:71
+#: cluster/views.py:82
 msgid ""
 "\n"
 "        <h5>Worker Configuration</h5>\n"
@@ -230,15 +226,15 @@ msgstr ""
 "mesto, názov hostiteľa).</p>\n"
 "        "
 
-#: cluster/views.py:106 templates/cluster/workers_list.html:88
+#: cluster/views.py:117 templates/cluster/workers_list.html:95
 msgid "Cluster Settings"
 msgstr "Nastavenia Clustra"
 
-#: cluster/views.py:112
+#: cluster/views.py:123
 msgid "Cluster settings updated successfully."
 msgstr "Nastavenia clustra úspešne aktualizované."
 
-#: cluster/views.py:124
+#: cluster/views.py:135
 msgid ""
 "\n"
 "        <h5>Cluster Mode</h5>\n"
@@ -766,132 +762,125 @@ msgid "Last Seen"
 msgstr "Naposledy videný"
 
 #: templates/cluster/workers_list.html:13
-#: templates/cluster/workers_list.html:110
+#: templates/cluster/workers_list.html:117
 msgid "Config Version"
 msgstr "Verzia konfigurácie"
 
-#: templates/cluster/workers_list.html:28
+#: templates/cluster/workers_list.html:30
 msgid "Configuration sync in progress"
 msgstr "Synchronizácia konfigurácie prebieha"
 
-#: templates/cluster/workers_list.html:37
+#: templates/cluster/workers_list.html:40
 msgid "The worker is outdated. Please update it to the latest version."
 msgstr "Tento worker je zastaraný. Prosím aktualizujte ho na najnovšiu verziu."
 
-#: templates/cluster/workers_list.html:44
+#: templates/cluster/workers_list.html:47
 msgid "IP Lock Enabled"
 msgstr "IP zámok povolený"
 
-#: templates/cluster/workers_list.html:47
-#: templates/cluster/workers_list.html:54
+#: templates/cluster/workers_list.html:50
+#: templates/cluster/workers_list.html:58
 msgid "Not set"
 msgstr "Nenastavené"
 
-#: templates/cluster/workers_list.html:61
+#: templates/cluster/workers_list.html:66
 msgid "Never"
 msgstr "Nikdy"
 
-#: templates/cluster/workers_list.html:64
+#: templates/cluster/workers_list.html:70
 msgid "Last seen more than 10 minutes ago or never seen."
 msgstr "Naposledy videný pred viac ako 10 minútami alebo nikdy videný."
 
-#: templates/cluster/workers_list.html:77
+#: templates/cluster/workers_list.html:83
 #: templates/dns/static_host_list.html:74 templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/wireguard_peer_list.html:198
 msgid "Edit"
 msgstr "Upraviť"
 
-#: templates/cluster/workers_list.html:82
+#: templates/cluster/workers_list.html:89
 msgid "No workers configured"
 msgstr "Nie sú nakonfigurovaní žiadni workery"
 
-#: templates/cluster/workers_list.html:89
-#: templates/cluster/workers_list.html:92
+#: templates/cluster/workers_list.html:96
+#: templates/cluster/workers_list.html:99
 msgid "Cluster Information"
 msgstr "Informácie o klastri"
 
-#: templates/cluster/workers_list.html:114
+#: templates/cluster/workers_list.html:121
 msgid "DNS Version"
 msgstr "Verzia DNS"
 
-#: templates/cluster/workers_list.html:119
-msgid "Stats Sync Interval"
-msgstr "Interval synchronizácie štatistík"
+#: templates/cluster/workers_list.html:126
+msgid "Stats Cache Refresh Interval"
+msgstr "Interval obnovy vyrovnávacej pamäte štatistík"
 
-#: templates/cluster/workers_list.html:123
-msgid "Stats Cache Interval"
-msgstr "Interval cache štatistík"
+#: templates/cluster/workers_list.html:130
+msgid "Cache Enabled"
+msgstr "Vyrovnávacia pamäť povolená"
 
-#: templates/cluster/workers_list.html:135
+#: templates/cluster/workers_list.html:140
+msgid "Cache Web Load Previous Count"
+msgstr "Počet predchádzajúcich načítaní webovej vyrovnávacej pamäte"
+
+#: templates/cluster/workers_list.html:144
+msgid "Master Cache Processing Time"
+msgstr "Čas spracovania vyrovnávacej pamäte Master"
+
+#: templates/cluster/workers_list.html:148
+msgid "Cluster Cache Processing Time"
+msgstr "Čas spracovania vyrovnávacej pamäte Cluster"
+
+#: templates/cluster/workers_list.html:160
 msgid "Primary WireGuard"
 msgstr "Povoliť primárny WireGuard"
 
-#: templates/cluster/workers_list.html:153
+#: templates/cluster/workers_list.html:178
 msgid "Cluster Feature – Testing Phase"
 msgstr "Funkcia klastra – testovacia fáza"
 
-#: templates/cluster/workers_list.html:160
+#: templates/cluster/workers_list.html:185
 msgid "The cluster functionality is currently released as experimental."
 msgstr "Funkcia klastra je v súčasnosti vydaná ako experimentálna."
 
-#: templates/cluster/workers_list.html:161
+#: templates/cluster/workers_list.html:186
 msgid "At this stage, only core features are implemented:"
 msgstr "V tejto fáze sú implementované iba základné funkcie:"
 
-#: templates/cluster/workers_list.html:163
+#: templates/cluster/workers_list.html:188
 msgid "Configuration synchronization service"
 msgstr "Služba synchronizácie konfigurácie"
 
-#: templates/cluster/workers_list.html:164
+#: templates/cluster/workers_list.html:189
 msgid "Primary node mirroring (WireGuard and firewall rules)"
 msgstr "Zrkadlenie primárneho uzla (WireGuard a pravidlá firewallu)"
 
-#: templates/cluster/workers_list.html:165
+#: templates/cluster/workers_list.html:190
 msgid "DNS rules mirroring"
 msgstr "Zrkadlenie pravidiel DNS"
 
-#: templates/cluster/workers_list.html:168
+#: templates/cluster/workers_list.html:193
 msgid "Warning:"
 msgstr "Upozornenie:"
 
-#: templates/cluster/workers_list.html:170
-msgid ""
-"In the current version, peer state information is not collected by the "
-"master server."
-msgstr ""
-"V súčasnej verzii master server nezhromažďuje informácie o stave peerov."
-
-#: templates/cluster/workers_list.html:171
-msgid ""
-"Traffic data, IP address, handshake status, and online/offline state will "
-"not be visible for peers connected to cluster nodes."
-msgstr ""
-"Údaje o návštevnosti, IP adresa, stav handshake a online/offline stav nebudú "
-"viditeľné pre peerov pripojených k uzlom klastra."
-
-#: templates/cluster/workers_list.html:173
+#: templates/cluster/workers_list.html:200
 msgid "Next priority features (coming soon):"
 msgstr "Ďalšie prioritné funkcie (už čoskoro):"
 
-#: templates/cluster/workers_list.html:175
+#: templates/cluster/workers_list.html:202
 msgid "Traffic data synchronization"
 msgstr "Synchronizácia údajov o návštevnosti"
 
-#: templates/cluster/workers_list.html:176
+#: templates/cluster/workers_list.html:203
 msgid ""
 "Server selection dropdown before downloading peer configs or VPN invites"
 msgstr ""
 "Rozbaľovací zoznam výberu servera pred stiahnutím konfigurácií peerov alebo "
 "pozvánok VPN"
 
-#: templates/cluster/workers_list.html:180
+#: templates/cluster/workers_list.html:207
 msgid "For more information, please visit:"
 msgstr "Pre viac informácií navštívte prosím:"
-
-#: templates/cluster/workers_list.html:184
-msgid "I Understand"
-msgstr "Rozumiem"
 
 #: templates/console/console.html:12
 msgid "Clear"
@@ -2420,6 +2409,29 @@ msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Neboli nájdené rozhrania|Neboli nájdené žiadne WireGuard rozhrania na "
 "spracovanie."
+
+#~ msgid "Stats Sync Interval"
+#~ msgstr "Interval synchronizácie štatistík"
+
+#~ msgid ""
+#~ "In the current version, peer state information is not collected by the "
+#~ "master server."
+#~ msgstr ""
+#~ "V súčasnej verzii master server nezhromažďuje informácie o stave peerov."
+
+#~ msgid ""
+#~ "Traffic data, IP address, handshake status, and online/offline state will "
+#~ "not be visible for peers connected to cluster nodes."
+#~ msgstr ""
+#~ "Údaje o návštevnosti, IP adresa, stav handshake a online/offline stav "
+#~ "nebudú viditeľné pre peerov pripojených k uzlom klastra."
+
+#~ msgid "I Understand"
+#~ msgstr "Rozumiem"
+
+#~ msgid "Disabling WireGuard on the master server is currently not supported."
+#~ msgstr ""
+#~ "Zakázanie WireGuard na hlavnom serveri momentálne nie je podporované."
 
 #~ msgid "Stats Sync Interval (seconds)"
 #~ msgstr "Interval synchronizácie štatistík (sekundy)"
