@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-13 19:58-0300\n"
+"POT-Creation-Date: 2026-01-14 09:01-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Name"
 msgstr "Nombre"
 
-#: cluster/forms.py:19 templates/cluster/workers_list.html:93
+#: cluster/forms.py:19 templates/cluster/workers_list.html:96
 #: vpn_invite/forms.py:49 vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Habilitado"
@@ -107,15 +107,15 @@ msgstr "Cluster habilitado"
 msgid "Primary Enable WireGuard"
 msgstr "Habilitar WireGuard primario"
 
-#: cluster/forms.py:99 templates/cluster/workers_list.html:103
+#: cluster/forms.py:99 templates/cluster/workers_list.html:106
 msgid "Cluster Mode"
 msgstr "Modo de cluster"
 
-#: cluster/forms.py:100 templates/cluster/workers_list.html:124
+#: cluster/forms.py:100 templates/cluster/workers_list.html:127
 msgid "Restart Mode"
 msgstr "Modo de reinicio"
 
-#: cluster/forms.py:101 templates/cluster/workers_list.html:128
+#: cluster/forms.py:101 templates/cluster/workers_list.html:131
 msgid "Worker Display"
 msgstr "Visualización del worker"
 
@@ -178,7 +178,7 @@ msgstr "Worker eliminado|Worker eliminado: "
 msgid "Worker not deleted|Invalid confirmation."
 msgstr "Worker no eliminado|Confirmación inválida."
 
-#: cluster/views.py:53 templates/cluster/workers_list.html:84
+#: cluster/views.py:53 templates/cluster/workers_list.html:87
 msgid "Add Worker"
 msgstr "Agregar Worker"
 
@@ -234,7 +234,7 @@ msgstr ""
 "nombre de host).</p>\n"
 "        "
 
-#: cluster/views.py:106 templates/cluster/workers_list.html:85
+#: cluster/views.py:106 templates/cluster/workers_list.html:88
 msgid "Cluster Settings"
 msgstr "Configuración del Cluster"
 
@@ -774,7 +774,7 @@ msgid "Last Seen"
 msgstr "Visto por última vez"
 
 #: templates/cluster/workers_list.html:13
-#: templates/cluster/workers_list.html:107
+#: templates/cluster/workers_list.html:110
 msgid "Config Version"
 msgstr "Versión de configuración"
 
@@ -800,68 +800,72 @@ msgstr "No establecido"
 msgid "Never"
 msgstr "Nunca"
 
-#: templates/cluster/workers_list.html:74
+#: templates/cluster/workers_list.html:64
+msgid "Last seen more than 10 minutes ago or never seen."
+msgstr "Visto por última vez hace más de 10 minutos o nunca visto."
+
+#: templates/cluster/workers_list.html:77
 #: templates/dns/static_host_list.html:74 templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/wireguard_peer_list.html:198
 msgid "Edit"
 msgstr "Editar"
 
-#: templates/cluster/workers_list.html:79
+#: templates/cluster/workers_list.html:82
 msgid "No workers configured"
 msgstr "No hay workers configurados"
 
-#: templates/cluster/workers_list.html:86
 #: templates/cluster/workers_list.html:89
+#: templates/cluster/workers_list.html:92
 msgid "Cluster Information"
 msgstr "Información del clúster"
 
-#: templates/cluster/workers_list.html:111
+#: templates/cluster/workers_list.html:114
 msgid "DNS Version"
 msgstr "Versión de DNS"
 
-#: templates/cluster/workers_list.html:116
+#: templates/cluster/workers_list.html:119
 msgid "Stats Sync Interval"
 msgstr "Intervalo de sincronización de estadísticas"
 
-#: templates/cluster/workers_list.html:120
+#: templates/cluster/workers_list.html:123
 msgid "Stats Cache Interval"
 msgstr "Intervalo de caché de estadísticas"
 
-#: templates/cluster/workers_list.html:132
+#: templates/cluster/workers_list.html:135
 msgid "Primary WireGuard"
 msgstr "Habilitar WireGuard primario"
 
-#: templates/cluster/workers_list.html:150
+#: templates/cluster/workers_list.html:153
 msgid "Cluster Feature – Testing Phase"
 msgstr "Función de clúster – Fase de pruebas"
 
-#: templates/cluster/workers_list.html:157
+#: templates/cluster/workers_list.html:160
 msgid "The cluster functionality is currently released as experimental."
 msgstr ""
 "La funcionalidad de clúster se encuentra actualmente en fase experimental."
 
-#: templates/cluster/workers_list.html:158
+#: templates/cluster/workers_list.html:161
 msgid "At this stage, only core features are implemented:"
 msgstr "En esta etapa, solo se han implementado las funciones principales:"
 
-#: templates/cluster/workers_list.html:160
+#: templates/cluster/workers_list.html:163
 msgid "Configuration synchronization service"
 msgstr "Servicio de sincronización de configuración"
 
-#: templates/cluster/workers_list.html:161
+#: templates/cluster/workers_list.html:164
 msgid "Primary node mirroring (WireGuard and firewall rules)"
 msgstr "Reflejo del nodo primario (WireGuard e regras de firewall)"
 
-#: templates/cluster/workers_list.html:162
+#: templates/cluster/workers_list.html:165
 msgid "DNS rules mirroring"
 msgstr "Reflejo de regras de DNS"
 
-#: templates/cluster/workers_list.html:165
+#: templates/cluster/workers_list.html:168
 msgid "Warning:"
 msgstr "Advertencia:"
 
-#: templates/cluster/workers_list.html:167
+#: templates/cluster/workers_list.html:170
 msgid ""
 "In the current version, peer state information is not collected by the "
 "master server."
@@ -869,7 +873,7 @@ msgstr ""
 "En la versión actual, el servidor maestro no recopila información sobre el "
 "estado de los peers."
 
-#: templates/cluster/workers_list.html:168
+#: templates/cluster/workers_list.html:171
 msgid ""
 "Traffic data, IP address, handshake status, and online/offline state will "
 "not be visible for peers connected to cluster nodes."
@@ -878,26 +882,26 @@ msgstr ""
 "el estado en línea/fuera de línea no serão visíveis para os peers conectados "
 "aos nós do cluster."
 
-#: templates/cluster/workers_list.html:170
+#: templates/cluster/workers_list.html:173
 msgid "Next priority features (coming soon):"
 msgstr "Próximas funciones prioritarias (próximamente):"
 
-#: templates/cluster/workers_list.html:172
+#: templates/cluster/workers_list.html:175
 msgid "Traffic data synchronization"
 msgstr "Sincronización de datos de tráfico"
 
-#: templates/cluster/workers_list.html:173
+#: templates/cluster/workers_list.html:176
 msgid ""
 "Server selection dropdown before downloading peer configs or VPN invites"
 msgstr ""
 "Menú desplegable de selección de servidor antes de descargar configuraciones "
 "de pares o invitaciones de VPN"
 
-#: templates/cluster/workers_list.html:177
+#: templates/cluster/workers_list.html:180
 msgid "For more information, please visit:"
 msgstr "Para obtener más información, visite:"
 
-#: templates/cluster/workers_list.html:181
+#: templates/cluster/workers_list.html:184
 msgid "I Understand"
 msgstr "Lo entiendo"
 
