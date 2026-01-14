@@ -87,12 +87,10 @@ def view_wireguard_peer_list(request):
     servers = []
     if cluster_settings:
         if cluster_settings.primary_enable_wireguard:
-            servers.append({'name': _('Primary Server'), 'address': ''})
+            servers.append({'name': _('Primary Server'), 'uuid': ''})
         
         for worker in Worker.objects.filter(enabled=True):
-            port = current_instance.listen_port if current_instance else 51820
-            worker_address = f"{worker.server_address}:{port}"
-            servers.append({'name': worker.display_name, 'address': worker_address})
+            servers.append({'name': worker.display_name, 'uuid': str(worker.uuid)})
 
     context = {
         'page_title': page_title, 'wireguard_instances': wireguard_instances,

@@ -220,7 +220,7 @@
                                     <label class="mr-2 mb-0" for="server_select">{% trans 'Server' %}:</label>
                                     <select class="form-control" id="server_select" style="width: 300px;">
                                         {% for server in servers %}
-                                            <option value="{{ server.address }}">{{ server.name }}</option>
+                                        <option value="{{ server.uuid }}">{{ server.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -245,9 +245,9 @@
 
 {% block custom_page_scripts %}
 
-    <script>
-        // Global object to store Chart.js instances for each peer.
-        var charts = {};
+<script>
+    // Global object to store Chart.js instances for each peer.
+    var charts = {};
 
         // Initialize charts for each peer once the DOM is ready.
         document.addEventListener('DOMContentLoaded', function() {
@@ -321,7 +321,7 @@
             var server = $('#server_select').val(); // Get selected server
             var url = "/tools/download_peer_config/?uuid=" + uuid + "&format=qrcode";
             if (server) {
-                url += "&server=" + encodeURIComponent(server);
+                url += "&worker=" + encodeURIComponent(server);
             }
 
             $("#qrCodeImg").attr("src", url);
@@ -337,14 +337,14 @@
             // Update download config button
             var downloadUrl = '/tools/download_peer_config/?uuid=' + uuid;
             if (server) {
-                downloadUrl += '&server=' + encodeURIComponent(server);
+                downloadUrl += '&worker=' + encodeURIComponent(server);
             }
             $('#downloadConfigButton').attr('href', downloadUrl);
 
             // Update QR code button (href is used for storing base url, actual action is click)
             var qrUrl = '/tools/download_peer_config/?uuid=' + uuid + '&format=qrcode';
             if (server) {
-                qrUrl += '&server=' + encodeURIComponent(server);
+                qrUrl += '&worker=' + encodeURIComponent(server);
             }
             $('#qrcodeButton').attr('href', qrUrl);
         });
@@ -400,8 +400,8 @@
             var qrUrl = '/tools/download_peer_config/?uuid=' + uuid + '&format=qrcode';
 
             if (server) {
-                downloadUrl += '&server=' + encodeURIComponent(server);
-                qrUrl += '&server=' + encodeURIComponent(server);
+                downloadUrl += '&worker=' + encodeURIComponent(server);
+                qrUrl += '&worker=' + encodeURIComponent(server);
             }
 
             $('#downloadConfigButton').attr('href', downloadUrl);

@@ -134,7 +134,7 @@
             <label for="server_select">Server:</label>
             <select id="server_select" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
                 {% for server in servers %}
-                <option value="{{ server.address }}">{{ server.name }}</option>
+                <option value="{{ server.uuid }}">{{ server.name }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -176,7 +176,7 @@
                 var server = document.getElementById("server_select") ? document.getElementById("server_select").value : "";
                 var url = "/invite/download_config/?token={{ peer_invite.uuid }}&password={{ password }}&format=qrcode";
                 if (server) {
-                    url += "&server=" + encodeURIComponent(server);
+                    url += "&worker=" + encodeURIComponent(server);
                 }
                 img.src = url;
                 img.alt = "QR Code";
@@ -198,7 +198,7 @@
             var server = document.getElementById("server_select") ? document.getElementById("server_select").value : "";
             var url = "/invite/download_config/?token={{ peer_invite.uuid }}&password={{ password }}";
             if (server) {
-                url += "&server=" + encodeURIComponent(server);
+                url += "&worker=" + encodeURIComponent(server);
             }
             this.href = url;
             });

@@ -18,12 +18,10 @@ def view_public_vpn_invite(request):
     servers = []
     if cluster_settings:
         if cluster_settings.primary_enable_wireguard:
-            servers.append({'name': 'Primary Server', 'address': ''})
+            servers.append({'name': 'Primary Server', 'uuid': ''})
         
         for worker in Worker.objects.filter(enabled=True):
-            listen_port = peer_invite.peer.wireguard_instance.listen_port
-            worker_address = f"{worker.server_address}:{listen_port}"
-            servers.append({'name': worker.display_name, 'address': worker_address})
+            servers.append({'name': worker.display_name, 'uuid': str(worker.uuid)})
 
     context = {
         'peer_invite': peer_invite,

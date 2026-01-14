@@ -11,7 +11,7 @@ from django.shortcuts import Http404, get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from cluster.models import ClusterSettings
+from cluster.models import ClusterSettings, Worker
 from firewall.models import RedirectRule
 from firewall.tools import export_user_firewall, generate_firewall_footer, generate_firewall_header, \
     generate_port_forward_firewall, generate_redirect_dns_rules
@@ -199,7 +199,15 @@ def download_config_or_qrcode(request):
             raise Http404
 
     format_type = request.GET.get('format', 'conf')
-    server_address = request.GET.get('server')
+    worker_uuid = request.GET.get('worker')
+    server_address = None
+
+    if worker_uuid:
+        try:
+            worker = Worker.objects.get(uuid=worker_uuid)
+            server_address = f"{worker.server_address}:{peer.wireguard_instance.listen_port}"
+        except (Worker.DoesNotExist, ValueError):
+            pass
 
     config_content = generate_peer_config(peer.uuid, server_address=server_address)
 
