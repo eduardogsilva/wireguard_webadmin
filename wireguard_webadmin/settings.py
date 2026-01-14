@@ -170,4 +170,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 WIREGUARD_WEBADMIN_VERSION = 9970
 
+CLUSTER_WORKER_CURRENT_VERSION = 11
+CLUSTER_WORKER_MINIMUM_VERSION = 11
+
 from wireguard_webadmin.production_settings import *

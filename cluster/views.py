@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
@@ -21,7 +22,7 @@ def cluster_main(request):
     context = {
         'page_title': page_title, 
         'workers': workers, 
-        'current_worker_version': 10,
+        'current_worker_version': settings.CLUSTER_WORKER_CURRENT_VERSION,
         'cluster_settings': cluster_settings
     }
     return render(request, 'cluster/workers_list.html', context)

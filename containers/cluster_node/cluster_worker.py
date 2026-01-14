@@ -19,8 +19,8 @@ MASTER_SERVER_ADDRESS = os.environ.get('MASTER_SERVER_ADDRESS')
 TOKEN = os.environ.get('TOKEN')
 WIREGUARD_DIR = '/etc/wireguard'
 DNS_DIR = '/etc/dnsmasq'
-WORKER_VERSION = 10
-REQUEST_TIMEOUT = 10
+WORKER_VERSION = 11
+REQUEST_TIMEOUT = 20
 
 class ClusterWorker:
     def __init__(self):

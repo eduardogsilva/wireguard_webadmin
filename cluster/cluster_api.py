@@ -33,7 +33,6 @@ def get_cluster_settings():
 
 
 def get_worker(request):
-    min_worker_version = 1
     success = True
     ip_address = get_ip_address(request)
     token = request.GET.get('token', '')
@@ -56,7 +55,7 @@ def get_worker(request):
         worker.error_status = ''
         worker.save()
 
-    if worker_version < min_worker_version:
+    if worker_version < settings.CLUSTER_WORKER_MINIMUM_VERSION:
         worker.error_status = 'update_required'
         worker.save()
         return worker, False
