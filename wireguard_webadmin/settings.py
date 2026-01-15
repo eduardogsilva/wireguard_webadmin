@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'dns',
     'vpn_invite',
     'cluster',
-    'api'
+    'api',
+    'routing_templates'
 ]
 
 MIDDLEWARE = [
