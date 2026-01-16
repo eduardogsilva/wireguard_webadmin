@@ -31,6 +31,7 @@ from firewall.views import manage_firewall_rule, manage_redirect_rule, view_fire
     view_firewall_rule_list, view_generate_iptables_script, view_manage_firewall_settings, view_redirect_rule_list, \
     view_reset_firewall
 from intl_tools.views import view_change_language
+from routing_templates.views import view_manage_routing_template, view_routing_template_list
 from user_manager.views import view_manage_user, view_peer_group_list, view_peer_group_manage, view_user_list
 from vpn_invite.views import view_email_settings, view_vpn_invite_list, view_vpn_invite_settings
 from vpn_invite_public.views import view_public_vpn_invite
@@ -99,5 +100,7 @@ urlpatterns = [
     path('cluster/', cluster_main, name='cluster_main'),
     path('cluster/worker/manage/', worker_manage, name='worker_manage'),
     path('cluster/settings/', cluster_settings, name='cluster_settings'),
+    path('routing-templates/list/', view_routing_template_list, name='routing_template_list'),
+    path('routing-templates/manage/', view_manage_routing_template, name='manage_routing_template'),
     path('change_language/', view_change_language, name='change_language'),
 ]

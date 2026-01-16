@@ -22,6 +22,7 @@ class RoutingTemplate(models.Model):
 
     custom_routes = models.TextField(blank=True, null=True, help_text=_('One route per line in CIDR notation.'))
     allow_peer_custom_routes = models.BooleanField(default=False)
+    enforce_route_policy = models.BooleanField(default=False)
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created = models.DateTimeField(auto_now_add=True)
