@@ -76,6 +76,10 @@ def view_manage_routing_template(request):
         
         <h5>Allow Peer Custom Routes</h5>
         <p>If checked, allows specific peers to add their own custom routes on top of this template.</p>
+        
+        <h5>Enforce Route Policy</h5>
+        <p>If enabled, firewall rules will be applied to strictly enforce this routing policy.<br>The peer will only be able to access networks explicitly defined by the assigned routing template.<br>Any traffic to destinations outside these routes will be blocked.</p>
+        <p>Note: depending on the number of routes and peers, enabling this option may generate a large number of firewall rules.</p>
         ''')
     }
     

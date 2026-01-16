@@ -16,6 +16,7 @@ class RoutingTemplateForm(forms.ModelForm):
             'route_type',
             'custom_routes',
             'allow_peer_custom_routes',
+            'enforce_route_policy',
         ]
 
     def __init__(self, *args, **kwargs):
@@ -28,6 +29,7 @@ class RoutingTemplateForm(forms.ModelForm):
         self.fields['route_type'].label = _("Route Type")
         self.fields['custom_routes'].label = _("Custom Routes")
         self.fields['allow_peer_custom_routes'].label = _("Allow Peer Custom Routes")
+        self.fields['enforce_route_policy'].label = _("Enforce Route Policy")
 
         back_label = _("Back")
         delete_label = _("Delete")
@@ -56,7 +58,9 @@ class RoutingTemplateForm(forms.ModelForm):
             ),
             Row(
                 Column('default_template', css_class='form-group col-md-6 mb-0'),
+                Column('enforce_route_policy', css_class='form-group col-md-6 mb-0'),
                 Column('allow_peer_custom_routes', css_class='form-group col-md-6 mb-0'),
+
                 css_class='form-row'
             ),
             Row(
@@ -68,3 +72,12 @@ class RoutingTemplateForm(forms.ModelForm):
                 css_class='form-row'
             )
         )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        allow_custom = cleaned_data.get('allow_peer_custom_routes')
+        enforce_policy = cleaned_data.get('enforce_route_policy')
+
+        if allow_custom and enforce_policy:
+            raise forms.ValidationError(_("You cannot enable 'Enforce Route Policy' when 'Allow Peer Custom Routes' is checked."))
+        return cleaned_data
