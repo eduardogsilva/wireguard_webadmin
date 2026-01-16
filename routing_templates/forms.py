@@ -57,9 +57,9 @@ class RoutingTemplateForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                Column('default_template', css_class='form-group col-md-6 mb-0'),
-                Column('enforce_route_policy', css_class='form-group col-md-6 mb-0'),
-                Column('allow_peer_custom_routes', css_class='form-group col-md-6 mb-0'),
+                Column('default_template', css_class='form-group col-md-12 mb-0'),
+                Column('enforce_route_policy', css_class='form-group col-md-12 mb-0'),
+                Column('allow_peer_custom_routes', css_class='form-group col-md-12 mb-0'),
 
                 css_class='form-row'
             ),
