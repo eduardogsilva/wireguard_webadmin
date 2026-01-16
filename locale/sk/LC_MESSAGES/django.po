@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-16 13:54-0300\n"
+"POT-Creation-Date: 2026-01-16 14:45-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n "
 ">= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 
-#: cluster/forms.py:18 dns/forms.py:111 routing_templates/forms.py:25
+#: cluster/forms.py:18 dns/forms.py:111 routing_templates/forms.py:26
 #: templates/cluster/workers_list.html:8 templates/dns/static_host_list.html:68
 #: templates/routing_templates/list.html:8
 #: templates/user_manager/peer_group_list.html:8 user_manager/forms.py:177
@@ -61,7 +61,7 @@ msgid "Token"
 msgstr "Token"
 
 #: cluster/forms.py:27 cluster/forms.py:103 dns/forms.py:25 dns/forms.py:67
-#: dns/forms.py:109 routing_templates/forms.py:32
+#: dns/forms.py:109 routing_templates/forms.py:34
 #: templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
@@ -73,7 +73,7 @@ msgid "Back"
 msgstr "Späť"
 
 #: cluster/forms.py:28 dns/forms.py:68 dns/forms.py:110
-#: routing_templates/forms.py:33
+#: routing_templates/forms.py:35
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
 #: templates/wireguard/wireguard_manage_ip.html:43
@@ -83,7 +83,7 @@ msgid "Delete"
 msgstr "Vymazať"
 
 #: cluster/forms.py:67 cluster/forms.py:124 dns/forms.py:37 dns/forms.py:83
-#: dns/forms.py:134 routing_templates/forms.py:64
+#: dns/forms.py:134 routing_templates/forms.py:68
 #: templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
@@ -158,7 +158,7 @@ msgstr "Vyžaduje sa aktualizácia workera."
 msgid "Access Denied"
 msgstr "Prístup zamietnutý"
 
-#: cluster/views.py:21 templates/base.html:180
+#: cluster/views.py:21 templates/base.html:172
 msgid "Cluster"
 msgstr "Cluster"
 
@@ -667,7 +667,7 @@ msgstr "Nastavenia firewall boli úspešne uložené"
 msgid "Language"
 msgstr "Jazyk"
 
-#: intl_tools/forms.py:24 templates/base.html:61
+#: intl_tools/forms.py:24 templates/base.html:57
 msgid "Change Language"
 msgstr "Zmeniť jazyk"
 
@@ -679,73 +679,75 @@ msgstr ""
 "Ak nájdete problémy s prekladom alebo si želáte požiadať o nový jazyk, "
 "prosím otvorte"
 
-#: routing_templates/forms.py:26
+#: routing_templates/forms.py:27
 #: templates/firewall/manage_redirect_rule.html:57
 #: templates/routing_templates/list.html:9
 msgid "WireGuard Instance"
-msgstr "WireGuard inštancia"
+msgstr "WireGuard Inštancia"
 
-#: routing_templates/forms.py:27 templates/routing_templates/list.html:24
-#, fuzzy
-#| msgid "default route"
+#: routing_templates/forms.py:28 templates/routing_templates/list.html:24
 msgid "Default Template"
-msgstr "predvolená trasa"
+msgstr "Predvolená Šablóna"
 
-#: routing_templates/forms.py:28 templates/routing_templates/list.html:10
+#: routing_templates/forms.py:29 templates/routing_templates/list.html:10
 msgid "Route Type"
-msgstr ""
+msgstr "Typ Trasy"
 
-#: routing_templates/forms.py:29 routing_templates/models.py:14
+#: routing_templates/forms.py:30 routing_templates/models.py:14
 msgid "Custom Routes"
-msgstr ""
+msgstr "Vlastné Trasy"
 
-#: routing_templates/forms.py:30
-#, fuzzy
-#| msgid "Allow Peer to Peer"
+#: routing_templates/forms.py:31
 msgid "Allow Peer Custom Routes"
-msgstr "Povoliť peer-to-peer"
+msgstr "Povoliť Vlastné Trasy Peera"
+
+#: routing_templates/forms.py:32
+msgid "Enforce Route Policy"
+msgstr "Vynútiť Smerovaciu Politiku"
+
+#: routing_templates/forms.py:82
+msgid ""
+"You cannot enable 'Enforce Route Policy' when 'Allow Peer Custom Routes' is "
+"checked."
+msgstr ""
+"Nemôžete povoliť 'Vynútiť Smerovaciu Politiku', ak je zaškrtnuté 'Povoliť "
+"Vlastné Trasy Peera'."
 
 #: routing_templates/models.py:11
 msgid "Default Route (0.0.0.0/0)"
-msgstr ""
+msgstr "Predvolená Trasa (0.0.0.0/0)"
 
 #: routing_templates/models.py:12
 msgid "Routes from Peers on same Interface"
-msgstr ""
+msgstr "Trasy od Peerov na rovnakom Rozhraní"
 
 #: routing_templates/models.py:13
 msgid "Routes from All Peers"
-msgstr ""
+msgstr "Trasy od Všetkých Peerov"
 
 #: routing_templates/models.py:23
 msgid "One route per line in CIDR notation."
-msgstr ""
+msgstr "Jedna trasa na riadok v notácii CIDR."
 
-#: routing_templates/views.py:16 templates/base.html:161
-#, fuzzy
-#| msgid "Routing table"
+#: routing_templates/views.py:16 templates/base.html:154
 msgid "Routing Templates"
-msgstr "Smerovacia tabuľka"
+msgstr "Smerovacie Šablóny"
 
 #: routing_templates/views.py:31
 msgid "Edit Routing Template: "
-msgstr ""
+msgstr "Upraviť Smerovaciu Šablónu: "
 
 #: routing_templates/views.py:37
 msgid "Routing Template deleted|Routing Template deleted: "
-msgstr ""
+msgstr "Smerovacia Šablóna vymazaná|Smerovacia Šablóna vymazaná: "
 
 #: routing_templates/views.py:40
-#, fuzzy
-#| msgid "Worker not deleted|Invalid confirmation."
 msgid "Routing Template not deleted|Invalid confirmation."
-msgstr "Worker nebol vymazaný|Neplatné potvrdenie."
+msgstr "Smerovacia Šablóna nebola vymazaná|Neplatné potvrdenie."
 
 #: routing_templates/views.py:44 templates/routing_templates/list.html:38
-#, fuzzy
-#| msgid "Routing table"
 msgid "Add Routing Template"
-msgstr "Smerovacia tabuľka"
+msgstr "Pridať Smerovaciu Šablónu"
 
 #: routing_templates/views.py:58
 msgid ""
@@ -777,8 +779,55 @@ msgid ""
 "        <h5>Allow Peer Custom Routes</h5>\n"
 "        <p>If checked, allows specific peers to add their own custom routes "
 "on top of this template.</p>\n"
+"        \n"
+"        <h5>Enforce Route Policy</h5>\n"
+"        <p>If enabled, firewall rules will be applied to strictly enforce "
+"this routing policy.<br>The peer will only be able to access networks "
+"explicitly defined by the assigned routing template.<br>Any traffic to "
+"destinations outside these routes will be blocked.</p>\n"
+"        <p>Note: depending on the number of routes and peers, enabling this "
+"option may generate a large number of firewall rules.</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Smerovacie Šablóny</h5>\n"
+"        <p>Definujte konfigurácie smerovania, ktoré sa môžu aplikovať na "
+"peerov.</p>\n"
+"        \n"
+"        <h5>Predvolená Šablóna</h5>\n"
+"        <p>Ak je zaškrtnuté, táto šablóna bude predvolená pre vybranú "
+"inštanciu WireGuard. Povolená je iba jedna predvolená šablóna na inštanciu.</"
+"p>\n"
+"\n"
+"        <h5>Typ Trasy</h5>\n"
+"        <p>Vyberte typ trás, ktoré sa majú odoslať klientovi.</p>\n"
+"        <ul>\n"
+"            <li><strong>Predvolená Trasa (0.0.0.0/0)</strong>: Presmeruje "
+"všetku prevádzku cez VPN.</li>\n"
+"            <li><strong>Trasy od Peerov na rovnakom Rozhraní</strong>: "
+"Odosiela trasy pre ostatných peerov na rovnakom rozhraní WireGuard.</li>\n"
+"            <li><strong>Trasy od Všetkých Peerov</strong>: Odosiela trasy "
+"pre všetkých peerov na všetkých rozhraniach.</li>\n"
+"            <li><strong>Vlastné Trasy</strong>: Umožňuje špecifikovať "
+"vlastné rozsahy CIDR.</li>\n"
+"        </ul>\n"
+"\n"
+"        <h5>Vlastné Trasy</h5>\n"
+"        <p>Zadajte vlastné trasy v notácii CIDR, jedna na riadok (napr. "
+"192.168.1.0/24).</p>\n"
+"        \n"
+"        <h5>Povoliť Vlastné Trasy Peera</h5>\n"
+"        <p>Ak je zaškrtnuté, umožňuje konkrétnym peerom pridať svoje vlastné "
+"trasy navyše k tejto šablóne.</p>\n"
+"        \n"
+"        <h5>Vynútiť Smerovaciu Politiku</h5>\n"
+"        <p>Ak je povolené, pravidlá firewallu sa aplikujú na prísne "
+"vynútenie tejto smerovacej politiky.<br>Peer bude môcť pristupovať iba k "
+"sieťam explicitne definovaným priradenou smerovacou šablónou.<br>Akákoľvek "
+"prevádzka do cieľov mimo týchto trás bude zablokovaná.</p>\n"
+"        <p>Poznámka: v závislosti od počtu trás a peerov môže povolenie "
+"tejto možnosti vygenerovať veľký počet pravidiel firewallu.</p>\n"
+"        "
 
 #: templates/access_denied.html:12
 msgid "Sorry, you do not have permission to access this page."
@@ -812,35 +861,47 @@ msgstr "Boli ste úspešne odhlásený."
 msgid "Login again"
 msgstr "Prihlásiť sa znovu"
 
-#: templates/base.html:94 templates/cluster/workers_list.html:9
+#: templates/base.html:89 templates/cluster/workers_list.html:9
 #: templates/dns/static_host_list.html:72 vpn_invite/forms.py:78
 #: vpn_invite/forms.py:79 vpn_invite/forms.py:80 vpn_invite/forms.py:81
 #: vpn_invite/forms.py:82
 msgid "Status"
 msgstr "Stav"
 
-#: templates/base.html:141 user_manager/views.py:74
+#: templates/base.html:135 user_manager/views.py:74
 msgid "User Manager"
 msgstr "Správa používateľov"
 
-#: templates/base.html:171 templates/wireguard/wireguard_peer_list.html:209
+#: templates/base.html:163 templates/wireguard/wireguard_peer_list.html:209
 #: vpn_invite/views.py:37
 msgid "VPN Invite"
 msgstr "VPN pozvánka"
 
-#: templates/base.html:260
+#: templates/base.html:250
 msgid "Update Required"
 msgstr "Aktualizácia potrebná"
 
-#: templates/base.html:269
+#: templates/base.html:252
+msgid ""
+"Your WireGuard settings have been modified. To apply these changes, please "
+"update the configuration and reload the WireGuard service."
+msgstr ""
+"Vaše WireGuard nastavenia boli zmenené. Pre aplikovanie týchto zmien, prosím "
+"aktualizujte konfiguráciu a reštartujte WireGuard službu."
+
+#: templates/base.html:261
 msgid "Update and restart service"
 msgstr "Aktualizovať a reštartovať službu"
 
-#: templates/base.html:274
+#: templates/base.html:269
 msgid "Update and reload service"
 msgstr "Aktualizovať a znovu načítať službu"
 
-#: templates/base.html:290
+#: templates/base.html:282
+msgid "Update Available"
+msgstr "Aktualizácia dostupná"
+
+#: templates/base.html:284
 msgid "Version"
 msgstr "Verzia"
 
@@ -1358,14 +1419,10 @@ msgid "Create Port forwarding Rule"
 msgstr "Vytvoriť pravidlo presmerovania portov"
 
 #: templates/routing_templates/list.html:11
-#, fuzzy
-#| msgid "Default Policy"
 msgid "Default"
 msgstr "Predvolená politika"
 
 #: templates/routing_templates/list.html:12
-#, fuzzy
-#| msgid "Update"
 msgid "Updated"
 msgstr "Aktualizovať"
 
@@ -1687,8 +1744,6 @@ msgid "QR Code"
 msgstr "QR kód"
 
 #: templates/wireguard/wireguard_peer_list.html:221
-#, fuzzy
-#| msgid "Primary Server"
 msgid "Server"
 msgstr "Primárny server"
 
@@ -2513,16 +2568,6 @@ msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Neboli nájdené rozhrania|Neboli nájdené žiadne WireGuard rozhrania na "
 "spracovanie."
-
-#~ msgid ""
-#~ "Your WireGuard settings have been modified. To apply these changes, "
-#~ "please update the configuration and reload the WireGuard service."
-#~ msgstr ""
-#~ "Vaše WireGuard nastavenia boli zmenené. Pre aplikovanie týchto zmien, "
-#~ "prosím aktualizujte konfiguráciu a reštartujte WireGuard službu."
-
-#~ msgid "Update Available"
-#~ msgstr "Aktualizácia dostupná"
 
 #~ msgid "Warning:"
 #~ msgstr "Upozornenie:"
