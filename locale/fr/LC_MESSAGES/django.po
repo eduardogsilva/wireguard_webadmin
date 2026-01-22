@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 15:30-0300\n"
+"POT-Creation-Date: 2026-01-22 15:43-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1518,50 +1518,40 @@ msgid "Invite Settings"
 msgstr "Paramètres d’invitation"
 
 #: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:332
-#, fuzzy
-#| msgid "Add Routing Template"
 msgid "Apply Route Template"
-msgstr "Ajouter un Modèle de Routage"
+msgstr "Appliquer le modèle de routage"
 
 #: templates/wireguard/apply_route_template.html:13
 msgid "Select a routing template to apply to the peer"
-msgstr ""
+msgstr "Sélectionnez un modèle de routage à appliquer au peer"
 
 #: templates/wireguard/apply_route_template.html:16
 msgid "Current Active Template:"
-msgstr ""
+msgstr "Modèle actif actuel :"
 
 #: templates/wireguard/apply_route_template.html:26
-#, fuzzy
-#| msgid "Display Name"
 msgid "Template Name"
-msgstr "Nom à afficher"
+msgstr "Nom du modèle"
 
 #: templates/wireguard/apply_route_template.html:27
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: templates/wireguard/apply_route_template.html:28
-#, fuzzy
-#| msgid "Action"
 msgid "Actions"
-msgstr "Action"
+msgstr "Actions"
 
 #: templates/wireguard/apply_route_template.html:44
-#, fuzzy
-#| msgid "Action"
 msgid "Active"
-msgstr "Action"
+msgstr "Actif"
 
 #: templates/wireguard/apply_route_template.html:48
 msgid "Unlink"
-msgstr ""
+msgstr "Dissocier"
 
 #: templates/wireguard/apply_route_template.html:55
-#, fuzzy
-#| msgid "No invite data available to refresh."
 msgid "No routing templates available for this interface."
-msgstr "Aucune donnée d’invitation à actualiser."
+msgstr "Aucun modèle de routage disponible pour cette interface."
 
 #: templates/wireguard/wireguard_manage_ip.html:18
 msgid "Enter Allowed IP"
@@ -1633,22 +1623,16 @@ msgid "Main ip address"
 msgstr "Adresse IP principale"
 
 #: templates/wireguard/wireguard_manage_peer.html:115
-#, fuzzy
-#| msgid "AllowedIPs at Peer section of wg"
 msgid "AllowedIPs at client configuration file"
-msgstr "AllowedIPs dans la section Peer de wg"
+msgstr "AllowedIPs dans le fichier de configuration client"
 
 #: templates/wireguard/wireguard_manage_peer.html:116
-#, fuzzy
-#| msgid "Client Routing Configuration"
 msgid "Client Routing"
-msgstr "Configuration du routage client"
+msgstr "Routage client"
 
 #: templates/wireguard/wireguard_manage_peer.html:119
-#, fuzzy
-#| msgid "Add Routing Template"
 msgid "Apply template"
-msgstr "Ajouter un Modèle de Routage"
+msgstr "Appliquer le modèle"
 
 #: templates/wireguard/wireguard_manage_peer.html:120
 msgid "Add Client route"
@@ -2593,22 +2577,20 @@ msgid "IP address added|IP address added successfully."
 msgstr "Adresse IP ajoutée | Ajout réussi."
 
 #: wireguard_peer/views.py:311
-#, fuzzy
-#| msgid "Cluster settings updated successfully."
 msgid "Route template unlinked successfully."
-msgstr "Paramètres du cluster mis à jour avec succès."
+msgstr "Modèle de routage dissocié avec succès."
 
 #: wireguard_peer/views.py:321
 msgid ""
 "Cannot apply template: This template does not allow custom routes, but the "
 "peer has custom client routes defined."
 msgstr ""
+"Impossible d'appliquer le modèle : ce modèle n'autorise pas les routes "
+"personnalisées, mais le peer a des routes client personnalisées définies."
 
 #: wireguard_peer/views.py:328
-#, fuzzy
-#| msgid "DNS settings applied successfully"
 msgid "Route template applied successfully."
-msgstr "Paramètres DNS appliqués avec succès"
+msgstr "Modèle de routage appliqué avec succès."
 
 #: wireguard_tools/views.py:170
 msgid ""

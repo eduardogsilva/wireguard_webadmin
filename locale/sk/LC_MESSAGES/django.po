@@ -1511,50 +1511,40 @@ msgid "Invite Settings"
 msgstr "Nastavenia pozvánky"
 
 #: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:332
-#, fuzzy
-#| msgid "Add Routing Template"
 msgid "Apply Route Template"
-msgstr "Pridať Smerovaciu Šablónu"
+msgstr "Použiť smerovaciu šablónu"
 
 #: templates/wireguard/apply_route_template.html:13
 msgid "Select a routing template to apply to the peer"
-msgstr ""
+msgstr "Vyberte smerovaciu šablónu, ktorú chcete použiť na peer"
 
 #: templates/wireguard/apply_route_template.html:16
 msgid "Current Active Template:"
-msgstr ""
+msgstr "Aktuálna aktívna šablóna:"
 
 #: templates/wireguard/apply_route_template.html:26
-#, fuzzy
-#| msgid "Display Name"
 msgid "Template Name"
-msgstr "Zobrazovací názov"
+msgstr "Názov šablóny"
 
 #: templates/wireguard/apply_route_template.html:27
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: templates/wireguard/apply_route_template.html:28
-#, fuzzy
-#| msgid "Action"
 msgid "Actions"
-msgstr "Akcia"
+msgstr "Akcie"
 
 #: templates/wireguard/apply_route_template.html:44
-#, fuzzy
-#| msgid "Action"
 msgid "Active"
-msgstr "Akcia"
+msgstr "Aktívne"
 
 #: templates/wireguard/apply_route_template.html:48
 msgid "Unlink"
-msgstr ""
+msgstr "Zrušiť prepojenie"
 
 #: templates/wireguard/apply_route_template.html:55
-#, fuzzy
-#| msgid "No invite data available to refresh."
 msgid "No routing templates available for this interface."
-msgstr "Žiadne údaje pozvánky na obnovenie."
+msgstr "Pre toto rozhranie nie sú k dispozícii žiadne smerovacie šablóny."
 
 #: templates/wireguard/wireguard_manage_ip.html:18
 msgid "Enter Allowed IP"
@@ -1626,22 +1616,16 @@ msgid "Main ip address"
 msgstr "Hlavná IP adresa"
 
 #: templates/wireguard/wireguard_manage_peer.html:115
-#, fuzzy
-#| msgid "AllowedIPs at Peer section of wg"
 msgid "AllowedIPs at client configuration file"
-msgstr "Povolené IP adresy v peer sekcii wg"
+msgstr "AllowedIPs v konfiguračnom súbore klienta"
 
 #: templates/wireguard/wireguard_manage_peer.html:116
-#, fuzzy
-#| msgid "Client Routing Configuration"
 msgid "Client Routing"
-msgstr "Konfigurácia smerovania klienta"
+msgstr "Smerovanie klienta"
 
 #: templates/wireguard/wireguard_manage_peer.html:119
-#, fuzzy
-#| msgid "Add Routing Template"
 msgid "Apply template"
-msgstr "Pridať Smerovaciu Šablónu"
+msgstr "Použiť šablónu"
 
 #: templates/wireguard/wireguard_manage_peer.html:120
 msgid "Add Client route"
@@ -2575,22 +2559,21 @@ msgid "IP address added|IP address added successfully."
 msgstr "IP adresa pridaná|IP adresa bola úspešne pridaná."
 
 #: wireguard_peer/views.py:311
-#, fuzzy
-#| msgid "Cluster settings updated successfully."
 msgid "Route template unlinked successfully."
-msgstr "Nastavenia clustra úspešne aktualizované."
+msgstr "Prepojenie so smerovacou šablónou bolo úspešne zrušené."
 
+#: wireguard_peer/views.py:321
 #: wireguard_peer/views.py:321
 msgid ""
 "Cannot apply template: This template does not allow custom routes, but the "
 "peer has custom client routes defined."
 msgstr ""
+"Nemožno použiť šablónu: Táto šablóna nepovoľuje vlastné trasy, ale peer má "
+"definované vlastné klientske trasy."
 
 #: wireguard_peer/views.py:328
-#, fuzzy
-#| msgid "DNS settings applied successfully"
 msgid "Route template applied successfully."
-msgstr "DNS nastavenia boli úspešne aplikované"
+msgstr "Smerovacia šablóna bola úspešne použitá."
 
 #: wireguard_tools/views.py:170
 msgid ""

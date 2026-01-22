@@ -1517,50 +1517,40 @@ msgid "Invite Settings"
 msgstr "Configuración de invitación"
 
 #: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:332
-#, fuzzy
-#| msgid "Add Routing Template"
 msgid "Apply Route Template"
-msgstr "Agregar Plantilla de Enrutamiento"
+msgstr "Aplicar Plantilla de Enrutamiento"
 
 #: templates/wireguard/apply_route_template.html:13
 msgid "Select a routing template to apply to the peer"
-msgstr ""
+msgstr "Seleccione una plantilla de enrutamiento para aplicar al peer"
 
 #: templates/wireguard/apply_route_template.html:16
 msgid "Current Active Template:"
-msgstr ""
+msgstr "Plantilla Activa Actual:"
 
 #: templates/wireguard/apply_route_template.html:26
-#, fuzzy
-#| msgid "Display Name"
 msgid "Template Name"
-msgstr "Nombre para mostrar"
+msgstr "Nombre de la Plantilla"
 
 #: templates/wireguard/apply_route_template.html:27
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: templates/wireguard/apply_route_template.html:28
-#, fuzzy
-#| msgid "Action"
 msgid "Actions"
-msgstr "Acción"
+msgstr "Acciones"
 
 #: templates/wireguard/apply_route_template.html:44
-#, fuzzy
-#| msgid "Action"
 msgid "Active"
-msgstr "Acción"
+msgstr "Activo"
 
 #: templates/wireguard/apply_route_template.html:48
 msgid "Unlink"
-msgstr ""
+msgstr "Desvincular"
 
 #: templates/wireguard/apply_route_template.html:55
-#, fuzzy
-#| msgid "No invite data available to refresh."
 msgid "No routing templates available for this interface."
-msgstr "No hay datos de invitación para actualizar."
+msgstr "No hay plantillas de enrutamiento disponibles para esta interfaz."
 
 #: templates/wireguard/wireguard_manage_ip.html:18
 msgid "Enter Allowed IP"
@@ -1632,22 +1622,16 @@ msgid "Main ip address"
 msgstr "IP principal"
 
 #: templates/wireguard/wireguard_manage_peer.html:115
-#, fuzzy
-#| msgid "AllowedIPs at Peer section of wg"
 msgid "AllowedIPs at client configuration file"
-msgstr "AllowedIPs en sección peer de wg"
+msgstr "AllowedIPs en el archivo de configuración del cliente"
 
 #: templates/wireguard/wireguard_manage_peer.html:116
-#, fuzzy
-#| msgid "Client Routing Configuration"
 msgid "Client Routing"
-msgstr "Configuración de rutas cliente"
+msgstr "Enrutamiento del Cliente"
 
 #: templates/wireguard/wireguard_manage_peer.html:119
-#, fuzzy
-#| msgid "Add Routing Template"
 msgid "Apply template"
-msgstr "Agregar Plantilla de Enrutamiento"
+msgstr "Aplicar plantilla"
 
 #: templates/wireguard/wireguard_manage_peer.html:120
 msgid "Add Client route"
@@ -2577,22 +2561,20 @@ msgid "IP address added|IP address added successfully."
 msgstr "IP añadida|IP añadida correctamente."
 
 #: wireguard_peer/views.py:311
-#, fuzzy
-#| msgid "Cluster settings updated successfully."
 msgid "Route template unlinked successfully."
-msgstr "Configuración del cluster actualizada exitosamente."
+msgstr "Plantilla de enrutamiento desvinculada exitosamente."
 
 #: wireguard_peer/views.py:321
 msgid ""
 "Cannot apply template: This template does not allow custom routes, but the "
 "peer has custom client routes defined."
 msgstr ""
+"No se puede aplicar la plantilla: esta plantilla no permite rutas personalizadas, "
+"pero el peer tiene rutas de cliente personalizadas definidas."
 
 #: wireguard_peer/views.py:328
-#, fuzzy
-#| msgid "DNS settings applied successfully"
 msgid "Route template applied successfully."
-msgstr "Configuración DNS aplicada correctamente"
+msgstr "Plantilla de enrutamiento aplicada exitosamente."
 
 #: wireguard_tools/views.py:170
 msgid ""
