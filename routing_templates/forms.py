@@ -1,3 +1,5 @@
+import ipaddress
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Column, HTML, Layout, Row, Submit
 from django import forms
@@ -77,7 +79,36 @@ class RoutingTemplateForm(forms.ModelForm):
         cleaned_data = super().clean()
         allow_custom = cleaned_data.get('allow_peer_custom_routes')
         enforce_policy = cleaned_data.get('enforce_route_policy')
+        route_type = cleaned_data.get('route_type')
+        custom_routes = cleaned_data.get('custom_routes')
 
         if allow_custom and enforce_policy:
             raise forms.ValidationError(_("You cannot enable 'Enforce Route Policy' when 'Allow Peer Custom Routes' is checked."))
+
+        if route_type == 'custom' and not custom_routes:
+            self.add_error('custom_routes', _("At least one route must be provided when Route Type is 'Custom'."))
+
+        if custom_routes:
+            lines = custom_routes.strip().split('\n')
+            validated_routes = []
+            for line in lines:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    network = ipaddress.ip_network(line, strict=False)
+                    if str(network) == '0.0.0.0/0':
+                        self.add_error('custom_routes', _("The route 0.0.0.0/0 is not allowed. Use the 'Default Route' type instead."))
+                        break
+                    validated_routes.append(str(network))
+                except ValueError:
+                    self.add_error('custom_routes', _("Invalid route format: '%(line)s'. Please use CIDR notation (e.g., 192.168.1.0/24).") % {'line': line})
+                    break
+            
+            if not self.errors.get('custom_routes'):
+                cleaned_data['custom_routes'] = '\n'.join(validated_routes)
+
+        if route_type == 'default' and custom_routes:
+            self.add_error('custom_routes', _("Custom routes should be empty when Route Type is 'Default Route'."))
+
         return cleaned_data
