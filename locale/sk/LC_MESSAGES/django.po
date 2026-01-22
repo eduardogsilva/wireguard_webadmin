@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-16 14:45-0300\n"
+"POT-Creation-Date: 2026-01-22 15:30-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,8 +65,9 @@ msgstr "Token"
 #: templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
+#: templates/wireguard/apply_route_template.html:63
 #: templates/wireguard/wireguard_manage_ip.html:42
-#: templates/wireguard/wireguard_manage_peer.html:170
+#: templates/wireguard/wireguard_manage_peer.html:174
 #: templates/wireguard/wireguard_peer_list.html:168 user_manager/forms.py:49
 #: user_manager/forms.py:180 vpn_invite/forms.py:192 vpn_invite/forms.py:326
 msgid "Back"
@@ -88,7 +89,7 @@ msgstr "Vymazať"
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
 #: templates/wireguard/wireguard_manage_ip.html:41
-#: templates/wireguard/wireguard_manage_peer.html:168
+#: templates/wireguard/wireguard_manage_peer.html:172
 #: templates/wireguard/wireguard_manage_server.html:130
 #: user_manager/forms.py:98 user_manager/forms.py:205 vpn_invite/forms.py:191
 #: vpn_invite/forms.py:325
@@ -1054,6 +1055,7 @@ msgid "Settings"
 msgstr "Nastavenia"
 
 #: templates/dns/static_host_list.html:47
+#: templates/wireguard/apply_route_template.html:41
 msgid "Apply"
 msgstr "Aplikovať"
 
@@ -1508,13 +1510,59 @@ msgstr "Nastavenia e-mailu"
 msgid "Invite Settings"
 msgstr "Nastavenia pozvánky"
 
+#: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:332
+#, fuzzy
+#| msgid "Add Routing Template"
+msgid "Apply Route Template"
+msgstr "Pridať Smerovaciu Šablónu"
+
+#: templates/wireguard/apply_route_template.html:13
+msgid "Select a routing template to apply to the peer"
+msgstr ""
+
+#: templates/wireguard/apply_route_template.html:16
+msgid "Current Active Template:"
+msgstr ""
+
+#: templates/wireguard/apply_route_template.html:26
+#, fuzzy
+#| msgid "Display Name"
+msgid "Template Name"
+msgstr "Zobrazovací názov"
+
+#: templates/wireguard/apply_route_template.html:27
+msgid "Type"
+msgstr ""
+
+#: templates/wireguard/apply_route_template.html:28
+#, fuzzy
+#| msgid "Action"
+msgid "Actions"
+msgstr "Akcia"
+
+#: templates/wireguard/apply_route_template.html:44
+#, fuzzy
+#| msgid "Action"
+msgid "Active"
+msgstr "Akcia"
+
+#: templates/wireguard/apply_route_template.html:48
+msgid "Unlink"
+msgstr ""
+
+#: templates/wireguard/apply_route_template.html:55
+#, fuzzy
+#| msgid "No invite data available to refresh."
+msgid "No routing templates available for this interface."
+msgstr "Žiadne údaje pozvánky na obnovenie."
+
 #: templates/wireguard/wireguard_manage_ip.html:18
 msgid "Enter Allowed IP"
 msgstr "Zadajte povolenú IP"
 
 #: templates/wireguard/wireguard_manage_ip.html:34
 #: templates/wireguard/wireguard_manage_peer.html:103
-#: templates/wireguard/wireguard_manage_peer.html:153
+#: templates/wireguard/wireguard_manage_peer.html:157
 #: wireguard_peer/forms.py:31
 msgid "Priority"
 msgstr "Priorita"
@@ -1568,24 +1616,38 @@ msgid "Peer IP Addresses and networks"
 msgstr "IP adresy a siete peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:88
-#: templates/wireguard/wireguard_manage_peer.html:169
+#: templates/wireguard/wireguard_manage_peer.html:173
 msgid "Add IP Address"
 msgstr "Pridať IP adresu"
 
 #: templates/wireguard/wireguard_manage_peer.html:101
-#: templates/wireguard/wireguard_manage_peer.html:151
+#: templates/wireguard/wireguard_manage_peer.html:155
 msgid "Main ip address"
 msgstr "Hlavná IP adresa"
 
+#: templates/wireguard/wireguard_manage_peer.html:115
+#, fuzzy
+#| msgid "AllowedIPs at Peer section of wg"
+msgid "AllowedIPs at client configuration file"
+msgstr "Povolené IP adresy v peer sekcii wg"
+
 #: templates/wireguard/wireguard_manage_peer.html:116
-msgid "Client Routing Configuration"
+#, fuzzy
+#| msgid "Client Routing Configuration"
+msgid "Client Routing"
 msgstr "Konfigurácia smerovania klienta"
 
-#: templates/wireguard/wireguard_manage_peer.html:118
+#: templates/wireguard/wireguard_manage_peer.html:119
+#, fuzzy
+#| msgid "Add Routing Template"
+msgid "Apply template"
+msgstr "Pridať Smerovaciu Šablónu"
+
+#: templates/wireguard/wireguard_manage_peer.html:120
 msgid "Add Client route"
 msgstr "Pridať klientskú trasu"
 
-#: templates/wireguard/wireguard_manage_peer.html:124
+#: templates/wireguard/wireguard_manage_peer.html:128
 msgid ""
 "The client is not configured to use the VPN as the default gateway."
 "\\n\\nOnly the specific networks listed below are routed through the VPN."
@@ -1599,7 +1661,7 @@ msgstr ""
 "musieť manuálne aktualizovať konfiguračný súbor klienta, aby odrážal tieto "
 "nastavenia."
 
-#: templates/wireguard/wireguard_manage_peer.html:127
+#: templates/wireguard/wireguard_manage_peer.html:131
 msgid ""
 "The client is configured to use the VPN as the default gateway. \\n\\nThis "
 "setting routes all client internet traffic through the VPN, enhancing "
@@ -1609,19 +1671,19 @@ msgstr ""
 "nastavenie smeruje všetku internetovú komunikáciu klienta cez VPN, čím "
 "zvyšuje súkromie a bezpečnosť všetkých pripojení."
 
-#: templates/wireguard/wireguard_manage_peer.html:136
+#: templates/wireguard/wireguard_manage_peer.html:140
 msgid "default route"
 msgstr "predvolená trasa"
 
-#: templates/wireguard/wireguard_manage_peer.html:171
+#: templates/wireguard/wireguard_manage_peer.html:175
 msgid "Delete Peer"
 msgstr "Vymazať peer"
 
-#: templates/wireguard/wireguard_manage_peer.html:188
+#: templates/wireguard/wireguard_manage_peer.html:192
 msgid "Action Required!"
 msgstr "Akcia vyžadovaná!"
 
-#: templates/wireguard/wireguard_manage_peer.html:189
+#: templates/wireguard/wireguard_manage_peer.html:193
 msgid ""
 "When manually updating the \"Public Key\", \"Pre-Shared Key\", or \"Private "
 "Key\", please ensure the configuration is correct."
@@ -1629,11 +1691,11 @@ msgstr ""
 "Pri manuálnej aktualizácii \"Verejného kľúča\", \"Vopred zdieľaného kľúča\" "
 "alebo \"Súkromného kľúča\", prosím uistite sa, že konfigurácia je správna."
 
-#: templates/wireguard/wireguard_manage_peer.html:209
+#: templates/wireguard/wireguard_manage_peer.html:213
 msgid "Please type \\\"delete\\\" to remove peer configuration."
 msgstr "Prosím napíšte \\\"delete\\\" pre odstránenie konfigurácie peer."
 
-#: templates/wireguard/wireguard_manage_peer.html:257
+#: templates/wireguard/wireguard_manage_peer.html:261
 msgid ""
 "The private key is empty. The peer’s configuration file and QR code will be "
 "generated without the private key.\\n It must be inserted manually when "
@@ -1662,7 +1724,7 @@ msgid "Transfer"
 msgstr "Prenos"
 
 #: templates/wireguard/wireguard_peer_list.html:77
-#: templates/wireguard/wireguard_peer_list.html:594 wireguard_peer/views.py:90
+#: templates/wireguard/wireguard_peer_list.html:594 wireguard_peer/views.py:91
 msgid "Primary Server"
 msgstr "Primárny server"
 
@@ -2447,48 +2509,48 @@ msgstr "Priorita musí byť väčšia alebo rovná 1"
 msgid "Invalid config file"
 msgstr "Neplatný konfiguračný súbor"
 
-#: wireguard_peer/views.py:52
+#: wireguard_peer/views.py:53
 msgid "WireGuard Peer List"
 msgstr "Zoznam WireGuard peerov"
 
-#: wireguard_peer/views.py:160
+#: wireguard_peer/views.py:161
 msgid "Create a new Peer for instance wg"
 msgstr "Vytvoriť nový peer pre inštanciu wg"
 
-#: wireguard_peer/views.py:179
+#: wireguard_peer/views.py:180
 msgid "Peer created|Peer created successfully."
 msgstr "Peer vytvorený|Peer bol úspešne vytvorený."
 
-#: wireguard_peer/views.py:184
+#: wireguard_peer/views.py:185
 msgid "Error creating peer|No available IP address found for peer creation."
 msgstr ""
 "Chyba pri vytváraní peer|Nebola nájdená dostupná IP adresa pre vytvorenie "
 "peer."
 
-#: wireguard_peer/views.py:197
+#: wireguard_peer/views.py:198
 msgid "Peer deleted|Peer deleted successfully."
 msgstr "Peer vymazaný|Peer bol úspešne vymazaný."
 
-#: wireguard_peer/views.py:200
+#: wireguard_peer/views.py:201
 msgid ""
 "Error deleting peer|Invalid confirmation message. Type \"delete\" to confirm."
 msgstr ""
 "Chyba pri vymazávaní peer|Neplatná potvrdzovacia správa. Napíšte \"delete\" "
 "pre potvrdenie."
 
-#: wireguard_peer/views.py:202
+#: wireguard_peer/views.py:203
 msgid "Update Peer: "
 msgstr "Aktualizovať peer: "
 
-#: wireguard_peer/views.py:213
+#: wireguard_peer/views.py:214
 msgid "Peer updated|Peer updated successfully."
 msgstr "Peer aktualizovaný|Peer bol úspešne aktualizovaný."
 
-#: wireguard_peer/views.py:251
+#: wireguard_peer/views.py:252
 msgid "IP address deleted|IP address deleted successfully."
 msgstr "IP adresa vymazaná|IP adresa bola úspešne vymazaná."
 
-#: wireguard_peer/views.py:256
+#: wireguard_peer/views.py:257
 msgid ""
 "Error deleting IP address|Invalid confirmation message. Type \"delete\" to "
 "confirm."
@@ -2496,21 +2558,39 @@ msgstr ""
 "Chyba pri vymazávaní IP adresy|Neplatná potvrdzovacia správa. Napíšte "
 "\"delete\" pre potvrdenie."
 
-#: wireguard_peer/views.py:261
+#: wireguard_peer/views.py:262
 msgid "Manage client route"
 msgstr "Spravovať klientskú trasu"
 
-#: wireguard_peer/views.py:263
+#: wireguard_peer/views.py:264
 msgid "Manage IP address or Network"
 msgstr "Spravovať IP adresu alebo sieť"
 
-#: wireguard_peer/views.py:276
+#: wireguard_peer/views.py:277
 msgid "IP address updated|IP address updated successfully."
 msgstr "IP adresa aktualizovaná|IP adresa bola úspešne aktualizovaná."
 
-#: wireguard_peer/views.py:278
+#: wireguard_peer/views.py:279
 msgid "IP address added|IP address added successfully."
 msgstr "IP adresa pridaná|IP adresa bola úspešne pridaná."
+
+#: wireguard_peer/views.py:311
+#, fuzzy
+#| msgid "Cluster settings updated successfully."
+msgid "Route template unlinked successfully."
+msgstr "Nastavenia clustra úspešne aktualizované."
+
+#: wireguard_peer/views.py:321
+msgid ""
+"Cannot apply template: This template does not allow custom routes, but the "
+"peer has custom client routes defined."
+msgstr ""
+
+#: wireguard_peer/views.py:328
+#, fuzzy
+#| msgid "DNS settings applied successfully"
+msgid "Route template applied successfully."
+msgstr "DNS nastavenia boli úspešne aplikované"
 
 #: wireguard_tools/views.py:170
 msgid ""

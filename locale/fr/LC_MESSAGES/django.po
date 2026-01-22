@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-16 14:45-0300\n"
+"POT-Creation-Date: 2026-01-22 15:30-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,8 +64,9 @@ msgstr "Jeton"
 #: templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
+#: templates/wireguard/apply_route_template.html:63
 #: templates/wireguard/wireguard_manage_ip.html:42
-#: templates/wireguard/wireguard_manage_peer.html:170
+#: templates/wireguard/wireguard_manage_peer.html:174
 #: templates/wireguard/wireguard_peer_list.html:168 user_manager/forms.py:49
 #: user_manager/forms.py:180 vpn_invite/forms.py:192 vpn_invite/forms.py:326
 msgid "Back"
@@ -87,7 +88,7 @@ msgstr "Supprimer"
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
 #: templates/wireguard/wireguard_manage_ip.html:41
-#: templates/wireguard/wireguard_manage_peer.html:168
+#: templates/wireguard/wireguard_manage_peer.html:172
 #: templates/wireguard/wireguard_manage_server.html:130
 #: user_manager/forms.py:98 user_manager/forms.py:205 vpn_invite/forms.py:191
 #: vpn_invite/forms.py:325
@@ -717,8 +718,8 @@ msgid ""
 "You cannot enable 'Enforce Route Policy' when 'Allow Peer Custom Routes' is "
 "checked."
 msgstr ""
-"Vous ne pouvez pas activer « Appliquer la politique de routage » lorsque "
-"« Autoriser les routes personnalisées des pairs » est coché."
+"Vous ne pouvez pas activer « Appliquer la politique de routage » lorsque « "
+"Autoriser les routes personnalisées des pairs » est coché."
 
 #: routing_templates/models.py:11
 msgid "Default Route (0.0.0.0/0)"
@@ -1065,6 +1066,7 @@ msgid "Settings"
 msgstr "Paramètres"
 
 #: templates/dns/static_host_list.html:47
+#: templates/wireguard/apply_route_template.html:41
 msgid "Apply"
 msgstr "Appliquer"
 
@@ -1515,13 +1517,59 @@ msgstr "Paramètres e‑mail"
 msgid "Invite Settings"
 msgstr "Paramètres d’invitation"
 
+#: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:332
+#, fuzzy
+#| msgid "Add Routing Template"
+msgid "Apply Route Template"
+msgstr "Ajouter un Modèle de Routage"
+
+#: templates/wireguard/apply_route_template.html:13
+msgid "Select a routing template to apply to the peer"
+msgstr ""
+
+#: templates/wireguard/apply_route_template.html:16
+msgid "Current Active Template:"
+msgstr ""
+
+#: templates/wireguard/apply_route_template.html:26
+#, fuzzy
+#| msgid "Display Name"
+msgid "Template Name"
+msgstr "Nom à afficher"
+
+#: templates/wireguard/apply_route_template.html:27
+msgid "Type"
+msgstr ""
+
+#: templates/wireguard/apply_route_template.html:28
+#, fuzzy
+#| msgid "Action"
+msgid "Actions"
+msgstr "Action"
+
+#: templates/wireguard/apply_route_template.html:44
+#, fuzzy
+#| msgid "Action"
+msgid "Active"
+msgstr "Action"
+
+#: templates/wireguard/apply_route_template.html:48
+msgid "Unlink"
+msgstr ""
+
+#: templates/wireguard/apply_route_template.html:55
+#, fuzzy
+#| msgid "No invite data available to refresh."
+msgid "No routing templates available for this interface."
+msgstr "Aucune donnée d’invitation à actualiser."
+
 #: templates/wireguard/wireguard_manage_ip.html:18
 msgid "Enter Allowed IP"
 msgstr "Saisir l’IP autorisée"
 
 #: templates/wireguard/wireguard_manage_ip.html:34
 #: templates/wireguard/wireguard_manage_peer.html:103
-#: templates/wireguard/wireguard_manage_peer.html:153
+#: templates/wireguard/wireguard_manage_peer.html:157
 #: wireguard_peer/forms.py:31
 msgid "Priority"
 msgstr "Priorité"
@@ -1575,24 +1623,38 @@ msgid "Peer IP Addresses and networks"
 msgstr "Adresses IP et réseaux du peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:88
-#: templates/wireguard/wireguard_manage_peer.html:169
+#: templates/wireguard/wireguard_manage_peer.html:173
 msgid "Add IP Address"
 msgstr "Ajouter une adresse IP"
 
 #: templates/wireguard/wireguard_manage_peer.html:101
-#: templates/wireguard/wireguard_manage_peer.html:151
+#: templates/wireguard/wireguard_manage_peer.html:155
 msgid "Main ip address"
 msgstr "Adresse IP principale"
 
+#: templates/wireguard/wireguard_manage_peer.html:115
+#, fuzzy
+#| msgid "AllowedIPs at Peer section of wg"
+msgid "AllowedIPs at client configuration file"
+msgstr "AllowedIPs dans la section Peer de wg"
+
 #: templates/wireguard/wireguard_manage_peer.html:116
-msgid "Client Routing Configuration"
+#, fuzzy
+#| msgid "Client Routing Configuration"
+msgid "Client Routing"
 msgstr "Configuration du routage client"
 
-#: templates/wireguard/wireguard_manage_peer.html:118
+#: templates/wireguard/wireguard_manage_peer.html:119
+#, fuzzy
+#| msgid "Add Routing Template"
+msgid "Apply template"
+msgstr "Ajouter un Modèle de Routage"
+
+#: templates/wireguard/wireguard_manage_peer.html:120
 msgid "Add Client route"
 msgstr "Ajouter une route client"
 
-#: templates/wireguard/wireguard_manage_peer.html:124
+#: templates/wireguard/wireguard_manage_peer.html:128
 msgid ""
 "The client is not configured to use the VPN as the default gateway."
 "\\n\\nOnly the specific networks listed below are routed through the VPN."
@@ -1605,7 +1667,7 @@ msgstr ""
 "\\n\\nRemarque: ces routes ne sont pas poussées automatiquement vers le "
 "client ; vous devrez mettre à jour manuellement son fichier de configuration."
 
-#: templates/wireguard/wireguard_manage_peer.html:127
+#: templates/wireguard/wireguard_manage_peer.html:131
 msgid ""
 "The client is configured to use the VPN as the default gateway. \\n\\nThis "
 "setting routes all client internet traffic through the VPN, enhancing "
@@ -1615,19 +1677,19 @@ msgstr ""
 "\\n\\nTout son trafic Internet passe donc par le VPN, améliorant la "
 "confidentialité et la sécurité de ses connexions."
 
-#: templates/wireguard/wireguard_manage_peer.html:136
+#: templates/wireguard/wireguard_manage_peer.html:140
 msgid "default route"
 msgstr "route par défaut"
 
-#: templates/wireguard/wireguard_manage_peer.html:171
+#: templates/wireguard/wireguard_manage_peer.html:175
 msgid "Delete Peer"
 msgstr "Supprimer le peer"
 
-#: templates/wireguard/wireguard_manage_peer.html:188
+#: templates/wireguard/wireguard_manage_peer.html:192
 msgid "Action Required!"
 msgstr "Action requise!"
 
-#: templates/wireguard/wireguard_manage_peer.html:189
+#: templates/wireguard/wireguard_manage_peer.html:193
 msgid ""
 "When manually updating the \"Public Key\", \"Pre-Shared Key\", or \"Private "
 "Key\", please ensure the configuration is correct."
@@ -1636,11 +1698,11 @@ msgstr ""
 "pré‑partagée » ou la « Clé privée », vérifiez que la configuration est "
 "correcte."
 
-#: templates/wireguard/wireguard_manage_peer.html:209
+#: templates/wireguard/wireguard_manage_peer.html:213
 msgid "Please type \\\"delete\\\" to remove peer configuration."
 msgstr "Tapez \\\"delete\\\" pour supprimer la configuration du peer."
 
-#: templates/wireguard/wireguard_manage_peer.html:257
+#: templates/wireguard/wireguard_manage_peer.html:261
 msgid ""
 "The private key is empty. The peer’s configuration file and QR code will be "
 "generated without the private key.\\n It must be inserted manually when "
@@ -1669,7 +1731,7 @@ msgid "Transfer"
 msgstr "Transfert"
 
 #: templates/wireguard/wireguard_peer_list.html:77
-#: templates/wireguard/wireguard_peer_list.html:594 wireguard_peer/views.py:90
+#: templates/wireguard/wireguard_peer_list.html:594 wireguard_peer/views.py:91
 msgid "Primary Server"
 msgstr "Serveur primaire"
 
@@ -2467,46 +2529,46 @@ msgstr "La priorité doit être supérieure ou égale à 1."
 msgid "Invalid config file"
 msgstr "Fichier de configuration invalide"
 
-#: wireguard_peer/views.py:52
+#: wireguard_peer/views.py:53
 msgid "WireGuard Peer List"
 msgstr "Liste des peers WireGuard"
 
-#: wireguard_peer/views.py:160
+#: wireguard_peer/views.py:161
 msgid "Create a new Peer for instance wg"
 msgstr "Créer un nouveau peer pour l’instance wg"
 
-#: wireguard_peer/views.py:179
+#: wireguard_peer/views.py:180
 msgid "Peer created|Peer created successfully."
 msgstr "Peer créé | Peer créé avec succès."
 
-#: wireguard_peer/views.py:184
+#: wireguard_peer/views.py:185
 msgid "Error creating peer|No available IP address found for peer creation."
 msgstr "Erreur de création | Aucune adresse IP disponible pour créer le peer."
 
-#: wireguard_peer/views.py:197
+#: wireguard_peer/views.py:198
 msgid "Peer deleted|Peer deleted successfully."
 msgstr "Peer supprimé | Peer supprimé avec succès."
 
-#: wireguard_peer/views.py:200
+#: wireguard_peer/views.py:201
 msgid ""
 "Error deleting peer|Invalid confirmation message. Type \"delete\" to confirm."
 msgstr ""
 "Erreur de suppression | Message de confirmation invalide. Tapez « delete » "
 "pour confirmer."
 
-#: wireguard_peer/views.py:202
+#: wireguard_peer/views.py:203
 msgid "Update Peer: "
 msgstr "Mettre à jour le peer: "
 
-#: wireguard_peer/views.py:213
+#: wireguard_peer/views.py:214
 msgid "Peer updated|Peer updated successfully."
 msgstr "Peer mis à jour | Peer mis à jour avec succès."
 
-#: wireguard_peer/views.py:251
+#: wireguard_peer/views.py:252
 msgid "IP address deleted|IP address deleted successfully."
 msgstr "Adresse IP supprimée | Suppression réussie."
 
-#: wireguard_peer/views.py:256
+#: wireguard_peer/views.py:257
 msgid ""
 "Error deleting IP address|Invalid confirmation message. Type \"delete\" to "
 "confirm."
@@ -2514,21 +2576,39 @@ msgstr ""
 "Erreur de suppression de l’IP | Message de confirmation invalide. Tapez « "
 "delete » pour confirmer."
 
-#: wireguard_peer/views.py:261
+#: wireguard_peer/views.py:262
 msgid "Manage client route"
 msgstr "Gérer la route client"
 
-#: wireguard_peer/views.py:263
+#: wireguard_peer/views.py:264
 msgid "Manage IP address or Network"
 msgstr "Gérer l’adresse IP ou le réseau"
 
-#: wireguard_peer/views.py:276
+#: wireguard_peer/views.py:277
 msgid "IP address updated|IP address updated successfully."
 msgstr "Adresse IP mise à jour | Mise à jour réussie."
 
-#: wireguard_peer/views.py:278
+#: wireguard_peer/views.py:279
 msgid "IP address added|IP address added successfully."
 msgstr "Adresse IP ajoutée | Ajout réussi."
+
+#: wireguard_peer/views.py:311
+#, fuzzy
+#| msgid "Cluster settings updated successfully."
+msgid "Route template unlinked successfully."
+msgstr "Paramètres du cluster mis à jour avec succès."
+
+#: wireguard_peer/views.py:321
+msgid ""
+"Cannot apply template: This template does not allow custom routes, but the "
+"peer has custom client routes defined."
+msgstr ""
+
+#: wireguard_peer/views.py:328
+#, fuzzy
+#| msgid "DNS settings applied successfully"
+msgid "Route template applied successfully."
+msgstr "Paramètres DNS appliqués avec succès"
 
 #: wireguard_tools/views.py:170
 msgid ""
