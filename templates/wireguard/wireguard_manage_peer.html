@@ -112,10 +112,14 @@
                     <div class="col-md-12">
                         <div class="d-flex justify-content-between align-items-center">
                             <label>
-                                <i class="fas fa-info-circle" title="AllowedIPs at client configuration file"></i> 
-                                {% trans 'Client Routing Configuration' %}
+                                <i class="fas fa-info-circle" title="{% trans 'AllowedIPs at client configuration file' %}"></i>
+                                {% trans 'Client Routing' %}
                             </label>
-                            <a class="btn btn-outline-primary btn-xs" href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}&config=client" >{% trans 'Add Client route' %}</a>
+                            <div>
+                                <a class="btn btn-outline-info btn-xs" href="/peer/apply_route_template/?peer={{ current_peer.uuid }}" >{% trans 'Apply template' %}</a>
+                                <a class="btn btn-outline-primary btn-xs" href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}&config=client" >{% trans 'Add Client route' %}</a>
+                            </div>
+
                         </div>
                         <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
                                 <p>

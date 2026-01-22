@@ -38,7 +38,7 @@ from vpn_invite_public.views import view_public_vpn_invite
 from wgrrd.views import view_rrd_graph
 from wireguard.views import view_apply_db_patches, view_wireguard_manage_instance, view_wireguard_status
 from wireguard_peer.views import view_manage_ip_address, view_wireguard_peer_list, view_wireguard_peer_manage, \
-    view_wireguard_peer_sort
+    view_wireguard_peer_sort, view_apply_route_template
 from wireguard_tools.views import download_config_or_qrcode, export_wireguard_configs, restart_wireguard_interfaces
 
 urlpatterns = [
@@ -55,6 +55,7 @@ urlpatterns = [
     path('peer/list/', view_wireguard_peer_list, name='wireguard_peer_list'),
     path('peer/sort/', view_wireguard_peer_sort, name='wireguard_peer_sort'),
     path('peer/manage/', view_wireguard_peer_manage, name='wireguard_peer_manage'),
+    path('peer/apply_route_template/', view_apply_route_template, name='apply_route_template'),
     path('peer/manage_ip_address/', view_manage_ip_address, name='manage_ip_address'),
     path('rrd/graph/', view_rrd_graph, name='rrd_graph'),
     path('console/', view_console, name='console'),

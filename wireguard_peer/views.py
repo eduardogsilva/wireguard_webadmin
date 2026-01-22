@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from cluster.models import ClusterSettings, Worker
+from routing_templates.models import RoutingTemplate
 from user_manager.models import UserAcl
 from wgwadmlibrary.tools import check_sort_order_conflict, deduplicate_sort_order, default_sort_peers, \
     user_allowed_instances, user_allowed_peers, user_has_access_to_instance, user_has_access_to_peer
@@ -283,4 +284,55 @@ def view_manage_ip_address(request):
     
     return render(request, 'wireguard/wireguard_manage_ip.html', {
         'page_title': page_title, 'form': form, 'current_peer': current_peer, 'current_ip': current_ip
-        })  
+        })
+
+
+@login_required
+def view_apply_route_template(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    
+    user_acl = get_object_or_404(UserAcl, user=request.user)
+    current_peer = get_object_or_404(Peer, uuid=request.GET.get('peer'))
+    
+    if not user_has_access_to_peer(user_acl, current_peer):
+        raise Http404
+
+    wireguard_instance = current_peer.wireguard_instance
+    available_templates = RoutingTemplate.objects.filter(wireguard_instance=wireguard_instance)
+    current_template = current_peer.routing_template
+    
+    if request.method == 'POST':
+        if request.POST.get('action') == 'unlink':
+            current_peer.routing_template = None
+            current_peer.save()
+            current_peer.wireguard_instance.pending_changes = True
+            current_peer.wireguard_instance.save()
+            messages.success(request, _('Route template unlinked successfully.'))
+            return redirect('/peer/manage/?peer=' + str(current_peer.uuid))
+            
+        template_uuid = request.POST.get('template_uuid')
+        if template_uuid:
+            selected_template = get_object_or_404(RoutingTemplate, uuid=template_uuid)
+            
+            # Validation
+            if not selected_template.allow_peer_custom_routes:
+                if current_peer.peerallowedip_set.filter(config_file='client', priority__gte=1).exists():
+                    messages.error(request, _('Cannot apply template: This template does not allow custom routes, but the peer has custom client routes defined.'))
+                    return redirect('/peer/apply_route_template/?peer=' + str(current_peer.uuid))
+
+            current_peer.routing_template = selected_template
+            current_peer.save()
+            current_peer.wireguard_instance.pending_changes = True
+            current_peer.wireguard_instance.save()
+            messages.success(request, _('Route template applied successfully.'))
+            return redirect('/peer/manage/?peer=' + str(current_peer.uuid))
+
+    context = {
+        'page_title': _('Apply Route Template'),
+        'current_peer': current_peer,
+        'available_templates': available_templates,
+        'current_template': current_template,
+    }
+    return render(request, 'wireguard/apply_route_template.html', context)
+
