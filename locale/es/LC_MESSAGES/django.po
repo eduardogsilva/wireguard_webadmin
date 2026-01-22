@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 16:43-0300\n"
+"POT-Creation-Date: 2026-01-22 16:49-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -722,23 +722,23 @@ msgstr ""
 
 #: routing_templates/forms.py:89
 msgid "At least one route must be provided when Route Type is 'Custom'."
-msgstr ""
+msgstr "Se debe proporcionar al menos una ruta cuando el Tipo de Ruta es 'Personalizada'."
 
 #: routing_templates/forms.py:101
 msgid ""
 "The route 0.0.0.0/0 is not allowed. Use the 'Default Route' type instead."
-msgstr ""
+msgstr "La ruta 0.0.0.0/0 no está permitida. Use el tipo 'Ruta Predeterminada'."
 
 #: routing_templates/forms.py:105
 #, python-format
 msgid ""
 "Invalid route format: '%(line)s'. Please use CIDR notation (e.g., "
 "192.168.1.0/24)."
-msgstr ""
+msgstr "Formato de ruta inválido: '%(line)s'. Use la notación CIDR (ej: 192.168.1.0/24)."
 
 #: routing_templates/forms.py:112
 msgid "Custom routes should be empty when Route Type is 'Default Route'."
-msgstr ""
+msgstr "Las rutas personalizadas deben estar vacías cuando el Tipo de Ruta es 'Ruta Predeterminada'."
 
 #: routing_templates/models.py:11
 msgid "Default Route (0.0.0.0/0)"
@@ -1658,10 +1658,8 @@ msgid "Add Client route"
 msgstr "Añadir ruta cliente"
 
 #: templates/wireguard/wireguard_manage_peer.html:132
-#, fuzzy
-#| msgid "Routing Templates"
 msgid "Routing Template"
-msgstr "Plantillas de Enrutamiento"
+msgstr "Plantilla de Enrutamiento"
 
 #: templates/wireguard/wireguard_manage_peer.html:140
 msgid ""
@@ -2517,7 +2515,7 @@ msgstr ""
 
 #: wireguard_peer/forms.py:66
 msgid "The peer's routing template does not allow custom routes."
-msgstr ""
+msgstr "La plantilla de enrutamiento del par no permite rutas personalizadas."
 
 #: wireguard_peer/forms.py:68
 msgid "Priority must be greater than or equal to 1"

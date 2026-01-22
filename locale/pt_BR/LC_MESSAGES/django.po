@@ -721,23 +721,23 @@ msgstr ""
 
 #: routing_templates/forms.py:89
 msgid "At least one route must be provided when Route Type is 'Custom'."
-msgstr ""
+msgstr "Pelo menos uma rota deve ser fornecida quando o Tipo de Rota é 'Personalizada'."
 
 #: routing_templates/forms.py:101
 msgid ""
 "The route 0.0.0.0/0 is not allowed. Use the 'Default Route' type instead."
-msgstr ""
+msgstr "A rota 0.0.0.0/0 não é permitida. Use o tipo 'Rota Padrão'."
 
 #: routing_templates/forms.py:105
 #, python-format
 msgid ""
 "Invalid route format: '%(line)s'. Please use CIDR notation (e.g., "
 "192.168.1.0/24)."
-msgstr ""
+msgstr "Formato de rota inválido: '%(line)s'. Use a notação CIDR (ex: 192.168.1.0/24)."
 
 #: routing_templates/forms.py:112
 msgid "Custom routes should be empty when Route Type is 'Default Route'."
-msgstr ""
+msgstr "As rotas personalizadas devem estar vazias quando o Tipo de Rota é 'Rota Padrão'."
 
 #: routing_templates/models.py:11
 msgid "Default Route (0.0.0.0/0)"
@@ -1661,10 +1661,8 @@ msgid "Add Client route"
 msgstr "Adicionar rota"
 
 #: templates/wireguard/wireguard_manage_peer.html:132
-#, fuzzy
-#| msgid "Routing Templates"
 msgid "Routing Template"
-msgstr "Modelos de Roteamento"
+msgstr "Modelo de Roteamento"
 
 #: templates/wireguard/wireguard_manage_peer.html:140
 msgid ""
@@ -2532,7 +2530,7 @@ msgstr ""
 
 #: wireguard_peer/forms.py:66
 msgid "The peer's routing template does not allow custom routes."
-msgstr ""
+msgstr "O modelo de roteamento do peer não permite rotas personalizadas."
 
 #: wireguard_peer/forms.py:68
 msgid "Priority must be greater than or equal to 1"
