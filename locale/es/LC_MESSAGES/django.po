@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 16:21-0300\n"
+"POT-Creation-Date: 2026-01-22 16:43-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: cluster/forms.py:18 dns/forms.py:111 routing_templates/forms.py:26
+#: cluster/forms.py:18 dns/forms.py:111 routing_templates/forms.py:28
 #: templates/cluster/workers_list.html:8 templates/dns/static_host_list.html:68
 #: templates/routing_templates/list.html:8
 #: templates/user_manager/peer_group_list.html:8 user_manager/forms.py:177
@@ -60,7 +60,7 @@ msgid "Token"
 msgstr "Token"
 
 #: cluster/forms.py:27 cluster/forms.py:103 dns/forms.py:25 dns/forms.py:67
-#: dns/forms.py:109 routing_templates/forms.py:34
+#: dns/forms.py:109 routing_templates/forms.py:36
 #: templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
@@ -73,7 +73,7 @@ msgid "Back"
 msgstr "Volver"
 
 #: cluster/forms.py:28 dns/forms.py:68 dns/forms.py:110
-#: routing_templates/forms.py:35
+#: routing_templates/forms.py:37
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
 #: templates/wireguard/wireguard_manage_ip.html:43
@@ -83,7 +83,7 @@ msgid "Delete"
 msgstr "Eliminar"
 
 #: cluster/forms.py:67 cluster/forms.py:124 dns/forms.py:37 dns/forms.py:83
-#: dns/forms.py:134 routing_templates/forms.py:68
+#: dns/forms.py:134 routing_templates/forms.py:70
 #: templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
@@ -686,39 +686,59 @@ msgstr ""
 "Si encuentra algún problema con la traducción o desea solicitar un nuevo "
 "idioma, por favor abra un"
 
-#: routing_templates/forms.py:27
+#: routing_templates/forms.py:29
 #: templates/firewall/manage_redirect_rule.html:57
 #: templates/routing_templates/list.html:9
 msgid "WireGuard Instance"
 msgstr "Instancia de WireGuard"
 
-#: routing_templates/forms.py:28 templates/routing_templates/list.html:24
+#: routing_templates/forms.py:30 templates/routing_templates/list.html:24
 msgid "Default Template"
 msgstr "Plantilla Predeterminada"
 
-#: routing_templates/forms.py:29 templates/routing_templates/list.html:10
+#: routing_templates/forms.py:31 templates/routing_templates/list.html:10
 msgid "Route Type"
 msgstr "Tipo de Ruta"
 
-#: routing_templates/forms.py:30 routing_templates/models.py:14
+#: routing_templates/forms.py:32 routing_templates/models.py:14
 msgid "Custom Routes"
 msgstr "Rutas Personalizadas"
 
-#: routing_templates/forms.py:31
+#: routing_templates/forms.py:33
 msgid "Allow Peer Custom Routes"
 msgstr "Permitir Rutas Personalizadas del Par"
 
-#: routing_templates/forms.py:32
+#: routing_templates/forms.py:34
 msgid "Enforce Route Policy"
 msgstr "Forzar Política de Enrutamiento"
 
-#: routing_templates/forms.py:82
+#: routing_templates/forms.py:86
 msgid ""
 "You cannot enable 'Enforce Route Policy' when 'Allow Peer Custom Routes' is "
 "checked."
 msgstr ""
 "No puede habilitar 'Forzar Política de Enrutamiento' cuando 'Permitir Rutas "
 "Personalizadas del Par' está marcado."
+
+#: routing_templates/forms.py:89
+msgid "At least one route must be provided when Route Type is 'Custom'."
+msgstr ""
+
+#: routing_templates/forms.py:101
+msgid ""
+"The route 0.0.0.0/0 is not allowed. Use the 'Default Route' type instead."
+msgstr ""
+
+#: routing_templates/forms.py:105
+#, python-format
+msgid ""
+"Invalid route format: '%(line)s'. Please use CIDR notation (e.g., "
+"192.168.1.0/24)."
+msgstr ""
+
+#: routing_templates/forms.py:112
+msgid "Custom routes should be empty when Route Type is 'Default Route'."
+msgstr ""
 
 #: routing_templates/models.py:11
 msgid "Default Route (0.0.0.0/0)"
