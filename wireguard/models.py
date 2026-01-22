@@ -1,6 +1,6 @@
-from django.core.exceptions import ValidationError
-from django.db import models
 import uuid
+
+from django.db import models
 
 NETMASK_CHOICES = (
         (8, '/8 (255.0.0.0)'),
@@ -82,6 +82,9 @@ class Peer(models.Model):
     persistent_keepalive = models.IntegerField(default=25)
     wireguard_instance = models.ForeignKey(WireGuardInstance, on_delete=models.CASCADE)
     sort_order = models.IntegerField(default=0)
+    routing_template = models.ForeignKey(
+        'routing_templates.RoutingTemplate', on_delete=models.SET_NULL, blank=True, null=True, related_name='peers'
+    )
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
