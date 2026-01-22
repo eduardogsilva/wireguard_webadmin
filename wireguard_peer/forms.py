@@ -62,6 +62,8 @@ class PeerAllowedIPForm(forms.ModelForm):
                 if ipaddress.ip_address(allowed_ip) in wireguard_network:
                     raise forms.ValidationError(_("The IP address belongs to the Peer's WireGuard instance network range. Please check the IP address or change use priority 0 instead."))
         elif self.config_file == 'client':
+            if self.current_peer.routing_template and not self.current_peer.routing_template.allow_peer_custom_routes:
+                raise forms.ValidationError(_("The peer's routing template does not allow custom routes."))
             if priority < 1:
                 raise forms.ValidationError(_("Priority must be greater than or equal to 1"))
         else:

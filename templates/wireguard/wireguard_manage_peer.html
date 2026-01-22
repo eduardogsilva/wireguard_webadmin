@@ -121,6 +121,18 @@
                             </div>
 
                         </div>
+                        {% if current_peer.routing_template %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p>
+                                <a href="/peer/apply_route_template/?peer={{ current_peer.uuid }}">
+                                    <i class="fas fa-route"></i> {{ current_peer.routing_template.name }}
+                                </a>
+                            </p>
+                            <p class="d-flex flex-column text-right small">
+                                {% trans 'Routing Template' %}
+                            </p>
+                        </div>
+                        {% else %}
                         <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
                                 <p>
                                     <a href="#"
@@ -140,6 +152,7 @@
                                     {% trans 'default route' %}
                                 </p>
                         </div>
+                        {% endif %}
 
 
                         {% for ip_address in peer_client_ip_list %}
