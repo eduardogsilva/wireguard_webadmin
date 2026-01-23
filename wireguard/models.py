@@ -1,7 +1,8 @@
-import ipaddress
 import uuid
 
 from django.db import models
+
+from wireguard_tools.networks import normalize_cidr_list, normalize_cidr_pairs, safe_network_cidr
 
 NETMASK_CHOICES = (
         (8, '/8 (255.0.0.0)'),
@@ -76,17 +77,10 @@ class WireGuardInstance(models.Model):
 
     @property
     def network_cidr(self):
-        try:
-            network = ipaddress.ip_network(
-                f"{self.address}/{self.netmask}",
-                strict=False
-            )
-            return str(network)
-        except Exception:
-            return None
+        return safe_network_cidr(self.address, self.netmask)
 
     @property
-    def peer_extra_networks(self):
+    def peer_announced_networks(self):
         rows = (
             PeerAllowedIP.objects
             .filter(
@@ -96,9 +90,8 @@ class WireGuardInstance(models.Model):
             )
             .values_list('allowed_ip', 'netmask')
             .distinct()
-            .order_by('allowed_ip', 'netmask')
         )
-        return [f"{ip}/{mask}" for ip, mask in rows]
+        return normalize_cidr_pairs(rows)
 
     @property
     def peer_main_addresses(self):
@@ -111,9 +104,8 @@ class WireGuardInstance(models.Model):
             )
             .values_list('allowed_ip', 'netmask')
             .distinct()
-            .order_by('allowed_ip', 'netmask')
         )
-        return [f"{ip}/{mask}" for ip, mask in rows]
+        return normalize_cidr_pairs(rows)
 
 
 class Peer(models.Model):
@@ -137,6 +129,57 @@ class Peer(models.Model):
             return self.name
         else:
             return self.public_key[:16] + "..."
+
+    @property
+    def announced_networks(self):
+        rows = (
+            self.peerallowedip_set
+            .filter(config_file='server', priority__gte=1)
+            .values_list('allowed_ip', 'netmask')
+            .distinct()
+        )
+        return normalize_cidr_pairs(rows)
+
+    @property
+    def client_routes(self):
+        routes = []
+
+        rows_client = (
+            self.peerallowedip_set
+            .filter(config_file='client')
+            .values_list('allowed_ip', 'netmask')
+            .distinct()
+        )
+        routes.extend(normalize_cidr_pairs(rows_client))
+
+        if self.routing_template:
+            routes.extend(self.routing_template.template_routes)
+
+        normalized = normalize_cidr_list(routes)
+
+        rows_announced = (
+            self.peerallowedip_set
+            .filter(config_file='server')
+            .values_list('allowed_ip', 'netmask')
+            .distinct()
+        )
+        exclude = set(normalize_cidr_pairs(rows_announced))
+
+        final_routes = [cidr for cidr in normalized if cidr not in exclude]
+
+        if not final_routes or '0.0.0.0/0' in final_routes:
+            return ['0.0.0.0/0']
+        return final_routes
+
+    @property
+    def main_addresses(self):
+        rows = (
+            self.peerallowedip_set
+            .filter(config_file='server', priority=0)
+            .values_list('allowed_ip', 'netmask')
+            .distinct()
+        )
+        return normalize_cidr_pairs(rows)
 
 
 class PeerStatus(models.Model):
