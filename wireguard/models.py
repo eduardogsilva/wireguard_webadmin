@@ -1,3 +1,4 @@
+import ipaddress
 import uuid
 
 from django.db import models
@@ -72,6 +73,47 @@ class WireGuardInstance(models.Model):
             return self.name    
         else:
             return 'wg' + str(self.instance_id)
+
+    @property
+    def network_cidr(self):
+        try:
+            network = ipaddress.ip_network(
+                f"{self.address}/{self.netmask}",
+                strict=False
+            )
+            return str(network)
+        except Exception:
+            return None
+
+    @property
+    def peer_extra_networks(self):
+        rows = (
+            PeerAllowedIP.objects
+            .filter(
+                peer__wireguard_instance=self,
+                config_file='server',
+                priority__gte=1
+            )
+            .values_list('allowed_ip', 'netmask')
+            .distinct()
+            .order_by('allowed_ip', 'netmask')
+        )
+        return [f"{ip}/{mask}" for ip, mask in rows]
+
+    @property
+    def peer_main_addresses(self):
+        rows = (
+            PeerAllowedIP.objects
+            .filter(
+                peer__wireguard_instance=self,
+                config_file='server',
+                priority=0
+            )
+            .values_list('allowed_ip', 'netmask')
+            .distinct()
+            .order_by('allowed_ip', 'netmask')
+        )
+        return [f"{ip}/{mask}" for ip, mask in rows]
 
 
 class Peer(models.Model):
