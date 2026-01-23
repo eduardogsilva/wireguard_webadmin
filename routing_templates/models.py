@@ -4,6 +4,8 @@ from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 
 from wireguard.models import WireGuardInstance
+from wireguard.models import WireGuardInstance, PeerAllowedIP
+from wireguard_tools.networks import normalize_cidr_list
 
 
 class RoutingTemplate(models.Model):
@@ -44,3 +46,29 @@ class RoutingTemplate(models.Model):
                     .exclude(pk=self.pk)
                     .update(default_template=False)
                 )
+
+    @property
+    def template_routes(self):
+        if self.route_type == 'default':
+            return ['0.0.0.0/0']
+
+        routes = []
+
+        if self.route_type == 'peer_same_instance':
+            if self.wireguard_instance.network_cidr:
+                routes.append(self.wireguard_instance.network_cidr)
+            routes.extend(self.wireguard_instance.peer_announced_networks)
+
+        elif self.route_type == 'peer_all_instances':
+            for wg in WireGuardInstance.objects.all().order_by('instance_id'):
+                if wg.network_cidr and wg.network_cidr not in routes:
+                    routes.append(wg.network_cidr)
+                routes.extend(wg.peer_announced_networks)
+
+        if self.custom_routes:
+            for raw_line in self.custom_routes.splitlines():
+                line = (raw_line or '').strip()
+                if line:
+                    routes.append(line)
+
+        return normalize_cidr_list(routes)
