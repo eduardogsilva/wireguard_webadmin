@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 16:49-0300\n"
+"POT-Creation-Date: 2026-01-24 14:25-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,7 +66,7 @@ msgstr "Jeton"
 #: templates/firewall/manage_redirect_rule.html:85
 #: templates/wireguard/apply_route_template.html:63
 #: templates/wireguard/wireguard_manage_ip.html:42
-#: templates/wireguard/wireguard_manage_peer.html:187
+#: templates/wireguard/wireguard_manage_peer.html:203
 #: templates/wireguard/wireguard_peer_list.html:168 user_manager/forms.py:49
 #: user_manager/forms.py:180 vpn_invite/forms.py:192 vpn_invite/forms.py:326
 msgid "Back"
@@ -88,7 +88,7 @@ msgstr "Supprimer"
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
 #: templates/wireguard/wireguard_manage_ip.html:41
-#: templates/wireguard/wireguard_manage_peer.html:185
+#: templates/wireguard/wireguard_manage_peer.html:201
 #: templates/wireguard/wireguard_manage_server.html:130
 #: user_manager/forms.py:98 user_manager/forms.py:205 vpn_invite/forms.py:191
 #: vpn_invite/forms.py:325
@@ -701,7 +701,7 @@ msgstr "Modèle par Défaut"
 msgid "Route Type"
 msgstr "Type de Route"
 
-#: routing_templates/forms.py:32 routing_templates/models.py:14
+#: routing_templates/forms.py:32 routing_templates/models.py:16
 msgid "Custom Routes"
 msgstr "Routes Personnalisées"
 
@@ -723,37 +723,44 @@ msgstr ""
 
 #: routing_templates/forms.py:89
 msgid "At least one route must be provided when Route Type is 'Custom'."
-msgstr "Au moins une route doit être fournie lorsque le Type de Route est 'Personnalisée'."
+msgstr ""
+"Au moins une route doit être fournie lorsque le Type de Route est "
+"'Personnalisée'."
 
 #: routing_templates/forms.py:101
 msgid ""
 "The route 0.0.0.0/0 is not allowed. Use the 'Default Route' type instead."
-msgstr "La route 0.0.0.0/0 n'est pas autorisée. Utilisez le type 'Route par Défaut'."
+msgstr ""
+"La route 0.0.0.0/0 n'est pas autorisée. Utilisez le type 'Route par Défaut'."
 
 #: routing_templates/forms.py:105
 #, python-format
 msgid ""
 "Invalid route format: '%(line)s'. Please use CIDR notation (e.g., "
 "192.168.1.0/24)."
-msgstr "Format de route invalide : '%(line)s'. Utilisez la notation CIDR (ex : 192.168.1.0/24)."
+msgstr ""
+"Format de route invalide : '%(line)s'. Utilisez la notation CIDR (ex : "
+"192.168.1.0/24)."
 
 #: routing_templates/forms.py:112
 msgid "Custom routes should be empty when Route Type is 'Default Route'."
-msgstr "Les routes personnalisées doivent être vides lorsque le Type de Route est 'Route par Défaut'."
+msgstr ""
+"Les routes personnalisées doivent être vides lorsque le Type de Route est "
+"'Route par Défaut'."
 
-#: routing_templates/models.py:11
+#: routing_templates/models.py:13
 msgid "Default Route (0.0.0.0/0)"
 msgstr "Route par Défaut (0.0.0.0/0)"
 
-#: routing_templates/models.py:12
+#: routing_templates/models.py:14
 msgid "Routes from Peers on same Interface"
 msgstr "Routes des Pairs sur la même Interface"
 
-#: routing_templates/models.py:13
+#: routing_templates/models.py:15
 msgid "Routes from All Peers"
 msgstr "Routes de Tous les Pairs"
 
-#: routing_templates/models.py:23
+#: routing_templates/models.py:25
 msgid "One route per line in CIDR notation."
 msgstr "Une route par ligne en notation CIDR."
 
@@ -1579,7 +1586,7 @@ msgstr "Saisir l’IP autorisée"
 
 #: templates/wireguard/wireguard_manage_ip.html:34
 #: templates/wireguard/wireguard_manage_peer.html:103
-#: templates/wireguard/wireguard_manage_peer.html:170
+#: templates/wireguard/wireguard_manage_peer.html:186
 #: wireguard_peer/forms.py:31
 msgid "Priority"
 msgstr "Priorité"
@@ -1633,12 +1640,12 @@ msgid "Peer IP Addresses and networks"
 msgstr "Adresses IP et réseaux du peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:88
-#: templates/wireguard/wireguard_manage_peer.html:186
+#: templates/wireguard/wireguard_manage_peer.html:202
 msgid "Add IP Address"
 msgstr "Ajouter une adresse IP"
 
 #: templates/wireguard/wireguard_manage_peer.html:101
-#: templates/wireguard/wireguard_manage_peer.html:168
+#: templates/wireguard/wireguard_manage_peer.html:184
 msgid "Main ip address"
 msgstr "Adresse IP principale"
 
@@ -1662,7 +1669,11 @@ msgstr "Ajouter une route client"
 msgid "Routing Template"
 msgstr "Modèle de Routage"
 
-#: templates/wireguard/wireguard_manage_peer.html:140
+#: templates/wireguard/wireguard_manage_peer.html:145
+msgid "Template Route"
+msgstr "Route du modèle"
+
+#: templates/wireguard/wireguard_manage_peer.html:156
 msgid ""
 "The client is not configured to use the VPN as the default gateway."
 "\\n\\nOnly the specific networks listed below are routed through the VPN."
@@ -1675,7 +1686,7 @@ msgstr ""
 "\\n\\nRemarque: ces routes ne sont pas poussées automatiquement vers le "
 "client ; vous devrez mettre à jour manuellement son fichier de configuration."
 
-#: templates/wireguard/wireguard_manage_peer.html:143
+#: templates/wireguard/wireguard_manage_peer.html:159
 msgid ""
 "The client is configured to use the VPN as the default gateway. \\n\\nThis "
 "setting routes all client internet traffic through the VPN, enhancing "
@@ -1685,19 +1696,19 @@ msgstr ""
 "\\n\\nTout son trafic Internet passe donc par le VPN, améliorant la "
 "confidentialité et la sécurité de ses connexions."
 
-#: templates/wireguard/wireguard_manage_peer.html:152
+#: templates/wireguard/wireguard_manage_peer.html:168
 msgid "default route"
 msgstr "route par défaut"
 
-#: templates/wireguard/wireguard_manage_peer.html:188
+#: templates/wireguard/wireguard_manage_peer.html:204
 msgid "Delete Peer"
 msgstr "Supprimer le peer"
 
-#: templates/wireguard/wireguard_manage_peer.html:205
+#: templates/wireguard/wireguard_manage_peer.html:221
 msgid "Action Required!"
 msgstr "Action requise!"
 
-#: templates/wireguard/wireguard_manage_peer.html:206
+#: templates/wireguard/wireguard_manage_peer.html:222
 msgid ""
 "When manually updating the \"Public Key\", \"Pre-Shared Key\", or \"Private "
 "Key\", please ensure the configuration is correct."
@@ -1706,11 +1717,11 @@ msgstr ""
 "pré‑partagée » ou la « Clé privée », vérifiez que la configuration est "
 "correcte."
 
-#: templates/wireguard/wireguard_manage_peer.html:226
+#: templates/wireguard/wireguard_manage_peer.html:242
 msgid "Please type \\\"delete\\\" to remove peer configuration."
 msgstr "Tapez \\\"delete\\\" pour supprimer la configuration du peer."
 
-#: templates/wireguard/wireguard_manage_peer.html:274
+#: templates/wireguard/wireguard_manage_peer.html:290
 msgid ""
 "The private key is empty. The peer’s configuration file and QR code will be "
 "generated without the private key.\\n It must be inserted manually when "
@@ -2620,7 +2631,7 @@ msgstr ""
 msgid "Route template applied successfully."
 msgstr "Modèle de routage appliqué avec succès."
 
-#: wireguard_tools/views.py:170
+#: wireguard_tools/views.py:165
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/."
@@ -2628,7 +2639,7 @@ msgstr ""
 "Exportation réussie! | Les fichiers de configuration WireGuard ont été "
 "exportés vers /etc/wireguard/."
 
-#: wireguard_tools/views.py:172
+#: wireguard_tools/views.py:167
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/. Don't forget to restart the interfaces."
@@ -2636,19 +2647,19 @@ msgstr ""
 "Exportation réussie! | Les fichiers WireGuard ont été exportés vers /etc/"
 "wireguard/. N’oubliez pas de redémarrer les interfaces."
 
-#: wireguard_tools/views.py:274
+#: wireguard_tools/views.py:269
 msgid "Error reloading"
 msgstr "Erreur de rechargement"
 
-#: wireguard_tools/views.py:286
+#: wireguard_tools/views.py:281
 msgid "Error stopping"
 msgstr "Erreur à l’arrêt"
 
-#: wireguard_tools/views.py:291
+#: wireguard_tools/views.py:286
 msgid "Error starting"
 msgstr "Erreur au démarrage"
 
-#: wireguard_tools/views.py:298
+#: wireguard_tools/views.py:293
 msgid ""
 "WARNING|Please note that the interface was reloaded, not restarted. Double-"
 "check if the the peers are working as expected. If you find any issues, "
@@ -2657,21 +2668,21 @@ msgstr ""
 "AVERTISSEMENT | L’interface a été rechargée, pas redémarrée. Vérifiez que "
 "les peers fonctionnent comme prévu ; signalez tout problème rencontré."
 
-#: wireguard_tools/views.py:299
+#: wireguard_tools/views.py:294
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
 msgstr "WireGuard rechargé | Le service WireGuard a été rechargé."
 
-#: wireguard_tools/views.py:301
+#: wireguard_tools/views.py:296
 msgid "WireGuard restarted|The WireGuard service has been restarted."
 msgstr "WireGuard redémarré | Le service WireGuard a été redémarré."
 
-#: wireguard_tools/views.py:304
+#: wireguard_tools/views.py:299
 msgid "Errors encountered|Error processing one or more interfaces."
 msgstr ""
 "Erreurs rencontrées | Problème lors du traitement d’une ou plusieurs "
 "interfaces."
 
-#: wireguard_tools/views.py:307
+#: wireguard_tools/views.py:302
 msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr "Aucune interface trouvée | Aucune interface WireGuard à traiter."
 
