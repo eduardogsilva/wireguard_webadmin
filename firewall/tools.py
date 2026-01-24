@@ -2,7 +2,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from firewall.models import FirewallRule, FirewallSettings, RedirectRule
-from wireguard.models import PeerAllowedIP, WireGuardInstance
+from wireguard.models import PeerAllowedIP, WireGuardInstance, Peer
 
 
 def get_peer_addresses(peers, include_networks):
@@ -158,6 +158,52 @@ def generate_redirect_dns_rules():
     return dns_redirect_rules
 
 
+def generate_route_policy_rules():
+    route_policy_rules = ''
+    route_policy_rules += '# Route policy rules\n'
+
+    peers = (
+        Peer.objects
+        .filter(routing_template__enforce_route_policy=True)
+        .select_related('wireguard_instance', 'routing_template')
+        .order_by('wireguard_instance__instance_id', 'sort_order', 'name', 'public_key')
+    )
+
+    if peers.exists():
+        route_policy_rules += 'iptables -t filter -A WGWADM_FORWARD -i wg+ -j WGWADM_ROUTE_POLICY\n\n'
+    else:
+        route_policy_rules += '# No peers with enforce_route_policy enabled\n\n'
+        return route_policy_rules
+
+    for peer in peers:
+        route_policy_rules += f"# Route policy for peer: {peer} - {peer.uuid}\n"
+
+        sources = (peer.main_addresses or []) + (peer.announced_networks or [])
+        destinations = peer.client_routes or ['0.0.0.0/0']
+
+        if not sources:
+            route_policy_rules += f"# Missing IPs for selected peer: {peer} - {peer.uuid}\n\n"
+            continue
+
+        if '0.0.0.0/0' in destinations:
+            route_policy_rules += f"# Destination includes default route, skipping route policy for peer: {peer} - {peer.uuid}\n\n"
+            continue
+
+        for source in sources:
+            for destination in destinations:
+                route_policy_rules += (
+                    f"iptables -t filter -A WGWADM_ROUTE_POLICY -i wg+ -s {source} -d {destination} -j ACCEPT\n"
+                )
+
+            route_policy_rules += (
+                f"iptables -t filter -A WGWADM_ROUTE_POLICY -i wg+ -s {source} -j REJECT\n"
+            )
+
+        route_policy_rules += "\n"
+
+    return route_policy_rules
+
+
 def generate_firewall_header():
     firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
     header = f'''#!/bin/bash
@@ -174,10 +220,12 @@ fi
 iptables -t nat    -N WGWADM_POSTROUTING >> /dev/null 2>&1
 iptables -t nat    -N WGWADM_PREROUTING  >> /dev/null 2>&1
 iptables -t filter -N WGWADM_FORWARD     >> /dev/null 2>&1
+iptables -t filter -N WGWADM_ROUTE_POLICY >> /dev/null 2>&1
 
 iptables -t nat    -F WGWADM_POSTROUTING
 iptables -t nat    -F WGWADM_PREROUTING
 iptables -t filter -F WGWADM_FORWARD
+iptables -t filter -F WGWADM_ROUTE_POLICY
 
 iptables -t nat    -D POSTROUTING -j WGWADM_POSTROUTING >> /dev/null 2>&1
 iptables -t nat    -D PREROUTING  -j WGWADM_PREROUTING  >> /dev/null 2>&1
