@@ -132,6 +132,22 @@
                                 {% trans 'Routing Template' %}
                             </p>
                         </div>
+
+                        {% for ip_address in current_peer.routing_template.template_routes %}
+                            <div class="d-flex justify-content-between align-items-center text-muted">
+                                <p>
+                                    <span >
+                                        <i class="fas fa-network-wired"></i>
+                                        {{ ip_address}}
+                                    </span>
+                                </p>
+                                <p class="d-flex flex-column text-right small">
+                                        {% trans 'Template Route' %}
+                                </p>
+                            </div>
+                        {% endfor %}
+
+
                         {% else %}
                         <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
                                 <p>
