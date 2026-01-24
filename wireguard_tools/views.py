@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _
 from cluster.models import ClusterSettings, Worker
 from firewall.models import RedirectRule
 from firewall.tools import export_user_firewall, generate_firewall_footer, generate_firewall_header, \
-    generate_port_forward_firewall, generate_redirect_dns_rules
+    generate_port_forward_firewall, generate_redirect_dns_rules, generate_route_policy_rules
 from user_manager.models import UserAcl
 from vpn_invite.models import PeerInvite
 from wgwadmlibrary.tools import user_has_access_to_peer
@@ -71,6 +71,7 @@ def export_firewall_configuration():
     firewall_content += generate_redirect_dns_rules()
     firewall_content += generate_port_forward_firewall()
     firewall_content += export_user_firewall()
+    firewall_content += generate_route_policy_rules()
     firewall_content += generate_firewall_footer()
     firewall_path = "/etc/wireguard/wg-firewall.sh"
     with open(firewall_path, "w") as firewall_file:
