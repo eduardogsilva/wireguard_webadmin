@@ -31,18 +31,12 @@ def generate_peer_config(peer_uuid, server_address=None):
     peer = get_object_or_404(Peer, uuid=peer_uuid)
     wg_instance = peer.wireguard_instance
 
-    priority_zero_ip = PeerAllowedIP.objects.filter(config_file='server', peer=peer, priority=0).first()
-
-    if not priority_zero_ip:
+    if not peer.main_addresses:
         return "No IP with priority zero found for this peer."
 
-    client_address = f"{priority_zero_ip.allowed_ip}/{priority_zero_ip.netmask}"
+    client_address = ", ".join(peer.main_addresses)
+    allowed_ips_line = ", ".join(peer.client_routes)
 
-    allowed_ips = PeerAllowedIP.objects.filter(peer=peer, config_file='client').order_by('priority')
-    if allowed_ips:
-        allowed_ips_line = ", ".join([f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips])
-    else:
-        allowed_ips_line = "0.0.0.0/0, ::/0"
     dns_entries = [wg_instance.dns_primary, wg_instance.dns_secondary]
     dns_line = ", ".join(filter(None, dns_entries))
 
