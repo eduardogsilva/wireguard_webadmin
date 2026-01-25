@@ -1,0 +1,15 @@
+{% load i18n %}
+<footer class="main-footer">
+    {% if webadmin_version.update_available %}
+        <a class='btn btn-sm btn-danger' id="btn_update_changelog">{% trans 'Update Available' %}</a>{% else %}
+        wireguard-webadmin {% endif %}
+    <div class="float-right d-none d-sm-inline-block">
+        <b>{% trans 'Version' %}</b> {{ webadmin_version.current_version }}
+    </div>
+</footer>
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->

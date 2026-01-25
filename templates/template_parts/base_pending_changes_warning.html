@@ -1,0 +1,27 @@
+{% load i18n %}
+{% if pending_changes_warning %}
+    <div class="alert alert-warning" role="alert">
+        <h4 class="alert-heading">{% trans 'Update Required' %}</h4>
+        <p>
+            {% trans 'Your WireGuard settings have been modified. To apply these changes, please update the configuration and reload the WireGuard service.' %}
+        </p>
+        <p>
+            <a
+                    {% if user_acl.enable_restart %}
+                        href="/tools/export_wireguard_config/?action=update_and_restart" class="btn btn-primary"
+                    {% else %}
+                        href="#" class="btn btn-secondary disabled"
+                    {% endif %}
+            ><i class="fa fa-check"></i>{% trans 'Update and restart service' %}</a>
+
+            <a
+                    {% if user_acl.enable_reload %}
+                        href="/tools/export_wireguard_config/?action=update_and_reload" class="btn btn-secondary"
+                    {% else %}
+                        href="#" class="btn btn-secondary disabled"
+                    {% endif %}
+            >{% trans 'Update and reload service' %}</a>
+        </p>
+
+    </div>
+{% endif %}

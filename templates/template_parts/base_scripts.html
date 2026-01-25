@@ -1,0 +1,124 @@
+{% load i18n %}
+
+<!-- jQuery -->
+<script src="/static/AdminLTE-3.2.0/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/static/AdminLTE-3.2.0/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="/static/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="/static/AdminLTE-3.2.0/plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<script src="/static/AdminLTE-3.2.0/plugins/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="/static/AdminLTE-3.2.0/plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="/static/AdminLTE-3.2.0/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="/static/AdminLTE-3.2.0/plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="/static/AdminLTE-3.2.0/plugins/moment/moment.min.js"></script>
+<script src="/static/AdminLTE-3.2.0/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="/static/AdminLTE-3.2.0/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="/static/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="/static/AdminLTE-3.2.0/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/AdminLTE-3.2.0/dist/js/adminlte.js"></script>
+
+<script>
+    $(document).ready(function() {
+        const webadminVersion = '{{ webadmin_version.current_version }}';
+
+        $('#btn_update_changelog').on('click', function() {
+            $.ajax({
+                url: `https://updates.eth0.com.br/api/application_changelog/?app=wireguard_webadmin&version=${webadminVersion}`,
+                type: 'GET',
+                success: function(response) {
+                    const updates = response.updates.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+                    let updatesHtml = '';
+                    updates.forEach(update => {
+                        updatesHtml += `<div class="update">
+                                        <h5>Version ${update.version}</h5>
+                                        <p>${update.release_notes.replace(/\r\n/g, "<br>")}</p>
+                                    </div>`;
+                    });
+
+                    // Update modal content
+                    $('#genericModalLabel').text('Wireguard Webadmin Updates');
+                    $('#genericModalBody').html(updatesHtml);
+                    $('#genericModalCloseButton').text('Close');
+                    $('#genericModalActionButton').text('Update Instructions').attr('href', 'https://github.com/eduardogsilva/wireguard_webadmin').attr('target', '_blank');
+
+                    // Show modal
+                    $('#genericModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    // Update modal for error display
+                    $('#genericModalLabel').text('Error');
+                    $('#genericModalBody').html('<p>An error occurred while fetching the update information. Please try again later.</p>');
+                    $('#genericModalCloseButton').text('Close');
+                    $('#genericModalActionButton').hide(); // Hide the action button in case of error
+
+                    // Show modal
+                    $('#genericModal').modal('show');
+                    console.error("An error occurred while fetching updates: ", error);
+                }
+            });
+        });
+    });
+
+
+</script>
+
+
+
+<script>
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+</script>
+
+<script>
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+        var sidebarState = getCookie('sidebarState');
+        if (sidebarState === 'collapsed') {
+            $('body').addClass('sidebar-collapse');
+        }
+
+        $('[data-widget="pushmenu"]').on('click', function(event) {
+            event.preventDefault();
+            setTimeout(function() {
+                if ($('body').hasClass('sidebar-collapse')) {
+                    setCookie('sidebarState', 'collapsed', 7);
+                } else {
+                    setCookie('sidebarState', 'opened', 7);
+                }
+            }, 500);
+        });
+    });
+</script>

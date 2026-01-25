@@ -1,0 +1,107 @@
+{% load i18n %}
+<!-- Sidebar -->
+<div class="sidebar">
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+
+            <li class="nav-item">
+                <a href="/status/" class="nav-link {% if '/status/' in request.path %}active{% endif %}">
+                    <i class="fas fa-tachometer-alt nav-icon"></i>
+                    <p>
+                        {% trans 'Status' %}
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/peer/list/" class="nav-link {% if '/peer/' in request.path %}active{% endif %}">
+                    <i class="fas fa-users-cog nav-icon"></i>
+                    <p>
+                        Peers
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/dns/" class="nav-link {% if '/dns/' in request.path %}active{% endif %}">
+                    <i class="fas fa-address-book nav-icon"></i>
+                    <p>
+                        DNS
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/firewall/rule_list/" class="nav-link {% if '/firewall/' in request.path %}active{% endif %}">
+                    <i class="fas fa-shield-alt nav-icon"></i>
+                    <p>
+                        Firewall
+
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/console/" class="nav-link {% if '/console/' in request.path %}active{% endif %}">
+                    <i class="fas fa-terminal nav-icon"></i>
+                    <p>
+                        Console
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/user/list/" class="nav-link {% if '/user/' in request.path %}active{% endif %}">
+                    <i class="fas fa-users nav-icon"></i>
+                    <p>
+                        {% trans 'User Manager' %}
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{% url 'wireguard_server_list' %}"
+                   class="nav-link {% if '/server/' in request.path %}active{% endif %}">
+                    <i class="fas fa-cogs nav-icon"></i>
+                    <p>
+                        WireGuard
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/routing-templates/list/"
+                   class="nav-link {% if '/routing-templates/' in request.path %}active{% endif %}">
+                    <i class="fas fa-route nav-icon"></i>
+                    <p>
+                        {% trans 'Routing Templates' %}
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/vpn_invite/" class="nav-link {% if '/vpn_invite/' in request.path %}active{% endif %}">
+                    <i class="fas fa-share-square nav-icon"></i>
+                    <p>
+                        {% trans 'VPN Invite' %}
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/cluster/" class="nav-link {% if '/cluster/' in request.path %}active{% endif %}">
+                    <i class="fas fa-server nav-icon"></i>
+                    <p>
+                        {% trans 'Cluster' %}
+                    </p>
+                </a>
+            </li>
+
+
+        </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+</div>
+<!-- /.sidebar -->
