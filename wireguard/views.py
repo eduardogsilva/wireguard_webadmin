@@ -205,3 +205,20 @@ def view_apply_db_patches(request):
 
 
 
+@login_required
+def view_server_list(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=40).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    wireguard_instances = WireGuardInstance.objects.all().order_by('instance_id')
+    context = {'page_title': _('WireGuard Instances'), 'wireguard_instances': wireguard_instances}
+    return render(request, 'wireguard/server_list.html', context)
+
+
+@login_required
+def view_server_detail(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=40).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    uuid = request.GET.get('uuid')
+    instance = get_object_or_404(WireGuardInstance, uuid=uuid)
+    context = {'page_title': f'wg{instance.instance_id}', 'instance': instance}
+    return render(request, 'wireguard/server_detail.html', context)

@@ -36,7 +36,8 @@ from user_manager.views import view_manage_user, view_peer_group_list, view_peer
 from vpn_invite.views import view_email_settings, view_vpn_invite_list, view_vpn_invite_settings
 from vpn_invite_public.views import view_public_vpn_invite
 from wgrrd.views import view_rrd_graph
-from wireguard.views import view_apply_db_patches, view_wireguard_manage_instance, view_wireguard_status
+from wireguard.views import view_apply_db_patches, view_wireguard_manage_instance, view_wireguard_status, \
+    view_server_list, view_server_detail
 from wireguard_peer.views import view_manage_ip_address, view_wireguard_peer_list, view_wireguard_peer_manage, \
     view_wireguard_peer_sort, view_apply_route_template
 from wireguard_tools.views import download_config_or_qrcode, export_wireguard_configs, restart_wireguard_interfaces
@@ -67,6 +68,8 @@ urlpatterns = [
     path('tools/download_peer_config/', download_config_or_qrcode, name='download_config_or_qrcode'),
     path('tools/restart_wireguard/', restart_wireguard_interfaces, name='restart_wireguard_interfaces'),
     path('server/manage/', view_wireguard_manage_instance, name='wireguard_manage_instance'),
+    path('server/list/', view_server_list, name='wireguard_server_list'),
+    path('server/detail/', view_server_detail, name='wireguard_server_detail'),
     path('accounts/create_first_user/', view_create_first_user, name='create_first_user'),
     path('accounts/login/', view_login, name='login'),
     path('accounts/logout/', view_logout, name='logout'),

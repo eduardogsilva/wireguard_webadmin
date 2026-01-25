@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <div class="card card-primary card-outline">
+        <div class="card-header">
+            <h3 class="card-title">{% trans 'WireGuard Instances' %}</h3>
+            <div class="card-tools">
+                <a href="{% url 'wireguard_manage_instance' %}?action=create" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> {% trans 'Create Instance' %}
+                </a>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                <tr>
+                    <th class="min-width">#</th>
+                    <th>{% trans 'Name' %}</th>
+                    <th>{% trans 'Listen Port' %}</th>
+                    <th>{% trans 'Address' %}</th>
+                    <th class="min-width">{% trans 'Peers' %}</th>
+                    <th class="min-width"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for instance in wireguard_instances %}
+                    <tr>
+                        <td class="min-width">
+                            <a href="{% url 'wireguard_server_detail' %}?uuid={{ instance.uuid }}">
+                                wg{{ instance.instance_id }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ instance }}
+                        </td>
+                        <td>
+                            {{ instance.listen_port }}
+                        </td>
+                        <td>
+                            {{ instance.address }}/{{ instance.netmask }}
+                        </td>
+                        <td class="min-width">
+                            {{ instance.peer_set.count }}
+                        </td>
+                        <td class="min-width">
+                            <a class="btn btn-outline-primary btn-sm"
+                               href="{% url 'wireguard_server_detail' %}?uuid={{ instance.uuid }}">
+                                <i class="fas fa-folder"></i>
+
+                            </a>
+                            <a class="btn btn-outline-info btn-sm"
+                               href="{% url 'wireguard_manage_instance' %}?uuid={{ instance.uuid }}">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            {% trans 'No WireGuard instances found.' %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+{% endblock %}

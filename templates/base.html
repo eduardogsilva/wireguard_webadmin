@@ -137,14 +137,15 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a href="/server/manage/" class="nav-link {% if '/server/' in request.path %}active{% endif %}">
-                            <i class="fas fa-cogs nav-icon"></i>
-                            <p>
-                                WireGuard
-                            </p>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{% url 'wireguard_server_list' %}"
+                                class="nav-link {% if '/server/' in request.path %}active{% endif %}">
+                                <i class="fas fa-cogs nav-icon"></i>
+                                <p>
+                                    WireGuard
+                                </p>
+                            </a>
+                        </li>
 
                     <li class="nav-item">
                         <a href="/routing-templates/list/"
