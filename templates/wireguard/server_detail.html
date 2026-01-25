@@ -7,14 +7,25 @@
         <div class="card card-primary card-outline">
             <div class="card-body box-profile">
                 <h3 class="profile-username text-center">wg{{ instance.instance_id }}</h3>
-                <p class="text-muted text-center">{{ instance.name|default:"" }}</p>
-
                 <ul class="list-group list-group-unbordered mb-3">
                     <li class="list-group-item">
+                        <b>{% trans 'Name' %}</b>
+                        <span class="float-right">{{ instance.name|default_if_none:"-" }}</span>
+                    </li>
+
+                    <li class="list-group-item">
                         <b>{% trans 'Public Key' %}</b>
-                        <a class="float-right" title="{{ instance.public_key }}">
-                            {{ instance.public_key|truncatechars:16 }}
-                        </a>
+                        <div class="float-right">
+                            <span id="publicKeyTruncated" title="{{ instance.public_key }}">
+                                {{ instance.public_key|truncatechars:16 }}
+                            </span>
+                            <span id="publicKeyFull" style="display: none;">
+                                {{ instance.public_key }}
+                            </span>
+                            <a href="javascript:void(0);" onclick="togglePublicKey()" class="text-primary ml-2">
+                                <i class="fas fa-eye" id="toggleIcon"></i>
+                            </a>
+                        </div>
                     </li>
                     <li class="list-group-item">
                         <b>{% trans 'Listen Port' %}</b>
@@ -35,7 +46,7 @@
                 </ul>
 
                 <a href="{% url 'wireguard_manage_instance' %}?uuid={{ instance.uuid }}"
-                   class="btn btn-primary btn-block">
+                    class="btn btn-primary btn-block">
                     <b>{% trans 'Edit Instance' %}</b>
                 </a>
                 <a href="{% url 'wireguard_server_list' %}" class="btn btn-default btn-block">
@@ -51,6 +62,7 @@
                 <h3 class="card-title">{% trans 'Traffic Graph' %}</h3>
                 <div class="card-tools">
                     <form method="get" class="form-inline">
+                        <input type="hidden" name="uuid" value="{{ instance.uuid }}">
                         <select name="period" class="form-control form-control-sm" onchange="this.form.submit()">
                             <option value="6h" {% if request.GET.period == '6h' %}selected{% endif %}>6h</option>
                             <option value="1d" {% if request.GET.period == '1d' %}selected{% endif %}>1d</option>
@@ -68,4 +80,26 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block custom_page_scripts %}
+<script>
+    function togglePublicKey() {
+        var truncated = document.getElementById('publicKeyTruncated');
+        var full = document.getElementById('publicKeyFull');
+        var icon = document.getElementById('toggleIcon');
+
+        if (full.style.display === "none") {
+            full.style.display = "inline";
+            truncated.style.display = "none";
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            full.style.display = "none";
+            truncated.style.display = "inline";
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
 {% endblock %}
