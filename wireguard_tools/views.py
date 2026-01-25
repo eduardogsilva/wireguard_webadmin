@@ -64,8 +64,8 @@ def export_firewall_configuration():
     firewall_content = generate_firewall_header()
     firewall_content += generate_redirect_dns_rules()
     firewall_content += generate_port_forward_firewall()
-    firewall_content += export_user_firewall()
     firewall_content += generate_route_policy_rules()
+    firewall_content += export_user_firewall()
     firewall_content += generate_firewall_footer()
     firewall_path = "/etc/wireguard/wg-firewall.sh"
     with open(firewall_path, "w") as firewall_file:

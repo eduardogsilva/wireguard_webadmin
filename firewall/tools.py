@@ -169,9 +169,7 @@ def generate_route_policy_rules():
         .order_by('wireguard_instance__instance_id', 'sort_order', 'name', 'public_key')
     )
 
-    if peers.exists():
-        route_policy_rules += 'iptables -t filter -A WGWADM_FORWARD -i wg+ -j WGWADM_ROUTE_POLICY\n\n'
-    else:
+    if not peers.exists():
         route_policy_rules += '# No peers with enforce_route_policy enabled\n\n'
         return route_policy_rules
 
@@ -226,6 +224,7 @@ iptables -t nat    -F WGWADM_POSTROUTING
 iptables -t nat    -F WGWADM_PREROUTING
 iptables -t filter -F WGWADM_FORWARD
 iptables -t filter -F WGWADM_ROUTE_POLICY
+iptables -t filter -F FORWARD
 
 iptables -t nat    -D POSTROUTING -j WGWADM_POSTROUTING >> /dev/null 2>&1
 iptables -t nat    -D PREROUTING  -j WGWADM_PREROUTING  >> /dev/null 2>&1
@@ -233,9 +232,10 @@ iptables -t filter -D FORWARD     -j WGWADM_FORWARD     >> /dev/null 2>&1
 
 iptables -t nat    -I POSTROUTING -j WGWADM_POSTROUTING
 iptables -t nat    -I PREROUTING  -j WGWADM_PREROUTING
-iptables -t filter -I FORWARD     -j WGWADM_FORWARD
 
-iptables -t filter -A WGWADM_FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -t filter -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -t filter -A FORWARD -i wg+ -j WGWADM_ROUTE_POLICY
+iptables -t filter -A FORWARD        -j WGWADM_FORWARD
 '''
     return header
 
