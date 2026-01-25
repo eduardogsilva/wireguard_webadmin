@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import models
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect, render, Http404
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy as _
 
@@ -124,7 +124,8 @@ def view_wireguard_manage_instance(request):
         if request.GET.get('action') == 'create':
             current_instance = None
         else:
-            current_instance = wireguard_instances.first()
+            raise Http404
+
     if current_instance:
         page_title = f'wg{current_instance.instance_id}'
         message_title = _('Update WireGuard Instance')
@@ -154,7 +155,7 @@ def view_wireguard_manage_instance(request):
             this_form.pending_changes = True
             this_form.save()
             messages.success(request, message_title + '|WireGuard instance updated: wg' + str(form.instance.instance_id))
-            return redirect('/server/manage/?uuid=' + str(form.instance.uuid))
+            return redirect('/server/detail/?uuid=' + str(form.instance.uuid))
     else:
         if not current_instance:
             form = WireGuardInstanceForm(initial=generate_instance_defaults())

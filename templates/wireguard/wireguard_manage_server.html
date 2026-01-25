@@ -6,19 +6,6 @@
 <div class="card card-primary card-outline">
     
     <div class="card-body">
-        <ul class="nav nav-tabs"  role="tablist">
-            {% for wgconf in wireguard_instances %}
-            <li class="nav-item">
-                <a class="nav-link {%if wgconf == current_instance%}active{%endif%}" href="/server/manage/?uuid={{wgconf.uuid}}" role="tab" >
-                    wg{{wgconf.instance_id}} {%if wgconf.name %}({{wgconf.name}}){%endif%}
-                </a>
-            </li>
-            {% endfor %}
-            <li class="nav-item">
-                <a class="nav-link {%if not current_instance%}active{%endif%}" href="/server/manage/?action=create" role="tab" >{% trans 'Create Instance' %}</a>
-            </li>
-
-          </ul>
         <div class="tab-content" id="custom-content-below-tabContent">
             <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
                 <form method="post">
@@ -128,6 +115,7 @@
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
                         {% if current_instance.uuid %}
+                            <a href="{% url 'wireguard_server_list' %}" class='btn btn-outline-secondary' >{% trans 'Back' %}</a>
                         <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{% trans 'Delete Configuration' %}</a>
                         {% endif %}
                     </div>
