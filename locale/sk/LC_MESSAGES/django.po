@@ -1588,42 +1588,32 @@ msgstr "Počúvací port"
 
 #: templates/wireguard/server_detail.html:35
 #: templates/wireguard/server_list.html:21
-#, fuzzy
-#| msgid "IP Address"
 msgid "Address"
-msgstr "IP adresa"
+msgstr "Adresa"
 
 #: templates/wireguard/server_detail.html:50
-#, fuzzy
-#| msgid "Instance"
 msgid "Edit Instance"
-msgstr "Inštancia"
+msgstr "Upraviť inštanciu"
 
 #: templates/wireguard/server_detail.html:53
-#, fuzzy
-#| msgid "Static Host List"
 msgid "Back to List"
-msgstr "Zoznam statických hostiteľov"
+msgstr "Späť na zoznam"
 
 #: templates/wireguard/server_detail.html:62
 msgid "Traffic Graph"
-msgstr ""
+msgstr "Graf prevádzky"
 
 #: templates/wireguard/server_list.html:7 wireguard/views.py:214
-#, fuzzy
-#| msgid "WireGuard Instance"
 msgid "WireGuard Instances"
-msgstr "WireGuard Inštancia"
+msgstr "WireGuard inštancie"
 
 #: templates/wireguard/server_list.html:10
 msgid "Create Instance"
 msgstr "Vytvoriť inštanciu"
 
 #: templates/wireguard/server_list.html:61
-#, fuzzy
-#| msgid "No WireGuard Instances Found"
 msgid "No WireGuard instances found."
-msgstr "Nenašli sa žiadne WireGuard inštancie"
+msgstr "Nenašli sa žiadne inštancie WireGuard."
 
 #: templates/wireguard/wireguard_manage_ip.html:18
 msgid "Enter Allowed IP"

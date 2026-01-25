@@ -1600,42 +1600,32 @@ msgstr "Porta"
 
 #: templates/wireguard/server_detail.html:35
 #: templates/wireguard/server_list.html:21
-#, fuzzy
-#| msgid "IP Address"
 msgid "Address"
-msgstr "Endereço IP"
+msgstr "Endereço"
 
 #: templates/wireguard/server_detail.html:50
-#, fuzzy
-#| msgid "Instance"
 msgid "Edit Instance"
-msgstr "Instância"
+msgstr "Editar Instância"
 
 #: templates/wireguard/server_detail.html:53
-#, fuzzy
-#| msgid "Static Host List"
 msgid "Back to List"
-msgstr "Lista de Endereços Estáticos"
+msgstr "Voltar para a Lista"
 
 #: templates/wireguard/server_detail.html:62
 msgid "Traffic Graph"
-msgstr ""
+msgstr "Gráfico de Tráfego"
 
 #: templates/wireguard/server_list.html:7 wireguard/views.py:214
-#, fuzzy
-#| msgid "WireGuard Instance"
 msgid "WireGuard Instances"
-msgstr "Instância do WireGuard"
+msgstr "Instâncias do WireGuard"
 
 #: templates/wireguard/server_list.html:10
 msgid "Create Instance"
 msgstr "Criar Instância"
 
 #: templates/wireguard/server_list.html:61
-#, fuzzy
-#| msgid "No WireGuard Instances Found"
 msgid "No WireGuard instances found."
-msgstr "Nenhuma Instância do WireGuard Encontrada"
+msgstr "Nenhuma instância do WireGuard encontrada."
 
 #: templates/wireguard/wireguard_manage_ip.html:18
 msgid "Enter Allowed IP"
