@@ -169,7 +169,7 @@
                             $("#inviteText").text(inviteData.text_body);
                             $("#invitePassword").html("{% trans 'Access Password' %}: <strong>" + inviteData.password + "</strong> {% trans '(Share this password via a separate secure channel)' %}");
                             $("#inviteExpiration").text(new Date(inviteData.expiration).toLocaleString());
-                            $("#inviteMessage").html("<div class='alert alert-success'>" + (response.message || xhr.statusText) + "</div>");
+                            $("#inviteMessage").html("<div class='alert alert-success'>" + (response.message || "{% trans 'Invite refreshed.' %}") + "</div>");
                         } else {
                             $("#inviteMessage").html("<div class='alert alert-danger'>" + (response.message || "{% trans 'Error refreshing invite.' %}") + "</div>");
                         }
