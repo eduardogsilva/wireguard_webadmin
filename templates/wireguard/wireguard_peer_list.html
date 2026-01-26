@@ -28,7 +28,8 @@
                             {% include 'wireguard/peer_list/peer_data.html' %}
                         </div>
                         {% if add_peer_enabled %}
-                            <a class="btn btn-primary" href="/peer/manage/?instance={{ current_instance.uuid }}"
+                            <a class="btn btn-primary"
+                               href="{% url 'wireguard_peer_create' %}?instance={{ current_instance.uuid }}"
                                onclick="return confirm('{% trans 'Are you sure you want to create a new peer?' %}');">
                                 {% trans 'Create Peer' %}
                             </a>
