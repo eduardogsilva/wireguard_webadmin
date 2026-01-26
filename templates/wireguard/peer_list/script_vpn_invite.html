@@ -1,0 +1,222 @@
+{% load i18n %}
+<!-- VPN Invite functionality with adjustments -->
+<script>
+    $(document).ready(function(){
+        var inviteData = null; // Store invite details
+
+        // Function to detect mobile device
+        function isMobileDevice() {
+            return /Mobi|Android/i.test(navigator.userAgent);
+        }
+
+        // Handler for VPN Invite button click
+        $("#inviteButton").on("click", function(e) {
+            e.preventDefault();
+            var peerUuid = $('#peerPreviewModal').data('peer-uuid');
+            // Hide other content sections
+            $(".info-content").hide();
+            $(".qr-code-content").hide();
+            $(".invite-content").show();
+
+            // Clear previous invite message and input field
+            $("#inviteMessage").html("");
+            $("#inviteContactInput").val("");
+
+            // Create the invite by calling the API endpoint
+            $.ajax({
+                url: '/api/peer_invite/',
+                data: { peer: peerUuid },
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if(response.status === "success") {
+                        inviteData = response.invite_data;
+                        // Populate invite details in the modal
+                        $("#inviteText").text(inviteData.text_body);
+                        $("#invitePassword").html("{% trans 'Access Password' %}: <strong>" + inviteData.password + "</strong> {% trans '(Share this password via a separate secure channel)' %}");
+                        $("#inviteExpiration").text(new Date(inviteData.expiration).toLocaleString());
+                    } else {
+                        $("#inviteMessage").html("<div class='alert alert-danger'>" + (response.message || "{% trans 'Unknown error' %}") + "</div>");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var message = "{% trans 'Error creating invite.' %}";
+                    try {
+                        var resp = xhr.responseJSON;
+                        message = resp && resp.message ? resp.message : xhr.statusText;
+                    } catch(err) {
+                        message = xhr.statusText;
+                    }
+                    $("#inviteMessage").html("<div class='alert alert-danger'>" + message + "</div>");
+                }
+            });
+        });
+
+        // Back button in the invite section
+        $("#backFromInviteButton").on("click", function(e) {
+            e.preventDefault();
+            $(".invite-content").hide();
+            $(".info-content").show();
+        });
+
+        // Validate email function
+        function isValidEmail(email) {
+            var re = /^\S+@\S+\.\S+$/;
+            return re.test(email);
+        }
+
+        // Validate phone number function (simple check)
+        function isValidPhone(phone) {
+            var re = /^\+?\d{10,15}$/;
+            return re.test(phone);
+        }
+
+        // Handler for copying the invite text to clipboard
+        $("#copyInviteTextButton").on("click", function(e) {
+            e.preventDefault();
+            var textToCopy = $("#inviteText").text();
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(textToCopy).then(function() {
+                    $("#inviteMessage").html("<div class='alert alert-success'>{% trans 'Invite text copied to clipboard.' %}</div>");
+                }, function(err) {
+                    $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Failed to copy text.' %}</div>");
+                });
+            } else {
+                $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Clipboard API not supported.' %}</div>");
+            }
+        });
+
+        // Handler for sending invite via WhatsApp with device detection
+        $("#sendInviteWhatsappButton").on("click", function(e) {
+            e.preventDefault();
+            var contact = $("#inviteContactInput").val().trim();
+            if(!isValidPhone(contact)) {
+                $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Please enter a valid phone number for WhatsApp.' %}</div>");
+                return;
+            }
+            if(inviteData && inviteData.whatsapp_body) {
+                var whatsappUrl;
+                if(isMobileDevice()){
+                    whatsappUrl = "https://api.whatsapp.com/send?phone=" + encodeURIComponent(contact) + "&text=" + encodeURIComponent(inviteData.whatsapp_body);
+                } else {
+                    whatsappUrl = "https://web.whatsapp.com/send?phone=" + encodeURIComponent(contact) + "&text=" + encodeURIComponent(inviteData.whatsapp_body);
+                }
+                window.open(whatsappUrl, '_blank');
+            } else {
+                $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Invite data is not available.' %}</div>");
+            }
+        });
+
+        // Handler for sending invite via Email
+        $("#sendInviteEmailButton").on("click", function(e, textStatus, xhr) {
+            e.preventDefault();
+            var contact = $("#inviteContactInput").val().trim();
+            if(!isValidEmail(contact)) {
+                $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Please enter a valid email address.' %}</div>");
+                return;
+            }
+            if(inviteData && inviteData.uuid) {
+                // Send invite email via API call
+                $.ajax({
+                    url: '/api/peer_invite/',
+                    data: { invite: inviteData.uuid, action: 'email', address: contact },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response, textStatus, xhr) {
+                        var message = response.message;
+                        if (!message) {
+                            message = xhr.statusText;
+                        }
+                        if(response.status === "success") {
+                            $("#inviteMessage").html("<div class='alert alert-success'>" + message + "</div>");
+                        } else {
+                            $("#inviteMessage").html("<div class='alert alert-danger'>" + message + "</div>");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        var message = "{% trans 'Error sending email.' %}";
+                        try {
+                            var resp = xhr.responseJSON;
+                            if (resp && resp.message) {
+                                message = resp.message;
+                            } else {
+                                message = xhr.statusText;
+                            }
+                        } catch(err) {
+                            message = xhr.statusText;
+                        }
+                        $("#inviteMessage").html("<div class='alert alert-danger'>" + message + "</div>");
+                    }
+                });
+            } else {
+                $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Invite data is not available.' %}</div>");
+            }
+        });
+
+        // Handler for refreshing the invite (update expiration and content)
+        $("#refreshInviteButton").on("click", function(e) {
+            e.preventDefault();
+            if(inviteData && inviteData.uuid) {
+                $.ajax({
+                    url: '/api/peer_invite/',
+                    data: { invite: inviteData.uuid, action: 'refresh' },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if(response.status === "success") {
+                            // Update the invite details
+                            inviteData = response.invite_data;
+                            $("#inviteText").text(inviteData.text_body);
+                            $("#invitePassword").html("{% trans 'Access Password' %}: <strong>" + inviteData.password + "</strong> {% trans '(Share this password via a separate secure channel)' %}");
+                            $("#inviteExpiration").text(new Date(inviteData.expiration).toLocaleString());
+                            $("#inviteMessage").html("<div class='alert alert-success'>" + (response.message || xhr.statusText) + "</div>");
+                        } else {
+                            $("#inviteMessage").html("<div class='alert alert-danger'>" + (response.message || "{% trans 'Error refreshing invite.' %}") + "</div>");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        var message = "{% trans 'Error refreshing invite.' %}";
+                        try {
+                            var resp = xhr.responseJSON;
+                            if (resp && resp.message) {
+                                message = resp.message;
+                            } else {
+                                message = xhr.statusText;
+                            }
+                        } catch(err) {
+                            message = xhr.statusText;
+                        }
+                        $("#inviteMessage").html("<div class='alert alert-danger'>" + message + "</div>");
+                    }
+                });
+            } else {
+                $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'No invite data available to refresh.' %}</div>");
+            }
+        });
+
+        // Handler for Close Invite button (which deletes the invite)
+        $("#closeInviteButton").on("click", function(e) {
+            e.preventDefault();
+            if(inviteData && inviteData.uuid) {
+                $.ajax({
+                    url: '/api/peer_invite/',
+                    data: { invite: inviteData.uuid, action: 'delete' },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        // Hide invite section and show info content regardless of API response
+                        $(".invite-content").hide();
+                        $(".info-content").show();
+                        inviteData = null;
+                    },
+                    error: function(xhr, status, error) {
+                        $("#inviteMessage").html("<div class='alert alert-danger'>{% trans 'Error closing invite:' %} " + error + "</div>");
+                    }
+                });
+            } else {
+                $(".invite-content").hide();
+                $(".info-content").show();
+            }
+        });
+    });
+</script>

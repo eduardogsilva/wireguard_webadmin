@@ -1,0 +1,64 @@
+{% load i18n %}
+<script>
+    // Global object to store Chart.js instances for each peer.
+    var charts = {};
+
+    // Initialize charts for each peer once the DOM is ready.
+    document.addEventListener('DOMContentLoaded', function() {
+        // For each canvas element matching id pattern "chart-<peer_public_key>"
+        document.querySelectorAll('canvas[id^="chart-"]').forEach(function(canvas) {
+            var peerId = canvas.id.replace('chart-', '');
+            // Create a new Chart instance
+            charts[peerId] = new Chart(canvas.getContext('2d'), {
+                type: 'line',
+                data: {
+                    // X-axis labels can be blank since we are only showing the last 10 points.
+                    labels: Array(10).fill(''),
+                    datasets: [
+                        {
+                            label: 'Download',
+                            data: Array(10).fill(0),
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            fill: false,
+                            tension: 0.1,
+                            lineTension: 0.4,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Upload',
+                            data: Array(10).fill(0),
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            fill: false,
+                            tension: 0.1,
+                            lineTension: 0.4,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            display: false,
+                            ticks: { display: false },
+                            gridLines: { display: false }
+                        }],
+                        yAxes: [{
+                            display: false,
+                            ticks: { display: false, beginAtZero: true },
+                            gridLines: { display: false }
+                        }]
+                    },
+                    animation: {
+                        duration: 0
+                    }
+                }
+            });
+        });
+    });
+</script>

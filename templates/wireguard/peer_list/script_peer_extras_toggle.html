@@ -1,0 +1,15 @@
+{% load i18n %}
+<script>
+    $(document).ready(function(){
+        $("#toggleExtraInfo").click(function(){
+            $(".peer-extra-info").toggle();
+            if($(".peer-extra-info").is(":visible")){
+                $(this).text("{% trans 'Hide extras' %}");
+                $(".div-peer-text-information").removeClass('position-absolute');
+            } else {
+                $(this).text("{% trans 'Show extras' %}");
+                $(".div-peer-text-information").addClass('position-absolute');
+            }
+        });
+    });
+</script>

@@ -1,0 +1,304 @@
+{% load i18n %}
+<script>
+    var previousMeasurements = {};
+    var toastShownThisCycle = false;
+    const LOAD_FROM_CACHE = {% if load_from_cache %}true{% else %}false{% endif %};
+
+    const parseSnapshotTs = (data) => {
+        if (data && data.cache_information && data.cache_information.created) {
+            const ts = Date.parse(data.cache_information.created);
+            if (!Number.isNaN(ts)) {
+                return ts / 1000; // epoch seconds
+            }
+        }
+        return Date.now() / 1000;
+    };
+
+    const updateThroughput = (peerId, peerInfo, snapshotTs) => {
+        const throughputElement = document.getElementById(`peer-throughput-${peerId}`);
+        const currentTime = snapshotTs; // snapshot timestamp (server/cache) in seconds
+        let formattedThroughput = '';
+
+        if (previousMeasurements[peerId]) {
+            const prev = previousMeasurements[peerId];
+            const timeDiff = currentTime - prev.timestamp; // time difference in seconds
+            // If timeDiff is invalid/small (out-of-order snapshots or same snapshot), skip throughput calc
+            if (timeDiff <= 0) {
+                previousMeasurements[peerId] = {
+                    timestamp: currentTime,
+                    transfer: { tx: peerInfo.transfer.tx, rx: peerInfo.transfer.rx }
+                };
+                return formattedThroughput;
+            }
+
+            // For the peer: download corresponds to tx and upload to rx
+            let downloadDiff = peerInfo.transfer.tx - prev.transfer.tx;
+            let uploadDiff = peerInfo.transfer.rx - prev.transfer.rx;
+
+            // If counters have been reset (current value < previous), show a toast (only once per cycle)
+            if (downloadDiff < 0 || uploadDiff < 0) {
+                if (!toastShownThisCycle) {
+                    $(document).Toasts('create', {
+                        class: 'bg-info',
+                        title: 'info',
+                        body: 'Throughput discarded due to counter reset',
+                        delay: 10000,
+                        autohide: true
+                    });
+                    toastShownThisCycle = true;
+                }
+                downloadDiff = 0;
+                uploadDiff = 0;
+            }
+
+            // Calculate throughput in bytes per second
+            const downloadThroughput = downloadDiff / timeDiff;
+            const uploadThroughput = uploadDiff / timeDiff;
+
+            // Convert bytes per second to bits per second
+            const downloadBps = downloadThroughput * 8;
+            const uploadBps = uploadThroughput * 8;
+
+            // Calculate Mbps and Kbps values
+            const downloadMbps = downloadBps / 1000000;
+            const uploadMbps = uploadBps / 1000000;
+            const downloadKbps = downloadBps / 1000;
+            const uploadKbps = uploadBps / 1000;
+
+            // Determine display unit and formatting
+            let downloadDisplay, uploadDisplay;
+            if (downloadMbps < 1) {
+                // Below 1 Mbps, display in Kbps
+                if (downloadKbps < 100) {
+                    downloadDisplay = downloadKbps.toFixed(2) + ' Kbps';
+                } else {
+                    downloadDisplay = downloadKbps.toFixed(0) + ' Kbps';
+                }
+            } else {
+                // 1 Mbps and above: if above 10 Mbps, show no decimals; else, show 2 decimals
+                downloadDisplay = (downloadMbps > 10 ? downloadMbps.toFixed(0) : downloadMbps.toFixed(2)) + ' Mbps';
+            }
+            if (uploadMbps < 1) {
+                if (uploadKbps < 10) {
+                    uploadDisplay = uploadKbps.toFixed(2) + ' Kbps';
+                } else {
+                    uploadDisplay = uploadKbps.toFixed(0) + ' Kbps';
+                }
+            } else {
+                uploadDisplay = (uploadMbps > 10 ? uploadMbps.toFixed(0) : uploadMbps.toFixed(2)) + ' Mbps';
+            }
+
+            // Highlight values above a threshold
+            const threshold = 100.0;
+            if (downloadMbps > threshold) {
+                downloadDisplay = `<strong>${downloadDisplay}</strong>`;
+            }
+            if (uploadMbps > threshold) {
+                uploadDisplay = `<strong>${uploadDisplay}</strong>`;
+            }
+
+            formattedThroughput = `<i class="fas fa-arrow-down"></i> ${downloadDisplay}, <i class="fas fa-arrow-up"></i> ${uploadDisplay}`;
+            throughputElement.innerHTML = formattedThroughput;
+
+            // Update Chart.js graphs with raw Mbps values (always using Mbps for consistency)
+            if (charts[peerId]) {
+                var chart = charts[peerId];
+                chart.data.datasets[0].data.push(downloadMbps);
+                if (chart.data.datasets[0].data.length > 10) {
+                    chart.data.datasets[0].data.shift();
+                }
+                chart.data.datasets[1].data.push(uploadMbps);
+                if (chart.data.datasets[1].data.length > 10) {
+                    chart.data.datasets[1].data.shift();
+                }
+                chart.update();
+            }
+        } else {
+            // First cycle: no previous measurement available.
+            formattedThroughput = `<i class="fas fa-arrow-down"></i> -.-- Kbps, <i class="fas fa-arrow-up"></i> -.-- Kbps`;
+            throughputElement.innerHTML = formattedThroughput;
+        }
+
+        previousMeasurements[peerId] = {
+            timestamp: currentTime,
+            transfer: {
+                tx: peerInfo.transfer.tx,
+                rx: peerInfo.transfer.rx
+            }
+        };
+
+        return formattedThroughput;
+    };
+
+    // Convert bytes to human-readable format with abbreviated units
+    const convertBytes = (bytes) => {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    };
+
+    const getPeerLocationLabel = (peerInfo) => {
+        if (peerInfo && peerInfo.source_uuid && String(peerInfo.source_uuid).trim() !== '') {
+            return peerInfo.source_name || '';
+        }
+        return "{% trans 'Primary Server' %}";
+    };
+
+    // Fetch Wireguard status and update UI
+    document.addEventListener('DOMContentLoaded', function() {
+        const fetchWireguardStatus = async (cachePrevious = null) => {
+            try {
+                let url = '/api/wireguard_status/';
+
+                // cachePrevious === 0 should behave like "normal"
+                if (cachePrevious !== null && cachePrevious !== 0) {
+                    url += '?cache_previous=' + encodeURIComponent(cachePrevious);
+                }
+
+                const response = await fetch(url);
+                let data = await response.json();
+
+                // If latest-handshakes is 0, use the stored value
+                for (const [interfaceName, peers] of Object.entries(data)) {
+                    for (const [peerId, peerInfo] of Object.entries(peers)) {
+                        const peerElementId = `peer-stored-latest-handshake-${peerId}`;
+                        const storedHandshakeElement = document.getElementById(peerElementId);
+                        if (peerInfo['latest-handshakes'] === '0' && storedHandshakeElement) {
+                            peerInfo['latest-handshakes'] = storedHandshakeElement.textContent;
+                        }
+                    }
+                }
+
+                const snapshotTs = parseSnapshotTs(data);
+                updateUI(data, snapshotTs);
+            } catch (error) {
+                console.error('Error fetching Wireguard status:', error);
+            }
+        };
+
+        const primeFromCache = async () => {
+            for (let i = {{ cache_previous_count }}; i >= 0; i--) {
+                await fetchWireguardStatus(i);
+            }
+        };
+
+        (async () => {
+            if (LOAD_FROM_CACHE) {
+                await primeFromCache();
+            } else {
+                await fetchWireguardStatus();
+            }
+
+            setInterval(fetchWireguardStatus, {{ refresh_interval }} * 1000);
+        })();
+
+    });
+
+    const updateUI = (data, snapshotTs) => {
+        // Reset the toast flag for this update cycle
+        toastShownThisCycle = false;
+
+        for (const [interfaceName, peers] of Object.entries(data)) {
+            for (const [peerId, peerInfo] of Object.entries(peers)) {
+                const peerDiv = document.getElementById(`peer-${peerId}`);
+                if (peerDiv) {
+                    updatePeerInfo(peerDiv, peerId, peerInfo);
+                    updateCalloutClass(peerDiv, peerInfo['latest-handshakes']);
+                    // Calculate throughput and update the card
+                    const throughputHTML = updateThroughput(peerId, peerInfo, snapshotTs);
+
+                    // If the modal is active for this peer, update its fields as well.
+                    const peerUuid = peerDiv.getAttribute("data-uuid");
+                    if ($('#peerPreviewModal').is(':visible') && $('#peerPreviewModal').data('peer-uuid') === peerUuid) {
+                        $('#peerThroughput').html(throughputHTML);
+                        $('#peerTransfer').text(`${convertBytes(peerInfo.transfer.tx)} TX, ${convertBytes(peerInfo.transfer.rx)} RX`);
+                        $('#peerHandshake').text(
+                            peerInfo['latest-handshakes'] !== '0'
+                                ? new Date(parseInt(peerInfo['latest-handshakes']) * 1000).toLocaleString()
+                                : '0'
+                        );
+                        $('#peerEndpoints').text(peerInfo.endpoints);
+                        const allowedIpsModalElement = document.getElementById('peerAllowedIPs');
+                        checkAllowedIps(allowedIpsModalElement, peerInfo['allowed-ips']);
+                        $('#peerLocation').text(getPeerLocationLabel(peerInfo));
+                    }
+                }
+            }
+        }
+    };
+
+    const updatePeerInfo = (peerDiv, peerId, peerInfo) => {
+        const escapedPeerId = peerId.replace(/([!"#$%&'()*+,.\/:;<=>?@[\]^`{|}~])/g, '\\$1');
+        const transfer = peerDiv.querySelector(`#peer-transfer-${escapedPeerId}`);
+        const latestHandshake = peerDiv.querySelector(`#peer-latest-handshake-${escapedPeerId}`);
+        const endpoints = peerDiv.querySelector(`#peer-endpoints-${escapedPeerId}`);
+        const allowedIps = peerDiv.querySelector(`#peer-allowed-ips-${escapedPeerId}`);
+        const location = peerDiv.querySelector(`#peer-location-${escapedPeerId}`);
+
+        transfer.textContent = `${convertBytes(peerInfo.transfer.tx)} TX, ${convertBytes(peerInfo.transfer.rx)} RX`;
+        latestHandshake.textContent = `${peerInfo['latest-handshakes'] !== '0' ? new Date(parseInt(peerInfo['latest-handshakes']) * 1000).toLocaleString() : '0'}`;
+        endpoints.textContent = `${peerInfo.endpoints}`;
+        checkAllowedIps(allowedIps, peerInfo['allowed-ips']);
+        if (location) {
+            location.textContent = getPeerLocationLabel(peerInfo);
+        }
+    };
+
+    const checkAllowedIps = (allowedIpsElement, allowedIpsApiResponse) => {
+        const apiIps = Array.isArray(allowedIpsApiResponse)
+            ? allowedIpsApiResponse.filter(Boolean)
+            : (allowedIpsApiResponse || '').split(/\s+/).filter(Boolean);
+        const htmlIpsText = allowedIpsElement.textContent.trim();
+        const htmlIpsArray = htmlIpsText.match(/\b(?:\d{1,3}\.){3}\d{1,3}\/\d{1,2}\b/g) || [];
+
+        allowedIpsElement.innerHTML = '';
+        let allowedIpsIssue = false;
+
+        htmlIpsArray.forEach((ip, index, array) => {
+            const ipSpan = document.createElement('span');
+            ipSpan.textContent = ip;
+            allowedIpsElement.appendChild(ipSpan);
+
+            if (!apiIps.includes(ip)) {
+                ipSpan.style.color = 'red';
+                ipSpan.style.textDecoration = 'underline';
+                ipSpan.title = '{% trans 'This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.' %}';
+                allowedIpsIssue = true;
+            }
+
+            if (index < array.length - 1) {
+                allowedIpsElement.appendChild(document.createTextNode(', '));
+            }
+        });
+
+        if (allowedIpsIssue) {
+            const peerId = allowedIpsElement.id.replace('peer-allowed-ips-', '');
+            const h5Element = document.getElementById('peer-name-' + peerId);
+            if (h5Element && !h5Element.querySelector('.fa-exclamation-triangle')) {
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-exclamation-triangle text-danger blink';
+                icon.title = '{% trans 'At least one address does not appear in the wg show command output, which may indicate that another peer is using an overlapping IP or that the configuration file is outdated.' %}';
+                h5Element.appendChild(icon);
+            }
+        }
+    };
+
+    const updateCalloutClass = (peerDiv, latestHandshake) => {
+        const calloutDiv = peerDiv.querySelector('.callout');
+        calloutDiv.classList.remove('callout-success', 'callout-info', 'callout-warning', 'callout-danger');
+        const handshakeAge = Date.now() / 1000 - parseInt(latestHandshake);
+
+        if (latestHandshake === '0') {
+            calloutDiv.classList.add('callout-danger');
+        } else if (handshakeAge < 600) {
+            calloutDiv.classList.add('callout-success');
+        } else if (handshakeAge < 1800) {
+            calloutDiv.classList.add('callout-info');
+        } else if (handshakeAge < 21600) {
+            calloutDiv.classList.add('callout-warning');
+        }
+        calloutDiv.style.transition = 'all 5s';
+    };
+</script>

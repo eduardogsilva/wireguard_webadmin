@@ -1,0 +1,136 @@
+{% load i18n %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $("#qrcodeButton").on("click", function (e) {
+            e.preventDefault();
+            if ($(this).hasClass('disabled')) {
+                return false;
+            }
+            var uuid = $("#peerPreviewModal").data("peer-uuid");
+            var server = $('#server_select').val(); // Get selected server
+            var url = "/tools/download_peer_config/?uuid=" + uuid + "&format=qrcode";
+            if (server) {
+                url += "&worker=" + encodeURIComponent(server);
+            }
+
+            $("#qrCodeImg").attr("src", url);
+            $(".info-content").hide();
+            $(".invite-content").hide();
+            $(".qr-code-content").show();
+        });
+
+        $("#server_select").on("change", function () {
+            var uuid = $('#peerPreviewModal').data('peer-uuid');
+            var server = $(this).val();
+
+            // Update download config button
+            var downloadUrl = '/tools/download_peer_config/?uuid=' + uuid;
+            if (server) {
+                downloadUrl += '&worker=' + encodeURIComponent(server);
+            }
+            $('#downloadConfigButton').attr('href', downloadUrl);
+
+            // Update QR code button (href is used for storing base url, actual action is click)
+            var qrUrl = '/tools/download_peer_config/?uuid=' + uuid + '&format=qrcode';
+            if (server) {
+                qrUrl += '&worker=' + encodeURIComponent(server);
+            }
+            $('#qrcodeButton').attr('href', qrUrl);
+        });
+
+        $("#backButton").on("click", function (e) {
+            e.preventDefault();
+            $(".qr-code-content").hide();
+            $(".info-content").show();
+        });
+
+        $("#downloadConfigButton").on("click", function(e) {
+            var hasPrivateKey = $("#peerPreviewModal").data("has-private-key");
+            if (!hasPrivateKey) {
+                if (!confirm("{% trans 'This configuration does not contain a private key. You must add the private key manually in your client before using it.' %}")) {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        });
+    });
+</script>
+
+<script>
+    function openPeerModal(uuid) {
+        $(".qr-code-content").hide();
+        $(".invite-content").hide();
+        $(".info-content").show();
+        $("#qrCodeImg").attr("src", "");
+        $('#graphImg').attr('src', '').hide();
+        // Find the peer element by its data-uuid attribute
+        var peerElem = document.querySelector('[data-uuid="' + uuid + '"]');
+        if (peerElem) {
+            var peerNameFromCard = peerElem.querySelector('h5').innerText;
+            var peerThroughput = peerElem.querySelector('[id^="peer-throughput-"]').innerHTML;
+            var peerTransfer = peerElem.querySelector('[id^="peer-transfer-"]').innerText;
+            var peerHandshake = peerElem.querySelector('[id^="peer-latest-handshake-"]').innerText;
+            var peerEndpoints = peerElem.querySelector('[id^="peer-endpoints-"]').innerText;
+            var peerAllowedIPs = peerElem.querySelector('[id^="peer-allowed-ips-"]').innerHTML;
+            var peerLocation = peerElem.querySelector('[id^="peer-location-"]').innerText;
+
+            // Update the modal fields with the card values
+            $('#peerPreviewModalLabel').text(peerNameFromCard);
+            $('#peerThroughput').html(peerThroughput);
+            $('#peerTransfer').text(peerTransfer);
+            $('#peerHandshake').text(peerHandshake);
+            $('#peerEndpoints').text(peerEndpoints);
+            $('#peerLocation').text(peerLocation);
+            $('#peerAllowedIPs').html(peerAllowedIPs);
+            $('#editPeerButton').attr('href', '/peer/manage/?peer=' + uuid);
+
+            var server = $('#server_select').val();
+            var downloadUrl = '/tools/download_peer_config/?uuid=' + uuid;
+            var qrUrl = '/tools/download_peer_config/?uuid=' + uuid + '&format=qrcode';
+
+            if (server) {
+                downloadUrl += '&worker=' + encodeURIComponent(server);
+                qrUrl += '&worker=' + encodeURIComponent(server);
+            }
+
+            $('#downloadConfigButton').attr('href', downloadUrl);
+            $('#qrcodeButton').attr('href', qrUrl);
+            $('#graphImg').attr('src', '/rrd/graph/?peer=' + uuid).show();
+            $('#peerPreviewModal').data('peer-uuid', uuid);
+
+            $.ajax({
+                url: '/api/peer_info/',
+                data: { uuid: uuid },
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.name) {
+                        $('#peerPreviewModalLabel').text(data.name);
+                    }
+                    // Check if peer has private_key and enable/disable buttons accordingly
+                    if (!data.private_key_exists) {
+                        $('#qrcodeButton').addClass('disabled').attr('aria-disabled', 'true');
+                        $('#peerPreviewModal').data('has-private-key', false);
+                    } else {
+                        $('#qrcodeButton').removeClass('disabled').removeAttr('aria-disabled');
+                        $('#peerPreviewModal').data('has-private-key', true);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching peer info:", error);
+                }
+            });
+            $('#peerPreviewModal').modal('show');
+        } else {
+            console.error('Peer element not found for uuid: ' + uuid);
+        }
+    }
+
+    $(document).on('click', '.graph-container .btn-group a', function(e) {
+        e.preventDefault();
+        var period = $(this).data('period');
+        var uuid = $('#peerPreviewModal').data('peer-uuid');
+        var newSrc = '/rrd/graph/?peer=' + uuid + '&period=' + period;
+        $('#graphImg').attr('src', newSrc);
+    });
+</script>
