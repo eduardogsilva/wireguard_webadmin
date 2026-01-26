@@ -12,12 +12,30 @@
             <div class="modal-body">
                 <!-- Info content section -->
                 <div class="info-content">
-                    <p><b><i class="fas fa-arrows-alt-v nav-icon"></i> {% trans 'Throughput' %}:</b> <span id="peerThroughput">--</span></p>
-                    <p><b><i class="fas fa-dolly nav-icon"></i> {% trans 'Transfer' %}:</b> <span id="peerTransfer">--</span></p>
-                    <p><b><i class="far fa-clock nav-icon"></i> {% trans 'Latest Handshake' %}:</b> <span id="peerHandshake">--</span></p>
-                    <p><b><i class="fas fa-map-marker-alt nav-icon"></i> {% trans 'Location' %}:</b> <span id="peerLocation">--</span></p>
-                    <p><b><i class="far fa-address-card nav-icon"></i> {% trans 'Endpoints' %}:</b> <span id="peerEndpoints">--</span></p>
-                    <p><b><i class="fas fa-network-wired nav-icon"></i> {% trans 'Allowed IPs' %}:</b> <span id="peerAllowedIPs">--</span></p>
+                    <p>
+                        <b><i class="fas fa-arrows-alt-v nav-icon"></i> {% trans 'Throughput' %}:</b>
+                        <span id="peerThroughput">--</span>
+                    </p>
+                    <p>
+                        <b><i class="fas fa-dolly nav-icon"></i> {% trans 'Transfer' %}:</b>
+                        <span id="peerTransfer">--</span>
+                    </p>
+                    <p>
+                        <b><i class="far fa-clock nav-icon"></i> {% trans 'Latest Handshake' %}:</b>
+                        <span id="peerHandshake">--</span>
+                    </p>
+                    <p>
+                        <b><i class="fas fa-map-marker-alt nav-icon"></i> {% trans 'Location' %}:</b>
+                        <span id="peerLocation">--</span>
+                    </p>
+                    <p>
+                        <b><i class="far fa-address-card nav-icon"></i> {% trans 'Endpoints' %}:</b>
+                        <span id="peerEndpoints">--</span>
+                    </p>
+                    <p>
+                        <b><i class="fas fa-network-wired nav-icon"></i> {% trans 'Allowed IPs' %}:</b>
+                        <span id="peerAllowedIPs">--</span>
+                    </p>
 
                     <!-- Traffic Graph -->
                     <div class="graph-container" style="margin-top:20px;">
@@ -39,14 +57,17 @@
                             </div>
                         </div>
                         <center style="margin-top:10px;">
-                            <img id="graphImg" src="" class="img-fluid" alt="{% trans 'No traffic history, please wait a few minutes' %}" style="display:block;">
+                            <img id="graphImg" src="" class="img-fluid" style="display:block;"
+                                 alt="{% trans 'No traffic history, please wait a few minutes' %}">
                         </center>
                     </div>
                 </div>
 
                 <!-- QR Code content section (initially hidden) -->
                 <div class="qr-code-content" style="display:none; ">
-                    <button class="btn btn-secondary" id="backButton"><i class="fas fa-times"></i> {% trans 'Close QR Code' %}</button><br>
+                    <button class="btn btn-secondary" id="backButton">
+                        <i class="fas fa-times"></i> {% trans 'Close QR Code' %}
+                    </button><br>
                     <div style="text-align: center;">
                         <img id="qrCodeImg" src="" alt="QR Code" class="img-fluid" style="max-width: 400px" />
                     </div>
@@ -54,7 +75,9 @@
 
                 <!-- VPN Invite content section (initially hidden) -->
                 <div class="invite-content" style="display:none;">
-                    <button class="btn btn-secondary" id="backFromInviteButton"><i class="fas fa-arrow-left"></i> {% trans 'Back' %}</button><br>
+                    <button class="btn btn-secondary" id="backFromInviteButton">
+                        <i class="fas fa-arrow-left"></i> {% trans 'Back' %}
+                    </button><br>
                     <div style="text-align: center; margin-top: 10px;">
                         <h5>{% trans 'VPN Invite Details' %}</h5>
                         <div id="inviteTextContainer">
@@ -63,22 +86,34 @@
                         <p id="invitePassword"></p>
                         <p>
                             {% trans 'Expires on' %}: <span id="inviteExpiration"></span>
-                            <i class="fas fa-sync-alt" id="refreshInviteButton" style="cursor: pointer;" title="{% trans 'Refresh Invite' %}"></i>
+                            <i class="fas fa-sync-alt" id="refreshInviteButton"
+                               style="cursor: pointer;" title="{% trans 'Refresh Invite' %}">
+                            </i>
                         </p>
                         <div class="form-group">
                             <label for="inviteContactInput">{% trans 'Enter Email or WhatsApp Number' %}:</label>
-                            <input type="text" class="form-control" id="inviteContactInput" placeholder="{% trans 'Email or phone number' %}">
+                            <input type="text" class="form-control" id="inviteContactInput"
+                                   placeholder="{% trans 'Email or phone number' %}">
                         </div>
                         <div>
-                            <button class="btn btn-outline-secondary" id="copyInviteTextButton"><i class="fas fa-copy"></i> {% trans 'Copy Text' %}</button>
-                            <button class="btn btn-success" id="sendInviteEmailButton"><i class="fas fa-envelope"></i> {% trans 'Email' %}</button>
-                            <button class="btn btn-success" id="sendInviteWhatsappButton"><i class="fab fa-whatsapp"></i> {% trans 'WhatsApp' %}</button>
-                            <button class="btn btn-secondary" id="closeInviteButton"><i class="far fa-trash-alt"></i> {% trans 'Delete' %}</button>
+                            <button class="btn btn-outline-secondary" id="copyInviteTextButton">
+                                <i class="fas fa-copy"></i> {% trans 'Copy Text' %}
+                            </button>
+                            <button class="btn btn-success" id="sendInviteEmailButton">
+                                <i class="fas fa-envelope"></i> {% trans 'Email' %}
+                            </button>
+                            <button class="btn btn-success" id="sendInviteWhatsappButton">
+                                <i class="fab fa-whatsapp"></i> {% trans 'WhatsApp' %}
+                            </button>
+                            <button class="btn btn-secondary" id="closeInviteButton">
+                                <i class="far fa-trash-alt"></i> {% trans 'Delete' %}
+                            </button>
                         </div>
                         <div id="inviteMessage" style="margin-top: 10px;"></div>
                     </div>
                 </div>
             </div>
+
             <div class="modal-footer d-flex flex-column align-items-stretch">
                 <!-- Row 1: buttons -->
                 <div class="d-flex w-100 justify-content-end flex-wrap">
@@ -116,6 +151,7 @@
                         </div>
                     </div>
                 {% endif %}
+
             </div>
         </div>
     </div>
