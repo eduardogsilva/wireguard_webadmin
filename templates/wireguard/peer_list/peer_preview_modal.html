@@ -1,0 +1,122 @@
+{% load i18n %}
+<!-- Peer Preview Modal -->
+<div class="modal fade" id="peerPreviewModal" tabindex="-1" aria-labelledby="peerPreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="peerPreviewModalLabel">Peer Preview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Info content section -->
+                <div class="info-content">
+                    <p><b><i class="fas fa-arrows-alt-v nav-icon"></i> {% trans 'Throughput' %}:</b> <span id="peerThroughput">--</span></p>
+                    <p><b><i class="fas fa-dolly nav-icon"></i> {% trans 'Transfer' %}:</b> <span id="peerTransfer">--</span></p>
+                    <p><b><i class="far fa-clock nav-icon"></i> {% trans 'Latest Handshake' %}:</b> <span id="peerHandshake">--</span></p>
+                    <p><b><i class="fas fa-map-marker-alt nav-icon"></i> {% trans 'Location' %}:</b> <span id="peerLocation">--</span></p>
+                    <p><b><i class="far fa-address-card nav-icon"></i> {% trans 'Endpoints' %}:</b> <span id="peerEndpoints">--</span></p>
+                    <p><b><i class="fas fa-network-wired nav-icon"></i> {% trans 'Allowed IPs' %}:</b> <span id="peerAllowedIPs">--</span></p>
+
+                    <!-- Traffic Graph -->
+                    <div class="graph-container" style="margin-top:20px;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label>
+                                <i class="fas fa-chart-area nav-icon"></i>
+                                {% trans 'Peer Traffic' %}
+                            </label>
+                            <div class="btn-group" role="group" aria-label="Graph interval">
+                                <a href="#" data-period="1h" class="btn btn-outline-primary btn-xs">1h</a>
+                                <a href="#" data-period="3h" class="btn btn-outline-primary btn-xs">3h</a>
+                                <a href="#" data-period="6h" class="btn btn-outline-primary btn-xs">6h</a>
+                                <a href="#" data-period="1d" class="btn btn-outline-primary btn-xs">1d</a>
+                                <a href="#" data-period="7d" class="btn btn-outline-primary btn-xs">7d</a>
+                                <a href="#" data-period="30d" class="btn btn-outline-primary btn-xs">1m</a>
+                                <a href="#" data-period="90d" class="btn btn-outline-primary btn-xs">3m</a>
+                                <a href="#" data-period="180d" class="btn btn-outline-primary btn-xs">6m</a>
+                                <a href="#" data-period="365d" class="btn btn-outline-primary btn-xs">1y</a>
+                            </div>
+                        </div>
+                        <center style="margin-top:10px;">
+                            <img id="graphImg" src="" class="img-fluid" alt="{% trans 'No traffic history, please wait a few minutes' %}" style="display:block;">
+                        </center>
+                    </div>
+                </div>
+
+                <!-- QR Code content section (initially hidden) -->
+                <div class="qr-code-content" style="display:none; ">
+                    <button class="btn btn-secondary" id="backButton"><i class="fas fa-times"></i> {% trans 'Close QR Code' %}</button><br>
+                    <div style="text-align: center;">
+                        <img id="qrCodeImg" src="" alt="QR Code" class="img-fluid" style="max-width: 400px" />
+                    </div>
+                </div>
+
+                <!-- VPN Invite content section (initially hidden) -->
+                <div class="invite-content" style="display:none;">
+                    <button class="btn btn-secondary" id="backFromInviteButton"><i class="fas fa-arrow-left"></i> {% trans 'Back' %}</button><br>
+                    <div style="text-align: center; margin-top: 10px;">
+                        <h5>{% trans 'VPN Invite Details' %}</h5>
+                        <div id="inviteTextContainer">
+                            <p id="inviteText"></p>
+                        </div>
+                        <p id="invitePassword"></p>
+                        <p>
+                            {% trans 'Expires on' %}: <span id="inviteExpiration"></span>
+                            <i class="fas fa-sync-alt" id="refreshInviteButton" style="cursor: pointer;" title="{% trans 'Refresh Invite' %}"></i>
+                        </p>
+                        <div class="form-group">
+                            <label for="inviteContactInput">{% trans 'Enter Email or WhatsApp Number' %}:</label>
+                            <input type="text" class="form-control" id="inviteContactInput" placeholder="{% trans 'Email or phone number' %}">
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-secondary" id="copyInviteTextButton"><i class="fas fa-copy"></i> {% trans 'Copy Text' %}</button>
+                            <button class="btn btn-success" id="sendInviteEmailButton"><i class="fas fa-envelope"></i> {% trans 'Email' %}</button>
+                            <button class="btn btn-success" id="sendInviteWhatsappButton"><i class="fab fa-whatsapp"></i> {% trans 'WhatsApp' %}</button>
+                            <button class="btn btn-secondary" id="closeInviteButton"><i class="far fa-trash-alt"></i> {% trans 'Delete' %}</button>
+                        </div>
+                        <div id="inviteMessage" style="margin-top: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex flex-column align-items-stretch">
+                <!-- Row 1: buttons -->
+                <div class="d-flex w-100 justify-content-end flex-wrap">
+                    <button type="button" class="btn btn-secondary mb-2" data-dismiss="modal">
+                        <i class="fas fa-times"></i> {% trans 'Close' %}
+                    </button>
+
+                    <a href="#" class="btn btn-info ml-2 mb-2" id="downloadConfigButton">
+                        <i class="fas fa-download"></i> {% trans 'Config' %}
+                    </a>
+
+                    <a href="#" class="btn btn-info ml-2 mb-2" id="qrcodeButton">
+                        <i class="fas fa-qrcode"></i> {% trans 'QR Code' %}
+                    </a>
+
+                    <a href="#" class="btn btn-info ml-2 mb-2" id="inviteButton">
+                        <i class="fas fa-share"></i> {% trans 'VPN Invite' %}
+                    </a>
+
+                    <a href="#" class="btn btn-outline-primary ml-2 mb-2" id="editPeerButton">
+                        <i class="far fa-edit"></i> {% trans 'Edit' %}
+                    </a>
+                </div>
+
+                <!-- Row 2: server select (right aligned) -->
+                {% if cluster_settings and servers|length > 1 %}
+                    <div class="d-flex w-100 mt-2">
+                        <div class="form-inline ml-auto">
+                            <label class="mr-2 mb-0" for="server_select">{% trans 'Server' %}:</label>
+                            <select class="form-control" id="server_select" style="width: 300px;">
+                                {% for server in servers %}
+                                    <option value="{{ server.uuid }}">{{ server.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
