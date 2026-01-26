@@ -1,0 +1,63 @@
+{% load i18n %}
+{% for peer in peer_list %}
+    <div class="col-xl-6" id="peer-{{ peer.public_key }}" data-uuid="{{ peer.uuid }}">
+        <div class="callout position-relative">
+            <div class="position-absolute p-3 div-peer-text-information"
+                 style="top: 0; left: 0; background: linear-gradient(to right, white, transparent); width: 100%; height: 100%;">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h5 id="peer-name-{{ peer.public_key }}">
+                        <a href="#" onclick="openPeerModal('{{ peer.uuid }}');" style="text-decoration: none">
+                            {{ peer }}
+                        </a>
+                    </h5>
+                    <span>
+                        {% if user_acl.user_level >= 30 %}
+                            <div class="d-inline-flex flex-column">
+                                <a href="/peer/sort/?peer={{ peer.uuid }}&direction=up"
+                                   style="line-height:0px">
+                                    <i class="fas fa-sort-up"></i>
+                                </a>
+                                <div style="overflow:hidden;margin-top: -9px">
+                                    <a href="/peer/sort/?peer={{ peer.uuid }}&direction=down"
+                                       style="position:relative;top:-11px">
+                                        <i class="fas fa-sort-down"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </span>
+                </div>
+                <b class="peer-extra-info">{% trans 'Throughput' %}: </b>
+                <span id="peer-throughput-{{ peer.public_key }}"></span><br>
+                <span class="peer-extra-info"><b>{% trans 'Transfer' %}:</b> <span
+                        id="peer-transfer-{{ peer.public_key }}"></span><br></span>
+                <span class="peer-extra-info"><b>{% trans 'Location' %}:</b> <span
+                        id="peer-location-{{ peer.public_key }}">{% trans 'Primary Server' %}</span><br></span>
+                <span class="peer-extra-info"><b>{% trans 'Latest Handshake' %}:</b> <span
+                        id="peer-latest-handshake-{{ peer.public_key }}"></span></span>
+                <span class="peer-extra-info"><span style="display: none;"
+                                                    id="peer-stored-latest-handshake-{{ peer.public_key }}">{% if peer.peerstatus.last_handshake %}
+                    {{ peer.peerstatus.last_handshake|date:"U" }}{% else %}0{% endif %}</span><br></span>
+                <span class="peer-extra-info"><b>{% trans 'Endpoints' %}:</b> <span
+                        id="peer-endpoints-{{ peer.public_key }}"></span><br></span>
+                <span class="peer-extra-info" id="peer-extra-info-allowed-ips-{{ peer.public_key }}">
+                                                <b>{% trans 'Allowed IPs' %}:</b>
+                                                <span id="peer-allowed-ips-{{ peer.public_key }}">
+                                                    {% for address in peer.peerallowedip_set.all %}
+                                                        {% if address.priority == 0 and address.config_file == 'server' %}
+                                                            {{ address }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% for address in peer.peerallowedip_set.all %}
+                                                        {% if address.priority >= 1 and address.config_file == 'server' %}
+                                                            {{ address }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </span>
+                                            </span>
+            </div>
+            <canvas class="" id="chart-{{ peer.public_key }}" width="800" height="130"
+                    style="min-height: 85px"></canvas>
+        </div>
+    </div>
+{% endfor %}
