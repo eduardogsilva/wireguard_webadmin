@@ -3,258 +3,272 @@
 
 {% block content %}
 
-<div class="card card-primary card-outline">
-    <div class="card-header">
-        <h3 class="card-title">{% trans 'Peer Configuration' %}</h3>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-lg-6">
-                <!-- Name -->
-                <div class="form-group border-bottom pb-3">
-                    <label>{% trans 'Name' %}</label>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span>{{ current_peer.name|default:"-" }}</span>
-                        <a href="{% url 'wireguard_peer_edit_field' %}?peer={{ current_peer.uuid }}&group=name"
-                            class="btn btn-tool">
-                            <i class="fas fa-pen"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Persistent Keepalive -->
-                <div class="form-group border-bottom pb-3">
-                    <label>{% trans 'Persistent Keepalive' %}</label>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span>{{ current_peer.persistent_keepalive }}</span>
-                        <a href="{% url 'wireguard_peer_edit_field' %}?peer={{ current_peer.uuid }}&group=keepalive"
-                            class="btn btn-tool">
-                            <i class="fas fa-pen"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Keys Section -->
-                <div class="form-group">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <label class="mb-0">{% trans 'Keys' %}</label>
-                        <a href="{% url 'wireguard_peer_edit_field' %}?peer={{ current_peer.uuid }}&group=keys"
-                            class="btn btn-tool">
-                            <i class="fas fa-pen"></i>
-                        </a>
-                    </div>
-
-                    <dl>
-                        <dt class="small text-muted font-weight-normal">{% trans 'Public Key' %}</dt>
-                        <dd class="text-break">{{ current_peer.public_key }}</dd>
-
-                        <dt class="small text-muted font-weight-normal">{% trans 'Private Key' %}</dt>
-                        <dd>
-                            {% if current_peer.private_key %}
-                            <code>********************************************</code>
-                            {% else %}
-                            <span class="text-muted">{% trans 'Not set' %}</span>
-                            {% endif %}
-                        </dd>
-
-                        <dt class="small text-muted font-weight-normal">{% trans 'Pre-Shared Key' %}</dt>
-                        <dd>
-                            {% if current_peer.pre_shared_key %}
-                            <code>********************************************</code>
-                            {% else %}
-                            <span class="text-muted">{% trans 'Not set' %}</span>
-                            {% endif %}
-                        </dd>
-                    </dl>
-                </div>
-
-            </div>
-            <div class="col-lg-6">
-
-            <div class="row mt-3">
-                <div class="col-lg-12">
-                    <div class="d-flex justify-content-between align-items-center ">
-                            <label>
-                                <i class="fas fa-chart-area"></i>
-                                {% trans 'Peer Traffic' %}
-                            </label>
-                            <div class="btn-group" role="group" aria-label="Graph interval">
-                                <a href="#" data-period="1h" class="btn btn-outline-primary btn-xs">1h</a>
-                                <a href="#" data-period="3h" class="btn btn-outline-primary btn-xs">3h</a>
-                                <a href="#" data-period="6h" class="btn btn-outline-primary btn-xs">6h</a>
-                                <a href="#" data-period="1d" class="btn btn-outline-primary btn-xs">1d</a>
-                                <a href="#" data-period="7d" class="btn btn-outline-primary btn-xs">7d</a>
-                                <a href="#" data-period="30d" class="btn btn-outline-primary btn-xs">1m</a>
-                                <a href="#" data-period="90d" class="btn btn-outline-primary btn-xs">3m</a>
-                                <a href="#" data-period="180d" class="btn btn-outline-primary btn-xs">6m</a>
-                                <a href="#" data-period="365d" class="btn btn-outline-primary btn-xs">1y</a>
-                            </div>
-                    </div>
-
-                    <center>
-                        <img id="graphImg" src="/rrd/graph/?peer={{ current_peer.uuid }}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}" class="img-fluid" alt="{% trans 'No traffic history, please wait a few minutes' %}" onerror="this.onerror=null; this.style.display='none'; this.insertAdjacentHTML('afterend', this.alt);">
-                    </center>
-
-                    <div class="d-flex justify-content-between align-items-center border-bottom mb-3" style="padding-top: 16px;"></div>
-                </div>
-            </div>
-
-
-                <div class="row">
-                    <div class="col-md-12">
+    <div class="card card-primary card-outline">
+        <div class="card-header">
+            <h3 class="card-title">{% trans 'Peer Configuration' %}</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <!-- Name -->
+                    <div class="form-group border-bottom pb-3">
+                        <label>{% trans 'Name' %}</label>
                         <div class="d-flex justify-content-between align-items-center">
-                            <label>
-                                <i class="fas fa-info-circle" title="{% trans 'AllowedIPs at Peer section of wg' %}{{ current_peer.wireguard_instance.instance_id }}.conf"></i>
-                                {% trans 'Peer IP Addresses and networks' %}
-                            </label>
-                            <a class="btn btn-outline-primary btn-xs" href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}&config=server" >{% trans 'Add IP Address' %}</a>
+                            <span>{{ current_peer.name|default:"-" }}</span>
+                            <a href="{% url 'wireguard_peer_edit_field' %}?peer={{ current_peer.uuid }}&group=name"
+                               class="btn btn-tool">
+                                <i class="fas fa-pen"></i>
+                            </a>
                         </div>
-                    
-                        {% for ip_address in peer_ip_list %}
-                            <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-                                <p>
-                                    <a href="/peer/manage_ip_address/?ip={{ ip_address.uuid }}">
-                                        <i class="fas fa-network-wired"></i>
-                                        {{ ip_address}}
-                                    </a>
-                                </p>
-                                <p class="d-flex flex-column text-right small">
-                                    {% if ip_address.priority == 0 %}
-                                        {% trans 'Main ip address' %}
-                                    {% else %}
-                                        {% trans 'Priority' %}: {{ ip_address.priority }}
-                                    {% endif %}
-                                </p>
-                            </div>
-                        {% endfor %}
-
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
+
+                    <!-- Persistent Keepalive -->
+                    <div class="form-group border-bottom pb-3">
+                        <label>{% trans 'Persistent Keepalive' %}</label>
                         <div class="d-flex justify-content-between align-items-center">
-                            <label>
-                                <i class="fas fa-info-circle" title="{% trans 'AllowedIPs at client configuration file' %}"></i>
-                                {% trans 'Client Routing' %}
-                            </label>
-                            <div>
-                                <a class="btn btn-outline-info btn-xs" href="/peer/apply_route_template/?peer={{ current_peer.uuid }}" >{% trans 'Apply template' %}</a>
-                                <a class="btn btn-outline-primary btn-xs" href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}&config=client" >{% trans 'Add Client route' %}</a>
+                            <span>{{ current_peer.persistent_keepalive }}</span>
+                            <a href="{% url 'wireguard_peer_edit_field' %}?peer={{ current_peer.uuid }}&group=keepalive"
+                               class="btn btn-tool">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Keys Section -->
+                    <div class="form-group">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="mb-0">{% trans 'Keys' %}</label>
+                            <a href="{% url 'wireguard_peer_edit_field' %}?peer={{ current_peer.uuid }}&group=keys"
+                               class="btn btn-tool">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                        </div>
+
+                        <dl>
+                            <dt class="small text-muted font-weight-normal">{% trans 'Public Key' %}</dt>
+                            <dd class="text-break">{{ current_peer.public_key }}</dd>
+
+                            <dt class="small text-muted font-weight-normal">{% trans 'Private Key' %}</dt>
+                            <dd>
+                                {% if current_peer.private_key %}
+                                    <code>********************************************</code>
+                                {% else %}
+                                    <span class="text-muted">{% trans 'Not set' %}</span>
+                                {% endif %}
+                            </dd>
+
+                            <dt class="small text-muted font-weight-normal">{% trans 'Pre-Shared Key' %}</dt>
+                            <dd>
+                                {% if current_peer.pre_shared_key %}
+                                    <code>********************************************</code>
+                                {% else %}
+                                    <span class="text-muted">{% trans 'Not set' %}</span>
+                                {% endif %}
+                            </dd>
+                        </dl>
+                    </div>
+
+                </div>
+                <div class="col-lg-6">
+
+                    <div class="row mt-3">
+                        <div class="col-lg-12">
+                            <div class="d-flex justify-content-between align-items-center ">
+                                <label>
+                                    <i class="fas fa-chart-area"></i>
+                                    {% trans 'Peer Traffic' %}
+                                </label>
+                                <div class="btn-group" role="group" aria-label="Graph interval">
+                                    <a href="#" data-period="1h" class="btn btn-outline-primary btn-xs">1h</a>
+                                    <a href="#" data-period="3h" class="btn btn-outline-primary btn-xs">3h</a>
+                                    <a href="#" data-period="6h" class="btn btn-outline-primary btn-xs">6h</a>
+                                    <a href="#" data-period="1d" class="btn btn-outline-primary btn-xs">1d</a>
+                                    <a href="#" data-period="7d" class="btn btn-outline-primary btn-xs">7d</a>
+                                    <a href="#" data-period="30d" class="btn btn-outline-primary btn-xs">1m</a>
+                                    <a href="#" data-period="90d" class="btn btn-outline-primary btn-xs">3m</a>
+                                    <a href="#" data-period="180d" class="btn btn-outline-primary btn-xs">6m</a>
+                                    <a href="#" data-period="365d" class="btn btn-outline-primary btn-xs">1y</a>
+                                </div>
                             </div>
 
+                            <center>
+                                <img id="graphImg" src="/rrd/graph/?peer={{ current_peer.uuid }}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}"
+                                     class="img-fluid" alt="{% trans 'No traffic history, please wait a few minutes' %}"
+                                     onerror="this.onerror=null; this.style.display='none'; this.insertAdjacentHTML('afterend', this.alt);">
+                            </center>
+
+                            <div class="d-flex justify-content-between align-items-center border-bottom mb-3"
+                                 style="padding-top: 16px;"></div>
                         </div>
-                        {% if current_peer.routing_template %}
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p>
-                                <a href="/peer/apply_route_template/?peer={{ current_peer.uuid }}">
-                                    <i class="fas fa-route"></i> {{ current_peer.routing_template.name }}
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label>
+                                    <i class="fas fa-info-circle" title="{% trans 'AllowedIPs at Peer section of wg' %}{{ current_peer.wireguard_instance.instance_id }}.conf"></i>
+                                    {% trans 'Peer IP Addresses and networks' %}
+                                </label>
+                                <a class="btn btn-outline-primary btn-xs"
+                                   href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}&config=server">
+                                    {% trans 'Add IP Address' %}
                                 </a>
-                            </p>
-                            <p class="d-flex flex-column text-right small">
-                                {% trans 'Routing Template' %}
-                            </p>
-                        </div>
-
-                        {% for ip_address in current_peer.routing_template.template_routes %}
-                            <div class="d-flex justify-content-between align-items-center text-muted">
-                                <p>
-                                    <span >
-                                        <i class="fas fa-network-wired"></i>
-                                        {{ ip_address}}
-                                    </span>
-                                </p>
-                                <p class="d-flex flex-column text-right small">
-                                        {% trans 'Template Route' %}
-                                </p>
                             </div>
-                        {% endfor %}
 
-
-                        {% else %}
-                        <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-                                <p>
-                                    <a href="#"
-                                       {% if peer_client_ip_list %}
-                                            onclick="alert('{% trans 'The client is not configured to use the VPN as the default gateway.\n\nOnly the specific networks listed below are routed through the VPN.\n\nNote: These routes are not automatically pushed to the client. You will need to manually update the client configuration file to reflect these settings.' %}');"
-                                       style="text-decoration: line-through;"
-                                       {% else %}
-                                            onclick="alert('{% trans 'The client is configured to use the VPN as the default gateway. \n\nThis setting routes all client internet traffic through the VPN, enhancing privacy and security across all connections.' %}');"
+                            {% for ip_address in peer_ip_list %}
+                                <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                    <p>
+                                        <a href="/peer/manage_ip_address/?ip={{ ip_address.uuid }}">
+                                            <i class="fas fa-network-wired"></i>
+                                            {{ ip_address }}
+                                        </a>
+                                    </p>
+                                    <p class="d-flex flex-column text-right small">
+                                        {% if ip_address.priority == 0 %}
+                                            {% trans 'Main ip address' %}
+                                        {% else %}
+                                            {% trans 'Priority' %}: {{ ip_address.priority }}
                                         {% endif %}
-                                        
-                                    >
-                                        <i class="fas fa-network-wired"></i>
-                                        0.0.0.0/0, ::/0
-                                    </a>
-                                </p>
-                                <p class="d-flex flex-column text-right small">
-                                    {% trans 'default route' %}
-                                </p>
+                                    </p>
+                                </div>
+                            {% endfor %}
+
                         </div>
-                        {% endif %}
-
-
-                        {% for ip_address in peer_client_ip_list %}
-                            <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-                                <p>
-                                    <a href="/peer/manage_ip_address/?ip={{ ip_address.uuid }}">
-                                        <i class="fas fa-network-wired"></i>
-                                        {{ ip_address}}
-                                    </a>
-                                </p>
-                                <p class="d-flex flex-column text-right small">
-                                    {% if ip_address.priority == 0 %}
-                                        {% trans 'Main ip address' %}
-                                    {% else %}
-                                        {% trans 'Priority' %}: {{ ip_address.priority }}
-                                    {% endif %}
-                                </p>
-                            </div>
-                        {% endfor %}
-
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label>
+                                    <i class="fas fa-info-circle"
+                                       title="{% trans 'AllowedIPs at client configuration file' %}"></i>
+                                    {% trans 'Client Routing' %}
+                                </label>
+                                <div>
+                                    <a class="btn btn-outline-info btn-xs"
+                                       href="/peer/apply_route_template/?peer={{ current_peer.uuid }}">
+                                        {% trans 'Apply template' %}
+                                    </a>
+                                    <a class="btn btn-outline-primary btn-xs"
+                                       href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}&config=client">
+                                        {% trans 'Add Client route' %}
+                                    </a>
+                                </div>
+
+                            </div>
+                            {% if current_peer.routing_template %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p>
+                                        <a href="/peer/apply_route_template/?peer={{ current_peer.uuid }}">
+                                            <i class="fas fa-route"></i> {{ current_peer.routing_template.name }}
+                                        </a>
+                                    </p>
+                                    <p class="d-flex flex-column text-right small">
+                                        {% trans 'Routing Template' %}
+                                    </p>
+                                </div>
+
+                                {% for ip_address in current_peer.routing_template.template_routes %}
+                                    <div class="d-flex justify-content-between align-items-center text-muted">
+                                        <p>
+                                    <span>
+                                        <i class="fas fa-network-wired"></i>
+                                        {{ ip_address }}
+                                    </span>
+                                        </p>
+                                        <p class="d-flex flex-column text-right small">
+                                            {% trans 'Template Route' %}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+
+
+                            {% else %}
+                                <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                    <p>
+                                        <a href="#"
+                                                {% if peer_client_ip_list %}
+                                           onclick="alert('{% trans 'The client is not configured to use the VPN as the default gateway.\n\nOnly the specific networks listed below are routed through the VPN.\n\nNote: These routes are not automatically pushed to the client. You will need to manually update the client configuration file to reflect these settings.' %}');"
+                                           style="text-decoration: line-through;"
+                                                {% else %}
+                                           onclick="alert('{% trans 'The client is configured to use the VPN as the default gateway. \n\nThis setting routes all client internet traffic through the VPN, enhancing privacy and security across all connections.' %}');"
+                                                {% endif %}
+                                        >
+                                            <i class="fas fa-network-wired"></i>
+                                            0.0.0.0/0, ::/0
+                                        </a>
+                                    </p>
+                                    <p class="d-flex flex-column text-right small">
+                                        {% trans 'default route' %}
+                                    </p>
+                                </div>
+                            {% endif %}
+
+
+                            {% for ip_address in peer_client_ip_list %}
+                                <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                                    <p>
+                                        <a href="/peer/manage_ip_address/?ip={{ ip_address.uuid }}">
+                                            <i class="fas fa-network-wired"></i>
+                                            {{ ip_address }}
+                                        </a>
+                                    </p>
+                                    <p class="d-flex flex-column text-right small">
+                                        {% if ip_address.priority == 0 %}
+                                            {% trans 'Main ip address' %}
+                                        {% else %}
+                                            {% trans 'Priority' %}: {{ ip_address.priority }}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+
                 </div>
-
-
-
-
             </div>
         </div>
+        <div class="card-footer">
+            <a class="btn btn-outline-secondary"
+               href="/peer/list/?uuid={{ current_peer.wireguard_instance.uuid }}#peer-{{ current_peer.public_key }}">
+                {% trans 'Back' %}
+            </a>
+            <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete'
+               onclick='openCommandDialog(this)'>{% trans 'Delete Peer' %}</a>
+        </div>
     </div>
-    <div class="card-footer">
-        <a class="btn btn-outline-secondary" href="/peer/list/?uuid={{ current_peer.wireguard_instance.uuid }}#peer-{{ current_peer.public_key }}">{% trans 'Back' %}</a>
-        <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{% trans 'Delete Peer' %}</a>
-    </div>
-</div>
 {% endblock %}
 
 {% block custom_page_scripts %}
 
-<script>
-    function openCommandDialog(element) {
-        var command = element.getAttribute('data-command');
-        var confirmation = prompt("{% trans 'Please type \"delete\" to remove peer configuration.' %}");
-        if (confirmation) {
-            var url = "?peer={{ current_peer.uuid }}&action=delete&confirmation=" + encodeURIComponent(confirmation);
-            window.location.href = url;
-        }
-    }
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-    var buttons = document.querySelectorAll('.btn-group a');
-    buttons.forEach(function(button){
-        button.addEventListener('click', function(e){
-            e.preventDefault();
-            var period = this.getAttribute('data-period');
-            var newSrc = '/rrd/graph/?peer={{ current_peer.uuid }}&period=' + period;
-            var imgElement = document.getElementById('graphImg');
-            if(imgElement){
-                imgElement.setAttribute('src', newSrc);
+    <script>
+        function openCommandDialog(element) {
+            var command = element.getAttribute('data-command');
+            var confirmation = prompt("{% trans 'Please type \"delete\" to remove peer configuration.' %}");
+            if (confirmation) {
+                var url = "?peer={{ current_peer.uuid }}&action=delete&confirmation=" + encodeURIComponent(confirmation);
+                window.location.href = url;
             }
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var buttons = document.querySelectorAll('.btn-group a');
+            buttons.forEach(function (button) {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var period = this.getAttribute('data-period');
+                    var newSrc = '/rrd/graph/?peer={{ current_peer.uuid }}&period=' + period;
+                    var imgElement = document.getElementById('graphImg');
+                    if (imgElement) {
+                        imgElement.setAttribute('src', newSrc);
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+    </script>
 
 {% endblock %}
