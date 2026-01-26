@@ -1,21 +1,56 @@
 import ipaddress
 
+from crispy_forms.bootstrap import FormActions
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit, Button
 from django import forms
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.translation import gettext_lazy as _
 
 from wireguard.models import NETMASK_CHOICES, Peer, PeerAllowedIP
 
 
-class PeerForm(forms.ModelForm):
+class PeerModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.layout = Layout(
+            *self.Meta.fields,
+            FormActions(
+                Submit('save', _('Save'), css_class='btn-primary'),
+                Button('cancel', _('Back'), css_class='btn-outline-secondary', onclick='window.history.back()')
+            )
+        )
+
+class PeerNameForm(PeerModelForm):
     name = forms.CharField(label=_('Name'), required=False)
+
+    class Meta:
+        model = Peer
+        fields = ['name']
+
+
+class PeerKeepaliveForm(PeerModelForm):
+    persistent_keepalive = forms.IntegerField(
+        label=_('Persistent Keepalive'),
+        required=True,
+        validators=[MinValueValidator(1), MaxValueValidator(3600)],
+    )
+
+    class Meta:
+        model = Peer
+        fields = ['persistent_keepalive']
+
+
+class PeerKeysForm(PeerModelForm):
     public_key = forms.CharField(label=_('Public Key'), required=True)
     private_key = forms.CharField(label=_('Private Key'), required=False)
     pre_shared_key = forms.CharField(label=_('Pre-Shared Key'), required=True)
-    persistent_keepalive = forms.IntegerField(label=_('Persistent Keepalive'), required=True)
-    
+
     class Meta:
         model = Peer
-        fields = ['name', 'public_key', 'private_key', 'pre_shared_key', 'persistent_keepalive']
+        fields = ['public_key', 'private_key', 'pre_shared_key']
         
 
 class PeerAllowedIPForm(forms.ModelForm):

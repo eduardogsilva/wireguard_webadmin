@@ -39,7 +39,7 @@ from wgrrd.views import view_rrd_graph
 from wireguard.views import view_apply_db_patches, view_wireguard_manage_instance, view_wireguard_status, \
     view_server_list, view_server_detail
 from wireguard_peer.views import view_manage_ip_address, view_wireguard_peer_list, view_wireguard_peer_manage, \
-    view_wireguard_peer_sort, view_apply_route_template, view_wireguard_peer_create
+    view_wireguard_peer_sort, view_apply_route_template, view_wireguard_peer_create, view_wireguard_peer_edit_field
 from wireguard_tools.views import download_config_or_qrcode, export_wireguard_configs, restart_wireguard_interfaces
 
 urlpatterns = [
@@ -57,6 +57,7 @@ urlpatterns = [
     path('peer/sort/', view_wireguard_peer_sort, name='wireguard_peer_sort'),
     path('peer/manage/', view_wireguard_peer_manage, name='wireguard_peer_manage'),
     path('peer/create/', view_wireguard_peer_create, name='wireguard_peer_create'),
+    path('peer/edit/', view_wireguard_peer_edit_field, name='wireguard_peer_edit_field'),
     path('peer/apply_route_template/', view_apply_route_template, name='apply_route_template'),
     path('peer/manage_ip_address/', view_manage_ip_address, name='manage_ip_address'),
     path('rrd/graph/', view_rrd_graph, name='rrd_graph'),

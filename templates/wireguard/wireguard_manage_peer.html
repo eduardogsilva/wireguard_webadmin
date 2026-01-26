@@ -7,43 +7,65 @@
     <div class="card-header">
         <h3 class="card-title">{% trans 'Peer Configuration' %}</h3>
     </div>
-    <form method="post">
-        {% csrf_token %}
-        <div class="card-body row">
+    <div class="card-body">
+        <div class="row">
             <div class="col-lg-6">
                 <!-- Name -->
-                <div class="form-group">
-                    <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
-                    <input type="text" class="form-control" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" placeholder="{% trans 'Enter Name' %}" value="{{ form.name.value|default_if_none:'' }}">
-                </div>
-
-                <!-- Persistent Keepalive -->
-                <div class="form-group">
-                    <label for="{{ form.persistent_keepalive.id_for_label }}">{{ form.persistent_keepalive.label }}</label>
-                    <input type="number" class="form-control" id="{{ form.persistent_keepalive.id_for_label }}" name="{{ form.persistent_keepalive.html_name }}" placeholder="{% trans 'Persistent Keepalive' %}" value="{{ form.persistent_keepalive.value|default_if_none:'' }}" required>
-                </div>
-
-                <!-- Public Key -->
-                <div class="form-group">
-                    <label for="{{ form.public_key.id_for_label }}">{{ form.public_key.label }}</label>
-                    <input type="text" class="form-control" id="{{ form.public_key.id_for_label }}" name="{{ form.public_key.html_name }}" placeholder="{% trans 'Public Key' %}" value="{{ form.public_key.value|default_if_none:'' }}" required>
-                </div>
-
-                <!-- Private Key -->
-                <div class="form-group">
-                    <label for="{{ form.private_key.id_for_label }}">{{ form.private_key.label }}</label>
-                    <div class="input-group">
-                        <input type="password" class="form-control" id="{{ form.private_key.id_for_label }}" name="{{ form.private_key.html_name }}" placeholder="{% trans 'Private Key' %}" value="{{ form.private_key.value|default_if_none:'' }}">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary toggle-password" type="button"><i class="fas fa-eye"></i></button>
-                        </div>
+                <div class="form-group border-bottom pb-3">
+                    <label>{% trans 'Name' %}</label>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>{{ current_peer.name|default:"-" }}</span>
+                        <a href="{% url 'wireguard_peer_edit_field' %}?peer={{ current_peer.uuid }}&group=name"
+                            class="btn btn-tool">
+                            <i class="fas fa-pen"></i>
+                        </a>
                     </div>
                 </div>
 
-                <!-- Pre-Shared Key -->
+                <!-- Persistent Keepalive -->
+                <div class="form-group border-bottom pb-3">
+                    <label>{% trans 'Persistent Keepalive' %}</label>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>{{ current_peer.persistent_keepalive }}</span>
+                        <a href="{% url 'wireguard_peer_edit_field' %}?peer={{ current_peer.uuid }}&group=keepalive"
+                            class="btn btn-tool">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Keys Section -->
                 <div class="form-group">
-                    <label for="{{ form.pre_shared_key.id_for_label }}">{{ form.pre_shared_key.label }}</label>
-                    <input type="text" class="form-control" id="{{ form.pre_shared_key.id_for_label }}" name="{{ form.pre_shared_key.html_name }}" placeholder="{% trans 'Pre-Shared Key' %}" value="{{ form.pre_shared_key.value|default_if_none:'' }}" required>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label class="mb-0">{% trans 'Keys' %}</label>
+                        <a href="{% url 'wireguard_peer_edit_field' %}?peer={{ current_peer.uuid }}&group=keys"
+                            class="btn btn-tool">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                    </div>
+
+                    <dl>
+                        <dt class="small text-muted font-weight-normal">{% trans 'Public Key' %}</dt>
+                        <dd class="text-break">{{ current_peer.public_key }}</dd>
+
+                        <dt class="small text-muted font-weight-normal">{% trans 'Private Key' %}</dt>
+                        <dd>
+                            {% if current_peer.private_key %}
+                            <code>********************************************</code>
+                            {% else %}
+                            <span class="text-muted">{% trans 'Not set' %}</span>
+                            {% endif %}
+                        </dd>
+
+                        <dt class="small text-muted font-weight-normal">{% trans 'Pre-Shared Key' %}</dt>
+                        <dd>
+                            {% if current_peer.pre_shared_key %}
+                            <code>********************************************</code>
+                            {% else %}
+                            <span class="text-muted">{% trans 'Not set' %}</span>
+                            {% endif %}
+                        </dd>
+                    </dl>
                 </div>
 
             </div>
@@ -197,44 +219,15 @@
 
             </div>
         </div>
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
-            <a href="/peer/manage_ip_address/?peer={{ current_peer.uuid }}" class="btn btn-outline-primary">{% trans 'Add IP Address' %}</a>
-            <a class="btn btn-outline-secondary" href="/peer/list/?uuid={{ current_peer.wireguard_instance.uuid }}#peer-{{ current_peer.public_key }}">{% trans 'Back' %}</a>
-            <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{% trans 'Delete Peer' %}</a>
-
-        </div>
-    </form>
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-outline-secondary" href="/peer/list/?uuid={{ current_peer.wireguard_instance.uuid }}#peer-{{ current_peer.public_key }}">{% trans 'Back' %}</a>
+        <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{% trans 'Delete Peer' %}</a>
+    </div>
 </div>
 {% endblock %}
 
 {% block custom_page_scripts %}
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var alertShown = false; 
-        var fieldsToWatch = ['id_public_key', 'id_pre_shared_key', 'id_private_key'];
-        function showAlert() {
-            if (!alertShown) { 
-                $(document).Toasts('create', {
-                    class: 'bg-warning', 
-                    title: '{% trans 'Action Required!' %}',
-                    body: '{% trans 'When manually updating the "Public Key", "Pre-Shared Key", or "Private Key", please ensure the configuration is correct.' %}',
-                });
-                alertShown = true; 
-            }
-        }
-
-        
-        fieldsToWatch.forEach(function(fieldId) {
-            var field = document.getElementById(fieldId);
-            if (field) {
-                field.addEventListener('change', showAlert);
-            }
-        });
-    });
-</script>
-
 
 <script>
     function openCommandDialog(element) {
@@ -246,22 +239,6 @@
         }
     }
 </script>
-    
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelector('.toggle-password').addEventListener('click', function () {
-            let passwordInput = document.getElementById('{{ form.private_key.id_for_label }}');
-            let passStatus = passwordInput.getAttribute('type') === 'password';
-            passwordInput.setAttribute('type', passStatus ? 'text' : 'password');
-            this.innerHTML = passStatus ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
-        });
-    
-        document.getElementById('{{ form.private_key.id_for_label }}').addEventListener('keypress', function () {
-            this.setAttribute('type', 'text');
-        });
-    });
-</script>
-
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
@@ -280,23 +257,4 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var form = document.querySelector('form[method="post"]');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            var privateKeyField = document.getElementById('{{ form.private_key.id_for_label }}');
-            if (privateKeyField && privateKeyField.value.trim() === '') {
-                var confirmed = confirm('{% trans "The private key is empty. The peer’s configuration file and QR code will be generated without the private key.\n It must be inserted manually when importing.\n\n Do you want to continue?" %}');
-                if (!confirmed) {
-                    e.preventDefault();
-                    return false;
-                }
-            }
-        });
-    }
-});
-</script>
-
-    
 {% endblock %}
