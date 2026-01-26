@@ -1,163 +1,68 @@
-{% extends "base.html" %}
-{% load i18n %}
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-
-<div class="card card-primary card-outline">
-    
-    <div class="card-body">
-        <div class="tab-content" id="custom-content-below-tabContent">
-            <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="card-body row">
-                        <div class="col-lg-6">
-                            <!-- Line 1: Name and peer_list_refresh_interval -->
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
-                                    <input type="text" class="form-control" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" placeholder="Enter Name" value="{{ form.name.value|default_if_none:'' }}">
-                                </div>
-                                
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.peer_list_refresh_interval.id_for_label }}">{{ form.peer_list_refresh_interval.label }}</label>
-                                    <input type="number" class="form-control" id="{{ form.peer_list_refresh_interval.id_for_label }}" name="{{ form.peer_list_refresh_interval.html_name }}" placeholder="Persistent Keepalive" value="{% if force_cache_refresh > 0 %}{{ force_cache_refresh }}{% else %}{{ form.peer_list_refresh_interval.value|default_if_none:'' }}{% endif %}" required {% if force_cache_refresh > 0 %}readonly{% endif %}>
-                                </div>
-
-
-                            </div>
-                            <!-- Line 2: Hostname, Listen Port and instance id -->
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.hostname.id_for_label }}">{{ form.hostname.label }}</label>
-                                    <input type="text" class="form-control" id="{{ form.hostname.id_for_label }}" name="{{ form.hostname.html_name }}" placeholder="Hostname" value="{{ form.hostname.value|default_if_none:'' }}" required>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="{{ form.listen_port.id_for_label }}">{{ form.listen_port.label }}</label>
-                                    <input type="number" class="form-control" id="{{ form.listen_port.id_for_label }}" name="{{ form.listen_port.html_name }}" placeholder="Listen Port" value="{{ form.listen_port.value|default_if_none:'' }}" required>
-                                </div>
-
-                                <div class="form-group col-md-3">
-                                    <label for="{{ form.instance_id.id_for_label }}">{{ form.instance_id.label }}</label>
-                                    <input type="number" class="form-control" id="{{ form.instance_id.id_for_label }}" name="{{ form.instance_id.html_name }}" placeholder="Instance ID" value="{{ form.instance_id.value|default_if_none:'' }}" required>
-                                </div>
-                                
-                            </div>
-                            <!-- Line 3: Private Key and Persistent Keepalive -->
-                            <div class="form-row">
-                                {% comment %}
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.private_key.id_for_label }}">{{ form.private_key.label }}</label>
-                                    <input type="text" class="form-control" id="{{ form.private_key.id_for_label }}" name="{{ form.private_key.html_name }}" placeholder="Private Key" value="{{ form.private_key.value|default_if_none:'' }}" required>
-                                </div>
-                                {% endcomment %}
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.private_key.id_for_label }}">{{ form.private_key.label }}</label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" id="{{ form.private_key.id_for_label }}" name="{{ form.private_key.html_name }}" placeholder="Private Key" value="{{ form.private_key.value|default_if_none:'' }}" required>
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary toggle-password" type="button"><i class="fas fa-eye"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.public_key.id_for_label }}">{{ form.public_key.label }}</label>
-                                    <input type="text" class="form-control" id="{{ form.public_key.id_for_label }}" name="{{ form.public_key.html_name }}" placeholder="public Key" value="{{ form.public_key.value|default_if_none:'' }}" required>
-                                </div>
-                                
-                            </div>
-                            <!-- Line 4: Address and Netmask -->
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
-                                    <input type="text" class="form-control" id="{{ form.address.id_for_label }}" name="{{ form.address.html_name }}" placeholder="Address" value="{{ form.address.value|default_if_none:'' }}" required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.netmask.id_for_label }}">{{ form.netmask.label }}</label>
-                                    <select class="form-control" id="{{ form.netmask.id_for_label }}" name="{{ form.netmask.html_name }}">
-                                        {% for value, display in form.netmask.field.choices %}
-                                        <option value="{{ value }}" {% if form.netmask.value == value %}selected{% endif %}>{{ display }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- Line 5: Primary and secondary DNS -->
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.dns_primary.id_for_label }}">{{ form.dns_primary.label }}</label>
-                                    <input type="text" class="form-control" id="{{ form.dns_primary.id_for_label }}" name="{{ form.dns_primary.html_name }}" value="{{ form.dns_primary.value|default_if_none:'' }}">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="{{ form.dns_secondary.id_for_label }}">{{ form.dns_secondary.label }}</label>
-                                    <input type="text" class="form-control" id="{{ form.dns_secondary.id_for_label }}" name="{{ form.dns_secondary.html_name }}" value="{{ form.dns_secondary.value|default_if_none:'' }}">
-                                </div>
-                                
-                            </div>
-
-
-
-
-                        </div>
-                        <div class="col-lg-6">
-                            <!-- Line 1: Post Up -->
-                            <div class="form-group">
-                                <label for="{{ form.post_up.id_for_label }}">{{ form.post_up.label }}</label>
-                                <textarea class="form-control" id="{{ form.post_up.id_for_label }}" name="{{ form.post_up.html_name }}" placeholder="Post Up" style="height: 150px;" readonly>{{ form.post_up.value|default_if_none:'' }}</textarea>
-                            </div>
-                            <!-- Line 2: Post Down -->
-                            <div class="form-group">
-                                <label for="{{ form.post_down.id_for_label }}">{{ form.post_down.label }}</label>
-                                <textarea class="form-control" id="{{ form.post_down.id_for_label }}" name="{{ form.post_down.html_name }}" placeholder="Post Down" style="height: 150px;" readonly>{{ form.post_down.value|default_if_none:'' }}</textarea>
-                            </div>
-                        </div>
+    <div class="row">
+        <div class="{% if form_size %}{{ form_size }}{% else %}col-lg-12{% endif %}">
+            <div class="card card-primary card-outline">
+                {% if page_title %}
+                    <div class="card-header">
+                        <h3 class="card-title">{{ page_title }}</h3>
                     </div>
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
-                        {% if current_instance.uuid %}
-                            <a href="{% url 'wireguard_server_list' %}" class='btn btn-outline-secondary' >{% trans 'Back' %}</a>
-                        <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{% trans 'Delete Configuration' %}</a>
-                        {% endif %}
+                {% endif %}
+                <div class="card-body row">
+                    <div class="col-lg-12">
+                        {% crispy form %}
                     </div>
-                </form>            
                 </div>
+            </div>
         </div>
-      
     </div>
-</div>
-
-
-
-
 {% endblock %}
 
-
 {% block custom_page_scripts %}
-<script>
-    function openCommandDialog(element) {
-        var command = element.getAttribute('data-command');
-        var confirmation = prompt("Please type 'delete wg{{ current_instance.instance_id }}' to remove the configuration.");
-        if (confirmation) {
-            var url = "?uuid={{current_instance.uuid}}&action=delete&confirmation=" + encodeURIComponent(confirmation);
-            window.location.href = url;
+    <script>
+        function openCommandDialog(element) {
+            var command = element.getAttribute('data-command');
+            var confirmation = prompt("{{ delete_confirmation_message }}");
+            if (confirmation) {
+                var url = "?uuid={{ instance.uuid }}&action=delete&confirmation=" + encodeURIComponent(confirmation);
+                window.location.href = url;
+            }
         }
-    }
-</script>
-    
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelector('.toggle-password').addEventListener('click', function () {
-            let passwordInput = document.getElementById('{{ form.private_key.id_for_label }}');
-            let passStatus = passwordInput.getAttribute('type') === 'password';
-            passwordInput.setAttribute('type', passStatus ? 'text' : 'password');
-            this.innerHTML = passStatus ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
-        });
-    
-        document.getElementById('{{ form.private_key.id_for_label }}').addEventListener('keypress', function () {
-            this.setAttribute('type', 'text');
-        });
-    });
-</script>
+    </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let passwordInput = document.getElementById('id_private_key');
 
+            if (passwordInput) {
+                let groupDiv = passwordInput.parentNode;
+                if (!groupDiv.classList.contains('input-group')) {
+                    let newGroup = document.createElement('div');
+                    newGroup.className = 'input-group';
+
+                    passwordInput.parentNode.insertBefore(newGroup, passwordInput);
+                    newGroup.appendChild(passwordInput);
+
+                    let appendDiv = document.createElement('div');
+                    appendDiv.className = 'input-group-append';
+
+                    let btn = document.createElement('button');
+                    btn.className = 'btn btn-outline-secondary toggle-password-btn';
+                    btn.type = 'button';
+                    btn.innerHTML = '<i class="fas fa-eye"></i>';
+
+                    appendDiv.appendChild(btn);
+                    newGroup.appendChild(appendDiv);
+
+                    btn.addEventListener('click', function () {
+                        let passStatus = passwordInput.getAttribute('type') === 'password';
+                        passwordInput.setAttribute('type', passStatus ? 'text' : 'password');
+                        this.innerHTML = passStatus ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+                    });
+                }
+            }
+        });
+    </script>
 {% endblock %}

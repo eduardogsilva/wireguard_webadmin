@@ -139,7 +139,7 @@ def view_wireguard_manage_instance(request):
                     return redirect('/server/manage/?uuid=' + str(current_instance.uuid))
                 current_instance.delete()
                 messages.success(request, message_title + _('|WireGuard instance deleted: wg') + str(current_instance.instance_id))
-                return redirect('/server/manage/')
+                return redirect('/server/list/')
             else:
                 messages.warning(request, _('Invalid confirmation|Please confirm deletion of WireGuard instance: wg') + str(current_instance.instance_id))
             return redirect('/server/manage/?uuid=' + str(current_instance.uuid))
@@ -165,7 +165,17 @@ def view_wireguard_manage_instance(request):
         force_cache_refresh = settings.WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL
     else:
         force_cache_refresh = 0
-    context = {'page_title': page_title, 'wireguard_instances': wireguard_instances, 'current_instance': current_instance, 'form': form, 'force_cache_refresh': force_cache_refresh}
+    
+    # Passing 'instance' and 'delete_confirmation_message' for generic_form compatibility
+    context = {
+        'page_title': page_title, 
+        'wireguard_instances': wireguard_instances, 
+        'current_instance': current_instance, 
+        'instance': current_instance,
+        'form': form, 
+        'force_cache_refresh': force_cache_refresh,
+        'delete_confirmation_message': 'Please type delete wg' + str(current_instance.instance_id) + ' to remove the configuration.' if current_instance else None
+    }
     return render(request, 'wireguard/wireguard_manage_server.html', context)
 
 
