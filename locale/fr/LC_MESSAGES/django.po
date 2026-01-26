@@ -1747,7 +1747,7 @@ msgstr "Erreur lors de l’envoi de l’e‑mail."
 
 #: templates/wireguard/peer_list/script_vpn_invite.html:172
 msgid "Invite refreshed."
-msgstr ""
+msgstr "Invitation actualisée."
 
 #: templates/wireguard/peer_list/script_vpn_invite.html:174
 #: templates/wireguard/peer_list/script_vpn_invite.html:178

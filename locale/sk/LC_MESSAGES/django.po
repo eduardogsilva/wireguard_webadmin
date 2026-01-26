@@ -1736,7 +1736,7 @@ msgstr "Chyba pri odosielaní e-mailu."
 
 #: templates/wireguard/peer_list/script_vpn_invite.html:172
 msgid "Invite refreshed."
-msgstr ""
+msgstr "Pozvánka bola aktualizovaná."
 
 #: templates/wireguard/peer_list/script_vpn_invite.html:174
 #: templates/wireguard/peer_list/script_vpn_invite.html:178

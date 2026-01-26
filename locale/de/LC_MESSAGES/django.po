@@ -1758,7 +1758,7 @@ msgstr "Fehler beim Senden der E‑Mail."
 
 #: templates/wireguard/peer_list/script_vpn_invite.html:172
 msgid "Invite refreshed."
-msgstr ""
+msgstr "Einladung aktualisiert."
 
 #: templates/wireguard/peer_list/script_vpn_invite.html:174
 #: templates/wireguard/peer_list/script_vpn_invite.html:178
