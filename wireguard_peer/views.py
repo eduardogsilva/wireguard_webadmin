@@ -154,6 +154,7 @@ def view_wireguard_peer_create(request):
             raise Http404
 
         new_peer_data = generate_peer_default(current_instance)
+        default_routing_template = RoutingTemplate.objects.filter(wireguard_instance=current_instance, default_template=True).first()
 
         if new_peer_data['allowed_ip']:
             new_peer = Peer.objects.create(
@@ -163,6 +164,7 @@ def view_wireguard_peer_create(request):
                 persistent_keepalive=new_peer_data['persistent_keepalive'],
                 private_key=new_peer_data['private_key'],
                 wireguard_instance=current_instance,
+                routing_template=default_routing_template,
             )
             PeerAllowedIP.objects.create(
                 config_file='server',
