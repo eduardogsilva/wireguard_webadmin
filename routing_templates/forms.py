@@ -78,37 +78,75 @@ class RoutingTemplateForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         allow_custom = cleaned_data.get('allow_peer_custom_routes')
-        enforce_policy = cleaned_data.get('enforce_route_policy')
         route_type = cleaned_data.get('route_type')
-        custom_routes = cleaned_data.get('custom_routes')
+        custom_routes_raw = (cleaned_data.get('custom_routes') or "")
 
-        if allow_custom and enforce_policy:
-            raise forms.ValidationError(_("You cannot enable 'Enforce Route Policy' when 'Allow Peer Custom Routes' is checked."))
+        lines = [ln.strip() for ln in custom_routes_raw.splitlines() if ln.strip()]
 
-        if route_type == 'custom' and not custom_routes:
-            self.add_error('custom_routes', _("At least one route must be provided when Route Type is 'Custom'."))
+        if route_type == 'default':
+            if lines:
+                self.add_error(
+                    'custom_routes',
+                    _("Custom routes should be empty when Route Type is 'Default Route'.")
+                )
+            if allow_custom:
+                self.add_error(
+                    'allow_peer_custom_routes',
+                    _("Allowing peer custom routes is not applicable when Route Type is 'Default Route'.")
+                )
+            return cleaned_data
 
-        if custom_routes:
-            lines = custom_routes.strip().split('\n')
+        if route_type == 'custom' and not lines:
+            self.add_error(
+                'custom_routes',
+                _("At least one route must be provided when Route Type is 'Custom'.")
+            )
+            return cleaned_data
+
+        if lines:
             validated_routes = []
             for line in lines:
-                line = line.strip()
-                if not line:
-                    continue
+                # exige ip/mask
+                if "/" not in line:
+                    self.add_error(
+                        'custom_routes',
+                        _("Invalid route format: '%(line)s'. Please use CIDR notation (e.g., 10.0.0.0/24).") % {
+                            'line': line}
+                    )
+                    break
+
                 try:
                     network = ipaddress.ip_network(line, strict=False)
-                    if str(network) == '0.0.0.0/0':
-                        self.add_error('custom_routes', _("The route 0.0.0.0/0 is not allowed. Use the 'Default Route' type instead."))
-                        break
-                    validated_routes.append(str(network))
                 except ValueError:
-                    self.add_error('custom_routes', _("Invalid route format: '%(line)s'. Please use CIDR notation (e.g., 192.168.1.0/24).") % {'line': line})
+                    self.add_error(
+                        'custom_routes',
+                        _("Invalid route format: '%(line)s'. Please use CIDR notation (e.g., 10.0.0.0/24).") % {
+                            'line': line}
+                    )
                     break
-            
+
+                if str(network) in ('0.0.0.0/0', '::/0'):
+                    self.add_error(
+                        'custom_routes',
+                        _("The route %(route)s is not allowed. Use the 'Default Route' type instead.") % {
+                            'route': str(network)}
+                    )
+                    break
+
+                if str(network) != line:
+                    self.add_error(
+                        'custom_routes',
+                        _("'%(line)s' is not a network address. Use the network address (e.g., '%(net)s').") % {
+                            'line': line,
+                            'net': str(network),
+                        }
+                    )
+                    break
+
+                validated_routes.append(str(network))
+
             if not self.errors.get('custom_routes'):
                 cleaned_data['custom_routes'] = '\n'.join(validated_routes)
 
-        if route_type == 'default' and custom_routes:
-            self.add_error('custom_routes', _("Custom routes should be empty when Route Type is 'Default Route'."))
-
         return cleaned_data
+
