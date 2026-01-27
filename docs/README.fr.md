@@ -21,6 +21,8 @@ wireguard_webadmin est une interface web complète et facile à configurer pour 
 - **Instances WireGuard multiples**: gérez séparément les pairs de plusieurs instances.
 - **Crypto Key Routing**: simplifie la configuration des interconnexions site‑à‑site.
 - **Partage d’invitations VPN**: générez et distribuez instantanément des invitations VPN sécurisées et limitées dans le temps par e‑mail ou WhatsApp, avec QR code et fichier de configuration.
+- **Modèles de Routage par Peer**: Définissez des modèles de routage réutilisables par instance WireGuard et appliquez-les aux pairs, garantissant un comportement de routage cohérent et prévisible.
+- **Application des Routes avec Règles de Firewall Automatiques**: Appliquez des politiques de routage en générant automatiquement des règles de pare-feu qui restreignent les pairs aux routes explicitement autorisées.
 
 Ce projet vise à offrir une solution intuitive et conviviale pour l’administration de WireGuard, sans compromettre la puissance et la flexibilité du protocole.
 

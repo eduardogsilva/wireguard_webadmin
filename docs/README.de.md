@@ -25,6 +25,8 @@
 - **Mehrere WireGuard‑Instanzen**: Separate Verwaltung der Peers über mehrere Instanzen hinweg.
 - **Crypto‑Key‑Routing**: Vereinfacht die Konfiguration von Site‑to‑Site‑Verbindungen.
 - **Einfaches Teilen von VPN‑Einladungen**: Erzeuge und verteile sofort sichere, zeitlich begrenzte VPN‑Einladungen per E‑Mail oder WhatsApp – inklusive QR‑Code und Konfigurationsdatei.
+- **Routing-Vorlagen pro Peer**: Definieren Sie wiederverwendbare Routing-Vorlagen pro WireGuard-Instanz und wenden Sie diese auf Peers an, um ein konsistentes und vorhersehbares Routing-Verhalten zu gewährleisten.
+- **Routenzwang mit automatischen Firewall-Regeln**: Erwingen Sie Routing-Richtlinien durch automatisches Erstellen von Firewall-Regeln, die Peers auf explizit erlaubte Routen beschränken.
 
 Dieses Projekt zielt darauf ab, eine intuitive und benutzerfreundliche Lösung für das WireGuard‑Management bereitzustellen, ohne die Flexibilität und Leistung von WireGuard einzuschränken.
 

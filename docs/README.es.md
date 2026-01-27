@@ -21,6 +21,8 @@
 - **Múltiples Instancias de WireGuard**: Permite la gestión separada de peers en varias instancias.
 - **Crypto‑Key Routing**: Simplifica la configuración de interconexiones *site‑to‑site*.
 - **Compartir Invitaciones VPN Sin Esfuerzo**: Genere y distribuya al instante invitaciones VPN seguras y temporales por correo electrónico o WhatsApp, con código QR y archivo de configuración.
+- **Plantillas de Enrutamiento por Peer**: Defina plantillas de enrutamiento reutilizables por instancia de WireGuard y aplíquelas a los pares, asegurando un comportamiento de enrutamiento consistente y predecible.
+- **Cumplimiento de Rutas con Reglas de Firewall Automáticas**: Imponga políticas de enrutamiento generando automáticamente reglas de firewall que restrinjan los pares a las rutas explícitamente permitidas.
 
 Este proyecto tiene como objetivo ofrecer una solución intuitiva y fácil de usar para la gestión de VPN WireGuard sin comprometer la potencia y flexibilidad que proporciona WireGuard.
 
