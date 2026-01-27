@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 
 {% block content %}
     <div class="row">
-        <div class="{% if form_size %}{{ form_size }}{% else %}col-lg-12{% endif %}">
+        <div class="col-lg-6">
             <div class="card card-primary card-outline">
                 {% if page_title %}
                     <div class="card-header">
@@ -13,6 +14,69 @@
                 <div class="card-body row">
                     <div class="col-lg-12">
                         {% crispy form %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-primary card-outline">
+                <div class="card-body row">
+                    <div class="col-lg-12">
+                        <h5>{% trans "Display Name" %}</h5>
+                        <p>
+                            {% blocktrans %}
+                                Optional name used only for display in the web interface.
+                            {% endblocktrans %}
+                        </p>
+                        <h5>{% trans "Web Refresh Interval" %}</h5>
+                        <p>
+                            {% blocktrans %}
+                                Interval used to refresh WireGuard status information in the web UI.
+                            {% endblocktrans %}
+                        </p>
+                        <h5>{% trans "Public Address" %}</h5>
+                        <p>
+                            {% blocktrans %}
+                                Public hostname or IP address and UDP port used by peers to connect.
+                                <br>
+                                The <b>listen port</b> must be exposed and mapped in your Docker compose (YAML) file.
+                            {% endblocktrans %}
+                        </p>
+                        <h5>{% trans "Interface Keys" %}</h5>
+                        <p>
+                            {% blocktrans %}
+                                WireGuard private and public keys for this interface.
+                                <br>
+                                The private key must remain secret.
+                                Changing it requires updating all peer configurations.
+                            {% endblocktrans %}
+                        </p>
+                        <h5>{% trans "Internal Network" %}</h5>
+                        <p>
+                            {% blocktrans %}
+                                Internal IP address and netmask used by the WireGuard interface.
+                            {% endblocktrans %}
+                        </p>
+                        <h5>{% trans "DNS Configuration" %}</h5>
+                        <p>
+                            {% blocktrans %}
+                                DNS servers pushed to peers.
+                                <br>
+                                Using the internal IP as primary DNS enables internal name resolution
+                                and DNS filtering.
+                            {% endblocktrans %}
+                        </p>
+                        <h5>{% trans "Enforce Route Policy" %}</h5>
+                        <p>
+                            {% blocktrans %}
+                                Enforces routing rules defined by routing templates using firewall rules.
+                                <br>
+                                Peers with a default route (0.0.0.0/0) are not restricted.
+                                <br><br>
+                                Note: depending on the number of routes and peers, this option may generate
+                                a large number of firewall rules.
+                            {% endblocktrans %}
+                        </p>
                     </div>
                 </div>
             </div>

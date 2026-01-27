@@ -23,12 +23,13 @@ class WireGuardInstanceForm(forms.ModelForm):
     peer_list_refresh_interval = forms.IntegerField(label=_('Web Refresh Interval'), initial=10)
     dns_primary = forms.GenericIPAddressField(label=_('Primary DNS'), initial='1.1.1.1', required=False)
     dns_secondary = forms.GenericIPAddressField(label=_('Secondary DNS'), initial='', required=False)
+    enforce_route_policy = forms.BooleanField(label=_('Enforce Route Policy'), required=False)
 
     class Meta:
         model = WireGuardInstance
         fields = [
             'name', 'instance_id', 'private_key', 'public_key','hostname', 'listen_port', 'address', 
-            'netmask', 'peer_list_refresh_interval', 'dns_primary', 'dns_secondary'
+            'netmask', 'peer_list_refresh_interval', 'dns_primary', 'dns_secondary', 'enforce_route_policy'
             ]
         
     def __init__(self, *args, **kwargs):
@@ -85,6 +86,10 @@ class WireGuardInstanceForm(forms.ModelForm):
                          Column('dns_primary', css_class='form-group col-md-6 mb-0'),
                          Column('dns_secondary', css_class='form-group col-md-6 mb-0'),
                          css_class='form-row'
+                    ),
+                    Row(
+                        Column('enforce_route_policy', css_class='form-group col-md-12 mb-0'),
+                        css_class='form-row'
                     ),
                     css_class='col-lg-12'
                 ),
