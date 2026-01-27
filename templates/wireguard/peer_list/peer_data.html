@@ -10,6 +10,7 @@
                         </a>
                     </h5>
                     <span>
+                        <div class="d-inline-flex flex-column align-items-end">
                         {% if user_acl.user_level >= 30 %}
                             <div class="d-inline-flex flex-column">
                                 <a href="/peer/sort/?peer={{ peer.uuid }}&direction=up"
@@ -24,6 +25,12 @@
                                 </div>
                             </div>
                         {% endif %}
+
+                        {% if peer.is_route_policy_restricted %}
+                            <i class="fas fa-lock peer-lock-icon" title="{% trans 'Route policy enforced' %}"></i>
+                        {% endif %}
+
+                        </div>
                     </span>
                 </div>
                 <b class="peer-extra-info">{% trans 'Throughput' %}: </b>
