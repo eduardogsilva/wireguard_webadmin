@@ -1,3 +1,5 @@
+import glob
+import logging
 import os
 import re
 import subprocess
@@ -86,10 +88,26 @@ def export_wireguard_configs(request):
 
     instances = WireGuardInstance.objects.all()
     base_dir = "/etc/wireguard"
+    os.makedirs(base_dir, exist_ok=True)
 
     export_firewall_configuration()
-    
+
     firewall_inserted = False
+
+    active_instance_conf_set = {f"wg{instance.instance_id}.conf" for instance in instances}
+    for old_conf_file in glob.glob(os.path.join(base_dir, "wg[0-9]*.conf")):
+        filename = os.path.basename(old_conf_file)
+        if filename not in active_instance_conf_set:
+            logging.info("Removing abandoned WireGuard config: %s", filename)
+            try:
+                os.remove(old_conf_file)
+            except FileNotFoundError:
+                pass
+            except IsADirectoryError:
+                continue
+            except PermissionError:
+                continue
+
     for instance in instances:
         if instance.legacy_firewall:
             post_up_processed = clean_command_field(instance.post_up) if instance.post_up else ""
@@ -156,8 +174,6 @@ def export_wireguard_configs(request):
 
         config_content = "\n".join(config_lines)
         config_path = os.path.join(base_dir, f"wg{instance.instance_id}.conf")
-
-        os.makedirs(base_dir, exist_ok=True)
 
         with open(config_path, "w") as config_file:
             config_file.write(config_content)
