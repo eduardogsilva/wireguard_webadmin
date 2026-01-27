@@ -1,3 +1,4 @@
+from django.db.models import Q, Prefetch
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -164,12 +165,21 @@ def generate_route_policy_rules():
 
     peers = (
         Peer.objects
-        .filter(routing_template__enforce_route_policy=True)
+        .filter(
+            Q(routing_template__enforce_route_policy=True) |
+            Q(wireguard_instance__enforce_route_policy=True)
+        )
         .select_related('wireguard_instance', 'routing_template')
+        .prefetch_related(
+            Prefetch(
+                "peerallowedip_set",
+                queryset=PeerAllowedIP.objects.only("peer_id", "allowed_ip", "netmask", "priority", "config_file"),
+            )
+        )
         .order_by('wireguard_instance__instance_id', 'sort_order', 'name', 'public_key')
     )
-
-    if not peers.exists():
+    peers = list(peers) # evaluate queryset once (prefetch included)
+    if not peers:
         route_policy_rules += '# No peers with enforce_route_policy enabled\n\n'
         return route_policy_rules
 
