@@ -726,14 +726,12 @@ msgstr ""
 "'Standardroute' ist."
 
 #: routing_templates/forms.py:95
-#, fuzzy
-#| msgid "Custom routes should be empty when Route Type is 'Default Route'."
 msgid ""
 "Allowing peer custom routes is not applicable when Route Type is 'Default "
 "Route'."
 msgstr ""
-"Benutzerdefinierte Routen sollten leer sein, wenn der Routentyp "
-"'Standardroute' ist."
+"Das Zulassen benutzerdefinierter Routen für Peers ist nicht anwendbar, wenn "
+"der Routentyp 'Standardroute' ist."
 
 #: routing_templates/forms.py:102
 msgid "At least one route must be provided when Route Type is 'Custom'."
@@ -742,25 +740,20 @@ msgstr ""
 "'Benutzerdefiniert' ist."
 
 #: routing_templates/forms.py:113 routing_templates/forms.py:123
-#, fuzzy, python-format
-#| msgid ""
-#| "Invalid route format: '%(line)s'. Please use CIDR notation (e.g., "
-#| "192.168.1.0/24)."
+#, python-format
 msgid ""
 "Invalid route format: '%(line)s'. Please use CIDR notation (e.g., "
 "10.0.0.0/24)."
 msgstr ""
 "Ungültiges Routenformat: '%(line)s'. Bitte verwenden Sie die CIDR-Notation "
-"(z. B. 192.168.1.0/24)."
+"(z. B. 10.0.0.0/24)."
 
 #: routing_templates/forms.py:131
-#, fuzzy, python-format
-#| msgid ""
-#| "The route 0.0.0.0/0 is not allowed. Use the 'Default Route' type instead."
+#, python-format
 msgid ""
 "The route %(route)s is not allowed. Use the 'Default Route' type instead."
 msgstr ""
-"Die Route 0.0.0.0/0 ist nicht zulässig. Verwenden Sie stattdessen den Typ "
+"Die Route %(route)s ist nicht zulässig. Verwenden Sie stattdessen den Typ "
 "'Standardroute'."
 
 #: routing_templates/forms.py:139
@@ -769,6 +762,8 @@ msgid ""
 "'%(line)s' is not a network address. Use the network address (e.g., "
 "'%(net)s')."
 msgstr ""
+"'%(line)s' ist keine Netzwerkadresse. Verwenden Sie die Netzwerkadresse (z. B. "
+"'%(net)s')."
 
 #: routing_templates/models.py:13
 msgid "Default Route (0.0.0.0/0)"
@@ -1616,7 +1611,7 @@ msgstr "Keine Routen-Vorlagen für diese Schnittstelle verfügbar."
 
 #: templates/wireguard/peer_list/peer_data.html:30
 msgid "Route policy enforced"
-msgstr ""
+msgstr "Routenrichtlinie erzwungen"
 
 #: templates/wireguard/peer_list/peer_data.html:36
 #: templates/wireguard/peer_list/peer_preview_modal.html:16
@@ -1878,7 +1873,7 @@ msgstr "Persistent Keepalive"
 
 #: templates/wireguard/wireguard_manage_peer.html:40
 msgid "Keys"
-msgstr ""
+msgstr "Schlüssel"
 
 #: templates/wireguard/wireguard_manage_peer.html:51 wireguard/forms.py:17
 #: wireguard_peer/forms.py:48
@@ -1976,6 +1971,9 @@ msgid ""
 "web interface.\n"
 "                            "
 msgstr ""
+"\n"
+"                                Optionaler Name, der nur zur Anzeige in der Weboberfläche verwendet wird.\n"
+"                            "
 
 #: templates/wireguard/wireguard_manage_server.html:31 wireguard/forms.py:23
 msgid "Web Refresh Interval"
@@ -1988,6 +1986,9 @@ msgid ""
 "information in the web UI.\n"
 "                            "
 msgstr ""
+"\n"
+"                                Intervall zum Aktualisieren der WireGuard-Statusinformationen in der Web-Benutzeroberfläche.\n"
+"                            "
 
 #: templates/wireguard/wireguard_manage_server.html:37
 #: templates/wireguard/wireguard_status.html:46 wireguard/forms.py:19
@@ -2004,12 +2005,15 @@ msgid ""
 "mapped in your Docker compose (YAML) file.\n"
 "                            "
 msgstr ""
+"\n"
+"                                Öffentlicher Hostname oder IP-Adresse und UDP-Port, die von Peers zum Verbinden verwendet werden.\n"
+"                                <br>\n"
+"                                Der <b>Listen-Port</b> muss in Ihrer Docker-Compose-Datei (YAML) freigegeben und gemappt sein.\n"
+"                            "
 
 #: templates/wireguard/wireguard_manage_server.html:45
-#, fuzzy
-#| msgid "Interface"
 msgid "Interface Keys"
-msgstr "Schnittstelle"
+msgstr "Schnittstellenschlüssel"
 
 #: templates/wireguard/wireguard_manage_server.html:47
 msgid ""
@@ -2022,10 +2026,16 @@ msgid ""
 "configurations.\n"
 "                            "
 msgstr ""
+"\n"
+"                                Private und öffentliche WireGuard-Schlüssel für diese Schnittstelle.\n"
+"                                <br>\n"
+"                                Der private Schlüssel muss geheim bleiben.\n"
+"                                Das Ändern erfordert das Aktualisieren aller Peer-Konfigurationen.\n"
+"                            "
 
 #: templates/wireguard/wireguard_manage_server.html:54
 msgid "Internal Network"
-msgstr ""
+msgstr "Internes Netzwerk"
 
 #: templates/wireguard/wireguard_manage_server.html:56
 msgid ""
@@ -2034,12 +2044,13 @@ msgid ""
 "WireGuard interface.\n"
 "                            "
 msgstr ""
+"\n"
+"                                Interne IP-Adresse und Netzmaske der WireGuard-Schnittstelle.\n"
+"                            "
 
 #: templates/wireguard/wireguard_manage_server.html:60
-#, fuzzy
-#| msgid "Delete Configuration"
 msgid "DNS Configuration"
-msgstr "Konfiguration löschen"
+msgstr "DNS-Konfiguration"
 
 #: templates/wireguard/wireguard_manage_server.html:62
 msgid ""
@@ -2051,6 +2062,12 @@ msgid ""
 "                                and DNS filtering.\n"
 "                            "
 msgstr ""
+"\n"
+"                                DNS-Server, die an Peers gepusht werden.\n"
+"                                <br>\n"
+"                                Die Verwendung der internen IP als primärer DNS ermöglicht interne Namensauflösung\n"
+"                                und DNS-Filterung.\n"
+"                            "
 
 #: templates/wireguard/wireguard_manage_server.html:71
 msgid ""
@@ -2066,6 +2083,14 @@ msgid ""
 "                                a large number of firewall rules.\n"
 "                            "
 msgstr ""
+"\n"
+"                                Erzwingt Routing-Regeln, die durch Routing-Vorlagen definiert sind, mithilfe von Firewall-Regeln.\n"
+"                                <br>\n"
+"                                Peers mit einer Standardroute (0.0.0.0/0) sind nicht eingeschränkt.\n"
+"                                <br><br>\n"
+"                                Hinweis: Abhängig von der Anzahl der Routen und Peers kann diese Option eine\n"
+"                                Vielzahl von Firewall-Regeln generieren.\n"
+"                            "
 
 #: templates/wireguard/wireguard_peer_list.html:33
 msgid "Are you sure you want to create a new peer?"
@@ -2701,38 +2726,28 @@ msgstr ""
 "ein, um zu bestätigen."
 
 #: wireguard_peer/views.py:209
-#, fuzzy
-#| msgid "Peer Configuration"
 msgid "Peer Configuration: "
-msgstr "Peer‑Konfiguration"
+msgstr "Peerkonfiguration: "
 
 #: wireguard_peer/views.py:247
 msgid "Peer updated|Peer updated successfully."
 msgstr "Peer aktualisiert|Peer erfolgreich aktualisiert."
 
 #: wireguard_peer/views.py:250
-#, fuzzy
-#| msgid "Edit User"
 msgid "Edit Peer"
-msgstr "Benutzer bearbeiten"
+msgstr "Peer bearbeiten"
 
 #: wireguard_peer/views.py:252
-#, fuzzy
-#| msgid "Enter Name"
 msgid "Edit Peer Name"
-msgstr "Name eingeben"
+msgstr "Peernamen bearbeiten"
 
 #: wireguard_peer/views.py:254
-#, fuzzy
-#| msgid "Persistent Keepalive"
 msgid "Edit Keepalive"
-msgstr "Persistent Keepalive"
+msgstr "Keepalive bearbeiten"
 
 #: wireguard_peer/views.py:256
-#, fuzzy
-#| msgid "Edit User"
 msgid "Edit Keys"
-msgstr "Benutzer bearbeiten"
+msgstr "Schlüssel bearbeiten"
 
 #: wireguard_peer/views.py:288
 msgid "IP address deleted|IP address deleted successfully."

@@ -715,37 +715,32 @@ msgid "Custom routes should be empty when Route Type is 'Default Route'."
 msgstr "Vlastné trasy by mali byť prázdne, ak je Typ trasy 'Predvolená trasa'."
 
 #: routing_templates/forms.py:95
-#, fuzzy
-#| msgid "Custom routes should be empty when Route Type is 'Default Route'."
 msgid ""
 "Allowing peer custom routes is not applicable when Route Type is 'Default "
 "Route'."
-msgstr "Vlastné trasy by mali byť prázdne, ak je Typ trasy 'Predvolená trasa'."
+msgstr ""
+"Povolenie vlastných trás peera nie je možné, ak je Typ trasy 'Predvolená "
+"trasa'."
 
 #: routing_templates/forms.py:102
 msgid "At least one route must be provided when Route Type is 'Custom'."
 msgstr "Pri type trasy 'Vlastná' musí byť zadaná aspoň jedna trasa."
 
 #: routing_templates/forms.py:113 routing_templates/forms.py:123
-#, fuzzy, python-format
-#| msgid ""
-#| "Invalid route format: '%(line)s'. Please use CIDR notation (e.g., "
-#| "192.168.1.0/24)."
+#, python-format
 msgid ""
 "Invalid route format: '%(line)s'. Please use CIDR notation (e.g., "
 "10.0.0.0/24)."
 msgstr ""
 "Neplatný formát trasy: '%(line)s'. Použite prosím notáciu CIDR (napr. "
-"192.168.1.0/24)."
+"10.0.0.0/24)."
 
 #: routing_templates/forms.py:131
-#, fuzzy, python-format
-#| msgid ""
-#| "The route 0.0.0.0/0 is not allowed. Use the 'Default Route' type instead."
+#, python-format
 msgid ""
 "The route %(route)s is not allowed. Use the 'Default Route' type instead."
 msgstr ""
-"Trasa 0.0.0.0/0 nie je povolená. Použite radšej typ 'Predvolená trasa'."
+"Trasa %(route)s nie je povolená. Použite radšej typ 'Predvolená trasa'."
 
 #: routing_templates/forms.py:139
 #, python-format
@@ -753,6 +748,7 @@ msgid ""
 "'%(line)s' is not a network address. Use the network address (e.g., "
 "'%(net)s')."
 msgstr ""
+"'%(line)s' nie je sieťová adresa. Použite sieťovú adresu (napr., '%(net)s')."
 
 #: routing_templates/models.py:13
 msgid "Default Route (0.0.0.0/0)"
@@ -1593,7 +1589,7 @@ msgstr "Pre toto rozhranie nie sú k dispozícii žiadne smerovacie šablóny."
 
 #: templates/wireguard/peer_list/peer_data.html:30
 msgid "Route policy enforced"
-msgstr ""
+msgstr "Smerovacia politika vynútená"
 
 #: templates/wireguard/peer_list/peer_data.html:36
 #: templates/wireguard/peer_list/peer_preview_modal.html:16
@@ -1854,7 +1850,7 @@ msgstr "Trvalý keepalive"
 
 #: templates/wireguard/wireguard_manage_peer.html:40
 msgid "Keys"
-msgstr ""
+msgstr "Kľúče"
 
 #: templates/wireguard/wireguard_manage_peer.html:51 wireguard/forms.py:17
 #: wireguard_peer/forms.py:48
@@ -1953,6 +1949,9 @@ msgid ""
 "web interface.\n"
 "                            "
 msgstr ""
+"\n"
+"                                Voliteľný názov používaný iba na zobrazenie vo webovom rozhraní.\n"
+"                            "
 
 #: templates/wireguard/wireguard_manage_server.html:31 wireguard/forms.py:23
 msgid "Web Refresh Interval"
@@ -1965,6 +1964,9 @@ msgid ""
 "information in the web UI.\n"
 "                            "
 msgstr ""
+"\n"
+"                                Interval používaný na obnovenie informácií o stave WireGuard vo webovom používateľskom rozhraní.\n"
+"                            "
 
 #: templates/wireguard/wireguard_manage_server.html:37
 #: templates/wireguard/wireguard_status.html:46 wireguard/forms.py:19
@@ -1981,12 +1983,15 @@ msgid ""
 "mapped in your Docker compose (YAML) file.\n"
 "                            "
 msgstr ""
+"\n"
+"                                Verejný názov hostiteľa alebo IP adresa a UDP port, ktorý používajú peeri na pripojenie.\n"
+"                                <br>\n"
+"                                <b>Port počúvania</b> musí byť sprístupnený a namapovaný vo vašom súbore Docker compose (YAML).\n"
+"                            "
 
 #: templates/wireguard/wireguard_manage_server.html:45
-#, fuzzy
-#| msgid "Interface"
 msgid "Interface Keys"
-msgstr "Rozhranie"
+msgstr "Kľúče rozhrania"
 
 #: templates/wireguard/wireguard_manage_server.html:47
 msgid ""
@@ -1999,10 +2004,16 @@ msgid ""
 "configurations.\n"
 "                            "
 msgstr ""
+"\n"
+"                                Súkromné a verejné kľúče WireGuard pre toto rozhranie.\n"
+"                                <br>\n"
+"                                Súkromný kľúč musí zostať v tajnosti.\n"
+"                                Jeho zmena vyžaduje aktualizáciu konfigurácií všetkých peerov.\n"
+"                            "
 
 #: templates/wireguard/wireguard_manage_server.html:54
 msgid "Internal Network"
-msgstr ""
+msgstr "Interná Sieť"
 
 #: templates/wireguard/wireguard_manage_server.html:56
 msgid ""
@@ -2011,12 +2022,13 @@ msgid ""
 "WireGuard interface.\n"
 "                            "
 msgstr ""
+"\n"
+"                                Interná IP adresa a sieťová maska používaná rozhraním WireGuard.\n"
+"                            "
 
 #: templates/wireguard/wireguard_manage_server.html:60
-#, fuzzy
-#| msgid "Delete Configuration"
 msgid "DNS Configuration"
-msgstr "Vymazať konfiguráciu"
+msgstr "Konfigurácia DNS"
 
 #: templates/wireguard/wireguard_manage_server.html:62
 msgid ""
@@ -2028,6 +2040,12 @@ msgid ""
 "                                and DNS filtering.\n"
 "                            "
 msgstr ""
+"\n"
+"                                DNS servery odoslané peerom.\n"
+"                                <br>\n"
+"                                Použitie internej IP ako primárneho DNS umožňuje interné rozlíšenie názvov\n"
+"                                a filtrovanie DNS.\n"
+"                            "
 
 #: templates/wireguard/wireguard_manage_server.html:71
 msgid ""
@@ -2043,6 +2061,14 @@ msgid ""
 "                                a large number of firewall rules.\n"
 "                            "
 msgstr ""
+"\n"
+"                                Vynucuje smerovacie pravidlá definované smerovacími šablónami pomocou pravidiel firewallu.\n"
+"                                <br>\n"
+"                                Peeri s predvolenou trasou (0.0.0.0/0) nie sú obmedzení.\n"
+"                                <br><br>\n"
+"                                Poznámka: v závislosti od poču trás a peerov môže táto možnosť vygenerovať\n"
+"                                veľký počet pravidiel firewallu.\n"
+"                            "
 
 #: templates/wireguard/wireguard_peer_list.html:33
 msgid "Are you sure you want to create a new peer?"
@@ -2667,38 +2693,28 @@ msgstr ""
 "pre potvrdenie."
 
 #: wireguard_peer/views.py:209
-#, fuzzy
-#| msgid "Peer Configuration"
 msgid "Peer Configuration: "
-msgstr "Konfigurácia peer"
+msgstr "Konfigurácia peera: "
 
 #: wireguard_peer/views.py:247
 msgid "Peer updated|Peer updated successfully."
 msgstr "Peer aktualizovaný|Peer bol úspešne aktualizovaný."
 
 #: wireguard_peer/views.py:250
-#, fuzzy
-#| msgid "Edit User"
 msgid "Edit Peer"
-msgstr "Upraviť používateľa"
+msgstr "Upraviť Peera"
 
 #: wireguard_peer/views.py:252
-#, fuzzy
-#| msgid "Enter Name"
 msgid "Edit Peer Name"
-msgstr "Zadajte názov"
+msgstr "Upraviť Názov Peera"
 
 #: wireguard_peer/views.py:254
-#, fuzzy
-#| msgid "Persistent Keepalive"
 msgid "Edit Keepalive"
-msgstr "Trvalý keepalive"
+msgstr "Upraviť Keepalive"
 
 #: wireguard_peer/views.py:256
-#, fuzzy
-#| msgid "Edit User"
 msgid "Edit Keys"
-msgstr "Upraviť používateľa"
+msgstr "Upraviť Kľúče"
 
 #: wireguard_peer/views.py:288
 msgid "IP address deleted|IP address deleted successfully."
