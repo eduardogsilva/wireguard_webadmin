@@ -32,6 +32,8 @@ from firewall.views import manage_firewall_rule, manage_redirect_rule, view_fire
     view_reset_firewall
 from intl_tools.views import view_change_language
 from routing_templates.views import view_manage_routing_template, view_routing_template_list
+from scheduler.views import view_scheduler_profile_list, view_manage_scheduler_profile, view_delete_scheduler_profile, \
+    view_manage_scheduler_slot, view_delete_scheduler_slot
 from user_manager.views import view_manage_user, view_peer_group_list, view_peer_group_manage, view_user_list
 from vpn_invite.views import view_email_settings, view_vpn_invite_list, view_vpn_invite_settings
 from vpn_invite_public.views import view_public_vpn_invite
@@ -108,5 +110,10 @@ urlpatterns = [
     path('cluster/settings/', cluster_settings, name='cluster_settings'),
     path('routing-templates/list/', view_routing_template_list, name='routing_template_list'),
     path('routing-templates/manage/', view_manage_routing_template, name='manage_routing_template'),
+    path('scheduler/profile/list/', view_scheduler_profile_list, name='scheduler_profile_list'),
+    path('scheduler/profile/manage/', view_manage_scheduler_profile, name='manage_scheduler_profile'),
+    path('scheduler/profile/delete/', view_delete_scheduler_profile, name='delete_scheduler_profile'),
+    path('scheduler/slot/manage/', view_manage_scheduler_slot, name='manage_scheduler_slot'),
+    path('scheduler/slot/delete/', view_delete_scheduler_slot, name='delete_scheduler_slot'),
     path('change_language/', view_change_language, name='change_language'),
 ]

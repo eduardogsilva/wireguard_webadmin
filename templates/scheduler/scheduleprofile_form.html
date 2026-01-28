@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">{{ title }}</h3>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    {{ form|crispy }}
+                </div>
+            </div>
+
+            <!-- Schedule Slots -->
+            {% if profile %}
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>{% trans "Time Intervals" %}</h4>
+                        <a href="{% url 'manage_scheduler_slot' %}?profile_uuid={{ profile.uuid }}"
+                            class="btn btn-sm btn-primary">
+                            <i class="fas fa-plus"></i> {% trans "Add Interval" %}
+                        </a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Start Day" %}</th>
+                                    <th>{% trans "Start Time" %}</th>
+                                    <th>{% trans "End Day" %}</th>
+                                    <th>{% trans "End Time" %}</th>
+                                    <th class="text-end">{% trans "Actions" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for slot in slots %}
+                                <tr>
+                                    <td>{{ slot.get_start_weekday_display }}</td>
+                                    <td>{{ slot.start_time }}</td>
+                                    <td>{{ slot.get_end_weekday_display }}</td>
+                                    <td>{{ slot.end_time }}</td>
+                                    <td class="text-end">
+                                        <a href="{% url 'manage_scheduler_slot' %}?uuid={{ slot.uuid }}"
+                                            class="btn btn-sm btn-outline-primary" title="{% trans 'Edit' %}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'delete_scheduler_slot' %}?uuid={{ slot.uuid }}"
+                                            class="btn btn-sm btn-outline-danger" title="{% trans 'Delete' %}">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">
+                                        {% trans "No time intervals found." %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row mt-4">
+                <div class="col-12 d-flex justify-content-end gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> {% trans "Save" %}
+                    </button>
+                    <a href="{% url 'scheduler_profile_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> {% trans "Cancel" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

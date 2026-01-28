@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">{% trans 'Schedule Profiles' %}</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>{% trans 'Name' %}</th>
+                    <th>{% trans 'Peers' %}</th>
+                    <th style="width: 100px;">{% trans 'Actions' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in profiles %}
+                <tr>
+                    <td>{{ profile.name }}</td>
+                    <td>{{ profile.peerscheduling_set.count }}</td>
+                    <td class="text-nowrap">
+                        <a href="{% url 'manage_scheduler_profile' %}?uuid={{ profile.uuid }}"
+                            class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
+                            <i class="far fa-edit"></i>
+                        </a>
+                        <a href="{% url 'delete_scheduler_profile' %}?uuid={{ profile.uuid }}"
+                            class="btn btn-sm btn-danger" title="{% trans 'Delete' %}">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">{% trans 'No schedule profiles found.' %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'manage_scheduler_profile' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> {% trans 'Add Profile' %}
+        </a>
+    </div>
+</div>
+{% endblock %}

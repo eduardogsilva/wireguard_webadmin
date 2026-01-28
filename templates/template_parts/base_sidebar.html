@@ -99,6 +99,16 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a href="{% url 'scheduler_profile_list' %}"
+                    class="nav-link {% if '/scheduler/' in request.path %}active{% endif %}">
+                    <i class="fas fa-calendar-alt nav-icon"></i>
+                    <p>
+                        {% trans 'Scheduler' %}
+                    </p>
+                </a>
+            </li>
+
 
         </ul>
     </nav>

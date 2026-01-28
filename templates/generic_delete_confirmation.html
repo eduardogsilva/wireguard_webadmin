@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="card card-danger card-outline">
+    <div class="card-header">
+        <h3 class="card-title">{{ title }}</h3>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="card-body">
+            <p>{{ text }}</p>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> {% trans 'Confirm Delete' %}
+            </button>
+            <a href="{{ cancel_url }}" class="btn btn-secondary">
+                {% trans 'Cancel' %}
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

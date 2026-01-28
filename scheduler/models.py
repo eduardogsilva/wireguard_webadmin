@@ -24,7 +24,7 @@ class ScheduleProfile(models.Model):
 
 
 class ScheduleSlot(models.Model):
-    profile = models.ForeignKey(ScheduleProfile, on_delete=models.CASCADE, related_name="slots")
+    profile = models.ForeignKey(ScheduleProfile, on_delete=models.CASCADE, related_name="time_interval")
     start_weekday = models.PositiveSmallIntegerField(choices=WEEK_DAYS)
     end_weekday = models.PositiveSmallIntegerField(choices=WEEK_DAYS)
     start_time = models.TimeField()
