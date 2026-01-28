@@ -2,6 +2,14 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
+{% block page_custom_head %}
+    <style>
+        .grid-cell {
+            transition: background-color 0.3s ease;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
 <div class="card card-primary card-outline">
     <div class="card-header">
@@ -16,8 +24,58 @@
                 </div>
             </div>
 
-            <!-- Schedule Slots -->
+            <!-- Schedule Grid Visualization -->
             {% if profile %}
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card card-outline card-secondary">
+                        <div class="card-header">
+                            <h4 class="card-title">{% trans "Schedule Visualization" %}</h4>
+                        </div>
+                        <div class="card-body p-1">
+                            <div class="schedule-grid-container mb-1">
+                                <div class="schedule-grid-header d-flex text-center mb-0">
+                                    <div class="flex-grow-1">{% trans "M" %}
+                                    </div>
+                                    <div class="flex-grow-1">{% trans "T" %}
+                                    </div>
+                                    <div class="flex-grow-1">{% trans "W" %}
+                                    </div>
+                                    <div class="flex-grow-1">{% trans "T" %}
+                                    </div>
+                                    <div class="flex-grow-1">{% trans "F" %}
+                                    </div>
+                                    <div class="flex-grow-1">{% trans "S" %}
+                                    </div>
+                                    <div class="flex-grow-1" >{% trans "S" %}
+                                    </div>
+                                </div>
+                                <div class="schedule-grid-body">
+                                    {% for hour in "012345678901234567890123"|make_list %}
+                                    <div class="d-flex align-items-center mb-0">
+                                        <div class="grid-row flex-grow-1 d-flex gap-0" style="height: 6px;">
+                                            {% for day in "0123456"|make_list %}
+                                            <div class="grid-cell flex-grow-1 border-bottom border-end"
+                                                id="cell-{{ day }}-{{ forloop.parentloop.counter0 }}"
+                                                title="{% trans 'Day' %}: {{ day }}, {% trans 'Hour' %}: {{ forloop.parentloop.counter0 }}:00"
+                                                style="background-color: #f8f9fa;">
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="d-flex  mt-0 justify-content-center">
+                                <span><i class="fas fa-circle" style="color: #28a745;"></i> {% trans "Active" %}</span> &nbsp;
+                                <span><i class="fas fa-circle" style="color: #dc3545;"></i> {% trans "Inactive" %}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Existing Table -->
             <div class="row mt-4">
                 <div class="col-12">
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -83,4 +141,87 @@
         </div>
     </form>
 </div>
+{% endblock %}
+
+{% block custom_page_scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const slots = [
+                {% for slot in slots %}
+                    {
+                        start_day: {{ slot.start_weekday }},
+                        end_day: {{ slot.end_weekday }},
+                        start_time: "{{ slot.start_time|time:'H:i' }}",
+                        end_time: "{{ slot.end_time|time:'H:i' }}"
+                    },
+                {% endfor %}
+            ];
+
+            function timeToMinutes(timeStr) {
+                const [hours, minutes] = timeStr.split(':').map(Number);
+                return hours * 60 + minutes;
+            }
+
+            function isHourCovered(day, hour) {
+                const hourStart = hour * 60;
+                const hourEnd = (hour + 1) * 60;
+
+                // Normalize day to 0-6 (Mon-Sun)
+                // Note: Our model uses 0=Monday, which matches the grid loop
+
+                for (const slot of slots) {
+                    let currentDay = slot.start_day;
+                    let currentMinutes = timeToMinutes(slot.start_time);
+
+                    // Calculate total duration in minutes
+                    let totalMinutes = 0;
+                    let endMinutes = timeToMinutes(slot.end_time);
+
+                    let tempDay = slot.start_day;
+                    while (tempDay != slot.end_day) {
+                        totalMinutes += 1440; // 24 * 60
+                        tempDay = (tempDay + 1) % 7;
+                    }
+                    totalMinutes = totalMinutes - currentMinutes + endMinutes;
+                    if (totalMinutes < 0) totalMinutes += 7 * 1440; // Wrap around week
+
+                    // Check if the hour [day:hourStart, day:hourEnd] overlaps with [slotStart, slotEnd]
+                    // Convert everything to week minutes
+                    const slotStartWeekMinutes = slot.start_day * 1440 + currentMinutes;
+                    const hourStartWeekMinutes = day * 1440 + hourStart;
+                    const hourEndWeekMinutes = day * 1440 + hourEnd;
+
+                    // Handle wrap around week
+                    const weekTotal = 7 * 1440;
+
+                    // A simple way is to check the range [slotStart, slotStart + totalMinutes]
+                    // and see if the hour (or its week-repetitions) overlaps it.
+
+                    // Try for current week and next week (to handle wrap)
+                    for (let offset of [0, -weekTotal, weekTotal]) {
+                        const s = slotStartWeekMinutes + offset;
+                        const e = s + totalMinutes;
+
+                        if (Math.max(s, hourStartWeekMinutes) < Math.min(e, hourEndWeekMinutes)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            for (let day = 0; day < 7; day++) {
+                for (let hour = 0; hour < 24; hour++) {
+                    const cell = document.getElementById(`cell-${day}-${hour}`);
+                    if (cell) {
+                        if (isHourCovered(day, hour)) {
+                            cell.style.backgroundColor = '#28a745'; // green-ish
+                        } else {
+                            cell.style.backgroundColor = '#dc3545'; // red-ish
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 {% endblock %}
