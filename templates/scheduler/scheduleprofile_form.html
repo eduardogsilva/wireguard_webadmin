@@ -35,19 +35,19 @@
                         <div class="card-body p-1">
                             <div class="schedule-grid-container mb-1">
                                 <div class="schedule-grid-header d-flex text-center mb-0">
-                                    <div class="flex-grow-1">{% trans "M" %}
+                                    <div class="flex-grow-1">Mon
                                     </div>
-                                    <div class="flex-grow-1">{% trans "T" %}
+                                    <div class="flex-grow-1">Tue
                                     </div>
-                                    <div class="flex-grow-1">{% trans "W" %}
+                                    <div class="flex-grow-1">Wed
                                     </div>
-                                    <div class="flex-grow-1">{% trans "T" %}
+                                    <div class="flex-grow-1">Thu
                                     </div>
-                                    <div class="flex-grow-1">{% trans "F" %}
+                                    <div class="flex-grow-1">Fri
                                     </div>
-                                    <div class="flex-grow-1">{% trans "S" %}
+                                    <div class="flex-grow-1">Sat
                                     </div>
-                                    <div class="flex-grow-1" >{% trans "S" %}
+                                    <div class="flex-grow-1" >Sun
                                     </div>
                                 </div>
                                 <div class="schedule-grid-body">
@@ -57,7 +57,7 @@
                                             {% for day in "0123456"|make_list %}
                                             <div class="grid-cell flex-grow-1 border-bottom border-end"
                                                 id="cell-{{ day }}-{{ forloop.parentloop.counter0 }}"
-                                                title="{% trans 'Day' %}: {{ day }}, {% trans 'Hour' %}: {{ forloop.parentloop.counter0 }}:00"
+                                                title="{{ forloop.parentloop.counter0 }}:00"
                                                 style="background-color: #f8f9fa;">
                                             </div>
                                             {% endfor %}
