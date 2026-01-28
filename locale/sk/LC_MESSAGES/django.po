@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-27 15:08-0300\n"
+"POT-Creation-Date: 2026-01-28 12:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -865,6 +865,34 @@ msgstr ""
 "        <p>Poznámka: v závislosti od počtu trás a peerov môže povolenie "
 "tejto možnosti vygenerovať veľký počet pravidiel firewallu.</p>\n"
 "        "
+
+#: scheduler/models.py:9
+msgid "Monday"
+msgstr ""
+
+#: scheduler/models.py:10
+msgid "Tuesday"
+msgstr ""
+
+#: scheduler/models.py:11
+msgid "Wednesday"
+msgstr ""
+
+#: scheduler/models.py:12
+msgid "Thursday"
+msgstr ""
+
+#: scheduler/models.py:13
+msgid "Friday"
+msgstr ""
+
+#: scheduler/models.py:14
+msgid "Saturday"
+msgstr ""
+
+#: scheduler/models.py:15
+msgid "Sunday"
+msgstr ""
 
 #: templates/access_denied.html:12
 msgid "Sorry, you do not have permission to access this page."
@@ -1950,7 +1978,8 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Voliteľný názov používaný iba na zobrazenie vo webovom rozhraní.\n"
+"                                Voliteľný názov používaný iba na zobrazenie "
+"vo webovom rozhraní.\n"
 "                            "
 
 #: templates/wireguard/wireguard_manage_server.html:31 wireguard/forms.py:23
@@ -1965,7 +1994,8 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Interval používaný na obnovenie informácií o stave WireGuard vo webovom používateľskom rozhraní.\n"
+"                                Interval používaný na obnovenie informácií o "
+"stave WireGuard vo webovom používateľskom rozhraní.\n"
 "                            "
 
 #: templates/wireguard/wireguard_manage_server.html:37
@@ -1984,9 +2014,11 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Verejný názov hostiteľa alebo IP adresa a UDP port, ktorý používajú peeri na pripojenie.\n"
+"                                Verejný názov hostiteľa alebo IP adresa a "
+"UDP port, ktorý používajú peeri na pripojenie.\n"
 "                                <br>\n"
-"                                <b>Port počúvania</b> musí byť sprístupnený a namapovaný vo vašom súbore Docker compose (YAML).\n"
+"                                <b>Port počúvania</b> musí byť sprístupnený "
+"a namapovaný vo vašom súbore Docker compose (YAML).\n"
 "                            "
 
 #: templates/wireguard/wireguard_manage_server.html:45
@@ -2005,10 +2037,12 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Súkromné a verejné kľúče WireGuard pre toto rozhranie.\n"
+"                                Súkromné a verejné kľúče WireGuard pre toto "
+"rozhranie.\n"
 "                                <br>\n"
 "                                Súkromný kľúč musí zostať v tajnosti.\n"
-"                                Jeho zmena vyžaduje aktualizáciu konfigurácií všetkých peerov.\n"
+"                                Jeho zmena vyžaduje aktualizáciu "
+"konfigurácií všetkých peerov.\n"
 "                            "
 
 #: templates/wireguard/wireguard_manage_server.html:54
@@ -2023,7 +2057,8 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Interná IP adresa a sieťová maska používaná rozhraním WireGuard.\n"
+"                                Interná IP adresa a sieťová maska používaná "
+"rozhraním WireGuard.\n"
 "                            "
 
 #: templates/wireguard/wireguard_manage_server.html:60
@@ -2043,7 +2078,8 @@ msgstr ""
 "\n"
 "                                DNS servery odoslané peerom.\n"
 "                                <br>\n"
-"                                Použitie internej IP ako primárneho DNS umožňuje interné rozlíšenie názvov\n"
+"                                Použitie internej IP ako primárneho DNS "
+"umožňuje interné rozlíšenie názvov\n"
 "                                a filtrovanie DNS.\n"
 "                            "
 
@@ -2062,11 +2098,14 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Vynucuje smerovacie pravidlá definované smerovacími šablónami pomocou pravidiel firewallu.\n"
+"                                Vynucuje smerovacie pravidlá definované "
+"smerovacími šablónami pomocou pravidiel firewallu.\n"
 "                                <br>\n"
-"                                Peeri s predvolenou trasou (0.0.0.0/0) nie sú obmedzení.\n"
+"                                Peeri s predvolenou trasou (0.0.0.0/0) nie "
+"sú obmedzení.\n"
 "                                <br><br>\n"
-"                                Poznámka: v závislosti od poču trás a peerov môže táto možnosť vygenerovať\n"
+"                                Poznámka: v závislosti od poču trás a peerov "
+"môže táto možnosť vygenerovať\n"
 "                                veľký počet pravidiel firewallu.\n"
 "                            "
 
@@ -2760,7 +2799,7 @@ msgstr ""
 msgid "Route template applied successfully."
 msgstr "Smerovacia šablóna bola úspešne použitá."
 
-#: wireguard_tools/views.py:165
+#: wireguard_tools/views.py:181
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/."
@@ -2768,7 +2807,7 @@ msgstr ""
 "Export úspešný!|WireGuard konfiguračné súbory boli exportované do /etc/"
 "wireguard/."
 
-#: wireguard_tools/views.py:167
+#: wireguard_tools/views.py:183
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/. Don't forget to restart the interfaces."
@@ -2776,19 +2815,19 @@ msgstr ""
 "Export úspešný!|WireGuard konfiguračné súbory boli exportované do /etc/"
 "wireguard/. Nezabudnite reštartovať rozhrania."
 
-#: wireguard_tools/views.py:269
+#: wireguard_tools/views.py:285
 msgid "Error reloading"
 msgstr "Chyba pri opätovnom načítaní"
 
-#: wireguard_tools/views.py:281
+#: wireguard_tools/views.py:297
 msgid "Error stopping"
 msgstr "Chyba pri zastavovaní"
 
-#: wireguard_tools/views.py:286
+#: wireguard_tools/views.py:302
 msgid "Error starting"
 msgstr "Chyba pri spúšťaní"
 
-#: wireguard_tools/views.py:293
+#: wireguard_tools/views.py:309
 msgid ""
 "WARNING|Please note that the interface was reloaded, not restarted. Double-"
 "check if the the peers are working as expected. If you find any issues, "
@@ -2798,20 +2837,20 @@ msgstr ""
 "reštartované. Dôkladne skontrolujte či peeri fungujú podľa očakávania. Ak "
 "nájdete problémy, prosím nahláste ich."
 
-#: wireguard_tools/views.py:294
+#: wireguard_tools/views.py:310
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
 msgstr "WireGuard znovu načítaný|Služba WireGuard bola znovu načítaná."
 
-#: wireguard_tools/views.py:296
+#: wireguard_tools/views.py:312
 msgid "WireGuard restarted|The WireGuard service has been restarted."
 msgstr "WireGuard reštartovaný|Služba WireGuard bola reštartovaná."
 
-#: wireguard_tools/views.py:299
+#: wireguard_tools/views.py:315
 msgid "Errors encountered|Error processing one or more interfaces."
 msgstr ""
 "Vyskytli sa chyby|Chyba pri spracovaní jedného alebo viacerých rozhraní."
 
-#: wireguard_tools/views.py:302
+#: wireguard_tools/views.py:318
 msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Neboli nájdené rozhrania|Neboli nájdené žiadne WireGuard rozhrania na "

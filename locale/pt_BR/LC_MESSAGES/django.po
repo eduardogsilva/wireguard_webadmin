@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-27 15:08-0300\n"
+"POT-Creation-Date: 2026-01-28 12:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -756,8 +756,7 @@ msgid ""
 "'%(line)s' is not a network address. Use the network address (e.g., "
 "'%(net)s')."
 msgstr ""
-"'%(line)s' não é um endereço de rede. Use o endereço da rede (ex: "
-"'%(net)s')."
+"'%(line)s' não é um endereço de rede. Use o endereço da rede (ex: '%(net)s')."
 
 #: routing_templates/models.py:13
 msgid "Default Route (0.0.0.0/0)"
@@ -873,6 +872,34 @@ msgstr ""
 "        <p>Nota: dependendo do número de rotas e clientes, ativar esta opção "
 "pode gerar um grande número de regras de firewall.</p>\n"
 "        "
+
+#: scheduler/models.py:9
+msgid "Monday"
+msgstr ""
+
+#: scheduler/models.py:10
+msgid "Tuesday"
+msgstr ""
+
+#: scheduler/models.py:11
+msgid "Wednesday"
+msgstr ""
+
+#: scheduler/models.py:12
+msgid "Thursday"
+msgstr ""
+
+#: scheduler/models.py:13
+msgid "Friday"
+msgstr ""
+
+#: scheduler/models.py:14
+msgid "Saturday"
+msgstr ""
+
+#: scheduler/models.py:15
+msgid "Sunday"
+msgstr ""
 
 #: templates/access_denied.html:12
 msgid "Sorry, you do not have permission to access this page."
@@ -1963,7 +1990,8 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Nome opcional usado apenas para exibição na interface web.\n"
+"                                Nome opcional usado apenas para exibição na "
+"interface web.\n"
 "                            "
 
 #: templates/wireguard/wireguard_manage_server.html:31 wireguard/forms.py:23
@@ -1978,7 +2006,8 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Intervalo usado para atualizar as informações de status do WireGuard na interface web.\n"
+"                                Intervalo usado para atualizar as "
+"informações de status do WireGuard na interface web.\n"
 "                            "
 
 #: templates/wireguard/wireguard_manage_server.html:37
@@ -1997,9 +2026,11 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Nome de host público ou endereço IP e porta UDP usados pelos peers para se conectar.\n"
+"                                Nome de host público ou endereço IP e porta "
+"UDP usados pelos peers para se conectar.\n"
 "                                <br>\n"
-"                                A <b>listen port</b> deve estar exposta e mapeada em seu arquivo Docker compose (YAML).\n"
+"                                A <b>listen port</b> deve estar exposta e "
+"mapeada em seu arquivo Docker compose (YAML).\n"
 "                            "
 
 #: templates/wireguard/wireguard_manage_server.html:45
@@ -2018,10 +2049,12 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Chaves privada e pública do WireGuard para esta interface.\n"
+"                                Chaves privada e pública do WireGuard para "
+"esta interface.\n"
 "                                <br>\n"
 "                                A chave privada deve permanecer em segredo.\n"
-"                                Alterá-la requer a atualização de todas as configurações dos peers.\n"
+"                                Alterá-la requer a atualização de todas as "
+"configurações dos peers.\n"
 "                            "
 
 #: templates/wireguard/wireguard_manage_server.html:54
@@ -2036,7 +2069,8 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Endereço IP interno e máscara de rede usados pela interface WireGuard.\n"
+"                                Endereço IP interno e máscara de rede usados "
+"pela interface WireGuard.\n"
 "                            "
 
 #: templates/wireguard/wireguard_manage_server.html:60
@@ -2056,7 +2090,8 @@ msgstr ""
 "\n"
 "                                Servidores DNS enviados aos peers.\n"
 "                                <br>\n"
-"                                Usar o IP interno como DNS primário habilita a resolução de nomes interna\n"
+"                                Usar o IP interno como DNS primário habilita "
+"a resolução de nomes interna\n"
 "                                e filtragem de DNS.\n"
 "                            "
 
@@ -2075,11 +2110,14 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"                                Força as regras de roteamento definidas pelos modelos de roteamento usando regras de firewall.\n"
+"                                Força as regras de roteamento definidas "
+"pelos modelos de roteamento usando regras de firewall.\n"
 "                                <br>\n"
-"                                Peers com uma rota padrão (0.0.0.0/0) não são restringidos.\n"
+"                                Peers com uma rota padrão (0.0.0.0/0) não "
+"são restringidos.\n"
 "                                <br><br>\n"
-"                                Nota: dependendo do número de rotas e peers, esta opção pode gerar\n"
+"                                Nota: dependendo do número de rotas e peers, "
+"esta opção pode gerar\n"
 "                                um grande número de regras de firewall.\n"
 "                            "
 
@@ -2781,7 +2819,7 @@ msgstr ""
 msgid "Route template applied successfully."
 msgstr "Modelo de roteamento aplicado com sucesso."
 
-#: wireguard_tools/views.py:165
+#: wireguard_tools/views.py:181
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/."
@@ -2789,7 +2827,7 @@ msgstr ""
 "Exportação bem-sucedida!|Os arquivos de configuração do WireGuard foram "
 "exportados para /etc/wireguard/."
 
-#: wireguard_tools/views.py:167
+#: wireguard_tools/views.py:183
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/. Don't forget to restart the interfaces."
@@ -2797,19 +2835,19 @@ msgstr ""
 "Exportação bem-sucedida!|Os arquivos de configuração do WireGuard foram "
 "exportados para /etc/wireguard/. Não se esqueça de reiniciar as interfaces."
 
-#: wireguard_tools/views.py:269
+#: wireguard_tools/views.py:285
 msgid "Error reloading"
 msgstr "Erro ao recarregar"
 
-#: wireguard_tools/views.py:281
+#: wireguard_tools/views.py:297
 msgid "Error stopping"
 msgstr "Erro ao parar"
 
-#: wireguard_tools/views.py:286
+#: wireguard_tools/views.py:302
 msgid "Error starting"
 msgstr "Erro ao iniciar"
 
-#: wireguard_tools/views.py:293
+#: wireguard_tools/views.py:309
 msgid ""
 "WARNING|Please note that the interface was reloaded, not restarted. Double-"
 "check if the the peers are working as expected. If you find any issues, "
@@ -2819,19 +2857,19 @@ msgstr ""
 "Verifique se os peers estão funcionando como esperado. Se você encontrar "
 "algum problema, por favor, relate-o."
 
-#: wireguard_tools/views.py:294
+#: wireguard_tools/views.py:310
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
 msgstr "WireGuard recarregado|O serviço WireGuard foi recarregado."
 
-#: wireguard_tools/views.py:296
+#: wireguard_tools/views.py:312
 msgid "WireGuard restarted|The WireGuard service has been restarted."
 msgstr "WireGuard reiniciado|O serviço WireGuard foi reiniciado."
 
-#: wireguard_tools/views.py:299
+#: wireguard_tools/views.py:315
 msgid "Errors encountered|Error processing one or more interfaces."
 msgstr "Erros encontrados|Erro ao processar uma ou mais interfaces."
 
-#: wireguard_tools/views.py:302
+#: wireguard_tools/views.py:318
 msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Nenhuma interface encontrada|Nenhuma interface WireGuard foi encontrada para "
