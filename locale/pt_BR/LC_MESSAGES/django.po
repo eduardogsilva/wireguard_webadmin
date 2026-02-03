@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-28 16:23-0300\n"
+"POT-Creation-Date: 2026-02-03 11:38-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,8 @@ msgid "Name"
 msgstr "Nome"
 
 #: cluster/forms.py:19 templates/cluster/workers_list.html:96
-#: vpn_invite/forms.py:49 vpn_invite/forms.py:294
+#: templates/wireguard/wireguard_peer_list.html:43 vpn_invite/forms.py:49
+#: vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Habilitado"
 
@@ -82,8 +83,8 @@ msgstr "Voltar"
 #: routing_templates/forms.py:37
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
-#: templates/scheduler/scheduleprofile_form.html:54
-#: templates/scheduler/scheduleprofile_list.html:33
+#: templates/scheduler/scheduleprofile_form.html:112
+#: templates/scheduler/scheduleprofile_list.html:29
 #: templates/wireguard/peer_list/peer_preview_modal.html:109
 #: templates/wireguard/wireguard_manage_ip.html:43 user_manager/forms.py:48
 #: user_manager/forms.py:181 wireguard/forms.py:52
@@ -91,11 +92,11 @@ msgid "Delete"
 msgstr "Excluir"
 
 #: cluster/forms.py:67 cluster/forms.py:124 dns/forms.py:37 dns/forms.py:83
-#: dns/forms.py:134 routing_templates/forms.py:70 scheduler/forms.py:63
+#: dns/forms.py:134 routing_templates/forms.py:70 scheduler/forms.py:61
 #: templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
-#: templates/scheduler/scheduleprofile_form.html:76
+#: templates/scheduler/scheduleprofile_form.html:134
 #: templates/wireguard/wireguard_manage_ip.html:41 user_manager/forms.py:98
 #: user_manager/forms.py:205 vpn_invite/forms.py:191 vpn_invite/forms.py:325
 #: wireguard/forms.py:100 wireguard_peer/forms.py:21
@@ -877,23 +878,23 @@ msgstr ""
 "pode gerar um grande número de regras de firewall.</p>\n"
 "        "
 
-#: scheduler/forms.py:16
+#: scheduler/forms.py:14
 msgid "Profile Name"
 msgstr "Nome do Perfil"
 
-#: scheduler/forms.py:40 templates/scheduler/scheduleprofile_form.html:34
+#: scheduler/forms.py:38 templates/scheduler/scheduleprofile_form.html:92
 msgid "Start Day"
 msgstr "Dia de Início"
 
-#: scheduler/forms.py:41 templates/scheduler/scheduleprofile_form.html:35
+#: scheduler/forms.py:39 templates/scheduler/scheduleprofile_form.html:93
 msgid "Start Time"
 msgstr "Hora de Início"
 
-#: scheduler/forms.py:42 templates/scheduler/scheduleprofile_form.html:36
+#: scheduler/forms.py:40 templates/scheduler/scheduleprofile_form.html:94
 msgid "End Day"
 msgstr "Dia de Término"
 
-#: scheduler/forms.py:43 templates/scheduler/scheduleprofile_form.html:37
+#: scheduler/forms.py:41 templates/scheduler/scheduleprofile_form.html:95
 msgid "End Time"
 msgstr "Hora de Término"
 
@@ -958,19 +959,19 @@ msgstr "Editar Intervalo de Horário"
 msgid "Add Time Interval"
 msgstr "Adicionar Intervalo de Horário"
 
-#: scheduler/views.py:93
+#: scheduler/views.py:92
 msgid "Time Interval saved successfully."
 msgstr "Intervalo de horário salvo com sucesso."
 
-#: scheduler/views.py:117
+#: scheduler/views.py:115
 msgid "Time Interval deleted successfully."
 msgstr "Intervalo de horário excluído com sucesso."
 
-#: scheduler/views.py:122
+#: scheduler/views.py:120
 msgid "Delete Time Interval"
 msgstr "Excluir Intervalo de Horário"
 
-#: scheduler/views.py:124
+#: scheduler/views.py:122
 msgid "Are you sure you want to delete this time interval?"
 msgstr "Tem certeza de que deseja excluir este intervalo de horário?"
 
@@ -1062,8 +1063,8 @@ msgstr "Visto pela última vez há mais de 10 minutos ou nunca visto."
 #: templates/cluster/workers_list.html:77
 #: templates/dns/static_host_list.html:74
 #: templates/routing_templates/list.html:29
-#: templates/scheduler/scheduleprofile_form.html:50
-#: templates/scheduler/scheduleprofile_list.html:29
+#: templates/scheduler/scheduleprofile_form.html:108
+#: templates/scheduler/scheduleprofile_list.html:25
 #: templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/peer_list/peer_preview_modal.html:137
@@ -1537,39 +1538,55 @@ msgstr ""
 msgid "Create Port forwarding Rule"
 msgstr "Criar Regra de Encaminhamento de Porta"
 
+#: templates/generic_delete_confirmation.html:16
+msgid "Confirm Delete"
+msgstr "Confirmar Exclusão"
+
+#: templates/generic_delete_confirmation.html:19
+#: templates/scheduler/scheduleprofile_form.html:137
+msgid "Cancel"
+msgstr "Cancelar"
+
 #: templates/routing_templates/list.html:11
 msgid "Default"
 msgstr "Política Padrão"
 
 #: templates/routing_templates/list.html:12
-#: templates/scheduler/scheduleprofile_list.html:16
 msgid "Updated"
 msgstr "Atualizar"
 
-#: templates/scheduler/generic_delete_confirm.html:16
-msgid "Confirm Delete"
-msgstr "Confirmar Exclusão"
+#: templates/scheduler/scheduleprofile_form.html:33
+#, fuzzy
+#| msgid "Schedule Slots"
+msgid "Schedule Visualization"
+msgstr "Slots de Agendamento"
 
-#: templates/scheduler/generic_delete_confirm.html:19
-#: templates/scheduler/scheduleprofile_form.html:79
-msgid "Cancel"
-msgstr "Cancelar"
+#: templates/scheduler/scheduleprofile_form.html:70
+#: templates/wireguard/apply_route_template.html:44
+msgid "Active"
+msgstr "Ativo"
 
-#: templates/scheduler/scheduleprofile_form.html:24
+#: templates/scheduler/scheduleprofile_form.html:71
+#, fuzzy
+#| msgid "Active"
+msgid "Inactive"
+msgstr "Ativo"
+
+#: templates/scheduler/scheduleprofile_form.html:82
 msgid "Time Intervals"
 msgstr "Intervalos de Horário"
 
-#: templates/scheduler/scheduleprofile_form.html:27
+#: templates/scheduler/scheduleprofile_form.html:85
 msgid "Add Interval"
 msgstr "Adicionar Intervalo"
 
-#: templates/scheduler/scheduleprofile_form.html:38
-#: templates/scheduler/scheduleprofile_list.html:17
+#: templates/scheduler/scheduleprofile_form.html:96
+#: templates/scheduler/scheduleprofile_list.html:15
 #: templates/wireguard/apply_route_template.html:28
 msgid "Actions"
 msgstr "Ações"
 
-#: templates/scheduler/scheduleprofile_form.html:62
+#: templates/scheduler/scheduleprofile_form.html:120
 msgid "No time intervals found."
 msgstr "Nenhum intervalo de horário encontrado."
 
@@ -1578,19 +1595,18 @@ msgid "Schedule Profiles"
 msgstr "Perfis de Agendamento"
 
 #: templates/scheduler/scheduleprofile_list.html:14
-#: templates/scheduler/scheduleprofile_list.html:14
-msgid "Intervals Count"
-msgstr "Contagem de Intervalos"
+#: templates/user_manager/peer_group_list.html:9
+#: templates/wireguard/server_detail.html:43
+#: templates/wireguard/server_list.html:22
+#: templates/wireguard/wireguard_status.html:48
+msgid "Peers"
+msgstr "Peers"
 
-#: templates/scheduler/scheduleprofile_list.html:15
-msgid "Created"
-msgstr "Relacionado"
-
-#: templates/scheduler/scheduleprofile_list.html:40
+#: templates/scheduler/scheduleprofile_list.html:36
 msgid "No schedule profiles found."
 msgstr "Nenhum perfil de agendamento encontrado."
 
-#: templates/scheduler/scheduleprofile_list.html:48
+#: templates/scheduler/scheduleprofile_list.html:44
 msgid "Add Profile"
 msgstr "Adicionar Perfil"
 
@@ -1685,13 +1701,6 @@ msgstr "Lista de Grupos de Peers"
 msgid "Add Peer Group"
 msgstr "Adicionar Grupo de Peers"
 
-#: templates/user_manager/peer_group_list.html:9
-#: templates/wireguard/server_detail.html:43
-#: templates/wireguard/server_list.html:22
-#: templates/wireguard/wireguard_status.html:48
-msgid "Peers"
-msgstr "Peers"
-
 #: templates/user_manager/peer_group_list.html:10 user_manager/forms.py:179
 msgid "Server Instance"
 msgstr "Instância do WireGuard"
@@ -1720,7 +1729,7 @@ msgstr "Configurações de Email"
 msgid "Invite Settings"
 msgstr "Configurações de Convite"
 
-#: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:368
+#: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:389
 msgid "Apply Route Template"
 msgstr "Aplicar Modelo de Roteamento"
 
@@ -1739,10 +1748,6 @@ msgstr "Nome do Modelo"
 #: templates/wireguard/apply_route_template.html:27
 msgid "Type"
 msgstr "Tipo"
-
-#: templates/wireguard/apply_route_template.html:44
-msgid "Active"
-msgstr "Ativo"
 
 #: templates/wireguard/apply_route_template.html:48
 msgid "Unlink"
@@ -1768,7 +1773,7 @@ msgstr "Transferência"
 
 #: templates/wireguard/peer_list/peer_data.html:44
 #: templates/wireguard/peer_list/script_wireguard_status_update.html:146
-#: wireguard_peer/views.py:91
+#: wireguard_peer/views.py:111
 msgid "Primary Server"
 msgstr "Servidor Primário"
 
@@ -2255,11 +2260,15 @@ msgstr "Você tem certeza que deseja criar um novo peer?"
 msgid "Create Peer"
 msgstr "Criar Peer"
 
-#: templates/wireguard/wireguard_peer_list.html:50
+#: templates/wireguard/wireguard_peer_list.html:48 vpn_invite/forms.py:49
+msgid "Disabled"
+msgstr "Desabilitado"
+
+#: templates/wireguard/wireguard_peer_list.html:61
 msgid "No WireGuard Instances Found"
 msgstr "Nenhuma Instância do WireGuard Encontrada"
 
-#: templates/wireguard/wireguard_peer_list.html:52
+#: templates/wireguard/wireguard_peer_list.html:63
 msgid ""
 "There are no WireGuard instances configured. You can add a new instance by "
 "clicking the button below."
@@ -2267,7 +2276,7 @@ msgstr ""
 "Não há instâncias do WireGuard configuradas. Você pode adicionar uma nova "
 "instância clicando no botão abaixo."
 
-#: templates/wireguard/wireguard_peer_list.html:56
+#: templates/wireguard/wireguard_peer_list.html:67
 msgid "Add WireGuard Instance"
 msgstr "Adicionar Instância do WireGuard"
 
@@ -2490,10 +2499,6 @@ msgstr ""
 #: user_manager/views.py:175
 msgid "Please type the username to proceed."
 msgstr "Por favor, digite o nome de usuário para prosseguir."
-
-#: vpn_invite/forms.py:49
-msgid "Disabled"
-msgstr "Desabilitado"
 
 #: vpn_invite/forms.py:68 vpn_invite/forms.py:69 vpn_invite/forms.py:70
 #: vpn_invite/forms.py:71 vpn_invite/forms.py:72
@@ -2852,59 +2857,65 @@ msgstr "Prioridade deve ser maior ou igual a 1"
 msgid "Invalid config file"
 msgstr "Arquivo de configuração inválido"
 
-#: wireguard_peer/views.py:53
+#: wireguard_peer/views.py:57
+#, fuzzy
+#| msgid "WireGuard Peer List"
+msgid "Disabled WireGuard Peer List"
+msgstr "Lista de Peers do WireGuard"
+
+#: wireguard_peer/views.py:60
 msgid "WireGuard Peer List"
 msgstr "Lista de Peers do WireGuard"
 
-#: wireguard_peer/views.py:176
+#: wireguard_peer/views.py:197
 msgid "Peer created|Peer created successfully."
 msgstr "Peer adicionado|Peer adicionado com sucesso."
 
-#: wireguard_peer/views.py:181
+#: wireguard_peer/views.py:202
 msgid "Error creating peer|No available IP address found for peer creation."
 msgstr ""
 "Erro ao criar peer|Nenhum endereço IP disponível encontrado para alocação. "
 
-#: wireguard_peer/views.py:204
+#: wireguard_peer/views.py:225
 msgid "Peer deleted|Peer deleted successfully."
 msgstr "Peer excluído|Peer excluído com sucesso."
 
-#: wireguard_peer/views.py:207
+#: wireguard_peer/views.py:228
 msgid ""
 "Error deleting peer|Invalid confirmation message. Type \"delete\" to confirm."
 msgstr ""
 "Erro ao excluir peer|Mensagem de confirmação inválida. Digite \"delete\" "
 "para confirmar."
 
-#: wireguard_peer/views.py:209
+#: wireguard_peer/views.py:230
 msgid "Peer Configuration: "
 msgstr "Configuração do Peer: "
 
-#: wireguard_peer/views.py:247
+#: wireguard_peer/views.py:268
 msgid "Peer updated|Peer updated successfully."
 msgstr "Peer atualizado|Peer atualizado com sucesso."
 
-#: wireguard_peer/views.py:250
+#: wireguard_peer/views.py:271
 msgid "Edit Peer"
 msgstr "Editar Peer"
 
-#: wireguard_peer/views.py:252
+#: wireguard_peer/views.py:273
 msgid "Edit Peer Name"
 msgstr "Editar Nome do Peer"
 
-#: wireguard_peer/views.py:254
+#: wireguard_peer/views.py:275
 msgid "Edit Keepalive"
 msgstr "Editar Keepalive"
 
-#: wireguard_peer/views.py:256
+#: wireguard_peer/views.py:277
 msgid "Edit Keys"
 msgstr "Editar Chaves"
 
-#: wireguard_peer/views.py:288
+#: wireguard_peer/views.py:309
 msgid "IP address deleted|IP address deleted successfully."
 msgstr "Endereço IP excluído|Endereço IP excluído com sucesso."
 
-#: wireguard_peer/views.py:293
+#: wireguard_peer/views.py:314
 msgid ""
 "Error deleting IP address|Invalid confirmation message. Type \"delete\" to "
 "confirm."
@@ -2912,27 +2923,27 @@ msgstr ""
 "Erro ao excluir endereço IP|Mensagem de confirmação inválida. Digite "
 "\"delete\" para confirmar."
 
-#: wireguard_peer/views.py:298
+#: wireguard_peer/views.py:319
 msgid "Manage client route"
 msgstr "Gerenciar rota do cliente"
 
-#: wireguard_peer/views.py:300
+#: wireguard_peer/views.py:321
 msgid "Manage IP address or Network"
 msgstr "Gerenciar Endereço IP ou Rede"
 
-#: wireguard_peer/views.py:313
+#: wireguard_peer/views.py:334
 msgid "IP address updated|IP address updated successfully."
 msgstr "Endereço IP atualizado|Endereço IP atualizado com sucesso."
 
-#: wireguard_peer/views.py:315
+#: wireguard_peer/views.py:336
 msgid "IP address added|IP address added successfully."
 msgstr "Endereço IP adicionado|Endereço IP adicionado com sucesso."
 
-#: wireguard_peer/views.py:347
+#: wireguard_peer/views.py:368
 msgid "Route template unlinked successfully."
 msgstr "Modelo de roteamento desvinculado com sucesso."
 
-#: wireguard_peer/views.py:357
+#: wireguard_peer/views.py:378
 msgid ""
 "Cannot apply template: This template does not allow custom routes, but the "
 "peer has custom client routes defined."
@@ -2940,7 +2951,7 @@ msgstr ""
 "Não é possível aplicar o modelo: Este modelo não permite rotas "
 "personalizadas, mas o peer possui rotas de cliente personalizadas definidas."
 
-#: wireguard_peer/views.py:364
+#: wireguard_peer/views.py:385
 msgid "Route template applied successfully."
 msgstr "Modelo de roteamento aplicado com sucesso."
 
@@ -3000,6 +3011,12 @@ msgstr ""
 "Nenhuma interface encontrada|Nenhuma interface WireGuard foi encontrada para "
 "processar."
 
+#~ msgid "Intervals Count"
+#~ msgstr "Contagem de Intervalos"
+
+#~ msgid "Created"
+#~ msgstr "Relacionado"
+
 #~ msgid "Slots Count"
 #~ msgstr "Contagem de Slots"
 
@@ -3017,9 +3034,6 @@ msgstr ""
 
 #~ msgid "Delete Schedule Slot"
 #~ msgstr "Excluir Slot de Agendamento"
-
-#~ msgid "Schedule Slots"
-#~ msgstr "Slots de Agendamento"
 
 #~ msgid "Add Slot"
 #~ msgstr "Adicionar Slot"
