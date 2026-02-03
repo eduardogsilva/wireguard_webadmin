@@ -150,9 +150,6 @@ This mode is recommended for running the web admin interface. The container depl
 
 After completing these steps, your WireGuard WebAdmin should be up and running. Begin the configuration by accessing your server's web interface.
 
-Certainly, let's refine the upgrade instructions with the inclusion of a backup step for the database and a more appropriate suggestion for transitioning users from a git clone workflow. 
-
-
 ## Upgrade Instructions
 
 Upgrading your WireGuard WebAdmin installation ensures you have access to the latest features, security improvements, and bug fixes. Follow these instructions for a smooth upgrade:
