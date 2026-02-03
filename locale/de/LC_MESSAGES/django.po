@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-03 14:41-0300\n"
+"POT-Creation-Date: 2026-02-03 14:49-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,8 +30,7 @@ msgid "Name"
 msgstr "Name"
 
 #: cluster/forms.py:19 templates/cluster/workers_list.html:96
-#: templates/wireguard/wireguard_peer_list.html:43 vpn_invite/forms.py:49
-#: vpn_invite/forms.py:294
+#: vpn_invite/forms.py:49 vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Aktiviert"
 
@@ -2281,8 +2280,16 @@ msgstr "Sind Sie sicher, dass Sie einen neuen Peer erstellen möchten?"
 msgid "Create Peer"
 msgstr "Peer erstellen"
 
-#: templates/wireguard/wireguard_peer_list.html:48 vpn_invite/forms.py:49
-msgid "Disabled"
+#: templates/wireguard/wireguard_peer_list.html:43
+#, fuzzy
+#| msgid "Enabled"
+msgid "Enabled Peers"
+msgstr "Aktiviert"
+
+#: templates/wireguard/wireguard_peer_list.html:48
+#, fuzzy
+#| msgid "Disabled"
+msgid "Disabled Peers"
 msgstr "Deaktiviert"
 
 #: templates/wireguard/wireguard_peer_list.html:61
@@ -2522,6 +2529,10 @@ msgstr ""
 #: user_manager/views.py:175
 msgid "Please type the username to proceed."
 msgstr "Bitte geben Sie den Benutzernamen ein, um fortzufahren."
+
+#: vpn_invite/forms.py:49
+msgid "Disabled"
+msgstr "Deaktiviert"
 
 #: vpn_invite/forms.py:68 vpn_invite/forms.py:69 vpn_invite/forms.py:70
 #: vpn_invite/forms.py:71 vpn_invite/forms.py:72
