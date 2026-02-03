@@ -8,6 +8,7 @@ from io import BytesIO
 import qrcode
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Prefetch
 from django.http import HttpResponse
 from django.shortcuts import Http404, get_object_or_404, redirect, render
 from django.utils import timezone
@@ -171,20 +172,47 @@ def export_wireguard_configuration(instance_only: WireGuardInstance = None):
             f"PrivateKey = {instance.private_key}",
             f"Address = {instance.address}/{instance.netmask}",
             f"ListenPort = {instance.listen_port}",
-            f"PostUp = {post_up_processed}",
-            f"PostDown = {post_down_processed}",
         ]
 
-        peers = Peer.objects.filter(wireguard_instance=instance)
+        if post_up_processed:
+            config_lines.append(f"PostUp = {post_up_processed}")
+        if post_down_processed:
+            config_lines.append(f"PostDown = {post_down_processed}")
+
+        config_lines.append("")
+
+        peers = (
+            Peer.objects
+            .filter(wireguard_instance=instance, suspended=False, disabled_by_schedule=False)
+            .prefetch_related(
+                Prefetch(
+                    "peerallowedip_set",
+                    queryset=PeerAllowedIP.objects.filter(config_file="server").order_by("priority"),
+                )
+            )
+        )
+
         for peer in peers:
+            allowed_ips = list(peer.peerallowedip_set.all())
+
+            if not allowed_ips:
+                prepend_line = "# "
+                peer_title = f"# WARNING: No Allowed IPs set for peer {peer}. "
+                allowed_ips_line = "# AllowedIPs = (missing)"
+            else:
+                prepend_line = ""
+                peer_title = f"# Peer: {peer}"
+                allowed_ips_line = prepend_line + "AllowedIPs = " + ", ".join(f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips)
+
             peer_lines = [
-                "[Peer]",
-                f"PublicKey = {peer.public_key}",
-                f"PresharedKey = {peer.pre_shared_key}" if peer.pre_shared_key else "",
-                f"PersistentKeepalive = {peer.persistent_keepalive}",
+                peer_title,
+                f"{prepend_line}[Peer]",
+                f"{prepend_line}PublicKey = {peer.public_key}",
             ]
-            allowed_ips = PeerAllowedIP.objects.filter(config_file='server', peer=peer).order_by('priority')
-            allowed_ips_line = "AllowedIPs = " + ", ".join([f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips])
+
+            if peer.pre_shared_key:
+                peer_lines.append(f"{prepend_line}PresharedKey = {peer.pre_shared_key}")
+            peer_lines.append(f"{prepend_line}PersistentKeepalive = {peer.persistent_keepalive}")
             peer_lines.append(allowed_ips_line)
             config_lines.extend(peer_lines)
             config_lines.append("")
