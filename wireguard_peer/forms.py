@@ -188,3 +188,34 @@ class PeerSuspensionForm(forms.ModelForm):
              raise forms.ValidationError(_('Scheduled unsuspension time must be at least 10 minutes in the future.'))
 
         return cleaned_data
+
+
+class PeerScheduleProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.peer = kwargs.pop('peer', None)
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        
+        self.helper.layout = Layout(
+            Row(Div(Field('profile'), css_class='col-md-12')),
+            Row(
+                Div(
+                    FormActions(
+                        Submit('save', _('Save'), css_class='btn-primary'),
+                        HTML(
+                            '<a class="btn btn-secondary" href="{}?peer={}">{}</a>'.format(
+                                reverse_lazy('wireguard_peer_manage'),
+                                self.peer.uuid,
+                                _("Back")
+                            )
+                        ),
+                    ),
+                    css_class='col-md-12'
+                )
+            )
+        )
+
+    class Meta:
+        model = PeerScheduling
+        fields = ['profile']

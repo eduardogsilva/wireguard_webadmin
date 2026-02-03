@@ -16,7 +16,8 @@ from user_manager.models import UserAcl
 from wgwadmlibrary.tools import check_sort_order_conflict, deduplicate_sort_order, default_sort_peers, \
     user_allowed_instances, user_allowed_peers, user_has_access_to_instance, user_has_access_to_peer
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
-from wireguard_peer.forms import PeerAllowedIPForm, PeerNameForm, PeerKeepaliveForm, PeerKeysForm, PeerSuspensionForm
+from wireguard_peer.forms import PeerAllowedIPForm, PeerNameForm, PeerKeepaliveForm, PeerKeysForm, PeerSuspensionForm, \
+    PeerScheduleProfileForm
 
 
 def generate_peer_default(wireguard_instance):
@@ -231,10 +232,17 @@ def view_wireguard_peer_manage(request):
     page_title = _('Peer Configuration: ') + str(current_peer)
     peer_ip_list = current_peer.peerallowedip_set.filter(config_file='server').order_by('priority')
     peer_client_ip_list = current_peer.peerallowedip_set.filter(config_file='client').order_by('priority')
+    
+    # Try to get peer scheduling, if it doesn't exist, it will be None
+    try:
+        peer_scheduling = current_peer.schedule
+    except PeerScheduling.DoesNotExist:
+        peer_scheduling = None
 
     context = {
         'page_title': page_title, 'current_instance': current_instance, 'current_peer': current_peer,
-        'peer_ip_list': peer_ip_list, 'peer_client_ip_list': peer_client_ip_list
+        'peer_ip_list': peer_ip_list, 'peer_client_ip_list': peer_client_ip_list,
+        'peer_scheduling': peer_scheduling
         }
     return render(request, 'wireguard/wireguard_manage_peer.html', context)
 
@@ -453,6 +461,35 @@ def view_wireguard_peer_suspend(request):
 
     context = {
         'page_title': _('Suspend / Reactivate Peer'),
+        'current_peer': current_peer,
+        'form': form,
+    }
+    return render(request, 'generic_form.html', context)
+
+
+@login_required
+def view_wireguard_peer_schedule_profile(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    
+    user_acl = get_object_or_404(UserAcl, user=request.user)
+    current_peer = get_object_or_404(Peer, uuid=request.GET.get('peer'))
+    
+    if not user_has_access_to_peer(user_acl, current_peer):
+        raise Http404
+
+    peer_scheduling, created = PeerScheduling.objects.get_or_create(peer=current_peer)
+    form = PeerScheduleProfileForm(request.POST or None, instance=peer_scheduling, peer=current_peer)
+
+    if form.is_valid():
+        form.save()
+        messages.success(request, _('Peer scheduling profile updated successfully.'))
+        current_peer.wireguard_instance.pending_changes = True
+        current_peer.wireguard_instance.save()
+        return redirect('/peer/manage/?peer=' + str(current_peer.uuid))
+
+    context = {
+        'page_title': _('Manage Peer Schedule Profile'),
         'current_peer': current_peer,
         'form': form,
     }

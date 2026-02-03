@@ -22,6 +22,9 @@ class ScheduleProfile(models.Model):
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(editable=False, default=uuid.uuid4)
 
+    def __str__(self):
+        return self.name
+
 
 class ScheduleSlot(models.Model):
     profile = models.ForeignKey(ScheduleProfile, on_delete=models.CASCADE, related_name="time_interval")

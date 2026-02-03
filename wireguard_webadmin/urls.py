@@ -42,7 +42,7 @@ from wireguard.views import view_apply_db_patches, view_wireguard_manage_instanc
     view_server_list, view_server_detail
 from wireguard_peer.views import view_manage_ip_address, view_wireguard_peer_list, view_wireguard_peer_manage, \
     view_wireguard_peer_sort, view_apply_route_template, view_wireguard_peer_create, view_wireguard_peer_edit_field, \
-    view_wireguard_peer_suspend
+    view_wireguard_peer_suspend, view_wireguard_peer_schedule_profile
 from wireguard_tools.views import download_config_or_qrcode, export_wireguard_configs, restart_wireguard_interfaces
 
 urlpatterns = [
@@ -62,6 +62,7 @@ urlpatterns = [
     path('peer/create/', view_wireguard_peer_create, name='wireguard_peer_create'),
     path('peer/edit/', view_wireguard_peer_edit_field, name='wireguard_peer_edit_field'),
     path('peer/suspend/', view_wireguard_peer_suspend, name='wireguard_peer_suspend'),
+    path('peer/schedule_profile/', view_wireguard_peer_schedule_profile, name='wireguard_peer_schedule_profile'),
     path('peer/apply_route_template/', view_apply_route_template, name='apply_route_template'),
     path('peer/manage_ip_address/', view_manage_ip_address, name='manage_ip_address'),
     path('rrd/graph/', view_rrd_graph, name='rrd_graph'),

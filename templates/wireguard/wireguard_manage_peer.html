@@ -22,6 +22,62 @@
                         </div>
                     </div>
 
+                <!-- Peer State -->
+                <div class="form-group border-bottom pb-3">
+                    <label>{% trans 'Peer State' %}</label>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex flex-column">
+                            {% if current_peer.suspended %}
+                            <span class="text-danger"><i class="fas fa-pause-circle"></i> {% trans 'Suspended' %}</span>
+                            {% if current_peer.suspend_reason %}
+                            <small class="text-muted">{{ current_peer.suspend_reason }}</small>
+                            {% endif %}
+                            {% else %}
+                            <span class="text-success"><i class="fas fa-check-circle"></i> {% trans 'Active' %}</span>
+                            {% endif %}
+
+                            {% if peer_scheduling.next_manual_suspend_at %}
+                            <small class="text-muted">{% trans 'Scheduled suspend' %}: {{ peer_scheduling.next_manual_suspend_at|date:"Y-m-d H:i" }}</small>
+                            {% endif %}
+                            {% if peer_scheduling.next_manual_unsuspend_at %}
+                            <small class="text-muted">{% trans 'Scheduled unsuspend' %}: {{ peer_scheduling.next_manual_unsuspend_at|date:"Y-m-d H:i" }}</small>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'wireguard_peer_suspend' %}?peer={{ current_peer.uuid }}" class="btn btn-tool">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Peer Schedule State -->
+                <div class="form-group border-bottom pb-3">
+                    <label>{% trans 'Peer Schedule' %}</label>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex flex-column">
+                            {% if peer_scheduling.profile %}
+                            <span><i class="fas fa-calendar-alt"></i> {{ peer_scheduling.profile.name }}</span>
+                            {% if current_peer.disabled_by_schedule %}
+                            <small class="text-danger">{% trans 'Disabled by schedule' %}</small>
+                            {% if peer_scheduling.next_scheduled_enable_at %}
+                            <small class="text-muted">{% trans 'Next enable' %}: {{ peer_scheduling.next_scheduled_enable_at|date:"Y-m-d H:i" }}</small>
+                            {% endif %}
+                            {% else %}
+                            <small class="text-success">{% trans 'Enabled by schedule' %}</small>
+                            {% if peer_scheduling.next_scheduled_disable_at %}
+                            <small class="text-muted">{% trans 'Next disable' %}: {{ peer_scheduling.next_scheduled_disable_at|date:"Y-m-d H:i" }}</small>
+                            {% endif %}
+                            {% endif %}
+                            {% else %}
+                            <span class="text-muted">{% trans 'No profile associated' %}</span>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'wireguard_peer_schedule_profile' %}?peer={{ current_peer.uuid }}"
+                            class="btn btn-tool">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                    </div>
+                </div>
+
                     <!-- Persistent Keepalive -->
                     <div class="form-group border-bottom pb-3">
                         <label>{% trans 'Persistent Keepalive' %}</label>
