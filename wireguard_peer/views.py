@@ -11,11 +11,12 @@ from django.utils.translation import gettext_lazy as _
 
 from cluster.models import ClusterSettings, Worker
 from routing_templates.models import RoutingTemplate
+from scheduler.models import PeerScheduling
 from user_manager.models import UserAcl
 from wgwadmlibrary.tools import check_sort_order_conflict, deduplicate_sort_order, default_sort_peers, \
     user_allowed_instances, user_allowed_peers, user_has_access_to_instance, user_has_access_to_peer
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
-from wireguard_peer.forms import PeerAllowedIPForm, PeerNameForm, PeerKeepaliveForm, PeerKeysForm
+from wireguard_peer.forms import PeerAllowedIPForm, PeerNameForm, PeerKeepaliveForm, PeerKeysForm, PeerSuspensionForm
 
 
 def generate_peer_default(wireguard_instance):
@@ -393,3 +394,66 @@ def view_apply_route_template(request):
     }
     return render(request, 'wireguard/apply_route_template.html', context)
 
+
+@login_required
+def view_wireguard_peer_suspend(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+    
+    user_acl = get_object_or_404(UserAcl, user=request.user)
+    current_peer = get_object_or_404(Peer, uuid=request.GET.get('peer'))
+    
+    if not user_has_access_to_peer(user_acl, current_peer):
+        raise Http404
+
+    peer_scheduling, created = PeerScheduling.objects.get_or_create(peer=current_peer)
+    form = PeerSuspensionForm(request.POST or None, instance=peer_scheduling, peer=current_peer)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        manual_suspend_reason = request.POST.get('manual_suspend_reason', '')
+
+        if action == 'schedule':
+            if form.is_valid():
+                form.save()
+                messages.success(request, _('Peer suspension/unsuspension scheduled successfully.'))
+                current_peer.wireguard_instance.pending_changes = True
+                current_peer.wireguard_instance.save()
+            else:
+                messages.error(request, _('Error scheduling peer suspension/unsuspension. Please correct the errors below.'))
+
+        elif action == 'clear_schedule':
+            peer_scheduling.next_manual_suspend_at = None
+            peer_scheduling.next_manual_unsuspend_at = None
+            peer_scheduling.manual_suspend_reason = None
+            peer_scheduling.save()
+            messages.success(request, _('Schedule cleared successfully.'))
+            current_peer.wireguard_instance.pending_changes = True
+            current_peer.wireguard_instance.save()
+
+        elif action == 'suspend_now':
+            current_peer.suspended = True
+            current_peer.suspend_reason = manual_suspend_reason
+            current_peer.save()
+            messages.success(request, _('Peer suspended successfully.'))
+            current_peer.wireguard_instance.pending_changes = True
+            current_peer.wireguard_instance.save()
+
+        elif action == 'unsuspend_now':
+            current_peer.suspended = False
+            current_peer.suspend_reason = ''
+            current_peer.save()
+            messages.success(request, _('Peer reactivated successfully.'))
+            current_peer.wireguard_instance.pending_changes = True
+            current_peer.wireguard_instance.save()
+        else:
+            messages.error(request, _('Invalid action.'))
+
+        return redirect('/peer/manage/?peer=' + str(current_peer.uuid))
+
+    context = {
+        'page_title': _('Suspend / Reactivate Peer'),
+        'current_peer': current_peer,
+        'form': form,
+    }
+    return render(request, 'generic_form.html', context)

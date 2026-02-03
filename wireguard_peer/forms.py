@@ -1,12 +1,17 @@
 import ipaddress
+from datetime import timedelta
 
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Button
+from crispy_forms.layout import Button, Field
+from crispy_forms.layout import HTML, Layout, Row, Submit, Div
 from django import forms
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from scheduler.models import PeerScheduling
 from wireguard.models import NETMASK_CHOICES, Peer, PeerAllowedIP
 
 
@@ -108,3 +113,79 @@ class PeerAllowedIPForm(forms.ModelForm):
         model = PeerAllowedIP
         fields = ['allowed_ip', 'priority', 'netmask']
     
+
+class PeerSuspensionForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.peer = kwargs.pop('peer', None)
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+
+        if self.peer and self.peer.suspended:
+            suspend_toggle_text = _('Reactivate now')
+            suspend_toggle_action = 'unsuspend_now'
+        else:
+            suspend_toggle_text = _('Suspend now')
+            suspend_toggle_action = 'suspend_now'
+
+
+        self.helper.layout = Layout(
+            Row(Div(Field('next_manual_suspend_at'), css_class='col-md-12')),
+            Row(Div(Field('next_manual_unsuspend_at'), css_class='col-md-12')),
+            Row(Div(Field('manual_suspend_reason'), css_class='col-md-12')),
+            Row(
+                Div(
+                    HTML(
+                        '<button type="submit" name="action" value="schedule" '
+                        'class="btn btn-primary me-2">{}</button>'.format(_("Schedule"))
+                    ),
+                    HTML(
+                        '<button type="submit" name="action" value="clear_schedule" '
+                        'class="btn btn-primary me-2">{}</button>'.format(_("Clear Schedule"))
+                    ),
+                    HTML(
+                        '<button type="submit" name="action" value="{}" '
+                        'class="btn btn-primary me-2">{}</button>'.format(
+                            suspend_toggle_action,
+                            suspend_toggle_text
+                        )
+                    ),
+                    HTML(
+                        '<a class="btn btn-secondary" href="{}?peer={}">{}</a>'.format(
+                            reverse_lazy('wireguard_peer_manage'),
+                            self.peer.uuid,
+                            _("Back")
+                        )
+                    ),
+
+                    css_class='col-md-12')
+            )
+        )
+
+    class Meta:
+        model = PeerScheduling
+        fields = ['next_manual_suspend_at', 'next_manual_unsuspend_at', 'manual_suspend_reason']
+        widgets = {
+            'next_manual_suspend_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+            'next_manual_unsuspend_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+            'manual_suspend_reason': forms.Textarea(attrs={'rows': 3}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        suspend_at = cleaned_data.get('next_manual_suspend_at')
+        unsuspend_at = cleaned_data.get('next_manual_unsuspend_at')
+
+        if suspend_at and unsuspend_at:
+            time_diff = abs((unsuspend_at - suspend_at).total_seconds())
+            if time_diff < 300:
+                raise forms.ValidationError(_('The difference between suspend and unsuspend times must be at least 5 minutes.'))
+
+        min_future_time = timezone.now() + timedelta(minutes=10)
+        if suspend_at and suspend_at < min_future_time:
+             raise forms.ValidationError(_('Scheduled suspension time must be at least 10 minutes in the future.'))
+        
+        if unsuspend_at and unsuspend_at < min_future_time:
+             raise forms.ValidationError(_('Scheduled unsuspension time must be at least 10 minutes in the future.'))
+
+        return cleaned_data

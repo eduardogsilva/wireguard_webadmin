@@ -231,9 +231,16 @@
             </div>
         </div>
         <div class="card-footer">
-            <a class="btn btn-outline-secondary"
+            <a class="btn btn-outline-primary"
                href="/peer/list/?uuid={{ current_peer.wireguard_instance.uuid }}#peer-{{ current_peer.public_key }}">
-                {% trans 'Back' %}
+                {% trans 'Peer List' %}
+            </a>
+            <a class="btn btn-outline-secondary" href="{% url 'wireguard_peer_suspend' %}?peer={{ current_peer.uuid }}">
+                {% if peer.suspended %}
+                    {% trans 'Reactivate' %}
+                {% else %}
+                    {% trans 'Suspend' %}
+                {% endif %}
             </a>
             <a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete'
                onclick='openCommandDialog(this)'>{% trans 'Delete Peer' %}</a>
