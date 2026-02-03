@@ -128,7 +128,6 @@ class PeerSuspensionForm(forms.ModelForm):
             suspend_toggle_text = _('Suspend now')
             suspend_toggle_action = 'suspend_now'
 
-
         self.helper.layout = Layout(
             Row(Div(Field('next_manual_suspend_at'), css_class='col-md-12')),
             Row(Div(Field('next_manual_unsuspend_at'), css_class='col-md-12')),
@@ -137,15 +136,15 @@ class PeerSuspensionForm(forms.ModelForm):
                 Div(
                     HTML(
                         '<button type="submit" name="action" value="schedule" '
-                        'class="btn btn-primary me-2">{}</button>'.format(_("Schedule"))
+                        'class="btn btn-primary me-2">{}</button> '.format(_("Schedule"))
                     ),
                     HTML(
                         '<button type="submit" name="action" value="clear_schedule" '
-                        'class="btn btn-primary me-2">{}</button>'.format(_("Clear Schedule"))
+                        'class="btn btn-primary me-2">{}</button> '.format(_("Clear Schedule"))
                     ),
                     HTML(
                         '<button type="submit" name="action" value="{}" '
-                        'class="btn btn-primary me-2">{}</button>'.format(
+                        'class="btn btn-primary me-2">{}</button> '.format(
                             suspend_toggle_action,
                             suspend_toggle_text
                         )
