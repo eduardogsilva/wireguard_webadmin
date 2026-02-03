@@ -119,7 +119,7 @@ class Peer(models.Model):
         'routing_templates.RoutingTemplate', on_delete=models.SET_NULL, blank=True, null=True, related_name='peers'
     )
 
-    enabled_by_schedule = models.BooleanField(default=True)
+    disabled_by_schedule = models.BooleanField(default=False)
     suspended = models.BooleanField(default=False)
     suspend_reason = models.TextField(blank=True, null=True)
 
@@ -135,7 +135,7 @@ class Peer(models.Model):
 
     @property
     def enabled(self) -> bool:
-        return self.enabled_by_schedule and not self.suspended
+        return not self.disabled_by_schedule and not self.suspended
 
     @property
     def announced_networks(self):
