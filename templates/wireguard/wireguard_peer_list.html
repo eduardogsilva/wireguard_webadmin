@@ -14,7 +14,7 @@
                     {% for wgconf in wireguard_instances %}
                         <li class="nav-item">
                             <a class="nav-link {% if wgconf == current_instance %}active{% endif %}"
-                               href="/peer/list/?uuid={{ wgconf.uuid }}" role="tab">
+                               href="{% url 'wireguard_peer_list' %}?uuid={{ wgconf.uuid }}" role="tab">
                                 wg{{ wgconf.instance_id }} {% if wgconf.name %}({{ wgconf.name }}){% endif %}
                             </a>
                         </li>
@@ -37,6 +37,17 @@
                             <a class="btn btn-primary disabled" href="">{% trans 'Create Peer' %}</a>
                         {% endif %}
                         <button id="toggleExtraInfo" class="btn btn-outline-primary">{% trans 'Show extras' %}</button>
+                        {% if show_only_disabled_peers %}
+                            <a class="btn btn-outline-secondary"
+                               href="{% url 'wireguard_peer_list' %}?uuid={{ current_instance.uuid }}">
+                            {% trans 'Enabled' %}
+                            </a>
+                        {% else %}
+                            <a class="btn btn-outline-secondary"
+                               href="{% url 'wireguard_peer_list' %}?uuid={{ current_instance.uuid }}&peer_status=disabled">
+                            {% trans 'Disabled' %}
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -63,7 +74,9 @@
 
     {% include 'wireguard/peer_list/script_peer_charts_init.html' %}
     {% include 'wireguard/peer_list/script_peer_modal.html' %}
-    {% include 'wireguard/peer_list/script_wireguard_status_update.html' %}
+    {% if not show_only_disabled_peers %}
+        {% include 'wireguard/peer_list/script_wireguard_status_update.html' %}
+    {% endif %}
     {% include 'wireguard/peer_list/script_peer_extras_toggle.html' %}
     {% include 'wireguard/peer_list/script_vpn_invite.html' %}
 

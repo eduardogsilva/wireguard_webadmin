@@ -4,6 +4,7 @@ import subprocess
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -50,9 +51,15 @@ def generate_peer_default(wireguard_instance):
 
 @login_required
 def view_wireguard_peer_list(request):
-    page_title = _('WireGuard Peer List')
     user_acl = get_object_or_404(UserAcl, user=request.user)
     wireguard_instances = user_allowed_instances(user_acl)
+    if request.GET.get('peer_status', '') == 'disabled':
+        page_title = _('Disabled WireGuard Peer List')
+        show_only_disabled_peers = True
+    else:
+        page_title = _('WireGuard Peer List')
+        show_only_disabled_peers = False
+
     refresh_interval = 120
     if settings.WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT > 0 and settings.WIREGUARD_STATUS_CACHE_ENABLED:
         load_from_cache = True
@@ -78,6 +85,10 @@ def view_wireguard_peer_list(request):
             raise Http404
         default_sort_peers(current_instance)
         peer_list = user_allowed_peers(user_acl, current_instance)
+        if show_only_disabled_peers:
+            peer_list = peer_list.filter(Q(disabled_by_schedule=True) | Q(suspended=True))
+        else:
+            peer_list = peer_list.filter(disabled_by_schedule=False, suspended=False)
     else:
         current_instance = None
         peer_list = None
@@ -109,6 +120,7 @@ def view_wireguard_peer_list(request):
         'load_from_cache': load_from_cache, 'cache_previous_count': cache_previous_count,
         'cluster_settings': cluster_settings,
         'servers': servers,
+        'show_only_disabled_peers': show_only_disabled_peers,
     }
 
     return render(request, 'wireguard/wireguard_peer_list.html', context)
