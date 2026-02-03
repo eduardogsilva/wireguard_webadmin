@@ -1565,10 +1565,8 @@ msgid "Updated"
 msgstr "Aktualisieren"
 
 #: templates/scheduler/scheduleprofile_form.html:33
-#, fuzzy
-#| msgid "Schedule Slots"
 msgid "Schedule Visualization"
-msgstr "Zeitplan-Slots"
+msgstr "Zeitplan-Visualisierung"
 
 #: templates/scheduler/scheduleprofile_form.html:70
 #: templates/wireguard/apply_route_template.html:44
@@ -1576,10 +1574,8 @@ msgid "Active"
 msgstr "Aktiv"
 
 #: templates/scheduler/scheduleprofile_form.html:71
-#, fuzzy
-#| msgid "Active"
 msgid "Inactive"
-msgstr "Aktiv"
+msgstr "Inaktiv"
 
 #: templates/scheduler/scheduleprofile_form.html:82
 msgid "Time Intervals"
@@ -2872,10 +2868,8 @@ msgid "Invalid config file"
 msgstr "Ungültige Konfigurationsdatei"
 
 #: wireguard_peer/views.py:57
-#, fuzzy
-#| msgid "WireGuard Peer List"
 msgid "Disabled WireGuard Peer List"
-msgstr "WireGuard‑Peer‑Liste"
+msgstr "Liste deaktivierter WireGuard-Peers"
 
 #: wireguard_peer/views.py:60
 msgid "WireGuard Peer List"
@@ -3051,7 +3045,6 @@ msgstr ""
 #~ msgid "Delete Schedule Slot"
 #~ msgstr "Zeitplan-Slot löschen"
 
-#, fuzzy
 #~| msgid "No schedule profiles found."
 #~ msgid "No schedule slots found."
 #~ msgstr "Keine Zeitplanprofile gefunden."

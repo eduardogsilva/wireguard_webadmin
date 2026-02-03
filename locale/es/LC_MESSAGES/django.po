@@ -1555,10 +1555,8 @@ msgid "Updated"
 msgstr "Actualizar"
 
 #: templates/scheduler/scheduleprofile_form.html:33
-#, fuzzy
-#| msgid "Schedule Slots"
 msgid "Schedule Visualization"
-msgstr "Franjas de Programación"
+msgstr "Visualización de Programación"
 
 #: templates/scheduler/scheduleprofile_form.html:70
 #: templates/wireguard/apply_route_template.html:44
@@ -1566,10 +1564,8 @@ msgid "Active"
 msgstr "Activo"
 
 #: templates/scheduler/scheduleprofile_form.html:71
-#, fuzzy
-#| msgid "Active"
 msgid "Inactive"
-msgstr "Activo"
+msgstr "Inactivo"
 
 #: templates/scheduler/scheduleprofile_form.html:82
 msgid "Time Intervals"
@@ -2846,10 +2842,8 @@ msgid "Invalid config file"
 msgstr "Archivo de configuración inválido"
 
 #: wireguard_peer/views.py:57
-#, fuzzy
-#| msgid "WireGuard Peer List"
 msgid "Disabled WireGuard Peer List"
-msgstr "Lista de peers WireGuard"
+msgstr "Lista de peers de WireGuard desactivados"
 
 #: wireguard_peer/views.py:60
 msgid "WireGuard Peer List"
