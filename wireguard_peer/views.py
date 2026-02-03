@@ -61,12 +61,19 @@ def view_wireguard_peer_list(request):
         load_from_cache = False
         cache_previous_count = 0
 
-
     if wireguard_instances:
         if request.GET.get('uuid'):
             current_instance = get_object_or_404(WireGuardInstance, uuid=request.GET.get('uuid'))
         else:
-            current_instance = wireguard_instances.first()
+            if request.session.get('last_instance_uuid'):
+                try:
+                    current_instance = WireGuardInstance.objects.get(uuid=request.session.get('last_instance_uuid'))
+                    if current_instance not in wireguard_instances:
+                        current_instance = wireguard_instances.first()
+                except:
+                    current_instance = wireguard_instances.first()
+            else:
+                current_instance = wireguard_instances.first()
         if current_instance not in wireguard_instances:
             raise Http404
         default_sort_peers(current_instance)
@@ -74,9 +81,11 @@ def view_wireguard_peer_list(request):
     else:
         current_instance = None
         peer_list = None
+        request.session.pop('last_instance_uuid', None)
 
     add_peer_enabled = False
     if current_instance:
+        request.session['last_instance_uuid'] = str(current_instance.uuid)
         refresh_interval = current_instance.peer_list_refresh_interval
         if user_has_access_to_instance(user_acl, current_instance):
             add_peer_enabled = True
