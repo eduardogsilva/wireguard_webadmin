@@ -2091,20 +2091,16 @@ msgid "default route"
 msgstr "ruta predeterminada"
 
 #: templates/wireguard/wireguard_manage_peer.html:236
-#, fuzzy
-#| msgid "Peers"
 msgid "Peer List"
-msgstr "Peers"
+msgstr "Lista de Peers"
 
 #: templates/wireguard/wireguard_manage_peer.html:240
-#, fuzzy
-#| msgid "Inactive"
 msgid "Reactivate"
-msgstr "Inactivo"
+msgstr "Reactivar"
 
 #: templates/wireguard/wireguard_manage_peer.html:242
 msgid "Suspend"
-msgstr ""
+msgstr "Suspender"
 
 #: templates/wireguard/wireguard_manage_peer.html:246
 msgid "Delete Peer"
@@ -2268,16 +2264,12 @@ msgid "Create Peer"
 msgstr "Crear peer"
 
 #: templates/wireguard/wireguard_peer_list.html:43
-#, fuzzy
-#| msgid "Enabled"
 msgid "Enabled Peers"
-msgstr "Habilitado"
+msgstr "Peers habilitados"
 
 #: templates/wireguard/wireguard_peer_list.html:48
-#, fuzzy
-#| msgid "Disabled"
 msgid "Disabled Peers"
-msgstr "Deshabilitado"
+msgstr "Peers deshabilitados"
 
 #: templates/wireguard/wireguard_peer_list.html:61
 msgid "No WireGuard Instances Found"
@@ -2766,7 +2758,7 @@ msgstr "Dirección IP interna"
 
 #: wireguard/forms.py:117
 msgid "Peer List Refresh Interval must be at least 5 seconds"
-msgstr "El intervalo de actualización de peers debe ser al menos 5 segundos"
+msgstr "El intervalo de actualización de la lista de peers debe ser de al menos 5 segundos"
 
 #: wireguard/forms.py:120
 msgid "Invalid hostname or IP Address"
@@ -2869,37 +2861,37 @@ msgstr "Archivo de configuración inválido"
 
 #: wireguard_peer/forms.py:125
 msgid "Reactivate now"
-msgstr ""
+msgstr "Reactivar ahora"
 
 #: wireguard_peer/forms.py:128
 msgid "Suspend now"
-msgstr ""
+msgstr "Suspender ahora"
 
 #: wireguard_peer/forms.py:140
-#, fuzzy
-#| msgid "Scheduler"
 msgid "Schedule"
-msgstr "Programador"
+msgstr "Programar"
 
 #: wireguard_peer/forms.py:144
-#, fuzzy
-#| msgid "Scheduler"
 msgid "Clear Schedule"
-msgstr "Programador"
+msgstr "Limpiar programación"
 
 #: wireguard_peer/forms.py:182
 msgid ""
 "The difference between suspend and unsuspend times must be at least 5 "
 "minutes."
 msgstr ""
+"La diferencia entre el horario de suspensión y el de reactivación debe ser "
+"de al menos 5 minutos."
 
 #: wireguard_peer/forms.py:186
 msgid "Scheduled suspension time must be at least 10 minutes in the future."
 msgstr ""
+"La programación de la suspensión debe ser al menos 10 minutos en el futuro."
 
 #: wireguard_peer/forms.py:189
 msgid "Scheduled unsuspension time must be at least 10 minutes in the future."
 msgstr ""
+"La programación de la reactivación debe ser al menos 10 minutos en el futuro."
 
 #: wireguard_peer/views.py:58
 msgid "Disabled WireGuard Peer List"
@@ -2997,44 +2989,36 @@ msgid "Route template applied successfully."
 msgstr "Plantilla de enrutamiento aplicada exitosamente."
 
 #: wireguard_peer/views.py:419
-#, fuzzy
-#| msgid "Cluster settings updated successfully."
 msgid "Peer suspension/unsuspension scheduled successfully."
-msgstr "Configuración del cluster actualizada exitosamente."
+msgstr "Suspensión/reactivación programada con éxito."
 
 #: wireguard_peer/views.py:423
 msgid ""
 "Error scheduling peer suspension/unsuspension. Please correct the errors "
 "below."
 msgstr ""
+"Error al programar la suspensión/reactivación del peer. Por favor, corrija "
+"los errores abajo."
 
 #: wireguard_peer/views.py:430
-#, fuzzy
-#| msgid "Schedule Slot saved successfully."
 msgid "Schedule cleared successfully."
-msgstr "Franja de programación guardada con éxito."
+msgstr "Programación limpiada con éxito."
 
 #: wireguard_peer/views.py:438
-#, fuzzy
-#| msgid "Peer updated|Peer updated successfully."
 msgid "Peer suspended successfully."
-msgstr "Peer actualizado|Peer actualizado correctamente."
+msgstr "Peer suspendido con éxito."
 
 #: wireguard_peer/views.py:446
-#, fuzzy
-#| msgid "Peer created|Peer created successfully."
 msgid "Peer reactivated successfully."
-msgstr "Peer creado|Peer creado correctamente."
+msgstr "Peer reactivado con éxito."
 
 #: wireguard_peer/views.py:450
-#, fuzzy
-#| msgid "Invalid command"
 msgid "Invalid action."
-msgstr "Comando inválido"
+msgstr "Acción inválida."
 
 #: wireguard_peer/views.py:455
 msgid "Suspend / Reactivate Peer"
-msgstr ""
+msgstr "Suspender / Reactivar Peer"
 
 #: wireguard_tools/views.py:181
 msgid ""

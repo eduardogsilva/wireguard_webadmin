@@ -1977,6 +1977,7 @@ msgstr "Vytvoriť inštanciu"
 msgid "No WireGuard instances found."
 msgstr "Nenašli sa žiadne inštancie WireGuard."
 
+
 #: templates/wireguard/wireguard_manage_ip.html:18
 msgid "Enter Allowed IP"
 msgstr "Zadajte povolenú IP"
@@ -2083,20 +2084,16 @@ msgid "default route"
 msgstr "predvolená trasa"
 
 #: templates/wireguard/wireguard_manage_peer.html:236
-#, fuzzy
-#| msgid "Peers"
 msgid "Peer List"
-msgstr "Peeri"
+msgstr "Zoznam Peerov"
 
 #: templates/wireguard/wireguard_manage_peer.html:240
-#, fuzzy
-#| msgid "Inactive"
 msgid "Reactivate"
-msgstr "Neaktívne"
+msgstr "Reaktivovať"
 
 #: templates/wireguard/wireguard_manage_peer.html:242
 msgid "Suspend"
-msgstr ""
+msgstr "Pozastaviť"
 
 #: templates/wireguard/wireguard_manage_peer.html:246
 msgid "Delete Peer"
@@ -2259,16 +2256,12 @@ msgid "Create Peer"
 msgstr "Vytvoriť peer"
 
 #: templates/wireguard/wireguard_peer_list.html:43
-#, fuzzy
-#| msgid "Enabled"
 msgid "Enabled Peers"
-msgstr "Povolené"
+msgstr "Povolené Peery"
 
 #: templates/wireguard/wireguard_peer_list.html:48
-#, fuzzy
-#| msgid "Disabled"
 msgid "Disabled Peers"
-msgstr "Zakázané"
+msgstr "Zakázané Peery"
 
 #: templates/wireguard/wireguard_peer_list.html:61
 msgid "No WireGuard Instances Found"
@@ -2860,37 +2853,36 @@ msgstr "Neplatný konfiguračný súbor"
 
 #: wireguard_peer/forms.py:125
 msgid "Reactivate now"
-msgstr ""
+msgstr "Reaktivovať teraz"
 
 #: wireguard_peer/forms.py:128
 msgid "Suspend now"
-msgstr ""
+msgstr "Pozastaviť teraz"
 
 #: wireguard_peer/forms.py:140
-#, fuzzy
-#| msgid "Scheduler"
 msgid "Schedule"
-msgstr "Plánovač"
+msgstr "Naplánovať"
 
 #: wireguard_peer/forms.py:144
-#, fuzzy
-#| msgid "Scheduler"
 msgid "Clear Schedule"
-msgstr "Plánovač"
+msgstr "Vymazať plán"
 
 #: wireguard_peer/forms.py:182
 msgid ""
 "The difference between suspend and unsuspend times must be at least 5 "
 "minutes."
 msgstr ""
+"Rozdiel medzi časom pozastavenia a reaktivácie musí byť aspoň 5 minút."
 
 #: wireguard_peer/forms.py:186
 msgid "Scheduled suspension time must be at least 10 minutes in the future."
 msgstr ""
+"Plánovaný čas pozastavenia musí byť aspoň 10 minút v budúcnosti."
 
 #: wireguard_peer/forms.py:189
 msgid "Scheduled unsuspension time must be at least 10 minutes in the future."
 msgstr ""
+"Plánovaný čas reaktivácie musí byť aspoň 10 minút v budúcnosti."
 
 #: wireguard_peer/views.py:58
 msgid "Disabled WireGuard Peer List"
@@ -2990,44 +2982,35 @@ msgid "Route template applied successfully."
 msgstr "Smerovacia šablóna bola úspešne použitá."
 
 #: wireguard_peer/views.py:419
-#, fuzzy
-#| msgid "Cluster settings updated successfully."
 msgid "Peer suspension/unsuspension scheduled successfully."
-msgstr "Nastavenia clustra úspešne aktualizované."
+msgstr "Pozastavenie/reaktivácia peera úspešne naplánovaná."
 
 #: wireguard_peer/views.py:423
 msgid ""
 "Error scheduling peer suspension/unsuspension. Please correct the errors "
 "below."
 msgstr ""
+"Chyba pri plánovaní pozastavenia/reaktivácie peera. Opravte chyby nižšie."
 
 #: wireguard_peer/views.py:430
-#, fuzzy
-#| msgid "Schedule Slot saved successfully."
 msgid "Schedule cleared successfully."
-msgstr "Slot plánovania bol úspešne uložený."
+msgstr "Plán úspešne vymazaný."
 
 #: wireguard_peer/views.py:438
-#, fuzzy
-#| msgid "Peer updated|Peer updated successfully."
 msgid "Peer suspended successfully."
-msgstr "Peer aktualizovaný|Peer bol úspešne aktualizovaný."
+msgstr "Peer úspešne pozastavený."
 
 #: wireguard_peer/views.py:446
-#, fuzzy
-#| msgid "Peer created|Peer created successfully."
 msgid "Peer reactivated successfully."
-msgstr "Peer vytvorený|Peer bol úspešne vytvorený."
+msgstr "Peer úspešne reaktivovaný."
 
 #: wireguard_peer/views.py:450
-#, fuzzy
-#| msgid "Invalid command"
 msgid "Invalid action."
-msgstr "Neplatný príkaz"
+msgstr "Neplatná akcia."
 
 #: wireguard_peer/views.py:455
 msgid "Suspend / Reactivate Peer"
-msgstr ""
+msgstr "Pozastaviť / Reaktivovať Peer"
 
 #: wireguard_tools/views.py:181
 msgid ""

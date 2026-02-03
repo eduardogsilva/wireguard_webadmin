@@ -131,7 +131,7 @@ msgstr "Exibição do Worker"
 
 #: cluster/forms.py:136
 msgid "Cluster mode requires WireGuard status cache to be enabled."
-msgstr ""
+msgstr "O modo cluster requer que o cache de status do WireGuard esteja habilitado."
 "O modo cluster requer que o cache de status do WireGuard esteja habilitado."
 
 #: cluster/models.py:46
@@ -139,6 +139,8 @@ msgid ""
 "IP lock is enabled, but the worker is attempting to access from a different "
 "IP address."
 msgstr ""
+"O bloqueio de IP está habilitado, mas o worker está tentando acessar de um "
+"endereço IP diferente."
 "O bloqueio de IP está habilitado, mas o worker está tentando acessar de um "
 "endereço IP diferente."
 
@@ -155,6 +157,8 @@ msgid ""
 "Please report worker_config_version, worker_dns_version and worker_version "
 "in the API request."
 msgstr ""
+"Por favor, informe worker_config_version, worker_dns_version e "
+"worker_version na requisição da API."
 "Por favor, informe worker_config_version, worker_dns_version e "
 "worker_version na requisição da API."
 
@@ -238,6 +242,26 @@ msgstr ""
 "        <p>Detalhes de localização opcionais para este worker (país, cidade, "
 "hostname).</p>\n"
 "        "
+"\n"
+"        <h5>Configuração do Worker</h5>\n"
+"        <p>Configure um nó worker do cluster que irá sincronizar com esta "
+"instância primária.</p>\n"
+"        \n"
+"        <h5>Nome</h5>\n"
+"        <p>Um nome exclusivo para identificar este worker.</p>\n"
+"        \n"
+"        <h5>Endereço IP</h5>\n"
+"        <p>O endereço IP do nó worker. Deixe em branco se o bloqueio de IP "
+"estiver desabilitado.</p>\n"
+"        \n"
+"        <h5>Bloqueio de IP</h5>\n"
+"        <p>Quando habilitado, o worker só poderá se conectar a partir do "
+"endereço IP especificado.</p>\n"
+"        \n"
+"        <h5>Informações de Localização</h5>\n"
+"        <p>Detalhes de localização opcionais para este worker (país, cidade, "
+"hostname).</p>\n"
+"        "
 
 #: cluster/views.py:117 templates/cluster/workers_list.html:88
 msgid "Cluster Settings"
@@ -268,6 +292,24 @@ msgid ""
 "name, server address, location, or a combination.</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Modo do Cluster</h5>\n"
+"        <p>Configure como o cluster opera e sincroniza as configurações "
+"entre os nós.</p>\n"
+"        \n"
+"        <h5>Intervalos de Sincronização</h5>\n"
+"        <p>Configure com que frequência as estatísticas e os dados de cache "
+"são sincronizados entre os nós do cluster.</p>\n"
+"        \n"
+"        <h5>Modo de Reinicialização</h5>\n"
+"        <p>Escolha se os serviços WireGuard devem ser reiniciados "
+"automaticamente quando as configurações mudarem ou se é necessária "
+"intervenção manual.</p>\n"
+"        \n"
+"        <h5>Exibição do Worker</h5>\n"
+"        <p>Selecione como os workers devem ser identificados na interface - "
+"por nome, endereço do servidor, localização ou uma combinação.</p>\n"
+"        "
 "\n"
 "        <h5>Modo do Cluster</h5>\n"
 "        <p>Configure como o cluster opera e sincroniza as configurações "
@@ -371,6 +413,7 @@ msgid ""
 "Pending Changes|There are pending DNS changes that have not been applied"
 msgstr ""
 "Alterações Pendentes|Há alterações de DNS pendentes que não foram aplicadas"
+"Alterações Pendentes|Há alterações de DNS pendentes que não foram aplicadas"
 
 #: dns/views.py:91
 msgid "DNS Forwarders"
@@ -381,6 +424,8 @@ msgid ""
 "All DNS queries will be forwarded to the primary resolver. If the primary "
 "resolver is not available, the secondary resolver will be used."
 msgstr ""
+"Todas as consultas DNS serão encaminhadas para o DNS primário. Se o "
+"resolvedor primário não estiver disponível, o DNS secundário será usado."
 "Todas as consultas DNS serão encaminhadas para o DNS primário. Se ele não "
 "estiver disponível, o DNS secundário será usado."
 
@@ -468,6 +513,7 @@ msgstr "Peer e Endereço IP não podem ser selecionados ao mesmo tempo."
 #: firewall/forms.py:57
 msgid "IP Address cannot be used without selecting a WireGuard instance."
 msgstr ""
+"Endereço IP não pode ser usado sem selecionar uma instância do WireGuard."
 "Endereço IP não pode ser usado sem selecionar uma instância do WireGuard."
 
 #: firewall/forms.py:81
@@ -638,6 +684,8 @@ msgid ""
 msgstr ""
 "Erro ao excluir a regra de Encaminhamento de porta|Confirmação inválida. A "
 "regra de Encaminhamento de porta não foi excluída."
+"Erro ao excluir a regra de Encaminhamento de porta|Confirmação inválida. A "
+"regra de Encaminhamento de porta não foi excluída."
 
 #: firewall/views.py:54
 msgid "Port Forward rule saved successfully"
@@ -660,6 +708,8 @@ msgid ""
 "Error deleting Firewall rule|Confirmation did not match. Firewall rule was "
 "not deleted."
 msgstr ""
+"Erro ao excluir a regra de Firewall|Confirmação inválida. A regra de "
+"Firewall não foi removida."
 "Erro ao excluir a regra de Firewall|Confirmação inválida. A regra de "
 "Firewall não foi removida."
 
@@ -688,6 +738,8 @@ msgid ""
 "If you find any issues with the translation or would like to request a new "
 "language, please open an"
 msgstr ""
+"Se encontrar algum problema na tradução ou quiser solicitar um novo idioma, "
+"por favor abra uma"
 "Se encontrar algum problema na tradução ou quiser solicitar um novo idioma, "
 "por favor abra uma"
 
@@ -723,6 +775,8 @@ msgid "Custom routes should be empty when Route Type is 'Default Route'."
 msgstr ""
 "As rotas personalizadas devem estar vazias quando o Tipo de Rota é 'Rota "
 "Padrão'."
+"As rotas personalizadas devem estar vazias quando o Tipo de Rota é 'Rota "
+"Padrão'."
 
 #: routing_templates/forms.py:95
 msgid ""
@@ -731,10 +785,14 @@ msgid ""
 msgstr ""
 "Permitir rotas personalizadas do peer não é aplicável quando o Tipo de Rota "
 "é 'Rota Padrão'."
+"Permitir rotas personalizadas do peer não é aplicável quando o Tipo de Rota "
+"é 'Rota Padrão'."
 
 #: routing_templates/forms.py:102
 msgid "At least one route must be provided when Route Type is 'Custom'."
 msgstr ""
+"Pelo menos uma rota deve ser fornecida quando o Tipo de Rota é "
+"'Personalizada'."
 "Pelo menos uma rota deve ser fornecida quando o Tipo de Rota é "
 "'Personalizada'."
 
@@ -744,6 +802,8 @@ msgid ""
 "Invalid route format: '%(line)s'. Please use CIDR notation (e.g., "
 "10.0.0.0/24)."
 msgstr ""
+"Formato de rota inválido: '%(line)s'. Por favor, use a notação CIDR (ex: "
+"10.0.0.0/24)."
 "Formato de rota inválido: '%(line)s'. Por favor, use a notação CIDR (ex: "
 "10.0.0.0/24)."
 
@@ -759,6 +819,7 @@ msgid ""
 "'%(line)s' is not a network address. Use the network address (e.g., "
 "'%(net)s')."
 msgstr ""
+"'%(line)s' não é um endereço de rede. Use o endereço da rede (ex: '%(net)s')."
 "'%(line)s' não é um endereço de rede. Use o endereço da rede (ex: '%(net)s')."
 
 #: routing_templates/models.py:13
@@ -983,6 +1044,8 @@ msgid ""
 msgstr ""
 "Por favor, entre em contato com o administrador do sistema se você acredita "
 "que isto é um erro."
+"Por favor, entre em contato com o administrador do sistema se você acredita "
+"que isto é um erro."
 
 #: templates/accounts/login.html:14 templates/user_manager/list.html:8
 #: user_manager/forms.py:13 vpn_invite/forms.py:281
@@ -1036,6 +1099,8 @@ msgstr "Sincronização de configuração em andamento"
 #: templates/cluster/workers_list.html:37
 msgid "The worker is outdated. Please update it to the latest version."
 msgstr ""
+"O worker está desatualizado. Por favor, atualize-o para a versão mais "
+"recente."
 "O worker está desatualizado. Por favor, atualize-o para a versão mais "
 "recente."
 
@@ -2095,20 +2160,16 @@ msgid "default route"
 msgstr "rota padrão"
 
 #: templates/wireguard/wireguard_manage_peer.html:236
-#, fuzzy
-#| msgid "Peers"
 msgid "Peer List"
-msgstr "Peers"
+msgstr "Lista de Peers"
 
 #: templates/wireguard/wireguard_manage_peer.html:240
-#, fuzzy
-#| msgid "Inactive"
 msgid "Reactivate"
-msgstr "Inativo"
+msgstr "Reativar"
 
 #: templates/wireguard/wireguard_manage_peer.html:242
 msgid "Suspend"
-msgstr ""
+msgstr "Suspender"
 
 #: templates/wireguard/wireguard_manage_peer.html:246
 msgid "Delete Peer"
@@ -2271,16 +2332,12 @@ msgid "Create Peer"
 msgstr "Criar Peer"
 
 #: templates/wireguard/wireguard_peer_list.html:43
-#, fuzzy
-#| msgid "Enabled"
 msgid "Enabled Peers"
-msgstr "Habilitado"
+msgstr "Peers Ativos"
 
 #: templates/wireguard/wireguard_peer_list.html:48
-#, fuzzy
-#| msgid "Disabled"
 msgid "Disabled Peers"
-msgstr "Desabilitado"
+msgstr "Peers Inativos"
 
 #: templates/wireguard/wireguard_peer_list.html:61
 msgid "No WireGuard Instances Found"
@@ -2881,37 +2938,35 @@ msgstr "Arquivo de configuração inválido"
 
 #: wireguard_peer/forms.py:125
 msgid "Reactivate now"
-msgstr ""
+msgstr "Reativar agora"
 
 #: wireguard_peer/forms.py:128
 msgid "Suspend now"
-msgstr ""
+msgstr "Suspender agora"
 
 #: wireguard_peer/forms.py:140
-#, fuzzy
-#| msgid "Scheduler"
 msgid "Schedule"
-msgstr "Agendador"
+msgstr "Agendar"
 
 #: wireguard_peer/forms.py:144
-#, fuzzy
-#| msgid "Scheduler"
 msgid "Clear Schedule"
-msgstr "Agendador"
+msgstr "Limpar Agendamento"
 
 #: wireguard_peer/forms.py:182
 msgid ""
 "The difference between suspend and unsuspend times must be at least 5 "
 "minutes."
 msgstr ""
+"A diferença entre os horários de suspensão e reativação deve ser de pelo "
+"menos 5 minutos."
 
 #: wireguard_peer/forms.py:186
 msgid "Scheduled suspension time must be at least 10 minutes in the future."
-msgstr ""
+msgstr "O agendamento de suspensão deve ser pelo menos 10 minutos no futuro."
 
 #: wireguard_peer/forms.py:189
 msgid "Scheduled unsuspension time must be at least 10 minutes in the future."
-msgstr ""
+msgstr "O agendamento de reativação deve ser pelo menos 10 minutos no futuro."
 
 #: wireguard_peer/views.py:58
 msgid "Disabled WireGuard Peer List"
@@ -3010,44 +3065,36 @@ msgid "Route template applied successfully."
 msgstr "Modelo de roteamento aplicado com sucesso."
 
 #: wireguard_peer/views.py:419
-#, fuzzy
-#| msgid "Cluster settings updated successfully."
 msgid "Peer suspension/unsuspension scheduled successfully."
-msgstr "Configurações do cluster atualizadas com sucesso."
+msgstr "Suspensão/reativação de peer agendada com sucesso."
 
 #: wireguard_peer/views.py:423
 msgid ""
 "Error scheduling peer suspension/unsuspension. Please correct the errors "
 "below."
 msgstr ""
+"Erro ao agendar a suspensão/reativação do peer. Por favor, corrija os erros "
+"abaixo."
 
 #: wireguard_peer/views.py:430
-#, fuzzy
-#| msgid "Schedule Slot saved successfully."
 msgid "Schedule cleared successfully."
-msgstr "Slot de agendamento salvo com sucesso."
+msgstr "Agendamento limpo com sucesso."
 
 #: wireguard_peer/views.py:438
-#, fuzzy
-#| msgid "Peer updated|Peer updated successfully."
 msgid "Peer suspended successfully."
-msgstr "Peer atualizado|Peer atualizado com sucesso."
+msgstr "Peer suspenso com sucesso."
 
 #: wireguard_peer/views.py:446
-#, fuzzy
-#| msgid "Peer created|Peer created successfully."
 msgid "Peer reactivated successfully."
-msgstr "Peer adicionado|Peer adicionado com sucesso."
+msgstr "Peer reativado com sucesso."
 
 #: wireguard_peer/views.py:450
-#, fuzzy
-#| msgid "Invalid command"
 msgid "Invalid action."
-msgstr "Comando inválido"
+msgstr "Ação inválida."
 
 #: wireguard_peer/views.py:455
 msgid "Suspend / Reactivate Peer"
-msgstr ""
+msgstr "Suspender / Reativar Peer"
 
 #: wireguard_tools/views.py:181
 msgid ""
