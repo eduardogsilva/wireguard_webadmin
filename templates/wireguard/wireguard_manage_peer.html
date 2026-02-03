@@ -236,7 +236,7 @@
                 {% trans 'Peer List' %}
             </a>
             <a class="btn btn-outline-secondary" href="{% url 'wireguard_peer_suspend' %}?peer={{ current_peer.uuid }}">
-                {% if peer.suspended %}
+                {% if current_peer.suspended %}
                     {% trans 'Reactivate' %}
                 {% else %}
                     {% trans 'Suspend' %}
