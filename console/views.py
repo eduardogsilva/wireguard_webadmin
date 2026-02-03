@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 
+from api.models import WireguardStatusCache
+from cluster.models import WorkerStatus
 from user_manager.models import UserAcl
 from wgwadmlibrary.tools import is_valid_ip_or_hostname
 from wireguard.models import WireGuardInstance
@@ -34,7 +36,12 @@ def view_console(request):
         bash_command = ['bash', '-c', 'ps faux']
     elif requested_command == 'wgshow':
         page_title += _('WireGuard show')
-        bash_command = ['bash', '-c', 'wg show']
+        if user_acl.enable_enhanced_filter:
+            command_output = _('Enhanced filter is enabled. This command is not available.')
+            bash_command = None
+            command_success = False
+        else:
+            bash_command = ['bash', '-c', 'wg show']
     elif requested_command == 'freem':
         page_title += _('Memory usage')
         bash_command = ['bash', '-c', 'free -m']
@@ -53,30 +60,41 @@ def view_console(request):
     elif requested_command == 'testdns':
         page_title += _('DNS container test script')
         bash_command = ['/app/dns/scripts/test_dns_service.sh']
+    elif requested_command == 'flush_cache':
+        page_title += _('Flush Wireguard status cache')
+        bash_command = ''
     else:
         page_title = _('Console') + ': ' + _('Invalid command')
         bash_command = None
         command_output = ''
         command_success = False
-    
-    if requested_command == 'ping' or requested_command == 'traceroute':
-        if not command_target:
-            command_output = requested_command + ': ' + _('Invalid target')
-            bash_command = None
-            command_success = False
-    
-    if user_acl.enable_enhanced_filter and requested_command == 'wgshow':
-        command_output = _('Enhanced filter is enabled. This command is not available.')
+
+    if requested_command == 'flush_cache':
+        command_output = ''
+        for worker_status in WorkerStatus.objects.all():
+            worker_status.wireguard_status = ''
+            worker_status.wireguard_status_updated = None
+            worker_status.save()
+            command_output += _('Flushed WireGuard status cache for worker: ') + str(worker_status.worker) + '\n'
+        command_success = True
+
+        wireguard_status_cache_count = WireGuardInstance.objects.all().count()
+        WireguardStatusCache.objects.all().delete()
+        command_output += _('Flushed WireGuard status cache entries: ') + str(wireguard_status_cache_count) + '\n'
+        command_success = True
+
+    if requested_command in ['ping', 'traceroute'] and not command_target:
+        command_output = requested_command + ': ' + _('Invalid target')
         bash_command = None
         command_success = False
-    else:
-        if bash_command:
-            try:
-                command_output = subprocess.check_output(bash_command, stderr=subprocess.STDOUT).decode('utf-8')
-                command_success = True
-            except subprocess.CalledProcessError as e:
-                command_output = e.output.decode('utf-8')
-                command_success = False
+
+    if bash_command:
+        try:
+            command_output = subprocess.check_output(bash_command, stderr=subprocess.STDOUT).decode('utf-8')
+            command_success = True
+        except subprocess.CalledProcessError as e:
+            command_output = e.output.decode('utf-8')
+            command_success = False
         
     context = {'page_title': page_title, 'command_output': command_output, 'command_success': command_success}
     return render(request, 'console/console.html', context)
