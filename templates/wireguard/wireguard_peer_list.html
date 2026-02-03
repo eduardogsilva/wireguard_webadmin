@@ -40,12 +40,12 @@
                         {% if show_only_disabled_peers %}
                             <a class="btn btn-outline-secondary"
                                href="{% url 'wireguard_peer_list' %}?uuid={{ current_instance.uuid }}">
-                            {% trans 'Enabled' %}
+                            {% trans 'Enabled Peers' %}
                             </a>
                         {% else %}
                             <a class="btn btn-outline-secondary"
                                href="{% url 'wireguard_peer_list' %}?uuid={{ current_instance.uuid }}&peer_status=disabled">
-                            {% trans 'Disabled' %}
+                            {% trans 'Disabled Peers' %}
                             </a>
                         {% endif %}
                     </div>

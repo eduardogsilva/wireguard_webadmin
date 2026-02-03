@@ -99,7 +99,7 @@ def view_wireguard_peer_list(request):
     if current_instance:
         request.session['last_instance_uuid'] = str(current_instance.uuid)
         refresh_interval = current_instance.peer_list_refresh_interval
-        if user_has_access_to_instance(user_acl, current_instance):
+        if user_has_access_to_instance(user_acl, current_instance) and not show_only_disabled_peers:
             add_peer_enabled = True
 
     if settings.WIREGUARD_STATUS_CACHE_ENABLED:
