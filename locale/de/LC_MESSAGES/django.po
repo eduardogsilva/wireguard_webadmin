@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-03 11:38-0300\n"
+"POT-Creation-Date: 2026-02-03 14:41-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 #: templates/wireguard/server_detail.html:12
 #: templates/wireguard/server_list.html:19
 #: templates/wireguard/wireguard_manage_peer.html:15 user_manager/forms.py:177
-#: wireguard_peer/forms.py:27
+#: wireguard_peer/forms.py:32
 msgid "Name"
 msgstr "Name"
 
@@ -72,10 +72,9 @@ msgstr "Token"
 #: templates/firewall/manage_redirect_rule.html:85
 #: templates/wireguard/apply_route_template.html:63
 #: templates/wireguard/peer_list/peer_preview_modal.html:79
-#: templates/wireguard/wireguard_manage_ip.html:42
-#: templates/wireguard/wireguard_manage_peer.html:236 user_manager/forms.py:49
+#: templates/wireguard/wireguard_manage_ip.html:42 user_manager/forms.py:49
 #: user_manager/forms.py:180 vpn_invite/forms.py:192 vpn_invite/forms.py:326
-#: wireguard/forms.py:51 wireguard_peer/forms.py:22
+#: wireguard/forms.py:51 wireguard_peer/forms.py:27 wireguard_peer/forms.py:157
 msgid "Back"
 msgstr "Zurück"
 
@@ -99,7 +98,7 @@ msgstr "Löschen"
 #: templates/scheduler/scheduleprofile_form.html:134
 #: templates/wireguard/wireguard_manage_ip.html:41 user_manager/forms.py:98
 #: user_manager/forms.py:205 vpn_invite/forms.py:191 vpn_invite/forms.py:325
-#: wireguard/forms.py:100 wireguard_peer/forms.py:21
+#: wireguard/forms.py:100 wireguard_peer/forms.py:26
 msgid "Save"
 msgstr "Speichern"
 
@@ -497,7 +496,7 @@ msgid "Source IP"
 msgstr "Quell‑IP"
 
 #: firewall/forms.py:116 firewall/forms.py:121 wireguard/forms.py:22
-#: wireguard_peer/forms.py:65
+#: wireguard_peer/forms.py:70
 msgid "Netmask"
 msgstr "Netzmaske"
 
@@ -1734,7 +1733,7 @@ msgstr "E‑Mail‑Einstellungen"
 msgid "Invite Settings"
 msgstr "Einladungs‑Einstellungen"
 
-#: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:389
+#: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:390
 msgid "Apply Route Template"
 msgstr "Routen-Vorlage anwenden"
 
@@ -1779,7 +1778,7 @@ msgstr "Übertragen"
 
 #: templates/wireguard/peer_list/peer_data.html:44
 #: templates/wireguard/peer_list/script_wireguard_status_update.html:146
-#: wireguard_peer/views.py:111
+#: wireguard_peer/views.py:112
 msgid "Primary Server"
 msgstr "Primärer Server"
 
@@ -1964,7 +1963,7 @@ msgstr ""
 
 #: templates/wireguard/server_detail.html:17
 #: templates/wireguard/wireguard_manage_peer.html:48 wireguard/forms.py:18
-#: wireguard_peer/forms.py:47
+#: wireguard_peer/forms.py:52
 msgid "Public Key"
 msgstr "Public Key"
 
@@ -2009,7 +2008,7 @@ msgstr "Erlaubte IP eingeben"
 #: templates/wireguard/wireguard_manage_ip.html:34
 #: templates/wireguard/wireguard_manage_peer.html:131
 #: templates/wireguard/wireguard_manage_peer.html:220
-#: wireguard_peer/forms.py:66
+#: wireguard_peer/forms.py:71
 msgid "Priority"
 msgstr "Priorität"
 
@@ -2021,7 +2020,7 @@ msgstr "Geben Sie \\\"delete\\\" ein, um diese IP‑Adresse zu löschen."
 msgid "Peer Configuration"
 msgstr "Peer‑Konfiguration"
 
-#: templates/wireguard/wireguard_manage_peer.html:27 wireguard_peer/forms.py:36
+#: templates/wireguard/wireguard_manage_peer.html:27 wireguard_peer/forms.py:41
 msgid "Persistent Keepalive"
 msgstr "Persistent Keepalive"
 
@@ -2030,11 +2029,11 @@ msgid "Keys"
 msgstr "Schlüssel"
 
 #: templates/wireguard/wireguard_manage_peer.html:51 wireguard/forms.py:17
-#: wireguard_peer/forms.py:48
+#: wireguard_peer/forms.py:53
 msgid "Private Key"
 msgstr "Private Key"
 
-#: templates/wireguard/wireguard_manage_peer.html:60 wireguard_peer/forms.py:49
+#: templates/wireguard/wireguard_manage_peer.html:60 wireguard_peer/forms.py:54
 msgid "Pre-Shared Key"
 msgstr "Pre‑Shared Key"
 
@@ -2106,11 +2105,27 @@ msgstr ""
 msgid "default route"
 msgstr "Standard‑Route"
 
-#: templates/wireguard/wireguard_manage_peer.html:239
+#: templates/wireguard/wireguard_manage_peer.html:236
+#, fuzzy
+#| msgid "Peers"
+msgid "Peer List"
+msgstr "Peers"
+
+#: templates/wireguard/wireguard_manage_peer.html:240
+#, fuzzy
+#| msgid "Inactive"
+msgid "Reactivate"
+msgstr "Inaktiv"
+
+#: templates/wireguard/wireguard_manage_peer.html:242
+msgid "Suspend"
+msgstr ""
+
+#: templates/wireguard/wireguard_manage_peer.html:246
 msgid "Delete Peer"
 msgstr "Peer löschen"
 
-#: templates/wireguard/wireguard_manage_peer.html:249
+#: templates/wireguard/wireguard_manage_peer.html:256
 msgid "Please type \\\"delete\\\" to remove peer configuration."
 msgstr "Geben Sie \\\"delete\\\" ein, um die Peer‑Konfiguration zu entfernen."
 
@@ -2814,23 +2829,23 @@ msgstr "Neue WireGuard‑Instanz erstellen"
 msgid "New WireGuard Instance"
 msgstr "Neue WireGuard‑Instanz"
 
-#: wireguard_peer/forms.py:64
+#: wireguard_peer/forms.py:69
 msgid "Allowed IP or Network"
 msgstr "Erlaubte IP oder Netzwerk"
 
-#: wireguard_peer/forms.py:74
+#: wireguard_peer/forms.py:79
 msgid "Please provide a valid IP address."
 msgstr "Bitte geben Sie eine gültige IP‑Adresse ein."
 
-#: wireguard_peer/forms.py:83
+#: wireguard_peer/forms.py:88
 msgid "A peer can have only one IP with priority zero."
 msgstr "Ein Peer kann nur eine IP mit Priorität 0 haben."
 
-#: wireguard_peer/forms.py:89
+#: wireguard_peer/forms.py:94
 msgid "This IP is already in use by another peer."
 msgstr "Diese IP wird bereits von einem anderen Peer verwendet."
 
-#: wireguard_peer/forms.py:91
+#: wireguard_peer/forms.py:96
 msgid ""
 "The IP address does not belong to the Peer's WireGuard instance network "
 "range. Please check the IP address or change the priority."
@@ -2838,16 +2853,16 @@ msgstr ""
 "Die IP‑Adresse liegt nicht im Netzbereich der WireGuard‑Instanz des Peers. "
 "Bitte prüfen Sie die IP oder ändern Sie die Priorität."
 
-#: wireguard_peer/forms.py:93
+#: wireguard_peer/forms.py:98
 msgid "The netmask for priority 0 IP must be 32."
 msgstr "Die Netzmaske für eine IP mit Priorität 0 muss 32 sein."
 
-#: wireguard_peer/forms.py:95
+#: wireguard_peer/forms.py:100
 msgid "The IP address is the same as the Peer's WireGuard instance address."
 msgstr ""
 "Die IP‑Adresse ist identisch mit der Adresse der WireGuard‑Instanz des Peers."
 
-#: wireguard_peer/forms.py:98
+#: wireguard_peer/forms.py:103
 msgid ""
 "The IP address belongs to the Peer's WireGuard instance network range. "
 "Please check the IP address or change use priority 0 instead."
@@ -2855,74 +2870,108 @@ msgstr ""
 "Die IP‑Adresse gehört zum Netzbereich der WireGuard‑Instanz des Peers. Bitte "
 "prüfen Sie die IP oder verwenden Sie stattdessen Priorität 0."
 
-#: wireguard_peer/forms.py:101
+#: wireguard_peer/forms.py:106
 msgid "The peer's routing template does not allow custom routes."
 msgstr "Die Routenvorlage des Peers lässt keine benutzerdefinierten Routes zu."
 
-#: wireguard_peer/forms.py:103
+#: wireguard_peer/forms.py:108
 msgid "Priority must be greater than or equal to 1"
 msgstr "Die Priorität muss größer oder gleich 1 sein"
 
-#: wireguard_peer/forms.py:105
+#: wireguard_peer/forms.py:110
 msgid "Invalid config file"
 msgstr "Ungültige Konfigurationsdatei"
 
-#: wireguard_peer/views.py:57
+#: wireguard_peer/forms.py:125
+msgid "Reactivate now"
+msgstr ""
+
+#: wireguard_peer/forms.py:128
+msgid "Suspend now"
+msgstr ""
+
+#: wireguard_peer/forms.py:140
+#, fuzzy
+#| msgid "Scheduler"
+msgid "Schedule"
+msgstr "Zeitplaner"
+
+#: wireguard_peer/forms.py:144
+#, fuzzy
+#| msgid "Scheduler"
+msgid "Clear Schedule"
+msgstr "Zeitplaner"
+
+#: wireguard_peer/forms.py:182
+msgid ""
+"The difference between suspend and unsuspend times must be at least 5 "
+"minutes."
+msgstr ""
+
+#: wireguard_peer/forms.py:186
+msgid "Scheduled suspension time must be at least 10 minutes in the future."
+msgstr ""
+
+#: wireguard_peer/forms.py:189
+msgid "Scheduled unsuspension time must be at least 10 minutes in the future."
+msgstr ""
+
+#: wireguard_peer/views.py:58
 msgid "Disabled WireGuard Peer List"
 msgstr "Liste deaktivierter WireGuard-Peers"
 
-#: wireguard_peer/views.py:60
+#: wireguard_peer/views.py:61
 msgid "WireGuard Peer List"
 msgstr "WireGuard‑Peer‑Liste"
 
-#: wireguard_peer/views.py:197
+#: wireguard_peer/views.py:198
 msgid "Peer created|Peer created successfully."
 msgstr "Peer erstellt|Peer erfolgreich erstellt."
 
-#: wireguard_peer/views.py:202
+#: wireguard_peer/views.py:203
 msgid "Error creating peer|No available IP address found for peer creation."
 msgstr "Fehler beim Erstellen des Peers|Keine freie IP‑Adresse verfügbar."
 
-#: wireguard_peer/views.py:225
+#: wireguard_peer/views.py:226
 msgid "Peer deleted|Peer deleted successfully."
 msgstr "Peer gelöscht|Peer erfolgreich gelöscht."
 
-#: wireguard_peer/views.py:228
+#: wireguard_peer/views.py:229
 msgid ""
 "Error deleting peer|Invalid confirmation message. Type \"delete\" to confirm."
 msgstr ""
 "Fehler beim Löschen des Peers|Ungültige Bestätigung. Geben Sie \"delete\" "
 "ein, um zu bestätigen."
 
-#: wireguard_peer/views.py:230
+#: wireguard_peer/views.py:231
 msgid "Peer Configuration: "
 msgstr "Peerkonfiguration: "
 
-#: wireguard_peer/views.py:268
+#: wireguard_peer/views.py:269
 msgid "Peer updated|Peer updated successfully."
 msgstr "Peer aktualisiert|Peer erfolgreich aktualisiert."
 
-#: wireguard_peer/views.py:271
+#: wireguard_peer/views.py:272
 msgid "Edit Peer"
 msgstr "Peer bearbeiten"
 
-#: wireguard_peer/views.py:273
+#: wireguard_peer/views.py:274
 msgid "Edit Peer Name"
 msgstr "Peernamen bearbeiten"
 
-#: wireguard_peer/views.py:275
+#: wireguard_peer/views.py:276
 msgid "Edit Keepalive"
 msgstr "Keepalive bearbeiten"
 
-#: wireguard_peer/views.py:277
+#: wireguard_peer/views.py:278
 msgid "Edit Keys"
 msgstr "Schlüssel bearbeiten"
 
-#: wireguard_peer/views.py:309
+#: wireguard_peer/views.py:310
 msgid "IP address deleted|IP address deleted successfully."
 msgstr "IP‑Adresse gelöscht|IP‑Adresse erfolgreich gelöscht."
 
-#: wireguard_peer/views.py:314
+#: wireguard_peer/views.py:315
 msgid ""
 "Error deleting IP address|Invalid confirmation message. Type \"delete\" to "
 "confirm."
@@ -2930,27 +2979,27 @@ msgstr ""
 "Fehler beim Löschen der IP‑Adresse|Ungültige Bestätigung. Geben Sie "
 "\"delete\" ein, um zu bestätigen."
 
-#: wireguard_peer/views.py:319
+#: wireguard_peer/views.py:320
 msgid "Manage client route"
 msgstr "Client‑Route verwalten"
 
-#: wireguard_peer/views.py:321
+#: wireguard_peer/views.py:322
 msgid "Manage IP address or Network"
 msgstr "IP‑Adresse oder Netzwerk verwalten"
 
-#: wireguard_peer/views.py:334
+#: wireguard_peer/views.py:335
 msgid "IP address updated|IP address updated successfully."
 msgstr "IP‑Adresse aktualisiert|IP‑Adresse erfolgreich aktualisiert."
 
-#: wireguard_peer/views.py:336
+#: wireguard_peer/views.py:337
 msgid "IP address added|IP address added successfully."
 msgstr "IP‑Adresse hinzugefügt|IP‑Adresse erfolgreich hinzugefügt."
 
-#: wireguard_peer/views.py:368
+#: wireguard_peer/views.py:369
 msgid "Route template unlinked successfully."
 msgstr "Routen-Vorlage erfolgreich getrennt."
 
-#: wireguard_peer/views.py:378
+#: wireguard_peer/views.py:379
 msgid ""
 "Cannot apply template: This template does not allow custom routes, but the "
 "peer has custom client routes defined."
@@ -2959,9 +3008,49 @@ msgstr ""
 "benutzerdefinierten Routen, aber der Peer hat benutzerdefinierte Client-"
 "Routen definiert."
 
-#: wireguard_peer/views.py:385
+#: wireguard_peer/views.py:386
 msgid "Route template applied successfully."
 msgstr "Routen-Vorlage erfolgreich angewendet."
+
+#: wireguard_peer/views.py:419
+#, fuzzy
+#| msgid "Cluster settings updated successfully."
+msgid "Peer suspension/unsuspension scheduled successfully."
+msgstr "Cluster-Einstellungen erfolgreich aktualisiert."
+
+#: wireguard_peer/views.py:423
+msgid ""
+"Error scheduling peer suspension/unsuspension. Please correct the errors "
+"below."
+msgstr ""
+
+#: wireguard_peer/views.py:430
+#, fuzzy
+#| msgid "Schedule Slot saved successfully."
+msgid "Schedule cleared successfully."
+msgstr "Zeitplan-Slot erfolgreich gespeichert."
+
+#: wireguard_peer/views.py:438
+#, fuzzy
+#| msgid "Peer updated|Peer updated successfully."
+msgid "Peer suspended successfully."
+msgstr "Peer aktualisiert|Peer erfolgreich aktualisiert."
+
+#: wireguard_peer/views.py:446
+#, fuzzy
+#| msgid "Peer created|Peer created successfully."
+msgid "Peer reactivated successfully."
+msgstr "Peer erstellt|Peer erfolgreich erstellt."
+
+#: wireguard_peer/views.py:450
+#, fuzzy
+#| msgid "Invalid command"
+msgid "Invalid action."
+msgstr "Ungültiger Befehl"
+
+#: wireguard_peer/views.py:455
+msgid "Suspend / Reactivate Peer"
+msgstr ""
 
 #: wireguard_tools/views.py:181
 msgid ""
@@ -3035,9 +3124,6 @@ msgstr ""
 
 #~ msgid "Add Schedule Slot"
 #~ msgstr "Zeitplan-Slot hinzufügen"
-
-#~ msgid "Schedule Slot saved successfully."
-#~ msgstr "Zeitplan-Slot erfolgreich gespeichert."
 
 #~ msgid "Schedule Slot deleted successfully."
 #~ msgstr "Zeitplan-Slot erfolgreich gelöscht."
