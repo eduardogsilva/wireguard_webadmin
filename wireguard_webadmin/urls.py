@@ -43,7 +43,7 @@ from wireguard.views import view_apply_db_patches, view_wireguard_manage_instanc
 from wireguard_peer.views import view_manage_ip_address, view_wireguard_peer_list, view_wireguard_peer_manage, \
     view_wireguard_peer_sort, view_apply_route_template, view_wireguard_peer_create, view_wireguard_peer_edit_field, \
     view_wireguard_peer_suspend, view_wireguard_peer_schedule_profile
-from wireguard_tools.views import download_config_or_qrcode, export_wireguard_configs, restart_wireguard_interfaces
+from wireguard_tools.views import download_config_or_qrcode, view_export_wireguard_configs, restart_wireguard_interfaces
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -71,7 +71,7 @@ urlpatterns = [
     path('user/manage/', view_manage_user, name='manage_user'),
     path('user/peer-group/list/', view_peer_group_list, name='peer_group_list'),
     path('user/peer-group/manage/', view_peer_group_manage, name='peer_group_manage'),
-    path('tools/export_wireguard_config/', export_wireguard_configs, name='export_wireguard_configs'),
+    path('tools/export_wireguard_config/', view_export_wireguard_configs, name='export_wireguard_configs'),
     path('tools/download_peer_config/', download_config_or_qrcode, name='download_config_or_qrcode'),
     path('tools/restart_wireguard/', restart_wireguard_interfaces, name='restart_wireguard_interfaces'),
     path('server/manage/', view_wireguard_manage_instance, name='wireguard_manage_instance'),

@@ -79,6 +79,7 @@ class FirewallSettings(models.Model):
     wan_interface = models.CharField(max_length=12, default='eth0')
     pending_changes = models.BooleanField(default=False)
     last_firewall_reset = models.DateTimeField(blank=True, null=True)
+    instance_to_execute_firewall = models.ForeignKey(WireGuardInstance, on_delete=models.SET_NULL, blank=True, null=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

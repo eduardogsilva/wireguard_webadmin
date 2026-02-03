@@ -14,7 +14,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from cluster.models import ClusterSettings, Worker
-from firewall.models import RedirectRule
+from firewall.models import RedirectRule, FirewallSettings
 from firewall.tools import export_user_firewall, generate_firewall_footer, generate_firewall_header, \
     generate_port_forward_firewall, generate_redirect_dns_rules, generate_route_policy_rules
 from user_manager.models import UserAcl
@@ -76,43 +76,61 @@ def export_firewall_configuration():
     return
 
 
-@login_required
-def export_wireguard_configs(request):
-    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
-        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+def set_instance_to_include_firewall():
+    firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
+    if firewall_settings.instance_to_execute_firewall:
+        force_export_all_instances = False
+        instance_to_execute_firewall = firewall_settings.instance_to_execute_firewall
+    else:
+        force_export_all_instances = True
+        instance_to_execute_firewall = WireGuardInstance.objects.order_by('instance_id').first()
+        if instance_to_execute_firewall:
+            firewall_settings.instance_to_execute_firewall = instance_to_execute_firewall
+            firewall_settings.save()
+    return instance_to_execute_firewall, force_export_all_instances
+
+
+def export_wireguard_configuration(instance_only: WireGuardInstance = None):
     cluster_settings = ClusterSettings.objects.filter(name='cluster_settings', enabled=True).first()
     if cluster_settings:
         if WireGuardInstance.objects.filter(pending_changes=True).exists():
             cluster_settings.config_version += 1
             cluster_settings.save()
 
-    instances = WireGuardInstance.objects.all()
+    cleanup_orphaned = True
+    instance_to_execute_firewall, force_export_all_instances = set_instance_to_include_firewall()
+
+    if instance_only and not force_export_all_instances:
+        instances = WireGuardInstance.objects.filter(id=instance_only.id)
+        cleanup_orphaned = False
+    else:
+        instances = WireGuardInstance.objects.all()
+
     base_dir = "/etc/wireguard"
     os.makedirs(base_dir, exist_ok=True)
 
-    export_firewall_configuration()
-
     firewall_inserted = False
 
-    active_instance_conf_set = {f"wg{instance.instance_id}.conf" for instance in instances}
-    for old_conf_file in glob.glob(os.path.join(base_dir, "wg[0-9]*.conf")):
-        filename = os.path.basename(old_conf_file)
-        if filename not in active_instance_conf_set:
-            logging.info("Removing abandoned WireGuard config: %s", filename)
-            try:
-                os.remove(old_conf_file)
-            except FileNotFoundError:
-                pass
-            except IsADirectoryError:
-                continue
-            except PermissionError:
-                continue
+    if cleanup_orphaned:
+        active_instance_conf_set = {f"wg{instance.instance_id}.conf" for instance in instances}
+        for old_conf_file in glob.glob(os.path.join(base_dir, "wg[0-9]*.conf")):
+            filename = os.path.basename(old_conf_file)
+            if filename not in active_instance_conf_set:
+                logging.info("Removing abandoned WireGuard config: %s", filename)
+                try:
+                    os.remove(old_conf_file)
+                except FileNotFoundError:
+                    pass
+                except IsADirectoryError:
+                    continue
+                except PermissionError:
+                    continue
 
     for instance in instances:
         if instance.legacy_firewall:
             post_up_processed = clean_command_field(instance.post_up) if instance.post_up else ""
             post_down_processed = clean_command_field(instance.post_down) if instance.post_down else ""
-            
+
             if post_up_processed:
                 post_up_processed += '; '
             if post_down_processed:
@@ -127,27 +145,26 @@ def export_wireguard_configs(request):
                     if peer_allowed_ip_address:
                         rule_destination = peer_allowed_ip_address.allowed_ip
                 if rule_destination:
-                    rule_text_up   = f"iptables -t nat -A PREROUTING -p {redirect_rule.protocol} -d wireguard-webadmin --dport {redirect_rule.port} -j DNAT --to-dest {rule_destination}:{redirect_rule.port} ; "
+                    rule_text_up = f"iptables -t nat -A PREROUTING -p {redirect_rule.protocol} -d wireguard-webadmin --dport {redirect_rule.port} -j DNAT --to-dest {rule_destination}:{redirect_rule.port} ; "
                     rule_text_down = f"iptables -t nat -D PREROUTING -p {redirect_rule.protocol} -d wireguard-webadmin --dport {redirect_rule.port} -j DNAT --to-dest {rule_destination}:{redirect_rule.port} ; "
                     if redirect_rule.add_forward_rule:
-                        rule_text_up   += f"iptables -A FORWARD -d {rule_destination} -p {redirect_rule.protocol} --dport {redirect_rule.port} -j ACCEPT ; "
+                        rule_text_up += f"iptables -A FORWARD -d {rule_destination} -p {redirect_rule.protocol} --dport {redirect_rule.port} -j ACCEPT ; "
                         rule_text_down += f"iptables -D FORWARD -d {rule_destination} -p {redirect_rule.protocol} --dport {redirect_rule.port} -j ACCEPT ; "
                     if redirect_rule.masquerade_source:
-                        rule_text_up   += f"iptables -t nat -A POSTROUTING -d {rule_destination} -p {redirect_rule.protocol} --dport {redirect_rule.port} -j MASQUERADE ; "
+                        rule_text_up += f"iptables -t nat -A POSTROUTING -d {rule_destination} -p {redirect_rule.protocol} --dport {redirect_rule.port} -j MASQUERADE ; "
                         rule_text_down += f"iptables -t nat -D POSTROUTING -d {rule_destination} -p {redirect_rule.protocol} --dport {redirect_rule.port} -j MASQUERADE ; "
                     post_up_processed += rule_text_up
                     post_down_processed += rule_text_down
-                    
+
             pass
         else:
             post_down_processed = ''
-            
-            if not firewall_inserted:
+
+            if not firewall_inserted and instance == instance_to_execute_firewall:
                 post_up_processed = '/etc/wireguard/wg-firewall.sh'
                 firewall_inserted = True
             else:
                 post_up_processed = ''
-            
 
         config_lines = [
             "[Interface]",
@@ -177,6 +194,17 @@ def export_wireguard_configs(request):
 
         with open(config_path, "w") as config_file:
             config_file.write(config_content)
+    return
+
+
+@login_required
+def view_export_wireguard_configs(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+
+    export_firewall_configuration()
+    export_wireguard_configuration()
+
     if request.GET.get('action') == 'update_and_restart' or request.GET.get('action') == 'update_and_reload':
         messages.success(request, _("Export successful!|WireGuard configuration files have been exported to /etc/wireguard/."))
     else:
