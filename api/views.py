@@ -30,6 +30,7 @@ from wgwadmlibrary.tools import create_peer_invite, get_peer_invite_data, send_e
     user_has_access_to_peer
 from wireguard.models import Peer, PeerStatus, WebadminSettings, WireGuardInstance
 from wireguard_tools.functions import func_reload_wireguard_interface
+from wireguard_tools.views import export_wireguard_configuration
 
 
 def get_api_key(api_name):
@@ -413,8 +414,6 @@ def cron_refresh_wireguard_status_cache(request):
 
 
 def cron_peer_scheduler(request):
-    success = True
-    message = ''
     now = timezone.now()
     data = {
         'status': 'success',
@@ -424,55 +423,64 @@ def cron_peer_scheduler(request):
         'scheduled_peers_suspended': 0,
         'scheduled_peers_unsuspended': 0,
     }
-    interface_list = []
-    pending_schedulings = PeerScheduling.objects.filter(
-        Q(next_scheduled_enable_at__lte=now) |
-        Q(next_scheduled_disable_at__lte=now) |
-        Q(next_manual_suspend_at__lte=now) |
-        Q(next_manual_unsuspend_at__lte=now)
+
+    interfaces = set()
+
+    pending_schedulings = (
+        PeerScheduling.objects
+        .select_related('peer', 'peer__wireguard_instance')
+        .filter(
+            Q(next_scheduled_enable_at__lte=now) |
+            Q(next_scheduled_disable_at__lte=now) |
+            Q(next_manual_suspend_at__lte=now) |
+            Q(next_manual_unsuspend_at__lte=now)
+        )
     )
+
     for peer_scheduling in pending_schedulings:
         if peer_scheduling.next_scheduled_enable_at and peer_scheduling.next_scheduled_enable_at <= now:
             data['scheduled_peers_enabled'] += 1
             peer_scheduling.next_scheduled_enable_at = None
             peer_scheduling.peer.disabled_by_schedule = False
-            if peer_scheduling.peer.wireguard_instance not in interface_list:
-                interface_list.append(peer_scheduling.peer.wireguard_instance)
+            interfaces.add(peer_scheduling.peer.wireguard_instance)
 
         if peer_scheduling.next_scheduled_disable_at and peer_scheduling.next_scheduled_disable_at <= now:
             data['scheduled_peers_disabled'] += 1
             peer_scheduling.next_scheduled_disable_at = None
             peer_scheduling.peer.disabled_by_schedule = True
-            if peer_scheduling.peer.wireguard_instance not in interface_list:
-                interface_list.append(peer_scheduling.peer.wireguard_instance)
+            interfaces.add(peer_scheduling.peer.wireguard_instance)
 
         if peer_scheduling.next_manual_unsuspend_at and peer_scheduling.next_manual_unsuspend_at <= now:
             data['scheduled_peers_unsuspended'] += 1
             peer_scheduling.next_manual_unsuspend_at = None
             peer_scheduling.peer.suspended = False
             peer_scheduling.peer.suspend_reason = ''
-            if peer_scheduling.peer.wireguard_instance not in interface_list:
-                interface_list.append(peer_scheduling.peer.wireguard_instance)
+            interfaces.add(peer_scheduling.peer.wireguard_instance)
 
         if peer_scheduling.next_manual_suspend_at and peer_scheduling.next_manual_suspend_at <= now:
             data['scheduled_peers_suspended'] += 1
             peer_scheduling.next_manual_suspend_at = None
             peer_scheduling.peer.suspended = True
             peer_scheduling.peer.suspend_reason = peer_scheduling.manual_suspend_reason
-            if peer_scheduling.peer.wireguard_instance not in interface_list:
-                interface_list.append(peer_scheduling.peer.wireguard_instance)
+            interfaces.add(peer_scheduling.peer.wireguard_instance)
 
         peer_scheduling.peer.save()
         peer_scheduling.save()
 
-    for wireguard_instance in interface_list:
-        success, message = func_reload_wireguard_interface(wireguard_instance)
+    errors = []
+    for wireguard_instance in interfaces:
+        export_wireguard_configuration(wireguard_instance)
+        ok, msg = func_reload_wireguard_interface(wireguard_instance)
+        if not ok:
+            errors.append(f"wg{wireguard_instance.instance_id} - {msg}")
 
-    if not success:
+    if errors:
         data['status'] = 'error'
-        data['message'] = message
+        data['message'] = " | ".join(errors)
+        return JsonResponse(data, status=500)
 
-    return JsonResponse(data)
+    return JsonResponse(data, status=200)
+
 
 @require_http_methods(["GET"])
 def wireguard_status(request):
