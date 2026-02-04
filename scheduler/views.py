@@ -86,7 +86,7 @@ def view_manage_scheduler_slot(request):
     cancel_url = f"{reverse('manage_scheduler_profile')}?uuid={profile.uuid}"
 
     if request.method == 'POST':
-        form = ScheduleSlotForm(request.POST, instance=slot, cancel_url=cancel_url)
+        form = ScheduleSlotForm(request.POST, instance=slot, cancel_url=cancel_url, profile=profile)
         if form.is_valid():
             new_slot = form.save(commit=False)
             new_slot.profile = profile
@@ -94,7 +94,7 @@ def view_manage_scheduler_slot(request):
             messages.success(request, _('Time Interval saved successfully.'))
             return redirect(cancel_url)
     else:
-        form = ScheduleSlotForm(instance=slot, cancel_url=cancel_url)
+        form = ScheduleSlotForm(instance=slot, cancel_url=cancel_url, profile=profile)
 
     context = {
         'form': form,
@@ -123,4 +123,4 @@ def view_delete_scheduler_slot(request):
         'cancel_url': cancel_url,
         'text': _('Are you sure you want to delete this time interval?')
     }
-    return render(request, 'scheduler/generic_delete_confirm.html', context)
+    return render(request, 'generic_delete_confirmation.html', context)

@@ -74,9 +74,9 @@
                             <div class="row">
                                 <div class="col-12">
                                     <ul>
-                                        <li>{% trans 'Current time' %}: {{ now }}</li>
-                                        <li>{% trans 'Becomes active at' %}: {{ profile.next_dates.enable|default_if_none:'' }}</li>
-                                        <li>{% trans 'Becomes inactive at' %}: {{ profile.next_dates.disable|default_if_none:'' }}</li>
+                                        <li><b>{% trans 'Current time' %}:</b> {{ now }}</li>
+                                        <li><b>{% trans 'Becomes active at' %}:</b> {{ profile.next_dates.enable|default_if_none:'' }}</li>
+                                        <li><b>{% trans 'Becomes inactive at' %}:</b> {{ profile.next_dates.disable|default_if_none:'' }}</li>
                                     </ul>
                                 </div>
                             </div>

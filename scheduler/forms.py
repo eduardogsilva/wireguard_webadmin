@@ -51,6 +51,17 @@ def _intervals_overlap(a_start, a_end, b_start, b_end) -> bool:
     return a_start < b_end and b_start < a_end
 
 
+def _circular_gap(a_start, a_end, b_start, b_end, week_minutes):
+    if a_start < b_end and b_start < a_end:
+        return 0
+
+    gaps = [
+        (b_start - a_end) % week_minutes,
+        (a_start - b_end) % week_minutes,
+    ]
+    return min(gaps)
+
+
 class ScheduleSlotForm(forms.ModelForm):
     class Meta:
         model = ScheduleSlot
@@ -98,7 +109,7 @@ class ScheduleSlotForm(forms.ModelForm):
 
     def clean(self):
         cleaned = super().clean()
-
+        week_minutes = 7 * 24 * 60
         start_weekday = cleaned.get("start_weekday")
         start_time = cleaned.get("start_time")
         end_weekday = cleaned.get("end_weekday")
@@ -111,6 +122,14 @@ class ScheduleSlotForm(forms.ModelForm):
             raise ValidationError(_("Unable to validate overlaps: schedule profile is missing."))
 
         new_intervals = _slot_to_week_intervals(start_weekday, start_time, end_weekday, end_time)
+
+        total_minutes = sum((end - start) for start, end in new_intervals)
+
+        if total_minutes < 10:
+            raise ValidationError(_("The minimum duration between start and end must be at least 10 minutes."))
+
+        if total_minutes > (week_minutes - 10):
+            raise ValidationError(_("The minimum duration between start and end must be at least 10 minutes."))
 
         qs = ScheduleSlot.objects.filter(profile=self.profile)
         if self.instance and self.instance.pk:
@@ -133,6 +152,12 @@ class ScheduleSlotForm(forms.ModelForm):
                                 "start": f"{existing.get_start_weekday_display()} {existing.start_time.strftime('%H:%M')}",
                                 "end": f"{existing.get_end_weekday_display()} {existing.end_time.strftime('%H:%M')}",
                             },
+                        )
+
+                    gap = _circular_gap(ns, ne, es, ee, week_minutes)
+                    if gap < 10:
+                        raise ValidationError(
+                            _("There must be at least 10 minutes between time slots.")
                         )
 
         return cleaned
