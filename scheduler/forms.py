@@ -1,6 +1,9 @@
+from datetime import time
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, HTML, Div
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from scheduler.models import ScheduleProfile, ScheduleSlot
@@ -26,6 +29,28 @@ class ScheduleProfileForm(forms.ModelForm):
         )
 
 
+def _time_to_minutes(t: time) -> int:
+    return t.hour * 60 + t.minute
+
+
+def _slot_to_week_intervals(start_weekday: int, start_time: time, end_weekday: int, end_time: time):
+    week_minutes = 7 * 24 * 60
+    start = start_weekday * 1440 + _time_to_minutes(start_time)
+    end = end_weekday * 1440 + _time_to_minutes(end_time)
+
+    if start == end:
+        return [(0, week_minutes)]
+
+    if end < start:
+        return [(start, week_minutes), (0, end)]
+
+    return [(start, end)]
+
+
+def _intervals_overlap(a_start, a_end, b_start, b_end) -> bool:
+    return a_start < b_end and b_start < a_end
+
+
 class ScheduleSlotForm(forms.ModelForm):
     class Meta:
         model = ScheduleSlot
@@ -42,8 +67,13 @@ class ScheduleSlotForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.profile = kwargs.pop("profile", None)
         cancel_url = kwargs.pop('cancel_url', '#')
         super().__init__(*args, **kwargs)
+
+        if self.profile is None and getattr(self.instance, "profile_id", None):
+            self.profile = self.instance.profile
+
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
@@ -65,3 +95,44 @@ class ScheduleSlotForm(forms.ModelForm):
                 css_class='row'
             )
         )
+
+    def clean(self):
+        cleaned = super().clean()
+
+        start_weekday = cleaned.get("start_weekday")
+        start_time = cleaned.get("start_time")
+        end_weekday = cleaned.get("end_weekday")
+        end_time = cleaned.get("end_time")
+
+        if None in (start_weekday, start_time, end_weekday, end_time):
+            return cleaned
+
+        if self.profile is None:
+            raise ValidationError(_("Unable to validate overlaps: schedule profile is missing."))
+
+        new_intervals = _slot_to_week_intervals(start_weekday, start_time, end_weekday, end_time)
+
+        qs = ScheduleSlot.objects.filter(profile=self.profile)
+        if self.instance and self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+
+        for existing in qs:
+            existing_intervals = _slot_to_week_intervals(
+                existing.start_weekday,
+                existing.start_time,
+                existing.end_weekday,
+                existing.end_time,
+            )
+
+            for ns, ne in new_intervals:
+                for es, ee in existing_intervals:
+                    if _intervals_overlap(ns, ne, es, ee):
+                        raise ValidationError(
+                            _("This time slot overlaps with an existing slot (%(start)s → %(end)s)."),
+                            params={
+                                "start": f"{existing.get_start_weekday_display()} {existing.start_time.strftime('%H:%M')}",
+                                "end": f"{existing.get_end_weekday_display()} {existing.end_time.strftime('%H:%M')}",
+                            },
+                        )
+
+        return cleaned
