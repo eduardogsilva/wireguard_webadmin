@@ -16,8 +16,10 @@ echo "Starting cron with WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL=$WIREGUARD_STAT
 
 # Create cron tasks
 cat <<EOF > /etc/cron.d/cron_tasks
-* * * * * root /usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_check_updates/ >> /var/log/cron.log 2>&1
-*/10 * * * * root /usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_update_peer_latest_handshake/ >> /var/log/cron.log 2>&1
+*/15 * * * * root sleep 20 ; /usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_check_updates/ >> /var/log/cron.log 2>&1
+*/10 * * * * root sleep 15 ; /usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_update_peer_latest_handshake/ >> /var/log/cron.log 2>&1
+* * * * * root sleep 10 ; /usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_peer_scheduler/ >> /var/log/cron.log 2>&1
+* * * * * root sleep 30 ; /usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_calculate_peer_schedules/ >> /var/log/cron.log 2>&1
 EOF
 
 CMD="/usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_refresh_wireguard_status_cache/ >> /var/log/cron.log 2>&1"
