@@ -7,7 +7,7 @@ from django.utils.translation import gettext as _
 
 from scheduler.forms import ScheduleProfileForm
 from scheduler.forms import ScheduleSlotForm
-from scheduler.models import ScheduleProfile, ScheduleSlot
+from scheduler.models import ScheduleProfile, ScheduleSlot, PeerScheduling
 
 
 @login_required
@@ -31,6 +31,12 @@ def view_manage_scheduler_profile(request):
         title = _('Create Schedule Profile')
         slots = None
 
+    show_peers = request.GET.get('show_peers') == 'true'
+    peers_scheduling = None
+
+    if show_peers and profile:
+        peers_scheduling = PeerScheduling.objects.filter(profile=profile).select_related('peer').order_by('peer__name')
+
     if request.method == 'POST':
         form = ScheduleProfileForm(request.POST, instance=profile)
         if form.is_valid():
@@ -46,6 +52,8 @@ def view_manage_scheduler_profile(request):
         'profile': profile,
         'slots': slots,
         'now': timezone.now(),
+        'show_peers': show_peers,
+        'peers_scheduling': peers_scheduling,
     }
     return render(request, 'scheduler/scheduleprofile_form.html', context)
 

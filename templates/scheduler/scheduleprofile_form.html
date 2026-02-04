@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="flex-grow-1">Sat
                                     </div>
-                                    <div class="flex-grow-1" >Sun
+                                    <div class="flex-grow-1">Sun
                                     </div>
                                 </div>
                                 <div class="schedule-grid-body">
@@ -143,14 +143,70 @@
             </div>
             {% endif %}
 
+            <!-- Peers List Debug Table -->
+            {% if show_peers %}
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card card-outline card-info">
+                        <div class="card-header">
+                            <h4 class="card-title">{% trans "Linked Peers (Debug)" %}</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>{% trans "Peer" %}</th>
+                                            <th>{% trans "Disabled by Schedule" %}</th>
+                                            <th>{% trans "Next Enable" %}</th>
+                                            <th>{% trans "Next Disable" %}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in peers_scheduling %}
+                                        <tr>
+                                            <td>
+                                                <a href="{% url 'wireguard_peer_manage' %}?peer={{ item.peer.uuid }}">
+                                                    {{ item.peer }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {% if item.peer.disabled_by_schedule %}
+                                                <span class="badge bg-danger">{% trans "Yes" %}</span>
+                                                {% else %}
+                                                <span class="badge bg-success">{% trans "No" %}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ item.next_scheduled_enable_at|default:"-" }}</td>
+                                            <td>{{ item.next_scheduled_disable_at|default:"-" }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted">{% trans "No peers linked to this profile." %}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
             <div class="row mt-4">
                 <div class="col-12 d-flex justify-content-end gap-2">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> {% trans "Save" %}
-                    </button>
+                    </button> &nbsp;
                     <a href="{% url 'scheduler_profile_list' %}" class="btn btn-secondary">
                         <i class="fas fa-times"></i> {% trans "Cancel" %}
-                    </a>
+                    </a> &nbsp;
+                    {% if profile %}
+                    <a href="?uuid={{ profile.uuid }}&show_peers=true" class="btn btn-outline-info">
+                        <i class="fas fa-bug"></i> {% trans "Show Peers" %}
+                    </a> &nbsp;
+                    {% endif %}
                 </div>
             </div>
         </div>
