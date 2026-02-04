@@ -1,6 +1,8 @@
 import uuid
+from datetime import datetime, timedelta
 
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from wireguard.models import Peer
@@ -24,6 +26,51 @@ class ScheduleProfile(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def _next_weekday_time(now, weekday, t):
+
+        tz = timezone.get_current_timezone()
+
+        today = timezone.localdate(now)
+        candidate_date = today + timedelta(days=(weekday - today.weekday()) % 7)
+
+        candidate = timezone.make_aware(
+            datetime.combine(candidate_date, t),
+            tz
+        )
+
+        if candidate <= now:
+            candidate_date += timedelta(days=7)
+            candidate = timezone.make_aware(
+                datetime.combine(candidate_date, t),
+                tz
+            )
+
+        return candidate
+
+    @property
+    def next_dates(self):
+        slots = list(self.time_interval.all())
+        if not slots:
+            return {'enable': None, 'disable': None}
+
+        now = timezone.now()
+
+        start_candidates = []
+        end_candidates = []
+
+        for slot in slots:
+            start_dt = ScheduleProfile._next_weekday_time(now, slot.start_weekday, slot.start_time)
+            end_dt = ScheduleProfile._next_weekday_time(now, slot.end_weekday, slot.end_time)
+
+            start_candidates.append(start_dt)
+            end_candidates.append(end_dt)
+
+        return {
+            'enable': min(start_candidates) if start_candidates else None,
+            'disable': min(end_candidates) if end_candidates else None,
+        }
 
 
 class ScheduleSlot(models.Model):

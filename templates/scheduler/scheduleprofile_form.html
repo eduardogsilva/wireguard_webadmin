@@ -70,6 +70,17 @@
                                 <span><i class="fas fa-circle" style="color: #28a745;"></i> {% trans "Active" %}</span> &nbsp;
                                 <span><i class="fas fa-circle" style="color: #dc3545;"></i> {% trans "Inactive" %}</span>
                             </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <ul>
+                                        <li>{% trans 'Current time' %}: {{ now }}</li>
+                                        <li>{% trans 'Becomes active at' %}: {{ profile.next_dates.enable|default_if_none:'' }}</li>
+                                        <li>{% trans 'Becomes inactive at' %}: {{ profile.next_dates.disable|default_if_none:'' }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

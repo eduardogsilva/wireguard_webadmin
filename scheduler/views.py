@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from scheduler.forms import ScheduleProfileForm
@@ -44,6 +45,7 @@ def view_manage_scheduler_profile(request):
         'title': title,
         'profile': profile,
         'slots': slots,
+        'now': timezone.now(),
     }
     return render(request, 'scheduler/scheduleprofile_form.html', context)
 
