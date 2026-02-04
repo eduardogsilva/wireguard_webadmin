@@ -6,4 +6,4 @@ class SchedulerConfig(AppConfig):
     name = 'scheduler'
 
     def ready(self):
-        pass
+        from . import signals # noqa
