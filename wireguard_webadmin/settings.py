@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'cluster',
     'api',
     'routing_templates',
-    'scheduler'
+    'scheduler.apps.SchedulerConfig'
 ]
 
 MIDDLEWARE = [
