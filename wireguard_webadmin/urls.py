@@ -20,7 +20,7 @@ from django.urls import path
 from accounts.views import view_create_first_user, view_login, view_logout
 from api.views import api_instance_info, api_peer_invite, api_peer_list, cron_check_updates, \
     cron_update_peer_latest_handshake, peer_info, routerfleet_authenticate_session, routerfleet_get_user_token, \
-    wireguard_status, cron_refresh_wireguard_status_cache
+    wireguard_status, cron_refresh_wireguard_status_cache, cron_calculate_peer_schedules, cron_peer_scheduler
 from cluster.cluster_api import api_cluster_status, api_get_worker_config_files, api_get_worker_dnsmasq_config, \
     api_worker_ping, api_submit_worker_wireguard_stats
 from cluster.views import cluster_main, cluster_settings, worker_manage
@@ -87,6 +87,8 @@ urlpatterns = [
     path('api/instance_info/', api_instance_info, name='api_instance_info'),
     path('api/peer_info/', peer_info, name='api_peer_info'),
     path('api/peer_invite/', api_peer_invite, name='api_peer_invite'),
+    path('api/cron_peer_scheduler/', cron_peer_scheduler, name='cron_peer_scheduler'),
+    path('api/cron_calculate_peer_schedules/', cron_calculate_peer_schedules, name='cron_calculate_peer_schedules'),
     path('api/cron_refresh_wireguard_status_cache/', cron_refresh_wireguard_status_cache, name='cron_refresh_wireguard_status_cache'),
     path('api/cron_check_updates/', cron_check_updates, name='cron_check_updates'),
     path('api/cron_update_peer_latest_handshake/', cron_update_peer_latest_handshake, name='cron_update_peer_latest_handshake'),

@@ -23,7 +23,7 @@ from django.views.decorators.http import require_http_methods
 
 from api.models import WireguardStatusCache
 from cluster.models import ClusterSettings, WorkerStatus
-from scheduler.models import PeerScheduling
+from scheduler.models import PeerScheduling, ScheduleProfile
 from user_manager.models import AuthenticationToken, UserAcl
 from vpn_invite.models import InviteSettings, PeerInvite
 from wgwadmlibrary.tools import create_peer_invite, get_peer_invite_data, send_email, user_allowed_peers, \
@@ -410,6 +410,76 @@ def cron_refresh_wireguard_status_cache(request):
     WireguardStatusCache.objects.create(data=wireguard_status_data, processing_time_ms=processing_time_ms, cache_type='master')
     if ClusterSettings.objects.filter(name='cluster_settings', enabled=True).exists():
         func_concatenate_cluster_wireguard_status_cache()
+    return JsonResponse(data)
+
+
+def cron_calculate_peer_schedules(request):
+    data = {
+        'status': 'success',
+        'updated_records': 0,
+        'skipped_records': 0,
+    }
+
+    peer_scheduling_queryset = (
+        PeerScheduling.objects
+        .select_related('peer', 'profile')
+        .filter(
+            profile__active=True,
+            peer__suspended=False,
+        )
+        .filter(
+            Q(next_scheduled_enable_at__isnull=True) |
+            Q(next_scheduled_disable_at__isnull=True)
+        )
+    )
+
+    if not peer_scheduling_queryset.exists():
+        return JsonResponse(data)
+
+    distinct_profile_ids = list(
+        peer_scheduling_queryset.values_list('profile_id', flat=True).distinct()
+    )
+
+    schedule_profiles = (
+        ScheduleProfile.objects
+        .filter(id__in=distinct_profile_ids, active=True)
+        .prefetch_related('time_interval')
+    )
+
+    profile_next_dates_cache = {}
+
+    for schedule_profile in schedule_profiles:
+        next_dates = schedule_profile.next_dates
+        profile_next_dates_cache[schedule_profile.id] = (
+            next_dates.get('enable'),
+            next_dates.get('disable'),
+        )
+
+    peer_schedulings_to_update = []
+
+    for peer_scheduling in peer_scheduling_queryset.iterator(chunk_size=500):
+        next_enable_at, next_disable_at = profile_next_dates_cache.get(
+            peer_scheduling.profile_id,
+            (None, None)
+        )
+
+        if not next_enable_at or not next_disable_at:
+            data['skipped_records'] += 1
+            continue
+
+        peer_scheduling.next_scheduled_enable_at = next_enable_at
+        peer_scheduling.next_scheduled_disable_at = next_disable_at
+
+        peer_schedulings_to_update.append(peer_scheduling)
+
+    if peer_schedulings_to_update:
+        PeerScheduling.objects.bulk_update(
+            peer_schedulings_to_update,
+            ['next_scheduled_enable_at', 'next_scheduled_disable_at'],
+            batch_size=500
+        )
+        data['updated_records'] = len(peer_schedulings_to_update)
+
     return JsonResponse(data)
 
 
