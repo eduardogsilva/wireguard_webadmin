@@ -438,6 +438,11 @@ def view_wireguard_peer_suspend(request):
             messages.success(request, _('Schedule cleared successfully.'))
 
         elif action == 'suspend_now':
+            peer_scheduling.next_scheduled_enable_at = None
+            peer_scheduling.next_scheduled_disable_at = None
+            peer_scheduling.schedule_last_calculated_at = None
+            peer_scheduling.save()
+
             current_peer.suspended = True
             current_peer.suspend_reason = manual_suspend_reason
             current_peer.save()
