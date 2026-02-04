@@ -440,7 +440,6 @@ def view_wireguard_peer_suspend(request):
         elif action == 'suspend_now':
             peer_scheduling.next_scheduled_enable_at = None
             peer_scheduling.next_scheduled_disable_at = None
-            peer_scheduling.schedule_last_calculated_at = None
             peer_scheduling.save()
 
             current_peer.suspended = True

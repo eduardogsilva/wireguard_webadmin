@@ -435,7 +435,6 @@ def cron_peer_scheduler(request):
         if peer_scheduling.next_scheduled_enable_at and peer_scheduling.next_scheduled_enable_at <= now:
             data['scheduled_peers_enabled'] += 1
             peer_scheduling.next_scheduled_enable_at = None
-            peer_scheduling.schedule_last_calculated_at = None
             peer_scheduling.peer.disabled_by_schedule = False
             if peer_scheduling.peer.wireguard_instance not in interface_list:
                 interface_list.append(peer_scheduling.peer.wireguard_instance)
@@ -443,7 +442,6 @@ def cron_peer_scheduler(request):
         if peer_scheduling.next_scheduled_disable_at and peer_scheduling.next_scheduled_disable_at <= now:
             data['scheduled_peers_disabled'] += 1
             peer_scheduling.next_scheduled_disable_at = None
-            peer_scheduling.schedule_last_calculated_at = None
             peer_scheduling.peer.disabled_by_schedule = True
             if peer_scheduling.peer.wireguard_instance not in interface_list:
                 interface_list.append(peer_scheduling.peer.wireguard_instance)

@@ -53,7 +53,6 @@ class PeerScheduling(models.Model):
 
     next_scheduled_enable_at = models.DateTimeField(null=True, blank=True)
     next_scheduled_disable_at = models.DateTimeField(null=True, blank=True)
-    schedule_last_calculated_at = models.DateTimeField(null=True, blank=True)
 
     next_manual_suspend_at = models.DateTimeField(null=True, blank=True)
     next_manual_unsuspend_at = models.DateTimeField(null=True, blank=True)
