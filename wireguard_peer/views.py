@@ -18,6 +18,8 @@ from wgwadmlibrary.tools import check_sort_order_conflict, deduplicate_sort_orde
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from wireguard_peer.forms import PeerAllowedIPForm, PeerNameForm, PeerKeepaliveForm, PeerKeysForm, PeerSuspensionForm, \
     PeerScheduleProfileForm
+from wireguard_tools.functions import func_reload_wireguard_interface
+from wireguard_tools.views import export_wireguard_configuration
 
 
 def generate_peer_default(wireguard_instance):
@@ -425,8 +427,6 @@ def view_wireguard_peer_suspend(request):
             if form.is_valid():
                 form.save()
                 messages.success(request, _('Peer suspension/unsuspension scheduled successfully.'))
-                current_peer.wireguard_instance.pending_changes = True
-                current_peer.wireguard_instance.save()
             else:
                 messages.error(request, _('Error scheduling peer suspension/unsuspension. Please correct the errors below.'))
 
@@ -436,24 +436,31 @@ def view_wireguard_peer_suspend(request):
             peer_scheduling.manual_suspend_reason = None
             peer_scheduling.save()
             messages.success(request, _('Schedule cleared successfully.'))
-            current_peer.wireguard_instance.pending_changes = True
-            current_peer.wireguard_instance.save()
 
         elif action == 'suspend_now':
             current_peer.suspended = True
             current_peer.suspend_reason = manual_suspend_reason
             current_peer.save()
-            messages.success(request, _('Peer suspended successfully.'))
-            current_peer.wireguard_instance.pending_changes = True
-            current_peer.wireguard_instance.save()
+
+            export_wireguard_configuration(current_peer.wireguard_instance)
+            success, message = func_reload_wireguard_interface(current_peer.wireguard_instance)
+            if success:
+                messages.success(request, _('Peer suspended successfully.'))
+            else:
+                messages.error(request, _('Peer suspended, but failed to reload WireGuard interface: ') + message)
 
         elif action == 'unsuspend_now':
             current_peer.suspended = False
             current_peer.suspend_reason = ''
             current_peer.save()
-            messages.success(request, _('Peer reactivated successfully.'))
-            current_peer.wireguard_instance.pending_changes = True
-            current_peer.wireguard_instance.save()
+
+            export_wireguard_configuration(current_peer.wireguard_instance)
+            success, message = func_reload_wireguard_interface(current_peer.wireguard_instance)
+            if success:
+                messages.success(request, _('Peer reactivated successfully.'))
+            else:
+                messages.error(request, _('Peer reactivated, but failed to reload WireGuard interface: ') + message)
+
         else:
             messages.error(request, _('Invalid action.'))
 

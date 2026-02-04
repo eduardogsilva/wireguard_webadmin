@@ -102,7 +102,7 @@ def export_wireguard_configuration(instance_only: WireGuardInstance = None):
     instance_to_execute_firewall, force_export_all_instances = set_instance_to_include_firewall()
 
     if instance_only and not force_export_all_instances:
-        instances = WireGuardInstance.objects.filter(id=instance_only.id)
+        instances = WireGuardInstance.objects.filter(uuid=instance_only.uuid)
         cleanup_orphaned = False
     else:
         instances = WireGuardInstance.objects.all()
@@ -230,8 +230,8 @@ def view_export_wireguard_configs(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
         return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
 
-    export_firewall_configuration()
     export_wireguard_configuration()
+    export_firewall_configuration()
 
     if request.GET.get('action') == 'update_and_restart' or request.GET.get('action') == 'update_and_reload':
         messages.success(request, _("Export successful!|WireGuard configuration files have been exported to /etc/wireguard/."))
