@@ -63,6 +63,7 @@ class StaticHostForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.fields['hostname'].label = _('Hostname')
+        self.fields['hostname'].help_text = _('Hostname or wildcard domain (e.g. *.example.com)')
         self.fields['ip_address'].label = _('IP Address')
         back_label = _('Back')
         delete_label = _('Delete')
@@ -90,10 +91,12 @@ class StaticHostForm(forms.ModelForm):
         cleaned_data = super().clean()
         hostname = cleaned_data.get('hostname')
         if hostname:
-            regex = r'^[a-zA-Z][a-zA-Z0-9-\.]*[a-zA-Z0-9]$'
-            if not re.match(regex, hostname):
-                raise ValidationError('Invalid hostname')
-        return
+            # Allow plain hostname (e.g. example.com) or wildcard (e.g. *.example.com)
+            plain_regex = r'^[a-zA-Z0-9]([a-zA-Z0-9-\.]*[a-zA-Z0-9])?$'
+            wildcard_regex = r'^\*\.([a-zA-Z0-9]([a-zA-Z0-9-\.]*[a-zA-Z0-9])?)$'
+            if not (re.match(plain_regex, hostname) or re.match(wildcard_regex, hostname)):
+                raise ValidationError(_('Invalid hostname. Use a hostname (e.g. example.com) or wildcard (e.g. *.example.com).'))
+        return cleaned_data
 
 
 class DNSFilterListForm(forms.ModelForm):
