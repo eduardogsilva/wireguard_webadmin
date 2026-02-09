@@ -40,6 +40,7 @@ class RoutingTemplateForm(forms.ModelForm):
         self.helper.form_method = 'post'
 
         if self.instance.pk:
+            self.fields['wireguard_instance'].disabled = True
             delete_html = f"<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{delete_label}</a>"
         else:
             delete_html = ''
