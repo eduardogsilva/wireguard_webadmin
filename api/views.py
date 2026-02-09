@@ -41,6 +41,8 @@ def get_api_key(api_name):
         api_file_path = '/etc/wireguard/routerfleet_key'
     elif api_name == 'rrdkey':
         api_file_path = '/app_secrets/rrdtool_key'
+    elif api_name == 'cron_key':
+        api_file_path = '/app_secrets/cron_key'
     else:
         return api_key
 
@@ -398,6 +400,12 @@ def func_concatenate_cluster_wireguard_status_cache() -> None:
 
 
 def cron_refresh_wireguard_status_cache(request):
+    api_key = get_api_key('cron_key')
+    if api_key and api_key == request.GET.get('cron_key'):
+        pass
+    else:
+        return HttpResponseForbidden()
+
     data = {'status': 'success'}
     WireguardStatusCache.objects.filter(created__lt=timezone.now() - timezone.timedelta(seconds=settings.WIREGUARD_STATUS_CACHE_MAX_AGE)).delete()
 
@@ -414,6 +422,12 @@ def cron_refresh_wireguard_status_cache(request):
 
 
 def cron_calculate_peer_schedules(request):
+    api_key = get_api_key('cron_key')
+    if api_key and api_key == request.GET.get('cron_key'):
+        pass
+    else:
+        return HttpResponseForbidden()
+
     data = {
         'status': 'success',
         'updated_records': 0,
@@ -484,6 +498,12 @@ def cron_calculate_peer_schedules(request):
 
 
 def cron_peer_scheduler(request):
+    api_key = get_api_key('cron_key')
+    if api_key and api_key == request.GET.get('cron_key'):
+        pass
+    else:
+        return HttpResponseForbidden()
+
     now = timezone.now()
     data = {
         'status': 'success',
@@ -671,6 +691,12 @@ def legacy_wireguard_status(request):
 
 @require_http_methods(["GET"])
 def cron_update_peer_latest_handshake(request):
+    api_key = get_api_key('cron_key')
+    if api_key and api_key == request.GET.get('cron_key'):
+        pass
+    else:
+        return HttpResponseForbidden()
+
     command = "wg show all latest-handshakes | expand | tr -s ' '"
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     stdout, stderr = process.communicate()
@@ -707,6 +733,12 @@ def cron_update_peer_latest_handshake(request):
 
 
 def cron_check_updates(request):
+    api_key = get_api_key('cron_key')
+    if api_key and api_key == request.GET.get('cron_key'):
+        pass
+    else:
+        return HttpResponseForbidden()
+
     webadmin_settings, webadmin_settings_created = WebadminSettings.objects.get_or_create(name='webadmin_settings')
     if webadmin_settings.last_checked is None or timezone.now() > (webadmin_settings.last_checked + datetime.timedelta(hours=1)):
         try:

@@ -2,7 +2,7 @@
 
 set -e
 
-if [[ "$COMPOSE_VERSION" != "c1b" ]]; then
+if [[ "$COMPOSE_VERSION" != "c1c" ]]; then
     echo "ERROR: Please upgrade your docker compose file. Exiting."
     exit 1
 fi
@@ -19,6 +19,10 @@ fi
 
 if [ ! -f /app_secrets/rrdtool_key ]; then
     cat /proc/sys/kernel/random/uuid > /app_secrets/rrdtool_key
+fi
+
+if [ ! -f /app_secrets/cron_key ]; then
+    cat /proc/sys/kernel/random/uuid > /app_secrets/cron_key
 fi
 
 SERVER_HOSTNAME=$(echo $SERVER_ADDRESS | cut -d ':' -f 1)

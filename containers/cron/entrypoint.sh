@@ -16,32 +16,28 @@ echo "Starting cron with WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL=$WIREGUARD_STAT
 
 # Create cron tasks
 cat <<EOF > /etc/cron.d/cron_tasks
-*/15 * * * * root sleep 20 ; /usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_check_updates/ >> /var/log/cron.log 2>&1
-*/10 * * * * root sleep 15 ; /usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_update_peer_latest_handshake/ >> /var/log/cron.log 2>&1
-* * * * * root sleep 10 ; /usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_peer_scheduler/ >> /var/log/cron.log 2>&1
-* * * * * root sleep 30 ; /usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_calculate_peer_schedules/ >> /var/log/cron.log 2>&1
+*/15 * * * * root sleep 20  ; /cron_runner.sh check_updates                >> /var/log/cron.log 2>&1
+*/10 * * * * root sleep 15  ; /cron_runner.sh update_peer_latest_handshake >> /var/log/cron.log 2>&1
+* * * * *    root sleep 10  ; /cron_runner.sh peer_scheduler               >> /var/log/cron.log 2>&1
+* * * * *    root sleep 30  ; /cron_runner.sh calculate_peer_schedules     >> /var/log/cron.log 2>&1
 EOF
 
-CMD="/usr/bin/curl -s http://wireguard-webadmin:8000/api/cron_refresh_wireguard_status_cache/ >> /var/log/cron.log 2>&1"
+CMD="echo -n cron_refresh_wireguard_status_cache ; /cron_runner.sh refresh_wireguard_status_cache >> /var/log/cron.log 2>&1"
 
 if [ "$WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL" -eq 30 ]; then
-    echo "* * * * * root $CMD" >> /etc/cron.d/cron_tasks
-    echo "* * * * * root sleep 30; $CMD" >> /etc/cron.d/cron_tasks
+    echo "* * * * *    root             $CMD" >> /etc/cron.d/cron_tasks
+    echo "* * * * *    root sleep 30  ; $CMD" >> /etc/cron.d/cron_tasks
 elif [ "$WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL" -eq 60 ]; then
-    echo "* * * * * root $CMD" >> /etc/cron.d/cron_tasks
+    echo "* * * * *    root             $CMD" >> /etc/cron.d/cron_tasks
 elif [ "$WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL" -eq 150 ]; then
-    echo "*/5 * * * * root $CMD" >> /etc/cron.d/cron_tasks
-    echo "*/5 * * * * root sleep 150; $CMD" >> /etc/cron.d/cron_tasks
+    echo "*/5 * * * *  root             $CMD" >> /etc/cron.d/cron_tasks
+    echo "*/5 * * * *  root sleep 150 ; $CMD" >> /etc/cron.d/cron_tasks
 elif [ "$WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL" -eq 300 ]; then
-    echo "*/5 * * * * root $CMD" >> /etc/cron.d/cron_tasks
+    echo "*/5 * * * *  root             $CMD" >> /etc/cron.d/cron_tasks
 fi
 
-# Permissions
 chmod 0644 /etc/cron.d/cron_tasks
-# crontab /etc/cron.d/cron_tasks
 
-# Touch log file
-touch /var/log/cron.log
-
-# Execute cron
-exec cron -f
+echo > /var/log/cron.log
+cron
+tail -n 0 -F /var/log/cron.log

@@ -7,7 +7,7 @@ services:
     environment:
       - SERVER_ADDRESS=${SERVER_ADDRESS}
       - DEBUG_MODE=${DEBUG_MODE}
-      - COMPOSE_VERSION=c1b
+      - COMPOSE_VERSION=c1c
       - TZ=${TIMEZONE}
       - EXTRA_ALLOWED_HOSTS=${EXTRA_ALLOWED_HOSTS}
       - WIREGUARD_STATUS_CACHE_ENABLED=${WIREGUARD_STATUS_CACHE_ENABLED}
@@ -42,6 +42,8 @@ services:
     environment:
       - TZ=${TIMEZONE}
       - WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL=${WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL}
+    volumes:
+      - app_secrets:/app_secrets/
     depends_on:
       - wireguard-webadmin
 
