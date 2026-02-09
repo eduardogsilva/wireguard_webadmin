@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 13:51-0300\n"
+"POT-Creation-Date: 2026-02-09 20:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -133,15 +133,16 @@ msgstr "Exibição do Worker"
 
 #: cluster/forms.py:136
 msgid "Cluster mode requires WireGuard status cache to be enabled."
-msgstr "O modo cluster requer que o cache de status do WireGuard esteja habilitado."
+msgstr ""
+"O modo cluster requer que o cache de status do WireGuard esteja habilitado."
 
 #: cluster/models.py:46
 msgid ""
 "IP lock is enabled, but the worker is attempting to access from a different "
 "IP address."
 msgstr ""
-"O bloqueio de IP está habilitado, mas o worker está tentando acessar a partir "
-"de um endereço IP diferente."
+"O bloqueio de IP está habilitado, mas o worker está tentando acessar a "
+"partir de um endereço IP diferente."
 
 #: cluster/models.py:47
 msgid "Worker is not enabled"
@@ -382,7 +383,8 @@ msgstr "Lista de Filtro de DNS padrão criada com sucesso"
 #: dns/views.py:72
 msgid ""
 "Pending Changes|There are pending DNS changes that have not been applied"
-msgstr "Alterações Pendentes|Há alterações de DNS pendentes que não foram aplicadas"
+msgstr ""
+"Alterações Pendentes|Há alterações de DNS pendentes que não foram aplicadas"
 
 #: dns/views.py:91
 msgid "DNS Forwarders"
@@ -547,25 +549,25 @@ msgstr "Protocolo"
 msgid "Destination Port"
 msgstr "Porta de Destino"
 
-#: firewall/forms.py:127 templates/firewall/firewall_rule_list.html:141
+#: firewall/forms.py:127 templates/firewall/firewall_rule_list.html:155
 msgid "New"
 msgstr "Novo"
 
 #: firewall/forms.py:128 templates/firewall/firewall_rule_list.html:60
-#: templates/firewall/firewall_rule_list.html:142
+#: templates/firewall/firewall_rule_list.html:156
 msgid "Related"
 msgstr "Relacionado"
 
 #: firewall/forms.py:129 templates/firewall/firewall_rule_list.html:61
-#: templates/firewall/firewall_rule_list.html:143
+#: templates/firewall/firewall_rule_list.html:157
 msgid "Established"
 msgstr "Estabelecido"
 
-#: firewall/forms.py:130 templates/firewall/firewall_rule_list.html:144
+#: firewall/forms.py:130 templates/firewall/firewall_rule_list.html:158
 msgid "Invalid"
 msgstr "Inválido"
 
-#: firewall/forms.py:131 templates/firewall/firewall_rule_list.html:145
+#: firewall/forms.py:131 templates/firewall/firewall_rule_list.html:159
 msgid "Untracked"
 msgstr "Não rastreado"
 
@@ -587,15 +589,15 @@ msgstr "Política Padrão (Forward)"
 
 #: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
 #: firewall/models.py:76 templates/firewall/firewall_rule_list.html:63
-#: templates/firewall/firewall_rule_list.html:91
-#: templates/firewall/firewall_rule_list.html:168
-#: templates/firewall/firewall_rule_list.html:187
+#: templates/firewall/firewall_rule_list.html:105
+#: templates/firewall/firewall_rule_list.html:182
+#: templates/firewall/firewall_rule_list.html:201
 msgid "ACCEPT"
 msgstr "ACEITA"
 
 #: firewall/forms.py:182 firewall/models.py:62
-#: templates/firewall/firewall_rule_list.html:170
-#: templates/firewall/firewall_rule_list.html:187
+#: templates/firewall/firewall_rule_list.html:184
+#: templates/firewall/firewall_rule_list.html:201
 msgid "REJECT"
 msgstr "REJEITA"
 
@@ -620,15 +622,15 @@ msgstr "Interface WAN"
 msgid "MASQUERADE"
 msgstr "MASCARAR"
 
-#: firewall/tools.py:45
+#: firewall/tools.py:46
 msgid "Masquerade traffic from VPN to WAN"
 msgstr "Mascarar tráfego da VPN para a WAN"
 
-#: firewall/tools.py:55 firewall/tools.py:59 firewall/tools.py:63
+#: firewall/tools.py:56 firewall/tools.py:60 firewall/tools.py:64
 msgid "Reject traffic to private networks exiting on WAN interface"
 msgstr "Rejeitar tráfego para redes privadas saindo pela interface WAN"
 
-#: firewall/tools.py:67
+#: firewall/tools.py:68
 msgid "Allow traffic from VPN to WAN"
 msgstr "Permitir tráfego da VPN para a WAN"
 
@@ -916,16 +918,21 @@ msgstr "Hora de Término"
 
 #: scheduler/forms.py:122
 msgid "Unable to validate overlaps: schedule profile is missing."
-msgstr "Não foi possível validar sobreposições: o perfil de agendamento está faltando."
+msgstr ""
+"Não foi possível validar sobreposições: o perfil de agendamento está "
+"faltando."
 
 #: scheduler/forms.py:129 scheduler/forms.py:132
 msgid "The minimum duration between start and end must be at least 10 minutes."
-msgstr "A duração mínima entre o início e o fim deve ser de pelo menos 10 minutos."
+msgstr ""
+"A duração mínima entre o início e o fim deve ser de pelo menos 10 minutos."
 
 #: scheduler/forms.py:150
 #, python-format
 msgid "This time slot overlaps with an existing slot (%(start)s → %(end)s)."
-msgstr "Este intervalo de tempo se sobrepõe a um intervalo existente (%(start)s → %(end)s)."
+msgstr ""
+"Este intervalo de tempo se sobrepõe a um intervalo existente (%(start)s → "
+"%(end)s)."
 
 #: scheduler/forms.py:160
 msgid "There must be at least 10 minutes between time slots."
@@ -1279,33 +1286,44 @@ msgid "Automatic rule: Allow established/related traffic"
 msgstr "Regra Automática: Permitir tráfego estabelecido/relacionado"
 
 #: templates/firewall/firewall_rule_list.html:58
-#: templates/firewall/firewall_rule_list.html:138
+#: templates/firewall/firewall_rule_list.html:74
+#: templates/firewall/firewall_rule_list.html:152
 msgid "all"
 msgstr "Todos"
 
-#: templates/firewall/firewall_rule_list.html:71
-#: templates/firewall/firewall_rule_list.html:97
+#: templates/firewall/firewall_rule_list.html:69
+#, fuzzy
+#| msgid "Enforce Route Policy"
+msgid "Automatic rule: Route Policy"
+msgstr "Forçar Política de Roteamento"
+
+#: templates/firewall/firewall_rule_list.html:77
+msgid "RETURN"
+msgstr ""
+
+#: templates/firewall/firewall_rule_list.html:85
+#: templates/firewall/firewall_rule_list.html:111
 msgid "Automatic Rule: Port forward."
 msgstr "Regra Automática: Encaminhamento de Porta."
 
-#: templates/firewall/firewall_rule_list.html:158
+#: templates/firewall/firewall_rule_list.html:172
 msgid "Automatic Rule: Firewall Settings Peer to Peer traffic"
 msgstr "Regra Automática: Configurações de Firewall tráfego entre Peers"
 
-#: templates/firewall/firewall_rule_list.html:179
+#: templates/firewall/firewall_rule_list.html:193
 msgid "Automatic Rule: Firewall Settings Instance to Instance"
 msgstr "Regra Automática: permitir tráfego entre Instâncias"
 
-#: templates/firewall/firewall_rule_list.html:194
+#: templates/firewall/firewall_rule_list.html:208
 msgid "Create Firewall Rule"
 msgstr "Criar Regra de Firewall"
 
-#: templates/firewall/firewall_rule_list.html:195
+#: templates/firewall/firewall_rule_list.html:209
 #: templates/firewall/redirect_rule_list.html:59
 msgid "Firewall Settings"
 msgstr "Configuração de Firewall"
 
-#: templates/firewall/firewall_rule_list.html:196
+#: templates/firewall/firewall_rule_list.html:210
 msgid "Display automatic rules"
 msgstr "Mostrar regras automáticas"
 
@@ -3169,7 +3187,7 @@ msgstr "Suspender / Reativar Peer"
 msgid "Peer scheduling profile updated successfully."
 msgstr "Perfil de agendamento do peer atualizado com sucesso."
 
-#: wireguard_peer/views.py:503
+#: wireguard_peer/views.py:510
 msgid "Manage Peer Schedule Profile"
 msgstr "Gerenciar Perfil de Agendamento do Peer"
 

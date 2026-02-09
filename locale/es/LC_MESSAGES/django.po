@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 13:51-0300\n"
+"POT-Creation-Date: 2026-02-09 20:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -549,25 +549,25 @@ msgstr "Protocolo"
 msgid "Destination Port"
 msgstr "Puerto de destino"
 
-#: firewall/forms.py:127 templates/firewall/firewall_rule_list.html:141
+#: firewall/forms.py:127 templates/firewall/firewall_rule_list.html:155
 msgid "New"
 msgstr "Nuevo"
 
 #: firewall/forms.py:128 templates/firewall/firewall_rule_list.html:60
-#: templates/firewall/firewall_rule_list.html:142
+#: templates/firewall/firewall_rule_list.html:156
 msgid "Related"
 msgstr "Relacionado"
 
 #: firewall/forms.py:129 templates/firewall/firewall_rule_list.html:61
-#: templates/firewall/firewall_rule_list.html:143
+#: templates/firewall/firewall_rule_list.html:157
 msgid "Established"
 msgstr "Establecido"
 
-#: firewall/forms.py:130 templates/firewall/firewall_rule_list.html:144
+#: firewall/forms.py:130 templates/firewall/firewall_rule_list.html:158
 msgid "Invalid"
 msgstr "Inválido"
 
-#: firewall/forms.py:131 templates/firewall/firewall_rule_list.html:145
+#: firewall/forms.py:131 templates/firewall/firewall_rule_list.html:159
 msgid "Untracked"
 msgstr "Sin seguimiento"
 
@@ -589,15 +589,15 @@ msgstr "Política predeterminada de reenvío"
 
 #: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
 #: firewall/models.py:76 templates/firewall/firewall_rule_list.html:63
-#: templates/firewall/firewall_rule_list.html:91
-#: templates/firewall/firewall_rule_list.html:168
-#: templates/firewall/firewall_rule_list.html:187
+#: templates/firewall/firewall_rule_list.html:105
+#: templates/firewall/firewall_rule_list.html:182
+#: templates/firewall/firewall_rule_list.html:201
 msgid "ACCEPT"
 msgstr "ACEPTAR"
 
 #: firewall/forms.py:182 firewall/models.py:62
-#: templates/firewall/firewall_rule_list.html:170
-#: templates/firewall/firewall_rule_list.html:187
+#: templates/firewall/firewall_rule_list.html:184
+#: templates/firewall/firewall_rule_list.html:201
 msgid "REJECT"
 msgstr "RECHAZAR"
 
@@ -622,15 +622,15 @@ msgstr "Interfaz WAN"
 msgid "MASQUERADE"
 msgstr "MASCARAR"
 
-#: firewall/tools.py:45
+#: firewall/tools.py:46
 msgid "Masquerade traffic from VPN to WAN"
 msgstr "Mascarar tráfico de VPN a WAN"
 
-#: firewall/tools.py:55 firewall/tools.py:59 firewall/tools.py:63
+#: firewall/tools.py:56 firewall/tools.py:60 firewall/tools.py:64
 msgid "Reject traffic to private networks exiting on WAN interface"
 msgstr "Rechazar tráfico a redes privadas saliendo por la interfaz WAN"
 
-#: firewall/tools.py:67
+#: firewall/tools.py:68
 msgid "Allow traffic from VPN to WAN"
 msgstr "Permitir tráfico de VPN a WAN"
 
@@ -918,16 +918,20 @@ msgstr "Hora de Fin"
 
 #: scheduler/forms.py:122
 msgid "Unable to validate overlaps: schedule profile is missing."
-msgstr "No se pudieron validar las superposiciones: falta el perfil de programación."
+msgstr ""
+"No se pudieron validar las superposiciones: falta el perfil de programación."
 
 #: scheduler/forms.py:129 scheduler/forms.py:132
 msgid "The minimum duration between start and end must be at least 10 minutes."
-msgstr "La duración mínima entre el inicio y el fin debe ser de al menos 10 minutos."
+msgstr ""
+"La duración mínima entre el inicio y el fin debe ser de al menos 10 minutos."
 
 #: scheduler/forms.py:150
 #, python-format
 msgid "This time slot overlaps with an existing slot (%(start)s → %(end)s)."
-msgstr "Este intervalo de tiempo se superpone con un intervalo existente (%(start)s → %(end)s)."
+msgstr ""
+"Este intervalo de tiempo se superpone con un intervalo existente (%(start)s "
+"→ %(end)s)."
 
 #: scheduler/forms.py:160
 msgid "There must be at least 10 minutes between time slots."
@@ -1280,33 +1284,44 @@ msgid "Automatic rule: Allow established/related traffic"
 msgstr "Regla automática: permitir tráfico establecido/relacionado"
 
 #: templates/firewall/firewall_rule_list.html:58
-#: templates/firewall/firewall_rule_list.html:138
+#: templates/firewall/firewall_rule_list.html:74
+#: templates/firewall/firewall_rule_list.html:152
 msgid "all"
 msgstr "todos"
 
-#: templates/firewall/firewall_rule_list.html:71
-#: templates/firewall/firewall_rule_list.html:97
+#: templates/firewall/firewall_rule_list.html:69
+#, fuzzy
+#| msgid "Enforce Route Policy"
+msgid "Automatic rule: Route Policy"
+msgstr "Forzar Política de Enrutamiento"
+
+#: templates/firewall/firewall_rule_list.html:77
+msgid "RETURN"
+msgstr ""
+
+#: templates/firewall/firewall_rule_list.html:85
+#: templates/firewall/firewall_rule_list.html:111
 msgid "Automatic Rule: Port forward."
 msgstr "Regla automática: redirección de puerto."
 
-#: templates/firewall/firewall_rule_list.html:158
+#: templates/firewall/firewall_rule_list.html:172
 msgid "Automatic Rule: Firewall Settings Peer to Peer traffic"
 msgstr "Regla automática: tráfico peer-to-peer"
 
-#: templates/firewall/firewall_rule_list.html:179
+#: templates/firewall/firewall_rule_list.html:193
 msgid "Automatic Rule: Firewall Settings Instance to Instance"
 msgstr "Regla automática: tráfico entre instancias"
 
-#: templates/firewall/firewall_rule_list.html:194
+#: templates/firewall/firewall_rule_list.html:208
 msgid "Create Firewall Rule"
 msgstr "Crear regla de firewall"
 
-#: templates/firewall/firewall_rule_list.html:195
+#: templates/firewall/firewall_rule_list.html:209
 #: templates/firewall/redirect_rule_list.html:59
 msgid "Firewall Settings"
 msgstr "Configuración de firewall"
 
-#: templates/firewall/firewall_rule_list.html:196
+#: templates/firewall/firewall_rule_list.html:210
 msgid "Display automatic rules"
 msgstr "Mostrar reglas automáticas"
 
@@ -3154,7 +3169,7 @@ msgstr "Suspender / Reactivar Peer"
 msgid "Peer scheduling profile updated successfully."
 msgstr "Perfil de programación del peer actualizado con éxito."
 
-#: wireguard_peer/views.py:503
+#: wireguard_peer/views.py:510
 msgid "Manage Peer Schedule Profile"
 msgstr "Gestionar Perfil de Programación del Peer"
 

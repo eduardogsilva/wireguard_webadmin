@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 13:51-0300\n"
+"POT-Creation-Date: 2026-02-09 20:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -550,25 +550,25 @@ msgstr "Protocole"
 msgid "Destination Port"
 msgstr "Port de destination"
 
-#: firewall/forms.py:127 templates/firewall/firewall_rule_list.html:141
+#: firewall/forms.py:127 templates/firewall/firewall_rule_list.html:155
 msgid "New"
 msgstr "Nouveau"
 
 #: firewall/forms.py:128 templates/firewall/firewall_rule_list.html:60
-#: templates/firewall/firewall_rule_list.html:142
+#: templates/firewall/firewall_rule_list.html:156
 msgid "Related"
 msgstr "Connexe"
 
 #: firewall/forms.py:129 templates/firewall/firewall_rule_list.html:61
-#: templates/firewall/firewall_rule_list.html:143
+#: templates/firewall/firewall_rule_list.html:157
 msgid "Established"
 msgstr "Établi"
 
-#: firewall/forms.py:130 templates/firewall/firewall_rule_list.html:144
+#: firewall/forms.py:130 templates/firewall/firewall_rule_list.html:158
 msgid "Invalid"
 msgstr "Invalide"
 
-#: firewall/forms.py:131 templates/firewall/firewall_rule_list.html:145
+#: firewall/forms.py:131 templates/firewall/firewall_rule_list.html:159
 msgid "Untracked"
 msgstr "Non suivi"
 
@@ -590,15 +590,15 @@ msgstr "Politique de transfert par défaut"
 
 #: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
 #: firewall/models.py:76 templates/firewall/firewall_rule_list.html:63
-#: templates/firewall/firewall_rule_list.html:91
-#: templates/firewall/firewall_rule_list.html:168
-#: templates/firewall/firewall_rule_list.html:187
+#: templates/firewall/firewall_rule_list.html:105
+#: templates/firewall/firewall_rule_list.html:182
+#: templates/firewall/firewall_rule_list.html:201
 msgid "ACCEPT"
 msgstr "Accepter"
 
 #: firewall/forms.py:182 firewall/models.py:62
-#: templates/firewall/firewall_rule_list.html:170
-#: templates/firewall/firewall_rule_list.html:187
+#: templates/firewall/firewall_rule_list.html:184
+#: templates/firewall/firewall_rule_list.html:201
 msgid "REJECT"
 msgstr "Rejeter"
 
@@ -623,15 +623,15 @@ msgstr "Interface WAN"
 msgid "MASQUERADE"
 msgstr "MASQUERADE"
 
-#: firewall/tools.py:45
+#: firewall/tools.py:46
 msgid "Masquerade traffic from VPN to WAN"
 msgstr "Masquer le trafic du VPN vers le WAN"
 
-#: firewall/tools.py:55 firewall/tools.py:59 firewall/tools.py:63
+#: firewall/tools.py:56 firewall/tools.py:60 firewall/tools.py:64
 msgid "Reject traffic to private networks exiting on WAN interface"
 msgstr "Rejeter le trafic vers les réseaux privés sortant sur l’interface WAN"
 
-#: firewall/tools.py:67
+#: firewall/tools.py:68
 msgid "Allow traffic from VPN to WAN"
 msgstr "Autoriser le trafic du VPN vers le WAN"
 
@@ -918,16 +918,20 @@ msgstr "Heure de Fin"
 
 #: scheduler/forms.py:122
 msgid "Unable to validate overlaps: schedule profile is missing."
-msgstr "Impossible de valider les chevauchements : le profil de planification est manquant."
+msgstr ""
+"Impossible de valider les chevauchements : le profil de planification est "
+"manquant."
 
 #: scheduler/forms.py:129 scheduler/forms.py:132
 msgid "The minimum duration between start and end must be at least 10 minutes."
-msgstr "La durée minimale entre le début et la fin doit être d'au moins 10 minutes."
+msgstr ""
+"La durée minimale entre le début et la fin doit être d'au moins 10 minutes."
 
 #: scheduler/forms.py:150
 #, python-format
 msgid "This time slot overlaps with an existing slot (%(start)s → %(end)s)."
-msgstr "Ce créneau horaire chevauche un créneau existant (%(start)s → %(end)s)."
+msgstr ""
+"Ce créneau horaire chevauche un créneau existant (%(start)s → %(end)s)."
 
 #: scheduler/forms.py:160
 msgid "There must be at least 10 minutes between time slots."
@@ -1279,33 +1283,44 @@ msgid "Automatic rule: Allow established/related traffic"
 msgstr "Règle automatique: autoriser le trafic établi/associé"
 
 #: templates/firewall/firewall_rule_list.html:58
-#: templates/firewall/firewall_rule_list.html:138
+#: templates/firewall/firewall_rule_list.html:74
+#: templates/firewall/firewall_rule_list.html:152
 msgid "all"
 msgstr "tous"
 
-#: templates/firewall/firewall_rule_list.html:71
-#: templates/firewall/firewall_rule_list.html:97
+#: templates/firewall/firewall_rule_list.html:69
+#, fuzzy
+#| msgid "Enforce Route Policy"
+msgid "Automatic rule: Route Policy"
+msgstr "Appliquer la politique de routage"
+
+#: templates/firewall/firewall_rule_list.html:77
+msgid "RETURN"
+msgstr ""
+
+#: templates/firewall/firewall_rule_list.html:85
+#: templates/firewall/firewall_rule_list.html:111
 msgid "Automatic Rule: Port forward."
 msgstr "Règle automatique: redirection de port."
 
-#: templates/firewall/firewall_rule_list.html:158
+#: templates/firewall/firewall_rule_list.html:172
 msgid "Automatic Rule: Firewall Settings Peer to Peer traffic"
 msgstr "Règle automatique: trafic Peer ↔ Peer (paramètres du pare‑feu)"
 
-#: templates/firewall/firewall_rule_list.html:179
+#: templates/firewall/firewall_rule_list.html:193
 msgid "Automatic Rule: Firewall Settings Instance to Instance"
 msgstr "Règle automatique: trafic Instance ↔ Instance (paramètres du pare‑feu)"
 
-#: templates/firewall/firewall_rule_list.html:194
+#: templates/firewall/firewall_rule_list.html:208
 msgid "Create Firewall Rule"
 msgstr "Créer une règle de pare‑feu"
 
-#: templates/firewall/firewall_rule_list.html:195
+#: templates/firewall/firewall_rule_list.html:209
 #: templates/firewall/redirect_rule_list.html:59
 msgid "Firewall Settings"
 msgstr "Paramètres du pare‑feu"
 
-#: templates/firewall/firewall_rule_list.html:196
+#: templates/firewall/firewall_rule_list.html:210
 msgid "Display automatic rules"
 msgstr "Afficher les règles automatiques"
 
@@ -3168,7 +3183,7 @@ msgstr "Suspendre / Réactiver le Peer"
 msgid "Peer scheduling profile updated successfully."
 msgstr "Profil de planification du peer mis à jour avec succès."
 
-#: wireguard_peer/views.py:503
+#: wireguard_peer/views.py:510
 msgid "Manage Peer Schedule Profile"
 msgstr "Gérer le Profil de Planification du Peer"
 
