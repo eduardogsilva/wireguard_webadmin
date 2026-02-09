@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'cluster',
     'api',
     'routing_templates',
-    'scheduler.apps.SchedulerConfig'
+    'scheduler.apps.SchedulerConfig',
+    'api_v2'
 ]
 
 MIDDLEWARE = [
