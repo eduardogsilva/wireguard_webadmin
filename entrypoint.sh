@@ -47,6 +47,10 @@ if [ -n "${TZ:-}" ]; then
     echo "TIME_ZONE = '${TZ}'" >> /app/wireguard_webadmin/production_settings.py
 fi
 
+if [[ "${VPN_CLIENTS_CAN_ACCESS_DJANGO,,}" == "true" ]]; then
+    echo "VPN_CLIENTS_CAN_ACCESS_DJANGO = True" >> /app/wireguard_webadmin/production_settings.py
+fi
+
 if [[ "${WIREGUARD_STATUS_CACHE_ENABLED,,}" == "false" ]]; then
     echo "WIREGUARD_STATUS_CACHE_ENABLED = False" >> /app/wireguard_webadmin/production_settings.py
 fi

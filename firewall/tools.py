@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import Q, Prefetch
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -235,6 +236,7 @@ iptables -t nat    -F WGWADM_PREROUTING
 iptables -t filter -F WGWADM_FORWARD
 iptables -t filter -F WGWADM_ROUTE_POLICY
 iptables -t filter -F FORWARD
+iptables -t filter -F INPUT
 
 iptables -t nat    -D POSTROUTING -j WGWADM_POSTROUTING >> /dev/null 2>&1
 iptables -t nat    -D PREROUTING  -j WGWADM_PREROUTING  >> /dev/null 2>&1
@@ -247,6 +249,9 @@ iptables -t filter -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -t filter -A FORWARD -i wg+ -j WGWADM_ROUTE_POLICY
 iptables -t filter -A FORWARD        -j WGWADM_FORWARD
 '''
+    if not settings.VPN_CLIENTS_CAN_ACCESS_DJANGO:
+        header += 'iptables -t filter -A INPUT -i wg+ -p tcp --dport 8000 -j REJECT\n'
+
     return header
 
 

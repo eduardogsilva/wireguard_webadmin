@@ -495,8 +495,15 @@ def view_wireguard_peer_schedule_profile(request):
     if form.is_valid():
         form.save()
         messages.success(request, _('Peer scheduling profile updated successfully.'))
-        current_peer.wireguard_instance.pending_changes = True
-        current_peer.wireguard_instance.save()
+        if not peer_scheduling.profile and current_peer.disabled_by_schedule:
+            current_peer.disabled_by_schedule = False
+            current_peer.save()
+            export_wireguard_configuration(current_peer.wireguard_instance)
+            success, message = func_reload_wireguard_interface(current_peer.wireguard_instance)
+
+        peer_scheduling.next_scheduled_enable_at = None
+        peer_scheduling.next_scheduled_disable_at = None
+        peer_scheduling.save()
         return redirect('/peer/manage/?peer=' + str(current_peer.uuid))
 
     context = {
