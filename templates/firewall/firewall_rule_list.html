@@ -64,6 +64,20 @@
                             <td></td>
                         </tr>
 
+                        <tr class="fw_automatic_rule">
+                            <td>-</td>
+                            <td><i class="fas fa-info-circle" title="{% trans 'Automatic rule: Route Policy' %}"></i></td>
+                            <td>wg+</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{% trans 'all' %}</td>
+                            <td></td>
+                            <td></td>
+                            <td>{% trans 'RETURN' %}</td>
+                            <td></td>
+                        </tr>
+
                         {% for rule in port_forward_list %}
                             {% if rule.add_forward_rule and current_chain == 'forward' %}
                                 <tr class="fw_automatic_rule">

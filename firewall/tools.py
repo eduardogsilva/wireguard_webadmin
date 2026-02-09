@@ -200,7 +200,7 @@ def generate_route_policy_rules():
         for source in sources:
             for destination in destinations:
                 route_policy_rules += (
-                    f"iptables -t filter -A WGWADM_ROUTE_POLICY -i wg+ -s {source} -d {destination} -j ACCEPT\n"
+                    f"iptables -t filter -A WGWADM_ROUTE_POLICY -i wg+ -s {source} -d {destination} -j RETURN\n"
                 )
 
             route_policy_rules += (
