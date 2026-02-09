@@ -324,28 +324,20 @@ msgid "DNS container test script"
 msgstr "DNS‑Container‑Testskript"
 
 #: console/views.py:64
-#, fuzzy
-#| msgid "WireGuard Status"
 msgid "Flush Wireguard status cache"
-msgstr "WireGuard‑Status"
+msgstr "WireGuard-Status-Cache leeren"
 
 #: console/views.py:67
 msgid "Invalid command"
 msgstr "Ungültiger Befehl"
 
 #: console/views.py:78
-#, fuzzy
-#| msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgid "Flushed WireGuard status cache for worker: "
-msgstr ""
-"Der Cluster-Modus erfordert die Aktivierung des WireGuard-Status-Caches."
+msgstr "WireGuard-Status-Cache geleert für Worker: "
 
 #: console/views.py:83
-#, fuzzy
-#| msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgid "Flushed WireGuard status cache entries: "
-msgstr ""
-"Der Cluster-Modus erfordert die Aktivierung des WireGuard-Status-Caches."
+msgstr "WireGuard-Status-Cache-Einträge geleert: "
 
 #: console/views.py:87
 msgid "Invalid target"
@@ -932,7 +924,7 @@ msgstr "Endzeit"
 
 #: scheduler/forms.py:122
 msgid "Unable to validate overlaps: schedule profile is missing."
-msgstr ""
+msgstr "Überlappungen konnten nicht validiert werden: Zeitplanprofil fehlt."
 
 #: scheduler/forms.py:129 scheduler/forms.py:132
 #, fuzzy
@@ -947,7 +939,7 @@ msgstr ""
 #: scheduler/forms.py:150
 #, python-format
 msgid "This time slot overlaps with an existing slot (%(start)s → %(end)s)."
-msgstr ""
+msgstr "Dieses Zeitfenster überschneidet sich mit einem bestehenden Fenster (%(start)s → %(end)s)."
 
 #: scheduler/forms.py:160
 #, fuzzy
@@ -1628,18 +1620,16 @@ msgid "Inactive"
 msgstr "Inaktiv"
 
 #: templates/scheduler/scheduleprofile_form.html:78
-#, fuzzy
-#| msgid "Current Active Template:"
 msgid "Current time"
-msgstr "Aktuell aktive Vorlage:"
+msgstr "Aktuelle Uhrzeit"
 
 #: templates/scheduler/scheduleprofile_form.html:79
 msgid "Becomes active at"
-msgstr ""
+msgstr "Wird aktiv um"
 
 #: templates/scheduler/scheduleprofile_form.html:80
 msgid "Becomes inactive at"
-msgstr ""
+msgstr "Wird inaktiv um"
 
 #: templates/scheduler/scheduleprofile_form.html:97
 msgid "Time Intervals"
@@ -1661,43 +1651,35 @@ msgstr "Keine Zeitintervalle gefunden."
 
 #: templates/scheduler/scheduleprofile_form.html:152
 msgid "Linked Peers (Debug)"
-msgstr ""
+msgstr "Verknüpfte Peers (Debug)"
 
 #: templates/scheduler/scheduleprofile_form.html:160
-#, fuzzy
-#| msgid "Disabled Peers"
 msgid "Disabled by Schedule"
-msgstr "Deaktivierte Peers"
+msgstr "Durch Zeitplan deaktiviert"
 
 #: templates/scheduler/scheduleprofile_form.html:161
-#, fuzzy
-#| msgid "Restart Enabled"
 msgid "Next Enable"
-msgstr "Neustart aktiviert"
+msgstr "Nächste Aktivierung"
 
 #: templates/scheduler/scheduleprofile_form.html:162
-#, fuzzy
-#| msgid "Disabled"
 msgid "Next Disable"
-msgstr "Deaktiviert"
+msgstr "Nächste Deaktivierung"
 
 #: templates/scheduler/scheduleprofile_form.html:175
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: templates/scheduler/scheduleprofile_form.html:177
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: templates/scheduler/scheduleprofile_form.html:185
 msgid "No peers linked to this profile."
-msgstr ""
+msgstr "Keine Peers mit diesem Profil verknüpft."
 
 #: templates/scheduler/scheduleprofile_form.html:207
-#, fuzzy
-#| msgid "Show extras"
 msgid "Show Peers"
-msgstr "Extras anzeigen"
+msgstr "Peers anzeigen"
 
 #: templates/scheduler/scheduleprofile_list.html:7
 msgid "Schedule Profiles"
@@ -2126,60 +2108,44 @@ msgid "Peer Configuration"
 msgstr "Peer‑Konfiguration"
 
 #: templates/wireguard/wireguard_manage_peer.html:27
-#, fuzzy
-#| msgid "Packet State"
 msgid "Peer State"
-msgstr "Paket‑Zustand"
+msgstr "Peer-Status"
 
 #: templates/wireguard/wireguard_manage_peer.html:31
-#, fuzzy
-#| msgid "Suspend"
 msgid "Suspended"
-msgstr "Sperren"
+msgstr "Gesperrt"
 
 #: templates/wireguard/wireguard_manage_peer.html:40
-#, fuzzy
-#| msgid "Schedule"
 msgid "Scheduled suspend"
-msgstr "Planen"
+msgstr "Geplante Sperrung"
 
 #: templates/wireguard/wireguard_manage_peer.html:43
 msgid "Scheduled unsuspend"
-msgstr ""
+msgstr "Geplante Freigabe"
 
 #: templates/wireguard/wireguard_manage_peer.html:54
-#, fuzzy
-#| msgid "Clear Schedule"
 msgid "Peer Schedule"
-msgstr "Zeitplan löschen"
+msgstr "Peer-Zeitplan"
 
 #: templates/wireguard/wireguard_manage_peer.html:60
-#, fuzzy
-#| msgid "Disabled Peers"
 msgid "Disabled by schedule"
-msgstr "Deaktivierte Peers"
+msgstr "Durch Zeitplan deaktiviert"
 
 #: templates/wireguard/wireguard_manage_peer.html:62
-#, fuzzy
-#| msgid "Restart Enabled"
 msgid "Next enable"
-msgstr "Neustart aktiviert"
+msgstr "Nächste Aktivierung"
 
 #: templates/wireguard/wireguard_manage_peer.html:65
-#, fuzzy
-#| msgid "Enabled Peers"
 msgid "Enabled by schedule"
-msgstr "Aktivierte Peers"
+msgstr "Durch Zeitplan aktiviert"
 
 #: templates/wireguard/wireguard_manage_peer.html:67
-#, fuzzy
-#| msgid "Disabled"
 msgid "Next disable"
-msgstr "Deaktiviert"
+msgstr "Nächste Deaktivierung"
 
 #: templates/wireguard/wireguard_manage_peer.html:71
 msgid "No profile associated"
-msgstr ""
+msgstr "Kein Profil zugeordnet"
 
 #: templates/wireguard/wireguard_manage_peer.html:83 wireguard_peer/forms.py:41
 msgid "Persistent Keepalive"
@@ -3203,7 +3169,7 @@ msgstr "Peer erfolgreich gesperrt."
 
 #: wireguard_peer/views.py:454
 msgid "Peer suspended, but failed to reload WireGuard interface: "
-msgstr ""
+msgstr "Peer gesperrt, aber das Neuladen der WireGuard-Schnittstelle schlug fehl: "
 
 #: wireguard_peer/views.py:464
 msgid "Peer reactivated successfully."
@@ -3211,7 +3177,7 @@ msgstr "Peer erfolgreich reaktiviert."
 
 #: wireguard_peer/views.py:466
 msgid "Peer reactivated, but failed to reload WireGuard interface: "
-msgstr ""
+msgstr "Peer reaktiviert, aber das Neuladen der WireGuard-Schnittstelle schlug fehl: "
 
 #: wireguard_peer/views.py:469
 msgid "Invalid action."
@@ -3222,16 +3188,12 @@ msgid "Suspend / Reactivate Peer"
 msgstr "Peer sperren / reaktivieren"
 
 #: wireguard_peer/views.py:497
-#, fuzzy
-#| msgid "Schedule Profile deleted successfully."
 msgid "Peer scheduling profile updated successfully."
-msgstr "Zeitplanprofil erfolgreich gelöscht."
+msgstr "Zeitplanprofil des Peers erfolgreich aktualisiert."
 
 #: wireguard_peer/views.py:503
-#, fuzzy
-#| msgid "Delete Schedule Profile"
 msgid "Manage Peer Schedule Profile"
-msgstr "Zeitplanprofil löschen"
+msgstr "Zeitplanprofil des Peers verwalten"
 
 #: wireguard_tools/views.py:237
 msgid ""

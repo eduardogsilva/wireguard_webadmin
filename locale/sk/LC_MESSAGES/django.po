@@ -319,26 +319,20 @@ msgid "DNS container test script"
 msgstr "Testovací skript DNS kontajnera"
 
 #: console/views.py:64
-#, fuzzy
-#| msgid "WireGuard Status"
 msgid "Flush Wireguard status cache"
-msgstr "Stav WireGuard"
+msgstr "Vymazať vyrovnávaciu pamäť stavu WireGuard"
 
 #: console/views.py:67
 msgid "Invalid command"
 msgstr "Neplatný príkaz"
 
 #: console/views.py:78
-#, fuzzy
-#| msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgid "Flushed WireGuard status cache for worker: "
-msgstr "Režim klastra vyžaduje povolenie vyrovnávacej pamäte stavu WireGuard."
+msgstr "Vymazaná vyrovnávacia pamäť stavu WireGuard pre workera: "
 
 #: console/views.py:83
-#, fuzzy
-#| msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgid "Flushed WireGuard status cache entries: "
-msgstr "Režim klastra vyžaduje povolenie vyrovnávacej pamäte stavu WireGuard."
+msgstr "Vymazané záznamy vyrovnávacej pamäte stavu WireGuard: "
 
 #: console/views.py:87
 msgid "Invalid target"
@@ -911,26 +905,20 @@ msgstr "Čas ukončenia"
 
 #: scheduler/forms.py:122
 msgid "Unable to validate overlaps: schedule profile is missing."
-msgstr ""
+msgstr "Nepodarilo sa overiť prekrývanie: profil plánovania chýba."
 
 #: scheduler/forms.py:129 scheduler/forms.py:132
-#, fuzzy
-#| msgid ""
-#| "The difference between suspend and unsuspend times must be at least 5 "
-#| "minutes."
 msgid "The minimum duration between start and end must be at least 10 minutes."
-msgstr "Rozdiel medzi časom pozastavenia a reaktivácie musí byť aspoň 5 minút."
+msgstr "Minimálne trvanie medzi začiatkom a koncom musí byť aspoň 10 minút."
 
 #: scheduler/forms.py:150
 #, python-format
 msgid "This time slot overlaps with an existing slot (%(start)s → %(end)s)."
-msgstr ""
+msgstr "Tento časový slot sa prekrýva s existujúcim slotom (%(start)s → %(end)s)."
 
 #: scheduler/forms.py:160
-#, fuzzy
-#| msgid "Scheduled suspension time must be at least 10 minutes in the future."
 msgid "There must be at least 10 minutes between time slots."
-msgstr "Plánovaný čas pozastavenia musí byť aspoň 10 minút v budúcnosti."
+msgstr "Medzi časovými slotmi musí byť aspoň 10 minút."
 
 #: scheduler/models.py:11
 msgid "Monday"
@@ -1602,18 +1590,16 @@ msgid "Inactive"
 msgstr "Neaktívne"
 
 #: templates/scheduler/scheduleprofile_form.html:78
-#, fuzzy
-#| msgid "Current Active Template:"
 msgid "Current time"
-msgstr "Aktuálna aktívna šablóna:"
+msgstr "Aktuálny čas"
 
 #: templates/scheduler/scheduleprofile_form.html:79
 msgid "Becomes active at"
-msgstr ""
+msgstr "Aktivuje sa o"
 
 #: templates/scheduler/scheduleprofile_form.html:80
 msgid "Becomes inactive at"
-msgstr ""
+msgstr "Deaktivuje sa o"
 
 #: templates/scheduler/scheduleprofile_form.html:97
 msgid "Time Intervals"
@@ -1635,43 +1621,35 @@ msgstr "Nenašli sa žiadne časové intervaly."
 
 #: templates/scheduler/scheduleprofile_form.html:152
 msgid "Linked Peers (Debug)"
-msgstr ""
+msgstr "Prepojení Peeri (Debug)"
 
 #: templates/scheduler/scheduleprofile_form.html:160
-#, fuzzy
-#| msgid "Disabled Peers"
 msgid "Disabled by Schedule"
-msgstr "Zakázané Peery"
+msgstr "Zakázané podľa plánu"
 
 #: templates/scheduler/scheduleprofile_form.html:161
-#, fuzzy
-#| msgid "Restart Enabled"
 msgid "Next Enable"
-msgstr "Reštart povolený"
+msgstr "Nasledujúce povolenie"
 
 #: templates/scheduler/scheduleprofile_form.html:162
-#, fuzzy
-#| msgid "Disabled"
 msgid "Next Disable"
-msgstr "Zakázané"
+msgstr "Nasledujúce zakázanie"
 
 #: templates/scheduler/scheduleprofile_form.html:175
 msgid "Yes"
-msgstr ""
+msgstr "Áno"
 
 #: templates/scheduler/scheduleprofile_form.html:177
 msgid "No"
-msgstr ""
+msgstr "Nie"
 
 #: templates/scheduler/scheduleprofile_form.html:185
 msgid "No peers linked to this profile."
-msgstr ""
+msgstr "K tomuto profilu nie sú pripojení žiadni peeri."
 
 #: templates/scheduler/scheduleprofile_form.html:207
-#, fuzzy
-#| msgid "Show extras"
 msgid "Show Peers"
-msgstr "Zobraziť dodatky"
+msgstr "Zobraziť Peerov"
 
 #: templates/scheduler/scheduleprofile_list.html:7
 msgid "Schedule Profiles"
@@ -2098,60 +2076,44 @@ msgid "Peer Configuration"
 msgstr "Konfigurácia peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:27
-#, fuzzy
-#| msgid "Packet State"
 msgid "Peer State"
-msgstr "Stav paketu"
+msgstr "Stav peera"
 
 #: templates/wireguard/wireguard_manage_peer.html:31
-#, fuzzy
-#| msgid "Suspend"
 msgid "Suspended"
-msgstr "Pozastaviť"
+msgstr "Pozastavené"
 
 #: templates/wireguard/wireguard_manage_peer.html:40
-#, fuzzy
-#| msgid "Schedule"
 msgid "Scheduled suspend"
-msgstr "Naplánovať"
+msgstr "Naplánované pozastavenie"
 
 #: templates/wireguard/wireguard_manage_peer.html:43
 msgid "Scheduled unsuspend"
-msgstr ""
+msgstr "Naplánované zrušenie pozastavenia"
 
 #: templates/wireguard/wireguard_manage_peer.html:54
-#, fuzzy
-#| msgid "Clear Schedule"
 msgid "Peer Schedule"
-msgstr "Vymazať plán"
+msgstr "Plán peera"
 
 #: templates/wireguard/wireguard_manage_peer.html:60
-#, fuzzy
-#| msgid "Disabled Peers"
 msgid "Disabled by schedule"
-msgstr "Zakázané Peery"
+msgstr "Zakázané podľa plánu"
 
 #: templates/wireguard/wireguard_manage_peer.html:62
-#, fuzzy
-#| msgid "Restart Enabled"
 msgid "Next enable"
-msgstr "Reštart povolený"
+msgstr "Nasledujúce povolenie"
 
 #: templates/wireguard/wireguard_manage_peer.html:65
-#, fuzzy
-#| msgid "Enabled Peers"
 msgid "Enabled by schedule"
-msgstr "Povolené Peery"
+msgstr "Povolené podľa plánu"
 
 #: templates/wireguard/wireguard_manage_peer.html:67
-#, fuzzy
-#| msgid "Disabled"
 msgid "Next disable"
-msgstr "Zakázané"
+msgstr "Nasledujúce zakázanie"
 
 #: templates/wireguard/wireguard_manage_peer.html:71
 msgid "No profile associated"
-msgstr ""
+msgstr "Nie je priradený žiadny profil"
 
 #: templates/wireguard/wireguard_manage_peer.html:83 wireguard_peer/forms.py:41
 msgid "Persistent Keepalive"
@@ -3156,7 +3118,7 @@ msgstr "Peer úspešne pozastavený."
 
 #: wireguard_peer/views.py:454
 msgid "Peer suspended, but failed to reload WireGuard interface: "
-msgstr ""
+msgstr "Pozastavenie peera prebehlo úspešne, ale zlyhalo znovunačítanie rozhrania WireGuard: "
 
 #: wireguard_peer/views.py:464
 msgid "Peer reactivated successfully."
@@ -3164,7 +3126,7 @@ msgstr "Peer úspešne reaktivovaný."
 
 #: wireguard_peer/views.py:466
 msgid "Peer reactivated, but failed to reload WireGuard interface: "
-msgstr ""
+msgstr "Reaktivácia peera prebehla úspešne, ale zlyhalo znovunačítanie rozhrania WireGuard: "
 
 #: wireguard_peer/views.py:469
 msgid "Invalid action."
@@ -3175,16 +3137,12 @@ msgid "Suspend / Reactivate Peer"
 msgstr "Pozastaviť / Reaktivovať Peer"
 
 #: wireguard_peer/views.py:497
-#, fuzzy
-#| msgid "Schedule Profile deleted successfully."
 msgid "Peer scheduling profile updated successfully."
-msgstr "Profil plánovania bol úspešne vymazaný."
+msgstr "Profil plánovania peera bol úspešne aktualizovaný."
 
 #: wireguard_peer/views.py:503
-#, fuzzy
-#| msgid "Delete Schedule Profile"
 msgid "Manage Peer Schedule Profile"
-msgstr "Odstrániť profil plánovania"
+msgstr "Spravovať profil plánovania peera"
 
 #: wireguard_tools/views.py:237
 msgid ""

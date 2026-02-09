@@ -133,18 +133,15 @@ msgstr "Exibição do Worker"
 
 #: cluster/forms.py:136
 msgid "Cluster mode requires WireGuard status cache to be enabled."
-msgstr ""
-"O modo cluster requer que o cache de status do WireGuard esteja habilitado.O "
-"modo cluster requer que o cache de status do WireGuard esteja habilitado."
+msgstr "O modo cluster requer que o cache de status do WireGuard esteja habilitado."
 
 #: cluster/models.py:46
 msgid ""
 "IP lock is enabled, but the worker is attempting to access from a different "
 "IP address."
 msgstr ""
-"O bloqueio de IP está habilitado, mas o worker está tentando acessar de um "
-"endereço IP diferente.O bloqueio de IP está habilitado, mas o worker está "
-"tentando acessar de um endereço IP diferente."
+"O bloqueio de IP está habilitado, mas o worker está tentando acessar a partir "
+"de um endereço IP diferente."
 
 #: cluster/models.py:47
 msgid "Worker is not enabled"
@@ -160,9 +157,7 @@ msgid ""
 "in the API request."
 msgstr ""
 "Por favor, informe worker_config_version, worker_dns_version e "
-"worker_version na requisição da API.Por favor, informe "
-"worker_config_version, worker_dns_version e worker_version na requisição da "
-"API."
+"worker_version na requisição da API."
 
 #: cluster/models.py:50
 msgid "Worker update is required."
@@ -243,25 +238,6 @@ msgstr ""
 "        <h5>Informações de Localização</h5>\n"
 "        <p>Detalhes de localização opcionais para este worker (país, cidade, "
 "hostname).</p>\n"
-"        \n"
-"        <h5>Configuração do Worker</h5>\n"
-"        <p>Configure um nó worker do cluster que irá sincronizar com esta "
-"instância primária.</p>\n"
-"        \n"
-"        <h5>Nome</h5>\n"
-"        <p>Um nome exclusivo para identificar este worker.</p>\n"
-"        \n"
-"        <h5>Endereço IP</h5>\n"
-"        <p>O endereço IP do nó worker. Deixe em branco se o bloqueio de IP "
-"estiver desabilitado.</p>\n"
-"        \n"
-"        <h5>Bloqueio de IP</h5>\n"
-"        <p>Quando habilitado, o worker só poderá se conectar a partir do "
-"endereço IP especificado.</p>\n"
-"        \n"
-"        <h5>Informações de Localização</h5>\n"
-"        <p>Detalhes de localização opcionais para este worker (país, cidade, "
-"hostname).</p>\n"
 "        "
 
 #: cluster/views.py:117 templates/cluster/workers_list.html:88
@@ -294,23 +270,6 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"        <h5>Modo do Cluster</h5>\n"
-"        <p>Configure como o cluster opera e sincroniza as configurações "
-"entre os nós.</p>\n"
-"        \n"
-"        <h5>Intervalos de Sincronização</h5>\n"
-"        <p>Configure com que frequência as estatísticas e os dados de cache "
-"são sincronizados entre os nós do cluster.</p>\n"
-"        \n"
-"        <h5>Modo de Reinicialização</h5>\n"
-"        <p>Escolha se os serviços WireGuard devem ser reiniciados "
-"automaticamente quando as configurações mudarem ou se é necessária "
-"intervenção manual.</p>\n"
-"        \n"
-"        <h5>Exibição do Worker</h5>\n"
-"        <p>Selecione como os workers devem ser identificados na interface - "
-"por nome, endereço do servidor, localização ou uma combinação.</p>\n"
-"        \n"
 "        <h5>Modo do Cluster</h5>\n"
 "        <p>Configure como o cluster opera e sincroniza as configurações "
 "entre os nós.</p>\n"
@@ -362,30 +321,20 @@ msgid "DNS container test script"
 msgstr "Script de teste do contêiner DNS"
 
 #: console/views.py:64
-#, fuzzy
-#| msgid "WireGuard Status"
 msgid "Flush Wireguard status cache"
-msgstr "Estado do WireGuard"
+msgstr "Limpar cache de status do WireGuard"
 
 #: console/views.py:67
 msgid "Invalid command"
 msgstr "Comando inválido"
 
 #: console/views.py:78
-#, fuzzy
-#| msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgid "Flushed WireGuard status cache for worker: "
-msgstr ""
-"O modo cluster requer que o cache de status do WireGuard esteja habilitado.O "
-"modo cluster requer que o cache de status do WireGuard esteja habilitado."
+msgstr "Limpou o cache de status do WireGuard para o worker: "
 
 #: console/views.py:83
-#, fuzzy
-#| msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgid "Flushed WireGuard status cache entries: "
-msgstr ""
-"O modo cluster requer que o cache de status do WireGuard esteja habilitado.O "
-"modo cluster requer que o cache de status do WireGuard esteja habilitado."
+msgstr "Limpou as entradas do cache de status do WireGuard: "
 
 #: console/views.py:87
 msgid "Invalid target"
@@ -433,10 +382,7 @@ msgstr "Lista de Filtro de DNS padrão criada com sucesso"
 #: dns/views.py:72
 msgid ""
 "Pending Changes|There are pending DNS changes that have not been applied"
-msgstr ""
-"Alterações Pendentes|Há alterações de DNS pendentes que não foram "
-"aplicadasAlterações Pendentes|Há alterações de DNS pendentes que não foram "
-"aplicadas"
+msgstr "Alterações Pendentes|Há alterações de DNS pendentes que não foram aplicadas"
 
 #: dns/views.py:91
 msgid "DNS Forwarders"
@@ -449,8 +395,6 @@ msgid ""
 msgstr ""
 "Todas as consultas DNS serão encaminhadas para o DNS primário. Se o "
 "resolvedor primário não estiver disponível, o DNS secundário será usado."
-"Todas as consultas DNS serão encaminhadas para o DNS primário. Se ele não "
-"estiver disponível, o DNS secundário será usado."
 
 #: dns/views.py:119
 msgid "Static DNS deleted successfully"
@@ -706,9 +650,7 @@ msgid ""
 "rule was not deleted."
 msgstr ""
 "Erro ao excluir a regra de Encaminhamento de porta|Confirmação inválida. A "
-"regra de Encaminhamento de porta não foi excluída.Erro ao excluir a regra de "
-"Encaminhamento de porta|Confirmação inválida. A regra de Encaminhamento de "
-"porta não foi excluída."
+"regra de Encaminhamento de porta não foi excluída."
 
 #: firewall/views.py:54
 msgid "Port Forward rule saved successfully"
@@ -732,8 +674,7 @@ msgid ""
 "not deleted."
 msgstr ""
 "Erro ao excluir a regra de Firewall|Confirmação inválida. A regra de "
-"Firewall não foi removida.Erro ao excluir a regra de Firewall|Confirmação "
-"inválida. A regra de Firewall não foi removida."
+"Firewall não foi removida."
 
 #: firewall/views.py:125
 msgid "Firewall rule saved successfully"
@@ -761,8 +702,7 @@ msgid ""
 "language, please open an"
 msgstr ""
 "Se encontrar algum problema na tradução ou quiser solicitar um novo idioma, "
-"por favor abra umaSe encontrar algum problema na tradução ou quiser "
-"solicitar um novo idioma, por favor abra uma"
+"por favor abra uma"
 
 #: routing_templates/forms.py:29
 #: templates/firewall/manage_redirect_rule.html:57
@@ -795,8 +735,7 @@ msgstr "Forçar Política de Roteamento"
 msgid "Custom routes should be empty when Route Type is 'Default Route'."
 msgstr ""
 "As rotas personalizadas devem estar vazias quando o Tipo de Rota é 'Rota "
-"Padrão'.As rotas personalizadas devem estar vazias quando o Tipo de Rota é "
-"'Rota Padrão'."
+"Padrão'."
 
 #: routing_templates/forms.py:95
 msgid ""
@@ -977,28 +916,20 @@ msgstr "Hora de Término"
 
 #: scheduler/forms.py:122
 msgid "Unable to validate overlaps: schedule profile is missing."
-msgstr ""
+msgstr "Não foi possível validar sobreposições: o perfil de agendamento está faltando."
 
 #: scheduler/forms.py:129 scheduler/forms.py:132
-#, fuzzy
-#| msgid ""
-#| "The difference between suspend and unsuspend times must be at least 5 "
-#| "minutes."
 msgid "The minimum duration between start and end must be at least 10 minutes."
-msgstr ""
-"A diferença entre os horários de suspensão e reativação deve ser de pelo "
-"menos 5 minutos."
+msgstr "A duração mínima entre o início e o fim deve ser de pelo menos 10 minutos."
 
 #: scheduler/forms.py:150
 #, python-format
 msgid "This time slot overlaps with an existing slot (%(start)s → %(end)s)."
-msgstr ""
+msgstr "Este intervalo de tempo se sobrepõe a um intervalo existente (%(start)s → %(end)s)."
 
 #: scheduler/forms.py:160
-#, fuzzy
-#| msgid "Scheduled suspension time must be at least 10 minutes in the future."
 msgid "There must be at least 10 minutes between time slots."
-msgstr "O agendamento de suspensão deve ser pelo menos 10 minutos no futuro."
+msgstr "Deve haver pelo menos 10 minutos entre os intervalos de tempo."
 
 #: scheduler/models.py:11
 msgid "Monday"
@@ -1677,18 +1608,16 @@ msgid "Inactive"
 msgstr "Inativo"
 
 #: templates/scheduler/scheduleprofile_form.html:78
-#, fuzzy
-#| msgid "Current Active Template:"
 msgid "Current time"
-msgstr "Modelo Ativo Atual:"
+msgstr "Hora atual"
 
 #: templates/scheduler/scheduleprofile_form.html:79
 msgid "Becomes active at"
-msgstr ""
+msgstr "Torna-se ativo às"
 
 #: templates/scheduler/scheduleprofile_form.html:80
 msgid "Becomes inactive at"
-msgstr ""
+msgstr "Torna-se inativo às"
 
 #: templates/scheduler/scheduleprofile_form.html:97
 msgid "Time Intervals"
@@ -1710,43 +1639,35 @@ msgstr "Nenhum intervalo de horário encontrado."
 
 #: templates/scheduler/scheduleprofile_form.html:152
 msgid "Linked Peers (Debug)"
-msgstr ""
+msgstr "Peers Vinculados (Debug)"
 
 #: templates/scheduler/scheduleprofile_form.html:160
-#, fuzzy
-#| msgid "Disabled Peers"
 msgid "Disabled by Schedule"
-msgstr "Peers Inativos"
+msgstr "Desativado pelo Agendamento"
 
 #: templates/scheduler/scheduleprofile_form.html:161
-#, fuzzy
-#| msgid "Restart Enabled"
 msgid "Next Enable"
-msgstr "Reiniciar Habilitado"
+msgstr "Próxima Ativação"
 
 #: templates/scheduler/scheduleprofile_form.html:162
-#, fuzzy
-#| msgid "Disabled"
 msgid "Next Disable"
-msgstr "Desabilitado"
+msgstr "Próxima Desativação"
 
 #: templates/scheduler/scheduleprofile_form.html:175
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: templates/scheduler/scheduleprofile_form.html:177
 msgid "No"
-msgstr ""
+msgstr "Não"
 
 #: templates/scheduler/scheduleprofile_form.html:185
 msgid "No peers linked to this profile."
-msgstr ""
+msgstr "Nenhum peer vinculado a este perfil."
 
 #: templates/scheduler/scheduleprofile_form.html:207
-#, fuzzy
-#| msgid "Show extras"
 msgid "Show Peers"
-msgstr "Exibir extras"
+msgstr "Mostrar Peers"
 
 #: templates/scheduler/scheduleprofile_list.html:7
 msgid "Schedule Profiles"
@@ -2173,60 +2094,44 @@ msgid "Peer Configuration"
 msgstr "Configuração do Peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:27
-#, fuzzy
-#| msgid "Packet State"
 msgid "Peer State"
-msgstr "Estado do Pacote"
+msgstr "Estado do Peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:31
-#, fuzzy
-#| msgid "Suspend"
 msgid "Suspended"
-msgstr "Suspender"
+msgstr "Suspenso"
 
 #: templates/wireguard/wireguard_manage_peer.html:40
-#, fuzzy
-#| msgid "Schedule"
 msgid "Scheduled suspend"
-msgstr "Agendar"
+msgstr "Suspensão agendada"
 
 #: templates/wireguard/wireguard_manage_peer.html:43
 msgid "Scheduled unsuspend"
-msgstr ""
+msgstr "Reativação agendada"
 
 #: templates/wireguard/wireguard_manage_peer.html:54
-#, fuzzy
-#| msgid "Clear Schedule"
 msgid "Peer Schedule"
-msgstr "Limpar Agendamento"
+msgstr "Agendamento do Peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:60
-#, fuzzy
-#| msgid "Disabled Peers"
 msgid "Disabled by schedule"
-msgstr "Peers Inativos"
+msgstr "Desativado pelo agendamento"
 
 #: templates/wireguard/wireguard_manage_peer.html:62
-#, fuzzy
-#| msgid "Restart Enabled"
 msgid "Next enable"
-msgstr "Reiniciar Habilitado"
+msgstr "Próxima ativação"
 
 #: templates/wireguard/wireguard_manage_peer.html:65
-#, fuzzy
-#| msgid "Enabled Peers"
 msgid "Enabled by schedule"
-msgstr "Peers Ativos"
+msgstr "Ativado pelo agendamento"
 
 #: templates/wireguard/wireguard_manage_peer.html:67
-#, fuzzy
-#| msgid "Disabled"
 msgid "Next disable"
-msgstr "Desabilitado"
+msgstr "Próxima desativação"
 
 #: templates/wireguard/wireguard_manage_peer.html:71
 msgid "No profile associated"
-msgstr ""
+msgstr "Nenhum perfil associado"
 
 #: templates/wireguard/wireguard_manage_peer.html:83 wireguard_peer/forms.py:41
 msgid "Persistent Keepalive"
@@ -3242,7 +3147,7 @@ msgstr "Peer suspenso com sucesso."
 
 #: wireguard_peer/views.py:454
 msgid "Peer suspended, but failed to reload WireGuard interface: "
-msgstr ""
+msgstr "Peer suspenso, mas falha ao recarregar a interface WireGuard: "
 
 #: wireguard_peer/views.py:464
 msgid "Peer reactivated successfully."
@@ -3250,7 +3155,7 @@ msgstr "Peer reativado com sucesso."
 
 #: wireguard_peer/views.py:466
 msgid "Peer reactivated, but failed to reload WireGuard interface: "
-msgstr ""
+msgstr "Peer reativado, mas falha ao recarregar a interface WireGuard: "
 
 #: wireguard_peer/views.py:469
 msgid "Invalid action."
@@ -3261,16 +3166,12 @@ msgid "Suspend / Reactivate Peer"
 msgstr "Suspender / Reativar Peer"
 
 #: wireguard_peer/views.py:497
-#, fuzzy
-#| msgid "Schedule Profile deleted successfully."
 msgid "Peer scheduling profile updated successfully."
-msgstr "Perfil de agendamento excluído com sucesso."
+msgstr "Perfil de agendamento do peer atualizado com sucesso."
 
 #: wireguard_peer/views.py:503
-#, fuzzy
-#| msgid "Delete Schedule Profile"
 msgid "Manage Peer Schedule Profile"
-msgstr "Excluir Perfil de Agendamento"
+msgstr "Gerenciar Perfil de Agendamento do Peer"
 
 #: wireguard_tools/views.py:237
 msgid ""

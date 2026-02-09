@@ -323,28 +323,20 @@ msgid "DNS container test script"
 msgstr "Script de test du conteneur DNS"
 
 #: console/views.py:64
-#, fuzzy
-#| msgid "WireGuard Status"
 msgid "Flush Wireguard status cache"
-msgstr "Statut WireGuard"
+msgstr "Vider le cache d'état de WireGuard"
 
 #: console/views.py:67
 msgid "Invalid command"
 msgstr "Commande invalide"
 
 #: console/views.py:78
-#, fuzzy
-#| msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgid "Flushed WireGuard status cache for worker: "
-msgstr ""
-"Le mode cluster nécessite que le cache d'état de WireGuard soit activé."
+msgstr "Cache d'état de WireGuard vidé pour le worker : "
 
 #: console/views.py:83
-#, fuzzy
-#| msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgid "Flushed WireGuard status cache entries: "
-msgstr ""
-"Le mode cluster nécessite que le cache d'état de WireGuard soit activé."
+msgstr "Entrées du cache d'état de WireGuard vidées : "
 
 #: console/views.py:87
 msgid "Invalid target"
@@ -926,29 +918,20 @@ msgstr "Heure de Fin"
 
 #: scheduler/forms.py:122
 msgid "Unable to validate overlaps: schedule profile is missing."
-msgstr ""
+msgstr "Impossible de valider les chevauchements : le profil de planification est manquant."
 
 #: scheduler/forms.py:129 scheduler/forms.py:132
-#, fuzzy
-#| msgid ""
-#| "The difference between suspend and unsuspend times must be at least 5 "
-#| "minutes."
 msgid "The minimum duration between start and end must be at least 10 minutes."
-msgstr ""
-"La différence entre les heures de suspension et de réactivation doit être "
-"d'au moins 5 minutes."
+msgstr "La durée minimale entre le début et la fin doit être d'au moins 10 minutes."
 
 #: scheduler/forms.py:150
 #, python-format
 msgid "This time slot overlaps with an existing slot (%(start)s → %(end)s)."
-msgstr ""
+msgstr "Ce créneau horaire chevauche un créneau existant (%(start)s → %(end)s)."
 
 #: scheduler/forms.py:160
-#, fuzzy
-#| msgid "Scheduled suspension time must be at least 10 minutes in the future."
 msgid "There must be at least 10 minutes between time slots."
-msgstr ""
-"L'heure de suspension programmée doit être au moins 10 minutes dans le futur."
+msgstr "Il doit y avoir au moins 10 minutes entre les créneaux horaires."
 
 #: scheduler/models.py:11
 msgid "Monday"
@@ -1619,18 +1602,16 @@ msgid "Inactive"
 msgstr "Inactif"
 
 #: templates/scheduler/scheduleprofile_form.html:78
-#, fuzzy
-#| msgid "Current Active Template:"
 msgid "Current time"
-msgstr "Modèle actif actuel :"
+msgstr "Heure actuelle"
 
 #: templates/scheduler/scheduleprofile_form.html:79
 msgid "Becomes active at"
-msgstr ""
+msgstr "Devient actif à"
 
 #: templates/scheduler/scheduleprofile_form.html:80
 msgid "Becomes inactive at"
-msgstr ""
+msgstr "Devient inactif à"
 
 #: templates/scheduler/scheduleprofile_form.html:97
 msgid "Time Intervals"
@@ -1652,43 +1633,35 @@ msgstr "Aucun intervalle de temps trouvé."
 
 #: templates/scheduler/scheduleprofile_form.html:152
 msgid "Linked Peers (Debug)"
-msgstr ""
+msgstr "Peers liés (Debug)"
 
 #: templates/scheduler/scheduleprofile_form.html:160
-#, fuzzy
-#| msgid "Disabled Peers"
 msgid "Disabled by Schedule"
-msgstr "Peers désactivés"
+msgstr "Désactivé par la planification"
 
 #: templates/scheduler/scheduleprofile_form.html:161
-#, fuzzy
-#| msgid "Restart Enabled"
 msgid "Next Enable"
-msgstr "Redémarrage autorisé"
+msgstr "Prochaine activation"
 
 #: templates/scheduler/scheduleprofile_form.html:162
-#, fuzzy
-#| msgid "Disabled"
 msgid "Next Disable"
-msgstr "Désactivé"
+msgstr "Prochaine désactivation"
 
 #: templates/scheduler/scheduleprofile_form.html:175
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 #: templates/scheduler/scheduleprofile_form.html:177
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #: templates/scheduler/scheduleprofile_form.html:185
 msgid "No peers linked to this profile."
-msgstr ""
+msgstr "Aucun peer lié à ce profil."
 
 #: templates/scheduler/scheduleprofile_form.html:207
-#, fuzzy
-#| msgid "Show extras"
 msgid "Show Peers"
-msgstr "Afficher les extras"
+msgstr "Afficher les Peers"
 
 #: templates/scheduler/scheduleprofile_list.html:7
 msgid "Schedule Profiles"
@@ -2115,60 +2088,44 @@ msgid "Peer Configuration"
 msgstr "Configuration du peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:27
-#, fuzzy
-#| msgid "Packet State"
 msgid "Peer State"
-msgstr "État du paquet"
+msgstr "État du Peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:31
-#, fuzzy
-#| msgid "Suspend"
 msgid "Suspended"
-msgstr "Suspendre"
+msgstr "Suspendu"
 
 #: templates/wireguard/wireguard_manage_peer.html:40
-#, fuzzy
-#| msgid "Schedule"
 msgid "Scheduled suspend"
-msgstr "Programmer"
+msgstr "Suspension agendée"
 
 #: templates/wireguard/wireguard_manage_peer.html:43
 msgid "Scheduled unsuspend"
-msgstr ""
+msgstr "Réactivation agendée"
 
 #: templates/wireguard/wireguard_manage_peer.html:54
-#, fuzzy
-#| msgid "Clear Schedule"
 msgid "Peer Schedule"
-msgstr "Effacer la programmation"
+msgstr "Calendrier du Peer"
 
 #: templates/wireguard/wireguard_manage_peer.html:60
-#, fuzzy
-#| msgid "Disabled Peers"
 msgid "Disabled by schedule"
-msgstr "Peers désactivés"
+msgstr "Désactivé par le calendrier"
 
 #: templates/wireguard/wireguard_manage_peer.html:62
-#, fuzzy
-#| msgid "Restart Enabled"
 msgid "Next enable"
-msgstr "Redémarrage autorisé"
+msgstr "Prochaine activation"
 
 #: templates/wireguard/wireguard_manage_peer.html:65
-#, fuzzy
-#| msgid "Enabled Peers"
 msgid "Enabled by schedule"
-msgstr "Peers activés"
+msgstr "Activé par le calendrier"
 
 #: templates/wireguard/wireguard_manage_peer.html:67
-#, fuzzy
-#| msgid "Disabled"
 msgid "Next disable"
-msgstr "Désactivé"
+msgstr "Prochaine désactivation"
 
 #: templates/wireguard/wireguard_manage_peer.html:71
 msgid "No profile associated"
-msgstr ""
+msgstr "Aucun profil associé"
 
 #: templates/wireguard/wireguard_manage_peer.html:83 wireguard_peer/forms.py:41
 msgid "Persistent Keepalive"
@@ -3189,7 +3146,7 @@ msgstr "Peer suspendu avec succès."
 
 #: wireguard_peer/views.py:454
 msgid "Peer suspended, but failed to reload WireGuard interface: "
-msgstr ""
+msgstr "Peer suspendu, mais échec du rechargement de l'interface WireGuard : "
 
 #: wireguard_peer/views.py:464
 msgid "Peer reactivated successfully."
@@ -3197,7 +3154,7 @@ msgstr "Peer réactivé avec succès."
 
 #: wireguard_peer/views.py:466
 msgid "Peer reactivated, but failed to reload WireGuard interface: "
-msgstr ""
+msgstr "Peer réactivé, mais échec du rechargement de l'interface WireGuard : "
 
 #: wireguard_peer/views.py:469
 msgid "Invalid action."
@@ -3208,16 +3165,12 @@ msgid "Suspend / Reactivate Peer"
 msgstr "Suspendre / Réactiver le Peer"
 
 #: wireguard_peer/views.py:497
-#, fuzzy
-#| msgid "Schedule Profile deleted successfully."
 msgid "Peer scheduling profile updated successfully."
-msgstr "Profil de planification supprimé avec succès."
+msgstr "Profil de planification du peer mis à jour avec succès."
 
 #: wireguard_peer/views.py:503
-#, fuzzy
-#| msgid "Delete Schedule Profile"
 msgid "Manage Peer Schedule Profile"
-msgstr "Supprimer le Profil de Planification"
+msgstr "Gérer le Profil de Planification du Peer"
 
 #: wireguard_tools/views.py:237
 msgid ""
