@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block content %}
+<div class='row'>
+    <div class='{% if form_size %}{{ form_size }}{% else %}col-lg-6{% endif %}'>
+        <div class="card card-primary card-outline">
+            {% if page_title %}
+            <div class="card-header">
+                <h3 class="card-title">{{ page_title }}</h3>
+            </div>
+            {% endif %}
+
+            <div class="card-body row">
+                <div class="col-lg-12">
+                    {% csrf_token %}
+                    {% crispy form %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if form_description %}
+    <div class='{% if form_description.size %}{{ form_description.size }}{% else %}col-lg-6{% endif %}'>
+        <div class="card card-primary card-outline">
+
+            <div class="card-body row">
+                <div class="col-lg-12">
+                    {{ form_description.content|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block custom_page_scripts %}
+{% endblock %}

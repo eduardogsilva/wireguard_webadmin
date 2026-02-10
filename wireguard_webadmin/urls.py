@@ -21,6 +21,7 @@ from accounts.views import view_create_first_user, view_login, view_logout
 from api.views import api_instance_info, api_peer_invite, api_peer_list, cron_check_updates, \
     cron_update_peer_latest_handshake, peer_info, routerfleet_authenticate_session, routerfleet_get_user_token, \
     wireguard_status, cron_refresh_wireguard_status_cache, cron_calculate_peer_schedules, cron_peer_scheduler
+from api_v2.views import view_api_key_list, view_manage_api_key, view_delete_api_key
 from cluster.cluster_api import api_cluster_status, api_get_worker_config_files, api_get_worker_dnsmasq_config, \
     api_worker_ping, api_submit_worker_wireguard_stats
 from cluster.views import cluster_main, cluster_settings, worker_manage
@@ -47,6 +48,9 @@ from wireguard_tools.views import download_config_or_qrcode, view_export_wiregua
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('manage_api/v2/list/', view_api_key_list, name='api_v2_list'),
+    path('manage_api/v2/manage/', view_manage_api_key, name='api_v2_manage'),
+    path('manage_api/v2/delete/<uuid:uuid>/', view_delete_api_key, name='api_v2_delete'),
     path('', view_apply_db_patches, name='apply_db_patches'),
     path('status/', view_wireguard_status, name='wireguard_status'),
     path('dns/', view_static_host_list, name='static_host_list'),
