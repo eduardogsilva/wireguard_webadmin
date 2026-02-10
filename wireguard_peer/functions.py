@@ -1,5 +1,6 @@
 import ipaddress
 import subprocess
+from typing import Any, Dict, Optional, Tuple
 
 from django.utils.translation import gettext_lazy as _
 
@@ -41,28 +42,59 @@ def generate_peer_default(wireguard_instance):
     }
 
 
-def func_create_new_peer(wireguard_instance: WireGuardInstance):
+def func_create_new_peer(
+        wireguard_instance: WireGuardInstance,
+        overrides: Optional[Dict[str, Any]] = None,
+) -> Tuple[Optional[Peer], str]:
+    """
+    Creates a new Peer using generate_peer_default(), allowing optional overrides.
+
+    Supported override keys:
+      - name
+      - public_key
+      - pre_shared_key
+      - persistent_keepalive
+      - private_key
+      - allowed_ip
+      - default_routing_template
+      - allowed_ip_netmask (defaults to 32)
+    """
     new_peer_data = generate_peer_default(wireguard_instance)
 
-    if new_peer_data['allowed_ip']:
+    overrides = overrides or {}
+
+    # avoid accidental mismatch / footguns
+    forbidden_keys = {'wireguard_instance'}
+    for k in forbidden_keys:
+        if k in overrides:
+            raise ValueError(f'Override not allowed: {k}')
+
+    # apply overrides last
+    new_peer_data.update(overrides)
+
+    allowed_ip_netmask = int(new_peer_data.get('allowed_ip_netmask', 32) or 32)
+
+    if new_peer_data.get('allowed_ip'):
         new_peer = Peer.objects.create(
-            name=new_peer_data['name'],
+            name=new_peer_data.get('name', ''),
             public_key=new_peer_data['public_key'],
             pre_shared_key=new_peer_data['pre_shared_key'],
-            persistent_keepalive=new_peer_data['persistent_keepalive'],
-            private_key=new_peer_data['private_key'],
+            persistent_keepalive=new_peer_data.get('persistent_keepalive', 25),
+            private_key=new_peer_data.get('private_key'),
             wireguard_instance=wireguard_instance,
-            routing_template=new_peer_data['default_routing_template'],
+            routing_template=new_peer_data.get('default_routing_template'),
         )
+
         PeerAllowedIP.objects.create(
             config_file='server',
             peer=new_peer,
             allowed_ip=new_peer_data['allowed_ip'],
             priority=0,
-            netmask=32,
+            netmask=allowed_ip_netmask,
         )
-        message = _('Peer created|Peer created successfully.')
+
+        message = str(_('Peer created|Peer created successfully.'))
         return new_peer, message
-    else:
-        message = _('Error creating peer|No available IP address found for peer creation.')
-        return None, message
+
+    message = str(_('Error creating peer|No available IP address found for peer creation.'))
+    return None, message
