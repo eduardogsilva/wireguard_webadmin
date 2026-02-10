@@ -124,12 +124,11 @@ bind-interfaces
     if static_hosts:
         dnsmasq_config += '\n'
         for static_host in static_hosts:
-            # dnsmasq uses /.example.com/ for wildcards (matches *.example.com and example.com)
+            hostname = static_host.hostname.strip().lower()
             if static_host.hostname.startswith('*.'):
-                dnsmasq_domain = '.' + static_host.hostname[2:]
+                dnsmasq_config += f'address=/{hostname[1:]}/{static_host.ip_address}\n'
             else:
-                dnsmasq_domain = static_host.hostname
-            dnsmasq_config += f'address=/{dnsmasq_domain}/{static_host.ip_address}\n'
+                dnsmasq_config += f'host-record={hostname},{static_host.ip_address}\n'
 
     if dns_lists:
         dnsmasq_config += '\n'

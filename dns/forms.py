@@ -63,7 +63,7 @@ class StaticHostForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.fields['hostname'].label = _('Hostname')
-        self.fields['hostname'].help_text = _('Hostname or wildcard domain (e.g. *.example.com)')
+        self.fields['hostname'].help_text = _('Exact hostname or domain rule (e.g. *.example.com matches example.com and all subdomains)')
         self.fields['ip_address'].label = _('IP Address')
         back_label = _('Back')
         delete_label = _('Delete')
@@ -77,7 +77,7 @@ class StaticHostForm(forms.ModelForm):
                 Div(
                     Field('hostname', css_class='form-control'),
                     Field('ip_address', css_class='form-control'),
-                    css_class='col-md-6'
+                    css_class='col-md-12'
                 ),
             ),
             FormActions(
@@ -90,12 +90,28 @@ class StaticHostForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         hostname = cleaned_data.get('hostname')
-        if hostname:
-            # Allow plain hostname (e.g. example.com) or wildcard (e.g. *.example.com)
-            plain_regex = r'^[a-zA-Z0-9]([a-zA-Z0-9-\.]*[a-zA-Z0-9])?$'
-            wildcard_regex = r'^\*\.([a-zA-Z0-9]([a-zA-Z0-9-\.]*[a-zA-Z0-9])?)$'
-            if not (re.match(plain_regex, hostname) or re.match(wildcard_regex, hostname)):
-                raise ValidationError(_('Invalid hostname. Use a hostname (e.g. example.com) or wildcard (e.g. *.example.com).'))
+        if not hostname:
+            raise ValidationError(_('Invalid hostname.'))
+
+        hostname = hostname.strip().lower()
+        if '://' in hostname or '/' in hostname or ':' in hostname:
+            raise ValidationError(_('Invalid hostname.'))
+
+        domain = hostname[2:] if hostname.startswith('*.') else hostname
+        labels = domain.split('.')
+
+        if len(labels) < 2:
+            raise ValidationError(_('Invalid hostname.'))
+
+        for label in labels:
+            if not label:
+                raise ValidationError(_('Invalid hostname.'))
+            if not re.match(r'^[a-z0-9-]+$', label):
+                raise ValidationError(_('Invalid hostname.'))
+            if label.startswith('-') or label.endswith('-'):
+                raise ValidationError(_('Invalid hostname.'))
+
+        cleaned_data['hostname'] = hostname
         return cleaned_data
 
 
