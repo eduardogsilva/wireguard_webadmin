@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 20:13-0300\n"
+"POT-Creation-Date: 2026-02-09 22:07-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: cluster/forms.py:18 dns/forms.py:111 routing_templates/forms.py:28
+#: api_v2/forms.py:29 cluster/forms.py:27 cluster/forms.py:103 dns/forms.py:25
+#: dns/forms.py:67 dns/forms.py:109 routing_templates/forms.py:36
+#: templates/firewall/manage_firewall_rule.html:380
+#: templates/firewall/manage_firewall_settings.html:60
+#: templates/firewall/manage_redirect_rule.html:85
+#: templates/wireguard/apply_route_template.html:63
+#: templates/wireguard/peer_list/peer_preview_modal.html:79
+#: templates/wireguard/wireguard_manage_ip.html:42 user_manager/forms.py:49
+#: user_manager/forms.py:180 vpn_invite/forms.py:192 vpn_invite/forms.py:326
+#: wireguard/forms.py:51 wireguard_peer/forms.py:27 wireguard_peer/forms.py:156
+#: wireguard_peer/forms.py:210
+msgid "Back"
+msgstr "Retour"
+
+#: api_v2/forms.py:30 cluster/forms.py:28 dns/forms.py:68 dns/forms.py:110
+#: routing_templates/forms.py:37
+#: templates/firewall/manage_firewall_rule.html:382
+#: templates/firewall/manage_redirect_rule.html:86
+#: templates/scheduler/scheduleprofile_form.html:127
+#: templates/scheduler/scheduleprofile_list.html:29
+#: templates/wireguard/peer_list/peer_preview_modal.html:109
+#: templates/wireguard/wireguard_manage_ip.html:43 user_manager/forms.py:48
+#: user_manager/forms.py:181 wireguard/forms.py:52
+msgid "Delete"
+msgstr "Supprimer"
+
+#: api_v2/forms.py:31
+msgid "Regenerate Token"
+msgstr "Régénérer le jeton"
+
+#: api_v2/forms.py:63 cluster/forms.py:67 cluster/forms.py:124 dns/forms.py:37
+#: dns/forms.py:83 dns/forms.py:134 routing_templates/forms.py:71
+#: scheduler/forms.py:102 templates/firewall/manage_firewall_rule.html:379
+#: templates/firewall/manage_firewall_settings.html:59
+#: templates/firewall/manage_redirect_rule.html:84
+#: templates/scheduler/scheduleprofile_form.html:200
+#: templates/wireguard/wireguard_manage_ip.html:41 user_manager/forms.py:98
+#: user_manager/forms.py:205 vpn_invite/forms.py:191 vpn_invite/forms.py:325
+#: wireguard/forms.py:100 wireguard_peer/forms.py:26
+#: wireguard_peer/forms.py:205
+msgid "Save"
+msgstr "Enregistrer"
+
+#: api_v2/models.py:10 cluster/forms.py:18 dns/forms.py:111
+#: routing_templates/forms.py:28 templates/api_v2/list.html:8
 #: templates/cluster/workers_list.html:8 templates/dns/static_host_list.html:68
 #: templates/routing_templates/list.html:8
 #: templates/scheduler/scheduleprofile_list.html:13
@@ -29,10 +73,96 @@ msgstr ""
 msgid "Name"
 msgstr "Nom"
 
-#: cluster/forms.py:19 templates/cluster/workers_list.html:96
+#: api_v2/models.py:11 cluster/forms.py:25 templates/api_v2/list.html:9
+msgid "Token"
+msgstr "Jeton"
+
+#: api_v2/models.py:12 templates/api_v2/list.html:10
+msgid "Allowed Instances"
+msgstr "Instances autorisées"
+
+#: api_v2/models.py:13 templates/api_v2/list.html:12
+msgid "Allow Restart"
+msgstr "Autoriser le redémarrage"
+
+#: api_v2/models.py:14 templates/api_v2/list.html:13
+msgid "Allow Reload"
+msgstr "Autoriser le rechargement"
+
+#: api_v2/models.py:15 templates/api_v2/list.html:14
+msgid "Allow Export"
+msgstr "Autoriser l'exportation"
+
+#: api_v2/models.py:16 cluster/forms.py:19 templates/api_v2/list.html:11
+#: templates/api_v2/list.html:41 templates/cluster/workers_list.html:96
 #: vpn_invite/forms.py:49 vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Activé"
+
+#: api_v2/views.py:16 api_v2/views.py:26 api_v2/views.py:81 cluster/views.py:18
+#: cluster/views.py:45 cluster/views.py:114 templates/access_denied.html:9
+msgid "Access Denied"
+msgstr "Accès refusé"
+
+#: api_v2/views.py:18 templates/template_parts/base_sidebar.html:108
+msgid "API Keys"
+msgstr "Clés d'API"
+
+#: api_v2/views.py:31
+msgid "Edit API Key: "
+msgstr "Modifier la clé d'API : "
+
+#: api_v2/views.py:34 templates/api_v2/list.html:80
+msgid "Add API Key"
+msgstr "Ajouter une clé d'API"
+
+#: api_v2/views.py:45
+msgid "Token regenerated successfully."
+msgstr "Jeton régénéré avec succès."
+
+#: api_v2/views.py:50
+msgid "API Key saved successfully."
+msgstr "Clé d'API enregistrée avec succès."
+
+#: api_v2/views.py:60
+msgid ""
+"\n"
+"        <h5>API Keys</h5>\n"
+"        <p>API Keys allow external applications to interact with the "
+"WireGuard WebAdmin API.</p>\n"
+"        <p><strong>Token:</strong> The secret token used for authentication. "
+"Keep this secure.</p>\n"
+"        <p><strong>Allowed Instances:</strong> The WireGuard instances this "
+"key can manage. If none are selected, the key has access to ALL instances.</"
+"p>\n"
+"        <p><strong>Permissions:</strong> specific actions allowed for this "
+"key.</p>\n"
+"        "
+msgstr ""
+"\n"
+"        <h5>Clés d'API</h5>\n"
+"        <p>Les clés d'API permettent à des applications externes d'interagir "
+"com a API do WireGuard WebAdmin.</p>\n"
+"        <p><strong>Token:</strong> Le jeton secret utilisé pour l'authentification. "
+"Gardez-le en sécurité.</p>\n"
+"        <p><strong>Instances autorisées:</strong> Les instances WireGuard que cette "
+"clé peut gérer. Si aucune n'est sélectionnée, la clé a accès à TOUTES les instances.</p>\n"
+"        <p><strong>Permissions:</strong> actions spécifiques autorisées pour "
+"cette clé.</p>\n"
+"        "
+
+#: api_v2/views.py:87
+msgid "API Key deleted successfully."
+msgstr "Clé d'API supprimée avec succès."
+
+#: api_v2/views.py:92
+msgid "Delete API Key"
+msgstr "Supprimer la clé d'API"
+
+#: api_v2/views.py:94
+#, python-format
+msgid "Are you sure you want to delete the API Key \"%(name)s\"?"
+msgstr "Êtes-vous sûr de vouloir supprimer la clé d'API \"%(name)s\" ?"
 
 #: cluster/forms.py:20
 msgid "IP Lock"
@@ -59,49 +189,6 @@ msgstr "Ville"
 #: templates/wireguard/server_detail.html:39
 msgid "Hostname"
 msgstr "Nom d’hôte"
-
-#: cluster/forms.py:25
-msgid "Token"
-msgstr "Jeton"
-
-#: cluster/forms.py:27 cluster/forms.py:103 dns/forms.py:25 dns/forms.py:67
-#: dns/forms.py:109 routing_templates/forms.py:36
-#: templates/firewall/manage_firewall_rule.html:380
-#: templates/firewall/manage_firewall_settings.html:60
-#: templates/firewall/manage_redirect_rule.html:85
-#: templates/wireguard/apply_route_template.html:63
-#: templates/wireguard/peer_list/peer_preview_modal.html:79
-#: templates/wireguard/wireguard_manage_ip.html:42 user_manager/forms.py:49
-#: user_manager/forms.py:180 vpn_invite/forms.py:192 vpn_invite/forms.py:326
-#: wireguard/forms.py:51 wireguard_peer/forms.py:27 wireguard_peer/forms.py:156
-#: wireguard_peer/forms.py:210
-msgid "Back"
-msgstr "Retour"
-
-#: cluster/forms.py:28 dns/forms.py:68 dns/forms.py:110
-#: routing_templates/forms.py:37
-#: templates/firewall/manage_firewall_rule.html:382
-#: templates/firewall/manage_redirect_rule.html:86
-#: templates/scheduler/scheduleprofile_form.html:127
-#: templates/scheduler/scheduleprofile_list.html:29
-#: templates/wireguard/peer_list/peer_preview_modal.html:109
-#: templates/wireguard/wireguard_manage_ip.html:43 user_manager/forms.py:48
-#: user_manager/forms.py:181 wireguard/forms.py:52
-msgid "Delete"
-msgstr "Supprimer"
-
-#: cluster/forms.py:67 cluster/forms.py:124 dns/forms.py:37 dns/forms.py:83
-#: dns/forms.py:134 routing_templates/forms.py:70 scheduler/forms.py:102
-#: templates/firewall/manage_firewall_rule.html:379
-#: templates/firewall/manage_firewall_settings.html:59
-#: templates/firewall/manage_redirect_rule.html:84
-#: templates/scheduler/scheduleprofile_form.html:200
-#: templates/wireguard/wireguard_manage_ip.html:41 user_manager/forms.py:98
-#: user_manager/forms.py:205 vpn_invite/forms.py:191 vpn_invite/forms.py:325
-#: wireguard/forms.py:100 wireguard_peer/forms.py:26
-#: wireguard_peer/forms.py:205
-msgid "Save"
-msgstr "Enregistrer"
 
 #: cluster/forms.py:82
 msgid "A worker with that name already exists."
@@ -164,12 +251,7 @@ msgstr ""
 msgid "Worker update is required."
 msgstr "La mise à jour du worker est requise."
 
-#: cluster/views.py:18 cluster/views.py:45 cluster/views.py:114
-#: templates/access_denied.html:9
-msgid "Access Denied"
-msgstr "Accès refusé"
-
-#: cluster/views.py:21 templates/template_parts/base_sidebar.html:107
+#: cluster/views.py:21 templates/template_parts/base_sidebar.html:117
 msgid "Cluster"
 msgstr "Cluster"
 
@@ -734,13 +816,13 @@ msgstr "Autoriser les Routes Personnalisées des Pairs"
 msgid "Enforce Route Policy"
 msgstr "Appliquer la politique de routage"
 
-#: routing_templates/forms.py:90
+#: routing_templates/forms.py:91
 msgid "Custom routes should be empty when Route Type is 'Default Route'."
 msgstr ""
 "Les routes personnalisées doivent être vides lorsque le Type de Route est "
 "'Route par Défaut'."
 
-#: routing_templates/forms.py:95
+#: routing_templates/forms.py:96
 msgid ""
 "Allowing peer custom routes is not applicable when Route Type is 'Default "
 "Route'."
@@ -748,13 +830,13 @@ msgstr ""
 "L'autorisation de routes personnalisées de pairs n'est pas applicable "
 "lorsque le Type de Route est 'Route par Défaut'."
 
-#: routing_templates/forms.py:102
+#: routing_templates/forms.py:103
 msgid "At least one route must be provided when Route Type is 'Custom'."
 msgstr ""
 "Au moins une route doit être fournie lorsque le Type de Route est "
 "'Personnalisée'."
 
-#: routing_templates/forms.py:113 routing_templates/forms.py:123
+#: routing_templates/forms.py:114 routing_templates/forms.py:124
 #, python-format
 msgid ""
 "Invalid route format: '%(line)s'. Please use CIDR notation (e.g., "
@@ -763,14 +845,14 @@ msgstr ""
 "Format de route invalide : '%(line)s'. Veuillez utiliser la notation CIDR "
 "(ex : 10.0.0.0/24)."
 
-#: routing_templates/forms.py:131
+#: routing_templates/forms.py:132
 #, python-format
 msgid ""
 "The route %(route)s is not allowed. Use the 'Default Route' type instead."
 msgstr ""
 "La route %(route)s n'est pas autorisée. Utilisez le type 'Route par Défaut'."
 
-#: routing_templates/forms.py:139
+#: routing_templates/forms.py:140
 #, python-format
 msgid ""
 "'%(line)s' is not a network address. Use the network address (e.g., "
@@ -1048,6 +1130,25 @@ msgstr "Vous avez été déconnecté avec succès."
 msgid "Login again"
 msgstr "Se reconnecter"
 
+#: templates/api_v2/list.html:36 templates/user_manager/list.html:26
+msgid "All"
+msgstr "Tous"
+
+#: templates/api_v2/list.html:43 vpn_invite/forms.py:49
+msgid "Disabled"
+msgstr "Désactivé"
+
+#: templates/api_v2/list.html:68 templates/cluster/workers_list.html:77
+#: templates/dns/static_host_list.html:74
+#: templates/routing_templates/list.html:29
+#: templates/scheduler/scheduleprofile_form.html:123
+#: templates/scheduler/scheduleprofile_list.html:25
+#: templates/user_manager/list.html:53
+#: templates/user_manager/peer_group_list.html:35
+#: templates/wireguard/peer_list/peer_preview_modal.html:137
+msgid "Edit"
+msgstr "Modifier"
+
 #: templates/cluster/workers_list.html:9 templates/dns/static_host_list.html:72
 #: templates/scheduler/scheduleprofile_form.html:82
 #: templates/template_parts/base_sidebar.html:13 vpn_invite/forms.py:78
@@ -1098,17 +1199,6 @@ msgstr "Jamais"
 #: templates/cluster/workers_list.html:64
 msgid "Last seen more than 10 minutes ago or never seen."
 msgstr "Vu pour la dernière fois il y a plus de 10 minutes ou jamais vu."
-
-#: templates/cluster/workers_list.html:77
-#: templates/dns/static_host_list.html:74
-#: templates/routing_templates/list.html:29
-#: templates/scheduler/scheduleprofile_form.html:123
-#: templates/scheduler/scheduleprofile_list.html:25
-#: templates/user_manager/list.html:53
-#: templates/user_manager/peer_group_list.html:35
-#: templates/wireguard/peer_list/peer_preview_modal.html:137
-msgid "Edit"
-msgstr "Modifier"
 
 #: templates/cluster/workers_list.html:82
 msgid "No workers configured"
@@ -1289,14 +1379,12 @@ msgid "all"
 msgstr "tous"
 
 #: templates/firewall/firewall_rule_list.html:69
-#, fuzzy
-#| msgid "Enforce Route Policy"
 msgid "Automatic rule: Route Policy"
-msgstr "Appliquer la politique de routage"
+msgstr "Règle automatique : politique de routage"
 
 #: templates/firewall/firewall_rule_list.html:77
 msgid "RETURN"
-msgstr ""
+msgstr "RETOUR"
 
 #: templates/firewall/firewall_rule_list.html:85
 #: templates/firewall/firewall_rule_list.html:111
@@ -1752,10 +1840,6 @@ msgstr "Groupes de peers"
 #: templates/user_manager/list.html:11
 msgid "Permissions"
 msgstr "Autorisations"
-
-#: templates/user_manager/list.html:26
-msgid "All"
-msgstr "Tous"
 
 #: templates/user_manager/list.html:31
 msgid "Restart Enabled"
@@ -2642,10 +2726,6 @@ msgstr ""
 msgid "Please type the username to proceed."
 msgstr "Veuillez saisir le nom d’utilisateur pour continuer."
 
-#: vpn_invite/forms.py:49
-msgid "Disabled"
-msgstr "Désactivé"
-
 #: vpn_invite/forms.py:68 vpn_invite/forms.py:69 vpn_invite/forms.py:70
 #: vpn_invite/forms.py:71 vpn_invite/forms.py:72
 msgid "URL"
@@ -3360,9 +3440,6 @@ msgstr "Aucune interface trouvée | Aucune interface WireGuard à traiter."
 
 #~ msgid "Force Reload"
 #~ msgstr "Forcer le rechargement"
-
-#~ msgid "Force Restart"
-#~ msgstr "Forcer le redémarrage"
 
 #~ msgid "Options"
 #~ msgstr "Options"
