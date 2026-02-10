@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 22:07-0300\n"
+"POT-Creation-Date: 2026-02-10 10:55-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: api_v2/forms.py:29 cluster/forms.py:27 cluster/forms.py:103 dns/forms.py:25
-#: dns/forms.py:67 dns/forms.py:109 routing_templates/forms.py:36
+#: dns/forms.py:68 dns/forms.py:128 routing_templates/forms.py:36
 #: templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Back"
 msgstr "Voltar"
 
-#: api_v2/forms.py:30 cluster/forms.py:28 dns/forms.py:68 dns/forms.py:110
+#: api_v2/forms.py:30 cluster/forms.py:28 dns/forms.py:69 dns/forms.py:129
 #: routing_templates/forms.py:37
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
@@ -48,7 +48,7 @@ msgid "Regenerate Token"
 msgstr "Regenerar Token"
 
 #: api_v2/forms.py:63 cluster/forms.py:67 cluster/forms.py:124 dns/forms.py:37
-#: dns/forms.py:83 dns/forms.py:134 routing_templates/forms.py:71
+#: dns/forms.py:84 dns/forms.py:153 routing_templates/forms.py:71
 #: scheduler/forms.py:102 templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
@@ -60,7 +60,7 @@ msgstr "Regenerar Token"
 msgid "Save"
 msgstr "Salvar"
 
-#: api_v2/models.py:10 cluster/forms.py:18 dns/forms.py:111
+#: api_v2/models.py:10 cluster/forms.py:18 dns/forms.py:130
 #: routing_templates/forms.py:28 templates/api_v2/list.html:8
 #: templates/cluster/workers_list.html:8 templates/dns/static_host_list.html:68
 #: templates/routing_templates/list.html:8
@@ -146,8 +146,8 @@ msgstr ""
 "        <p><strong>Token:</strong> O token secreto usado para autenticação. "
 "Mantenha-o seguro.</p>\n"
 "        <p><strong>Instâncias Permitidas:</strong> As instâncias do "
-"WireGuard que esta chave pode gerenciar. Se nenhuma for selecionada, a "
-"chave terá acesso a TODAS as instâncias.</p>\n"
+"WireGuard que esta chave pode gerenciar. Se nenhuma for selecionada, a chave "
+"terá acesso a TODAS as instâncias.</p>\n"
 "        <p><strong>Permissões:</strong> ações específicas permitidas para "
 "esta chave.</p>\n"
 "        "
@@ -169,7 +169,7 @@ msgstr "Tem certeza de que deseja excluir a Chave de API \"%(name)s\"?"
 msgid "IP Lock"
 msgstr "Bloqueio de IP"
 
-#: cluster/forms.py:21 dns/forms.py:66 templates/cluster/workers_list.html:10
+#: cluster/forms.py:21 dns/forms.py:67 templates/cluster/workers_list.html:10
 #: templates/dns/static_host_list.html:18
 #: templates/firewall/manage_redirect_rule.html:43
 #: templates/firewall/manage_redirect_rule.html:67
@@ -436,22 +436,35 @@ msgstr "DNS Secundário"
 msgid "Resolver Settings"
 msgstr "Resolução de DNS"
 
-#: dns/forms.py:75
+#: dns/forms.py:66
+msgid ""
+"Exact hostname or domain rule (e.g. *.example.com matches example.com and "
+"all subdomains)"
+msgstr ""
+"Nome de host exato ou regra de domínio (ex: *.exemplo.com corresponde a "
+"exemplo.com e todos os subdomínios)"
+
+#: dns/forms.py:76
 msgid "Static DNS"
 msgstr "DNS Estático"
 
-#: dns/forms.py:112 firewall/forms.py:111
+#: dns/forms.py:94 dns/forms.py:98 dns/forms.py:104 dns/forms.py:108
+#: dns/forms.py:110 dns/forms.py:112
+msgid "Invalid hostname."
+msgstr "Nome de host inválido."
+
+#: dns/forms.py:131 firewall/forms.py:111
 #: templates/dns/static_host_list.html:69
 #: templates/firewall/manage_redirect_rule.html:18
 #: templates/firewall/manage_redirect_rule.html:19
 msgid "Description"
 msgstr "Descrição"
 
-#: dns/forms.py:113
+#: dns/forms.py:132
 msgid "List URL"
 msgstr "Endereço da Lista"
 
-#: dns/forms.py:125
+#: dns/forms.py:144
 msgid "DNS Filter List Details"
 msgstr "Detalhes da Lista de Filtro de DNS"
 

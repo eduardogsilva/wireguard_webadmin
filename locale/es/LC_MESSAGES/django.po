@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 22:07-0300\n"
+"POT-Creation-Date: 2026-02-10 10:55-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: api_v2/forms.py:29 cluster/forms.py:27 cluster/forms.py:103 dns/forms.py:25
-#: dns/forms.py:67 dns/forms.py:109 routing_templates/forms.py:36
+#: dns/forms.py:68 dns/forms.py:128 routing_templates/forms.py:36
 #: templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Back"
 msgstr "Volver"
 
-#: api_v2/forms.py:30 cluster/forms.py:28 dns/forms.py:68 dns/forms.py:110
+#: api_v2/forms.py:30 cluster/forms.py:28 dns/forms.py:69 dns/forms.py:129
 #: routing_templates/forms.py:37
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
@@ -48,7 +48,7 @@ msgid "Regenerate Token"
 msgstr "Regenerar token"
 
 #: api_v2/forms.py:63 cluster/forms.py:67 cluster/forms.py:124 dns/forms.py:37
-#: dns/forms.py:83 dns/forms.py:134 routing_templates/forms.py:71
+#: dns/forms.py:84 dns/forms.py:153 routing_templates/forms.py:71
 #: scheduler/forms.py:102 templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
@@ -60,7 +60,7 @@ msgstr "Regenerar token"
 msgid "Save"
 msgstr "Guardar"
 
-#: api_v2/models.py:10 cluster/forms.py:18 dns/forms.py:111
+#: api_v2/models.py:10 cluster/forms.py:18 dns/forms.py:130
 #: routing_templates/forms.py:28 templates/api_v2/list.html:8
 #: templates/cluster/workers_list.html:8 templates/dns/static_host_list.html:68
 #: templates/routing_templates/list.html:8
@@ -169,7 +169,7 @@ msgstr "¿Está seguro de que desea eliminar la clave de API \"%(name)s\"?"
 msgid "IP Lock"
 msgstr "Bloqueo de IP"
 
-#: cluster/forms.py:21 dns/forms.py:66 templates/cluster/workers_list.html:10
+#: cluster/forms.py:21 dns/forms.py:67 templates/cluster/workers_list.html:10
 #: templates/dns/static_host_list.html:18
 #: templates/firewall/manage_redirect_rule.html:43
 #: templates/firewall/manage_redirect_rule.html:67
@@ -438,22 +438,35 @@ msgstr "DNS secundario"
 msgid "Resolver Settings"
 msgstr "Configuración de resolución"
 
-#: dns/forms.py:75
+#: dns/forms.py:66
+msgid ""
+"Exact hostname or domain rule (e.g. *.example.com matches example.com and "
+"all subdomains)"
+msgstr ""
+"Nombre de host exacto o regla de dominio (ej: *.ejemplo.com coincide con "
+"ejemplo.com y todos los subdominios)"
+
+#: dns/forms.py:76
 msgid "Static DNS"
 msgstr "DNS estático"
 
-#: dns/forms.py:112 firewall/forms.py:111
+#: dns/forms.py:94 dns/forms.py:98 dns/forms.py:104 dns/forms.py:108
+#: dns/forms.py:110 dns/forms.py:112
+msgid "Invalid hostname."
+msgstr "Nombre de host inválido."
+
+#: dns/forms.py:131 firewall/forms.py:111
 #: templates/dns/static_host_list.html:69
 #: templates/firewall/manage_redirect_rule.html:18
 #: templates/firewall/manage_redirect_rule.html:19
 msgid "Description"
 msgstr "Descripción"
 
-#: dns/forms.py:113
+#: dns/forms.py:132
 msgid "List URL"
 msgstr "URL de la lista"
 
-#: dns/forms.py:125
+#: dns/forms.py:144
 msgid "DNS Filter List Details"
 msgstr "Detalles de la lista de filtro DNS"
 
