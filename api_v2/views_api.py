@@ -7,6 +7,7 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from api.views import func_get_wireguard_status
 from routing_templates.models import RoutingTemplate
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from wireguard_peer.functions import func_create_new_peer
@@ -618,3 +619,32 @@ def api_v2_peer_detail(request):
 
     return JsonResponse({"status": "success", "peer": peer_data}, status=200)
 
+
+@csrf_exempt
+@api_doc(
+    summary="Get WireGuard status (dump) for all interfaces/peers",
+    auth="Header token: <ApiKey.token>",
+    methods=["POST", "GET"],
+    params=[],
+    returns=[
+        {"status": 200, "body": {"status": "success", "message": "...", "wg0": { "...": "..." }, "cache_information": { "..." }}},
+        {"status": 403, "body": {"status": "error", "error_message": "Invalid API key."}},
+        {"status": 405, "body": {"status": "error", "error_message": "Method not allowed."}},
+    ],
+    examples={
+        "get_latest_status": {
+            "method": "GET",
+            "json": {}
+        }
+    }
+)
+def api_v2_wireguard_status(request):
+    if request.method not in ("POST", "GET"):
+        return JsonResponse({"status": "error", "error_message": "Method not allowed."}, status=405)
+
+    api_key, api_error = validate_api_key(request)
+    if not api_key:
+        return JsonResponse({"status": "error", "error_message": api_error}, status=403)
+
+    data = func_get_wireguard_status()
+    return JsonResponse(data)
