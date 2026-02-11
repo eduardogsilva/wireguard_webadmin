@@ -1,4 +1,3 @@
-import ipaddress
 import subprocess
 from typing import Any, Dict, Optional, Tuple
 
@@ -12,23 +11,8 @@ def generate_peer_default(wireguard_instance):
     private_key = subprocess.check_output('wg genkey', shell=True).decode('utf-8').strip()
     public_key = subprocess.check_output(f'echo {private_key} | wg pubkey', shell=True).decode('utf-8').strip()
     pre_shared_key = subprocess.check_output('wg genpsk', shell=True).decode('utf-8').strip()
-
-    address = wireguard_instance.address
-    netmask = wireguard_instance.netmask
-    cidr_network = f"{address}/{netmask}"
-    network = ipaddress.ip_network(cidr_network, strict=False)
-
-    # the code below can be an issue for larger networks, for now it's fine, but it should be optimized in the future
-    used_ips = set(WireGuardInstance.objects.all().values_list('address', flat=True)) | \
-               set(PeerAllowedIP.objects.filter(config_file='server', priority=0).values_list('allowed_ip', flat=True))
-
-    free_ip_address = None
-    for ip in network.hosts():
-        if str(ip) not in used_ips:
-            free_ip_address = str(ip)
-            break
-
     default_routing_template = RoutingTemplate.objects.filter(wireguard_instance=wireguard_instance, default_template=True).first()
+    free_ip_address = wireguard_instance.next_available_ip_address
 
     return {
         'name': '',
@@ -68,6 +52,10 @@ def func_create_new_peer(
     for k in forbidden_keys:
         if k in overrides:
             raise ValueError(f'Override not allowed: {k}')
+
+    if overrides.get('allowed_ip'):
+        if not wireguard_instance.check_available_ip_address(overrides.get('allowed_ip')):
+            return None, str(_('Error creating peer|The specified IP address is not available.'))
 
     # apply overrides last
     new_peer_data.update(overrides)
