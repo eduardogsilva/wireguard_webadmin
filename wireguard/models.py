@@ -1,4 +1,6 @@
+import ipaddress
 import uuid
+from typing import Optional
 
 from django.db import models
 
@@ -105,6 +107,83 @@ class WireGuardInstance(models.Model):
             .values_list('allowed_ip', 'netmask')
         )
         return normalize_cidr_pairs(rows)
+
+    def check_available_ip_address(self, ip_address: str) -> bool:
+        """
+        Returns True if:
+          - ip_address is a valid IPv4 address
+          - ip_address is inside this instance network (network_cidr)
+          - ip_address is not already used by the instance address nor by any peer main address
+          - ip_address is not a network/broadcast address (when applicable)
+        Otherwise returns False.
+        """
+        if not ip_address:
+            return False
+
+        try:
+            ip = ipaddress.IPv4Address(str(ip_address).strip())
+        except (ValueError, ipaddress.AddressValueError):
+            return False
+
+        network = self.network_cidr
+        if not network:
+            return False
+
+        try:
+            net = ipaddress.IPv4Network(str(network), strict=False)
+        except (ValueError, ipaddress.NetmaskValueError):
+            return False
+
+        # Must be inside the instance network.
+        if ip not in net:
+            return False
+
+        # Disallow network/broadcast addresses (broadcast may not exist for /31,/32 in ipaddress rules).
+        if ip == net.network_address:
+            return False
+        if net.broadcast_address is not None and ip == net.broadcast_address:
+            return False
+
+        # Build the used IP set:
+        # - instance address
+        # - peer main addresses (priority=0, server config)
+        used_ips = {str(self.address)}
+
+        # peer_main_addresses returns CIDRs like "10.0.0.2/32" (normalized).
+        # We only care about the host IP part.
+        for cidr in (self.peer_main_addresses or []):
+            try:
+                used_ips.add(cidr.split("/", 1)[0])
+            except Exception:
+                continue
+
+        return str(ip) not in used_ips
+
+    @property
+    def next_available_ip_address(self) -> Optional[str]:
+        """
+        Returns the next available IPv4 address inside this instance network, or None if none is available.
+        Iterates in ascending order and uses check_available_ip_address().
+        """
+        network = self.network_cidr
+        if not network:
+            return None
+
+        try:
+            net = ipaddress.IPv4Network(str(network), strict=False)
+        except (ValueError, ipaddress.NetmaskValueError):
+            return None
+
+        # Prefer usable hosts when possible.
+        # For /32 there are no hosts(), so we also try the single address.
+        candidates = list(net.hosts()) if net.num_addresses > 1 else [net.network_address]
+
+        for ip in candidates:
+            ip_str = str(ip)
+            if self.check_available_ip_address(ip_str):
+                return ip_str
+
+        return None
 
 
 class Peer(models.Model):
