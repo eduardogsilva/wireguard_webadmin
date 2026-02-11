@@ -2,88 +2,151 @@
 {% load i18n %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
-        <h2 class="mb-4">{% trans 'API Documentation' %}</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mb-4">{% trans 'API Documentation' %}</h2>
 
-        {% for doc in docs %}
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    {% for method in doc.methods %}
-                    <span class="badge badge-primary mr-2">{{ method }}</span>
-                    {% endfor %}
-                    <code>/api/v2/{{ doc.url_pattern }}</code>
-                </h5>
-            </div>
-            <div class="card-body">
-                <p class="lead">{{ doc.summary }}</p>
+            <div id="accordion">
+                {% for doc in docs %}
+                    <div class="card mb-2">
+                        <div class="card-header" id="heading-{{ forloop.counter }}">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed d-flex align-items-center"
+                                        type="button" data-toggle="collapse" data-target="#collapse-{{ forloop.counter }}"
+                                        aria-expanded="false" aria-controls="collapse-{{ forloop.counter }}"
+                                        style="text-decoration: none; color: inherit;">
+                                    <i class="fas fa-chevron-right mr-3 text-muted"></i>
+                                    <div class="mr-auto">
+                                        {% for method in doc.methods %}
+                                            <span class="badge badge-primary mr-2">{{ method }}</span>
+                                        {% endfor %}
+                                        <code>/api/v2/{{ doc.url_pattern }}</code>
+                                    </div>
+                                    <small class="text-muted ml-3 d-none d-md-block">{{ doc.summary|truncatechars:100 }}</small>
+                                </button>
+                            </h5>
+                        </div>
 
-                <p><strong>{% trans 'Authentication' %}:</strong> {{ doc.auth }}</p>
+                        <div id="collapse-{{ forloop.counter }}" class="collapse"
+                             aria-labelledby="heading-{{ forloop.counter }}" data-parent="#accordion">
+                            <div class="card-body">
+                                <p class="lead">{{ doc.summary }}</p>
 
-                {% if doc.params %}
-                <h6 class="mt-3">{% trans 'Parameters' %}</h6>
-                <table class="table table-sm table-bordered">
-                    <thead>
-                        <tr>
-                            <th>{% trans 'Name' %}</th>
-                            <th>{% trans 'In' %}</th>
-                            <th>{% trans 'Type' %}</th>
-                            <th>{% trans 'Required' %}</th>
-                            <th>{% trans 'Description' %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for param in doc.params %}
-                        <tr>
-                            <td><code>{{ param.name }}</code></td>
-                            <td>{{ param.in }}</td>
-                            <td>{{ param.type }}</td>
-                            <td>
-                                {% if param.required %}
-                                <span class="badge badge-danger">{% trans 'Yes' %}</span>
-                                {% else %}
-                                <span class="badge badge-secondary">{% trans 'No' %}</span>
+                                <p><strong>{% trans 'Authentication' %}:</strong> {{ doc.auth }}</p>
+
+                                <!-- Parameters Section -->
+                                {% if doc.params %}
+                                    <div class="mt-3">
+                                        <h6 class="mb-0 pointer" data-toggle="collapse" data-target="#params-{{ forloop.counter }}"
+                                            aria-expanded="false" aria-controls="params-{{ forloop.counter }}"
+                                            style="cursor: pointer;">
+                                            <i class="fas fa-chevron-right mr-2 text-muted"></i> {% trans 'Parameters' %}
+                                        </h6>
+                                        <div id="params-{{ forloop.counter }}" class="collapse mt-2">
+                                            <table class="table table-sm table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>{% trans 'Name' %}</th>
+                                                    <th>{% trans 'In' %}</th>
+                                                    <th>{% trans 'Type' %}</th>
+                                                    <th>{% trans 'Required' %}</th>
+                                                    <th>{% trans 'Description' %}</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for param in doc.params %}
+                                                    <tr>
+                                                        <td><code>{{ param.name }}</code></td>
+                                                        <td>{{ param.in }}</td>
+                                                        <td>{{ param.type }}</td>
+                                                        <td>
+                                                            {% if param.required %}
+                                                                <span class="badge badge-danger">{% trans 'Yes' %}</span>
+                                                            {% else %}
+                                                                <span class="badge badge-secondary">{% trans 'No' %}</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            {{ param.description }}
+                                                            {% if param.example %}
+                                                                <br><small class="text-muted">{% trans 'Example' %}: {{ param.example }}</small>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 {% endif %}
-                            </td>
-                            <td>
-                                {{ param.description }}
-                                {% if param.example %}
-                                <br><small class="text-muted">{% trans 'Example' %}: {{ param.example }}</small>
+
+                                <!-- Returns Section -->
+                                {% if doc.returns %}
+                                    <div class="mt-3">
+                                        <h6 class="mb-0 pointer" data-toggle="collapse" data-target="#returns-{{ forloop.counter }}"
+                                            aria-expanded="false" aria-controls="returns-{{ forloop.counter }}"
+                                            style="cursor: pointer;">
+                                            <i class="fas fa-chevron-right mr-2 text-muted"></i> {% trans 'Returns' %}
+                                        </h6>
+                                        <div id="returns-{{ forloop.counter }}" class="collapse mt-2">
+                                            <ul class="list-group">
+                                                {% for ret in doc.returns %}
+                                                    <li class="list-group-item">
+                                                        <strong>{{ ret.status }}</strong>
+                                                        <pre class="bg-light p-2 mt-2"><code>{{ ret.body|pprint }}</code></pre>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
                                 {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% endif %}
 
-                {% if doc.returns %}
-                <h6 class="mt-3">{% trans 'Returns' %}</h6>
-                <ul class="list-group">
-                    {% for ret in doc.returns %}
-                    <li class="list-group-item">
-                        <strong>{{ ret.status }}</strong>
-                        <pre class="bg-light p-2 mt-2"><code>{{ ret.body|pprint }}</code></pre>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-
-                {% if doc.examples %}
-                <h6 class="mt-3">{% trans 'Examples' %}</h6>
-                {% for key, example in doc.examples.items %}
-                <div class="card bg-light mb-2">
-                    <div class="card-body p-2">
-                        <strong>{{ key }}</strong>
-                        <pre class="mb-0"><code>{{ example|pprint }}</code></pre>
+                                <!-- Examples Section -->
+                                {% if doc.examples %}
+                                    <div class="mt-3">
+                                        <h6 class="mb-0 pointer" data-toggle="collapse"
+                                            data-target="#examples-{{ forloop.counter }}" aria-expanded="false"
+                                            aria-controls="examples-{{ forloop.counter }}" style="cursor: pointer;">
+                                            <i class="fas fa-chevron-right mr-2 text-muted"></i> {% trans 'Examples' %}
+                                        </h6>
+                                        <div id="examples-{{ forloop.counter }}" class="collapse mt-2">
+                                            {% for key, example in doc.examples.items %}
+                                                <div class="card bg-light mb-2">
+                                                    <div class="card-body p-2">
+                                                        <strong>{{ key }}</strong>
+                                                        <pre class="mb-0"><code>{{ example|pprint }}</code></pre>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
-                </div>
                 {% endfor %}
-                {% endif %}
             </div>
         </div>
-        {% endfor %}
     </div>
-</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Function to toggle icon class on collapse events
+            function setupIconToggle(collapseId, iconSelector) {
+                $('#' + collapseId).on('show.bs.collapse', function () {
+                    var trigger = $('[data-target="#' + collapseId + '"]');
+                    trigger.find(iconSelector).first().removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                }).on('hide.bs.collapse', function () {
+                    var trigger = $('[data-target="#' + collapseId + '"]');
+                    trigger.find(iconSelector).first().removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                });
+            }
+
+            // Setup for all collapsible elements
+            $('.collapse').each(function () {
+                var id = $(this).attr('id');
+                setupIconToggle(id, '.fa-chevron-right, .fa-chevron-down');
+            });
+        });
+    </script>
 {% endblock %}
