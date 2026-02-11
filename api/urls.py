@@ -5,6 +5,7 @@ from api.views import api_instance_info, api_peer_invite, api_peer_list, cron_ch
     wireguard_status, cron_refresh_wireguard_status_cache, cron_calculate_peer_schedules, cron_peer_scheduler
 
 urlpatterns = [
+    path('v2/', include('api_v2.urls_api')),
     path('cluster/', include('cluster.urls_api')),
     path('routerfleet_get_user_token/', routerfleet_get_user_token, name='routerfleet_get_user_token'),
     path('wireguard_status/', wireguard_status, name='api_wireguard_status'),
