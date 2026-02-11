@@ -67,7 +67,10 @@
                                             <td>
                                                 {{ param.description }}
                                                 {% if param.example %}
-                                                <br><small class="text-muted">{% trans 'Example' %}: {{ param.example }}</small>
+                                                <br>
+                                                    <small class="text-muted">
+                                                        {% trans 'Example' %}: {{ param.example }}
+                                                    </small>
                                                 {% endif %}
                                             </td>
                                         </tr>
@@ -112,7 +115,7 @@
                                 <div class="card bg-light mb-2">
                                     <div class="card-body p-2">
                                         <strong>{{ key }}</strong>
-                                        <pre class="mb-0"><code>{{ example|pprint }}</code></pre>
+                                        <pre class="mb-0"><code>{{ example }}</code></pre>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -128,7 +131,7 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function ( ) {
         // Function to toggle icon class on collapse events
         function setupIconToggle(collapseId, iconSelector) {
             $('#' + collapseId).on('show.bs.collapse', function () {
@@ -141,7 +144,7 @@
         }
 
         // Setup for all collapsible elements
-        $('.collapse').each(function () {
+        $('.collapse').each(function  () {
             var id = $(this).attr('id');
             setupIconToggle(id, '.fa-chevron-right, .fa-chevron-down');
         });

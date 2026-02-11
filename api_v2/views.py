@@ -1,3 +1,4 @@
+import json
 import uuid as uuid_lib
 
 from django.contrib import messages
@@ -116,6 +117,23 @@ def view_api_docs(request):
                 doc_data = view_func.api_doc.copy()
                 doc_data['url_pattern'] = str(pattern.pattern)
                 doc_data['name'] = pattern.name
+
+                # Convert examples to curl commands
+                if 'examples' in doc_data:
+                    curl_examples = {}
+                    for key, example in doc_data['examples'].items():
+                        method = example.get('method', 'POST')
+                        body = example.get('json', {})
+                        url = f"https://your-server/api/v2/{doc_data['url_pattern']}"
+                        
+                        curl_cmd = f"curl -X {method} {url} \\\n"
+                        curl_cmd += "  -H 'token: <YOUR_API_TOKEN>' \\\n"
+                        curl_cmd += "  -H 'Content-Type: application/json' \\\n"
+                        curl_cmd += f"  -d '{json.dumps(body, indent=4)}'"
+                        
+                        curl_examples[key] = curl_cmd
+                    doc_data['examples'] = curl_examples
+
                 docs.append(doc_data)
 
     context = {
