@@ -15,13 +15,14 @@ from wireguard_tools.views import export_wireguard_configuration
 from .models import ApiKey
 
 
-def api_doc(*, summary: str, auth: str, params: list, returns: list, examples: Optional[dict] = None):
+def api_doc(*, summary: str, auth: str, params: list, returns: list, methods: Optional[List[str]] = None, examples: Optional[dict] = None):
     def decorator(view_func):
         view_func.api_doc = {
             "summary": summary,
             "auth": auth,
             "params": params,
             "returns": returns,
+            "methods": methods or ["POST"],
             "examples": examples or {},
         }
 
@@ -166,6 +167,7 @@ def _get_wireguard_instance(instance_name: str) -> Optional[WireGuardInstance]:
 @api_doc(
     summary="Create / Update / Delete a WireGuard peer (and optionally reload the interface)",
     auth="Header token: <ApiKey.token>",
+    methods=["POST", "PUT", "DELETE"],
     params=[
         {"name": "instance", "in": "json", "type": "string", "required": True, "example": "wg0",
          "description": "Target instance name in the format wg{instance_id} (e.g. wg0, wg1)."},
@@ -450,6 +452,7 @@ def api_v2_manage_peer(request):
 @api_doc(
     summary="List peers for a specific instance (required)",
     auth="Header token: <ApiKey.token>",
+    methods=["POST", "GET"],
     params=[
         {"name": "instance", "in": "json", "type": "string", "required": True, "example": "wg2",
          "description": "Required. Target instance name in the format wg{instance_id} (e.g. wg0, wg1)."},
@@ -523,6 +526,7 @@ def api_v2_peer_list(request):
 @api_doc(
     summary="Peer details for a specific instance (required) by peer_uuid or peer_public_key",
     auth="Header token: <ApiKey.token>",
+    methods=["POST", "GET"],
     params=[
         {"name": "instance", "in": "json", "type": "string", "required": True, "example": "wg2",
          "description": "Required. Target instance name in the format wg{instance_id} (e.g. wg0, wg1)."},

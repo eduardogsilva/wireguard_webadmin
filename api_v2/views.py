@@ -94,3 +94,32 @@ def view_delete_api_key(request, uuid):
         'text': _('Are you sure you want to delete the API Key "%(name)s"?') % {'name': api_key.name}
     }
     return render(request, 'generic_delete_confirmation.html', context)
+
+
+@login_required
+def view_api_docs(request):
+    from django.urls.resolvers import URLPattern
+    from api_v2 import urls_api
+
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
+
+    docs = []
+    # We iterate over the urlpatterns from the api_v2.urls_api module
+    for pattern in urls_api.urlpatterns:
+        if isinstance(pattern, URLPattern):
+            view_func = pattern.callback
+            # The view might be wrapped (e.g. by @csrf_exempt), but @api_doc metadata
+            # should have been preserved on the wrapper or be available on the original function.
+            # verify_api_doc checks handled this.
+            if hasattr(view_func, 'api_doc'):
+                doc_data = view_func.api_doc.copy()
+                doc_data['url_pattern'] = str(pattern.pattern)
+                doc_data['name'] = pattern.name
+                docs.append(doc_data)
+
+    context = {
+        'page_title': _('API Documentation'),
+        'docs': docs
+    }
+    return render(request, 'api_v2/api_documentation.html', context)
