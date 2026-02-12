@@ -1199,15 +1199,15 @@ msgstr "Exemplos"
 
 #: templates/api_v2/api_documentation.html:135
 msgid "This API is a work in progress and new endpoints are added as needed."
-msgstr ""
+msgstr "Esta API é um trabalho em andamento e novos endpoints são adicionados conforme necessário."
 
 #: templates/api_v2/api_documentation.html:136
 msgid "Missing a method or feature?"
-msgstr ""
+msgstr "Faltando um método ou recurso?"
 
 #: templates/api_v2/api_documentation.html:138
 msgid "Open an issue on GitHub"
-msgstr ""
+msgstr "Abrir uma issue no GitHub"
 
 #: templates/api_v2/list.html:36 templates/user_manager/list.html:26
 msgid "All"

@@ -1179,15 +1179,15 @@ msgstr "Príklady"
 
 #: templates/api_v2/api_documentation.html:135
 msgid "This API is a work in progress and new endpoints are added as needed."
-msgstr ""
+msgstr "Toto rozhranie API sa pripravuje a nové koncové body sa pridávajú podľa potreby."
 
 #: templates/api_v2/api_documentation.html:136
 msgid "Missing a method or feature?"
-msgstr ""
+msgstr "Chýba metóda alebo funkcia?"
 
 #: templates/api_v2/api_documentation.html:138
 msgid "Open an issue on GitHub"
-msgstr ""
+msgstr "Otvoriť problém na GitHub"
 
 #: templates/api_v2/list.html:36 templates/user_manager/list.html:26
 msgid "All"
