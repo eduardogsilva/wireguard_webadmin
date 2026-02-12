@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-10 10:55-0300\n"
+"POT-Creation-Date: 2026-02-12 12:41-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,8 +62,9 @@ msgid "Save"
 msgstr "Uložiť"
 
 #: api_v2/models.py:10 cluster/forms.py:18 dns/forms.py:130
-#: routing_templates/forms.py:28 templates/api_v2/list.html:8
-#: templates/cluster/workers_list.html:8 templates/dns/static_host_list.html:68
+#: routing_templates/forms.py:28 templates/api_v2/api_documentation.html:47
+#: templates/api_v2/list.html:8 templates/cluster/workers_list.html:8
+#: templates/dns/static_host_list.html:68
 #: templates/routing_templates/list.html:8
 #: templates/scheduler/scheduleprofile_list.html:13
 #: templates/user_manager/peer_group_list.html:8
@@ -100,32 +101,33 @@ msgstr "Povoliť export"
 msgid "Enabled"
 msgstr "Povolené"
 
-#: api_v2/views.py:16 api_v2/views.py:26 api_v2/views.py:81 cluster/views.py:18
-#: cluster/views.py:45 cluster/views.py:114 templates/access_denied.html:9
+#: api_v2/views.py:17 api_v2/views.py:27 api_v2/views.py:82 api_v2/views.py:106
+#: cluster/views.py:18 cluster/views.py:45 cluster/views.py:114
+#: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Prístup zamietnutý"
 
-#: api_v2/views.py:18 templates/template_parts/base_sidebar.html:108
+#: api_v2/views.py:19 templates/template_parts/base_sidebar.html:108
 msgid "API Keys"
 msgstr "Kľúče API"
 
-#: api_v2/views.py:31
+#: api_v2/views.py:32
 msgid "Edit API Key: "
 msgstr "Upraviť kľúč API: "
 
-#: api_v2/views.py:34 templates/api_v2/list.html:80
+#: api_v2/views.py:35 templates/api_v2/list.html:80
 msgid "Add API Key"
 msgstr "Pridať kľúč API"
 
-#: api_v2/views.py:45
+#: api_v2/views.py:46
 msgid "Token regenerated successfully."
 msgstr "Token bol úspešne regenerovaný."
 
-#: api_v2/views.py:50
+#: api_v2/views.py:51
 msgid "API Key saved successfully."
 msgstr "Kľúč API bol úspešne uložený."
 
-#: api_v2/views.py:60
+#: api_v2/views.py:61
 msgid ""
 "\n"
 "        <h5>API Keys</h5>\n"
@@ -153,18 +155,22 @@ msgstr ""
 "kľúč.</p>\n"
 "        "
 
-#: api_v2/views.py:87
+#: api_v2/views.py:88
 msgid "API Key deleted successfully."
 msgstr "Kľúč API bol úspešne vymazaný."
 
-#: api_v2/views.py:92
+#: api_v2/views.py:93
 msgid "Delete API Key"
 msgstr "Vymazať kľúč API"
 
-#: api_v2/views.py:94
+#: api_v2/views.py:95
 #, python-format
 msgid "Are you sure you want to delete the API Key \"%(name)s\"?"
 msgstr "Ste si istí, že chcete odstrániť kľúč API \"%(name)s\"?"
+
+#: api_v2/views.py:140 templates/api_v2/list.html:83
+msgid "API Documentation"
+msgstr ""
 
 #: cluster/forms.py:20
 msgid "IP Lock"
@@ -438,8 +444,8 @@ msgid ""
 "Exact hostname or domain rule (e.g. *.example.com matches example.com and "
 "all subdomains)"
 msgstr ""
-"Presný názov hostiteľa alebo pravidlo domény (napr. *.example.com sa "
-"zhoduje s example.com a všetkými subdoménami)"
+"Presný názov hostiteľa alebo pravidlo domény (napr. *.example.com sa zhoduje "
+"s example.com a všetkými subdoménami)"
 
 #: dns/forms.py:76
 msgid "Static DNS"
@@ -451,6 +457,7 @@ msgid "Invalid hostname."
 msgstr "Neplatný názov hostiteľa."
 
 #: dns/forms.py:131 firewall/forms.py:111
+#: templates/api_v2/api_documentation.html:51
 #: templates/dns/static_host_list.html:69
 #: templates/firewall/manage_redirect_rule.html:18
 #: templates/firewall/manage_redirect_rule.html:19
@@ -1126,6 +1133,54 @@ msgstr "Boli ste úspešne odhlásený."
 msgid "Login again"
 msgstr "Prihlásiť sa znovu"
 
+#: templates/api_v2/api_documentation.html:33
+#, fuzzy
+#| msgid "Destination"
+msgid "Authentication"
+msgstr "Cieľ"
+
+#: templates/api_v2/api_documentation.html:41
+msgid "Parameters"
+msgstr ""
+
+#: templates/api_v2/api_documentation.html:48
+#: templates/firewall/firewall_rule_list.html:40
+msgid "In"
+msgstr "Vstup"
+
+#: templates/api_v2/api_documentation.html:49
+#: templates/wireguard/apply_route_template.html:27
+msgid "Type"
+msgstr "Typ"
+
+#: templates/api_v2/api_documentation.html:50
+#, fuzzy
+#| msgid "Update Required"
+msgid "Required"
+msgstr "Aktualizácia potrebná"
+
+#: templates/api_v2/api_documentation.html:62
+#: templates/scheduler/scheduleprofile_form.html:175
+msgid "Yes"
+msgstr "Áno"
+
+#: templates/api_v2/api_documentation.html:64
+#: templates/scheduler/scheduleprofile_form.html:177
+msgid "No"
+msgstr "Nie"
+
+#: templates/api_v2/api_documentation.html:72
+msgid "Example"
+msgstr ""
+
+#: templates/api_v2/api_documentation.html:90
+msgid "Returns"
+msgstr ""
+
+#: templates/api_v2/api_documentation.html:111
+msgid "Examples"
+msgstr ""
+
 #: templates/api_v2/list.html:36 templates/user_manager/list.html:26
 msgid "All"
 msgstr "Všetko"
@@ -1327,10 +1382,6 @@ msgstr "Presmerovanie portov"
 #: templates/firewall/firewall_nav_tabs.html:15
 msgid "Default Policy"
 msgstr "Predvolená politika"
-
-#: templates/firewall/firewall_rule_list.html:40
-msgid "In"
-msgstr "Vstup"
 
 #: templates/firewall/firewall_rule_list.html:41
 msgid "Out"
@@ -1749,14 +1800,6 @@ msgstr "Nasledujúce povolenie"
 msgid "Next Disable"
 msgstr "Nasledujúce zakázanie"
 
-#: templates/scheduler/scheduleprofile_form.html:175
-msgid "Yes"
-msgstr "Áno"
-
-#: templates/scheduler/scheduleprofile_form.html:177
-msgid "No"
-msgstr "Nie"
-
 #: templates/scheduler/scheduleprofile_form.html:185
 msgid "No peers linked to this profile."
 msgstr "K tomuto profilu nie sú pripojení žiadni peeri."
@@ -1900,7 +1943,7 @@ msgstr "Nastavenia e-mailu"
 msgid "Invite Settings"
 msgstr "Nastavenia pozvánky"
 
-#: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:400
+#: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:350
 msgid "Apply Route Template"
 msgstr "Použiť smerovaciu šablónu"
 
@@ -1915,10 +1958,6 @@ msgstr "Aktuálna aktívna šablóna:"
 #: templates/wireguard/apply_route_template.html:26
 msgid "Template Name"
 msgstr "Názov šablóny"
-
-#: templates/wireguard/apply_route_template.html:27
-msgid "Type"
-msgstr "Typ"
 
 #: templates/wireguard/apply_route_template.html:48
 msgid "Unlink"
@@ -1944,7 +1983,7 @@ msgstr "Prenos"
 
 #: templates/wireguard/peer_list/peer_data.html:44
 #: templates/wireguard/peer_list/script_wireguard_status_update.html:146
-#: wireguard_peer/views.py:115
+#: wireguard_peer/views.py:82
 msgid "Primary Server"
 msgstr "Primárny server"
 
@@ -3106,64 +3145,76 @@ msgstr "Plánovaný čas pozastavenia musí byť aspoň 10 minút v budúcnosti.
 msgid "Scheduled unsuspension time must be at least 10 minutes in the future."
 msgstr "Plánovaný čas reaktivácie musí byť aspoň 10 minút v budúcnosti."
 
-#: wireguard_peer/views.py:61
-msgid "Disabled WireGuard Peer List"
-msgstr "Zoznam zakázaných WireGuard peerov"
+#: wireguard_peer/functions.py:58
+#, fuzzy
+#| msgid "Error creating peer|No available IP address found for peer creation."
+msgid "Error creating peer|The specified IP address is not available."
+msgstr ""
+"Chyba pri vytváraní peer|Nebola nájdená dostupná IP adresa pre vytvorenie "
+"peer."
 
-#: wireguard_peer/views.py:64
-msgid "WireGuard Peer List"
-msgstr "Zoznam WireGuard peerov"
-
-#: wireguard_peer/views.py:201
+#: wireguard_peer/functions.py:84 wireguard_peer/views.py:150
 msgid "Peer created|Peer created successfully."
 msgstr "Peer vytvorený|Peer bol úspešne vytvorený."
 
-#: wireguard_peer/views.py:206
+#: wireguard_peer/functions.py:87
 msgid "Error creating peer|No available IP address found for peer creation."
 msgstr ""
 "Chyba pri vytváraní peer|Nebola nájdená dostupná IP adresa pre vytvorenie "
 "peer."
 
-#: wireguard_peer/views.py:229
+#: wireguard_peer/views.py:28
+msgid "Disabled WireGuard Peer List"
+msgstr "Zoznam zakázaných WireGuard peerov"
+
+#: wireguard_peer/views.py:31
+msgid "WireGuard Peer List"
+msgstr "Zoznam WireGuard peerov"
+
+#: wireguard_peer/views.py:158
+msgid "Peer not created|Missing instance parameter."
+msgstr ""
+
+#: wireguard_peer/views.py:179
 msgid "Peer deleted|Peer deleted successfully."
 msgstr "Peer vymazaný|Peer bol úspešne vymazaný."
 
-#: wireguard_peer/views.py:232
+#: wireguard_peer/views.py:182
 msgid ""
 "Error deleting peer|Invalid confirmation message. Type \"delete\" to confirm."
 msgstr ""
 "Chyba pri vymazávaní peer|Neplatná potvrdzovacia správa. Napíšte \"delete\" "
 "pre potvrdenie."
 
-#: wireguard_peer/views.py:234
+#: wireguard_peer/views.py:184
 msgid "Peer Configuration: "
 msgstr "Konfigurácia peera: "
 
-#: wireguard_peer/views.py:279
+#: wireguard_peer/views.py:229
 msgid "Peer updated|Peer updated successfully."
 msgstr "Peer aktualizovaný|Peer bol úspešne aktualizovaný."
 
-#: wireguard_peer/views.py:282
+#: wireguard_peer/views.py:232
 msgid "Edit Peer"
 msgstr "Upraviť Peera"
 
-#: wireguard_peer/views.py:284
+#: wireguard_peer/views.py:234
 msgid "Edit Peer Name"
 msgstr "Upraviť Názov Peera"
 
-#: wireguard_peer/views.py:286
+#: wireguard_peer/views.py:236
 msgid "Edit Keepalive"
 msgstr "Upraviť Keepalive"
 
-#: wireguard_peer/views.py:288
+#: wireguard_peer/views.py:238
 msgid "Edit Keys"
 msgstr "Upraviť Kľúče"
 
-#: wireguard_peer/views.py:320
+#: wireguard_peer/views.py:270
 msgid "IP address deleted|IP address deleted successfully."
 msgstr "IP adresa vymazaná|IP adresa bola úspešne vymazaná."
 
-#: wireguard_peer/views.py:325
+#: wireguard_peer/views.py:275
 msgid ""
 "Error deleting IP address|Invalid confirmation message. Type \"delete\" to "
 "confirm."
@@ -3171,27 +3222,27 @@ msgstr ""
 "Chyba pri vymazávaní IP adresy|Neplatná potvrdzovacia správa. Napíšte "
 "\"delete\" pre potvrdenie."
 
-#: wireguard_peer/views.py:330
+#: wireguard_peer/views.py:280
 msgid "Manage client route"
 msgstr "Spravovať klientskú trasu"
 
-#: wireguard_peer/views.py:332
+#: wireguard_peer/views.py:282
 msgid "Manage IP address or Network"
 msgstr "Spravovať IP adresu alebo sieť"
 
-#: wireguard_peer/views.py:345
+#: wireguard_peer/views.py:295
 msgid "IP address updated|IP address updated successfully."
 msgstr "IP adresa aktualizovaná|IP adresa bola úspešne aktualizovaná."
 
-#: wireguard_peer/views.py:347
+#: wireguard_peer/views.py:297
 msgid "IP address added|IP address added successfully."
 msgstr "IP adresa pridaná|IP adresa bola úspešne pridaná."
 
-#: wireguard_peer/views.py:379
+#: wireguard_peer/views.py:329
 msgid "Route template unlinked successfully."
 msgstr "Prepojenie so smerovacou šablónou bolo úspešne zrušené."
 
-#: wireguard_peer/views.py:389
+#: wireguard_peer/views.py:339
 msgid ""
 "Cannot apply template: This template does not allow custom routes, but the "
 "peer has custom client routes defined."
@@ -3199,58 +3250,58 @@ msgstr ""
 "Nemožno použiť šablónu: Táto šablóna nepovoľuje vlastné trasy, ale peer má "
 "definované vlastné klientske trasy."
 
-#: wireguard_peer/views.py:396
+#: wireguard_peer/views.py:346
 msgid "Route template applied successfully."
 msgstr "Smerovacia šablóna bola úspešne použitá."
 
-#: wireguard_peer/views.py:429
+#: wireguard_peer/views.py:379
 msgid "Peer suspension/unsuspension scheduled successfully."
 msgstr "Pozastavenie/reaktivácia peera úspešne naplánovaná."
 
-#: wireguard_peer/views.py:431
+#: wireguard_peer/views.py:381
 msgid ""
 "Error scheduling peer suspension/unsuspension. Please correct the errors "
 "below."
 msgstr ""
 "Chyba pri plánovaní pozastavenia/reaktivácie peera. Opravte chyby nižšie."
 
-#: wireguard_peer/views.py:438
+#: wireguard_peer/views.py:388
 msgid "Schedule cleared successfully."
 msgstr "Plán úspešne vymazaný."
 
-#: wireguard_peer/views.py:452
+#: wireguard_peer/views.py:402
 msgid "Peer suspended successfully."
 msgstr "Peer úspešne pozastavený."
 
-#: wireguard_peer/views.py:454
+#: wireguard_peer/views.py:404
 msgid "Peer suspended, but failed to reload WireGuard interface: "
 msgstr ""
 "Pozastavenie peera prebehlo úspešne, ale zlyhalo znovunačítanie rozhrania "
 "WireGuard: "
 
-#: wireguard_peer/views.py:464
+#: wireguard_peer/views.py:414
 msgid "Peer reactivated successfully."
 msgstr "Peer úspešne reaktivovaný."
 
-#: wireguard_peer/views.py:466
+#: wireguard_peer/views.py:416
 msgid "Peer reactivated, but failed to reload WireGuard interface: "
 msgstr ""
 "Reaktivácia peera prebehla úspešne, ale zlyhalo znovunačítanie rozhrania "
 "WireGuard: "
 
-#: wireguard_peer/views.py:469
+#: wireguard_peer/views.py:419
 msgid "Invalid action."
 msgstr "Neplatná akcia."
 
-#: wireguard_peer/views.py:474
+#: wireguard_peer/views.py:424
 msgid "Suspend / Reactivate Peer"
 msgstr "Pozastaviť / Reaktivovať Peer"
 
-#: wireguard_peer/views.py:497
+#: wireguard_peer/views.py:447
 msgid "Peer scheduling profile updated successfully."
 msgstr "Profil plánovania peera bol úspešne aktualizovaný."
 
-#: wireguard_peer/views.py:510
+#: wireguard_peer/views.py:460
 msgid "Manage Peer Schedule Profile"
 msgstr "Spravovať profil plánovania peera"
 
