@@ -5,14 +5,14 @@ CacheControl==0.14.4
 certifi==2026.1.4
 cffi==2.0.0
 charset-normalizer==3.4.4
-crispy-bootstrap4==2025.6
+crispy-bootstrap4==2026.2
 Django==5.2.11
 django-crispy-forms==2.5
-gunicorn==25.0.1
+gunicorn==25.0.3
 idna==3.11
 msgpack==1.1.2
 packaging==26.0
-pillow==12.1.0
+pillow==12.1.1
 polib==1.2.0
 pycparser==3.0
 pypng==0.20220715.0
