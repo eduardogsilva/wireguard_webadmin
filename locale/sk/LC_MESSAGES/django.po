@@ -170,7 +170,7 @@ msgstr "Ste si istí, že chcete odstrániť kľúč API \"%(name)s\"?"
 
 #: api_v2/views.py:140 templates/api_v2/list.html:83
 msgid "API Documentation"
-msgstr ""
+msgstr "Dokumentácia API"
 
 #: cluster/forms.py:20
 msgid "IP Lock"
@@ -1134,14 +1134,12 @@ msgid "Login again"
 msgstr "Prihlásiť sa znovu"
 
 #: templates/api_v2/api_documentation.html:33
-#, fuzzy
-#| msgid "Destination"
 msgid "Authentication"
-msgstr "Cieľ"
+msgstr "Autentifikácia"
 
 #: templates/api_v2/api_documentation.html:41
 msgid "Parameters"
-msgstr ""
+msgstr "Parametre"
 
 #: templates/api_v2/api_documentation.html:48
 #: templates/firewall/firewall_rule_list.html:40
@@ -1154,10 +1152,8 @@ msgid "Type"
 msgstr "Typ"
 
 #: templates/api_v2/api_documentation.html:50
-#, fuzzy
-#| msgid "Update Required"
 msgid "Required"
-msgstr "Aktualizácia potrebná"
+msgstr "Povinné"
 
 #: templates/api_v2/api_documentation.html:62
 #: templates/scheduler/scheduleprofile_form.html:175
@@ -1171,15 +1167,15 @@ msgstr "Nie"
 
 #: templates/api_v2/api_documentation.html:72
 msgid "Example"
-msgstr ""
+msgstr "Príklad"
 
 #: templates/api_v2/api_documentation.html:90
 msgid "Returns"
-msgstr ""
+msgstr "Vracia"
 
 #: templates/api_v2/api_documentation.html:111
 msgid "Examples"
-msgstr ""
+msgstr "Príklady"
 
 #: templates/api_v2/list.html:36 templates/user_manager/list.html:26
 msgid "All"
@@ -3146,12 +3142,8 @@ msgid "Scheduled unsuspension time must be at least 10 minutes in the future."
 msgstr "Plánovaný čas reaktivácie musí byť aspoň 10 minút v budúcnosti."
 
 #: wireguard_peer/functions.py:58
-#, fuzzy
-#| msgid "Error creating peer|No available IP address found for peer creation."
 msgid "Error creating peer|The specified IP address is not available."
-msgstr ""
-"Chyba pri vytváraní peer|Nebola nájdená dostupná IP adresa pre vytvorenie "
-"peer."
+msgstr "Chyba pri vytváraní peer|Zadaná IP adresa nie je k dispozícii."
 
 #: wireguard_peer/functions.py:84 wireguard_peer/views.py:150
 msgid "Peer created|Peer created successfully."
@@ -3173,7 +3165,7 @@ msgstr "Zoznam WireGuard peerov"
 
 #: wireguard_peer/views.py:158
 msgid "Peer not created|Missing instance parameter."
-msgstr ""
+msgstr "Peer nebol vytvorený|Chýba parameter inštancie."
 
 #: wireguard_peer/views.py:179
 msgid "Peer deleted|Peer deleted successfully."

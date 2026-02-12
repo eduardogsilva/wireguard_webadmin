@@ -170,7 +170,7 @@ msgstr ""
 
 #: api_v2/views.py:140 templates/api_v2/list.html:83
 msgid "API Documentation"
-msgstr ""
+msgstr "API-Dokumentation"
 
 #: cluster/forms.py:20
 msgid "IP Lock"
@@ -1157,14 +1157,12 @@ msgid "Login again"
 msgstr "Erneut anmelden"
 
 #: templates/api_v2/api_documentation.html:33
-#, fuzzy
-#| msgid "Destination"
 msgid "Authentication"
-msgstr "Ziel"
+msgstr "Authentifizierung"
 
 #: templates/api_v2/api_documentation.html:41
 msgid "Parameters"
-msgstr ""
+msgstr "Parameter"
 
 #: templates/api_v2/api_documentation.html:48
 #: templates/firewall/firewall_rule_list.html:40
@@ -1177,10 +1175,8 @@ msgid "Type"
 msgstr "Typ"
 
 #: templates/api_v2/api_documentation.html:50
-#, fuzzy
-#| msgid "Update Required"
 msgid "Required"
-msgstr "Aktualisierung erforderlich"
+msgstr "Erforderlich"
 
 #: templates/api_v2/api_documentation.html:62
 #: templates/scheduler/scheduleprofile_form.html:175
@@ -1194,15 +1190,15 @@ msgstr "Nein"
 
 #: templates/api_v2/api_documentation.html:72
 msgid "Example"
-msgstr ""
+msgstr "Beispiel"
 
 #: templates/api_v2/api_documentation.html:90
 msgid "Returns"
-msgstr ""
+msgstr "Rückgabewerte"
 
 #: templates/api_v2/api_documentation.html:111
 msgid "Examples"
-msgstr ""
+msgstr "Beispiele"
 
 #: templates/api_v2/list.html:36 templates/user_manager/list.html:26
 msgid "All"
@@ -3191,10 +3187,8 @@ msgstr ""
 "liegen."
 
 #: wireguard_peer/functions.py:58
-#, fuzzy
-#| msgid "Error creating peer|No available IP address found for peer creation."
 msgid "Error creating peer|The specified IP address is not available."
-msgstr "Fehler beim Erstellen des Peers|Keine freie IP‑Adresse verfügbar."
+msgstr "Fehler beim Erstellen des Peers|Die angegebene IP-Adresse ist não verfügbar."
 
 #: wireguard_peer/functions.py:84 wireguard_peer/views.py:150
 msgid "Peer created|Peer created successfully."
@@ -3214,7 +3208,7 @@ msgstr "WireGuard‑Peer‑Liste"
 
 #: wireguard_peer/views.py:158
 msgid "Peer not created|Missing instance parameter."
-msgstr ""
+msgstr "Peer nicht erstellt|Fehlender Instanzparameter."
 
 #: wireguard_peer/views.py:179
 msgid "Peer deleted|Peer deleted successfully."
