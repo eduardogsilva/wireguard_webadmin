@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 12:41-0300\n"
+"POT-Creation-Date: 2026-02-12 13:34-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1199,6 +1199,18 @@ msgstr "Rückgabewerte"
 #: templates/api_v2/api_documentation.html:111
 msgid "Examples"
 msgstr "Beispiele"
+
+#: templates/api_v2/api_documentation.html:135
+msgid "This API is a work in progress and new endpoints are added as needed."
+msgstr ""
+
+#: templates/api_v2/api_documentation.html:136
+msgid "Missing a method or feature?"
+msgstr ""
+
+#: templates/api_v2/api_documentation.html:138
+msgid "Open an issue on GitHub"
+msgstr ""
 
 #: templates/api_v2/list.html:36 templates/user_manager/list.html:26
 msgid "All"
@@ -3188,7 +3200,8 @@ msgstr ""
 
 #: wireguard_peer/functions.py:58
 msgid "Error creating peer|The specified IP address is not available."
-msgstr "Fehler beim Erstellen des Peers|Die angegebene IP-Adresse ist não verfügbar."
+msgstr ""
+"Fehler beim Erstellen des Peers|Die angegebene IP-Adresse ist não verfügbar."
 
 #: wireguard_peer/functions.py:84 wireguard_peer/views.py:150
 msgid "Peer created|Peer created successfully."
