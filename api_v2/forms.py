@@ -13,9 +13,9 @@ class ApiKeyForm(forms.ModelForm):
         fields = [
             'name',
             'allowed_instances',
-            'allow_restart',
-            'allow_reload',
-            'allow_export',
+            #'allow_restart',
+            #'allow_reload',
+            #'allow_export',
             'enabled',
         ]
 
@@ -48,12 +48,12 @@ class ApiKeyForm(forms.ModelForm):
                 Column('allowed_instances', css_class='form-group col-md-12 mb-0'),
                 css_class='form-row'
             ),
-            Row(
-                Column('allow_restart', css_class='form-group col-md-4 mb-0'),
-                Column('allow_reload', css_class='form-group col-md-4 mb-0'),
-                Column('allow_export', css_class='form-group col-md-4 mb-0'),
-                css_class='form-row'
-            ),
+            #Row(
+            #    Column('allow_restart', css_class='form-group col-md-4 mb-0'),
+            #    Column('allow_reload', css_class='form-group col-md-4 mb-0'),
+            #    Column('allow_export', css_class='form-group col-md-4 mb-0'),
+            #    css_class='form-row'
+            #),
              Row(
                 Column('enabled', css_class='form-group col-md-12 mb-0'),
                 css_class='form-row'
