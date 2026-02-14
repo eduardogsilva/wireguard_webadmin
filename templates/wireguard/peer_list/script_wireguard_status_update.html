@@ -264,7 +264,7 @@
             if (!apiIps.includes(ip)) {
                 ipSpan.style.color = 'red';
                 ipSpan.style.textDecoration = 'underline';
-                ipSpan.title = '{% trans 'This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.' %}';
+                ipSpan.title = '{% trans 'This address does not appear in the wg show command output, likely indicating that another peer has an IP overlapping this network or that the configuration file is outdated.'|escapejs %}';
                 allowedIpsIssue = true;
             }
 
@@ -279,7 +279,7 @@
             if (h5Element && !h5Element.querySelector('.fa-exclamation-triangle')) {
                 const icon = document.createElement('i');
                 icon.className = 'fas fa-exclamation-triangle text-danger blink';
-                icon.title = '{% trans 'At least one address does not appear in the wg show command output, which may indicate that another peer is using an overlapping IP or that the configuration file is outdated.' %}';
+                icon.title = '{% trans 'At least one address does not appear in the wg show command output, which may indicate that another peer is using an overlapping IP or that the configuration file is outdated.'|escapejs %}';
                 h5Element.appendChild(icon);
             }
         }
