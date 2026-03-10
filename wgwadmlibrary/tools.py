@@ -8,7 +8,7 @@ from email.mime.text import MIMEText
 
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.db.models import Max
+from django.db.models import Max, Q
 from django.utils import timezone
 
 from user_manager.models import UserAcl
@@ -46,21 +46,17 @@ def user_allowed_instances(user_acl: UserAcl):
 
 
 def user_allowed_peers(user_acl: UserAcl, instance: WireGuardInstance):
+    base_qs = Peer.objects.filter(wireguard_instance=instance)
 
     if not user_acl.peer_groups.exists():
-        return Peer.objects.filter(wireguard_instance=instance).order_by('sort_order')
+        return base_qs.order_by('sort_order')
 
-    peers_from_direct = Peer.objects.filter(
-        wireguard_instance=instance,
-        peergroup__in=user_acl.peer_groups.all()
+    return (
+        base_qs.filter(
+            Q(peergroup__in=user_acl.peer_groups.all()) |
+            Q(wireguard_instance__peergroup__in=user_acl.peer_groups.filter(server_instance=instance))
+        ).distinct().order_by('sort_order')
     )
-    
-    peers_from_instance = Peer.objects.filter(
-        wireguard_instance=instance,
-        wireguard_instance__peergroup__in=user_acl.peer_groups.filter(server_instance=instance)
-    )
-
-    return peers_from_direct.union(peers_from_instance).order_by('sort_order')
 
 
 def is_valid_ip_or_hostname(value):
