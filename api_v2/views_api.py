@@ -293,12 +293,6 @@ def api_v2_manage_peer(request):
                     return JsonResponse({"status": "error", "error_message": "Invalid persistent_keepalive."}, status=400)
 
             peer_allowed_ip = payload.get("allowed_ip") or None
-            peer_allowed_ip_netmask = payload.get("allowed_ip_netmask")
-            if peer_allowed_ip_netmask is not None:
-                try:
-                    peer_allowed_ip_netmask = int(peer_allowed_ip_netmask)
-                except Exception:
-                    return JsonResponse({"status": "error", "error_message": "Invalid allowed_ip_netmask."}, status=400)
 
             create_overrides = {"name": peer_name}
 
@@ -312,8 +306,6 @@ def api_v2_manage_peer(request):
                 create_overrides["persistent_keepalive"] = peer_persistent_keepalive
             if peer_allowed_ip:
                 create_overrides["allowed_ip"] = str(peer_allowed_ip).strip()
-            if peer_allowed_ip_netmask is not None:
-                create_overrides["allowed_ip_netmask"] = peer_allowed_ip_netmask
 
             if routing_template is not None:
                 create_overrides["default_routing_template"] = routing_template
