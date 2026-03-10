@@ -183,6 +183,9 @@ def _get_wireguard_instance(instance_name: str) -> Optional[WireGuardInstance]:
         {"name": "routing_template_uuid", "in": "json", "type": "string", "required": False,
          "description": "Routing template UUID (optional). Must belong to the same WireGuard instance."},
 
+        {"name": "allowed_ip", "in": "json", "type": "string", "required": False,
+         "example": "10.188.0.15", "description": "Optional peer main IP address. It must be an available IP within the instance subnet. If omitted, the system will automatically assign the next available IP address."},
+
         {"name": "announced_networks", "in": "json", "type": "list[string]", "required": False,
          "example": ["10.10.0.0/24"], "description": "Server announced networks (priority>=1). Will be synced."},
         {"name": "client_routes", "in": "json", "type": "list[string]", "required": False,
