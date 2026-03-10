@@ -25,7 +25,7 @@ services:
       - rrd_data:/rrd_data/
     ports:
       # Do not directly expose the Django port to the internet, use some kind of reverse proxy with SSL.
-      - "8000:8000"
+      # - "8000:8000"
       # Warning: Docker will have a hard time handling large amount of ports. Expose only the ports that you need.
       # Ports for multiple WireGuard instances. (Probably, you just need one)
       - "51820-51839:51820-51839/udp"
@@ -79,9 +79,31 @@ services:
     volumes:
       - dnsmasq_conf:/etc/dnsmasq/
 
+  wireguard-webadmin-caddy:
+    container_name: wireguard-webadmin-caddy
+    restart: unless-stopped
+    build:
+      context: ./containers/caddy
+      dockerfile: Dockerfile-caddy
+    environment:
+      - SERVER_ADDRESS=${SERVER_ADDRESS}
+      - EXTRA_ALLOWED_HOSTS=${EXTRA_ALLOWED_HOSTS}
+      - TZ=${TIMEZONE}
+    volumes:
+      - static_volume:/static
+      - https_cert:/certificates
+      - letsencrypt_data:/data
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - wireguard-webadmin
+
 volumes:
   static_volume:
+  https_cert:
   wireguard:
   dnsmasq_conf:
   app_secrets:
   rrd_data:
+  letsencrypt_data:
