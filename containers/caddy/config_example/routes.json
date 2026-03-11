@@ -1,0 +1,43 @@
+{
+  "entries": {
+    "wireguard_webadmin": {
+      "default_policy": "admin_access",
+      "routes": [
+        {
+          "id": "public_area",
+          "path_prefix": "/public",
+          "policy": "public"
+        },
+        {
+          "id": "admin_area",
+          "path_prefix": "/admin",
+          "policy": "admin_access"
+        },
+        {
+          "id": "api_area",
+          "path_prefix": "/api",
+          "policy": "api_users"
+        }
+      ]
+    },
+    "grafana": {
+      "default_policy": "ops_access",
+      "routes": []
+    },
+    "routerfleet": {
+      "default_policy": "admin_access",
+      "routes": [
+        {
+          "id": "public_api",
+          "path_prefix": "/api/public",
+          "policy": "public"
+        },
+        {
+          "id": "admin_area",
+          "path_prefix": "/admin",
+          "policy": "admin_access"
+        }
+      ]
+    }
+  }
+}

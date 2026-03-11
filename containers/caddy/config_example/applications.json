@@ -1,0 +1,21 @@
+{
+  "entries": [
+    {
+      "id": "grafana",
+      "name": "Grafana",
+      "hosts": [
+        "grafana.example.com"
+      ],
+      "upstream": "grafana:3000"
+    },
+    {
+      "id": "routerfleet",
+      "name": "RouterFleet",
+      "hosts": [
+        "routerfleet.example.com",
+        "rf.example.com"
+      ],
+      "upstream": "routerfleet:8080"
+    }
+  ]
+}

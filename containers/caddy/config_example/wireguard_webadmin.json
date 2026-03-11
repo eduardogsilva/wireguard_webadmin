@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "id": "wireguard_webadmin",
+      "name": "WireGuard WebAdmin",
+      "hosts": [
+        "wireguard-webadmin-dev.local",
+        "wireguard-webadmin-dev2.local",
+        "wireguard-webadmin-dev3.local"
+      ],
+      "upstream": "wireguard-webadmin:8000",
+      "static_routes": [
+        {
+          "path_prefix": "/static",
+          "root": "/static",
+          "strip_prefix": "/static",
+          "cache_control": "public, max-age=3600"
+        }
+      ]
+    }
+  ]
+}

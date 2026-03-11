@@ -1,0 +1,99 @@
+{
+  "auth_methods": {
+    "password_local": {
+      "type": "local_password"
+    },
+    "totp_default": {
+      "type": "totp"
+    },
+    "google_workspace_admins": {
+      "type": "oidc",
+      "provider": "google",
+      "client_id": "GOOGLE_CLIENT_ID",
+      "client_secret": "GOOGLE_CLIENT_SECRET",
+      "allowed_domains": [
+        "example.com"
+      ],
+      "allowed_emails": [
+        "eduardo@example.com",
+        "alice@example.com"
+      ]
+    }
+  },
+  "groups": {
+    "admins": {
+      "users": [
+        "eduardo",
+        "alice"
+      ]
+    },
+    "ops": {
+      "users": [
+        "bob",
+        "charlie"
+      ]
+    },
+    "staff": {
+      "users": [
+        "david"
+      ]
+    }
+  },
+  "users": {
+    "eduardo": {
+      "email": "eduardo@example.com",
+      "password_hash": "$argon2id$hash"
+    },
+    "alice": {
+      "email": "alice@example.com",
+      "password_hash": "$argon2id$hash"
+    },
+    "bob": {
+      "email": "bob@example.com",
+      "password_hash": "$argon2id$hash"
+    }
+  },
+  "policies": {
+    "public": {
+      "policy_type": "bypass"
+    },
+    "api_users": {
+      "policy_type": "one_factor",
+      "groups": [
+        "staff"
+      ],
+      "methods": [
+        "password_local"
+      ]
+    },
+    "ops_access": {
+      "policy_type": "one_factor",
+      "groups": [
+        "ops"
+      ],
+      "methods": [
+        "password_local"
+      ]
+    },
+    "admin_access": {
+      "policy_type": "two_factor",
+      "groups": [
+        "admins"
+      ],
+      "methods": [
+        "password_local",
+        "totp_default"
+      ]
+    },
+    "google_admin_access": {
+      "policy_type": "two_factor",
+      "groups": [
+        "admins"
+      ],
+      "methods": [
+        "google_workspace_admins",
+        "totp_default"
+      ]
+    }
+  }
+}
