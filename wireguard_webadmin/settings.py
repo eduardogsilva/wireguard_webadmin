@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'api',
     'routing_templates',
     'scheduler.apps.SchedulerConfig',
-    'api_v2'
+    'api_v2',
+    'gatekeeper',
+    'app_gateway',
 ]
 
 MIDDLEWARE = [
