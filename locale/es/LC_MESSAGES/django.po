@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 13:34-0300\n"
+"POT-Creation-Date: 2026-03-11 18:49-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,6 +46,12 @@ msgstr "Eliminar"
 #: api_v2/forms.py:31
 msgid "Regenerate Token"
 msgstr "Regenerar token"
+
+#: api_v2/forms.py:37
+msgid ""
+"Are you sure you want to regenerate the token? The old token will stop "
+"working immediately."
+msgstr ""
 
 #: api_v2/forms.py:63 cluster/forms.py:67 cluster/forms.py:124 dns/forms.py:37
 #: dns/forms.py:84 dns/forms.py:153 routing_templates/forms.py:71
@@ -106,7 +112,7 @@ msgstr "Habilitado"
 msgid "Access Denied"
 msgstr "Acceso denegado"
 
-#: api_v2/views.py:19 templates/template_parts/base_sidebar.html:108
+#: api_v2/views.py:19 templates/template_parts/base_sidebar.html:126
 msgid "API Keys"
 msgstr "Claves de API"
 
@@ -170,6 +176,34 @@ msgstr "¿Está seguro de que desea eliminar la clave de API \"%(name)s\"?"
 #: api_v2/views.py:140 templates/api_v2/list.html:83
 msgid "API Documentation"
 msgstr "Documentación de la API"
+
+#: app_gateway/models.py:12
+msgid "Upstream address, e.g.: http://10.188.18.27:3000"
+msgstr ""
+
+#: app_gateway/models.py:42
+msgid "Bypass (public)"
+msgstr ""
+
+#: app_gateway/models.py:43
+msgid "One Factor"
+msgstr ""
+
+#: app_gateway/models.py:44
+msgid "Two Factor"
+msgstr ""
+
+#: app_gateway/models.py:45
+msgid "Deny"
+msgstr ""
+
+#: app_gateway/models.py:84
+msgid "Route identifier, used in export (e.g.: public_area)"
+msgstr ""
+
+#: app_gateway/models.py:87
+msgid "Evaluation order — lower value means higher priority"
+msgstr ""
 
 #: cluster/forms.py:20
 msgid "IP Lock"
@@ -260,7 +294,7 @@ msgstr ""
 msgid "Worker update is required."
 msgstr "Se requiere la actualización del worker."
 
-#: cluster/views.py:21 templates/template_parts/base_sidebar.html:117
+#: cluster/views.py:21 templates/template_parts/base_sidebar.html:135
 msgid "Cluster"
 msgstr "Cluster"
 
@@ -793,6 +827,28 @@ msgstr "Gestionar configuración de firewall"
 msgid "Firewall settings saved successfully"
 msgstr "Configuración de firewall guardada correctamente"
 
+#: gatekeeper/models.py:9
+#, fuzzy
+#| msgid "Default Password"
+msgid "Local Password"
+msgstr "Contraseña predeterminada"
+
+#: gatekeeper/models.py:9
+msgid "TOTP"
+msgstr ""
+
+#: gatekeeper/models.py:9
+msgid "OIDC"
+msgstr ""
+
+#: gatekeeper/models.py:66
+msgid "Password for local authentication (leave blank if not using)"
+msgstr ""
+
+#: gatekeeper/models.py:67
+msgid "Per-user TOTP secret key"
+msgstr ""
+
 #: intl_tools/forms.py:11 templates/accounts/login.html:36
 msgid "Language"
 msgstr "Idioma"
@@ -1019,6 +1075,11 @@ msgstr "Día de Fin"
 msgid "End Time"
 msgstr "Hora de Fin"
 
+#: scheduler/forms.py:103 templates/generic_delete_confirmation.html:19
+#: templates/scheduler/scheduleprofile_form.html:203
+msgid "Cancel"
+msgstr "Cancelar"
+
 #: scheduler/forms.py:122
 msgid "Unable to validate overlaps: schedule profile is missing."
 msgstr ""
@@ -1197,7 +1258,9 @@ msgstr "Ejemplos"
 
 #: templates/api_v2/api_documentation.html:135
 msgid "This API is a work in progress and new endpoints are added as needed."
-msgstr "Esta API es un trabajo en progreso y se agregan nuevos endpoints según sea necesario."
+msgstr ""
+"Esta API es un trabajo en progreso y se agregan nuevos endpoints según sea "
+"necesario."
 
 #: templates/api_v2/api_documentation.html:136
 msgid "Missing a method or feature?"
@@ -1699,8 +1762,8 @@ msgstr ""
 "                        <p>El archivo <code>docker-compose.yml</code> "
 "predeterminado especifica el rango de puertos <b>TCP</b> <b>8080-8089</b>. "
 "Si deseas cambiarlo, edita manualmente el archivo <code>docker-compose.yml</"
-"code> y vuelve a ejecutar Docker Compose según las <a href=\"https://github."
-"com/eduardogsilva/wireguard_webadmin?tab=readme-ov-"
+"code> y vuelve a ejecutar Docker Compose según las <a href=\"https://"
+"github.com/eduardogsilva/wireguard_webadmin?tab=readme-ov-"
 "file#deployment\">instrucciones de despliegue</a>.</p>\n"
 "                        <h5>Tipo de destino: Peer</h5>\n"
 "                        <p>La redirección de puerto dará prioridad a la "
@@ -1747,11 +1810,6 @@ msgstr "Crear regla de reenvío de puerto"
 #: templates/generic_delete_confirmation.html:16
 msgid "Confirm Delete"
 msgstr "Confirmar Eliminación"
-
-#: templates/generic_delete_confirmation.html:19
-#: templates/scheduler/scheduleprofile_form.html:203
-msgid "Cancel"
-msgstr "Cancelar"
 
 #: templates/routing_templates/list.html:11
 msgid "Default"
@@ -1882,11 +1940,11 @@ msgstr "Actualizar y recargar servicio"
 msgid "Scheduler"
 msgstr "Programador"
 
-#: templates/template_parts/base_sidebar.html:79 user_manager/views.py:74
+#: templates/template_parts/base_sidebar.html:97 user_manager/views.py:74
 msgid "User Manager"
 msgstr "Gestión de usuarios"
 
-#: templates/template_parts/base_sidebar.html:98
+#: templates/template_parts/base_sidebar.html:116
 #: templates/wireguard/peer_list/peer_preview_modal.html:133
 #: vpn_invite/views.py:37
 msgid "VPN Invite"
