@@ -76,18 +76,18 @@ def is_valid_ip_or_hostname(value):
 
 
 def list_network_interfaces():
-    # Executa o comando 'ip link show' com grep para filtrar linhas com 'UP'
     cmd = "ip link show | grep UP"
-    cmd_output = subprocess.check_output(cmd, shell=True, text=True)
+    try:
+        cmd_output = subprocess.check_output(cmd, shell=True, text=True)
+    except:
+        cmd_output = ''
 
-    # Processa a saída para extrair os nomes das interfaces
     interfaces = []
     for line in cmd_output.split('\n'):
-        if line:  # Verifica se a linha não está vazia
+        if line:
             parts = line.split(': ')
             if len(parts) > 1:
-                # O nome da interface está na segunda posição após o split
-                interface_name = parts[1].split('@')[0]  # Remove qualquer coisa após '@'
+                interface_name = parts[1].split('@')[0]
                 interfaces.append(interface_name)
 
     return interfaces
