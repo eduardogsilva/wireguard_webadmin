@@ -64,6 +64,24 @@
             </li>
 
             <li class="nav-item">
+                <a href="/gatekeeper/" class="nav-link {% if '/gatekeeper/' in request.path %}active{% endif %}">
+                    <i class="fas fa-dungeon"></i>
+                    <p>
+                        Gatekeeper
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/app_gateway/" class="nav-link {% if '/app_gateway/' in request.path %}active{% endif %}">
+                    <i class="fas fa-route"></i>
+                    <p>
+                        App Gateway
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a href="/console/" class="nav-link {% if '/console/' in request.path %}active{% endif %}">
                     <i class="fas fa-terminal nav-icon"></i>
                     <p>
