@@ -196,7 +196,7 @@ def view_manage_auth_method(request):
         'page_title': title,
         'form_description': form_description,
     }
-    return render(request, 'generic_form.html', context)
+    return render(request, 'gatekeeper/gatekeeper_auth_method_form.html', context)
 
 
 @login_required
