@@ -65,9 +65,8 @@ class ApplicationForm(forms.ModelForm):
 class ApplicationHostForm(forms.ModelForm):
     class Meta:
         model = ApplicationHost
-        fields = ['application', 'hostname']
+        fields = ['hostname']
         labels = {
-            'application': _('Application'),
             'hostname': _('Hostname'),
         }
 
@@ -78,8 +77,7 @@ class ApplicationHostForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('application', css_class='col-md-6'),
-                Div('hostname', css_class='col-md-6'),
+                Div('hostname', css_class='col-md-12'),
                 css_class='row'
             ),
             Div(
@@ -134,9 +132,8 @@ class AccessPolicyForm(forms.ModelForm):
 class ApplicationPolicyForm(forms.ModelForm):
     class Meta:
         model = ApplicationPolicy
-        fields = ['application', 'default_policy']
+        fields = ['default_policy']
         labels = {
-            'application': _('Application'),
             'default_policy': _('Default Policy'),
         }
 
@@ -147,8 +144,7 @@ class ApplicationPolicyForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('application', css_class='col-md-6'),
-                Div('default_policy', css_class='col-md-6'),
+                Div('default_policy', css_class='col-md-12'),
                 css_class='row'
             ),
             Div(
@@ -165,13 +161,12 @@ class ApplicationPolicyForm(forms.ModelForm):
 class ApplicationRouteForm(forms.ModelForm):
     class Meta:
         model = ApplicationRoute
-        fields = ['application', 'name', 'path_prefix', 'policy', 'order']
+        fields = ['name', 'path_prefix', 'policy', 'order']
         labels = {
-            'application': _('Application'),
             'name': _('Route Name'),
             'path_prefix': _('Path Prefix'),
             'policy': _('Policy'),
-            'order': _('Priority Order'),
+            'order': _('Order'),
         }
 
     def __init__(self, *args, **kwargs):
@@ -181,13 +176,12 @@ class ApplicationRouteForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('application', css_class='col-md-6'),
-                Div('name', css_class='col-md-6'),
+                Div('name', css_class='col-md-12'),
                 css_class='row'
             ),
             Div(
-                Div('path_prefix', css_class='col-md-8'),
-                Div('order', css_class='col-md-4'),
+                Div('path_prefix', css_class='col-xl-7'),
+                Div('order', css_class='col-xl-5'),
                 css_class='row'
             ),
             Div(

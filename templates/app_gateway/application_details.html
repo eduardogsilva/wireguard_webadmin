@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-server"></i> {{ application }}
+        </h3>
+        <div class="card-tools">
+            <a href="{% url 'app_gateway_list' %}" class="btn btn-sm btn-secondary">
+                <i class="fas fa-arrow-left"></i> {% trans 'Back to List' %}
+            </a>
+            <a href="{% url 'manage_application' %}?uuid={{ application.uuid }}" class="btn btn-sm btn-info">
+                <i class="fas fa-edit"></i> {% trans 'Edit Application' %}
+            </a>
+            <a href="{% url 'delete_application' %}?uuid={{ application.uuid }}" class="btn btn-sm btn-danger">
+                <i class="fas fa-trash"></i> {% trans 'Delete Application' %}
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <strong>{% trans 'Name' %}:</strong> {{ application.name }}<br>
+                <strong>{% trans 'Display Name' %}:</strong> {{ application.display_name }}<br>
+                <strong>{% trans 'Upstream' %}:</strong> <code>{{ application.upstream }}</code><br>
+            </div>
+            <div class="col-md-6">
+                <strong>{% trans 'Default Policy' %}:</strong>
+                {% if application.default_policy_config %}
+                <span>{{ application.default_policy_config.default_policy.name }}</span>
+                <a href="{% url 'manage_application_policy' %}?uuid={{ application.default_policy_config.uuid }}"
+                    class="btn btn-sm btn-outline-secondary btn-xs"><i class="fas fa-edit"></i></a>
+                <a href="{% url 'delete_application_policy' %}?uuid={{ application.default_policy_config.uuid }}"
+                    class="btn btn-sm btn-outline-danger btn-xs"><i class="fas fa-times"></i></a>
+                {% else %}
+                <span class="text-muted">{% trans 'Default (Deny)' %}</span>
+                <a href="{% url 'manage_application_policy' %}?application_uuid={{ application.uuid }}"
+                    class="btn btn-sm btn-outline-primary btn-xs"><i class="fas fa-plus"></i> {% trans 'Set Policy' %}</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr>
+
+        <h4 id="hosts">{% trans 'Application Hosts' %}</h4>
+        <div class="mb-3">
+            <a href="{% url 'manage_application_host' %}?application_uuid={{ application.uuid }}"
+                class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-plus"></i> {% trans 'Add Host' %}
+            </a>
+        </div>
+
+        {% if hosts %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Hostname' %}</th>
+                        <th>{% trans 'Actions' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for host in hosts %}
+                    <tr>
+                        <td>{{ host.hostname }}</td>
+                        <td style="width: 15%">
+                            <a href="{% url 'manage_application_host' %}?uuid={{ host.uuid }}"
+                                class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'delete_application_host' %}?uuid={{ host.uuid }}"
+                                class="btn btn-sm btn-danger" title="{% trans 'Delete' %}">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            {% trans 'No Hosts configured for this application.' %}
+        </div>
+        {% endif %}
+
+        <hr class="mt-4 mb-4">
+
+        <h4 id="routes">{% trans 'Application Routes' %}</h4>
+        <div class="mb-3">
+            <a href="{% url 'manage_application_route' %}?application_uuid={{ application.uuid }}"
+                class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-plus"></i> {% trans 'Add Route' %}
+            </a>
+        </div>
+
+        {% if routes %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Route Name' %}</th>
+                        <th>{% trans 'Path Prefix' %}</th>
+                        <th>{% trans 'Policy' %}</th>
+                        <th>{% trans 'Order' %}</th>
+                        <th>{% trans 'Actions' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for route in routes %}
+                    <tr>
+                        <td>{{ route.name }}</td>
+                        <td><code>{{ route.path_prefix }}</code></td>
+                        <td>{{ route.policy.name }}</td>
+                        <td>{{ route.order }}</td>
+                        <td style="width: 15%">
+                            <a href="{% url 'manage_application_route' %}?uuid={{ route.uuid }}"
+                                class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'delete_application_route' %}?uuid={{ route.uuid }}"
+                                class="btn btn-sm btn-danger" title="{% trans 'Delete' %}">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            {% trans 'No Routes configured for this application.' %}
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

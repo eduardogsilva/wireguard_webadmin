@@ -9,6 +9,7 @@ urlpatterns = [
     # Applications
     path('application/manage/', views.view_manage_application, name='manage_application'),
     path('application/delete/', views.view_delete_application, name='delete_application'),
+    path('application/view/', views.view_application_details, name='view_application'),
 
     # Application Hosts
     path('host/manage/', views.view_manage_application_host, name='manage_application_host'),

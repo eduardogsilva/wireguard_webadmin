@@ -23,7 +23,6 @@ def view_app_gateway_list(request):
     hosts = ApplicationHost.objects.all().order_by('hostname')
     access_policies = AccessPolicy.objects.all().order_by('name')
     app_policies = ApplicationPolicy.objects.all().order_by('application__name')
-    routes = ApplicationRoute.objects.all().order_by('application__name', 'order', 'path_prefix')
 
     tab = request.GET.get('tab', 'applications')
 
@@ -32,10 +31,29 @@ def view_app_gateway_list(request):
         'hosts': hosts,
         'access_policies': access_policies,
         'app_policies': app_policies,
-        'routes': routes,
         'active_tab': tab,
     }
     return render(request, 'app_gateway/app_gateway_list.html', context)
+
+
+@login_required
+def view_application_details(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=20).exists():
+        return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
+
+    application_uuid = request.GET.get('uuid')
+    application = get_object_or_404(Application, uuid=application_uuid)
+
+    hosts = application.hosts.all().order_by('hostname')
+    routes = application.routes.all().order_by('order', 'path_prefix')
+
+    context = {
+        'application': application,
+        'hosts': hosts,
+        'routes': routes,
+        'page_title': _('Application Details'),
+    }
+    return render(request, 'app_gateway/application_details.html', context)
 
 
 @login_required
@@ -97,19 +115,24 @@ def view_manage_application_host(request):
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
 
     application_host_uuid = request.GET.get('uuid')
+    application_uuid = request.GET.get('application_uuid')
 
     if application_host_uuid:
         application_host = get_object_or_404(ApplicationHost, uuid=application_host_uuid)
+        application = application_host.application
         title = _('Edit Application Host')
     else:
         application_host = None
+        application = get_object_or_404(Application, uuid=application_uuid)
         title = _('Add Application Host')
 
-    cancel_url = reverse('app_gateway_list') + '?tab=hosts'
+    cancel_url = reverse('view_application') + f'?uuid={application.uuid}#hosts'
 
     form = ApplicationHostForm(request.POST or None, instance=application_host, cancel_url=cancel_url)
     if form.is_valid():
-        form.save()
+        host = form.save(commit=False)
+        host.application = application
+        host.save()
         messages.success(request, _('Application Host saved successfully.'))
         return redirect(cancel_url)
 
@@ -127,8 +150,9 @@ def view_delete_application_host(request):
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
 
     application_host = get_object_or_404(ApplicationHost, uuid=request.GET.get('uuid'))
+    application = application_host.application
 
-    cancel_url = reverse('app_gateway_list') + '?tab=hosts'
+    cancel_url = reverse('view_application') + f'?uuid={application.uuid}#hosts'
 
     if request.method == 'POST':
         application_host.delete()
@@ -203,20 +227,24 @@ def view_manage_application_policy(request):
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
 
     application_policy_uuid = request.GET.get('uuid')
+    application_uuid = request.GET.get('application_uuid')
 
     if application_policy_uuid:
         application_policy = get_object_or_404(ApplicationPolicy, uuid=application_policy_uuid)
+        application = application_policy.application
         title = _('Edit Application Default Policy')
     else:
         application_policy = None
+        application = get_object_or_404(Application, uuid=application_uuid)
         title = _('Set Application Default Policy')
 
-    cancel_url = reverse('app_gateway_list') + '?tab=applications'
-
+    cancel_url = reverse('view_application') + f'?uuid={application.uuid}'
 
     form = ApplicationPolicyForm(request.POST or None, instance=application_policy, cancel_url=cancel_url)
     if form.is_valid():
-        form.save()
+        policy_config = form.save(commit=False)
+        policy_config.application = application
+        policy_config.save()
         messages.success(request, _('Application Default Policy saved successfully.'))
         return redirect(cancel_url)
 
@@ -234,8 +262,9 @@ def view_delete_application_policy(request):
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
 
     application_policy = get_object_or_404(ApplicationPolicy, uuid=request.GET.get('uuid'))
+    application = application_policy.application
 
-    cancel_url = reverse('app_gateway_list') + '?tab=applications'
+    cancel_url = reverse('view_application') + f'?uuid={application.uuid}'
 
     if request.method == 'POST':
         application_policy.delete()
@@ -259,26 +288,46 @@ def view_manage_application_route(request):
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
 
     application_route_uuid = request.GET.get('uuid')
+    application_uuid = request.GET.get('application_uuid')
 
     if application_route_uuid:
         application_route = get_object_or_404(ApplicationRoute, uuid=application_route_uuid)
+        application = application_route.application
         title = _('Edit Application Route')
     else:
         application_route = None
+        application = get_object_or_404(Application, uuid=application_uuid)
         title = _('Add Application Route')
 
-    cancel_url = reverse('app_gateway_list') + '?tab=routes'
+    cancel_url = reverse('view_application') + f'?uuid={application.uuid}#routes'
 
     form = ApplicationRouteForm(request.POST or None, instance=application_route, cancel_url=cancel_url)
     if form.is_valid():
-        form.save()
+        route = form.save(commit=False)
+        route.application = application
+        route.save()
         messages.success(request, _('Application Route saved successfully.'))
         return redirect(cancel_url)
+
+    form_description = {
+        'size': 'col-lg-6',
+        'content': _('''
+        <h5>Application Route</h5>
+        <p>A Route defines a path prefix within this Application that requires a specific Access Policy.</p>
+        <ul>
+            <li><strong>Route Name</strong>: An internal identifier for this route (e.g., "public_api", "admin_area"). Used for reference and exports.</li>
+            <li><strong>Path Prefix</strong>: The URL path that triggers this route (e.g., <code>/api/</code> or <code>/admin/</code>). Use <code>/</code> to match all remaining paths.</li>
+            <li><strong>Policy</strong>: The Access Policy that will be enforced when a user accesses this path.</li>
+            <li><strong>Order</strong>: Determines the priority of this route when evaluating the request. Lower numbers are evaluated first. If multiple routes match a path, the one with the lowest order wins.</li>
+        </ul>
+        ''')
+    }
 
     context = {
         'form': form,
         'title': title,
         'page_title': title,
+        'form_description': form_description,
     }
     return render(request, 'generic_form.html', context)
 
@@ -289,8 +338,9 @@ def view_delete_application_route(request):
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
 
     application_route = get_object_or_404(ApplicationRoute, uuid=request.GET.get('uuid'))
+    application = application_route.application
 
-    cancel_url = reverse('app_gateway_list') + '?tab=routes'
+    cancel_url = reverse('view_application') + f'?uuid={application.uuid}#routes'
 
     if request.method == 'POST':
         application_route.delete()

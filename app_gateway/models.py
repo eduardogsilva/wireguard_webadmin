@@ -87,7 +87,7 @@ class ApplicationRoute(models.Model):
     name = models.SlugField(max_length=64, help_text=_("Route identifier, used in export (e.g.: public_area)"))
     path_prefix = models.CharField(max_length=255)
     policy = models.ForeignKey(AccessPolicy, on_delete=models.PROTECT, related_name='routes')
-    order = models.PositiveIntegerField(default=0, help_text=_("Evaluation order — lower value means higher priority"))
+    order = models.PositiveIntegerField(default=0)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
