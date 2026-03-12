@@ -7,15 +7,15 @@
         
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link {% if active_tab == 'users' or active_tab == 'groups' %}active{% endif %}"
-                   href="{% url 'gatekeeper_list' %}?tab=users" role="tab">
-                    {% trans 'Gatekeeper Users' %}
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link {% if active_tab == 'auth_methods' %}active{% endif %}"
                    href="{% url 'gatekeeper_list' %}?tab=auth_methods" role="tab">
                     {% trans 'Authentication Methods' %}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if active_tab == 'users' or active_tab == 'groups' %}active{% endif %}"
+                   href="{% url 'gatekeeper_list' %}?tab=users" role="tab">
+                    {% trans 'Gatekeeper Users' %}
                 </a>
             </li>
             <li class="nav-item">

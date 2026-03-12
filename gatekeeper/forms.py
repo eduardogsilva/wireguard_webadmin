@@ -1,4 +1,5 @@
 import pyotp
+from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, HTML, Div, Field
 from django import forms
@@ -210,7 +211,7 @@ class GatekeeperIPAddressForm(forms.ModelForm):
             ),
             Div(
                 Div('address', css_class='col-xl-6'),
-                Div('prefix_length', css_class='col-xl-6'),
+                Div(PrependedText('prefix_length', '/'), css_class='col-xl-6'),
                 css_class='row'
             ),
             Div(
@@ -245,7 +246,7 @@ class AuthMethodAllowedDomainForm(forms.ModelForm):
         self.helper.layout = Layout(
             Div(
                 Div('auth_method', css_class='col-md-6'),
-                Div('domain', css_class='col-md-6'),
+                Div(PrependedText('domain', '@'), css_class='col-xl-6'),
                 css_class='row'
             ),
             Div(

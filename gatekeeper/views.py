@@ -21,15 +21,14 @@ def view_gatekeeper_list(request):
     """Main list view containing tabs for Users, Groups, and Auth Methods"""
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=20).exists():
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
-    
+
+    active_tab = request.GET.get('tab', 'auth_methods')
+    auth_methods = AuthMethod.objects.all().order_by('name')
     users = GatekeeperUser.objects.all().order_by('username')
     groups = GatekeeperGroup.objects.all().order_by('name')
-    auth_methods = AuthMethod.objects.all().order_by('name')
     auth_domains = AuthMethodAllowedDomain.objects.all().order_by('domain')
     auth_emails = AuthMethodAllowedEmail.objects.all().order_by('email')
     auth_ips = GatekeeperIPAddress.objects.all().order_by('address')
-    
-    tab = request.GET.get('tab', 'users')
     
     context = {
         'users': users,
@@ -38,7 +37,7 @@ def view_gatekeeper_list(request):
         'auth_domains': auth_domains,
         'auth_emails': auth_emails,
         'auth_ips': auth_ips,
-        'active_tab': tab,
+        'active_tab': active_tab,
     }
     return render(request, 'gatekeeper/gatekeeper_list.html', context)
 
@@ -380,10 +379,29 @@ def view_manage_gatekeeper_ip(request):
         messages.success(request, _('IP Address saved successfully.'))
         return redirect(cancel_url)
 
+    form_description = {
+        'size': 'col-lg-6',
+        'content': _('''
+        <h5>IP Address List</h5>
+        <p>Manage specific IP addresses or networks that are allowed or denied access when using the IP Address List authentication method.</p>
+        
+        <h5>IP Address & Prefix</h5>
+        <p>Enter a single IP address (e.g., 192.168.1.50) or a network address. Use the prefix length for CIDR notation (e.g., 24 for a /24 network). Leave prefix blank for a single host (/32 for IPv4, /128 for IPv6).</p>
+        
+        <h5>Action</h5>
+        <p><strong>Allow</strong>: Grants access to the specified IP/network.<br>
+        <strong>Deny</strong>: Specifically blocks access from the specified IP/network.</p>
+        
+        <h5>Description</h5>
+        <p>An optional note to help identify this entry (e.g., "Office Network", "Blocked Attacker").</p>
+        ''')
+    }
+
     context = {
         'form': form,
         'title': title,
         'page_title': title,
+        'form_description': form_description,
     }
     return render(request, 'generic_form.html', context)
 
