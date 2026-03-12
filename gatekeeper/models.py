@@ -6,7 +6,12 @@ from django.utils.translation import gettext_lazy as _
 
 class AuthMethod(models.Model):
     name = models.SlugField(max_length=64, unique=True)
-    auth_type = models.CharField(max_length=32, choices=(('local_password', _('Local Password')), ('totp', _('TOTP')), ('oidc', _('OIDC'))))
+    auth_type = models.CharField(max_length=32, choices=(
+        ('local_password', _('Local Password')),
+        ('totp', _('One-Time Password (TOTP)')),
+        ('oidc', _('OpenID Connect (OIDC)')),
+        ('ip_address', _('IP Address List'))
+    ))
 
     # TOTP-specific fields
     totp_secret = models.CharField(
@@ -95,3 +100,30 @@ class GatekeeperGroup(models.Model):
         verbose_name = 'Gatekeeper Group'
         verbose_name_plural = 'Gatekeeper Groups'
 
+
+class GatekeeperIPAddress(models.Model):
+    auth_method = models.ForeignKey(
+        AuthMethod, on_delete=models.CASCADE, related_name='ip_addresses',
+        limit_choices_to={'auth_type': 'ip_address'}
+    )
+    address = models.GenericIPAddressField()
+    prefix_length = models.PositiveSmallIntegerField(
+        null=True, blank=True,
+        help_text=_("CIDR prefix length (e.g.: 24 for /24). Leave blank for a single host.")
+    )
+    action = models.CharField(max_length=8, choices=(('allow', _('Allow')), ('deny', _('Deny'))), default='allow')
+    description = models.CharField(max_length=255, blank=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+
+    def __str__(self):
+        prefix = f"/{self.prefix_length}" if self.prefix_length is not None else ""
+        return f"{self.address}{prefix} ({self.get_action_display()})"
+
+    class Meta:
+        ordering = ['address']
+        unique_together = [('auth_method', 'address', 'prefix_length')]
+        verbose_name = 'IP Address'
+        verbose_name_plural = 'IP Addresses'
