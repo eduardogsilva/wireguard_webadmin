@@ -36,5 +36,45 @@
 {% endblock %}
 
 {% block custom_page_scripts %}
+<script>
+    $(document).ready(function () {
+        function toggleFields() {
+            var authType = $('#id_auth_type').val();
+            if (authType === 'local_password' || authType === 'ip_address') {
+                $('.totp-group').hide();
+                $('.oidc-group').hide();
+            } else if (authType === 'totp') {
+                $('.totp-group').show();
+                $('.oidc-group').hide();
+            } else if (authType === 'oidc') {
+                $('.totp-group').hide();
+                $('.oidc-group').show();
+            }
+        }
 
+        $('#id_auth_type').change(toggleFields);
+        toggleFields();
+
+        var qrContainer = $('<div class="mt-3 text-center" style="display:none;" id="qrCodeContainer"><img id="qrCodeImg" src="" class="img-fluid" style="border: 2px solid #ddd; border-radius: 8px; max-width: 250px;"/></div>');
+        var btnShowQr = $('<button type="button" class="btn btn-sm btn-info mt-2" id="btnShowQr"><i class="fas fa-qrcode"></i> View QR Code</button>');
+        
+        $('#div_id_totp_secret').append(btnShowQr);
+        $('#div_id_totp_secret').append(qrContainer);
+
+        $('#btnShowQr').click(function (e) {
+            e.preventDefault();
+            var secret = $('#id_totp_secret').val();
+            var name = $('#id_name').val() || 'Gatekeeper';
+            
+            if (!secret) {
+                alert("Please enter a TOTP Secret first to generate the QR code.");
+                return;
+            }
+            
+            var url = '/gatekeeper/auth_method/qr/?secret=' + encodeURIComponent(secret) + '&name=' + encodeURIComponent(name);
+            $('#qrCodeImg').attr('src', url);
+            $('#qrCodeContainer').slideToggle();
+        });
+    });
+</script>
 {% endblock %}

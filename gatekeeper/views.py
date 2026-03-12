@@ -1,5 +1,10 @@
+import io
+
+import pyotp
+import qrcode
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -221,6 +226,42 @@ def view_delete_auth_method(request):
         'text': _('Are you sure you want to delete the authentication method "%(name)s"?') % {'name': obj.name}
     }
     return render(request, 'generic_delete_confirmation.html', context)
+
+
+@login_required
+def view_generate_totp_qr(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return HttpResponse("Access Denied", status=403)
+
+    totp_secret = request.GET.get('secret')
+    issuer = request.GET.get('issuer', 'wireguard_webadmin')
+    name = request.GET.get('name', 'Gatekeeper')
+
+    if not totp_secret:
+        return HttpResponse("No secret provided", status=400)
+
+    try:
+        totp = pyotp.TOTP(totp_secret)
+        uri = totp.provisioning_uri(name=name, issuer_name=issuer)
+
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(uri)
+        qr.make(fit=True)
+        img = qr.make_image(fill_color="black", back_color="white")
+
+        response = HttpResponse(content_type="image/png")
+        img_io = io.BytesIO()
+        img.save(img_io, format='PNG')
+        img_io.seek(0)
+        response.write(img_io.getvalue())
+        return response
+    except Exception:
+        return HttpResponse("Error generating QR code", status=500)
 
 
 @login_required

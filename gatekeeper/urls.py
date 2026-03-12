@@ -17,6 +17,7 @@ urlpatterns = [
     # Auth Methods
     path('auth_method/manage/', views.view_manage_auth_method, name='manage_gatekeeper_auth_method'),
     path('auth_method/delete/', views.view_delete_auth_method, name='delete_gatekeeper_auth_method'),
+    path('auth_method/qr/', views.view_generate_totp_qr, name='generate_totp_qr'),
 
     # Auth Method Allowed Domains
     path('domain/manage/', views.view_manage_auth_domain, name='manage_gatekeeper_domain'),

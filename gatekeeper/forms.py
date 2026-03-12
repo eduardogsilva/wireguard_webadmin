@@ -115,21 +115,21 @@ class AuthMethodForm(forms.ModelForm):
             Div(
                 Div('name', css_class='col-md-6'),
                 Div('auth_type', css_class='col-md-6'),
-                css_class='row'
+                css_class='row auth-type-group'
             ),
             Div(
                 Div('totp_secret', css_class='col-md-6'),
                 Div('totp_pin', css_class='col-md-6'),
-                css_class='row'
+                css_class='row totp-group'
             ),
             Div(
                 Div('oidc_provider', css_class='col-md-12'),
-                css_class='row'
+                css_class='row oidc-group'
             ),
             Div(
                 Div('oidc_client_id', css_class='col-md-6'),
                 Div('oidc_client_secret', css_class='col-md-6'),
-                css_class='row'
+                css_class='row oidc-group'
             ),
             Div(
                 Div(
