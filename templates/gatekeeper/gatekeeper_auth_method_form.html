@@ -49,6 +49,9 @@
             } else if (authType === 'oidc') {
                 $('.totp-group').hide();
                 $('.oidc-group').show();
+            } else {
+                $('.totp-group').hide();
+                $('.oidc-group').hide();
             }
         }
 
