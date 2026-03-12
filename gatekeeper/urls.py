@@ -25,4 +25,8 @@ urlpatterns = [
     # Auth Method Allowed Emails
     path('email/manage/', views.view_manage_auth_email, name='manage_gatekeeper_email'),
     path('email/delete/', views.view_delete_auth_email, name='delete_gatekeeper_email'),
+
+    # Gatekeeper IP Addresses
+    path('ip/manage/', views.view_manage_gatekeeper_ip, name='manage_gatekeeper_ip'),
+    path('ip/delete/', views.view_delete_gatekeeper_ip, name='delete_gatekeeper_ip'),
 ]

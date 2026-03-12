@@ -5,7 +5,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from gatekeeper.models import GatekeeperUser, GatekeeperGroup, AuthMethod, AuthMethodAllowedDomain, \
-    AuthMethodAllowedEmail
+    AuthMethodAllowedEmail, GatekeeperIPAddress
 
 
 class GatekeeperUserForm(forms.ModelForm):
@@ -185,6 +185,48 @@ class AuthMethodForm(forms.ModelForm):
                 self.add_error('totp_pin', _('TOTP validation PIN must be empty for OIDC authentication.'))
 
         return cleaned_data
+
+class GatekeeperIPAddressForm(forms.ModelForm):
+    class Meta:
+        model = GatekeeperIPAddress
+        fields = ['auth_method', 'address', 'prefix_length', 'action', 'description']
+        labels = {
+            'auth_method': _('Authentication Method'),
+            'address': _('IP/Network Address'),
+            'prefix_length': _('Prefix Length'),
+            'action': _('Action'),
+            'description': _('Description'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        cancel_url = kwargs.pop('cancel_url', '#')
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Div(
+                Div('auth_method', css_class='col-md-12'),
+                css_class='row'
+            ),
+            Div(
+                Div('address', css_class='col-md-8'),
+                Div('prefix_length', css_class='col-md-4'),
+                css_class='row'
+            ),
+            Div(
+                Div('action', css_class='col-md-4'),
+                Div('description', css_class='col-md-8'),
+                css_class='row'
+            ),
+            Div(
+                Div(
+                    Submit('submit', _('Save'), css_class='btn btn-primary'),
+                    HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
+                    css_class='col-12 d-flex justify-content-end gap-2 mt-3'
+                ),
+                css_class='row'
+            )
+        )
 
 class AuthMethodAllowedDomainForm(forms.ModelForm):
     class Meta:

@@ -5,9 +5,9 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from gatekeeper.forms import GatekeeperUserForm, GatekeeperGroupForm, AuthMethodForm, AuthMethodAllowedDomainForm, \
-    AuthMethodAllowedEmailForm
+    AuthMethodAllowedEmailForm, GatekeeperIPAddressForm
 from gatekeeper.models import GatekeeperUser, GatekeeperGroup, AuthMethod, AuthMethodAllowedDomain, \
-    AuthMethodAllowedEmail
+    AuthMethodAllowedEmail, GatekeeperIPAddress
 from user_manager.models import UserAcl
 
 
@@ -22,6 +22,7 @@ def view_gatekeeper_list(request):
     auth_methods = AuthMethod.objects.all().order_by('name')
     auth_domains = AuthMethodAllowedDomain.objects.all().order_by('domain')
     auth_emails = AuthMethodAllowedEmail.objects.all().order_by('email')
+    auth_ips = GatekeeperIPAddress.objects.all().order_by('address')
     
     tab = request.GET.get('tab', 'users')
     
@@ -31,6 +32,7 @@ def view_gatekeeper_list(request):
         'auth_methods': auth_methods,
         'auth_domains': auth_domains,
         'auth_emails': auth_emails,
+        'auth_ips': auth_ips,
         'active_tab': tab,
     }
     return render(request, 'gatekeeper/gatekeeper_list.html', context)
@@ -331,5 +333,62 @@ def view_delete_auth_email(request):
         'title': _('Delete Allowed Email'),
         'cancel_url': cancel_url,
         'text': _('Are you sure you want to delete the allowed email "%(email)s"?') % {'email': obj.email}
+    }
+    return render(request, 'generic_delete_confirmation.html', context)
+
+
+@login_required
+def view_manage_gatekeeper_ip(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
+
+    obj_uuid = request.GET.get('uuid')
+    
+    if obj_uuid:
+        obj = get_object_or_404(GatekeeperIPAddress, uuid=obj_uuid)
+        title = _('Edit IP Address')
+    else:
+        obj = None
+        title = _('Add IP Address')
+
+    cancel_url = reverse('gatekeeper_list') + '?tab=ip_addresses'
+
+    if request.method == 'POST':
+        form = GatekeeperIPAddressForm(request.POST, instance=obj, cancel_url=cancel_url)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('IP Address saved successfully.'))
+            return redirect(cancel_url)
+    else:
+        form = GatekeeperIPAddressForm(instance=obj, cancel_url=cancel_url)
+
+    context = {
+        'form': form,
+        'title': title,
+        'page_title': title,
+    }
+    return render(request, 'generic_form.html', context)
+
+
+@login_required
+def view_delete_gatekeeper_ip(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
+
+    obj_uuid = request.GET.get('uuid')
+    obj = get_object_or_404(GatekeeperIPAddress, uuid=obj_uuid)
+    
+    cancel_url = reverse('gatekeeper_list') + '?tab=ip_addresses'
+
+    if request.method == 'POST':
+        obj.delete()
+        messages.success(request, _('IP Address deleted successfully.'))
+        return redirect(cancel_url)
+
+    context = {
+        'object': obj,
+        'title': _('Delete IP Address'),
+        'cancel_url': cancel_url,
+        'text': _('Are you sure you want to delete the IP address "%(address)s"?') % {'address': obj.address}
     }
     return render(request, 'generic_delete_confirmation.html', context)
