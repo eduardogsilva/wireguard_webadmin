@@ -39,7 +39,7 @@ class ApplicationForm(forms.ModelForm):
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-12 d-flex justify-content-end gap-2 mt-3'
+                    css_class='col-md-12'
                 ),
                 css_class='row'
             )
@@ -86,7 +86,7 @@ class ApplicationHostForm(forms.ModelForm):
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-12 d-flex justify-content-end gap-2 mt-3'
+                    css_class='col-md-12'
                 ),
                 css_class='row'
             )
@@ -124,7 +124,7 @@ class AccessPolicyForm(forms.ModelForm):
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-12 d-flex justify-content-end gap-2 mt-3'
+                    css_class='col-md-12'
                 ),
                 css_class='row'
             )
@@ -155,7 +155,7 @@ class ApplicationPolicyForm(forms.ModelForm):
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-12 d-flex justify-content-end gap-2 mt-3'
+                    css_class='col-md-12'
                 ),
                 css_class='row'
             )
@@ -198,7 +198,7 @@ class ApplicationRouteForm(forms.ModelForm):
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-12 d-flex justify-content-end gap-2 mt-3'
+                    css_class='col-md-12'
                 ),
                 css_class='row'
             )
