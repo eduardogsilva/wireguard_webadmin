@@ -8,7 +8,7 @@ from gatekeeper.models import GatekeeperGroup, AuthMethod
 
 class Application(models.Model):
     name = models.SlugField(max_length=64, unique=True)
-    display_name = models.CharField(max_length=128)
+    display_name = models.CharField(max_length=128, blank=True)
     upstream = models.CharField(max_length=255, help_text=_("Upstream address, e.g.: http://10.188.18.27:3000"))
 
     created = models.DateTimeField(auto_now_add=True)
@@ -16,7 +16,10 @@ class Application(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
     def __str__(self):
-        return self.display_name
+        if self.display_name:
+            return f"{self.display_name} ({self.name})"
+        else:
+            return self.name
 
     class Meta:
         ordering = ['name']
