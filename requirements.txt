@@ -15,6 +15,7 @@ packaging==26.0
 pillow==12.1.1
 polib==1.2.0
 pycparser==3.0
+pyotp==2.9.0
 pypng==0.20220715.0
 pyproject_hooks==1.2.0
 pytz==2025.2

@@ -22,6 +22,7 @@ urlpatterns = [
     path('firewall/', include('firewall.urls')),
     path('peer/', include('wireguard_peer.urls')),
     path('routing-templates/', include('routing_templates.urls')),
+    path('gatekeeper/', include('gatekeeper.urls')),
     path('scheduler/', include('scheduler.urls')),
     path('server/', include('wireguard.urls')),
     path('tools/', include('wireguard_tools.urls')),
