@@ -14,10 +14,7 @@ class AuthMethod(models.Model):
     ))
 
     # TOTP-specific fields
-    totp_secret = models.CharField(
-        max_length=255, blank=True,
-        help_text="Shared/global TOTP secret key"
-    )
+    totp_secret = models.CharField(max_length=255, blank=True, help_text=_("Shared/global TOTP secret key"))
 
     # OIDC-specific fields
     oidc_provider = models.CharField(max_length=64, blank=True)

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 
 {% block content %}
     <div class='row'>
@@ -59,7 +60,7 @@
         toggleFields();
 
         var qrContainer = $('<div class="mt-3 text-center" style="display:none;" id="qrCodeContainer"><img id="qrCodeImg" src="" class="img-fluid" style="border: 2px solid #ddd; border-radius: 8px; max-width: 250px;"/></div>');
-        var btnShowQr = $('<button type="button" class="btn btn-sm btn-info mt-2" id="btnShowQr"><i class="fas fa-qrcode"></i> View QR Code</button>');
+        var btnShowQr = $('<button type="button" class="btn btn-sm btn-info mt-2" id="btnShowQr"><i class="fas fa-qrcode"></i> {% trans 'View QR Code' %}</button>');
         
         $('#div_id_totp_secret').append(btnShowQr);
         $('#div_id_totp_secret').append(qrContainer);
@@ -70,7 +71,7 @@
             var name = $('#id_name').val() || 'Gatekeeper';
             
             if (!secret) {
-                alert("Please enter a TOTP Secret first to generate the QR code.");
+                alert("{% trans 'Please enter a TOTP Secret first to generate the QR code.' %}");
                 return;
             }
             
