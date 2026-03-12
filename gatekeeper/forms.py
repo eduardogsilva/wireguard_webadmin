@@ -39,7 +39,7 @@ class GatekeeperUserForm(forms.ModelForm):
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-12 d-flex justify-content-end gap-2 mt-3'
+                    css_class='col-md-12'
                 ),
                 css_class='row'
             )
@@ -73,7 +73,7 @@ class GatekeeperGroupForm(forms.ModelForm):
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-12 d-flex justify-content-end gap-2 mt-3'
+                    css_class='col-md-12'
                 ),
                 css_class='row'
             )
@@ -135,7 +135,7 @@ class AuthMethodForm(forms.ModelForm):
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-12 d-flex justify-content-end gap-2 mt-3'
+                    css_class='col-md-12'
                 ),
                 css_class='row'
             )
@@ -192,7 +192,7 @@ class GatekeeperIPAddressForm(forms.ModelForm):
         fields = ['auth_method', 'address', 'prefix_length', 'action', 'description']
         labels = {
             'auth_method': _('Authentication Method'),
-            'address': _('IP/Network Address'),
+            'address': _('IP Address'),
             'prefix_length': _('Prefix Length'),
             'action': _('Action'),
             'description': _('Description'),
@@ -209,20 +209,20 @@ class GatekeeperIPAddressForm(forms.ModelForm):
                 css_class='row'
             ),
             Div(
-                Div('address', css_class='col-md-8'),
-                Div('prefix_length', css_class='col-md-4'),
+                Div('address', css_class='col-xl-6'),
+                Div('prefix_length', css_class='col-xl-6'),
                 css_class='row'
             ),
             Div(
-                Div('action', css_class='col-md-4'),
-                Div('description', css_class='col-md-8'),
+                Div('action', css_class='col-xl-4'),
+                Div('description', css_class='col-xl-8'),
                 css_class='row'
             ),
             Div(
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-12 d-flex justify-content-end gap-2 mt-3'
+                    css_class='col-md-12'
                 ),
                 css_class='row'
             )
@@ -252,7 +252,7 @@ class AuthMethodAllowedDomainForm(forms.ModelForm):
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-12 d-flex justify-content-end gap-2 mt-3'
+                    css_class='col-md-12'
                 ),
                 css_class='row'
             )
@@ -283,7 +283,7 @@ class AuthMethodAllowedEmailForm(forms.ModelForm):
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-12 d-flex justify-content-end gap-2 mt-3'
+                    css_class='col-md-12'
                 ),
                 css_class='row'
             )

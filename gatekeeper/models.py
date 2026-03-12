@@ -33,7 +33,7 @@ class AuthMethod(models.Model):
 
 
 class AuthMethodAllowedDomain(models.Model):
-    auth_method = models.ForeignKey(AuthMethod, on_delete=models.CASCADE, related_name='allowed_domains')
+    auth_method = models.ForeignKey(AuthMethod, on_delete=models.CASCADE, related_name='allowed_domains', limit_choices_to={'auth_type': 'oidc'})
     domain = models.CharField(max_length=255)
 
     created = models.DateTimeField(auto_now_add=True)
@@ -48,7 +48,7 @@ class AuthMethodAllowedDomain(models.Model):
 
 
 class AuthMethodAllowedEmail(models.Model):
-    auth_method = models.ForeignKey(AuthMethod, on_delete=models.CASCADE, related_name='allowed_emails')
+    auth_method = models.ForeignKey(AuthMethod, on_delete=models.CASCADE, related_name='allowed_emails', limit_choices_to={'auth_type': 'oidc'})
     email = models.EmailField()
 
     created = models.DateTimeField(auto_now_add=True)
@@ -104,10 +104,7 @@ class GatekeeperIPAddress(models.Model):
         limit_choices_to={'auth_type': 'ip_address'}
     )
     address = models.GenericIPAddressField()
-    prefix_length = models.PositiveSmallIntegerField(
-        null=True, blank=True,
-        help_text=_("CIDR prefix length (e.g.: 24 for /24). Leave blank for a single host.")
-    )
+    prefix_length = models.PositiveSmallIntegerField(null=True, blank=True)
     action = models.CharField(max_length=8, choices=(('allow', _('Allow')), ('deny', _('Deny'))), default='allow')
     description = models.CharField(max_length=255, blank=True)
 
