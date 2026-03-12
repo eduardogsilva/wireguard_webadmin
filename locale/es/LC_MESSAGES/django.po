@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-12 09:46-0300\n"
+"POT-Creation-Date: 2026-03-12 10:44-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,11 +35,12 @@ msgstr "Volver"
 #: routing_templates/forms.py:37
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
-#: templates/gatekeeper/gatekeeper_list.html:71
-#: templates/gatekeeper/gatekeeper_list.html:114
-#: templates/gatekeeper/gatekeeper_list.html:159
-#: templates/gatekeeper/gatekeeper_list.html:207
-#: templates/gatekeeper/gatekeeper_list.html:224
+#: templates/gatekeeper/gatekeeper_list.html:77
+#: templates/gatekeeper/gatekeeper_list.html:120
+#: templates/gatekeeper/gatekeeper_list.html:165
+#: templates/gatekeeper/gatekeeper_list.html:213
+#: templates/gatekeeper/gatekeeper_list.html:230
+#: templates/gatekeeper/gatekeeper_list.html:282
 #: templates/scheduler/scheduleprofile_form.html:127
 #: templates/scheduler/scheduleprofile_list.html:29
 #: templates/wireguard/peer_list/peer_preview_modal.html:109
@@ -60,8 +61,9 @@ msgstr ""
 
 #: api_v2/forms.py:63 cluster/forms.py:67 cluster/forms.py:124 dns/forms.py:37
 #: dns/forms.py:84 dns/forms.py:153 gatekeeper/forms.py:40
-#: gatekeeper/forms.py:74 gatekeeper/forms.py:136 gatekeeper/forms.py:211
-#: gatekeeper/forms.py:242 routing_templates/forms.py:71 scheduler/forms.py:102
+#: gatekeeper/forms.py:74 gatekeeper/forms.py:136 gatekeeper/forms.py:223
+#: gatekeeper/forms.py:253 gatekeeper/forms.py:284
+#: routing_templates/forms.py:71 scheduler/forms.py:102
 #: templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
@@ -77,7 +79,7 @@ msgstr "Guardar"
 #: gatekeeper/forms.py:98 routing_templates/forms.py:28
 #: templates/api_v2/api_documentation.html:47 templates/api_v2/list.html:8
 #: templates/cluster/workers_list.html:8 templates/dns/static_host_list.html:68
-#: templates/gatekeeper/gatekeeper_list.html:143
+#: templates/gatekeeper/gatekeeper_list.html:149
 #: templates/routing_templates/list.html:8
 #: templates/scheduler/scheduleprofile_list.html:13
 #: templates/user_manager/peer_group_list.html:8
@@ -116,11 +118,11 @@ msgstr "Habilitado"
 
 #: api_v2/views.py:17 api_v2/views.py:27 api_v2/views.py:82 api_v2/views.py:106
 #: cluster/views.py:18 cluster/views.py:45 cluster/views.py:114
-#: gatekeeper/views.py:18 gatekeeper/views.py:42 gatekeeper/views.py:75
-#: gatekeeper/views.py:99 gatekeeper/views.py:132 gatekeeper/views.py:156
-#: gatekeeper/views.py:203 gatekeeper/views.py:227 gatekeeper/views.py:260
-#: gatekeeper/views.py:284 gatekeeper/views.py:317
-#: templates/access_denied.html:9
+#: gatekeeper/views.py:23 gatekeeper/views.py:49 gatekeeper/views.py:82
+#: gatekeeper/views.py:106 gatekeeper/views.py:139 gatekeeper/views.py:163
+#: gatekeeper/views.py:210 gatekeeper/views.py:270 gatekeeper/views.py:303
+#: gatekeeper/views.py:327 gatekeeper/views.py:360 gatekeeper/views.py:384
+#: gatekeeper/views.py:417 templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Acceso denegado"
 
@@ -206,6 +208,7 @@ msgid "Two Factor"
 msgstr ""
 
 #: app_gateway/models.py:45 gatekeeper/models.py:114
+#: templates/gatekeeper/gatekeeper_list.html:272
 msgid "Deny"
 msgstr ""
 
@@ -226,6 +229,7 @@ msgstr "Bloqueo de IP"
 #: templates/firewall/manage_redirect_rule.html:43
 #: templates/firewall/manage_redirect_rule.html:67
 #: templates/firewall/manage_redirect_rule.html:68
+#: templates/gatekeeper/gatekeeper_list.html:256
 #: templates/wireguard/wireguard_status.html:45
 msgid "IP Address"
 msgstr "Dirección IP"
@@ -507,7 +511,7 @@ msgstr "DNS estático"
 msgid "Invalid hostname."
 msgstr "Nombre de host inválido."
 
-#: dns/forms.py:131 firewall/forms.py:111
+#: dns/forms.py:131 firewall/forms.py:111 gatekeeper/forms.py:198
 #: templates/api_v2/api_documentation.html:51
 #: templates/dns/static_host_list.html:69
 #: templates/firewall/manage_redirect_rule.html:18
@@ -840,15 +844,15 @@ msgid "Firewall settings saved successfully"
 msgstr "Configuración de firewall guardada correctamente"
 
 #: gatekeeper/forms.py:16 templates/accounts/login.html:14
-#: templates/gatekeeper/gatekeeper_list.html:55
+#: templates/gatekeeper/gatekeeper_list.html:61
 #: templates/user_manager/list.html:8 user_manager/forms.py:13
 #: vpn_invite/forms.py:281
 msgid "Username"
 msgstr "Usuario"
 
-#: gatekeeper/forms.py:17 gatekeeper/forms.py:226
-#: templates/gatekeeper/gatekeeper_list.html:56
-#: templates/gatekeeper/gatekeeper_list.html:198
+#: gatekeeper/forms.py:17 gatekeeper/forms.py:268
+#: templates/gatekeeper/gatekeeper_list.html:62
+#: templates/gatekeeper/gatekeeper_list.html:204
 #: templates/wireguard/peer_list/peer_preview_modal.html:103
 msgid "Email"
 msgstr "Email"
@@ -864,19 +868,19 @@ msgid "TOTP Secret"
 msgstr ""
 
 #: gatekeeper/forms.py:41 gatekeeper/forms.py:75 gatekeeper/forms.py:137
-#: gatekeeper/forms.py:212 gatekeeper/forms.py:243 scheduler/forms.py:103
-#: templates/generic_delete_confirmation.html:19
+#: gatekeeper/forms.py:224 gatekeeper/forms.py:254 gatekeeper/forms.py:285
+#: scheduler/forms.py:103 templates/generic_delete_confirmation.html:19
 #: templates/scheduler/scheduleprofile_form.html:203
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: gatekeeper/forms.py:54 templates/gatekeeper/gatekeeper_list.html:98
+#: gatekeeper/forms.py:54 templates/gatekeeper/gatekeeper_list.html:104
 #, fuzzy
 #| msgid "Profile Name"
 msgid "Group Name"
 msgstr "Nombre del Perfil"
 
-#: gatekeeper/forms.py:55 templates/gatekeeper/gatekeeper_list.html:99
+#: gatekeeper/forms.py:55 templates/gatekeeper/gatekeeper_list.html:105
 msgid "Members"
 msgstr ""
 
@@ -958,13 +962,29 @@ msgstr ""
 msgid "TOTP validation PIN must be empty for OIDC authentication."
 msgstr ""
 
-#: gatekeeper/forms.py:194 gatekeeper/forms.py:225
+#: gatekeeper/forms.py:194 gatekeeper/forms.py:236 gatekeeper/forms.py:267
 #, fuzzy
 #| msgid "Authentication"
 msgid "Authentication Method"
 msgstr "Autenticación"
 
-#: gatekeeper/forms.py:195 templates/gatekeeper/gatekeeper_list.html:215
+#: gatekeeper/forms.py:195
+#, fuzzy
+#| msgid "IP Address"
+msgid "IP/Network Address"
+msgstr "Dirección IP"
+
+#: gatekeeper/forms.py:196 templates/gatekeeper/gatekeeper_list.html:257
+msgid "Prefix Length"
+msgstr ""
+
+#: gatekeeper/forms.py:197 templates/firewall/firewall_rule_list.html:47
+#: templates/firewall/manage_firewall_rule.html:360
+#: templates/gatekeeper/gatekeeper_list.html:258
+msgid "Action"
+msgstr "Acción"
+
+#: gatekeeper/forms.py:237 templates/gatekeeper/gatekeeper_list.html:221
 msgid "Domain"
 msgstr ""
 
@@ -1000,99 +1020,99 @@ msgstr ""
 msgid "CIDR prefix length (e.g.: 24 for /24). Leave blank for a single host."
 msgstr ""
 
-#: gatekeeper/models.py:114
+#: gatekeeper/models.py:114 templates/gatekeeper/gatekeeper_list.html:270
 #, fuzzy
 #| msgid "Allowed IPs"
 msgid "Allow"
 msgstr "IPs permitidas"
 
-#: gatekeeper/views.py:48
+#: gatekeeper/views.py:55
 #, fuzzy
 #| msgid "Edit User"
 msgid "Edit Gatekeeper User"
 msgstr "Editar usuario"
 
-#: gatekeeper/views.py:51
+#: gatekeeper/views.py:58
 #, fuzzy
 #| msgid "Create Peer"
 msgid "Create Gatekeeper User"
 msgstr "Crear peer"
 
-#: gatekeeper/views.py:59
+#: gatekeeper/views.py:66
 #, fuzzy
 #| msgid "API Key saved successfully."
 msgid "Gatekeeper User saved successfully."
 msgstr "Clave de API guardada con éxito."
 
-#: gatekeeper/views.py:84
+#: gatekeeper/views.py:91
 #, fuzzy
 #| msgid "Peer deleted|Peer deleted successfully."
 msgid "Gatekeeper User deleted successfully."
 msgstr "Peer eliminado|Peer eliminado correctamente."
 
-#: gatekeeper/views.py:89
+#: gatekeeper/views.py:96
 #, fuzzy
 #| msgid "Delete Peer"
 msgid "Delete Gatekeeper User"
 msgstr "Eliminar peer"
 
-#: gatekeeper/views.py:91
+#: gatekeeper/views.py:98
 #, fuzzy, python-format
 #| msgid "Are you sure you want to delete the API Key \"%(name)s\"?"
 msgid "Are you sure you want to delete the user \"%(username)s\"?"
 msgstr "¿Está seguro de que desea eliminar la clave de API \"%(name)s\"?"
 
-#: gatekeeper/views.py:105
+#: gatekeeper/views.py:112
 #, fuzzy
 #| msgid "Edit Peer Group: "
 msgid "Edit Gatekeeper Group"
 msgstr "Editar grupo de peers: "
 
-#: gatekeeper/views.py:108
+#: gatekeeper/views.py:115
 msgid "Create Gatekeeper Group"
 msgstr ""
 
-#: gatekeeper/views.py:116
+#: gatekeeper/views.py:123
 #, fuzzy
 #| msgid "Peer reactivated successfully."
 msgid "Gatekeeper Group saved successfully."
 msgstr "Peer reactivado con éxito."
 
-#: gatekeeper/views.py:141
+#: gatekeeper/views.py:148
 #, fuzzy
 #| msgid "Schedule Slot deleted successfully."
 msgid "Gatekeeper Group deleted successfully."
 msgstr "Franja de programación eliminada con éxito."
 
-#: gatekeeper/views.py:146
+#: gatekeeper/views.py:153
 msgid "Delete Gatekeeper Group"
 msgstr ""
 
-#: gatekeeper/views.py:148
+#: gatekeeper/views.py:155
 #, fuzzy, python-format
 #| msgid "Are you sure you want to delete the profile \"%(name)s\"?"
 msgid "Are you sure you want to delete the group \"%(name)s\"?"
 msgstr "¿Está seguro de que desea eliminar el perfil \"%(name)s\"?"
 
-#: gatekeeper/views.py:162
+#: gatekeeper/views.py:169
 #, fuzzy
 #| msgid "Authentication"
 msgid "Edit Authentication Method"
 msgstr "Autenticación"
 
-#: gatekeeper/views.py:165
+#: gatekeeper/views.py:172
 #, fuzzy
 #| msgid "Authentication"
 msgid "Create Authentication Method"
 msgstr "Autenticación"
 
-#: gatekeeper/views.py:173
+#: gatekeeper/views.py:180
 #, fuzzy
 #| msgid "Static DNS saved successfully"
 msgid "Authentication Method saved successfully."
 msgstr "DNS estático guardado correctamente"
 
-#: gatekeeper/views.py:180
+#: gatekeeper/views.py:187
 msgid ""
 "\n"
 "        <h5>Authentication Types</h5>\n"
@@ -1111,89 +1131,124 @@ msgid ""
 "        "
 msgstr ""
 
-#: gatekeeper/views.py:212
+#: gatekeeper/views.py:219
 #, fuzzy
 #| msgid "Static DNS deleted successfully"
 msgid "Authentication Method deleted successfully."
 msgstr "DNS estático eliminado correctamente"
 
-#: gatekeeper/views.py:217
+#: gatekeeper/views.py:224
 #, fuzzy
 #| msgid "Authentication"
 msgid "Delete Authentication Method"
 msgstr "Autenticación"
 
-#: gatekeeper/views.py:219
+#: gatekeeper/views.py:226
 #, fuzzy, python-format
 #| msgid "Are you sure you want to delete the API Key \"%(name)s\"?"
 msgid "Are you sure you want to delete the authentication method \"%(name)s\"?"
 msgstr "¿Está seguro de que desea eliminar la clave de API \"%(name)s\"?"
 
-#: gatekeeper/views.py:233
+#: gatekeeper/views.py:276
 #, fuzzy
 #| msgid "Enter Allowed IP"
 msgid "Edit Allowed Domain"
 msgstr "Ingresar IP permitida"
 
-#: gatekeeper/views.py:236 templates/gatekeeper/gatekeeper_list.html:180
+#: gatekeeper/views.py:279 templates/gatekeeper/gatekeeper_list.html:186
 msgid "Add Allowed Domain"
 msgstr ""
 
-#: gatekeeper/views.py:244
+#: gatekeeper/views.py:287
 #, fuzzy
 #| msgid "API Key saved successfully."
 msgid "Allowed Domain saved successfully."
 msgstr "Clave de API guardada con éxito."
 
-#: gatekeeper/views.py:269
+#: gatekeeper/views.py:312
 #, fuzzy
 #| msgid "API Key deleted successfully."
 msgid "Allowed Domain deleted successfully."
 msgstr "Clave de API eliminada con éxito."
 
-#: gatekeeper/views.py:274
+#: gatekeeper/views.py:317
 msgid "Delete Allowed Domain"
 msgstr ""
 
-#: gatekeeper/views.py:276
+#: gatekeeper/views.py:319
 #, fuzzy, python-format
 #| msgid "Are you sure you want to delete the profile \"%(name)s\"?"
 msgid "Are you sure you want to delete the allowed domain \"%(domain)s\"?"
 msgstr "¿Está seguro de que desea eliminar el perfil \"%(name)s\"?"
 
-#: gatekeeper/views.py:290
+#: gatekeeper/views.py:333
 #, fuzzy
 #| msgid "Enter Allowed IP"
 msgid "Edit Allowed Email"
 msgstr "Ingresar IP permitida"
 
-#: gatekeeper/views.py:293 templates/gatekeeper/gatekeeper_list.html:177
+#: gatekeeper/views.py:336 templates/gatekeeper/gatekeeper_list.html:183
 msgid "Add Allowed Email"
 msgstr ""
 
-#: gatekeeper/views.py:301
+#: gatekeeper/views.py:344
 #, fuzzy
 #| msgid "API Key saved successfully."
 msgid "Allowed Email saved successfully."
 msgstr "Clave de API guardada con éxito."
 
-#: gatekeeper/views.py:326
+#: gatekeeper/views.py:369
 #, fuzzy
 #| msgid "API Key deleted successfully."
 msgid "Allowed Email deleted successfully."
 msgstr "Clave de API eliminada con éxito."
 
-#: gatekeeper/views.py:331
+#: gatekeeper/views.py:374
 #, fuzzy
 #| msgid "Enter Allowed IP"
 msgid "Delete Allowed Email"
 msgstr "Ingresar IP permitida"
 
-#: gatekeeper/views.py:333
+#: gatekeeper/views.py:376
 #, fuzzy, python-format
 #| msgid "Are you sure you want to delete the profile \"%(name)s\"?"
 msgid "Are you sure you want to delete the allowed email \"%(email)s\"?"
 msgstr "¿Está seguro de que desea eliminar el perfil \"%(name)s\"?"
+
+#: gatekeeper/views.py:390
+#, fuzzy
+#| msgid "Add IP Address"
+msgid "Edit IP Address"
+msgstr "Añadir IP"
+
+#: gatekeeper/views.py:393 templates/gatekeeper/gatekeeper_list.html:247
+#: templates/wireguard/wireguard_manage_peer.html:171
+msgid "Add IP Address"
+msgstr "Añadir IP"
+
+#: gatekeeper/views.py:401
+#, fuzzy
+#| msgid "API Key saved successfully."
+msgid "IP Address saved successfully."
+msgstr "Clave de API guardada con éxito."
+
+#: gatekeeper/views.py:426
+#, fuzzy
+#| msgid "API Key deleted successfully."
+msgid "IP Address deleted successfully."
+msgstr "Clave de API eliminada con éxito."
+
+#: gatekeeper/views.py:431
+#, fuzzy
+#| msgid "IP Address"
+msgid "Delete IP Address"
+msgstr "Dirección IP"
+
+#: gatekeeper/views.py:433
+#, fuzzy, python-format
+#| msgid "Are you sure you want to delete the API Key \"%(name)s\"?"
+msgid "Are you sure you want to delete the IP address \"%(address)s\"?"
+msgstr "¿Está seguro de que desea eliminar la clave de API \"%(name)s\"?"
 
 #: intl_tools/forms.py:11 templates/accounts/login.html:36
 msgid "Language"
@@ -1556,8 +1611,8 @@ msgid "In"
 msgstr "Entrada"
 
 #: templates/api_v2/api_documentation.html:49
-#: templates/gatekeeper/gatekeeper_list.html:144
-#: templates/gatekeeper/gatekeeper_list.html:189
+#: templates/gatekeeper/gatekeeper_list.html:150
+#: templates/gatekeeper/gatekeeper_list.html:195
 #: templates/wireguard/apply_route_template.html:27
 msgid "Type"
 msgstr "Tipo"
@@ -1612,11 +1667,12 @@ msgstr "Deshabilitado"
 
 #: templates/api_v2/list.html:68 templates/cluster/workers_list.html:77
 #: templates/dns/static_host_list.html:74
-#: templates/gatekeeper/gatekeeper_list.html:67
-#: templates/gatekeeper/gatekeeper_list.html:110
-#: templates/gatekeeper/gatekeeper_list.html:155
-#: templates/gatekeeper/gatekeeper_list.html:203
-#: templates/gatekeeper/gatekeeper_list.html:220
+#: templates/gatekeeper/gatekeeper_list.html:73
+#: templates/gatekeeper/gatekeeper_list.html:116
+#: templates/gatekeeper/gatekeeper_list.html:161
+#: templates/gatekeeper/gatekeeper_list.html:209
+#: templates/gatekeeper/gatekeeper_list.html:226
+#: templates/gatekeeper/gatekeeper_list.html:278
 #: templates/routing_templates/list.html:29
 #: templates/scheduler/scheduleprofile_form.html:123
 #: templates/scheduler/scheduleprofile_list.html:25
@@ -1836,11 +1892,6 @@ msgstr "Puerto"
 #: templates/firewall/firewall_rule_list.html:46
 msgid "State"
 msgstr "Estado"
-
-#: templates/firewall/firewall_rule_list.html:47
-#: templates/firewall/manage_firewall_rule.html:360
-msgid "Action"
-msgstr "Acción"
 
 #: templates/firewall/firewall_rule_list.html:53
 msgid "Automatic rule: Allow established/related traffic"
@@ -2158,69 +2209,88 @@ msgstr "Autenticación"
 msgid "Allowed Emails & Domains"
 msgstr ""
 
-#: templates/gatekeeper/gatekeeper_list.html:34
+#: templates/gatekeeper/gatekeeper_list.html:30
+#, fuzzy
+#| msgid "IP Address"
+msgid "IP Addresses"
+msgstr "Dirección IP"
+
+#: templates/gatekeeper/gatekeeper_list.html:40
 #: templates/user_manager/peer_group_list.html:11
 msgid "Users"
 msgstr "Usuarios"
 
-#: templates/gatekeeper/gatekeeper_list.html:37
+#: templates/gatekeeper/gatekeeper_list.html:43
 #, fuzzy
 #| msgid "Peer Groups"
 msgid "Groups"
 msgstr "Grupos de peers"
 
-#: templates/gatekeeper/gatekeeper_list.html:45
+#: templates/gatekeeper/gatekeeper_list.html:51
 #: templates/user_manager/list_buttons.html:2 user_manager/views.py:111
 msgid "Add User"
 msgstr "Añadir usuario"
 
-#: templates/gatekeeper/gatekeeper_list.html:57
-#: templates/gatekeeper/gatekeeper_list.html:100
-#: templates/gatekeeper/gatekeeper_list.html:145
-#: templates/gatekeeper/gatekeeper_list.html:192
+#: templates/gatekeeper/gatekeeper_list.html:63
+#: templates/gatekeeper/gatekeeper_list.html:106
+#: templates/gatekeeper/gatekeeper_list.html:151
+#: templates/gatekeeper/gatekeeper_list.html:198
 #: templates/scheduler/scheduleprofile_form.html:111
 #: templates/scheduler/scheduleprofile_list.html:15
 #: templates/wireguard/apply_route_template.html:28
 msgid "Actions"
 msgstr "Acciones"
 
-#: templates/gatekeeper/gatekeeper_list.html:82
+#: templates/gatekeeper/gatekeeper_list.html:88
 #, fuzzy
 #| msgid "No time intervals found."
 msgid "No Gatekeeper Users found."
 msgstr "No se encontraron intervalos de tiempo."
 
-#: templates/gatekeeper/gatekeeper_list.html:89
+#: templates/gatekeeper/gatekeeper_list.html:95
 #, fuzzy
 #| msgid "Add Peer Group"
 msgid "Add Group"
 msgstr "Añadir grupo de peers"
 
-#: templates/gatekeeper/gatekeeper_list.html:125
+#: templates/gatekeeper/gatekeeper_list.html:131
 msgid "No Gatekeeper Groups found."
 msgstr ""
 
-#: templates/gatekeeper/gatekeeper_list.html:134
+#: templates/gatekeeper/gatekeeper_list.html:140
 msgid "Add Auth Method"
 msgstr ""
 
-#: templates/gatekeeper/gatekeeper_list.html:170
+#: templates/gatekeeper/gatekeeper_list.html:176
 #, fuzzy
 #| msgid "Authentication"
 msgid "No Authentication Methods found."
 msgstr "Autenticación"
 
-#: templates/gatekeeper/gatekeeper_list.html:190
+#: templates/gatekeeper/gatekeeper_list.html:196
 msgid "Identity"
 msgstr ""
 
-#: templates/gatekeeper/gatekeeper_list.html:191
+#: templates/gatekeeper/gatekeeper_list.html:197
+#: templates/gatekeeper/gatekeeper_list.html:259
 msgid "Auth Method"
 msgstr ""
 
-#: templates/gatekeeper/gatekeeper_list.html:235
+#: templates/gatekeeper/gatekeeper_list.html:241
 msgid "No Allowed Emails or Domains found."
 msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:260
+#, fuzzy
+#| msgid "User Manager"
+msgid "Manage"
+msgstr "Gestión de usuarios"
+
+#: templates/gatekeeper/gatekeeper_list.html:293
+#, fuzzy
+#| msgid "IP Address"
+msgid "No IP Addresses found."
+msgstr "Dirección IP"
 
 #: templates/generic_delete_confirmation.html:16
 msgid "Confirm Delete"
@@ -2764,10 +2834,6 @@ msgstr "AllowedIPs en sección peer de wg"
 #: templates/wireguard/wireguard_manage_peer.html:167
 msgid "Peer IP Addresses and networks"
 msgstr "IPs y redes del peer"
-
-#: templates/wireguard/wireguard_manage_peer.html:171
-msgid "Add IP Address"
-msgstr "Añadir IP"
 
 #: templates/wireguard/wireguard_manage_peer.html:185
 #: templates/wireguard/wireguard_manage_peer.html:274
