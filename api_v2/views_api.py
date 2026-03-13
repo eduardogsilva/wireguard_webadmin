@@ -206,8 +206,8 @@ def _get_wireguard_instance(instance_name: str) -> Optional[WireGuardInstance]:
          "description": "Suspend reason (update). Can be cleared by sending null/empty string."},
     ],
     returns=[
-        {"status": 200, "body": {"status": "success", "message": "Peer updated successfully.", "peer_uuid": "...", "public_key": "...", "reload": {"success": True, "message": "..."}}},
-        {"status": 201, "body": {"status": "success", "message": "Peer created successfully.", "peer_uuid": "...", "public_key": "...", "reload": {"success": True, "message": "..."}}},
+        {"status": 200, "body": {"status": "success", "message": "Peer updated successfully.", "peer_uuid": "...", "public_key": "...", "main_addresses": ["..."], "reload": {"success": True, "message": "..."}}},
+        {"status": 201, "body": {"status": "success", "message": "Peer created successfully.", "peer_uuid": "...", "public_key": "...", "main_addresses": ["..."], "reload": {"success": True, "message": "..."}}},
         {"status": 400, "body": {"status": "error", "error_message": "Invalid payload: ..."}},
         {"status": 403, "body": {"status": "error", "error_message": "Invalid API key."}},
         {"status": 405, "body": {"status": "error", "error_message": "Method not allowed."}},
@@ -456,7 +456,7 @@ def api_v2_manage_peer(request):
          "description": "Required. Target instance name in the format wg{instance_id} (e.g. wg0, wg1)."},
     ],
     returns=[
-        {"status": 200, "body": {"status": "success", "instance": "wg2", "peers": [{"uuid": "...", "public_key": "..."}]}},
+        {"status": 200, "body": {"status": "success", "instance": "wg2", "peers": [{"uuid": "...", "name": "...", "public_key": "...", "suspended": False, "suspend_reason": "...", "disabled_by_schedule": False, "main_addresses": ["..."]}]}},
         {"status": 400, "body": {"status": "error", "error_message": "Invalid or missing WireGuard instance."}},
         {"status": 403, "body": {"status": "error", "error_message": "Invalid API key."}},
     ],
@@ -534,7 +534,7 @@ def api_v2_peer_list(request):
          "description": "Peer public key selector."},
     ],
     returns=[
-        {"status": 200, "body": {"status": "success", "peer": {"uuid": "...", "name": "...", "public_key": "..."}}},
+        {"status": 200, "body": {"status": "success", "peer": {"uuid": "...", "name": "...", "public_key": "...", "pre_shared_key": "...", "private_key": "...", "persistent_keepalive": 25, "routing_template_uuid": "...", "suspended": False, "suspend_reason": "...", "disabled_by_schedule": False, "enabled": True, "main_addresses": ["..."], "announced_networks": ["..."], "client_routes": ["..."], "instance": "...", "instance_uuid": "..."}}},
         {"status": 400, "body": {"status": "error", "error_message": "Missing peer selector (peer_uuid or peer_public_key)."}},
         {"status": 404, "body": {"status": "error", "error_message": "Peer not found."}},
         {"status": 403, "body": {"status": "error", "error_message": "Invalid API key."}},
