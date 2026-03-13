@@ -340,6 +340,7 @@ def api_v2_manage_peer(request):
                     "message": create_message or "Peer created successfully.",
                     "peer_uuid": str(created_peer.uuid),
                     "public_key": created_peer.public_key,
+                    "main_addresses": created_peer.main_addresses,
                     "reload": {"success": reload_success, "message": reload_message},
                 },
                 status=201
@@ -419,6 +420,7 @@ def api_v2_manage_peer(request):
                     "message": "Peer updated successfully.",
                     "peer_uuid": str(peer_for_action.uuid),
                     "public_key": peer_for_action.public_key,
+                    "main_addresses": peer_for_action.main_addresses,
                     "reload": {"success": reload_success, "message": reload_message},
                 },
                 status=200
