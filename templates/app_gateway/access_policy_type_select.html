@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">{% trans 'Select Access Policy Type' %}</h3>
+            </div>
+            <div class="card-body text-center">
+                <p class="mb-4">{% trans 'Choose the type of access policy you want to create.' %}</p>
+                <div class="row">
+                    <!-- Public -->
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 bg-light">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <i class="fas fa-globe fa-3x mb-3 text-success"></i>
+                                <h5>{% trans 'Public' %}</h5>
+                                <p class="text-muted small">{% trans 'Allow access to everyone without authentication.' %}</p>
+                                <a href="{% url 'manage_access_policy' %}?policy_type=public" class="btn btn-success mt-auto">{% trans 'Select' %}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Protected -->
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 bg-light">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
+                                <h5>{% trans 'Protected' %}</h5>
+                                <p class="text-muted small">{% trans 'Require authentication using specified methods or groups.' %}</p>
+                                <a href="{% url 'manage_access_policy' %}?policy_type=protected" class="btn btn-primary mt-auto">{% trans 'Select' %}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Deny -->
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 bg-light">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <i class="fas fa-ban fa-3x mb-3 text-danger"></i>
+                                <h5>{% trans 'Deny' %}</h5>
+                                <p class="text-muted small">{% trans 'Deny all access.' %}</p>
+                                <a href="{% url 'manage_access_policy' %}?policy_type=deny" class="btn btn-danger mt-auto">{% trans 'Select' %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'app_gateway_list' %}?tab=policies" class="btn btn-secondary">{% trans 'Cancel' %}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

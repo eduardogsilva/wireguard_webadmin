@@ -16,6 +16,7 @@ urlpatterns = [
     path('host/delete/', views.view_delete_application_host, name='delete_application_host'),
 
     # Access Policies
+    path('policy/select-type/', views.view_select_policy_type, name='select_policy_type'),
     path('policy/manage/', views.view_manage_access_policy, name='manage_access_policy'),
     path('policy/delete/', views.view_delete_access_policy, name='delete_access_policy'),
 

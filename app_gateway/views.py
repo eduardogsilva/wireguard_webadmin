@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import ProtectedError
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -78,10 +79,24 @@ def view_manage_application(request):
         messages.success(request, _('Application saved successfully.'))
         return redirect(cancel_url)
 
+    form_description = {
+        'size': 'col-lg-6',
+        'content': _('''
+        <h5>Application</h5>
+        <p>Define the main details of the application you want to expose through the gateway.</p>
+        <ul>
+            <li><strong>Name</strong>: A unique internal identifier for this application (e.g., "wiki", "crm"). Contains only letters, numbers, hyphens, or underscores.</li>
+            <li><strong>Display Name</strong>: A friendly, human-readable name for display purposes.</li>
+            <li><strong>Upstream</strong>: The destination URL where requests will be forwarded (e.g., <code>http://10.188.18.27:3000</code>). Must start with <code>http://</code> or <code>https://</code>.</li>
+        </ul>
+        ''')
+    }
+
     context = {
         'form': form,
         'title': title,
         'page_title': title,
+        'form_description': form_description,
     }
     return render(request, 'generic_form.html', context)
 
@@ -169,33 +184,76 @@ def view_delete_application_host(request):
 
 
 @login_required
+def view_select_policy_type(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
+
+    context = {
+        'page_title': _('Select Access Policy Type'),
+    }
+    return render(request, 'app_gateway/access_policy_type_select.html', context)
+
+
+@login_required
 def view_manage_access_policy(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
 
     access_policy_uuid = request.GET.get('uuid')
+    policy_type = request.GET.get('policy_type')
 
     if access_policy_uuid:
         access_policy = get_object_or_404(AccessPolicy, uuid=access_policy_uuid)
         title = _('Edit Access Policy')
+        policy_type = access_policy.policy_type
     else:
         access_policy = None
         title = _('Create Access Policy')
 
     cancel_url = reverse('app_gateway_list') + '?tab=policies'
 
-    form = AccessPolicyForm(request.POST or None, instance=access_policy, cancel_url=cancel_url)
+    form = AccessPolicyForm(request.POST or None, instance=access_policy, cancel_url=cancel_url, policy_type=policy_type)
     if form.is_valid():
         form.save()
         messages.success(request, _('Access Policy saved successfully.'))
         return redirect(cancel_url)
 
+    if policy_type == 'public':
+        form_description = {
+            'size': 'col-lg-6',
+            'content': _('''
+            <h5>Public Policy</h5>
+            <p>A Public policy allows access to the application without requiring any authentication.</p>
+            ''')
+        }
+    elif policy_type == 'deny':
+        form_description = {
+            'size': 'col-lg-6',
+            'content': _('''
+            <h5>Deny Policy</h5>
+            <p>A Deny policy blocks all access to the matched routes.</p>
+            ''')
+        }
+    else:
+        form_description = {
+            'size': 'col-lg-6',
+            'content': _('''
+            <h5>Protected Policy</h5>
+            <p>A Protected policy requires users to authenticate before accessing the application.</p>
+            <ul>
+                <li><strong>Allowed Groups</strong>: Limits access to specific user groups. Note: Using groups requires selecting an Authentication Method of type "Local Password".</li>
+                <li><strong>Authentication Methods</strong>: Specify which methods users can use to authenticate (e.g., Local Password, TOTP, OIDC).</li>
+            </ul>
+            ''')
+        }
+
     context = {
         'form': form,
         'title': title,
         'page_title': title,
+        'form_description': form_description,
     }
-    return render(request, 'app_gateway/app_gateway_policy_form.html', context)
+    return render(request, 'generic_form.html', context)
 
 
 @login_required
@@ -208,8 +266,11 @@ def view_delete_access_policy(request):
     cancel_url = reverse('app_gateway_list') + '?tab=policies'
 
     if request.method == 'POST':
-        access_policy.delete()
-        messages.success(request, _('Access Policy deleted successfully.'))
+        try:
+            access_policy.delete()
+            messages.success(request, _('Access Policy deleted successfully.'))
+        except ProtectedError:
+            messages.error(request, _('Cannot delete this Access Policy because it is currently in use by an Application Route or Application Default Policy.'))
         return redirect(cancel_url)
 
     context = {

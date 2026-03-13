@@ -104,29 +104,72 @@ class AccessPolicyForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         cancel_url = kwargs.pop('cancel_url', '#')
+        policy_type = kwargs.pop('policy_type', None)
         super().__init__(*args, **kwargs)
 
+        if self.instance and self.instance.pk:
+            policy_type = self.instance.policy_type
+
+        if policy_type and not self.initial.get('policy_type'):
+            self.initial['policy_type'] = policy_type
+
+        self.fields['policy_type'].widget = forms.HiddenInput()
+
         self.helper = FormHelper()
-        self.helper.layout = Layout(
-            Div(
-                Div('name', css_class='col-md-6'),
-                Div('policy_type', css_class='col-md-6'),
-                css_class='row'
-            ),
-            Div(
-                Div('groups', css_class='col-md-6'),
-                Div('methods', css_class='col-md-6'),
-                css_class='row'
-            ),
-            Div(
+        
+        if policy_type in ['public', 'deny']:
+            self.helper.layout = Layout(
                 Div(
-                    Submit('submit', _('Save'), css_class='btn btn-primary'),
-                    HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-md-12'
+                    Div('name', css_class='col-md-12'),
+                    'policy_type',
+                    css_class='row'
                 ),
-                css_class='row'
+                Div(
+                    Div(
+                        Submit('submit', _('Save'), css_class='btn btn-primary'),
+                        HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
+                        css_class='col-md-12'
+                    ),
+                    css_class='row'
+                )
             )
-        )
+        else:
+            self.helper.layout = Layout(
+                Div(
+                    Div('name', css_class='col-md-12'),
+                    'policy_type',
+                    css_class='row'
+                ),
+                Div(Div('methods', css_class='col-md-12'), css_class='row'),
+                Div(Div('groups', css_class='col-md-12'), css_class='row'),
+                Div(
+                    Div(
+                        Submit('submit', _('Save'), css_class='btn btn-primary'),
+                        HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
+                        css_class='col-md-12'
+                    ),
+                    css_class='row'
+                )
+            )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        policy_type = cleaned_data.get('policy_type')
+        groups = cleaned_data.get('groups')
+        methods = cleaned_data.get('methods')
+
+        if policy_type == 'protected':
+            if groups and len(groups) > 0:
+                has_local_password = False
+                if methods:
+                    for method in methods:
+                        if method.auth_type == 'local_password':
+                            has_local_password = True
+                            break
+                if not has_local_password:
+                    self.add_error(None, _("User groups can only be used with local user authentication."))
+
+        return cleaned_data
 
 
 class ApplicationPolicyForm(forms.ModelForm):
