@@ -41,15 +41,8 @@ class ApplicationHost(models.Model):
 
 
 class AccessPolicy(models.Model):
-    POLICY_TYPE_CHOICES = [
-        ('bypass', _('Bypass (public)')),
-        ('one_factor', _('One Factor')),
-        ('two_factor', _('Two Factor')),
-        ('deny', _('Deny')),
-    ]
-
     name = models.SlugField(max_length=64, unique=True)
-    policy_type = models.CharField(max_length=32, choices=POLICY_TYPE_CHOICES)
+    policy_type = models.CharField(max_length=32, choices=(('public', _('Public')), ('protected', _('Protected')), ('deny', _('Deny'))))
     groups = models.ManyToManyField(GatekeeperGroup, blank=True, related_name='policies')
     methods = models.ManyToManyField(AuthMethod, blank=True, related_name='policies')
 
