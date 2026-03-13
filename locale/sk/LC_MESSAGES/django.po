@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 20:12-0300\n"
+"POT-Creation-Date: 2026-03-13 20:41-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -257,10 +257,9 @@ msgid "Authentication Methods"
 msgstr "Metódy autentifikácie"
 
 #: app_gateway/forms.py:170
-#, fuzzy
-#| msgid "TOTP secret must be empty for Local Password authentication."
 msgid "User groups can only be used with local user authentication."
-msgstr "TOTP tajomstvo musí byť prázdne pre autentifikáciu miestnym heslom."
+msgstr ""
+"Používateľské skupiny je možné použiť iba s lokálnym overením používateľa."
 
 #: app_gateway/forms.py:180 templates/app_gateway/app_gateway_list.html:56
 #: templates/app_gateway/application_details.html:31
@@ -290,15 +289,13 @@ msgstr "Upstream adresa, napr.: http://10.188.18.27:3000"
 
 #: app_gateway/models.py:45
 #: templates/app_gateway/access_policy_type_select.html:19
-#, fuzzy
-#| msgid "Public Key"
 msgid "Public"
-msgstr "Verejný kľúč"
+msgstr "Verejné"
 
 #: app_gateway/models.py:45
 #: templates/app_gateway/access_policy_type_select.html:30
 msgid "Protected"
-msgstr ""
+msgstr "Chránené"
 
 #: app_gateway/models.py:45 gatekeeper/models.py:108
 #: templates/app_gateway/access_policy_type_select.html:41
@@ -308,11 +305,11 @@ msgstr "Odmietnuť"
 
 #: app_gateway/models.py:80
 msgid "Route identifier, used in export (e.g.: public_area)"
-msgstr "Identifikátor trasy používaný pri exporte (napr.: public_area)"
+msgstr "Identifikátor trasy, použitý v exporte (napr.: public_area)"
 
 #: app_gateway/views.py:55
 msgid "Application Details"
-msgstr "Detaily aplikácie"
+msgstr "Podrobnosti o aplikácii"
 
 #: app_gateway/views.py:69 templates/app_gateway/application_details.html:15
 msgid "Edit Application"
@@ -344,6 +341,21 @@ msgid ""
 "        </ul>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Aplikácia</h5>\n"
+"        <p>Definujte hlavné podrobnosti aplikácie, ktorú chcete vystaviť "
+"prostredníctvom brány.</p>\n"
+"        <ul>\n"
+"            <li><strong>Názov</strong>: Jedinečný interný identifikátor pre "
+"túto aplikáciu (napr. „wiki“, „crm“). Obsahuje iba písmená, čísla, pomlčky "
+"alebo podčiarkovníky.</li>\n"
+"            <li><strong>Zobrazený názov</strong>: Priateľský, čitateľný "
+"názov na účely zobrazenia.</li>\n"
+"            <li><strong>Upstream</strong>: Cieľová URL adresa, kam sa budú "
+"požiadavky presmerovávať (napr. <code>http://10.188.18.27:3000</code>). Musí "
+"začínať na <code>http://</code> alebo <code>https://</code>.</li>\n"
+"        </ul>\n"
+"        "
 
 #: app_gateway/views.py:115
 msgid "Application deleted successfully."
@@ -385,10 +397,8 @@ msgstr "Naozaj chcete odstrániť hostiteľa \"%(hostname)s\"?"
 
 #: app_gateway/views.py:192
 #: templates/app_gateway/access_policy_type_select.html:9
-#, fuzzy
-#| msgid "Delete Access Policy"
 msgid "Select Access Policy Type"
-msgstr "Odstrániť politiku prístupu"
+msgstr "Vyberte typ prístupovej politiky"
 
 #: app_gateway/views.py:207
 msgid "Edit Access Policy"
@@ -410,6 +420,11 @@ msgid ""
 "requiring any authentication.</p>\n"
 "            "
 msgstr ""
+"\n"
+"            <h5>Verejná politika</h5>\n"
+"            <p>Verejná politika umožňuje prístup k aplikácii bez vyžadovania "
+"akéhokoľvek overenia.</p>\n"
+"            "
 
 #: app_gateway/views.py:232
 msgid ""
@@ -418,6 +433,11 @@ msgid ""
 "            <p>A Deny policy blocks all access to the matched routes.</p>\n"
 "            "
 msgstr ""
+"\n"
+"            <h5>Politika odmietnutia</h5>\n"
+"            <p>Politika odmietnutia blokuje všetok prístup k zodpovedajúcim "
+"trasám.</p>\n"
+"            "
 
 #: app_gateway/views.py:240
 msgid ""
@@ -435,6 +455,19 @@ msgid ""
 "            </ul>\n"
 "            "
 msgstr ""
+"\n"
+"            <h5>Chránená politika</h5>\n"
+"            <p>Chránená politika vyžaduje, aby sa používatelia pred "
+"prístupom k aplikácii overili.</p>\n"
+"            <ul>\n"
+"                <li><strong>Povolené skupiny</strong>: Obmedzuje prístup pre "
+"konkrétne skupiny používateľov. Poznámka: Používanie skupín vyžaduje výber "
+"autentifikačnej metódy typu „Miestne heslo“.</li>\n"
+"                <li><strong>Autentifikačné metódy</strong>: Špecifikujte, "
+"ktoré metódy môžu používatelia použiť na overenie (napr. miestne heslo, "
+"TOTP, OIDC).</li>\n"
+"            </ul>\n"
+"            "
 
 #: app_gateway/views.py:271
 msgid "Access Policy deleted successfully."
@@ -444,7 +477,7 @@ msgstr "Politika prístupu bola úspešne odstránená."
 msgid ""
 "Cannot delete this Access Policy because it is currently in use by an "
 "Application Route or Application Default Policy."
-msgstr ""
+msgstr "Túto prístupovú politiku nie je možné odstrániť, pretože sa momentálne používa v trase aplikácie alebo v predvolenej politike aplikácie."
 
 #: app_gateway/views.py:278
 msgid "Delete Access Policy"
@@ -1977,25 +2010,25 @@ msgstr "Upraviť"
 
 #: templates/app_gateway/access_policy_type_select.html:12
 msgid "Choose the type of access policy you want to create."
-msgstr ""
+msgstr "Vyberte typ prístupovej politiky, ktorú chcete vytvoriť."
 
 #: templates/app_gateway/access_policy_type_select.html:20
 msgid "Allow access to everyone without authentication."
-msgstr ""
+msgstr "Povoliť prístup každému bez overenia."
 
 #: templates/app_gateway/access_policy_type_select.html:21
 #: templates/app_gateway/access_policy_type_select.html:32
 #: templates/app_gateway/access_policy_type_select.html:43
 msgid "Select"
-msgstr ""
+msgstr "Vybrať"
 
 #: templates/app_gateway/access_policy_type_select.html:31
 msgid "Require authentication using specified methods or groups."
-msgstr ""
+msgstr "Vyžadovať overenie pomocou špecifikovaných metód alebo skupín."
 
 #: templates/app_gateway/access_policy_type_select.html:42
 msgid "Deny all access."
-msgstr ""
+msgstr "Odmietnuť všetok prístup."
 
 #: templates/app_gateway/app_gateway_list.html:12
 #: templates/app_gateway/app_gateway_list.html:30
@@ -4280,6 +4313,34 @@ msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Neboli nájdené rozhrania|Neboli nájdené žiadne WireGuard rozhrania na "
 "spracovanie."
+
+#~ msgid ""
+#~ "\n"
+#~ "            <h5>Access Policy</h5>\n"
+#~ "            <p>Access policies define HOW and WHO can access your "
+#~ "applications and routes.</p>\n"
+#~ "            <ul>\n"
+#~ "                <li><strong>Public</strong>: No authentication required.</"
+#~ "li>\n"
+#~ "                <li><strong>Protected</strong>: Requires authentication "
+#~ "(optional: limit to specific groups).</li>\n"
+#~ "                <li><strong>Deny</strong>: Blocks all access.</li>\n"
+#~ "            </ul>\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "            <h5>Prístupová politika</h5>\n"
+#~ "            <p>Prístupové politiky definujú AKO a KTO môže pristupovať k "
+#~ "vašim aplikáciám a trasám.</p>\n"
+#~ "            <ul>\n"
+#~ "                <li><strong>Verejné</strong>: Nevyžaduje sa žiadne "
+#~ "overenie.</li>\n"
+#~ "                <li><strong>Chránené</strong>: Vyžaduje sa overenie "
+#~ "(voliteľné: obmedzenie pre konkrétne skupiny).</li>\n"
+#~ "                <li><strong>Odmietnuť</strong>: Blokuje všetok prístup.</"
+#~ "li>\n"
+#~ "            </ul>\n"
+#~ "            "
 
 #~ msgid "Bypass (public)"
 #~ msgstr "Bypass (verejné)"

@@ -257,11 +257,8 @@ msgid "Authentication Methods"
 msgstr "Métodos de autenticación"
 
 #: app_gateway/forms.py:170
-#, fuzzy
-#| msgid "TOTP secret must be empty for Local Password authentication."
 msgid "User groups can only be used with local user authentication."
-msgstr ""
-"El secreto TOTP debe estar vacío para la autenticación por contraseña local."
+msgstr "Los grupos de usuarios solo se pueden utilizar con la autenticación de usuarios locales."
 
 #: app_gateway/forms.py:180 templates/app_gateway/app_gateway_list.html:56
 #: templates/app_gateway/application_details.html:31
@@ -291,15 +288,13 @@ msgstr "Dirección de origen (upstream), ej.: http://10.188.18.27:3000"
 
 #: app_gateway/models.py:45
 #: templates/app_gateway/access_policy_type_select.html:19
-#, fuzzy
-#| msgid "Public Key"
 msgid "Public"
-msgstr "Clave pública"
+msgstr "Público"
 
 #: app_gateway/models.py:45
 #: templates/app_gateway/access_policy_type_select.html:30
 msgid "Protected"
-msgstr ""
+msgstr "Protegido"
 
 #: app_gateway/models.py:45 gatekeeper/models.py:108
 #: templates/app_gateway/access_policy_type_select.html:41
@@ -345,6 +340,21 @@ msgid ""
 "        </ul>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Aplicación</h5>\n"
+"        <p>Defina los detalles principales de la aplicación que desea "
+"exponer a través del gateway.</p>\n"
+"        <ul>\n"
+"            <li><strong>Nombre</strong>: Un identificador interno único para "
+"esta aplicación (ej: \"wiki\", \"crm\"). Contiene solo letras, números, "
+"guiones o guiones bajos.</li>\n"
+"            <li><strong>Nombre para mostrar</strong>: Un nombre amigable y "
+"legible para fines de visualización.</li>\n"
+"            <li><strong>Upstream</strong>: La URL de destino a la que se "
+"reenviarán las solicitudes (ej: <code>http://10.188.18.27:3000</code>). "
+"Debe comenzar con <code>http://</code> o <code>https://</code>.</li>\n"
+"        </ul>\n"
+"        "
 
 #: app_gateway/views.py:115
 msgid "Application deleted successfully."
@@ -386,10 +396,8 @@ msgstr "¿Está seguro de que desea eliminar el host \"%(hostname)s\"?"
 
 #: app_gateway/views.py:192
 #: templates/app_gateway/access_policy_type_select.html:9
-#, fuzzy
-#| msgid "Delete Access Policy"
 msgid "Select Access Policy Type"
-msgstr "Eliminar política de acceso"
+msgstr "Seleccionar tipo de política de acceso"
 
 #: app_gateway/views.py:207
 msgid "Edit Access Policy"
@@ -411,6 +419,11 @@ msgid ""
 "requiring any authentication.</p>\n"
 "            "
 msgstr ""
+"\n"
+"            <h5>Política pública</h5>\n"
+"            <p>Una política pública permite el acceso a la aplicación sin "
+"requerir ninguna autenticación.</p>\n"
+"            "
 
 #: app_gateway/views.py:232
 msgid ""
@@ -419,6 +432,10 @@ msgid ""
 "            <p>A Deny policy blocks all access to the matched routes.</p>\n"
 "            "
 msgstr ""
+"\n"
+"            <h5>Política de denegación</h5>\n"
+"            <p>Una política de denegación bloquea todo el acceso a las rutas coincidentes.</p>\n"
+"            "
 
 #: app_gateway/views.py:240
 msgid ""
@@ -436,6 +453,14 @@ msgid ""
 "            </ul>\n"
 "            "
 msgstr ""
+"\n"
+"            <h5>Política protegida</h5>\n"
+"            <p>Una política protegida requiere que los usuarios se autentiquen antes de acceder a la aplicación.</p>\n"
+"            <ul>\n"
+"                <li><strong>Grupos permitidos</strong>: Limita el acceso a grupos de usuarios específicos. Nota: El uso de grupos requiere seleccionar un Método de autenticación de tipo \"Contraseña local\".</li>\n"
+"                <li><strong>Métodos de autenticación</strong>: Especifique qué métodos pueden utilizar los usuarios para autenticarse (por ejemplo, Contraseña local, TOTP, OIDC).</li>\n"
+"            </ul>\n"
+"            "
 
 #: app_gateway/views.py:271
 msgid "Access Policy deleted successfully."
@@ -445,7 +470,7 @@ msgstr "Política de acceso eliminada correctamente."
 msgid ""
 "Cannot delete this Access Policy because it is currently in use by an "
 "Application Route or Application Default Policy."
-msgstr ""
+msgstr "No se puede eliminar esta política de acceso porque está actualmente en uso por una ruta de aplicación o una política predeterminada de aplicación."
 
 #: app_gateway/views.py:278
 msgid "Delete Access Policy"
@@ -2008,25 +2033,25 @@ msgstr "Editar"
 
 #: templates/app_gateway/access_policy_type_select.html:12
 msgid "Choose the type of access policy you want to create."
-msgstr ""
+msgstr "Elija el tipo de política de acceso que desea crear."
 
 #: templates/app_gateway/access_policy_type_select.html:20
 msgid "Allow access to everyone without authentication."
-msgstr ""
+msgstr "Permitir el acceso a todos sin autenticación."
 
 #: templates/app_gateway/access_policy_type_select.html:21
 #: templates/app_gateway/access_policy_type_select.html:32
 #: templates/app_gateway/access_policy_type_select.html:43
 msgid "Select"
-msgstr ""
+msgstr "Seleccionar"
 
 #: templates/app_gateway/access_policy_type_select.html:31
 msgid "Require authentication using specified methods or groups."
-msgstr ""
+msgstr "Requerir autenticación utilizando métodos o grupos especificados."
 
 #: templates/app_gateway/access_policy_type_select.html:42
 msgid "Deny all access."
-msgstr ""
+msgstr "Denegar todo el acceso."
 
 #: templates/app_gateway/app_gateway_list.html:12
 #: templates/app_gateway/app_gateway_list.html:30

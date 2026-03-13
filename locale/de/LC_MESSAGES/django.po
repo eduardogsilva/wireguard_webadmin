@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 20:12-0300\n"
+"POT-Creation-Date: 2026-03-13 20:41-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -259,12 +259,10 @@ msgid "Authentication Methods"
 msgstr "Authentifizierungsmethoden"
 
 #: app_gateway/forms.py:170
-#, fuzzy
-#| msgid "TOTP secret must be empty for Local Password authentication."
 msgid "User groups can only be used with local user authentication."
 msgstr ""
-"Das TOTP-Geheimnis muss für die Authentifizierung mit lokalem Passwort leer "
-"sein."
+"Benutzergruppen können nur mit lokaler Benutzerauthentifizierung verwendet "
+"werden."
 
 #: app_gateway/forms.py:180 templates/app_gateway/app_gateway_list.html:56
 #: templates/app_gateway/application_details.html:31
@@ -294,25 +292,23 @@ msgstr "Upstream-Adresse, z. B.: http://10.188.18.27:3000"
 
 #: app_gateway/models.py:45
 #: templates/app_gateway/access_policy_type_select.html:19
-#, fuzzy
-#| msgid "Public Key"
 msgid "Public"
-msgstr "Public Key"
+msgstr "Öffentlich"
 
 #: app_gateway/models.py:45
 #: templates/app_gateway/access_policy_type_select.html:30
 msgid "Protected"
-msgstr ""
+msgstr "Geschützt"
 
 #: app_gateway/models.py:45 gatekeeper/models.py:108
 #: templates/app_gateway/access_policy_type_select.html:41
 #: templates/gatekeeper/gatekeeper_list.html:272
 msgid "Deny"
-msgstr "Ablehnen"
+msgstr "Verweigern"
 
 #: app_gateway/models.py:80
 msgid "Route identifier, used in export (e.g.: public_area)"
-msgstr "Routen-ID, verwendet im Export (z. B.: public_area)"
+msgstr "Routen-Identifikator, verwendet im Export (z.B.: public_area)"
 
 #: app_gateway/views.py:55
 msgid "Application Details"
@@ -348,6 +344,21 @@ msgid ""
 "        </ul>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Anwendung</h5>\n"
+"        <p>Definieren Sie die wichtigsten Details der Anwendung, die Sie "
+"über das Gateway bereitstellen möchten.</p>\n"
+"        <ul>\n"
+"            <li><strong>Name</strong>: Eine eindeutige interne Kennung für "
+"diese Anwendung (z.B. „wiki“, „crm“). Enthält nur Buchstaben, Zahlen, "
+"Bindestriche oder Unterstriche.</li>\n"
+"            <li><strong>Anzeigename</strong>: Ein freundlicher, lesbarer "
+"Name für Anzeigezwecke.</li>\n"
+"            <li><strong>Upstream</strong>: Die Ziel-URL, an die Anfragen "
+"weitergeleitet werden (z.B. <code>http://10.188.18.27:3000</code>). Muss mit "
+"<code>http://</code> oder <code>https://</code> beginnen.</li>\n"
+"        </ul>\n"
+"        "
 
 #: app_gateway/views.py:115
 msgid "Application deleted successfully."
@@ -389,10 +400,8 @@ msgstr "Sind Sie sicher, dass Sie den Host \"%(hostname)s\" löschen möchten?"
 
 #: app_gateway/views.py:192
 #: templates/app_gateway/access_policy_type_select.html:9
-#, fuzzy
-#| msgid "Delete Access Policy"
 msgid "Select Access Policy Type"
-msgstr "Zugriffsrichtlinie löschen"
+msgstr "Zugriffsrichtlinientyp auswählen"
 
 #: app_gateway/views.py:207
 msgid "Edit Access Policy"
@@ -414,6 +423,11 @@ msgid ""
 "requiring any authentication.</p>\n"
 "            "
 msgstr ""
+"\n"
+"            <h5>Öffentliche Richtlinie</h5>\n"
+"            <p>Eine öffentliche Richtlinie ermöglicht den Zugriff auf die "
+"Anwendung, ohne eine Authentifizierung zu erfordern.</p>\n"
+"            "
 
 #: app_gateway/views.py:232
 msgid ""
@@ -422,6 +436,11 @@ msgid ""
 "            <p>A Deny policy blocks all access to the matched routes.</p>\n"
 "            "
 msgstr ""
+"\n"
+"            <h5>Ablehnungsrichtlinie</h5>\n"
+"            <p>Eine Ablehnungsrichtlinie blockiert jeglichen Zugriff auf die "
+"übereinstimmenden Routen.</p>\n"
+"            "
 
 #: app_gateway/views.py:240
 msgid ""
@@ -439,6 +458,20 @@ msgid ""
 "            </ul>\n"
 "            "
 msgstr ""
+"\n"
+"            <h5>Geschützte Richtlinie</h5>\n"
+"            <p>Eine geschützte Richtlinie erfordert, dass sich Benutzer "
+"authentifizieren, bevor sie auf die Anwendung zugreifen.</p>\n"
+"            <ul>\n"
+"                <li><strong>Erlaubte Gruppen</strong>: Beschränkt den "
+"Zugriff auf bestimmte Benutzergruppen. Hinweis: Die Verwendung von Gruppen "
+"erfordert die Auswahl einer Authentifizierungsmethode vom Typ „Lokales "
+"Passwort“.</li>\n"
+"                <li><strong>Authentifizierungsmethoden</strong>: Legen Sie "
+"fest, welche Methoden Benutzer zur Authentifizierung verwenden können (z.B. "
+"lokales Passwort, TOTP, OIDC).</li>\n"
+"            </ul>\n"
+"            "
 
 #: app_gateway/views.py:271
 msgid "Access Policy deleted successfully."
@@ -449,6 +482,8 @@ msgid ""
 "Cannot delete this Access Policy because it is currently in use by an "
 "Application Route or Application Default Policy."
 msgstr ""
+"Diese Zugriffsrichtlinie kann nicht gelöscht werden, da sie derzeit von "
+"einer Anwendungsroute oder einer Standardanwendungsrichtlinie verwendet wird."
 
 #: app_gateway/views.py:278
 msgid "Delete Access Policy"
@@ -2025,24 +2060,25 @@ msgstr "Bearbeiten"
 #: templates/app_gateway/access_policy_type_select.html:12
 msgid "Choose the type of access policy you want to create."
 msgstr ""
+"Wählen Sie den Typ der Zugriffsrichtlinie aus, die Sie erstellen möchten."
 
 #: templates/app_gateway/access_policy_type_select.html:20
 msgid "Allow access to everyone without authentication."
-msgstr ""
+msgstr "Ermöglichen Sie jedem den Zugriff ohne Authentifizierung."
 
 #: templates/app_gateway/access_policy_type_select.html:21
 #: templates/app_gateway/access_policy_type_select.html:32
 #: templates/app_gateway/access_policy_type_select.html:43
 msgid "Select"
-msgstr ""
+msgstr "Auswählen"
 
 #: templates/app_gateway/access_policy_type_select.html:31
 msgid "Require authentication using specified methods or groups."
-msgstr ""
+msgstr "Authentifizierung mit bestimmten Methoden oder Gruppen anfordern."
 
 #: templates/app_gateway/access_policy_type_select.html:42
 msgid "Deny all access."
-msgstr ""
+msgstr "Gesamten Zugriff verweigern."
 
 #: templates/app_gateway/app_gateway_list.html:12
 #: templates/app_gateway/app_gateway_list.html:30
@@ -4350,6 +4386,34 @@ msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Keine Schnittstellen gefunden|Es wurden keine WireGuard‑Schnittstellen "
 "gefunden."
+
+#~ msgid ""
+#~ "\n"
+#~ "            <h5>Access Policy</h5>\n"
+#~ "            <p>Access policies define HOW and WHO can access your "
+#~ "applications and routes.</p>\n"
+#~ "            <ul>\n"
+#~ "                <li><strong>Public</strong>: No authentication required.</"
+#~ "li>\n"
+#~ "                <li><strong>Protected</strong>: Requires authentication "
+#~ "(optional: limit to specific groups).</li>\n"
+#~ "                <li><strong>Deny</strong>: Blocks all access.</li>\n"
+#~ "            </ul>\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "            <h5>Zugriffsrichtlinie</h5>\n"
+#~ "            <p>Zugriffsrichtlinien definieren, WIE und WER auf Ihre "
+#~ "Anwendungen und Routen zugreifen kann.</p>\n"
+#~ "            <ul>\n"
+#~ "                <li><strong>Öffentlich</strong>: Keine Authentifizierung "
+#~ "erforderlich.</li>\n"
+#~ "                <li><strong>Geschützt</strong>: Erfordert "
+#~ "Authentifizierung (optional: Beschränkung auf bestimmte Gruppen).</li>\n"
+#~ "                <li><strong>Verweigern</strong>: Blockiert den gesamten "
+#~ "Zugriff.</li>\n"
+#~ "            </ul>\n"
+#~ "            "
 
 #~ msgid "Bypass (public)"
 #~ msgstr "Bypass (öffentlich)"
