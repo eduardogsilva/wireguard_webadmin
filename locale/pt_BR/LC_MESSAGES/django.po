@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-12 18:41-0300\n"
+"POT-Creation-Date: 2026-03-13 20:12-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,11 +65,12 @@ msgstr ""
 "funcionar imediatamente."
 
 #: api_v2/forms.py:63 app_gateway/forms.py:40 app_gateway/forms.py:85
-#: app_gateway/forms.py:123 app_gateway/forms.py:152 app_gateway/forms.py:193
-#: cluster/forms.py:67 cluster/forms.py:124 dns/forms.py:37 dns/forms.py:84
-#: dns/forms.py:153 gatekeeper/forms.py:41 gatekeeper/forms.py:75
-#: gatekeeper/forms.py:137 gatekeeper/forms.py:224 gatekeeper/forms.py:254
-#: gatekeeper/forms.py:285 routing_templates/forms.py:71 scheduler/forms.py:102
+#: app_gateway/forms.py:129 app_gateway/forms.py:147 app_gateway/forms.py:195
+#: app_gateway/forms.py:236 cluster/forms.py:67 cluster/forms.py:124
+#: dns/forms.py:37 dns/forms.py:84 dns/forms.py:153 gatekeeper/forms.py:41
+#: gatekeeper/forms.py:75 gatekeeper/forms.py:137 gatekeeper/forms.py:224
+#: gatekeeper/forms.py:254 gatekeeper/forms.py:285
+#: routing_templates/forms.py:71 scheduler/forms.py:102
 #: templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
 #: templates/firewall/manage_redirect_rule.html:84
@@ -126,16 +127,17 @@ msgid "Enabled"
 msgstr "Habilitado"
 
 #: api_v2/views.py:17 api_v2/views.py:27 api_v2/views.py:82 api_v2/views.py:106
-#: app_gateway/views.py:20 app_gateway/views.py:42 app_gateway/views.py:62
-#: app_gateway/views.py:92 app_gateway/views.py:115 app_gateway/views.py:150
-#: app_gateway/views.py:174 app_gateway/views.py:204 app_gateway/views.py:227
-#: app_gateway/views.py:262 app_gateway/views.py:288 app_gateway/views.py:338
-#: cluster/views.py:18 cluster/views.py:45 cluster/views.py:114
-#: gatekeeper/views.py:23 gatekeeper/views.py:48 gatekeeper/views.py:78
-#: gatekeeper/views.py:101 gatekeeper/views.py:131 gatekeeper/views.py:154
-#: gatekeeper/views.py:198 gatekeeper/views.py:257 gatekeeper/views.py:287
-#: gatekeeper/views.py:310 gatekeeper/views.py:340 gatekeeper/views.py:363
-#: gatekeeper/views.py:412 templates/access_denied.html:9
+#: app_gateway/views.py:21 app_gateway/views.py:43 app_gateway/views.py:63
+#: app_gateway/views.py:107 app_gateway/views.py:130 app_gateway/views.py:165
+#: app_gateway/views.py:189 app_gateway/views.py:200 app_gateway/views.py:262
+#: app_gateway/views.py:288 app_gateway/views.py:323 app_gateway/views.py:349
+#: app_gateway/views.py:399 cluster/views.py:18 cluster/views.py:45
+#: cluster/views.py:114 gatekeeper/views.py:23 gatekeeper/views.py:48
+#: gatekeeper/views.py:78 gatekeeper/views.py:101 gatekeeper/views.py:131
+#: gatekeeper/views.py:154 gatekeeper/views.py:198 gatekeeper/views.py:257
+#: gatekeeper/views.py:287 gatekeeper/views.py:310 gatekeeper/views.py:340
+#: gatekeeper/views.py:363 gatekeeper/views.py:412
+#: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Acesso Negado"
 
@@ -214,10 +216,12 @@ msgstr "Nome de Exibição"
 msgid "Upstream"
 msgstr "Upstream"
 
-#: app_gateway/forms.py:41 app_gateway/forms.py:86 app_gateway/forms.py:124
-#: app_gateway/forms.py:153 app_gateway/forms.py:194 gatekeeper/forms.py:42
-#: gatekeeper/forms.py:76 gatekeeper/forms.py:138 gatekeeper/forms.py:225
-#: gatekeeper/forms.py:255 gatekeeper/forms.py:286 scheduler/forms.py:103
+#: app_gateway/forms.py:41 app_gateway/forms.py:86 app_gateway/forms.py:130
+#: app_gateway/forms.py:148 app_gateway/forms.py:196 app_gateway/forms.py:237
+#: gatekeeper/forms.py:42 gatekeeper/forms.py:76 gatekeeper/forms.py:138
+#: gatekeeper/forms.py:225 gatekeeper/forms.py:255 gatekeeper/forms.py:286
+#: scheduler/forms.py:103
+#: templates/app_gateway/access_policy_type_select.html:50
 #: templates/generic_delete_confirmation.html:19
 #: templates/scheduler/scheduleprofile_form.html:203
 msgid "Cancel"
@@ -251,25 +255,31 @@ msgstr "Grupos Permitidos"
 msgid "Authentication Methods"
 msgstr "Métodos de Autenticação"
 
-#: app_gateway/forms.py:137 templates/app_gateway/app_gateway_list.html:56
+#: app_gateway/forms.py:170
+#, fuzzy
+#| msgid "TOTP secret must be empty for Local Password authentication."
+msgid "User groups can only be used with local user authentication."
+msgstr "O segredo TOTP deve estar vazio para autenticação por Senha Local."
+
+#: app_gateway/forms.py:180 templates/app_gateway/app_gateway_list.html:56
 #: templates/app_gateway/application_details.html:31
 #: templates/firewall/firewall_nav_tabs.html:15
 msgid "Default Policy"
 msgstr "Política Padrão"
 
-#: app_gateway/forms.py:166 templates/app_gateway/application_details.html:105
+#: app_gateway/forms.py:209 templates/app_gateway/application_details.html:105
 msgid "Route Name"
 msgstr "Nome da Rota"
 
-#: app_gateway/forms.py:167 templates/app_gateway/application_details.html:106
+#: app_gateway/forms.py:210 templates/app_gateway/application_details.html:106
 msgid "Path Prefix"
 msgstr "Prefixo do Caminho"
 
-#: app_gateway/forms.py:168 templates/app_gateway/application_details.html:107
+#: app_gateway/forms.py:211 templates/app_gateway/application_details.html:107
 msgid "Policy"
 msgstr "Política"
 
-#: app_gateway/forms.py:169 templates/app_gateway/application_details.html:108
+#: app_gateway/forms.py:212 templates/app_gateway/application_details.html:108
 msgid "Order"
 msgstr "Ordem"
 
@@ -278,143 +288,210 @@ msgid "Upstream address, e.g.: http://10.188.18.27:3000"
 msgstr "Endereço upstream, ex: http://10.188.18.27:3000"
 
 #: app_gateway/models.py:45
-msgid "Bypass (public)"
-msgstr "Bypass (público)"
+#: templates/app_gateway/access_policy_type_select.html:19
+#, fuzzy
+#| msgid "Public Key"
+msgid "Public"
+msgstr "Chave Pública"
 
-#: app_gateway/models.py:46
-msgid "One Factor"
-msgstr "Um Fator"
+#: app_gateway/models.py:45
+#: templates/app_gateway/access_policy_type_select.html:30
+msgid "Protected"
+msgstr ""
 
-#: app_gateway/models.py:47
-msgid "Two Factor"
-msgstr "Dois Fatores"
-
-#: app_gateway/models.py:48 gatekeeper/models.py:108
+#: app_gateway/models.py:45 gatekeeper/models.py:108
+#: templates/app_gateway/access_policy_type_select.html:41
 #: templates/gatekeeper/gatekeeper_list.html:272
 msgid "Deny"
 msgstr "Negar"
 
-#: app_gateway/models.py:87
+#: app_gateway/models.py:80
 msgid "Route identifier, used in export (e.g.: public_area)"
 msgstr "Identificador da rota, usado na exportação (ex: public_area)"
 
-#: app_gateway/views.py:54
+#: app_gateway/views.py:55
 msgid "Application Details"
 msgstr "Detalhes da Aplicação"
 
-#: app_gateway/views.py:68 templates/app_gateway/application_details.html:15
+#: app_gateway/views.py:69 templates/app_gateway/application_details.html:15
 msgid "Edit Application"
 msgstr "Editar Aplicação"
 
-#: app_gateway/views.py:71
+#: app_gateway/views.py:72
 msgid "Create Application"
 msgstr "Criar Aplicação"
 
-#: app_gateway/views.py:78
+#: app_gateway/views.py:79
 msgid "Application saved successfully."
 msgstr "Aplicação salva com sucesso."
 
-#: app_gateway/views.py:100
+#: app_gateway/views.py:84
+msgid ""
+"\n"
+"        <h5>Application</h5>\n"
+"        <p>Define the main details of the application you want to expose "
+"through the gateway.</p>\n"
+"        <ul>\n"
+"            <li><strong>Name</strong>: A unique internal identifier for this "
+"application (e.g., \"wiki\", \"crm\"). Contains only letters, numbers, "
+"hyphens, or underscores.</li>\n"
+"            <li><strong>Display Name</strong>: A friendly, human-readable "
+"name for display purposes.</li>\n"
+"            <li><strong>Upstream</strong>: The destination URL where "
+"requests will be forwarded (e.g., <code>http://10.188.18.27:3000</code>). "
+"Must start with <code>http://</code> or <code>https://</code>.</li>\n"
+"        </ul>\n"
+"        "
+msgstr ""
+
+#: app_gateway/views.py:115
 msgid "Application deleted successfully."
 msgstr "Aplicação excluída com sucesso."
 
-#: app_gateway/views.py:105 templates/app_gateway/application_details.html:18
+#: app_gateway/views.py:120 templates/app_gateway/application_details.html:18
 msgid "Delete Application"
 msgstr "Excluir Aplicação"
 
-#: app_gateway/views.py:107
+#: app_gateway/views.py:122
 #, python-format
 msgid "Are you sure you want to delete the application \"%(name)s\"?"
 msgstr "Tem certeza de que deseja excluir a aplicação \"%(name)s\"?"
 
-#: app_gateway/views.py:123
+#: app_gateway/views.py:138
 msgid "Edit Application Host"
 msgstr "Editar Host da Aplicação"
 
-#: app_gateway/views.py:127
+#: app_gateway/views.py:142
 msgid "Add Application Host"
 msgstr "Adicionar Host da Aplicação"
 
-#: app_gateway/views.py:136
+#: app_gateway/views.py:151
 msgid "Application Host saved successfully."
 msgstr "Host da Aplicação salvo com sucesso."
 
-#: app_gateway/views.py:159
+#: app_gateway/views.py:174
 msgid "Application Host deleted successfully."
 msgstr "Host da Aplicação excluído com sucesso."
 
-#: app_gateway/views.py:164
+#: app_gateway/views.py:179
 msgid "Delete Application Host"
 msgstr "Excluir Host da Aplicação"
 
-#: app_gateway/views.py:166
+#: app_gateway/views.py:181
 #, python-format
 msgid "Are you sure you want to delete the host \"%(hostname)s\"?"
 msgstr "Tem certeza de que deseja excluir o host \"%(hostname)s\"?"
 
-#: app_gateway/views.py:180
+#: app_gateway/views.py:192
+#: templates/app_gateway/access_policy_type_select.html:9
+#, fuzzy
+#| msgid "Delete Access Policy"
+msgid "Select Access Policy Type"
+msgstr "Excluir Política de Acesso"
+
+#: app_gateway/views.py:207
 msgid "Edit Access Policy"
 msgstr "Editar Política de Acesso"
 
-#: app_gateway/views.py:183
+#: app_gateway/views.py:211
 msgid "Create Access Policy"
 msgstr "Criar Política de Acesso"
 
-#: app_gateway/views.py:190
+#: app_gateway/views.py:218
 msgid "Access Policy saved successfully."
 msgstr "Política de Acesso salva com sucesso."
 
-#: app_gateway/views.py:212
+#: app_gateway/views.py:224
+msgid ""
+"\n"
+"            <h5>Public Policy</h5>\n"
+"            <p>A Public policy allows access to the application without "
+"requiring any authentication.</p>\n"
+"            "
+msgstr ""
+
+#: app_gateway/views.py:232
+msgid ""
+"\n"
+"            <h5>Deny Policy</h5>\n"
+"            <p>A Deny policy blocks all access to the matched routes.</p>\n"
+"            "
+msgstr ""
+
+#: app_gateway/views.py:240
+msgid ""
+"\n"
+"            <h5>Protected Policy</h5>\n"
+"            <p>A Protected policy requires users to authenticate before "
+"accessing the application.</p>\n"
+"            <ul>\n"
+"                <li><strong>Allowed Groups</strong>: Limits access to "
+"specific user groups. Note: Using groups requires selecting an "
+"Authentication Method of type \"Local Password\".</li>\n"
+"                <li><strong>Authentication Methods</strong>: Specify which "
+"methods users can use to authenticate (e.g., Local Password, TOTP, OIDC).</"
+"li>\n"
+"            </ul>\n"
+"            "
+msgstr ""
+
+#: app_gateway/views.py:271
 msgid "Access Policy deleted successfully."
 msgstr "Política de Acesso excluída com sucesso."
 
-#: app_gateway/views.py:217
+#: app_gateway/views.py:273
+msgid ""
+"Cannot delete this Access Policy because it is currently in use by an "
+"Application Route or Application Default Policy."
+msgstr ""
+
+#: app_gateway/views.py:278
 msgid "Delete Access Policy"
 msgstr "Excluir Política de Acesso"
 
-#: app_gateway/views.py:219
+#: app_gateway/views.py:280
 #, python-format
 msgid "Are you sure you want to delete the access policy \"%(name)s\"?"
 msgstr "Tem certeza de que deseja excluir a política de acesso \"%(name)s\"?"
 
-#: app_gateway/views.py:235
+#: app_gateway/views.py:296
 msgid "Edit Application Default Policy"
 msgstr "Editar Política Padrão da Aplicação"
 
-#: app_gateway/views.py:239
+#: app_gateway/views.py:300
 msgid "Set Application Default Policy"
 msgstr "Configurar Política Padrão da Aplicação"
 
-#: app_gateway/views.py:248
+#: app_gateway/views.py:309
 msgid "Application Default Policy saved successfully."
 msgstr "Política Padrão da Aplicação salva com sucesso."
 
-#: app_gateway/views.py:271
+#: app_gateway/views.py:332
 msgid "Application Default Policy deleted successfully."
 msgstr "Política Padrão da Aplicação excluída com sucesso."
 
-#: app_gateway/views.py:276
+#: app_gateway/views.py:337
 msgid "Delete Application Default Policy"
 msgstr "Excluir Política Padrão da Aplicação"
 
-#: app_gateway/views.py:278
+#: app_gateway/views.py:339
 #, python-format
 msgid "Are you sure you want to remove the default policy for \"%(name)s\"?"
 msgstr "Tem certeza de que deseja remover a política padrão para \"%(name)s\"?"
 
-#: app_gateway/views.py:296
+#: app_gateway/views.py:357
 msgid "Edit Application Route"
 msgstr "Editar Rota da Aplicação"
 
-#: app_gateway/views.py:300
+#: app_gateway/views.py:361
 msgid "Add Application Route"
 msgstr "Adicionar Rota da Aplicação"
 
-#: app_gateway/views.py:309
+#: app_gateway/views.py:370
 msgid "Application Route saved successfully."
 msgstr "Rota da Aplicação salva com sucesso."
 
-#: app_gateway/views.py:314
+#: app_gateway/views.py:375
 msgid ""
 "\n"
 "        <h5>Application Route</h5>\n"
@@ -454,15 +531,15 @@ msgstr ""
 "        </ul>\n"
 "        "
 
-#: app_gateway/views.py:347
+#: app_gateway/views.py:408
 msgid "Application Route deleted successfully."
 msgstr "Rota da Aplicação excluída com sucesso."
 
-#: app_gateway/views.py:352
+#: app_gateway/views.py:413
 msgid "Delete Application Route"
 msgstr "Excluir Rota da Aplicação"
 
-#: app_gateway/views.py:354
+#: app_gateway/views.py:415
 #, python-format
 msgid "Are you sure you want to delete the route \"%(name)s\" (%(path)s)?"
 msgstr "Tem certeza de que deseja excluir a rota \"%(name)s\" (%(path)s)?"
@@ -1453,9 +1530,9 @@ msgstr ""
 "        \n"
 "        <h5>Endereço IP e Prefixo</h5>\n"
 "        <p>Insira um único endereço IP (ex: 192.168.1.50) ou um endereço de "
-"rede. Use o comprimento do prefixo para notação CIDR (ex: 24 para uma rede "
-"/24). Deixe o prefixo em branco para um único host (/32 para IPv4, /128 "
-"para IPv6).</p>\n"
+"rede. Use o comprimento do prefixo para notação CIDR (ex: 24 para uma rede /"
+"24). Deixe o prefixo em branco para um único host (/32 para IPv4, /128 para "
+"IPv6).</p>\n"
 "        \n"
 "        <h5>Ação</h5>\n"
 "        <p><strong>Permitir</strong>: Concede acesso à rede/IP especificado."
@@ -1918,6 +1995,28 @@ msgstr "Desabilitado"
 #: templates/wireguard/peer_list/peer_preview_modal.html:137
 msgid "Edit"
 msgstr "Editar"
+
+#: templates/app_gateway/access_policy_type_select.html:12
+msgid "Choose the type of access policy you want to create."
+msgstr ""
+
+#: templates/app_gateway/access_policy_type_select.html:20
+msgid "Allow access to everyone without authentication."
+msgstr ""
+
+#: templates/app_gateway/access_policy_type_select.html:21
+#: templates/app_gateway/access_policy_type_select.html:32
+#: templates/app_gateway/access_policy_type_select.html:43
+msgid "Select"
+msgstr ""
+
+#: templates/app_gateway/access_policy_type_select.html:31
+msgid "Require authentication using specified methods or groups."
+msgstr ""
+
+#: templates/app_gateway/access_policy_type_select.html:42
+msgid "Deny all access."
+msgstr ""
 
 #: templates/app_gateway/app_gateway_list.html:12
 #: templates/app_gateway/app_gateway_list.html:30
@@ -4212,6 +4311,15 @@ msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Nenhuma interface encontrada|Nenhuma interface WireGuard foi encontrada para "
 "processar."
+
+#~ msgid "Bypass (public)"
+#~ msgstr "Bypass (público)"
+
+#~ msgid "One Factor"
+#~ msgstr "Um Fator"
+
+#~ msgid "Two Factor"
+#~ msgstr "Dois Fatores"
 
 #, fuzzy
 #~| msgid "Sort Order"
