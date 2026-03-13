@@ -195,7 +195,7 @@ def view_manage_access_policy(request):
         'title': title,
         'page_title': title,
     }
-    return render(request, 'generic_form.html', context)
+    return render(request, 'app_gateway/app_gateway_policy_form.html', context)
 
 
 @login_required
