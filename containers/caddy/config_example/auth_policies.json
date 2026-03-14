@@ -4,7 +4,9 @@
       "type": "local_password"
     },
     "totp_default": {
-      "type": "totp"
+      "type": "totp",
+      "totp_secret": "",
+      "totp_before_auth": false
     },
     "google_workspace_admins": {
       "type": "oidc",
@@ -17,6 +19,23 @@
       "allowed_emails": [
         "eduardo@example.com",
         "alice@example.com"
+      ]
+    },
+    "office_network": {
+      "type": "ip_address",
+      "rules": [
+        {
+          "address": "10.0.0.0",
+          "prefix_length": 24,
+          "action": "allow",
+          "description": "Office LAN"
+        },
+        {
+          "address": "192.168.1.100",
+          "prefix_length": null,
+          "action": "deny",
+          "description": "Blocked workstation"
+        }
       ]
     }
   },
@@ -42,20 +61,25 @@
   "users": {
     "eduardo": {
       "email": "eduardo@example.com",
-      "password_hash": "$argon2id$hash"
+      "password_hash": "$argon2id$hash",
+      "totp_secret": "JBSWY3DPEHPK3PXP"
     },
     "alice": {
       "email": "alice@example.com",
-      "password_hash": "$argon2id$hash"
+      "password_hash": "$argon2id$hash",
+      "totp_secret": ""
     },
     "bob": {
       "email": "bob@example.com",
-      "password_hash": "$argon2id$hash"
+      "password_hash": "$argon2id$hash",
+      "totp_secret": ""
     }
   },
   "policies": {
     "public": {
-      "policy_type": "bypass"
+      "policy_type": "bypass",
+      "groups": [],
+      "methods": []
     },
     "api_users": {
       "policy_type": "protected",
