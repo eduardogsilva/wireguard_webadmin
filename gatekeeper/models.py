@@ -67,6 +67,7 @@ class GatekeeperUser(models.Model):
     username = models.SlugField(max_length=64, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(blank=True, max_length=128, help_text=_("Password for local authentication (leave blank if not using)"))
+    password_hash = models.CharField(blank=True, null=True, max_length=128)
     totp_secret = models.CharField(max_length=255, blank=True, help_text=_("Per-user TOTP secret key"))
 
     created = models.DateTimeField(auto_now_add=True)
