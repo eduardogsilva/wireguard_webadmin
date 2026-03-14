@@ -257,37 +257,34 @@ msgid "Authentication Methods"
 msgstr "Metódy autentifikácie"
 
 #: app_gateway/forms.py:178
-#, fuzzy
-#| msgid "TOTP secret must be empty for Local Password authentication."
 msgid "Cannot select more than one Local Password authentication method."
-msgstr "TOTP tajomstvo musí byť prázdne pre autentifikáciu miestnym heslom."
+msgstr "Nemožno vybrať viac ako jednu metódu autentifikácie lokálnym heslom."
 
 #: app_gateway/forms.py:182
 msgid ""
 "Cannot select more than one OpenID Connect (OIDC) authentication method."
 msgstr ""
+"Nemožno vybrať viac ako jednu metódu autentifikácie OpenID Connect (OIDC)."
 
 #: app_gateway/forms.py:186
 msgid ""
 "Cannot select both Local Password and OpenID Connect (OIDC) authentication "
 "methods."
 msgstr ""
+"Nemožno vybrať súčasne metódy autentifikácie lokálnym heslom a OpenID "
+"Connect (OIDC)."
 
 #: app_gateway/forms.py:190
-#, fuzzy
-#| msgid "TOTP validation PIN must be empty for Local Password authentication."
 msgid ""
 "At least one user group must be selected when using Local Password "
 "authentication."
 msgstr ""
-"Validačný PIN TOTP musí byť prázdny pre autentifikáciu miestnym heslom."
+"Pri použití autentifikácie lokálnym heslom musí byť vybraná aspoň jedna "
+"skupina používateľov."
 
 #: app_gateway/forms.py:194
-#, fuzzy
-#| msgid "User groups can only be used with local user authentication."
 msgid "User groups can only be used with Local Password authentication."
-msgstr ""
-"Používateľské skupiny je možné použiť iba s lokálnym overením používateľa."
+msgstr "Skupiny používateľov možno použiť len s autentifikáciou lokálnym heslom."
 
 #: app_gateway/forms.py:204 templates/app_gateway/app_gateway_list.html:56
 #: templates/app_gateway/application_details.html:31

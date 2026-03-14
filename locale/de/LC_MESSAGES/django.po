@@ -259,41 +259,39 @@ msgid "Authentication Methods"
 msgstr "Authentifizierungsmethoden"
 
 #: app_gateway/forms.py:178
-#, fuzzy
-#| msgid "TOTP secret must be empty for Local Password authentication."
 msgid "Cannot select more than one Local Password authentication method."
 msgstr ""
-"Das TOTP-Geheimnis muss für die Authentifizierung mit lokalem Passwort leer "
-"sein."
+"Es kann nicht mehr als eine lokale Passwort-Authentifizierungsmethode "
+"ausgewählt werden."
 
 #: app_gateway/forms.py:182
 msgid ""
 "Cannot select more than one OpenID Connect (OIDC) authentication method."
 msgstr ""
+"Es kann nicht mehr als eine OpenID Connect (OIDC)-Authentifizierungsmethode "
+"ausgewählt werden."
 
 #: app_gateway/forms.py:186
 msgid ""
 "Cannot select both Local Password and OpenID Connect (OIDC) authentication "
 "methods."
 msgstr ""
+"Die Authentifizierungsmethoden \"Lokales Passwort\" und OpenID Connect "
+"(OIDC) können nicht gleichzeitig ausgewählt werden."
 
 #: app_gateway/forms.py:190
-#, fuzzy
-#| msgid "TOTP validation PIN must be empty for Local Password authentication."
 msgid ""
 "At least one user group must be selected when using Local Password "
 "authentication."
 msgstr ""
-"Die TOTP-Validierungs-PIN muss für die Authentifizierung mit lokalem "
-"Passwort leer sein."
+"Bei Verwendung der lokalen Passwort-Authentifizierung muss mindestens eine "
+"Benutzergruppe ausgewählt werden."
 
 #: app_gateway/forms.py:194
-#, fuzzy
-#| msgid "User groups can only be used with local user authentication."
 msgid "User groups can only be used with Local Password authentication."
 msgstr ""
-"Benutzergruppen können nur mit lokaler Benutzerauthentifizierung verwendet "
-"werden."
+"Benutzergruppen können nur mit der lokalen Passwort-Authentifizierung "
+"verwendet werden."
 
 #: app_gateway/forms.py:204 templates/app_gateway/app_gateway_list.html:56
 #: templates/app_gateway/application_details.html:31
