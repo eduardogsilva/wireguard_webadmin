@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 09:35-0300\n"
+"POT-Creation-Date: 2026-03-14 10:10-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,9 +64,9 @@ msgstr ""
 "Êtes-vous sûr de vouloir régénérer le jeton ? L'ancien jeton cessera de "
 "fonctionner immédiatement."
 
-#: api_v2/forms.py:63 app_gateway/forms.py:40 app_gateway/forms.py:85
-#: app_gateway/forms.py:129 app_gateway/forms.py:147 app_gateway/forms.py:219
-#: app_gateway/forms.py:260 cluster/forms.py:67 cluster/forms.py:124
+#: api_v2/forms.py:63 app_gateway/forms.py:40 app_gateway/forms.py:92
+#: app_gateway/forms.py:136 app_gateway/forms.py:154 app_gateway/forms.py:226
+#: app_gateway/forms.py:267 cluster/forms.py:67 cluster/forms.py:124
 #: dns/forms.py:37 dns/forms.py:84 dns/forms.py:153 gatekeeper/forms.py:41
 #: gatekeeper/forms.py:75 gatekeeper/forms.py:139 gatekeeper/forms.py:226
 #: gatekeeper/forms.py:256 gatekeeper/forms.py:287
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Save"
 msgstr "Enregistrer"
 
-#: api_v2/models.py:10 app_gateway/forms.py:18 app_gateway/forms.py:99
+#: api_v2/models.py:10 app_gateway/forms.py:18 app_gateway/forms.py:106
 #: cluster/forms.py:18 dns/forms.py:130 gatekeeper/forms.py:99
 #: routing_templates/forms.py:28 templates/api_v2/api_documentation.html:47
 #: templates/api_v2/list.html:8 templates/app_gateway/app_gateway_list.html:52
@@ -216,8 +216,8 @@ msgstr "Nom à afficher"
 msgid "Upstream"
 msgstr "Upstream"
 
-#: app_gateway/forms.py:41 app_gateway/forms.py:86 app_gateway/forms.py:130
-#: app_gateway/forms.py:148 app_gateway/forms.py:220 app_gateway/forms.py:261
+#: app_gateway/forms.py:41 app_gateway/forms.py:93 app_gateway/forms.py:137
+#: app_gateway/forms.py:155 app_gateway/forms.py:227 app_gateway/forms.py:268
 #: gatekeeper/forms.py:42 gatekeeper/forms.py:76 gatekeeper/forms.py:140
 #: gatekeeper/forms.py:227 gatekeeper/forms.py:257 gatekeeper/forms.py:288
 #: scheduler/forms.py:103
@@ -228,14 +228,22 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: app_gateway/forms.py:54
+msgid "This is a reserved system name."
+msgstr "Il s'agit d'un nom de système réservé."
+
+#: app_gateway/forms.py:58
+msgid "This upstream is reserved by the system."
+msgstr "Cet upstream est réservé par le système."
+
+#: app_gateway/forms.py:61
 msgid "Upstream URL cannot contain spaces."
 msgstr "L'URL upstream ne peut pas contenir d'espaces."
 
-#: app_gateway/forms.py:60
+#: app_gateway/forms.py:67
 msgid "Enter a valid upstream URL starting with http:// or https://"
 msgstr "Entrez une URL upstream valide commençant par http:// ou https://"
 
-#: app_gateway/forms.py:70 cluster/forms.py:24 dns/forms.py:65
+#: app_gateway/forms.py:77 cluster/forms.py:24 dns/forms.py:65
 #: templates/app_gateway/app_gateway_list.html:95
 #: templates/app_gateway/application_details.html:61
 #: templates/dns/static_host_list.html:17
@@ -243,72 +251,72 @@ msgstr "Entrez une URL upstream valide commençant par http:// ou https://"
 msgid "Hostname"
 msgstr "Nom d’hôte"
 
-#: app_gateway/forms.py:100 templates/app_gateway/app_gateway_list.html:133
+#: app_gateway/forms.py:107 templates/app_gateway/app_gateway_list.html:133
 msgid "Policy Type"
 msgstr "Type de politique"
 
-#: app_gateway/forms.py:101
+#: app_gateway/forms.py:108
 msgid "Allowed Groups"
 msgstr "Groupes autorisés"
 
-#: app_gateway/forms.py:102 templates/gatekeeper/gatekeeper_list.html:12
+#: app_gateway/forms.py:109 templates/gatekeeper/gatekeeper_list.html:12
 msgid "Authentication Methods"
 msgstr "Méthodes d'authentification"
 
-#: app_gateway/forms.py:178
+#: app_gateway/forms.py:185
 msgid "Cannot select more than one Local Password authentication method."
 msgstr ""
 "Impossible de sélectionner plus d'une méthode d'authentification par mot de "
 "passe local."
 
-#: app_gateway/forms.py:182
+#: app_gateway/forms.py:189
 msgid ""
 "Cannot select more than one OpenID Connect (OIDC) authentication method."
 msgstr ""
 "Impossible de sélectionner plus d'une méthode d'authentification OpenID "
 "Connect (OIDC)."
 
-#: app_gateway/forms.py:186
+#: app_gateway/forms.py:193
 msgid ""
 "Cannot select both Local Password and OpenID Connect (OIDC) authentication "
 "methods."
 msgstr ""
-"Impossible de sélectionner à la fois les méthodes d'authentification par "
-"mot de passe local et OpenID Connect (OIDC)."
+"Impossible de sélectionner à la fois les méthodes d'authentification par mot "
+"de passe local et OpenID Connect (OIDC)."
 
-#: app_gateway/forms.py:190
+#: app_gateway/forms.py:197
 msgid ""
 "At least one user group must be selected when using Local Password "
 "authentication."
 msgstr ""
-"Au moins un groupe d'utilisateurs doit être sélectionné lors de l'utilisation "
-"de l'authentification par mot de passe local."
+"Au moins un groupe d'utilisateurs doit être sélectionné lors de "
+"l'utilisation de l'authentification par mot de passe local."
 
-#: app_gateway/forms.py:194
+#: app_gateway/forms.py:201
 msgid "User groups can only be used with Local Password authentication."
 msgstr ""
 "Les groupes d'utilisateurs ne peuvent être utilisés qu'avec "
 "l'authentification par mot de passe local."
 
-#: app_gateway/forms.py:204 templates/app_gateway/app_gateway_list.html:56
+#: app_gateway/forms.py:211 templates/app_gateway/app_gateway_list.html:56
 #: templates/app_gateway/application_details.html:31
 #: templates/firewall/firewall_nav_tabs.html:15
 msgid "Default Policy"
 msgstr "Politique par défaut"
 
-#: app_gateway/forms.py:233 templates/app_gateway/application_details.html:105
+#: app_gateway/forms.py:240 templates/app_gateway/application_details.html:105
 msgid "Route Name"
 msgstr "Nom de la route"
 
-#: app_gateway/forms.py:234 templates/app_gateway/application_details.html:106
+#: app_gateway/forms.py:241 templates/app_gateway/application_details.html:106
 msgid "Path Prefix"
 msgstr "Préfixe de chemin"
 
-#: app_gateway/forms.py:235 templates/app_gateway/application_details.html:107
+#: app_gateway/forms.py:242 templates/app_gateway/application_details.html:107
 msgid "Policy"
 msgstr "Politique"
 
-#: app_gateway/forms.py:236 templates/app_gateway/application_details.html:108
+#: app_gateway/forms.py:243 templates/app_gateway/application_details.html:108
 msgid "Order"
 msgstr "Ordre"
 
