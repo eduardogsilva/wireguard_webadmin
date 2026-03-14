@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 20:41-0300\n"
+"POT-Creation-Date: 2026-03-14 08:47-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,8 +68,8 @@ msgstr ""
 #: app_gateway/forms.py:129 app_gateway/forms.py:147 app_gateway/forms.py:195
 #: app_gateway/forms.py:236 cluster/forms.py:67 cluster/forms.py:124
 #: dns/forms.py:37 dns/forms.py:84 dns/forms.py:153 gatekeeper/forms.py:41
-#: gatekeeper/forms.py:75 gatekeeper/forms.py:137 gatekeeper/forms.py:224
-#: gatekeeper/forms.py:254 gatekeeper/forms.py:285
+#: gatekeeper/forms.py:75 gatekeeper/forms.py:139 gatekeeper/forms.py:226
+#: gatekeeper/forms.py:256 gatekeeper/forms.py:287
 #: routing_templates/forms.py:71 scheduler/forms.py:102
 #: templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
@@ -134,9 +134,9 @@ msgstr "Povolené"
 #: app_gateway/views.py:399 cluster/views.py:18 cluster/views.py:45
 #: cluster/views.py:114 gatekeeper/views.py:23 gatekeeper/views.py:48
 #: gatekeeper/views.py:78 gatekeeper/views.py:101 gatekeeper/views.py:131
-#: gatekeeper/views.py:154 gatekeeper/views.py:198 gatekeeper/views.py:257
-#: gatekeeper/views.py:287 gatekeeper/views.py:310 gatekeeper/views.py:340
-#: gatekeeper/views.py:363 gatekeeper/views.py:412
+#: gatekeeper/views.py:154 gatekeeper/views.py:202 gatekeeper/views.py:261
+#: gatekeeper/views.py:291 gatekeeper/views.py:314 gatekeeper/views.py:344
+#: gatekeeper/views.py:367 gatekeeper/views.py:416
 #: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Prístup zamietnutý"
@@ -218,8 +218,8 @@ msgstr "Upstream"
 
 #: app_gateway/forms.py:41 app_gateway/forms.py:86 app_gateway/forms.py:130
 #: app_gateway/forms.py:148 app_gateway/forms.py:196 app_gateway/forms.py:237
-#: gatekeeper/forms.py:42 gatekeeper/forms.py:76 gatekeeper/forms.py:138
-#: gatekeeper/forms.py:225 gatekeeper/forms.py:255 gatekeeper/forms.py:286
+#: gatekeeper/forms.py:42 gatekeeper/forms.py:76 gatekeeper/forms.py:140
+#: gatekeeper/forms.py:227 gatekeeper/forms.py:257 gatekeeper/forms.py:288
 #: scheduler/forms.py:103
 #: templates/app_gateway/access_policy_type_select.html:50
 #: templates/generic_delete_confirmation.html:19
@@ -297,7 +297,7 @@ msgstr "Verejné"
 msgid "Protected"
 msgstr "Chránené"
 
-#: app_gateway/models.py:45 gatekeeper/models.py:108
+#: app_gateway/models.py:45 gatekeeper/models.py:109
 #: templates/app_gateway/access_policy_type_select.html:41
 #: templates/gatekeeper/gatekeeper_list.html:272
 msgid "Deny"
@@ -477,7 +477,9 @@ msgstr "Politika prístupu bola úspešne odstránená."
 msgid ""
 "Cannot delete this Access Policy because it is currently in use by an "
 "Application Route or Application Default Policy."
-msgstr "Túto prístupovú politiku nie je možné odstrániť, pretože sa momentálne používa v trase aplikácie alebo v predvolenej politike aplikácie."
+msgstr ""
+"Túto prístupovú politiku nie je možné odstrániť, pretože sa momentálne "
+"používa v trase aplikácie alebo v predvolenej politike aplikácie."
 
 #: app_gateway/views.py:278
 msgid "Delete Access Policy"
@@ -582,7 +584,7 @@ msgstr "Naozaj chcete odstrániť trasu \"%(name)s\" (%(path)s)?"
 msgid "IP Lock"
 msgstr "IP zámok"
 
-#: cluster/forms.py:21 dns/forms.py:67 gatekeeper/forms.py:196
+#: cluster/forms.py:21 dns/forms.py:67 gatekeeper/forms.py:198
 #: templates/cluster/workers_list.html:10
 #: templates/dns/static_host_list.html:18
 #: templates/firewall/manage_redirect_rule.html:43
@@ -859,7 +861,7 @@ msgstr "Statický DNS"
 msgid "Invalid hostname."
 msgstr "Neplatný názov hostiteľa."
 
-#: dns/forms.py:131 firewall/forms.py:111 gatekeeper/forms.py:199
+#: dns/forms.py:131 firewall/forms.py:111 gatekeeper/forms.py:201
 #: templates/api_v2/api_documentation.html:51
 #: templates/dns/static_host_list.html:69
 #: templates/firewall/manage_redirect_rule.html:18
@@ -1197,7 +1199,7 @@ msgstr "Nastavenia firewall boli úspešne uložené"
 msgid "Username"
 msgstr "Používateľské meno"
 
-#: gatekeeper/forms.py:18 gatekeeper/forms.py:269
+#: gatekeeper/forms.py:18 gatekeeper/forms.py:271
 #: templates/gatekeeper/gatekeeper_list.html:62
 #: templates/gatekeeper/gatekeeper_list.html:204
 #: templates/wireguard/peer_list/peer_preview_modal.html:103
@@ -1243,78 +1245,82 @@ msgid "Global TOTP Secret"
 msgstr "Globálne TOTP tajomstvo"
 
 #: gatekeeper/forms.py:102
+msgid "Global TOTP Before Authentication"
+msgstr "Globálne TOTP pred autentifikáciou"
+
+#: gatekeeper/forms.py:103
 msgid "OIDC Provider URL"
 msgstr "URL poskytovateľa OIDC"
 
-#: gatekeeper/forms.py:103
+#: gatekeeper/forms.py:104
 msgid "OIDC Client ID"
 msgstr "ID klienta OIDC"
 
-#: gatekeeper/forms.py:104
+#: gatekeeper/forms.py:105
 msgid "OIDC Client Secret"
 msgstr "Secret klienta OIDC"
 
-#: gatekeeper/forms.py:155
+#: gatekeeper/forms.py:157
 msgid "TOTP secret must be empty for Local Password authentication."
 msgstr "TOTP tajomstvo musí byť prázdne pre autentifikáciu miestnym heslom."
 
-#: gatekeeper/forms.py:157
+#: gatekeeper/forms.py:159
 msgid "TOTP validation PIN must be empty for Local Password authentication."
 msgstr ""
 "Validačný PIN TOTP musí byť prázdny pre autentifikáciu miestnym heslom."
 
-#: gatekeeper/forms.py:159
+#: gatekeeper/forms.py:161
 msgid "OIDC fields must be empty for Local Password authentication."
 msgstr "Polia OIDC musia byť prázdne pre autentifikáciu miestnym heslom."
 
-#: gatekeeper/forms.py:165
+#: gatekeeper/forms.py:167
 msgid "Only one Local Password authentication method can be configured."
 msgstr ""
 "Je možné nakonfigurovať iba jednu metódu autentifikácie miestnym heslom."
 
-#: gatekeeper/forms.py:168
+#: gatekeeper/forms.py:170
 msgid "OIDC fields must be empty for TOTP authentication."
 msgstr "Polia OIDC musia byť prázdne pre autentifikáciu TOTP."
 
-#: gatekeeper/forms.py:170
+#: gatekeeper/forms.py:172
 msgid "TOTP secret is required for TOTP authentication."
 msgstr "TOTP tajomstvo je povinné pre autentifikáciu TOTP."
 
-#: gatekeeper/forms.py:174
+#: gatekeeper/forms.py:176
 msgid "Please provide a PIN to validate the TOTP secret."
 msgstr "Na overenie tajomstva TOTP zadajte PIN."
 
-#: gatekeeper/forms.py:179
+#: gatekeeper/forms.py:181
 msgid "Invalid TOTP PIN."
 msgstr "Neplatný PIN TOTP."
 
-#: gatekeeper/forms.py:181
+#: gatekeeper/forms.py:183
 msgid "Invalid TOTP secret format. Must be a valid Base32 string."
 msgstr "Neplatný formát tajomstva TOTP. Musí to byť platný reťazec Base32."
 
-#: gatekeeper/forms.py:184
+#: gatekeeper/forms.py:186
 msgid "TOTP secret must be empty for OIDC authentication."
 msgstr "TOTP tajomstvo musí byť prázdne pre autentifikáciu OIDC."
 
-#: gatekeeper/forms.py:186
+#: gatekeeper/forms.py:188
 msgid "TOTP validation PIN must be empty for OIDC authentication."
 msgstr "Validačný PIN TOTP musí byť prázdny pre autentifikáciu OIDC."
 
-#: gatekeeper/forms.py:195 gatekeeper/forms.py:237 gatekeeper/forms.py:268
+#: gatekeeper/forms.py:197 gatekeeper/forms.py:239 gatekeeper/forms.py:270
 msgid "Authentication Method"
 msgstr "Metóda autentifikácie"
 
-#: gatekeeper/forms.py:197 templates/gatekeeper/gatekeeper_list.html:257
+#: gatekeeper/forms.py:199 templates/gatekeeper/gatekeeper_list.html:257
 msgid "Prefix Length"
 msgstr "Dĺžka prefixu"
 
-#: gatekeeper/forms.py:198 templates/firewall/firewall_rule_list.html:47
+#: gatekeeper/forms.py:200 templates/firewall/firewall_rule_list.html:47
 #: templates/firewall/manage_firewall_rule.html:360
 #: templates/gatekeeper/gatekeeper_list.html:258
 msgid "Action"
 msgstr "Akcia"
 
-#: gatekeeper/forms.py:238 templates/gatekeeper/gatekeeper_list.html:221
+#: gatekeeper/forms.py:240 templates/gatekeeper/gatekeeper_list.html:221
 msgid "Domain"
 msgstr "Doména"
 
@@ -1338,15 +1344,15 @@ msgstr "Zoznam IP adries"
 msgid "Shared/global TOTP secret key"
 msgstr "Zdieľaný/globálny tajný kľúč TOTP"
 
-#: gatekeeper/models.py:68
+#: gatekeeper/models.py:69
 msgid "Password for local authentication (leave blank if not using)"
 msgstr "Heslo pre miestnu autentifikáciu (ak nepoužívate, nechajte prázdne)"
 
-#: gatekeeper/models.py:69
+#: gatekeeper/models.py:70
 msgid "Per-user TOTP secret key"
 msgstr "Tajný kľúč TOTP pre jednotlivých používateľov"
 
-#: gatekeeper/models.py:108 templates/gatekeeper/gatekeeper_list.html:270
+#: gatekeeper/models.py:109 templates/gatekeeper/gatekeeper_list.html:270
 msgid "Allow"
 msgstr "Povoliť"
 
@@ -1415,116 +1421,125 @@ msgstr "Metóda autentifikácie bola úspešne uložená."
 #: gatekeeper/views.py:175
 msgid ""
 "\n"
-"        <h5>Authentication Types</h5>\n"
+"        <h4>Authentication Types</h4>\n"
 "        <p>Select how users will authenticate through this method.</p>\n"
-"        <ul>\n"
-"            <li><strong>Local Password</strong>: Users will authenticate "
-"using a standard username and password stored locally. Only one of this type "
-"can be created.</li>\n"
-"            <li><strong>TOTP (Time-Based One-Time Password)</strong>: Users "
-"will need to enter a rotating token from an authenticator app. Requires "
-"setting a Global TOTP Secret.</li>\n"
-"            <li><strong>OIDC (OpenID Connect)</strong>: Users will "
-"authenticate via an external identity provider (like Keycloak, Google, or "
-"Authelia). Requires Provider URL, Client ID, and Client Secret.</li>\n"
-"        </ul>\n"
+"        \n"
+"        <h5>Local Password</h5>\n"
+"        <p>Users will authenticate using a standard username and password "
+"stored locally. Only one of this type can be created.</p>\n"
+"        \n"
+"        <h5>OIDC (OpenID Connect)</h5>\n"
+"        <p>Users will authenticate via an external identity provider (like "
+"Keycloak, Google, or Authelia). Requires Provider URL, Client ID, and Client "
+"Secret.</p>\n"
+"        \n"
+"        <h5>TOTP (Time-Based One-Time Password)</h5>\n"
+"        <p>Users will need to enter a rotating token from an authenticator "
+"app. Requires setting a Global TOTP Secret. <br>If <strong>Global TOTP "
+"Before Authentication</strong> is enabled, the PIN is required before the "
+"username and password to help combat bruteforce attacks.</p>\n"
 "        "
 msgstr ""
 "\n"
-"        <h5>Typy autentifikácie</h5>\n"
+"        <h4>Typy autentifikácie</h4>\n"
 "        <p>Vyberte, ako sa budú používatelia autentifikovať prostredníctvom "
 "tejto metódy.</p>\n"
-"        <ul>\n"
-"            <li><strong>Miestne heslo</strong>: Používatelia sa budú "
-"autentifikovať pomocou štandardného používateľského mena a hesla uloženého "
-"lokálne. Je možné vytvoriť iba jeden tento typ.</li>\n"
-"            <li><strong>TOTP (časovo založené jednorazové heslo)</strong>: "
-"Používatelia budú musieť zadať rotujúci token z autentifikačnej aplikácie. "
-"Vyžaduje nastavenie globálneho tajomstva TOTP.</li>\n"
-"            <li><strong>OIDC (OpenID Connect)</strong>: Používatelia sa budú "
-"autentifikovať prostredníctvom externého poskytovateľa identity (ako "
-"Keycloak, Google alebo Authelia). Vyžaduje URL poskytovateľa, ID klienta a "
-"Secret klienta.</li>\n"
-"        </ul>\n"
+"        \n"
+"        <h5>Miestne heslo</h5>\n"
+"        <p>Používatelia sa budú autentifikovať pomocou štandardného "
+"používateľského mena a hesla uloženého lokálne. Je možné vytvoriť iba jeden "
+"tento typ.</p>\n"
+"        \n"
+"        <h5>OIDC (OpenID Connect)</h5>\n"
+"        <p>Používatelia sa budú autentifikovať prostredníctvom externého "
+"poskytovateľa identity (ako Keycloak, Google alebo Authelia). Vyžaduje URL "
+"poskytovateľa, ID klienta a Secret klienta.</p>\n"
+"        \n"
+"        <h5>TOTP (Časovo založené jednorazové heslo)</h5>\n"
+"        <p>Používatelia budú musieť zadať rotujúci token z autentifikačnej "
+"aplikácie. Vyžaduje nastavenie globálneho tajomstva TOTP. <br>Ak je "
+"povolené <strong>Globálne TOTP pred autentifikáciou</strong>, PIN sa "
+"vyžaduje pred používateľským menom a heslom, čo pomáha bojovať proti "
+"útokom hrubou silou.</p>\n"
 "        "
 
-#: gatekeeper/views.py:206
+#: gatekeeper/views.py:210
 msgid "Authentication Method deleted successfully."
 msgstr "Metóda autentifikácie bola úspešne odstránená."
 
-#: gatekeeper/views.py:211
+#: gatekeeper/views.py:215
 msgid "Delete Authentication Method"
 msgstr "Odstrániť metódu autentifikácie"
 
-#: gatekeeper/views.py:213
+#: gatekeeper/views.py:217
 #, python-format
 msgid "Are you sure you want to delete the authentication method \"%(name)s\"?"
 msgstr "Naozaj chcete odstrániť metódu autentifikácie \"%(name)s\"?"
 
-#: gatekeeper/views.py:263
+#: gatekeeper/views.py:267
 msgid "Edit Allowed Domain"
 msgstr "Upraviť povolenú doménu"
 
-#: gatekeeper/views.py:266 templates/gatekeeper/gatekeeper_list.html:186
+#: gatekeeper/views.py:270 templates/gatekeeper/gatekeeper_list.html:186
 msgid "Add Allowed Domain"
 msgstr "Pridať povolenú doménu"
 
-#: gatekeeper/views.py:273
+#: gatekeeper/views.py:277
 msgid "Allowed Domain saved successfully."
 msgstr "Povolená doména bola úspešne uložená."
 
-#: gatekeeper/views.py:295
+#: gatekeeper/views.py:299
 msgid "Allowed Domain deleted successfully."
 msgstr "Povolená doména bola úspešne odstránená."
 
-#: gatekeeper/views.py:300
+#: gatekeeper/views.py:304
 msgid "Delete Allowed Domain"
 msgstr "Odstrániť povolenú doménu"
 
-#: gatekeeper/views.py:302
+#: gatekeeper/views.py:306
 #, python-format
 msgid "Are you sure you want to delete the allowed domain \"%(domain)s\"?"
 msgstr "Naozaj chcete odstrániť povolenú doménu \"%(domain)s\"?"
 
-#: gatekeeper/views.py:316
+#: gatekeeper/views.py:320
 msgid "Edit Allowed Email"
 msgstr "Upraviť povolený e-mail"
 
-#: gatekeeper/views.py:319 templates/gatekeeper/gatekeeper_list.html:183
+#: gatekeeper/views.py:323 templates/gatekeeper/gatekeeper_list.html:183
 msgid "Add Allowed Email"
 msgstr "Pridať povolený e-mail"
 
-#: gatekeeper/views.py:326
+#: gatekeeper/views.py:330
 msgid "Allowed Email saved successfully."
 msgstr "Povolený e-mail bol úspešne uložený."
 
-#: gatekeeper/views.py:348
+#: gatekeeper/views.py:352
 msgid "Allowed Email deleted successfully."
 msgstr "Povolený e-mail bol úspešne odstránený."
 
-#: gatekeeper/views.py:353
+#: gatekeeper/views.py:357
 msgid "Delete Allowed Email"
 msgstr "Odstrániť povolený e-mail"
 
-#: gatekeeper/views.py:355
+#: gatekeeper/views.py:359
 #, python-format
 msgid "Are you sure you want to delete the allowed email \"%(email)s\"?"
 msgstr "Naozaj chcete odstrániť povolený e-mail \"%(email)s\"?"
 
-#: gatekeeper/views.py:369
+#: gatekeeper/views.py:373
 msgid "Edit IP Address"
 msgstr "Upraviť IP adresu"
 
-#: gatekeeper/views.py:372 templates/gatekeeper/gatekeeper_list.html:247
+#: gatekeeper/views.py:376 templates/gatekeeper/gatekeeper_list.html:247
 #: templates/wireguard/wireguard_manage_peer.html:171
 msgid "Add IP Address"
 msgstr "Pridať IP adresu"
 
-#: gatekeeper/views.py:379
+#: gatekeeper/views.py:383
 msgid "IP Address saved successfully."
 msgstr "IP adresa bola úspešne uložená."
 
-#: gatekeeper/views.py:384
+#: gatekeeper/views.py:388
 msgid ""
 "\n"
 "        <h5>IP Address List</h5>\n"
@@ -1571,15 +1586,15 @@ msgstr ""
 "(napr. „Kancelárska sieť“, „Blokovaný útočník“).</p>\n"
 "        "
 
-#: gatekeeper/views.py:420
+#: gatekeeper/views.py:424
 msgid "IP Address deleted successfully."
 msgstr "IP adresa bola úspešne odstránená."
 
-#: gatekeeper/views.py:425
+#: gatekeeper/views.py:429
 msgid "Delete IP Address"
 msgstr "Odstrániť IP adresu"
 
-#: gatekeeper/views.py:427
+#: gatekeeper/views.py:431
 #, python-format
 msgid "Are you sure you want to delete the IP address \"%(address)s\"?"
 msgstr "Naozaj chcete odstrániť IP adresu \"%(address)s\"?"
