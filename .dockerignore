@@ -38,4 +38,5 @@ venv/
 venv.bak/
 .vscode/
 /.vscode
+.tmp/
 wireguard_webadmin/production_settings.py
