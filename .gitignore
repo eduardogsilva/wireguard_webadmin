@@ -40,4 +40,4 @@ venv.bak/
 /.vscode
 .tmp/
 wireguard_webadmin/production_settings.py
-containers/caddy/wireguard_webadmin.json
+containers/caddy/config_files/

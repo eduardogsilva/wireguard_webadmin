@@ -11,7 +11,7 @@ import os
 import re
 import sys
 
-OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "wireguard_webadmin.json")
+OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "config_files/wireguard_webadmin.json")
 
 UPSTREAM = "wireguard-webadmin:8000"
 STATIC_ROUTES = [
