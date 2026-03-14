@@ -179,4 +179,6 @@ WIREGUARD_WEBADMIN_VERSION = 9976
 CLUSTER_WORKER_CURRENT_VERSION = 11
 CLUSTER_WORKER_MINIMUM_VERSION = 11
 
+CADDY_ENABLED = os.getenv("CADDY_ENABLED", "false").lower() == "true"
+
 from wireguard_webadmin.production_settings import *
