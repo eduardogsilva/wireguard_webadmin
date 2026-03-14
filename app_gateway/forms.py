@@ -159,15 +159,39 @@ class AccessPolicyForm(forms.ModelForm):
         methods = cleaned_data.get('methods')
 
         if policy_type == 'protected':
-            if groups and len(groups) > 0:
-                has_local_password = False
-                if methods:
-                    for method in methods:
-                        if method.auth_type == 'local_password':
-                            has_local_password = True
-                            break
-                if not has_local_password:
-                    self.add_error(None, _("User groups can only be used with local user authentication."))
+            has_local_password = False
+            local_password_count = 0
+            oidc_count = 0
+            has_groups = groups and len(groups) > 0
+
+            # Count authentication methods
+            if methods:
+                for method in methods:
+                    if method.auth_type == 'local_password':
+                        has_local_password = True
+                        local_password_count += 1
+                    elif method.auth_type == 'oidc':
+                        oidc_count += 1
+
+            # Rule: Cannot select more than one local password method
+            if local_password_count > 1:
+                self.add_error('methods', _("Cannot select more than one Local Password authentication method."))
+
+            # Rule: Cannot select more than one oidc method
+            if oidc_count > 1:
+                self.add_error('methods', _("Cannot select more than one OpenID Connect (OIDC) authentication method."))
+
+            # Rule: Cannot mix local password and oidc
+            if local_password_count > 0 and oidc_count > 0:
+                self.add_error('methods', _("Cannot select both Local Password and OpenID Connect (OIDC) authentication methods."))
+
+            # Rule: If local password is selected, at least one user group must be selected
+            if has_local_password and not has_groups:
+                self.add_error('groups', _("At least one user group must be selected when using Local Password authentication."))
+
+            # Rule: If local password is NOT selected, user groups cannot be selected
+            if not has_local_password and has_groups:
+                self.add_error('groups', _("User groups can only be used with Local Password authentication."))
 
         return cleaned_data
 
