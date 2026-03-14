@@ -47,9 +47,16 @@ class ApplicationForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        name = cleaned_data.get("name")
         upstream = (cleaned_data.get("upstream") or "").strip()
 
+        if name == "wireguard_webadmin":
+            self.add_error("name", _("This is a reserved system name."))
+
         if upstream:
+            if "wireguard-webadmin:8000" in upstream:
+                self.add_error("upstream", _("This upstream is reserved by the system."))
+
             if " " in upstream:
                 self.add_error("upstream", _("Upstream URL cannot contain spaces."))
 
