@@ -27,4 +27,7 @@ urlpatterns = [
     # Application Routes
     path('route/manage/', views.view_manage_application_route, name='manage_application_route'),
     path('route/delete/', views.view_delete_application_route, name='delete_application_route'),
+
+    # Config Export
+    path('export/caddy/', views.view_export_caddy_config, name='export_caddy_config'),
 ]

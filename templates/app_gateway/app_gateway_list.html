@@ -36,6 +36,12 @@
                     </div>
                     {% if active_tab == 'applications' %}
                     <div>
+                        <form method="post" action="{% url 'export_caddy_config' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-secondary">
+                                <i class="fas fa-file-export"></i> {% trans 'Export Configuration' %}
+                            </button>
+                        </form>
                         <a href="{% url 'manage_application' %}" class="btn btn-outline-primary">
                             <i class="fas fa-plus"></i> {% trans 'Add Application' %}
                         </a>

@@ -1,10 +1,15 @@
+import os
+
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import ProtectedError
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.views.decorators.http import require_POST
 
+from app_gateway.caddy_config_export import export_caddy_config
 from app_gateway.forms import (
     ApplicationForm, ApplicationHostForm, AccessPolicyForm,
     ApplicationPolicyForm, ApplicationRouteForm
@@ -418,3 +423,26 @@ def view_delete_application_route(request):
         }
     }
     return render(request, 'generic_delete_confirmation.html', context)
+
+
+@login_required
+@require_POST
+def view_export_caddy_config(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
+
+    if settings.CADDY_ENABLED:
+        output_dir = '/caddy_json_export/'
+    else:
+        output_dir = os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files')
+
+    export_caddy_config(output_dir)
+
+    redirect_url = reverse('app_gateway_list') + '?tab=applications'
+
+    if settings.CADDY_ENABLED:
+        messages.success(request, _('Configuration exported successfully.'))
+    else:
+        messages.error(request, _('Caddy is not active. Configuration files were exported for debugging purposes.'))
+
+    return redirect(redirect_url)
