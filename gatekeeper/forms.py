@@ -27,20 +27,20 @@ class GatekeeperUserForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('username', css_class='col-md-6'),
-                Div('email', css_class='col-md-6'),
+                Div('username', css_class='col-xl-6'),
+                Div('email', css_class='col-xl-6'),
                 css_class='row'
             ),
             Div(
-                Div(Field('password', type='password'), css_class='col-md-6'),
-                Div('totp_secret', css_class='col-md-6'),
+                Div(Field('password', type='password'), css_class='col-xl-6'),
+                Div('totp_secret', css_class='col-xl-6'),
                 css_class='row'
             ),
             Div(
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-md-12'
+                    css_class='col-xl-12'
                 ),
                 css_class='row'
             )
@@ -63,18 +63,18 @@ class GatekeeperGroupForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('name', css_class='col-md-12'),
+                Div('name', css_class='col-xl-12'),
                 css_class='row'
             ),
             Div(
-                Div('users', css_class='col-md-12'),
+                Div('users', css_class='col-xl-12'),
                 css_class='row'
             ),
             Div(
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-md-12'
+                    css_class='col-xl-12'
                 ),
                 css_class='row'
             )
@@ -92,13 +92,14 @@ class AuthMethodForm(forms.ModelForm):
     class Meta:
         model = AuthMethod
         fields = [
-            'name', 'auth_type', 'totp_secret', 
+            'name', 'auth_type', 'totp_secret', 'totp_before_auth',
             'oidc_provider', 'oidc_client_id', 'oidc_client_secret'
         ]
         labels = {
             'name': _('Name'),
             'auth_type': _('Authentication Type'),
             'totp_secret': _('Global TOTP Secret'),
+            'totp_before_auth': _('Global TOTP Before Authentication'),
             'oidc_provider': _('OIDC Provider URL'),
             'oidc_client_id': _('OIDC Client ID'),
             'oidc_client_secret': _('OIDC Client Secret'),
@@ -114,29 +115,30 @@ class AuthMethodForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('name', css_class='col-md-6'),
-                Div('auth_type', css_class='col-md-6'),
+                Div('name', css_class='col-xl-6'),
+                Div('auth_type', css_class='col-xl-6'),
                 css_class='row auth-type-group'
             ),
             Div(
-                Div('totp_secret', css_class='col-md-6'),
-                Div('totp_pin', css_class='col-md-6'),
+                Div('totp_secret', css_class='col-xl-6'),
+                Div('totp_pin', css_class='col-xl-6'),
+                Div('totp_before_auth', css_class='col-xl-12'),
                 css_class='row totp-group'
             ),
             Div(
-                Div('oidc_provider', css_class='col-md-12'),
+                Div('oidc_provider', css_class='col-xl-12'),
                 css_class='row oidc-group'
             ),
             Div(
-                Div('oidc_client_id', css_class='col-md-6'),
-                Div('oidc_client_secret', css_class='col-md-6'),
+                Div('oidc_client_id', css_class='col-xl-6'),
+                Div('oidc_client_secret', css_class='col-xl-6'),
                 css_class='row oidc-group'
             ),
             Div(
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-md-12'
+                    css_class='col-xl-12'
                 ),
                 css_class='row'
             )
@@ -206,7 +208,7 @@ class GatekeeperIPAddressForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('auth_method', css_class='col-md-12'),
+                Div('auth_method', css_class='col-xl-12'),
                 css_class='row'
             ),
             Div(
@@ -223,7 +225,7 @@ class GatekeeperIPAddressForm(forms.ModelForm):
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-md-12'
+                    css_class='col-xl-12'
                 ),
                 css_class='row'
             )
@@ -245,7 +247,7 @@ class AuthMethodAllowedDomainForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('auth_method', css_class='col-md-6'),
+                Div('auth_method', css_class='col-xl-6'),
                 Div(PrependedText('domain', '@'), css_class='col-xl-6'),
                 css_class='row'
             ),
@@ -253,7 +255,7 @@ class AuthMethodAllowedDomainForm(forms.ModelForm):
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-md-12'
+                    css_class='col-xl-12'
                 ),
                 css_class='row'
             )
@@ -276,15 +278,15 @@ class AuthMethodAllowedEmailForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('auth_method', css_class='col-md-6'),
-                Div('email', css_class='col-md-6'),
+                Div('auth_method', css_class='col-xl-6'),
+                Div('email', css_class='col-xl-6'),
                 css_class='row'
             ),
             Div(
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
-                    css_class='col-md-12'
+                    css_class='col-xl-12'
                 ),
                 css_class='row'
             )
