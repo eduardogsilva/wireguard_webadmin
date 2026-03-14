@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 08:47-0300\n"
+"POT-Creation-Date: 2026-03-14 09:35-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,8 +65,8 @@ msgstr ""
 "fonctionner immédiatement."
 
 #: api_v2/forms.py:63 app_gateway/forms.py:40 app_gateway/forms.py:85
-#: app_gateway/forms.py:129 app_gateway/forms.py:147 app_gateway/forms.py:195
-#: app_gateway/forms.py:236 cluster/forms.py:67 cluster/forms.py:124
+#: app_gateway/forms.py:129 app_gateway/forms.py:147 app_gateway/forms.py:219
+#: app_gateway/forms.py:260 cluster/forms.py:67 cluster/forms.py:124
 #: dns/forms.py:37 dns/forms.py:84 dns/forms.py:153 gatekeeper/forms.py:41
 #: gatekeeper/forms.py:75 gatekeeper/forms.py:139 gatekeeper/forms.py:226
 #: gatekeeper/forms.py:256 gatekeeper/forms.py:287
@@ -217,7 +217,7 @@ msgid "Upstream"
 msgstr "Upstream"
 
 #: app_gateway/forms.py:41 app_gateway/forms.py:86 app_gateway/forms.py:130
-#: app_gateway/forms.py:148 app_gateway/forms.py:196 app_gateway/forms.py:237
+#: app_gateway/forms.py:148 app_gateway/forms.py:220 app_gateway/forms.py:261
 #: gatekeeper/forms.py:42 gatekeeper/forms.py:76 gatekeeper/forms.py:140
 #: gatekeeper/forms.py:227 gatekeeper/forms.py:257 gatekeeper/forms.py:288
 #: scheduler/forms.py:103
@@ -255,31 +255,61 @@ msgstr "Groupes autorisés"
 msgid "Authentication Methods"
 msgstr "Méthodes d'authentification"
 
-#: app_gateway/forms.py:170
-msgid "User groups can only be used with local user authentication."
+#: app_gateway/forms.py:178
+#, fuzzy
+#| msgid "TOTP secret must be empty for Local Password authentication."
+msgid "Cannot select more than one Local Password authentication method."
+msgstr ""
+"Le secret TOTP doit être vide pour l'authentification par mot de passe local."
+
+#: app_gateway/forms.py:182
+msgid ""
+"Cannot select more than one OpenID Connect (OIDC) authentication method."
+msgstr ""
+
+#: app_gateway/forms.py:186
+msgid ""
+"Cannot select both Local Password and OpenID Connect (OIDC) authentication "
+"methods."
+msgstr ""
+
+#: app_gateway/forms.py:190
+#, fuzzy
+#| msgid "TOTP validation PIN must be empty for Local Password authentication."
+msgid ""
+"At least one user group must be selected when using Local Password "
+"authentication."
+msgstr ""
+"Le code de validation TOTP doit être vide pour l'authentification par mot de "
+"passe local."
+
+#: app_gateway/forms.py:194
+#, fuzzy
+#| msgid "User groups can only be used with local user authentication."
+msgid "User groups can only be used with Local Password authentication."
 msgstr ""
 "Les groupes d'utilisateurs ne peuvent être utilisés qu'avec "
 "l'authentification des utilisateurs locaux."
 
-#: app_gateway/forms.py:180 templates/app_gateway/app_gateway_list.html:56
+#: app_gateway/forms.py:204 templates/app_gateway/app_gateway_list.html:56
 #: templates/app_gateway/application_details.html:31
 #: templates/firewall/firewall_nav_tabs.html:15
 msgid "Default Policy"
 msgstr "Politique par défaut"
 
-#: app_gateway/forms.py:209 templates/app_gateway/application_details.html:105
+#: app_gateway/forms.py:233 templates/app_gateway/application_details.html:105
 msgid "Route Name"
 msgstr "Nom de la route"
 
-#: app_gateway/forms.py:210 templates/app_gateway/application_details.html:106
+#: app_gateway/forms.py:234 templates/app_gateway/application_details.html:106
 msgid "Path Prefix"
 msgstr "Préfixe de chemin"
 
-#: app_gateway/forms.py:211 templates/app_gateway/application_details.html:107
+#: app_gateway/forms.py:235 templates/app_gateway/application_details.html:107
 msgid "Policy"
 msgstr "Politique"
 
-#: app_gateway/forms.py:212 templates/app_gateway/application_details.html:108
+#: app_gateway/forms.py:236 templates/app_gateway/application_details.html:108
 msgid "Order"
 msgstr "Ordre"
 
