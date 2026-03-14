@@ -58,7 +58,7 @@
       "policy_type": "bypass"
     },
     "api_users": {
-      "policy_type": "one_factor",
+      "policy_type": "protected",
       "groups": [
         "staff"
       ],
@@ -67,7 +67,7 @@
       ]
     },
     "ops_access": {
-      "policy_type": "one_factor",
+      "policy_type": "protected",
       "groups": [
         "ops"
       ],
@@ -76,7 +76,7 @@
       ]
     },
     "admin_access": {
-      "policy_type": "two_factor",
+      "policy_type": "protected",
       "groups": [
         "admins"
       ],
@@ -86,7 +86,7 @@
       ]
     },
     "google_admin_access": {
-      "policy_type": "two_factor",
+      "policy_type": "protected",
       "groups": [
         "admins"
       ],
