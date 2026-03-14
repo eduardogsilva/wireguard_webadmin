@@ -628,16 +628,16 @@ msgstr ""
 "Sind Sie sicher, dass Sie die Route \"%(name)s\" (%(path)s) löschen möchten?"
 
 #: app_gateway/views.py:444
-#, fuzzy
-#| msgid "Application deleted successfully."
 msgid "Configuration exported successfully."
-msgstr "Anwendung erfolgreich gelöscht."
+msgstr "Konfiguration erfolgreich exportiert."
 
 #: app_gateway/views.py:446
 msgid ""
 "Caddy is not active. Configuration files were exported for debugging "
 "purposes."
 msgstr ""
+"Caddy ist nicht aktiv. Konfigurationsdateien wurden zu Debugging-Zwecken "
+"exportiert."
 
 #: cluster/forms.py:20
 msgid "IP Lock"
@@ -2158,10 +2158,8 @@ msgid "Hosts"
 msgstr "Hosts"
 
 #: templates/app_gateway/app_gateway_list.html:42
-#, fuzzy
-#| msgid "Update Configuration"
 msgid "Export Configuration"
-msgstr "Konfiguration aktualisieren"
+msgstr "Konfiguration exportieren"
 
 #: templates/app_gateway/app_gateway_list.html:46
 msgid "Add Application"
