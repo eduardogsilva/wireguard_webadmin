@@ -275,10 +275,8 @@ msgstr ""
 "Nemožno vybrať viac ako jednu metódu autentifikácie OpenID Connect (OIDC)."
 
 #: app_gateway/forms.py:196
-#, fuzzy
-#| msgid "Cannot select more than one Local Password authentication method."
 msgid "Cannot select more than one TOTP authentication method."
-msgstr "Nemožno vybrať viac ako jednu metódu autentifikácie lokálnym heslom."
+msgstr "Nemožno vybrať viac ako jednu metódu autentifikácie TOTP."
 
 #: app_gateway/forms.py:200
 msgid ""
@@ -289,16 +287,12 @@ msgstr ""
 "Connect (OIDC)."
 
 #: app_gateway/forms.py:204
-#, fuzzy
-#| msgid ""
-#| "Cannot select both Local Password and OpenID Connect (OIDC) "
-#| "authentication methods."
 msgid ""
 "TOTP must be combined with a Local Password or OpenID Connect authentication "
 "method."
 msgstr ""
-"Nemožno vybrať súčasne metódy autentifikácie lokálnym heslom a OpenID "
-"Connect (OIDC)."
+"TOTP musí byť kombinované s metódou autentifikácie Lokálne heslo alebo OpenID "
+"Connect."
 
 #: app_gateway/forms.py:208
 msgid ""
@@ -1266,12 +1260,12 @@ msgid ""
 "Minimum 8 characters, with at least one uppercase letter, one lowercase "
 "letter, and one number."
 msgstr ""
+"Minimálne 8 znakov, aspoň jedno veľké písmeno, jedno malé písmeno a jedno "
+"číslo."
 
 #: gatekeeper/forms.py:23
-#, fuzzy
-#| msgid "Random Password"
 msgid "Confirm Password"
-msgstr "Náhodné heslo"
+msgstr "Potvrdiť heslo"
 
 #: gatekeeper/forms.py:28 gatekeeper/forms.py:161
 msgid "TOTP Validation PIN"
@@ -1304,38 +1298,28 @@ msgid "TOTP Secret"
 msgstr "TOTP tajomstvo"
 
 #: gatekeeper/forms.py:87
-#, fuzzy
-#| msgid "Port is required."
 msgid "Password is required."
-msgstr "Port je povinný."
+msgstr "Heslo je povinné."
 
 #: gatekeeper/forms.py:90 user_manager/forms.py:127
 msgid "Password must be at least 8 characters long."
 msgstr "Heslo musí mať aspoň 8 znakov."
 
 #: gatekeeper/forms.py:92
-#, fuzzy
-#| msgid "Password must be at least 8 characters long."
 msgid "Password must contain at least one lowercase letter."
-msgstr "Heslo musí mať aspoň 8 znakov."
+msgstr "Heslo musí obsahovať aspoň jedno malé písmeno."
 
 #: gatekeeper/forms.py:94
-#, fuzzy
-#| msgid "Password must be at least 8 characters long."
 msgid "Password must contain at least one uppercase letter."
-msgstr "Heslo musí mať aspoň 8 znakov."
+msgstr "Heslo musí obsahovať aspoň jedno veľké písmeno."
 
 #: gatekeeper/forms.py:96
-#, fuzzy
-#| msgid "Password must be at least 8 characters long."
 msgid "Password must contain at least one number."
-msgstr "Heslo musí mať aspoň 8 znakov."
+msgstr "Heslo musí obsahovať aspoň jedno číslo."
 
 #: gatekeeper/forms.py:98
-#, fuzzy
-#| msgid "Password Confirmation"
 msgid "Passwords do not match."
-msgstr "Potvrdenie hesla"
+msgstr "Heslá sa nezhodujú."
 
 #: gatekeeper/forms.py:103 gatekeeper/forms.py:249
 msgid "Please provide a PIN to validate the TOTP secret."
@@ -1495,6 +1479,25 @@ msgid ""
 "        6-digit PIN before saving.</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h4>Používateľ Gatekeeper</h4>\n"
+"        <p>Používatelia Gatekeeper sa používajú na autentifikáciu voči chráneným "
+"aplikáciám spravovaným touto bránou.</p>\n"
+"\n"
+"        <h5>Heslo</h5>\n"
+"        <p>Vyžaduje sa pri vytváraní používateľa. Pri úprave ponechajte obe polia pre heslo "
+"prázdne, aby sa zachovalo aktuálne heslo.\n"
+"        Heslá sa ukladajú pomocou hašovania <strong>Argon2id</strong>.</p>\n"
+"\n"
+"        <h5>TOTP tajomstvo</h5>\n"
+"        <p>Voliteľné TOTP tajomstvo pre konkrétneho používateľa. Keď je nastavené, tento používateľ sa "
+"bude autentifikovať pomocou vlastného tajomstva namiesto\n"
+"        globálneho TOTP tajomstva konfigurovaného v metóde autentifikácie. Pomocou "
+"tlačidiel pod poľom vygenerujte\n"
+"        náhodné tajomstvo a naskenujte QR kód pomocou vašej aplikácie autentifikátora. "
+"Pred uložením overte tajomstvo zadaním aktuálneho\n"
+"        6-miestneho kódu PIN.</p>\n"
+"        "
 
 #: gatekeeper/views.py:106
 msgid "Gatekeeper User deleted successfully."
@@ -1547,28 +1550,6 @@ msgid "Authentication Method saved successfully."
 msgstr "Metóda autentifikácie bola úspešne uložená."
 
 #: gatekeeper/views.py:195
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "        <h4>Authentication Types</h4>\n"
-#| "        <p>Select how users will authenticate through this method.</p>\n"
-#| "        \n"
-#| "        <h5>Local Password</h5>\n"
-#| "        <p>Users will authenticate using a standard username and password "
-#| "stored locally. Only one of this type can be created.</p>\n"
-#| "        \n"
-#| "        <h5>OIDC (OpenID Connect)</h5>\n"
-#| "        <p>Users will authenticate via an external identity provider "
-#| "(like Keycloak, Google, or Authelia). Requires Provider URL, Client ID, "
-#| "and Client Secret.</p>\n"
-#| "        \n"
-#| "        <h5>TOTP (Time-Based One-Time Password)</h5>\n"
-#| "        <p>Users will need to enter a rotating token from an "
-#| "authenticator app. Requires setting a Global TOTP Secret. <br>If "
-#| "<strong>Global TOTP Before Authentication</strong> is enabled, the PIN is "
-#| "required before the username and password to help combat bruteforce "
-#| "attacks.</p>\n"
-#| "        "
 msgid ""
 "\n"
 "        <h4>Authentication Types</h4>\n"
@@ -1591,11 +1572,6 @@ msgid ""
 msgstr ""
 "\n"
 "        <h4>Typy autentifikácie</h4>\n"
-"        <p>Vyberte, ako sa budú používatelia autentifikovať prostredníctvom "
-"tejto metódy.</p>\n"
-"        \n"
-"        <h5>Miestne heslo</h5>\n"
-"        <p>Používatelia sa budú autentifikovať pomocou štandardného "
 "používateľského mena a hesla uloženého lokálne. Je možné vytvoriť iba jeden "
 "tento typ.</p>\n"
 "        \n"
@@ -2820,10 +2796,8 @@ msgstr "Zobraziť QR kód"
 
 #: templates/gatekeeper/gatekeeper_auth_method_form.html:64
 #: templates/gatekeeper/gatekeeper_user_form.html:44
-#, fuzzy
-#| msgid "Global TOTP Secret"
 msgid "Generate TOTP Secret"
-msgstr "Globálne TOTP tajomstvo"
+msgstr "Generovať TOTP tajomstvo"
 
 #: templates/gatekeeper/gatekeeper_auth_method_form.html:93
 #: templates/gatekeeper/gatekeeper_user_form.html:73
@@ -2854,7 +2828,7 @@ msgstr "Pridať používateľa"
 
 #: templates/gatekeeper/gatekeeper_list.html:63
 msgid "TOTP"
-msgstr ""
+msgstr "TOTP"
 
 #: templates/gatekeeper/gatekeeper_list.html:104
 msgid "No Gatekeeper Users found."

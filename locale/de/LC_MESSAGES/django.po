@@ -280,12 +280,8 @@ msgstr ""
 "ausgewählt werden."
 
 #: app_gateway/forms.py:196
-#, fuzzy
-#| msgid "Cannot select more than one Local Password authentication method."
 msgid "Cannot select more than one TOTP authentication method."
-msgstr ""
-"Es kann nicht mehr als eine lokale Passwort-Authentifizierungsmethode "
-"ausgewählt werden."
+msgstr "Es kann nicht mehr als eine TOTP-Authentifizierungsmethode ausgewählt werden."
 
 #: app_gateway/forms.py:200
 msgid ""
@@ -296,16 +292,12 @@ msgstr ""
 "(OIDC) können nicht gleichzeitig ausgewählt werden."
 
 #: app_gateway/forms.py:204
-#, fuzzy
-#| msgid ""
-#| "Cannot select both Local Password and OpenID Connect (OIDC) "
-#| "authentication methods."
 msgid ""
 "TOTP must be combined with a Local Password or OpenID Connect authentication "
 "method."
 msgstr ""
-"Die Authentifizierungsmethoden \"Lokales Passwort\" und OpenID Connect "
-"(OIDC) können nicht gleichzeitig ausgewählt werden."
+"TOTP muss mit einer lokalen Passwort- oder OpenID Connect-"
+"Authentifizierungsmethode kombiniert werden."
 
 #: app_gateway/forms.py:208
 msgid ""
@@ -1292,12 +1284,12 @@ msgid ""
 "Minimum 8 characters, with at least one uppercase letter, one lowercase "
 "letter, and one number."
 msgstr ""
+"Mindestens 8 Zeichen, mit mindestens einem Großbuchstaben, einem "
+"Kleinbuchstaben und einer Zahl."
 
 #: gatekeeper/forms.py:23
-#, fuzzy
-#| msgid "Random Password"
 msgid "Confirm Password"
-msgstr "Zufallspasswort"
+msgstr "Passwort bestätigen"
 
 #: gatekeeper/forms.py:28 gatekeeper/forms.py:161
 msgid "TOTP Validation PIN"
@@ -1330,38 +1322,28 @@ msgid "TOTP Secret"
 msgstr "TOTP-Geheimnis"
 
 #: gatekeeper/forms.py:87
-#, fuzzy
-#| msgid "Port is required."
 msgid "Password is required."
-msgstr "Port ist erforderlich."
+msgstr "Passwort ist erforderlich."
 
 #: gatekeeper/forms.py:90 user_manager/forms.py:127
 msgid "Password must be at least 8 characters long."
 msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
 
 #: gatekeeper/forms.py:92
-#, fuzzy
-#| msgid "Password must be at least 8 characters long."
 msgid "Password must contain at least one lowercase letter."
-msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
+msgstr "Das Passwort muss mindestens einen Kleinbuchstaben enthalten."
 
 #: gatekeeper/forms.py:94
-#, fuzzy
-#| msgid "Password must be at least 8 characters long."
 msgid "Password must contain at least one uppercase letter."
-msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
+msgstr "Das Passwort muss mindestens einen Großbuchstaben enthalten."
 
 #: gatekeeper/forms.py:96
-#, fuzzy
-#| msgid "Password must be at least 8 characters long."
 msgid "Password must contain at least one number."
-msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
+msgstr "Das Passwort muss mindestens eine Zahl enthalten."
 
 #: gatekeeper/forms.py:98
-#, fuzzy
-#| msgid "Password Confirmation"
 msgid "Passwords do not match."
-msgstr "Passwortbestätigung"
+msgstr "Passwörter stimmen nicht überein."
 
 #: gatekeeper/forms.py:103 gatekeeper/forms.py:249
 msgid "Please provide a PIN to validate the TOTP secret."
@@ -1529,6 +1511,25 @@ msgid ""
 "        6-digit PIN before saving.</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h4>Gatekeeper-Benutzer</h4>\n"
+"        <p>Gatekeeper-Benutzer werden zur Authentifizierung gegenüber geschützten "
+"Anwendungen verwendet, die von diesem Gateway verwaltet werden.</p>\n"
+"\n"
+"        <h5>Passwort</h5>\n"
+"        <p>Erforderlich beim Erstellen eines Benutzers. Lassen Sie beim Bearbeiten beide Passwortfelder "
+"leer, um das aktuelle Passwort beizubehalten.\n"
+"        Passwörter werden mit <strong>Argon2id</strong>-Hashing gespeichert.</p>\n"
+"\n"
+"        <h5>TOTP-Geheimnis</h5>\n"
+"        <p>Optionales benutzerspezifisches TOTP-Geheimnis. Wenn festgelegt, authentifiziert sich dieser Benutzer "
+"mit seinem eigenen Geheimnis anstelle des\n"
+"        globalen TOTP-Geheimnisses, das in der Authentifizierungsmethode konfiguriert ist. Verwenden Sie die "
+"Schaltflächen unter dem Feld, um ein\n"
+"        zufälliges Geheimnis zu generieren und den QR-Code mit Ihrer Authentifizierungs-App zu scannen. "
+"Validieren Sie das Geheimnis durch Eingabe der aktuellen\n"
+"        6-stelligen PIN vor dem Speichern.</p>\n"
+"        "
 
 #: gatekeeper/views.py:106
 msgid "Gatekeeper User deleted successfully."
@@ -1582,28 +1583,6 @@ msgid "Authentication Method saved successfully."
 msgstr "Authentifizierungsmethode erfolgreich gespeichert."
 
 #: gatekeeper/views.py:195
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "        <h4>Authentication Types</h4>\n"
-#| "        <p>Select how users will authenticate through this method.</p>\n"
-#| "        \n"
-#| "        <h5>Local Password</h5>\n"
-#| "        <p>Users will authenticate using a standard username and password "
-#| "stored locally. Only one of this type can be created.</p>\n"
-#| "        \n"
-#| "        <h5>OIDC (OpenID Connect)</h5>\n"
-#| "        <p>Users will authenticate via an external identity provider "
-#| "(like Keycloak, Google, or Authelia). Requires Provider URL, Client ID, "
-#| "and Client Secret.</p>\n"
-#| "        \n"
-#| "        <h5>TOTP (Time-Based One-Time Password)</h5>\n"
-#| "        <p>Users will need to enter a rotating token from an "
-#| "authenticator app. Requires setting a Global TOTP Secret. <br>If "
-#| "<strong>Global TOTP Before Authentication</strong> is enabled, the PIN is "
-#| "required before the username and password to help combat bruteforce "
-#| "attacks.</p>\n"
-#| "        "
 msgid ""
 "\n"
 "        <h4>Authentication Types</h4>\n"
@@ -1626,25 +1605,19 @@ msgid ""
 msgstr ""
 "\n"
 "        <h4>Authentifizierungstypen</h4>\n"
-"        <p>Wählen Sie aus, wie sich Benutzer über diese Methode "
-"authentifizieren.</p>\n"
-"        \n"
+"        <p>Wählen Sie aus, wie sich Benutzer über diese Methode authentifizieren sollen.</p>\n"
+"\n"
 "        <h5>Lokales Passwort</h5>\n"
-"        <p>Benutzer authentifizieren sich mit einem lokal gespeicherten "
-"Standard-Benutzernamen und Passwort. Es kann nur einer dieser Typen erstellt "
-"werden.</p>\n"
-"        \n"
+"        <p>Benutzer authentifizieren sich mit einem standardmäßigen Benutzernamen und Passwort, "
+"das lokal gespeichert ist. Es kann nur eine davon erstellt werden.</p>\n"
+"\n"
 "        <h5>OIDC (OpenID Connect)</h5>\n"
-"        <p>Benutzer authentifizieren sich über einen externen "
-"Identitätsanbieter (wie Keycloak, Google oder Authelia). Erfordert Anbieter-"
-"URL, Client-ID und Client-Geheimnis.</p>\n"
-"        \n"
+"        <p>Benutzer authentifizieren sich über einen externen Identitätsanbieter "
+"(wie Keycloak, Google oder Authelia). Erfordert Provider-URL, Client-ID und Client-Secret.</p>\n"
+"\n"
 "        <h5>TOTP (Zeitbasiertes Einmalpasswort)</h5>\n"
-"        <p>Benutzer müssen ein rotierendes Token aus einer Authenticator-App "
-"eingeben. Erfordert die Festlegung eines globalen TOTP-Geheimnisses. "
-"<br>Wenn <strong>Globales TOTP vor der Authentifizierung</strong> aktiviert "
-"ist, wird die PIN vor dem Benutzernamen und dem Passwort benötigt, um Brute-"
-"Force-Angriffe zu bekämpfen.</p>\n"
+"        <p>Benutzer müssen ein rotierendes Token aus einer Authentifizierungs-App eingeben. "
+"Wenn ein Benutzer kein persönliches TOTP konfiguriert hat, wird stattdessen das <strong>globale TOTP-Geheimnis</strong> verwendet.</p>\n"
 "        "
 
 #: gatekeeper/views.py:230
@@ -2875,10 +2848,8 @@ msgstr "QR-Code anzeigen"
 
 #: templates/gatekeeper/gatekeeper_auth_method_form.html:64
 #: templates/gatekeeper/gatekeeper_user_form.html:44
-#, fuzzy
-#| msgid "Global TOTP Secret"
 msgid "Generate TOTP Secret"
-msgstr "Globales TOTP-Geheimnis"
+msgstr "TOTP-Geheimnis generieren"
 
 #: templates/gatekeeper/gatekeeper_auth_method_form.html:93
 #: templates/gatekeeper/gatekeeper_user_form.html:73
@@ -2910,7 +2881,7 @@ msgstr "Benutzer hinzufügen"
 
 #: templates/gatekeeper/gatekeeper_list.html:63
 msgid "TOTP"
-msgstr ""
+msgstr "TOTP"
 
 #: templates/gatekeeper/gatekeeper_list.html:104
 msgid "No Gatekeeper Users found."

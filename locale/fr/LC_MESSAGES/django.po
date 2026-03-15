@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-15 17:20-0300\n"
+"POT-Creation-Date: 2026-03-15 17:28-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -277,12 +277,8 @@ msgstr ""
 "Connect (OIDC)."
 
 #: app_gateway/forms.py:196
-#, fuzzy
-#| msgid "Cannot select more than one Local Password authentication method."
 msgid "Cannot select more than one TOTP authentication method."
-msgstr ""
-"Impossible de sélectionner plus d'une méthode d'authentification par mot de "
-"passe local."
+msgstr "Impossible de sélectionner plus d'une méthode d'authentification TOTP."
 
 #: app_gateway/forms.py:200
 msgid ""
@@ -293,16 +289,12 @@ msgstr ""
 "de passe local et OpenID Connect (OIDC)."
 
 #: app_gateway/forms.py:204
-#, fuzzy
-#| msgid ""
-#| "Cannot select both Local Password and OpenID Connect (OIDC) "
-#| "authentication methods."
 msgid ""
 "TOTP must be combined with a Local Password or OpenID Connect authentication "
 "method."
 msgstr ""
-"Impossible de sélectionner à la fois les méthodes d'authentification par mot "
-"de passe local et OpenID Connect (OIDC)."
+"Le TOTP doit être combiné avec une méthode d'authentification par Mot de "
+"passe local ou OpenID Connect."
 
 #: app_gateway/forms.py:208
 msgid ""
@@ -1287,12 +1279,12 @@ msgid ""
 "Minimum 8 characters, with at least one uppercase letter, one lowercase "
 "letter, and one number."
 msgstr ""
+"Minimum 8 caractères, avec au moins une lettre majuscule, une lettre "
+"minuscule et un chiffre."
 
 #: gatekeeper/forms.py:23
-#, fuzzy
-#| msgid "Random Password"
 msgid "Confirm Password"
-msgstr "Mot de passe aléatoire"
+msgstr "Confirmer le mot de passe"
 
 #: gatekeeper/forms.py:28 gatekeeper/forms.py:161
 msgid "TOTP Validation PIN"
@@ -1325,38 +1317,28 @@ msgid "TOTP Secret"
 msgstr "Secret TOTP"
 
 #: gatekeeper/forms.py:87
-#, fuzzy
-#| msgid "Port is required."
 msgid "Password is required."
-msgstr "Le port est obligatoire."
+msgstr "Le mot de passe est obligatoire."
 
 #: gatekeeper/forms.py:90 user_manager/forms.py:127
 msgid "Password must be at least 8 characters long."
 msgstr "Le mot de passe doit comporter au moins 8 caractères."
 
 #: gatekeeper/forms.py:92
-#, fuzzy
-#| msgid "Password must be at least 8 characters long."
 msgid "Password must contain at least one lowercase letter."
-msgstr "Le mot de passe doit comporter au moins 8 caractères."
+msgstr "Le mot de passe doit contenir au moins une lettre minuscule."
 
 #: gatekeeper/forms.py:94
-#, fuzzy
-#| msgid "Password must be at least 8 characters long."
 msgid "Password must contain at least one uppercase letter."
-msgstr "Le mot de passe doit comporter au moins 8 caractères."
+msgstr "Le mot de passe doit contenir au moins une lettre majuscule."
 
 #: gatekeeper/forms.py:96
-#, fuzzy
-#| msgid "Password must be at least 8 characters long."
 msgid "Password must contain at least one number."
-msgstr "Le mot de passe doit comporter au moins 8 caractères."
+msgstr "Le mot de passe doit contenir au moins un chiffre."
 
 #: gatekeeper/forms.py:98
-#, fuzzy
-#| msgid "Password Confirmation"
 msgid "Passwords do not match."
-msgstr "Confirmation du mot de passe"
+msgstr "Les mots de passe ne correspondent pas."
 
 #: gatekeeper/forms.py:103 gatekeeper/forms.py:249
 msgid "Please provide a PIN to validate the TOTP secret."
@@ -1524,6 +1506,27 @@ msgid ""
 "        6-digit PIN before saving.</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h4>Utilisateur Gatekeeper</h4>\n"
+"        <p>Les utilisateurs Gatekeeper sont utilisés pour s'authentifier "
+"auprès des applications protégées gérées par cette passerelle.</p>\n"
+"\n"
+"        <h5>Mot de passe</h5>\n"
+"        <p>Requis lors de la création d'un utilisateur. Lors de la "
+"modification, laissez les deux champs de mot de passe vides pour conserver "
+"le mot de passe actuel.\n"
+"        Les mots de passe sont stockés à l'aide du hachage <strong>Argon2id</"
+"strong>.</p>\n"
+"\n"
+"        <h5>Secret TOTP</h5>\n"
+"        <p>Secret TOTP optionnel par utilisateur. Lorsqu'il est défini, cet "
+"utilisateur s'authentifiera en utilisant son propre secret au lieu du\n"
+"        secret TOTP global configuré sur la méthode d'authentification. "
+"Utilisez les boutons sous le champ pour générer un\n"
+"        secret aléatoire et scannez le QR code avec votre application "
+"d'authentification. Validez le secret en saisissant le code PIN actuel à\n"
+"        6 chiffres avant d'enregistrer.</p>\n"
+"        "
 
 #: gatekeeper/views.py:106
 msgid "Gatekeeper User deleted successfully."
@@ -1576,28 +1579,6 @@ msgid "Authentication Method saved successfully."
 msgstr "Méthode d'authentification enregistrée avec succès."
 
 #: gatekeeper/views.py:195
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "        <h4>Authentication Types</h4>\n"
-#| "        <p>Select how users will authenticate through this method.</p>\n"
-#| "        \n"
-#| "        <h5>Local Password</h5>\n"
-#| "        <p>Users will authenticate using a standard username and password "
-#| "stored locally. Only one of this type can be created.</p>\n"
-#| "        \n"
-#| "        <h5>OIDC (OpenID Connect)</h5>\n"
-#| "        <p>Users will authenticate via an external identity provider "
-#| "(like Keycloak, Google, or Authelia). Requires Provider URL, Client ID, "
-#| "and Client Secret.</p>\n"
-#| "        \n"
-#| "        <h5>TOTP (Time-Based One-Time Password)</h5>\n"
-#| "        <p>Users will need to enter a rotating token from an "
-#| "authenticator app. Requires setting a Global TOTP Secret. <br>If "
-#| "<strong>Global TOTP Before Authentication</strong> is enabled, the PIN is "
-#| "required before the username and password to help combat bruteforce "
-#| "attacks.</p>\n"
-#| "        "
 msgid ""
 "\n"
 "        <h4>Authentication Types</h4>\n"
@@ -1620,25 +1601,19 @@ msgid ""
 msgstr ""
 "\n"
 "        <h4>Types d'authentification</h4>\n"
-"        <p>Sélectionnez la façon dont les utilisateurs s'authentifieront via "
-"cette méthode.</p>\n"
-"        \n"
+"        <p>Sélectionnez la manière dont les utilisateurs s'authentifieront via cette méthode.</p>\n"
+"\n"
 "        <h5>Mot de passe local</h5>\n"
-"        <p>Les utilisateurs s'authentifieront à l'aide d'un nom "
-"d'utilisateur et d'un mot de passe standard stockés localement. Un seul de "
-"ce type peut être créé.</p>\n"
-"        \n"
+"        <p>Les utilisateurs s'authentifieront à l'aide d'un nom d'utilisateur et d'un mot de passe "
+"standard stockés localement. Un seul de ce type peut être créé.</p>\n"
+"\n"
 "        <h5>OIDC (OpenID Connect)</h5>\n"
-"        <p>Les utilisateurs s'authentifieront via un fournisseur d'identité "
-"externe (comme Keycloak, Google ou Authelia). Nécessite l'URL du "
-"fournisseur, l'ID client et le secret client.</p>\n"
-"        \n"
+"        <p>Les utilisateurs s'authentifieront via un fournisseur d'identité externe "
+"(comme Keycloak, Google ou Authelia). Nécessite l'URL du fournisseur, l'ID client et le secret client.</p>\n"
+"\n"
 "        <h5>TOTP (Mot de passe à usage unique basé sur le temps)</h5>\n"
-"        <p>Les utilisateurs devront saisir un jeton rotatif à partir d'une "
-"application d'authentification. Nécessite la configuration d'un secret TOTP "
-"global. <br>Si <strong>TOTP mondial avant l'authentification</strong> est "
-"activé, le code est requis avant le nom d'utilisateur et le mot de passe "
-"pour aider à lutter contre les attaques par force brute.</p>\n"
+"        <p>Les utilisateurs devront saisir un jeton rotatif à partir d'une application d'authentification. "
+"Si un utilisateur n'a pas configuré de TOTP personnel, le <strong>secret TOTP global</strong> sera utilisé à la place.</p>\n"
 "        "
 
 #: gatekeeper/views.py:230
@@ -1834,7 +1809,7 @@ msgid ""
 "Allowing peer custom routes is not applicable when Route Type is 'Default "
 "Route'."
 msgstr ""
-"L'autorisation de routes personnalisées de pairs n'est pas applicable "
+"L'autorisation de routes personnalisées de peers n'est pas applicable "
 "lorsque le Type de Route est 'Route par Défaut'."
 
 #: routing_templates/forms.py:103
@@ -1981,7 +1956,7 @@ msgstr ""
 "accéder qu'aux réseaux explicitement définis par le modèle de routage "
 "attribué.<br>Tout trafic vers des destinations en dehors de ces routes sera "
 "bloqué.</p>\n"
-"        <p>Note : selon le nombre de routes et de pairs, l'activation de "
+"        <p>Note : selon le nombre de routes et de peers, l'activation de "
 "cette option peut générer un grand nombre de règles de pare-feu.</p>\n"
 "        "
 
@@ -2469,7 +2444,7 @@ msgid ""
 "Server selection dropdown before downloading peer configs or VPN invites"
 msgstr ""
 "Menu déroulant de sélection de serveur avant de télécharger les "
-"configurations des pairs ou les invitations VPN"
+"configurations des peers ou les invitations VPN"
 
 #: templates/cluster/workers_list.html:191
 msgid "For more information, please visit:"
@@ -2620,7 +2595,7 @@ msgstr ""
 "                                    <p>\n"
 "                                        Cette interface est un outil complet "
 "de gestion des règles de pare‑feu ; elle permet de définir des politiques de "
-"trafic avancées entre pairs VPN et réseaux. Elle simplifie la création de "
+"trafic avancées entre peers VPN et réseaux. Elle simplifie la création de "
 "règles, le filtrage de paquets et les configurations NAT afin d’offrir un "
 "contrôle précis sur la sécurité. Les utilisateurs peuvent spécifier adresses "
 "IP source et destination, ports, protocoles et actions pour ajuster le flux "
@@ -2861,10 +2836,8 @@ msgstr "Voir le code QR"
 
 #: templates/gatekeeper/gatekeeper_auth_method_form.html:64
 #: templates/gatekeeper/gatekeeper_user_form.html:44
-#, fuzzy
-#| msgid "Global TOTP Secret"
 msgid "Generate TOTP Secret"
-msgstr "Secret TOTP mondial"
+msgstr "Générer un secret TOTP"
 
 #: templates/gatekeeper/gatekeeper_auth_method_form.html:93
 #: templates/gatekeeper/gatekeeper_user_form.html:73
@@ -2895,7 +2868,7 @@ msgstr "Ajouter un utilisateur"
 
 #: templates/gatekeeper/gatekeeper_list.html:63
 msgid "TOTP"
-msgstr ""
+msgstr "TOTP"
 
 #: templates/gatekeeper/gatekeeper_list.html:104
 msgid "No Gatekeeper Users found."
