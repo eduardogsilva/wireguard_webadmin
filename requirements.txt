@@ -1,10 +1,12 @@
 anyio==4.12.1
+argon2-cffi==25.1.0
+argon2-cffi-bindings==25.1.0
 asgiref==3.11.1
 build==1.4.0
 CacheControl==0.14.4
 certifi==2026.2.25
 cffi==2.0.0
-charset-normalizer==3.4.5
+charset-normalizer==3.4.6
 crispy-bootstrap4==2026.2
 Django==5.2.12
 django-crispy-forms==2.6
@@ -19,6 +21,7 @@ pyotp==2.9.0
 pypng==0.20220715.0
 pyproject_hooks==1.2.0
 pytz==2025.2
+PyYAML==6.0.3
 qrcode==8.2
 requests==2.32.5
 rrdtool-bindings==0.5.0
