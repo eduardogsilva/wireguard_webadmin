@@ -1,0 +1,13 @@
+FROM alpine:latest AS tools
+RUN apk add --no-cache inotify-tools
+
+FROM authelia/authelia:latest
+
+COPY --from=tools /usr/bin/inotifywait /usr/bin/inotifywait
+COPY --from=tools /usr/lib/libinotifytools* /usr/lib/
+
+COPY entrypoint.sh /usr/local/bin/authelia-entrypoint.sh
+
+RUN chmod +x /usr/local/bin/authelia-entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/authelia-entrypoint.sh"]

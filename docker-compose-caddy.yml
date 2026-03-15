@@ -3,12 +3,10 @@ services:
   wireguard-webadmin:
     container_name: wireguard-webadmin
     restart: unless-stopped
-    build:
-      context: .
+    image: eduardosilva/wireguard_webadmin:latest
     environment:
       - SERVER_ADDRESS=${SERVER_ADDRESS}
       - DEBUG_MODE=${DEBUG_MODE}
-      - DEV_MODE=True
       - COMPOSE_VERSION=c1c
       - TZ=${TIMEZONE}
       - EXTRA_ALLOWED_HOSTS=${EXTRA_ALLOWED_HOSTS}
@@ -20,20 +18,18 @@ services:
     volumes:
       - wireguard:/etc/wireguard
       - static_volume:/app_static_files/
-      - .:/app
       - dnsmasq_conf:/etc/dnsmasq
       - app_secrets:/app_secrets/
       - rrd_data:/rrd_data/
       - caddy_json_export:/caddy_json_export/
     ports:
-      # Do not directly expose the Django port to the internet, use some kind of reverse proxy with SSL.
-      # - "8000:8000"
+      # Do not directly expose the Django port to the internet, use the reverse proxy below instead
+      # - "127.0.0.1:8000:8000"
       # Warning: Docker will have a hard time handling large amount of ports. Expose only the ports that you need.
       # Ports for multiple WireGuard instances. (Probably, you just need one)
       - "51820-51839:51820-51839/udp"
       # Ports for port forwarding rules. Add your own ports here if you need them.
       - "8080-8089:8080-8089/tcp"
-
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -45,9 +41,7 @@ services:
   wireguard-webadmin-cron:
     container_name: wireguard-webadmin-cron
     restart: unless-stopped
-    build:
-      context: containers/cron
-      dockerfile: Dockerfile-cron
+    image: eduardosilva/wireguard_webadmin_cron:latest
     environment:
       - TZ=${TIMEZONE}
       - WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL=${WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL}
@@ -59,9 +53,7 @@ services:
   wireguard-webadmin-rrdtool:
     container_name: wireguard-webadmin-rrdtool
     restart: unless-stopped
-    build:
-      context: ./containers/rrdtool
-      dockerfile: Dockerfile-rrdtool
+    image: eduardosilva/wireguard_webadmin_rrdtool:latest
     volumes:
       - app_secrets:/app_secrets/
       - rrd_data:/rrd_data/
@@ -73,9 +65,7 @@ services:
   wireguard-webadmin-dns:
     container_name: wireguard-webadmin-dns
     restart: unless-stopped
-    build:
-      context: ./containers/dnsmasq
-      dockerfile: Dockerfile-dnsmasq
+    image: eduardosilva/wireguard_webadmin_dns:latest
     environment:
       - TZ=${TIMEZONE}
     volumes:

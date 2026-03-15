@@ -11,7 +11,11 @@ import os
 import re
 import sys
 
-OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "config_files/wireguard_webadmin.json")
+OUTPUT_FILE = os.environ.get(
+    "OUTPUT_FILE",
+    os.path.join(os.path.dirname(__file__), "config_files/wireguard_webadmin.json"),
+)
+OUTPUT_FILE_CADDY = "/caddy_json_export/wireguard_webadmin.json"
 
 UPSTREAM = "wireguard-webadmin:8000"
 STATIC_ROUTES = [
@@ -122,16 +126,25 @@ def build_config(hosts: list) -> dict:
     }
 
 
+def _write_config(filepath, config):
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    with open(filepath, "w", encoding="utf-8") as output_file:
+        json.dump(config, output_file, indent=2)
+        output_file.write("\n")
+    print(f"Config written to {filepath}")
+
+
 def main() -> None:
     hosts = collect_hosts()
     config = build_config(hosts)
 
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as output_file:
-        json.dump(config, output_file, indent=2)
-        output_file.write("\n")
+    _write_config(OUTPUT_FILE, config)
 
-    print(f"Config written to {OUTPUT_FILE}")
+    caddy_export_dir = os.path.dirname(OUTPUT_FILE_CADDY)
+    if os.path.isdir(caddy_export_dir):
+        _write_config(OUTPUT_FILE_CADDY, config)
 
 
 if __name__ == "__main__":
     main()
+

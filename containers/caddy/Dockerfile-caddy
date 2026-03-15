@@ -1,8 +1,19 @@
-FROM caddy:2-alpine
+FROM caddy:2
 
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    py3-yaml \
+    inotify-tools \
+    bash
+
+RUN python3 -m venv /usr/local/bin/.venv && \
+    /usr/local/bin/.venv/bin/pip install --no-cache-dir pyyaml
+
+COPY export_wireguard_webadmin_config.py /usr/local/bin/export_wireguard_webadmin_config.py
+COPY process_config.py /usr/local/bin/process_config.py
 COPY entrypoint.sh /usr/local/bin/caddy-entrypoint.sh
 
 RUN chmod +x /usr/local/bin/caddy-entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/caddy-entrypoint.sh"]
-CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
