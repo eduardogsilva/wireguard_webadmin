@@ -80,6 +80,12 @@ def build_caddyfile(apps, auth_policies, routes):
             return policies[policy_name].get("policy_type", "bypass")
         return "bypass"
 
+    def emit_authelia_portal():
+        lines.append(f"  handle_path {AUTHELIA_PORTAL_PATH}/* {{")
+        lines.append(f"    reverse_proxy {AUTHELIA_INTERNAL_URL}")
+        lines.append(f"  }}")
+        lines.append("")
+
     for app in apps:
         app_id = app.get("id", "unknown")
         hosts = app.get("hosts", [])
@@ -93,10 +99,7 @@ def build_caddyfile(apps, auth_policies, routes):
         lines.append(f"{host_list} {{")
 
         if has_authelia and app_id == "wireguard_webadmin":
-            lines.append(f"  handle_path {AUTHELIA_PORTAL_PATH}/* {{")
-            lines.append(f"    reverse_proxy {AUTHELIA_INTERNAL_URL}")
-            lines.append(f"  }}")
-            lines.append("")
+            emit_authelia_portal()
 
         for static_route in static_routes:
             path_prefix = static_route.get("path_prefix", "")
@@ -128,6 +131,13 @@ def build_caddyfile(apps, auth_policies, routes):
         # non-deny routes and a catch-all respond 403 at Caddy level,
         # avoiding an unnecessary Authelia round-trip.
         if has_authelia and default_policy_type == "deny":
+            has_protected_routes = any(
+                get_policy_type(pn) not in ("bypass", "deny")
+                for pn in app_routes.values()
+            )
+            if has_protected_routes:
+                emit_authelia_portal()
+
             for path_prefix, policy_name in app_routes.items():
                 ptype = get_policy_type(policy_name)
                 if ptype == "bypass":
@@ -172,6 +182,11 @@ def build_caddyfile(apps, auth_policies, routes):
                     needs_auth = True
 
         if needs_auth:
+            # Expose the Authelia portal on this domain so session cookies can
+            # be set with the correct scope (authelia_url = this domain).
+            if app_id != "wireguard_webadmin":
+                emit_authelia_portal()
+
             for path_prefix, policy_name in app_routes.items():
                 if get_policy_type(policy_name) == "bypass":
                     lines.append(f"  @bypass_{_sanitize_id(path_prefix)} path {path_prefix}*")
@@ -195,13 +210,24 @@ def _sanitize_id(value):
     return value.strip("/").replace("/", "_").replace("-", "_")
 
 
-def _collect_app_domains(apps, server_address):
-    """Return session cookie entries for all unique app hostnames.
+def _collect_session_cookies(apps, routes, policies, server_address):
+    """Build session.cookies entries for Authelia.
 
     Authelia v4.37+ requires a session.cookies entry for every domain managed
-    via forward_auth. Without it, Authelia does not recognise the domain and
-    may allow requests through regardless of the access_control policy.
+    via forward_auth, and authelia_url must share the cookie scope with its
+    domain. For multi-domain gateways this means each domain must expose the
+    Authelia portal under its own hostname — Caddy handles this by routing
+    /authelia/* to the Authelia backend for each protected app.
+
+    Only apps with at least one protected (non-bypass, non-deny) route are
+    included. Deny is handled at the Caddy level; bypass needs no session.
     """
+    def get_policy_type(policy_name):
+        if policy_name and policy_name in policies:
+            return policies[policy_name].get("policy_type", "bypass")
+        return "bypass"
+
+    route_entries = routes.get("entries", {}) if routes else {}
     seen = {server_address}
     cookies = [
         {
@@ -210,15 +236,45 @@ def _collect_app_domains(apps, server_address):
             "default_redirection_url": f"https://{server_address}",
         }
     ]
+
     for app in apps:
-        for host in app.get("hosts", []):
+        app_id = app.get("id", "")
+        hosts = app.get("hosts", [])
+
+        if app_id == "wireguard_webadmin":
+            # Extra hostnames for the main app already have /authelia/* routed
+            # in Caddy — add their session cookies pointing to themselves.
+            for host in hosts:
+                if host not in seen:
+                    seen.add(host)
+                    cookies.append({
+                        "domain": host,
+                        "authelia_url": f"https://{host}{AUTHELIA_PORTAL_PATH}",
+                        "default_redirection_url": f"https://{host}",
+                    })
+            continue
+
+        app_route_data = route_entries.get(app_id, {})
+        default_ptype = get_policy_type(app_route_data.get("default_policy"))
+        needs_auth = default_ptype not in ("bypass", "deny")
+        if not needs_auth:
+            for route in app_route_data.get("routes", []):
+                if get_policy_type(route.get("policy", "")) not in ("bypass", "deny"):
+                    needs_auth = True
+                    break
+
+        if not needs_auth:
+            continue
+
+        for host in hosts:
             if host not in seen:
                 seen.add(host)
                 cookies.append({
                     "domain": host,
-                    "authelia_url": f"https://{server_address}{AUTHELIA_PORTAL_PATH}",
-                    "default_redirection_url": f"https://{server_address}",
+                    "authelia_url": f"https://{host}{AUTHELIA_PORTAL_PATH}",
+                    "default_redirection_url": f"https://{host}",
                 })
+
     return cookies
 
 
@@ -228,6 +284,10 @@ def build_authelia_config(auth_policies, routes, apps):
     jwt_secret = get_or_create_secret("jwt_secret")
     session_secret = get_or_create_secret("session_secret")
     storage_encryption_key = get_or_create_secret("storage_encryption_key")
+
+    session_cookies = _collect_session_cookies(
+        apps, routes, auth_policies.get("policies", {}), server_address
+    )
 
     config = {
         "server": {
@@ -248,7 +308,7 @@ def build_authelia_config(auth_policies, routes, apps):
         },
         "session": {
             "secret": session_secret,
-            "cookies": _collect_app_domains(apps, server_address),
+            "cookies": session_cookies,
         },
         "storage": {
             "encryption_key": storage_encryption_key,

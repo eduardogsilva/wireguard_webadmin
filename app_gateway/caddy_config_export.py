@@ -36,7 +36,6 @@ def _build_auth_method_entry(method):
 
     if method.auth_type == 'totp':
         entry['totp_secret'] = method.totp_secret
-        entry['totp_before_auth'] = method.totp_before_auth
 
     elif method.auth_type == 'oidc':
         entry['provider'] = method.oidc_provider
