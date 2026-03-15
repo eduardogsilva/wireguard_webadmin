@@ -437,6 +437,8 @@ def view_export_caddy_config(request):
         output_dir = os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files')
 
     export_caddy_config(output_dir)
+    if settings.DEBUG:
+        export_caddy_config(os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files'))
 
     redirect_url = reverse('app_gateway_list') + '?tab=applications'
 
