@@ -41,3 +41,4 @@ venv.bak/
 .tmp/
 wireguard_webadmin/production_settings.py
 containers/caddy/config_files/
+CLAUDE.md
