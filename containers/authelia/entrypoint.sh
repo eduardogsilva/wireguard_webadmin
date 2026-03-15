@@ -3,18 +3,11 @@
 set -eu
 
 CONFIG_PATH="/config/configuration.yml"
-MAX_WAIT=120
-WAIT_INTERVAL=2
+WAIT_INTERVAL=5
 
 echo "==> Waiting for Authelia configuration file..."
-elapsed=0
 while [ ! -f "$CONFIG_PATH" ]; do
-    if [ "$elapsed" -ge "$MAX_WAIT" ]; then
-        echo "Error: Timed out waiting for ${CONFIG_PATH} after ${MAX_WAIT}s"
-        exit 1
-    fi
     sleep "$WAIT_INTERVAL"
-    elapsed=$((elapsed + WAIT_INTERVAL))
 done
 echo "==> Configuration file found: ${CONFIG_PATH}"
 
