@@ -26,7 +26,7 @@ AUTHELIA_CONFIG_PATH = os.path.join(AUTHELIA_CONFIG_DIR, "configuration.yml")
 AUTHELIA_USERS_PATH = os.path.join(AUTHELIA_CONFIG_DIR, "users_database.yml")
 AUTHELIA_SECRETS_DIR = os.path.join(AUTHELIA_CONFIG_DIR, "secrets")
 
-AUTHELIA_INTERNAL_URL = "http://authelia:9091"
+AUTHELIA_INTERNAL_URL = "http://wireguard-webadmin-authelia:9091"
 AUTHELIA_PORTAL_PATH = "/authelia"
 
 
