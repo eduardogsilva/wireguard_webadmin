@@ -432,12 +432,9 @@ def view_export_caddy_config(request):
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
 
     if settings.CADDY_ENABLED:
-        output_dir = '/caddy_json_export/'
-    else:
-        output_dir = os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files')
+        export_caddy_config('/caddy_json_export/')
 
-    export_caddy_config(output_dir)
-    if settings.DEBUG:
+    if settings.DEBUG or not settings.CADDY_ENABLED:
         export_caddy_config(os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files'))
 
     redirect_url = reverse('app_gateway_list') + '?tab=applications'
