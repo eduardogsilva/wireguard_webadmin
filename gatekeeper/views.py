@@ -183,7 +183,7 @@ def view_manage_auth_method(request):
         <p>Users will authenticate via an external identity provider (like Keycloak, Google, or Authelia). Requires Provider URL, Client ID, and Client Secret.</p>
         
         <h5>TOTP (Time-Based One-Time Password)</h5>
-        <p>Users will need to enter a rotating token from an authenticator app. Requires setting a Global TOTP Secret. <br>If <strong>Global TOTP Before Authentication</strong> is enabled, the PIN is required before the username and password to help combat bruteforce attacks.</p>
+        <p>Users will need to enter a rotating token from an authenticator app. If a user does not have a personal TOTP configured, the <strong>Global TOTP Secret</strong> will be used instead. </p>
         ''')
     }
 
