@@ -64,12 +64,32 @@ def view_manage_gatekeeper_user(request):
         messages.success(request, _('Gatekeeper User saved successfully.'))
         return redirect(cancel_url)
 
+    form_description = {
+        'size': 'col-lg-6',
+        'content': _('''
+        <h4>Gatekeeper User</h4>
+        <p>Gatekeeper users are used for authenticating against protected applications managed by this gateway.</p>
+
+        <h5>Password</h5>
+        <p>Required when creating a user. When editing, leave both password fields blank to keep the current password.
+        Passwords are stored using <strong>Argon2id</strong> hashing.</p>
+
+        <h5>TOTP Secret</h5>
+        <p>Optional per-user TOTP secret. When set, this user will authenticate using their own secret instead of the
+        global TOTP secret configured on the Authentication Method. Use the buttons below the field to generate a
+        random secret and scan the QR code with your authenticator app. Validate the secret by entering the current
+        6-digit PIN before saving.</p>
+        ''')
+    }
+
     context = {
         'form': form,
+        'form_size': 'col-lg-6',
         'title': title,
         'page_title': title,
+        'form_description': form_description,
     }
-    return render(request, 'generic_form.html', context)
+    return render(request, 'gatekeeper/gatekeeper_user_form.html', context)
 
 
 @login_required
