@@ -5,8 +5,7 @@
     },
     "totp_default": {
       "type": "totp",
-      "totp_secret": "",
-      "totp_before_auth": false
+      "totp_secret": ""
     },
     "google_workspace_admins": {
       "type": "oidc",

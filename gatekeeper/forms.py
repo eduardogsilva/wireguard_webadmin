@@ -92,14 +92,13 @@ class AuthMethodForm(forms.ModelForm):
     class Meta:
         model = AuthMethod
         fields = [
-            'name', 'auth_type', 'totp_secret', 'totp_before_auth',
+            'name', 'auth_type', 'totp_secret',
             'oidc_provider', 'oidc_client_id', 'oidc_client_secret'
         ]
         labels = {
             'name': _('Name'),
             'auth_type': _('Authentication Type'),
             'totp_secret': _('Global TOTP Secret'),
-            'totp_before_auth': _('Global TOTP Before Authentication'),
             'oidc_provider': _('OIDC Provider URL'),
             'oidc_client_id': _('OIDC Client ID'),
             'oidc_client_secret': _('OIDC Client Secret'),
@@ -122,7 +121,6 @@ class AuthMethodForm(forms.ModelForm):
             Div(
                 Div('totp_secret', css_class='col-xl-6'),
                 Div('totp_pin', css_class='col-xl-6'),
-                Div('totp_before_auth', css_class='col-xl-12'),
                 css_class='row totp-group'
             ),
             Div(
