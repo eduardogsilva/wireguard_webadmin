@@ -16,6 +16,11 @@ fi
 # Django startup
 python manage.py migrate --noinput
 python manage.py collectstatic --noinput
+
+if [[ "${CADDY_ENABLED,,}" == "true" ]]; then
+    echo "Exporting Caddy configuration (auth_policies.json, applications.json, routes.json)..."
+    python manage.py shell -c "from app_gateway.caddy_config_export import export_caddy_config; export_caddy_config('/caddy_json_export')" || echo "Failed to export Caddy configuration."
+fi
 if [[ "${DEV_MODE,,}" == "true" ]]; then
     echo ""
     echo ""

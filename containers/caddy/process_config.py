@@ -86,6 +86,12 @@ def build_caddyfile(apps, auth_policies, routes):
         host_list = ", ".join(hosts)
         lines.append(f"{host_list} {{")
 
+        if has_authelia and app_id == "wireguard_webadmin":
+            lines.append(f"  handle_path {AUTHELIA_PORTAL_PATH}/* {{")
+            lines.append(f"    reverse_proxy {AUTHELIA_INTERNAL_URL}")
+            lines.append(f"  }}")
+            lines.append("")
+
         for static_route in static_routes:
             path_prefix = static_route.get("path_prefix", "")
             root_dir = static_route.get("root", "")
@@ -142,15 +148,6 @@ def build_caddyfile(apps, auth_policies, routes):
         lines.append(f"}}")
         lines.append("")
 
-    if has_authelia:
-        server_address = os.environ.get("SERVER_ADDRESS", "localhost")
-        lines.append(f"{server_address} {{")
-        lines.append(f"  handle_path {AUTHELIA_PORTAL_PATH}/* {{")
-        lines.append(f"    reverse_proxy {AUTHELIA_INTERNAL_URL}")
-        lines.append(f"  }}")
-        lines.append(f"}}")
-        lines.append("")
-
     return "\n".join(lines)
 
 
@@ -172,7 +169,11 @@ def build_authelia_config(auth_policies, routes, apps):
         "log": {
             "level": "info",
         },
-        "jwt_secret": jwt_secret,
+        "identity_validation": {
+            "reset_password": {
+                "jwt_secret": jwt_secret,
+            },
+        },
         "authentication_backend": {
             "file": {
                 "path": "/config/users_database.yml",
@@ -283,7 +284,7 @@ def build_access_control_rules(auth_policies, routes, apps):
             rules.append(default_rule)
 
     return {
-        "default_policy": "deny",
+        "default_policy": "two_factor" if not rules else "deny",
         "rules": rules,
     }
 
@@ -328,9 +329,18 @@ def build_identity_providers(auth_policies, server_address):
     }
 
 
+DUMMY_USER = {
+    "_dummy_setup_user": {
+        "disabled": True,
+        "displayname": "Dummy Setup User",
+        "password": "$argon2id$v=19$m=65536,t=3,p=4$Nklqa1J5a3ZweDhlZnNlUw$5D8WJ+sT20eXj1U10qNnS2Ew/M40B8v1/37X2b1lG0I",
+        "email": "dummy@localhost",
+    }
+}
+
 def build_users_database(auth_policies):
     if not auth_policies:
-        return {"users": {}}
+        return {"users": DUMMY_USER}
 
     users_data = auth_policies.get("users", {})
     groups_data = auth_policies.get("groups", {})
@@ -354,6 +364,9 @@ def build_users_database(auth_policies):
             user_entry["password"] = password_hash
 
         users[username] = user_entry
+
+    if not users:
+        users = DUMMY_USER.copy()
 
     return {"users": users}
 
