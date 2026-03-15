@@ -24,7 +24,7 @@ def view_gatekeeper_list(request):
 
     active_tab = request.GET.get('tab', 'auth_methods')
     auth_methods = AuthMethod.objects.all().order_by('name')
-    users = GatekeeperUser.objects.all().order_by('username')
+    users = GatekeeperUser.objects.all().prefetch_related('groups').order_by('username')
     groups = GatekeeperGroup.objects.all().order_by('name')
     auth_domains = AuthMethodAllowedDomain.objects.all().order_by('domain')
     auth_emails = AuthMethodAllowedEmail.objects.all().order_by('email')

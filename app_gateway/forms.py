@@ -169,6 +169,7 @@ class AccessPolicyForm(forms.ModelForm):
             has_local_password = False
             local_password_count = 0
             oidc_count = 0
+            totp_count = 0
             has_groups = groups and len(groups) > 0
 
             # Count authentication methods
@@ -179,6 +180,8 @@ class AccessPolicyForm(forms.ModelForm):
                         local_password_count += 1
                     elif method.auth_type == 'oidc':
                         oidc_count += 1
+                    elif method.auth_type == 'totp':
+                        totp_count += 1
 
             # Rule: Cannot select more than one local password method
             if local_password_count > 1:
@@ -188,9 +191,17 @@ class AccessPolicyForm(forms.ModelForm):
             if oidc_count > 1:
                 self.add_error('methods', _("Cannot select more than one OpenID Connect (OIDC) authentication method."))
 
+            # Rule: Cannot select more than one TOTP method
+            if totp_count > 1:
+                self.add_error('methods', _("Cannot select more than one TOTP authentication method."))
+
             # Rule: Cannot mix local password and oidc
             if local_password_count > 0 and oidc_count > 0:
                 self.add_error('methods', _("Cannot select both Local Password and OpenID Connect (OIDC) authentication methods."))
+
+            # Rule: TOTP cannot be selected alone — must be combined with local_password or oidc
+            if totp_count > 0 and local_password_count == 0 and oidc_count == 0:
+                self.add_error('methods', _("TOTP must be combined with a Local Password or OpenID Connect authentication method."))
 
             # Rule: If local password is selected, at least one user group must be selected
             if has_local_password and not has_groups:

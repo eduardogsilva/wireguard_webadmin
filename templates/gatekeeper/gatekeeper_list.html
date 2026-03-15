@@ -60,6 +60,8 @@
                                 <tr>
                                     <th>{% trans 'Username' %}</th>
                                     <th>{% trans 'Email' %}</th>
+                                    <th>{% trans 'TOTP' %}</th>
+                                    <th>{% trans 'Groups' %}</th>
                                     <th>{% trans 'Actions' %}</th>
                                 </tr>
                             </thead>
@@ -68,12 +70,26 @@
                                     <tr>
                                         <td>{{ user.username }}</td>
                                         <td>{{ user.email }}</td>
+                                        <td>
+                                            {% if user.totp_secret %}
+                                                <span class="badge badge-success"><i class="fas fa-check"></i> {% trans 'Yes' %}</span>
+                                            {% else %}
+                                                <span class="badge badge-secondary">{% trans 'No' %}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% for group in user.groups.all %}
+                                                <span class="badge badge-info">{{ group.name }}</span>
+                                            {% empty %}
+                                                <span class="text-muted">—</span>
+                                            {% endfor %}
+                                        </td>
                                         <td style="width: 15%">
-                                            <a href="{% url 'manage_gatekeeper_user' %}?uuid={{ user.uuid }}" 
+                                            <a href="{% url 'manage_gatekeeper_user' %}?uuid={{ user.uuid }}"
                                                class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="{% url 'delete_gatekeeper_user' %}?uuid={{ user.uuid }}" 
+                                            <a href="{% url 'delete_gatekeeper_user' %}?uuid={{ user.uuid }}"
                                                class="btn btn-sm btn-danger" title="{% trans 'Delete' %}">
                                                 <i class="fas fa-trash"></i>
                                             </a>
