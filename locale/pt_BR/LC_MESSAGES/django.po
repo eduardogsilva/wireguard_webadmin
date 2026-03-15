@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 11:54-0300\n"
+"POT-Creation-Date: 2026-03-15 17:20-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,12 +38,12 @@ msgstr "Voltar"
 #: templates/app_gateway/application_details.html:125
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
-#: templates/gatekeeper/gatekeeper_list.html:77
-#: templates/gatekeeper/gatekeeper_list.html:120
-#: templates/gatekeeper/gatekeeper_list.html:165
-#: templates/gatekeeper/gatekeeper_list.html:213
-#: templates/gatekeeper/gatekeeper_list.html:230
-#: templates/gatekeeper/gatekeeper_list.html:282
+#: templates/gatekeeper/gatekeeper_list.html:93
+#: templates/gatekeeper/gatekeeper_list.html:136
+#: templates/gatekeeper/gatekeeper_list.html:181
+#: templates/gatekeeper/gatekeeper_list.html:229
+#: templates/gatekeeper/gatekeeper_list.html:246
+#: templates/gatekeeper/gatekeeper_list.html:298
 #: templates/scheduler/scheduleprofile_form.html:127
 #: templates/scheduler/scheduleprofile_list.html:29
 #: templates/wireguard/peer_list/peer_preview_modal.html:109
@@ -65,11 +65,11 @@ msgstr ""
 "funcionar imediatamente."
 
 #: api_v2/forms.py:63 app_gateway/forms.py:40 app_gateway/forms.py:92
-#: app_gateway/forms.py:136 app_gateway/forms.py:154 app_gateway/forms.py:226
-#: app_gateway/forms.py:267 cluster/forms.py:67 cluster/forms.py:124
-#: dns/forms.py:37 dns/forms.py:84 dns/forms.py:153 gatekeeper/forms.py:41
-#: gatekeeper/forms.py:75 gatekeeper/forms.py:139 gatekeeper/forms.py:226
-#: gatekeeper/forms.py:256 gatekeeper/forms.py:287
+#: app_gateway/forms.py:136 app_gateway/forms.py:154 app_gateway/forms.py:237
+#: app_gateway/forms.py:278 cluster/forms.py:67 cluster/forms.py:124
+#: dns/forms.py:37 dns/forms.py:84 dns/forms.py:153 gatekeeper/forms.py:70
+#: gatekeeper/forms.py:150 gatekeeper/forms.py:212 gatekeeper/forms.py:299
+#: gatekeeper/forms.py:329 gatekeeper/forms.py:360
 #: routing_templates/forms.py:71 scheduler/forms.py:102
 #: templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
@@ -83,13 +83,13 @@ msgid "Save"
 msgstr "Salvar"
 
 #: api_v2/models.py:10 app_gateway/forms.py:18 app_gateway/forms.py:106
-#: cluster/forms.py:18 dns/forms.py:130 gatekeeper/forms.py:99
+#: cluster/forms.py:18 dns/forms.py:130 gatekeeper/forms.py:174
 #: routing_templates/forms.py:28 templates/api_v2/api_documentation.html:47
 #: templates/api_v2/list.html:8 templates/app_gateway/app_gateway_list.html:58
 #: templates/app_gateway/app_gateway_list.html:138
 #: templates/app_gateway/application_details.html:26
 #: templates/cluster/workers_list.html:8 templates/dns/static_host_list.html:68
-#: templates/gatekeeper/gatekeeper_list.html:149
+#: templates/gatekeeper/gatekeeper_list.html:165
 #: templates/routing_templates/list.html:8
 #: templates/scheduler/scheduleprofile_list.html:13
 #: templates/user_manager/peer_group_list.html:8
@@ -133,10 +133,10 @@ msgstr "Habilitado"
 #: app_gateway/views.py:293 app_gateway/views.py:328 app_gateway/views.py:354
 #: app_gateway/views.py:404 app_gateway/views.py:432 cluster/views.py:18
 #: cluster/views.py:45 cluster/views.py:114 gatekeeper/views.py:23
-#: gatekeeper/views.py:48 gatekeeper/views.py:78 gatekeeper/views.py:101
-#: gatekeeper/views.py:131 gatekeeper/views.py:154 gatekeeper/views.py:202
-#: gatekeeper/views.py:261 gatekeeper/views.py:291 gatekeeper/views.py:314
-#: gatekeeper/views.py:344 gatekeeper/views.py:367 gatekeeper/views.py:416
+#: gatekeeper/views.py:48 gatekeeper/views.py:98 gatekeeper/views.py:121
+#: gatekeeper/views.py:151 gatekeeper/views.py:174 gatekeeper/views.py:222
+#: gatekeeper/views.py:281 gatekeeper/views.py:311 gatekeeper/views.py:334
+#: gatekeeper/views.py:364 gatekeeper/views.py:387 gatekeeper/views.py:436
 #: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Acesso Negado"
@@ -217,9 +217,9 @@ msgid "Upstream"
 msgstr "Upstream"
 
 #: app_gateway/forms.py:41 app_gateway/forms.py:93 app_gateway/forms.py:137
-#: app_gateway/forms.py:155 app_gateway/forms.py:227 app_gateway/forms.py:268
-#: gatekeeper/forms.py:42 gatekeeper/forms.py:76 gatekeeper/forms.py:140
-#: gatekeeper/forms.py:227 gatekeeper/forms.py:257 gatekeeper/forms.py:288
+#: app_gateway/forms.py:155 app_gateway/forms.py:238 app_gateway/forms.py:279
+#: gatekeeper/forms.py:71 gatekeeper/forms.py:151 gatekeeper/forms.py:213
+#: gatekeeper/forms.py:300 gatekeeper/forms.py:330 gatekeeper/forms.py:361
 #: scheduler/forms.py:103
 #: templates/app_gateway/access_policy_type_select.html:50
 #: templates/generic_delete_confirmation.html:19
@@ -263,19 +263,26 @@ msgstr "Grupos Permitidos"
 msgid "Authentication Methods"
 msgstr "Métodos de Autenticação"
 
-#: app_gateway/forms.py:185
+#: app_gateway/forms.py:188
 msgid "Cannot select more than one Local Password authentication method."
 msgstr ""
 "Não é possível selecionar mais de um método de autenticação por Senha Local."
 
-#: app_gateway/forms.py:189
+#: app_gateway/forms.py:192
 msgid ""
 "Cannot select more than one OpenID Connect (OIDC) authentication method."
 msgstr ""
 "Não é possível selecionar mais de um método de autenticação OpenID Connect "
 "(OIDC)."
 
-#: app_gateway/forms.py:193
+#: app_gateway/forms.py:196
+#, fuzzy
+#| msgid "Cannot select more than one Local Password authentication method."
+msgid "Cannot select more than one TOTP authentication method."
+msgstr ""
+"Não é possível selecionar mais de um método de autenticação por Senha Local."
+
+#: app_gateway/forms.py:200
 msgid ""
 "Cannot select both Local Password and OpenID Connect (OIDC) authentication "
 "methods."
@@ -283,7 +290,19 @@ msgstr ""
 "Não é possível selecionar simultaneamente os métodos de autenticação por "
 "Senha Local e OpenID Connect (OIDC)."
 
-#: app_gateway/forms.py:197
+#: app_gateway/forms.py:204
+#, fuzzy
+#| msgid ""
+#| "Cannot select both Local Password and OpenID Connect (OIDC) "
+#| "authentication methods."
+msgid ""
+"TOTP must be combined with a Local Password or OpenID Connect authentication "
+"method."
+msgstr ""
+"Não é possível selecionar simultaneamente os métodos de autenticação por "
+"Senha Local e OpenID Connect (OIDC)."
+
+#: app_gateway/forms.py:208
 msgid ""
 "At least one user group must be selected when using Local Password "
 "authentication."
@@ -291,30 +310,30 @@ msgstr ""
 "Pelo menos um grupo de usuários deve ser selecionado ao usar a autenticação "
 "por Senha Local."
 
-#: app_gateway/forms.py:201
+#: app_gateway/forms.py:212
 msgid "User groups can only be used with Local Password authentication."
 msgstr ""
 "Grupos de usuários só podem ser usados com autenticação por Senha Local."
 
-#: app_gateway/forms.py:211 templates/app_gateway/app_gateway_list.html:62
+#: app_gateway/forms.py:222 templates/app_gateway/app_gateway_list.html:62
 #: templates/app_gateway/application_details.html:31
 #: templates/firewall/firewall_nav_tabs.html:15
 msgid "Default Policy"
 msgstr "Política Padrão"
 
-#: app_gateway/forms.py:240 templates/app_gateway/application_details.html:105
+#: app_gateway/forms.py:251 templates/app_gateway/application_details.html:105
 msgid "Route Name"
 msgstr "Nome da Rota"
 
-#: app_gateway/forms.py:241 templates/app_gateway/application_details.html:106
+#: app_gateway/forms.py:252 templates/app_gateway/application_details.html:106
 msgid "Path Prefix"
 msgstr "Prefixo do Caminho"
 
-#: app_gateway/forms.py:242 templates/app_gateway/application_details.html:107
+#: app_gateway/forms.py:253 templates/app_gateway/application_details.html:107
 msgid "Policy"
 msgstr "Política"
 
-#: app_gateway/forms.py:243 templates/app_gateway/application_details.html:108
+#: app_gateway/forms.py:254 templates/app_gateway/application_details.html:108
 msgid "Order"
 msgstr "Ordem"
 
@@ -332,9 +351,9 @@ msgstr "Público"
 msgid "Protected"
 msgstr "Protegido"
 
-#: app_gateway/models.py:45 gatekeeper/models.py:110
+#: app_gateway/models.py:45 gatekeeper/models.py:108
 #: templates/app_gateway/access_policy_type_select.html:41
-#: templates/gatekeeper/gatekeeper_list.html:272
+#: templates/gatekeeper/gatekeeper_list.html:288
 msgid "Deny"
 msgstr "Negar"
 
@@ -615,11 +634,11 @@ msgstr "Excluir Rota da Aplicação"
 msgid "Are you sure you want to delete the route \"%(name)s\" (%(path)s)?"
 msgstr "Tem certeza de que deseja excluir a rota \"%(name)s\" (%(path)s)?"
 
-#: app_gateway/views.py:444
+#: app_gateway/views.py:443
 msgid "Configuration exported successfully."
 msgstr "Configuração exportada com sucesso."
 
-#: app_gateway/views.py:446
+#: app_gateway/views.py:445
 msgid ""
 "Caddy is not active. Configuration files were exported for debugging "
 "purposes."
@@ -631,13 +650,13 @@ msgstr ""
 msgid "IP Lock"
 msgstr "Bloqueio de IP"
 
-#: cluster/forms.py:21 dns/forms.py:67 gatekeeper/forms.py:198
+#: cluster/forms.py:21 dns/forms.py:67 gatekeeper/forms.py:271
 #: templates/cluster/workers_list.html:10
 #: templates/dns/static_host_list.html:18
 #: templates/firewall/manage_redirect_rule.html:43
 #: templates/firewall/manage_redirect_rule.html:67
 #: templates/firewall/manage_redirect_rule.html:68
-#: templates/gatekeeper/gatekeeper_list.html:256
+#: templates/gatekeeper/gatekeeper_list.html:272
 #: templates/wireguard/wireguard_status.html:45
 msgid "IP Address"
 msgstr "Endereço IP"
@@ -912,7 +931,7 @@ msgstr "DNS Estático"
 msgid "Invalid hostname."
 msgstr "Nome de host inválido."
 
-#: dns/forms.py:131 firewall/forms.py:111 gatekeeper/forms.py:201
+#: dns/forms.py:131 firewall/forms.py:111 gatekeeper/forms.py:274
 #: templates/api_v2/api_documentation.html:51
 #: templates/dns/static_host_list.html:69
 #: templates/firewall/manage_redirect_rule.html:18
@@ -1247,43 +1266,29 @@ msgstr "Gerenciar Configurações de Firewall"
 msgid "Firewall settings saved successfully"
 msgstr "Configurações de Firewall salvas com sucesso"
 
-#: gatekeeper/forms.py:17 templates/accounts/login.html:14
-#: templates/gatekeeper/gatekeeper_list.html:61
-#: templates/user_manager/list.html:8 user_manager/forms.py:13
-#: vpn_invite/forms.py:281
-msgid "Username"
-msgstr "Usuário"
-
-#: gatekeeper/forms.py:18 gatekeeper/forms.py:271
-#: templates/gatekeeper/gatekeeper_list.html:62
-#: templates/gatekeeper/gatekeeper_list.html:204
-#: templates/wireguard/peer_list/peer_preview_modal.html:103
-msgid "Email"
-msgstr "Email"
-
-#: gatekeeper/forms.py:19 templates/accounts/login.html:23
+#: gatekeeper/forms.py:17 templates/accounts/login.html:23
 #: templates/vpn_invite/invite_settings.html:19 user_manager/forms.py:14
 #: vpn_invite/forms.py:282
 msgid "Password"
 msgstr "Senha"
 
 #: gatekeeper/forms.py:20
-msgid "TOTP Secret"
-msgstr "Segredo TOTP"
+msgid ""
+"Minimum 8 characters, with at least one uppercase letter, one lowercase "
+"letter, and one number."
+msgstr ""
 
-#: gatekeeper/forms.py:55 templates/gatekeeper/gatekeeper_list.html:104
-msgid "Group Name"
-msgstr "Nome do Grupo"
+#: gatekeeper/forms.py:23
+#, fuzzy
+#| msgid "Random Password"
+msgid "Confirm Password"
+msgstr "Senha Aleatória"
 
-#: gatekeeper/forms.py:56 templates/gatekeeper/gatekeeper_list.html:105
-msgid "Members"
-msgstr "Membros"
-
-#: gatekeeper/forms.py:86
+#: gatekeeper/forms.py:28 gatekeeper/forms.py:161
 msgid "TOTP Validation PIN"
 msgstr "PIN de Validação TOTP"
 
-#: gatekeeper/forms.py:89
+#: gatekeeper/forms.py:31 gatekeeper/forms.py:164
 msgid ""
 "Enter a 6-digit PIN generated by your authenticator app to validate the "
 "secret."
@@ -1291,90 +1296,146 @@ msgstr ""
 "Insira um PIN de 6 dígitos gerado pelo seu aplicativo autenticador para "
 "validar o segredo."
 
-#: gatekeeper/forms.py:100
+#: gatekeeper/forms.py:38 templates/accounts/login.html:14
+#: templates/gatekeeper/gatekeeper_list.html:61
+#: templates/user_manager/list.html:8 user_manager/forms.py:13
+#: vpn_invite/forms.py:281
+msgid "Username"
+msgstr "Usuário"
+
+#: gatekeeper/forms.py:39 gatekeeper/forms.py:344
+#: templates/gatekeeper/gatekeeper_list.html:62
+#: templates/gatekeeper/gatekeeper_list.html:220
+#: templates/wireguard/peer_list/peer_preview_modal.html:103
+msgid "Email"
+msgstr "Email"
+
+#: gatekeeper/forms.py:40
+msgid "TOTP Secret"
+msgstr "Segredo TOTP"
+
+#: gatekeeper/forms.py:87
+#, fuzzy
+#| msgid "Port is required."
+msgid "Password is required."
+msgstr "Porta é obrigatória."
+
+#: gatekeeper/forms.py:90 user_manager/forms.py:127
+msgid "Password must be at least 8 characters long."
+msgstr "Senha deve ter pelo menos 8 caracteres."
+
+#: gatekeeper/forms.py:92
+#, fuzzy
+#| msgid "Password must be at least 8 characters long."
+msgid "Password must contain at least one lowercase letter."
+msgstr "Senha deve ter pelo menos 8 caracteres."
+
+#: gatekeeper/forms.py:94
+#, fuzzy
+#| msgid "Password must be at least 8 characters long."
+msgid "Password must contain at least one uppercase letter."
+msgstr "Senha deve ter pelo menos 8 caracteres."
+
+#: gatekeeper/forms.py:96
+#, fuzzy
+#| msgid "Password must be at least 8 characters long."
+msgid "Password must contain at least one number."
+msgstr "Senha deve ter pelo menos 8 caracteres."
+
+#: gatekeeper/forms.py:98
+#, fuzzy
+#| msgid "Password Confirmation"
+msgid "Passwords do not match."
+msgstr "Confirmação de Senha"
+
+#: gatekeeper/forms.py:103 gatekeeper/forms.py:249
+msgid "Please provide a PIN to validate the TOTP secret."
+msgstr "Por favor, forneça um PIN para validar o segredo TOTP."
+
+#: gatekeeper/forms.py:108 gatekeeper/forms.py:254
+msgid "Invalid TOTP PIN."
+msgstr "PIN TOTP inválido."
+
+#: gatekeeper/forms.py:110 gatekeeper/forms.py:256
+msgid "Invalid TOTP secret format. Must be a valid Base32 string."
+msgstr "Formato de segredo TOTP inválido. Deve ser uma string Base32 válida."
+
+#: gatekeeper/forms.py:130 templates/gatekeeper/gatekeeper_list.html:120
+msgid "Group Name"
+msgstr "Nome do Grupo"
+
+#: gatekeeper/forms.py:131 templates/gatekeeper/gatekeeper_list.html:121
+msgid "Members"
+msgstr "Membros"
+
+#: gatekeeper/forms.py:175
 msgid "Authentication Type"
 msgstr "Tipo de Autenticação"
 
-#: gatekeeper/forms.py:101
+#: gatekeeper/forms.py:176
 msgid "Global TOTP Secret"
 msgstr "Segredo TOTP Global"
 
-#: gatekeeper/forms.py:102
-msgid "Global TOTP Before Authentication"
-msgstr "TOTP Global Antes da Autenticação"
-
-#: gatekeeper/forms.py:103
+#: gatekeeper/forms.py:177
 msgid "OIDC Provider URL"
 msgstr "URL do Provedor OIDC"
 
-#: gatekeeper/forms.py:104
+#: gatekeeper/forms.py:178
 msgid "OIDC Client ID"
 msgstr "ID do Cliente OIDC"
 
-#: gatekeeper/forms.py:105
+#: gatekeeper/forms.py:179
 msgid "OIDC Client Secret"
 msgstr "Segredo do Cliente OIDC"
 
-#: gatekeeper/forms.py:157
+#: gatekeeper/forms.py:230
 msgid "TOTP secret must be empty for Local Password authentication."
 msgstr "O segredo TOTP deve estar vazio para autenticação por Senha Local."
 
-#: gatekeeper/forms.py:159
+#: gatekeeper/forms.py:232
 msgid "TOTP validation PIN must be empty for Local Password authentication."
 msgstr ""
 "O PIN de validação TOTP deve estar vazio para autenticação por Senha Local."
 
-#: gatekeeper/forms.py:161
+#: gatekeeper/forms.py:234
 msgid "OIDC fields must be empty for Local Password authentication."
 msgstr "Os campos OIDC devem estar vazios para autenticação por Senha Local."
 
-#: gatekeeper/forms.py:167
+#: gatekeeper/forms.py:240
 msgid "Only one Local Password authentication method can be configured."
 msgstr "Apenas um método de autenticação por Senha Local pode ser configurado."
 
-#: gatekeeper/forms.py:170
+#: gatekeeper/forms.py:243
 msgid "OIDC fields must be empty for TOTP authentication."
 msgstr "Os campos OIDC devem estar vazios para autenticação por TOTP."
 
-#: gatekeeper/forms.py:172
+#: gatekeeper/forms.py:245
 msgid "TOTP secret is required for TOTP authentication."
 msgstr "O segredo TOTP é obrigatório para autenticação por TOTP."
 
-#: gatekeeper/forms.py:176
-msgid "Please provide a PIN to validate the TOTP secret."
-msgstr "Por favor, forneça um PIN para validar o segredo TOTP."
-
-#: gatekeeper/forms.py:181
-msgid "Invalid TOTP PIN."
-msgstr "PIN TOTP inválido."
-
-#: gatekeeper/forms.py:183
-msgid "Invalid TOTP secret format. Must be a valid Base32 string."
-msgstr "Formato de segredo TOTP inválido. Deve ser uma string Base32 válida."
-
-#: gatekeeper/forms.py:186
+#: gatekeeper/forms.py:259
 msgid "TOTP secret must be empty for OIDC authentication."
 msgstr "O segredo TOTP deve estar vazio para autenticação por OIDC."
 
-#: gatekeeper/forms.py:188
+#: gatekeeper/forms.py:261
 msgid "TOTP validation PIN must be empty for OIDC authentication."
 msgstr "O PIN de validação TOTP deve estar vazio para autenticação por OIDC."
 
-#: gatekeeper/forms.py:197 gatekeeper/forms.py:239 gatekeeper/forms.py:270
+#: gatekeeper/forms.py:270 gatekeeper/forms.py:312 gatekeeper/forms.py:343
 msgid "Authentication Method"
 msgstr "Método de Autenticação"
 
-#: gatekeeper/forms.py:199 templates/gatekeeper/gatekeeper_list.html:257
+#: gatekeeper/forms.py:272 templates/gatekeeper/gatekeeper_list.html:273
 msgid "Prefix Length"
 msgstr "Comprimento do Prefixo"
 
-#: gatekeeper/forms.py:200 templates/firewall/firewall_rule_list.html:47
+#: gatekeeper/forms.py:273 templates/firewall/firewall_rule_list.html:47
 #: templates/firewall/manage_firewall_rule.html:360
-#: templates/gatekeeper/gatekeeper_list.html:258
+#: templates/gatekeeper/gatekeeper_list.html:274
 msgid "Action"
 msgstr "Ação"
 
-#: gatekeeper/forms.py:240 templates/gatekeeper/gatekeeper_list.html:221
+#: gatekeeper/forms.py:313 templates/gatekeeper/gatekeeper_list.html:237
 msgid "Domain"
 msgstr "Domínio"
 
@@ -1398,15 +1459,15 @@ msgstr "Lista de Endereços IP"
 msgid "Shared/global TOTP secret key"
 msgstr "Chave secreta TOTP compartilhada/global"
 
-#: gatekeeper/models.py:69
+#: gatekeeper/models.py:68
 msgid "Password for local authentication (leave blank if not using)"
 msgstr "Senha para autenticação local (deixe em branco se não estiver usando)"
 
-#: gatekeeper/models.py:71
+#: gatekeeper/models.py:69
 msgid "Per-user TOTP secret key"
 msgstr "Chave secreta TOTP por usuário"
 
-#: gatekeeper/models.py:110 templates/gatekeeper/gatekeeper_list.html:270
+#: gatekeeper/models.py:108 templates/gatekeeper/gatekeeper_list.html:286
 msgid "Allow"
 msgstr "Permitir"
 
@@ -1422,57 +1483,102 @@ msgstr "Criar Usuário Gatekeeper"
 msgid "Gatekeeper User saved successfully."
 msgstr "Usuário Gatekeeper salvo com sucesso."
 
-#: gatekeeper/views.py:86
+#: gatekeeper/views.py:69
+msgid ""
+"\n"
+"        <h4>Gatekeeper User</h4>\n"
+"        <p>Gatekeeper users are used for authenticating against protected "
+"applications managed by this gateway.</p>\n"
+"\n"
+"        <h5>Password</h5>\n"
+"        <p>Required when creating a user. When editing, leave both password "
+"fields blank to keep the current password.\n"
+"        Passwords are stored using <strong>Argon2id</strong> hashing.</p>\n"
+"\n"
+"        <h5>TOTP Secret</h5>\n"
+"        <p>Optional per-user TOTP secret. When set, this user will "
+"authenticate using their own secret instead of the\n"
+"        global TOTP secret configured on the Authentication Method. Use the "
+"buttons below the field to generate a\n"
+"        random secret and scan the QR code with your authenticator app. "
+"Validate the secret by entering the current\n"
+"        6-digit PIN before saving.</p>\n"
+"        "
+msgstr ""
+
+#: gatekeeper/views.py:106
 msgid "Gatekeeper User deleted successfully."
 msgstr "Usuário Gatekeeper excluído com sucesso."
 
-#: gatekeeper/views.py:91
+#: gatekeeper/views.py:111
 msgid "Delete Gatekeeper User"
 msgstr "Excluir Usuário Gatekeeper"
 
-#: gatekeeper/views.py:93
+#: gatekeeper/views.py:113
 #, python-format
 msgid "Are you sure you want to delete the user \"%(username)s\"?"
 msgstr "Tem certeza de que deseja excluir o usuário \"%(username)s\"?"
 
-#: gatekeeper/views.py:107
+#: gatekeeper/views.py:127
 msgid "Edit Gatekeeper Group"
 msgstr "Editar Grupo Gatekeeper"
 
-#: gatekeeper/views.py:110
+#: gatekeeper/views.py:130
 msgid "Create Gatekeeper Group"
 msgstr "Criar Grupo Gatekeeper"
 
-#: gatekeeper/views.py:117
+#: gatekeeper/views.py:137
 msgid "Gatekeeper Group saved successfully."
 msgstr "Grupo Gatekeeper salvo com sucesso."
 
-#: gatekeeper/views.py:139
+#: gatekeeper/views.py:159
 msgid "Gatekeeper Group deleted successfully."
 msgstr "Grupo Gatekeeper excluído com sucesso."
 
-#: gatekeeper/views.py:144
+#: gatekeeper/views.py:164
 msgid "Delete Gatekeeper Group"
 msgstr "Excluir Grupo Gatekeeper"
 
-#: gatekeeper/views.py:146
+#: gatekeeper/views.py:166
 #, python-format
 msgid "Are you sure you want to delete the group \"%(name)s\"?"
 msgstr "Tem certeza de que deseja excluir o grupo \"%(name)s\"?"
 
-#: gatekeeper/views.py:160
+#: gatekeeper/views.py:180
 msgid "Edit Authentication Method"
 msgstr "Editar Método de Autenticação"
 
-#: gatekeeper/views.py:163
+#: gatekeeper/views.py:183
 msgid "Create Authentication Method"
 msgstr "Criar Método de Autenticação"
 
-#: gatekeeper/views.py:170
+#: gatekeeper/views.py:190
 msgid "Authentication Method saved successfully."
 msgstr "Método de Autenticação salvo com sucesso."
 
-#: gatekeeper/views.py:175
+#: gatekeeper/views.py:195
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "        <h4>Authentication Types</h4>\n"
+#| "        <p>Select how users will authenticate through this method.</p>\n"
+#| "        \n"
+#| "        <h5>Local Password</h5>\n"
+#| "        <p>Users will authenticate using a standard username and password "
+#| "stored locally. Only one of this type can be created.</p>\n"
+#| "        \n"
+#| "        <h5>OIDC (OpenID Connect)</h5>\n"
+#| "        <p>Users will authenticate via an external identity provider "
+#| "(like Keycloak, Google, or Authelia). Requires Provider URL, Client ID, "
+#| "and Client Secret.</p>\n"
+#| "        \n"
+#| "        <h5>TOTP (Time-Based One-Time Password)</h5>\n"
+#| "        <p>Users will need to enter a rotating token from an "
+#| "authenticator app. Requires setting a Global TOTP Secret. <br>If "
+#| "<strong>Global TOTP Before Authentication</strong> is enabled, the PIN is "
+#| "required before the username and password to help combat bruteforce "
+#| "attacks.</p>\n"
+#| "        "
 msgid ""
 "\n"
 "        <h4>Authentication Types</h4>\n"
@@ -1489,9 +1595,8 @@ msgid ""
 "        \n"
 "        <h5>TOTP (Time-Based One-Time Password)</h5>\n"
 "        <p>Users will need to enter a rotating token from an authenticator "
-"app. Requires setting a Global TOTP Secret. <br>If <strong>Global TOTP "
-"Before Authentication</strong> is enabled, the PIN is required before the "
-"username and password to help combat bruteforce attacks.</p>\n"
+"app. If a user does not have a personal TOTP configured, the <strong>Global "
+"TOTP Secret</strong> will be used instead. </p>\n"
 "        "
 msgstr ""
 "\n"
@@ -1516,84 +1621,84 @@ msgstr ""
 "força bruta.</p>\n"
 "        "
 
-#: gatekeeper/views.py:210
+#: gatekeeper/views.py:230
 msgid "Authentication Method deleted successfully."
 msgstr "Método de Autenticação excluído com sucesso."
 
-#: gatekeeper/views.py:215
+#: gatekeeper/views.py:235
 msgid "Delete Authentication Method"
 msgstr "Excluir Método de Autenticação"
 
-#: gatekeeper/views.py:217
+#: gatekeeper/views.py:237
 #, python-format
 msgid "Are you sure you want to delete the authentication method \"%(name)s\"?"
 msgstr ""
 "Tem certeza de que deseja excluir o método de autenticação \"%(name)s\"?"
 
-#: gatekeeper/views.py:267
+#: gatekeeper/views.py:287
 msgid "Edit Allowed Domain"
 msgstr "Editar Domínio Permitido"
 
-#: gatekeeper/views.py:270 templates/gatekeeper/gatekeeper_list.html:186
+#: gatekeeper/views.py:290 templates/gatekeeper/gatekeeper_list.html:202
 msgid "Add Allowed Domain"
 msgstr "Adicionar Domínio Permitido"
 
-#: gatekeeper/views.py:277
+#: gatekeeper/views.py:297
 msgid "Allowed Domain saved successfully."
 msgstr "Domínio Permitido salvo com sucesso."
 
-#: gatekeeper/views.py:299
+#: gatekeeper/views.py:319
 msgid "Allowed Domain deleted successfully."
 msgstr "Domínio Permitido excluído com sucesso."
 
-#: gatekeeper/views.py:304
+#: gatekeeper/views.py:324
 msgid "Delete Allowed Domain"
 msgstr "Excluir Domínio Permitido"
 
-#: gatekeeper/views.py:306
+#: gatekeeper/views.py:326
 #, python-format
 msgid "Are you sure you want to delete the allowed domain \"%(domain)s\"?"
 msgstr "Tem certeza de que deseja excluir o domínio permitido \"%(domain)s\"?"
 
-#: gatekeeper/views.py:320
+#: gatekeeper/views.py:340
 msgid "Edit Allowed Email"
 msgstr "Editar E-mail Permitido"
 
-#: gatekeeper/views.py:323 templates/gatekeeper/gatekeeper_list.html:183
+#: gatekeeper/views.py:343 templates/gatekeeper/gatekeeper_list.html:199
 msgid "Add Allowed Email"
 msgstr "Adicionar E-mail Permitido"
 
-#: gatekeeper/views.py:330
+#: gatekeeper/views.py:350
 msgid "Allowed Email saved successfully."
 msgstr "E-mail Permitido salvo com sucesso."
 
-#: gatekeeper/views.py:352
+#: gatekeeper/views.py:372
 msgid "Allowed Email deleted successfully."
 msgstr "E-mail Permitido excluído com sucesso."
 
-#: gatekeeper/views.py:357
+#: gatekeeper/views.py:377
 msgid "Delete Allowed Email"
 msgstr "Excluir E-mail Permitido"
 
-#: gatekeeper/views.py:359
+#: gatekeeper/views.py:379
 #, python-format
 msgid "Are you sure you want to delete the allowed email \"%(email)s\"?"
 msgstr "Tem certeza de que deseja excluir o e-mail permitido \"%(email)s\"?"
 
-#: gatekeeper/views.py:373
+#: gatekeeper/views.py:393
 msgid "Edit IP Address"
 msgstr "Editar Endereço IP"
 
-#: gatekeeper/views.py:376 templates/gatekeeper/gatekeeper_list.html:247
+#: gatekeeper/views.py:396 templates/gatekeeper/gatekeeper_list.html:263
 #: templates/wireguard/wireguard_manage_peer.html:171
 msgid "Add IP Address"
 msgstr "Adicionar IP"
 
-#: gatekeeper/views.py:383
+#: gatekeeper/views.py:403
 msgid "IP Address saved successfully."
 msgstr "Endereço IP salvo com sucesso."
 
-#: gatekeeper/views.py:388
+#: gatekeeper/views.py:408
 msgid ""
 "\n"
 "        <h5>IP Address List</h5>\n"
@@ -1640,15 +1745,15 @@ msgstr ""
 "\"Rede do Escritório\", \"Atacante Bloqueado\").</p>\n"
 "        "
 
-#: gatekeeper/views.py:424
+#: gatekeeper/views.py:444
 msgid "IP Address deleted successfully."
 msgstr "Endereço IP excluído com sucesso."
 
-#: gatekeeper/views.py:429
+#: gatekeeper/views.py:449
 msgid "Delete IP Address"
 msgstr "Excluir Endereço IP"
 
-#: gatekeeper/views.py:431
+#: gatekeeper/views.py:451
 #, python-format
 msgid "Are you sure you want to delete the IP address \"%(address)s\"?"
 msgstr "Tem certeza de que deseja excluir o endereço IP \"%(address)s\"?"
@@ -2016,8 +2121,8 @@ msgid "In"
 msgstr "Entrada"
 
 #: templates/api_v2/api_documentation.html:49
-#: templates/gatekeeper/gatekeeper_list.html:150
-#: templates/gatekeeper/gatekeeper_list.html:195
+#: templates/gatekeeper/gatekeeper_list.html:166
+#: templates/gatekeeper/gatekeeper_list.html:211
 #: templates/wireguard/apply_route_template.html:27
 msgid "Type"
 msgstr "Tipo"
@@ -2027,11 +2132,13 @@ msgid "Required"
 msgstr "Obrigatório"
 
 #: templates/api_v2/api_documentation.html:62
+#: templates/gatekeeper/gatekeeper_list.html:75
 #: templates/scheduler/scheduleprofile_form.html:175
 msgid "Yes"
 msgstr "Sim"
 
 #: templates/api_v2/api_documentation.html:64
+#: templates/gatekeeper/gatekeeper_list.html:77
 #: templates/scheduler/scheduleprofile_form.html:177
 msgid "No"
 msgstr "Não"
@@ -2076,12 +2183,12 @@ msgstr "Desabilitado"
 #: templates/app_gateway/application_details.html:121
 #: templates/cluster/workers_list.html:77
 #: templates/dns/static_host_list.html:74
-#: templates/gatekeeper/gatekeeper_list.html:73
-#: templates/gatekeeper/gatekeeper_list.html:116
-#: templates/gatekeeper/gatekeeper_list.html:161
-#: templates/gatekeeper/gatekeeper_list.html:209
-#: templates/gatekeeper/gatekeeper_list.html:226
-#: templates/gatekeeper/gatekeeper_list.html:278
+#: templates/gatekeeper/gatekeeper_list.html:89
+#: templates/gatekeeper/gatekeeper_list.html:132
+#: templates/gatekeeper/gatekeeper_list.html:177
+#: templates/gatekeeper/gatekeeper_list.html:225
+#: templates/gatekeeper/gatekeeper_list.html:242
+#: templates/gatekeeper/gatekeeper_list.html:294
 #: templates/routing_templates/list.html:29
 #: templates/scheduler/scheduleprofile_form.html:123
 #: templates/scheduler/scheduleprofile_list.html:25
@@ -2163,6 +2270,7 @@ msgstr "Adicionar Política de Acesso"
 
 #: templates/app_gateway/app_gateway_list.html:140
 #: templates/gatekeeper/gatekeeper_list.html:43
+#: templates/gatekeeper/gatekeeper_list.html:64
 msgid "Groups"
 msgstr "Grupos"
 
@@ -2173,10 +2281,10 @@ msgstr "Métodos de Autenticação"
 #: templates/app_gateway/app_gateway_list.html:142
 #: templates/app_gateway/application_details.html:62
 #: templates/app_gateway/application_details.html:109
-#: templates/gatekeeper/gatekeeper_list.html:63
-#: templates/gatekeeper/gatekeeper_list.html:106
-#: templates/gatekeeper/gatekeeper_list.html:151
-#: templates/gatekeeper/gatekeeper_list.html:198
+#: templates/gatekeeper/gatekeeper_list.html:65
+#: templates/gatekeeper/gatekeeper_list.html:122
+#: templates/gatekeeper/gatekeeper_list.html:167
+#: templates/gatekeeper/gatekeeper_list.html:214
 #: templates/scheduler/scheduleprofile_form.html:111
 #: templates/scheduler/scheduleprofile_list.html:15
 #: templates/wireguard/apply_route_template.html:28
@@ -2734,10 +2842,19 @@ msgid "Create Port forwarding Rule"
 msgstr "Criar Regra de Encaminhamento de Porta"
 
 #: templates/gatekeeper/gatekeeper_auth_method_form.html:63
+#: templates/gatekeeper/gatekeeper_user_form.html:43
 msgid "View QR Code"
 msgstr "Ver Código QR"
 
-#: templates/gatekeeper/gatekeeper_auth_method_form.html:74
+#: templates/gatekeeper/gatekeeper_auth_method_form.html:64
+#: templates/gatekeeper/gatekeeper_user_form.html:44
+#, fuzzy
+#| msgid "Global TOTP Secret"
+msgid "Generate TOTP Secret"
+msgstr "Segredo TOTP Global"
+
+#: templates/gatekeeper/gatekeeper_auth_method_form.html:93
+#: templates/gatekeeper/gatekeeper_user_form.html:73
 msgid "Please enter a TOTP Secret first to generate the QR code."
 msgstr "Por favor, insira um Segredo TOTP primeiro para gerar o código QR."
 
@@ -2763,44 +2880,48 @@ msgstr "Usuários"
 msgid "Add User"
 msgstr "Adicionar Usuário"
 
-#: templates/gatekeeper/gatekeeper_list.html:88
+#: templates/gatekeeper/gatekeeper_list.html:63
+msgid "TOTP"
+msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:104
 msgid "No Gatekeeper Users found."
 msgstr "Nenhum Usuário Gatekeeper encontrado."
 
-#: templates/gatekeeper/gatekeeper_list.html:95
+#: templates/gatekeeper/gatekeeper_list.html:111
 msgid "Add Group"
 msgstr "Adicionar Grupo"
 
-#: templates/gatekeeper/gatekeeper_list.html:131
+#: templates/gatekeeper/gatekeeper_list.html:147
 msgid "No Gatekeeper Groups found."
 msgstr "Nenhum Grupo Gatekeeper encontrado."
 
-#: templates/gatekeeper/gatekeeper_list.html:140
+#: templates/gatekeeper/gatekeeper_list.html:156
 msgid "Add Auth Method"
 msgstr "Adicionar Método de Autenticação"
 
-#: templates/gatekeeper/gatekeeper_list.html:176
+#: templates/gatekeeper/gatekeeper_list.html:192
 msgid "No Authentication Methods found."
 msgstr "Nenhum Método de Autenticação encontrado."
 
-#: templates/gatekeeper/gatekeeper_list.html:196
+#: templates/gatekeeper/gatekeeper_list.html:212
 msgid "Identity"
 msgstr "Identidade"
 
-#: templates/gatekeeper/gatekeeper_list.html:197
-#: templates/gatekeeper/gatekeeper_list.html:259
+#: templates/gatekeeper/gatekeeper_list.html:213
+#: templates/gatekeeper/gatekeeper_list.html:275
 msgid "Auth Method"
 msgstr "Método de Autenticação"
 
-#: templates/gatekeeper/gatekeeper_list.html:241
+#: templates/gatekeeper/gatekeeper_list.html:257
 msgid "No Allowed Emails or Domains found."
 msgstr "Nenhum E-mail ou Domínio Permitido encontrado."
 
-#: templates/gatekeeper/gatekeeper_list.html:260
+#: templates/gatekeeper/gatekeeper_list.html:276
 msgid "Manage"
 msgstr "Gerenciar"
 
-#: templates/gatekeeper/gatekeeper_list.html:293
+#: templates/gatekeeper/gatekeeper_list.html:309
 msgid "No IP Addresses found."
 msgstr "Nenhum Endereço IP encontrado."
 
@@ -3638,10 +3759,6 @@ msgstr "Confirmação de senha é obrigatória para novos usuários."
 msgid "The two password fields didn't match."
 msgstr "As duas senhas não coincidem."
 
-#: user_manager/forms.py:127
-msgid "Password must be at least 8 characters long."
-msgstr "Senha deve ter pelo menos 8 caracteres."
-
 #: user_manager/forms.py:220
 msgid "A peer group with that name already exists."
 msgstr "Um grupo de peers com esse nome já existe."
@@ -4410,3 +4527,6 @@ msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Nenhuma interface encontrada|Nenhuma interface WireGuard foi encontrada para "
 "processar."
+
+#~ msgid "Global TOTP Before Authentication"
+#~ msgstr "TOTP Global Antes da Autenticação"
