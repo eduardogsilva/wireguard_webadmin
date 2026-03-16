@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 
 from auth_gateway.models.applications import ApplicationModel
 from auth_gateway.models.routes import AppRoutesModel, RoutePolicyBindingModel
@@ -21,8 +21,14 @@ def normalize_host(raw_host: str) -> str:
 
 def normalize_path(raw_uri: str) -> str:
     parsed = urlsplit(raw_uri or "/")
-    path = parsed.path or "/"
+    path = unquote(parsed.path or "/")
     return path if path.startswith("/") else f"/{path}"
+
+
+def _path_matches(path: str, prefix: str) -> bool:
+    """Check path boundary correctly — prevents /admin matching /administrator."""
+    prefix = prefix.rstrip("/")
+    return path == prefix or path.startswith(prefix + "/")
 
 
 def resolve_application(runtime_config: RuntimeConfig, host: str) -> ApplicationModel | None:
@@ -42,7 +48,7 @@ def resolve_route(runtime_config: RuntimeConfig, application_id: str, path: str)
     sorted_routes = sorted(app_routes.routes, key=lambda route: len(route.path_prefix), reverse=True)
     for route in sorted_routes:
         route_prefix = normalize_path(route.path_prefix)
-        if normalized_path.startswith(route_prefix):
+        if _path_matches(normalized_path, route_prefix):
             return route, route.policy
     return None, app_routes.default_policy
 

@@ -43,7 +43,7 @@ def _redirect_with_cookie(request: Request, destination: str, session) -> Redire
         value=session.session_id,
         httponly=True,
         secure=request.app.state.settings.secure_cookies,
-        samesite="lax",
+        samesite="strict",
         path="/",
     )
     return response
@@ -236,6 +236,11 @@ async def login_oidc_callback(request: Request, state: str):
     oidc_state = request.app.state.session_service.consume_oidc_state(state)
     if not oidc_state:
         return _render(request, "error.html", status_code=400, title="Invalid OIDC state", message="The OIDC login state is missing or expired.")
+
+    callback_host = normalize_host(request.headers.get("host", ""))
+    if oidc_state.host != callback_host:
+        logger.warning("OIDC callback host mismatch: expected '%s', got '%s'", oidc_state.host, callback_host)
+        return _render(request, "error.html", status_code=400, title="OIDC callback host mismatch", message="The OIDC callback host does not match the original request host.")
 
     context = resolve_context_from_request(request, runtime_config, oidc_state.next_url)
     effective_policy = get_effective_policy(runtime_config, context.policy_name)

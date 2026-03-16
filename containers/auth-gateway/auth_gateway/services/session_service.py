@@ -52,9 +52,14 @@ class SessionService:
         if metadata:
             session.metadata.update(metadata)
         if add_factors:
+            was_unauthenticated = not session.auth_factors
             merged_factors = set(session.auth_factors)
             merged_factors.update(add_factors)
             session.auth_factors = sorted(merged_factors)
+            # Prevent session fixation: regenerate session ID on first authentication
+            if was_unauthenticated and existing_session:
+                self.storage.delete_session(existing_session.session_id)
+                session.session_id = token_urlsafe(32)
         requested_expiry = now + timedelta(minutes=expires_in_minutes or self.default_session_minutes)
         session.expires_at = min(session.expires_at, requested_expiry) if existing_session else requested_expiry
         session.updated_at = now

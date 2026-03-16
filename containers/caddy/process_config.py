@@ -109,6 +109,10 @@ def build_caddyfile(apps, auth_policies, routes):
         base, upstream_path = split_upstream(upstream)
 
         lines.append(f"{', '.join(hosts)} {{")
+        lines.append("  # Security: overwrite client-supplied forwarding headers with verified values")
+        lines.append("  request_header X-Forwarded-For {remote_host}")
+        lines.append("  request_header -X-Forwarded-Host")
+        lines.append("")
         emit_auth_portal()
 
         for static_route in static_routes:

@@ -25,7 +25,7 @@ class OIDCService:
             client_id=method.client_id,
             client_secret=method.client_secret,
             server_metadata_url=metadata_url,
-            client_kwargs={"scope": "openid email profile"},
+            client_kwargs={"scope": "openid email profile", "code_challenge_method": "S256"},
         )
         self._clients[method_name] = client
         return client
