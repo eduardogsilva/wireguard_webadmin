@@ -2,13 +2,11 @@ import json
 import os
 
 from app_gateway.models import (
-    AccessPolicy, Application, ApplicationPolicy
+    AccessPolicy, Application, ApplicationPolicy, RESERVED_APP_NAME
 )
 from gatekeeper.models import (
     AuthMethod, GatekeeperGroup, GatekeeperIPAddress, GatekeeperUser
 )
-
-RESERVED_APP_NAME = 'wireguard_webadmin'
 
 POLICY_TYPE_MAP = {
     'public': 'bypass',

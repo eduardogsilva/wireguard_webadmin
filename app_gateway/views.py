@@ -17,6 +17,7 @@ from app_gateway.forms import (
 from app_gateway.models import (
     Application, ApplicationHost, AccessPolicy, ApplicationPolicy, ApplicationRoute
 )
+from app_gateway.setup_defaults import create_default_entries
 from user_manager.models import UserAcl
 
 
@@ -25,6 +26,7 @@ def view_app_gateway_list(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=20).exists():
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
 
+    create_default_entries()
     applications = Application.objects.all().order_by('name')
     hosts = ApplicationHost.objects.all().order_by('hostname')
     access_policies = AccessPolicy.objects.all().order_by('name')

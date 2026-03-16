@@ -9,6 +9,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from app_gateway.setup_defaults import create_default_entries
 from gatekeeper.forms import GatekeeperUserForm, GatekeeperGroupForm, AuthMethodForm, AuthMethodAllowedDomainForm, \
     AuthMethodAllowedEmailForm, GatekeeperIPAddressForm
 from gatekeeper.models import GatekeeperUser, GatekeeperGroup, AuthMethod, AuthMethodAllowedDomain, \
@@ -22,6 +23,7 @@ def view_gatekeeper_list(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=20).exists():
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
 
+    create_default_entries()
     active_tab = request.GET.get('tab', 'auth_methods')
     auth_methods = AuthMethod.objects.all().order_by('name')
     users = GatekeeperUser.objects.all().prefetch_related('groups').order_by('username')

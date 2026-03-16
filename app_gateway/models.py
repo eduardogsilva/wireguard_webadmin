@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 from gatekeeper.models import GatekeeperGroup, AuthMethod, _unique_slug
 
+RESERVED_APP_NAME = 'wireguard_webadmin'
+
 
 class Application(models.Model):
     name = models.SlugField(max_length=64, unique=True)
@@ -17,7 +19,9 @@ class Application(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
     def save(self, *args, **kwargs):
-        if self.display_name:
+        if self.display_name == RESERVED_APP_NAME:
+            self.name = RESERVED_APP_NAME
+        elif self.display_name:
             self.name = _unique_slug(Application, self.display_name, exclude_pk=self.pk)
         super().save(*args, **kwargs)
 
