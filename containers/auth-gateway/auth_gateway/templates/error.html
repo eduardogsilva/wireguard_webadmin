@@ -1,18 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-    <link rel="stylesheet" href="{{ external_path }}/static/style.css">
-</head>
-<body>
-    <main class="shell">
-        <section class="card">
-            <p class="eyebrow">Auth Gateway</p>
-            <h1>{{ title }}</h1>
-            <p class="muted">{{ message }}</p>
-        </section>
-    </main>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}{{ title }} — Gatekeeper{% endblock %}
+{% block content %}
+    <h1 class="card-title">{{ title }}</h1>
+    <p class="card-subtitle">{{ message }}</p>
+{% endblock %}

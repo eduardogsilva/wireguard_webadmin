@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gatekeeper{% endblock %}</title>
+    <link rel="stylesheet" href="{{ external_path }}/static/style.css">
+</head>
+<body>
+    <div class="shell">
+        <div class="brand">
+            <span class="brand-name">🔐 Gatekeeper</span>
+        </div>
+        <section class="card">
+            {% block content %}{% endblock %}
+        </section>
+    </div>
+    <footer>
+        <a href="https://github.com/eduardogsilva/wireguard_webadmin" target="_blank" rel="noopener noreferrer">WireGuard WebAdmin</a>
+    </footer>
+</body>
+</html>
