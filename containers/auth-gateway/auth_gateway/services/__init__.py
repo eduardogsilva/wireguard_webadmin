@@ -1,0 +1,1 @@
+"""Auth gateway service layer."""

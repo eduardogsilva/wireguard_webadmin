@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+    <link rel="stylesheet" href="{{ external_path }}/static/style.css">
+</head>
+<body>
+    <main class="shell">
+        <section class="card">
+            <p class="eyebrow">Auth Gateway</p>
+            <h1>Sign in to {{ application_name }}</h1>
+            <p class="muted">Active policy: {{ policy_name }}</p>
+            <div class="stack">
+                {% if "password" in methods %}
+                <a class="button" href="{{ external_path }}/login/password?next={{ next | urlencode }}">Continue with username and password</a>
+                {% endif %}
+                {% if "oidc" in methods %}
+                <a class="button secondary" href="{{ external_path }}/login/oidc/start?next={{ next | urlencode }}">Continue with OIDC</a>
+                {% endif %}
+                {% if "totp" in methods %}
+                <a class="button secondary" href="{{ external_path }}/login/totp?next={{ next | urlencode }}">Continue with TOTP</a>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>

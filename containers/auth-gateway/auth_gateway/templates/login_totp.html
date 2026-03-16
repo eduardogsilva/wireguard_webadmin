@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOTP verification</title>
+    <link rel="stylesheet" href="{{ external_path }}/static/style.css">
+</head>
+<body>
+    <main class="shell">
+        <section class="card">
+            <p class="eyebrow">Auth Gateway</p>
+            <h1>Verify access to {{ application_name }}</h1>
+            <p class="muted">Enter the current code from your authenticator app.</p>
+            {% if error %}
+            <p class="error">{{ error }}</p>
+            {% endif %}
+            <form method="post" action="{{ external_path }}/login/totp" class="stack">
+                <input type="hidden" name="next" value="{{ next }}">
+                <label class="field">
+                    <span>Verification code</span>
+                    <input type="text" name="token" inputmode="numeric" autocomplete="one-time-code" required>
+                </label>
+                <button class="button" type="submit">Verify</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

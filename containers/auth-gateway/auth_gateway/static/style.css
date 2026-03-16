@@ -1,0 +1,117 @@
+:root {
+    color-scheme: light;
+    --bg: #f2efe7;
+    --bg-accent: #ddd4c4;
+    --card: rgba(255, 252, 246, 0.92);
+    --ink: #1e1b18;
+    --muted: #6a6258;
+    --line: rgba(30, 27, 24, 0.12);
+    --accent: #6b3f24;
+    --accent-strong: #4c2714;
+    --danger: #a0251d;
+    --shadow: 0 30px 80px rgba(62, 40, 25, 0.16);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+    color: var(--ink);
+    background:
+        radial-gradient(circle at top left, rgba(107, 63, 36, 0.14), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(93, 124, 96, 0.14), transparent 28%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-accent) 100%);
+}
+
+.shell {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+}
+
+.card {
+    width: min(100%, 440px);
+    padding: 32px;
+    border-radius: 24px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+}
+
+.eyebrow {
+    margin: 0 0 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    color: var(--muted);
+}
+
+h1 {
+    margin: 0 0 12px;
+    font-family: "IBM Plex Serif", Georgia, serif;
+    font-size: clamp(1.9rem, 4vw, 2.3rem);
+    line-height: 1.05;
+}
+
+.muted {
+    margin: 0 0 20px;
+    color: var(--muted);
+}
+
+.stack {
+    display: grid;
+    gap: 14px;
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+input {
+    width: 100%;
+    padding: 13px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--ink);
+    font: inherit;
+}
+
+.button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 48px;
+    padding: 12px 16px;
+    border: 0;
+    border-radius: 14px;
+    text-decoration: none;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 180ms ease, background 180ms ease;
+}
+
+.button:hover {
+    transform: translateY(-1px);
+    background: var(--accent-strong);
+}
+
+.button.secondary {
+    background: rgba(30, 27, 24, 0.08);
+    color: var(--ink);
+}
+
+.error {
+    margin: 0 0 16px;
+    color: var(--danger);
+    font-weight: 600;
+}

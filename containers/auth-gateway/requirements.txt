@@ -1,0 +1,10 @@
+fastapi==0.116.1
+uvicorn[standard]==0.35.0
+pydantic==2.11.7
+authlib==1.6.4
+httpx==0.28.1
+pyotp==2.9.0
+argon2-cffi==25.1.0
+jinja2==3.1.6
+python-multipart==0.0.20
+pydantic-settings==2.10.1
