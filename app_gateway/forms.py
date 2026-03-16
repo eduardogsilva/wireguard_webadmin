@@ -201,10 +201,6 @@ class AccessPolicyForm(forms.ModelForm):
             if local_password_count > 0 and oidc_count > 0:
                 self.add_error('methods', _("Cannot select both Local Password and OpenID Connect (OIDC) authentication methods."))
 
-            # Rule: TOTP cannot be selected alone — must be combined with local_password or oidc
-            if totp_count > 0 and local_password_count == 0 and oidc_count == 0:
-                self.add_error('methods', _("TOTP must be combined with a Local Password or OpenID Connect authentication method."))
-
             # Rule: If local password is selected, at least one user group must be selected
             if has_local_password and not has_groups:
                 self.add_error('groups', _("At least one user group must be selected when using Local Password authentication."))
