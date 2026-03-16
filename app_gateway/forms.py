@@ -277,3 +277,17 @@ class ApplicationRouteForm(forms.ModelForm):
                 css_class='row'
             )
         )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        path_prefix = (cleaned_data.get('path_prefix') or '').strip()
+        if path_prefix:
+            if not path_prefix.startswith('/'):
+                self.add_error('path_prefix', _('Path prefix must start with /.'))
+            elif ' ' in path_prefix:
+                self.add_error('path_prefix', _('Path prefix cannot contain spaces.'))
+            elif any(c in path_prefix for c in ('{', '}', '\n', '\r')):
+                self.add_error('path_prefix', _('Path prefix contains invalid characters.'))
+            else:
+                cleaned_data['path_prefix'] = path_prefix
+        return cleaned_data
