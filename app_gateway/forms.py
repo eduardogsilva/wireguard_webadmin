@@ -13,11 +13,12 @@ from app_gateway.models import (
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
-        fields = ['name', 'display_name', 'upstream']
+        fields = ['name', 'display_name', 'upstream', 'allow_invalid_cert']
         labels = {
             'name': _('Name'),
             'display_name': _('Display Name'),
             'upstream': _('Upstream'),
+            'allow_invalid_cert': _('Allow invalid/self-signed certificate'),
         }
 
     def __init__(self, *args, **kwargs):
@@ -33,6 +34,7 @@ class ApplicationForm(forms.ModelForm):
             ),
             Div(
                 Div('upstream', css_class='col-md-12'),
+                Div('allow_invalid_cert', css_class='col-md-12'),
                 css_class='row'
             ),
             Div(

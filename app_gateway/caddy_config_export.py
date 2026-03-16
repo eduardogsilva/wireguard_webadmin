@@ -26,6 +26,7 @@ def build_applications_data():
             'name': app.display_name or app.name,
             'hosts': list(app.hosts.values_list('hostname', flat=True)),
             'upstream': app.upstream,
+            'allow_invalid_cert': app.allow_invalid_cert,
         }
         entries.append(entry)
     return {'entries': entries}

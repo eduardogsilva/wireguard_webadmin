@@ -10,6 +10,7 @@ class Application(models.Model):
     name = models.SlugField(max_length=64, unique=True)
     display_name = models.CharField(max_length=128, blank=True)
     upstream = models.CharField(max_length=255, help_text=_("Upstream address, e.g.: http://10.188.18.27:3000"))
+    allow_invalid_cert = models.BooleanField(default=False, help_text=_("Allow invalid or self-signed TLS certificates from the upstream"))
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
