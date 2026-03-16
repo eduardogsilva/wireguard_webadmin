@@ -1,11 +1,28 @@
 import uuid
 
 from django.db import models
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
+
+
+def _unique_slug(model_class, display_name, exclude_pk=None, slug_field='name', filter_kwargs=None):
+    base = slugify(display_name) or 'item'
+    slug = base
+    counter = 1
+    qs = model_class.objects.all()
+    if exclude_pk:
+        qs = qs.exclude(pk=exclude_pk)
+    if filter_kwargs:
+        qs = qs.filter(**filter_kwargs)
+    while qs.filter(**{slug_field: slug}).exists():
+        slug = f"{base}-{counter}"
+        counter += 1
+    return slug
 
 
 class AuthMethod(models.Model):
     name = models.SlugField(max_length=64, unique=True)
+    display_name = models.CharField(max_length=128, blank=True)
     auth_type = models.CharField(max_length=32, choices=(
         ('local_password', _('Local Password')),
         ('totp', _('One-Time Password (TOTP)')),
@@ -31,8 +48,13 @@ class AuthMethod(models.Model):
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
+    def save(self, *args, **kwargs):
+        if self.display_name:
+            self.name = _unique_slug(AuthMethod, self.display_name, exclude_pk=self.pk)
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.name} ({self.get_auth_type_display()})"
+        return f"{self.display_name or self.name} ({self.get_auth_type_display()})"
 
     class Meta:
         ordering = ['name']
@@ -89,14 +111,20 @@ class GatekeeperUser(models.Model):
 
 class GatekeeperGroup(models.Model):
     name = models.SlugField(max_length=64, unique=True)
+    display_name = models.CharField(max_length=128, blank=True)
     users = models.ManyToManyField(GatekeeperUser, blank=True, related_name='groups')
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
+    def save(self, *args, **kwargs):
+        if self.display_name:
+            self.name = _unique_slug(GatekeeperGroup, self.display_name, exclude_pk=self.pk)
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.name
+        return self.display_name or self.name
 
     class Meta:
         ordering = ['name']

@@ -13,10 +13,9 @@ from app_gateway.models import (
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
-        fields = ['name', 'display_name', 'upstream', 'allow_invalid_cert']
+        fields = ['display_name', 'upstream', 'allow_invalid_cert']
         labels = {
-            'name': _('Name'),
-            'display_name': _('Display Name'),
+            'display_name': _('Name'),
             'upstream': _('Upstream'),
             'allow_invalid_cert': _('Allow invalid/self-signed certificate'),
         }
@@ -24,12 +23,12 @@ class ApplicationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         cancel_url = kwargs.pop('cancel_url', '#')
         super().__init__(*args, **kwargs)
+        self.fields['display_name'].required = True
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('name', css_class='col-md-6'),
-                Div('display_name', css_class='col-md-6'),
+                Div('display_name', css_class='col-md-12'),
                 css_class='row'
             ),
             Div(
@@ -49,11 +48,7 @@ class ApplicationForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        name = cleaned_data.get("name")
         upstream = (cleaned_data.get("upstream") or "").strip()
-
-        if name == "wireguard_webadmin":
-            self.add_error("name", _("This is a reserved system name."))
 
         if upstream:
             if "wireguard-webadmin:8000" in upstream:
@@ -103,9 +98,9 @@ class ApplicationHostForm(forms.ModelForm):
 class AccessPolicyForm(forms.ModelForm):
     class Meta:
         model = AccessPolicy
-        fields = ['name', 'policy_type', 'groups', 'methods']
+        fields = ['display_name', 'policy_type', 'groups', 'methods']
         labels = {
-            'name': _('Name'),
+            'display_name': _('Name'),
             'policy_type': _('Policy Type'),
             'groups': _('Allowed Groups'),
             'methods': _('Authentication Methods'),
@@ -115,6 +110,7 @@ class AccessPolicyForm(forms.ModelForm):
         cancel_url = kwargs.pop('cancel_url', '#')
         policy_type = kwargs.pop('policy_type', None)
         super().__init__(*args, **kwargs)
+        self.fields['display_name'].required = True
 
         if self.instance and self.instance.pk:
             policy_type = self.instance.policy_type
@@ -125,11 +121,11 @@ class AccessPolicyForm(forms.ModelForm):
         self.fields['policy_type'].widget = forms.HiddenInput()
 
         self.helper = FormHelper()
-        
+
         if policy_type in ['public', 'deny']:
             self.helper.layout = Layout(
                 Div(
-                    Div('name', css_class='col-md-12'),
+                    Div('display_name', css_class='col-md-12'),
                     'policy_type',
                     css_class='row'
                 ),
@@ -145,7 +141,7 @@ class AccessPolicyForm(forms.ModelForm):
         else:
             self.helper.layout = Layout(
                 Div(
-                    Div('name', css_class='col-md-12'),
+                    Div('display_name', css_class='col-md-12'),
                     'policy_type',
                     css_class='row'
                 ),
@@ -244,9 +240,9 @@ class ApplicationPolicyForm(forms.ModelForm):
 class ApplicationRouteForm(forms.ModelForm):
     class Meta:
         model = ApplicationRoute
-        fields = ['name', 'path_prefix', 'policy', 'order']
+        fields = ['display_name', 'path_prefix', 'policy', 'order']
         labels = {
-            'name': _('Route Name'),
+            'display_name': _('Route Name'),
             'path_prefix': _('Path Prefix'),
             'policy': _('Policy'),
             'order': _('Order'),
@@ -255,11 +251,12 @@ class ApplicationRouteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         cancel_url = kwargs.pop('cancel_url', '#')
         super().__init__(*args, **kwargs)
+        self.fields['display_name'].required = True
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('name', css_class='col-md-12'),
+                Div('display_name', css_class='col-md-12'),
                 css_class='row'
             ),
             Div(

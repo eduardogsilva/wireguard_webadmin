@@ -75,7 +75,7 @@
                                             <td>{{ app.routes.count }}</td>
                                             <td>
                                                 {% if app.default_policy_config %}
-                                                    {{ app.default_policy_config.default_policy.name }}
+                                                    {{ app.default_policy_config.default_policy }}
                                                 {% else %}
                                                     {% trans 'Default (Deny)' %}
                                                 {% endif %}
@@ -145,7 +145,7 @@
                             <tbody>
                                 {% for policy in access_policies %}
                                     <tr>
-                                        <td>{{ policy.name }}</td>
+                                        <td>{{ policy }}</td>
                                         <td>{{ policy.get_policy_type_display }}</td>
                                         <td>{{ policy.groups.count }}</td>
                                         <td>{{ policy.methods.count }}</td>

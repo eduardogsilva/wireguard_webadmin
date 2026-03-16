@@ -125,20 +125,21 @@ class GatekeeperUserForm(forms.ModelForm):
 class GatekeeperGroupForm(forms.ModelForm):
     class Meta:
         model = GatekeeperGroup
-        fields = ['name', 'users']
+        fields = ['display_name', 'users']
         labels = {
-            'name': _('Group Name'),
+            'display_name': _('Group Name'),
             'users': _('Members'),
         }
 
     def __init__(self, *args, **kwargs):
         cancel_url = kwargs.pop('cancel_url', '#')
         super().__init__(*args, **kwargs)
+        self.fields['display_name'].required = True
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('name', css_class='col-xl-12'),
+                Div('display_name', css_class='col-xl-12'),
                 css_class='row'
             ),
             Div(
@@ -179,11 +180,11 @@ class AuthMethodForm(forms.ModelForm):
     class Meta:
         model = AuthMethod
         fields = [
-            'name', 'auth_type', 'totp_secret',
+            'display_name', 'auth_type', 'totp_secret',
             'oidc_provider', 'oidc_client_id', 'oidc_client_secret'
         ]
         labels = {
-            'name': _('Name'),
+            'display_name': _('Name'),
             'auth_type': _('Authentication Type'),
             'totp_secret': _('Global TOTP Secret'),
             'oidc_provider': _('OIDC Provider URL'),
@@ -195,6 +196,7 @@ class AuthMethodForm(forms.ModelForm):
         cancel_url = kwargs.pop('cancel_url', '#')
         super().__init__(*args, **kwargs)
 
+        self.fields['display_name'].required = True
         if self.instance and self.instance.pk:
             self.fields['auth_type'].disabled = True
             exp_min = self.instance.session_expiration_minutes
@@ -208,7 +210,7 @@ class AuthMethodForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('name', css_class='col-xl-6'),
+                Div('display_name', css_class='col-xl-6'),
                 Div('auth_type', css_class='col-xl-6'),
                 css_class='row auth-type-group'
             ),

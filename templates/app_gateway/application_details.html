@@ -23,14 +23,13 @@
 
         <div class="row mb-4">
             <div class="col-md-6">
-                <strong>{% trans 'Name' %}:</strong> {{ application.name }}<br>
-                <strong>{% trans 'Display Name' %}:</strong> {{ application.display_name }}<br>
+                <strong>{% trans 'Name' %}:</strong> {{ application }}<br>
                 <strong>{% trans 'Upstream' %}:</strong> <code>{{ application.upstream }}</code><br>
             </div>
             <div class="col-md-6">
                 <strong>{% trans 'Default Policy' %}:</strong>
                 {% if application.default_policy_config %}
-                <span>{{ application.default_policy_config.default_policy.name }}</span>
+                <span>{{ application.default_policy_config.default_policy }}</span>
                 <a href="{% url 'manage_application_policy' %}?uuid={{ application.default_policy_config.uuid }}"
                     class="btn btn-sm btn-outline-secondary btn-xs"><i class="fas fa-edit"></i></a>
                 <a href="{% url 'delete_application_policy' %}?uuid={{ application.default_policy_config.uuid }}"
@@ -112,9 +111,9 @@
                 <tbody>
                     {% for route in routes %}
                     <tr>
-                        <td>{{ route.name }}</td>
+                        <td>{{ route }}</td>
                         <td><code>{{ route.path_prefix }}</code></td>
-                        <td>{{ route.policy.name }}</td>
+                        <td>{{ route.policy }}</td>
                         <td>{{ route.order }}</td>
                         <td style="width: 15%">
                             <a href="{% url 'manage_application_route' %}?uuid={{ route.uuid }}"

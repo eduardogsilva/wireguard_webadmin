@@ -79,7 +79,7 @@
                                         </td>
                                         <td>
                                             {% for group in user.groups.all %}
-                                                <span class="badge badge-info">{{ group.name }}</span>
+                                                <span class="badge badge-info">{{ group }}</span>
                                             {% empty %}
                                                 <span class="text-muted">—</span>
                                             {% endfor %}
@@ -125,7 +125,7 @@
                             <tbody>
                                 {% for group in groups %}
                                     <tr>
-                                        <td>{{ group.name }}</td>
+                                        <td>{{ group }}</td>
                                         <td>{{ group.users.count }}</td>
                                         <td style="width: 15%">
                                             <a href="{% url 'manage_gatekeeper_group' %}?uuid={{ group.uuid }}" 
@@ -170,7 +170,7 @@
                             <tbody>
                                 {% for method in auth_methods %}
                                     <tr>
-                                        <td>{{ method.name }}</td>
+                                        <td>{{ method }}</td>
                                         <td>{{ method.get_auth_type_display }}</td>
                                         <td style="width: 15%">
                                             <a href="{% url 'manage_gatekeeper_auth_method' %}?uuid={{ method.uuid }}" 
@@ -219,7 +219,7 @@
                                     <tr>
                                         <td><span class="badge badge-info">{% trans 'Email' %}</span></td>
                                         <td>{{ email.email }}</td>
-                                        <td>{{ email.auth_method.name }}</td>
+                                        <td>{{ email.auth_method }}</td>
                                         <td style="width: 15%">
                                             <a href="{% url 'manage_gatekeeper_email' %}?uuid={{ email.uuid }}" 
                                                class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
@@ -236,7 +236,7 @@
                                     <tr>
                                         <td><span class="badge badge-secondary">{% trans 'Domain' %}</span></td>
                                         <td>{{ domain.domain }}</td>
-                                        <td>{{ domain.auth_method.name }}</td>
+                                        <td>{{ domain.auth_method }}</td>
                                         <td style="width: 15%">
                                             <a href="{% url 'manage_gatekeeper_domain' %}?uuid={{ domain.uuid }}" 
                                                class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
@@ -288,7 +288,7 @@
                                                 <span class="badge badge-danger">{% trans 'Deny' %}</span>
                                             {% endif %}
                                         </td>
-                                        <td>{{ ip.auth_method.name }}</td>
+                                        <td>{{ ip.auth_method }}</td>
                                         <td style="width: 15%">
                                             <a href="{% url 'manage_gatekeeper_ip' %}?uuid={{ ip.uuid }}" 
                                                class="btn btn-sm btn-info" title="{% trans 'Edit' %}">

@@ -3,7 +3,7 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from gatekeeper.models import GatekeeperGroup, AuthMethod
+from gatekeeper.models import GatekeeperGroup, AuthMethod, _unique_slug
 
 
 class Application(models.Model):
@@ -16,11 +16,13 @@ class Application(models.Model):
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
-    def __str__(self):
+    def save(self, *args, **kwargs):
         if self.display_name:
-            return f"{self.display_name} ({self.name})"
-        else:
-            return self.name
+            self.name = _unique_slug(Application, self.display_name, exclude_pk=self.pk)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.display_name or self.name
 
     class Meta:
         ordering = ['name']
@@ -43,6 +45,7 @@ class ApplicationHost(models.Model):
 
 class AccessPolicy(models.Model):
     name = models.SlugField(max_length=64, unique=True)
+    display_name = models.CharField(max_length=128, blank=True)
     policy_type = models.CharField(max_length=32, choices=(('public', _('Public')), ('protected', _('Protected')), ('deny', _('Deny'))))
     groups = models.ManyToManyField(GatekeeperGroup, blank=True, related_name='policies')
     methods = models.ManyToManyField(AuthMethod, blank=True, related_name='policies')
@@ -51,8 +54,13 @@ class AccessPolicy(models.Model):
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
+    def save(self, *args, **kwargs):
+        if self.display_name:
+            self.name = _unique_slug(AccessPolicy, self.display_name, exclude_pk=self.pk)
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.name} ({self.get_policy_type_display()})"
+        return f"{self.display_name or self.name} ({self.get_policy_type_display()})"
 
     class Meta:
         ordering = ['name']
@@ -78,7 +86,8 @@ class ApplicationPolicy(models.Model):
 
 class ApplicationRoute(models.Model):
     application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name='routes')
-    name = models.SlugField(max_length=64, help_text=_("Route identifier, used in export (e.g.: public_area)"))
+    name = models.SlugField(max_length=64)
+    display_name = models.CharField(max_length=128, blank=True)
     path_prefix = models.CharField(max_length=255)
     policy = models.ForeignKey(AccessPolicy, on_delete=models.PROTECT, related_name='routes')
     order = models.PositiveIntegerField(default=0)
@@ -87,8 +96,16 @@ class ApplicationRoute(models.Model):
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
+    def save(self, *args, **kwargs):
+        if self.display_name:
+            self.name = _unique_slug(
+                ApplicationRoute, self.display_name, exclude_pk=self.pk,
+                filter_kwargs={'application': self.application},
+            )
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.application} {self.path_prefix} → {self.policy}"
+        return f"{self.application} — {self.display_name or self.name} ({self.path_prefix})"
 
     class Meta:
         ordering = ['application', 'order', 'path_prefix']
