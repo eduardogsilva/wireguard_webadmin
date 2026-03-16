@@ -15,7 +15,7 @@ from app_gateway.forms import (
     ApplicationPolicyForm, ApplicationRouteForm
 )
 from app_gateway.models import (
-    Application, ApplicationHost, AccessPolicy, ApplicationPolicy, ApplicationRoute
+    Application, ApplicationHost, AccessPolicy, ApplicationPolicy, ApplicationRoute, RESERVED_APP_NAME
 )
 from app_gateway.setup_defaults import create_default_entries
 from user_manager.models import UserAcl
@@ -59,6 +59,7 @@ def view_application_details(request):
         'application': application,
         'hosts': hosts,
         'routes': routes,
+        'is_reserved': application.name == RESERVED_APP_NAME,
         'page_title': _('Application Details'),
     }
     return render(request, 'app_gateway/application_details.html', context)
@@ -73,6 +74,9 @@ def view_manage_application(request):
 
     if application_uuid:
         application = get_object_or_404(Application, uuid=application_uuid)
+        if application.name == RESERVED_APP_NAME:
+            messages.error(request, _('The WireGuard WebAdmin application cannot be modified.'))
+            return redirect(reverse('view_application') + f'?uuid={application.uuid}')
         title = _('Edit Application')
     else:
         application = None
@@ -117,6 +121,10 @@ def view_delete_application(request):
 
     cancel_url = reverse('app_gateway_list') + '?tab=applications'
 
+    if application.name == RESERVED_APP_NAME:
+        messages.error(request, _('The WireGuard WebAdmin application cannot be deleted.'))
+        return redirect(reverse('view_application') + f'?uuid={application.uuid}')
+
     if request.method == 'POST':
         application.delete()
         messages.success(request, _('Application deleted successfully.'))
@@ -150,6 +158,10 @@ def view_manage_application_host(request):
 
     cancel_url = reverse('view_application') + f'?uuid={application.uuid}#hosts'
 
+    if application.name == RESERVED_APP_NAME:
+        messages.error(request, _('The WireGuard WebAdmin application cannot be modified.'))
+        return redirect(cancel_url)
+
     form = ApplicationHostForm(request.POST or None, instance=application_host, cancel_url=cancel_url)
     if form.is_valid():
         host = form.save(commit=False)
@@ -175,6 +187,10 @@ def view_delete_application_host(request):
     application = application_host.application
 
     cancel_url = reverse('view_application') + f'?uuid={application.uuid}#hosts'
+
+    if application.name == RESERVED_APP_NAME:
+        messages.error(request, _('The WireGuard WebAdmin application cannot be modified.'))
+        return redirect(cancel_url)
 
     if request.method == 'POST':
         application_host.delete()

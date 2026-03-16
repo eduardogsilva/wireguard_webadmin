@@ -145,7 +145,7 @@
                             <tbody>
                                 {% for policy in access_policies %}
                                     <tr>
-                                        <td>{{ policy }}</td>
+                                        <td>{{ policy.display_name|default:policy.name }}</td>
                                         <td>{{ policy.get_policy_type_display }}</td>
                                         <td>{{ policy.groups.count }}</td>
                                         <td>{{ policy.methods.count }}</td>
