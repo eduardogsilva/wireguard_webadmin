@@ -152,9 +152,9 @@ async def login_password_submit(request: Request, next: str = Form("/"), usernam
 
     if effective_policy.totp_method_names:
         logger.info("AUTH password ok for '%s' → totp required (policy: %s)", username, context.policy_name)
-        return _redirect_with_cookie(request, build_external_url(request, "/login/totp", next=next), session)
+        return _redirect_with_cookie(request, build_external_url(request, "/login/totp", next=context.path), session)
     logger.info("AUTH login ok for '%s' (policy: %s)", username, context.policy_name)
-    return _redirect_with_cookie(request, next, session)
+    return _redirect_with_cookie(request, context.path, session)
 
 
 @router.get("/login/totp", response_class=HTMLResponse)
@@ -205,7 +205,7 @@ async def login_totp_submit(request: Request, next: str = Form("/"), token: str 
         expires_in_minutes=get_effective_expiration(request, effective_policy, ["totp"]),
     )
     logger.info("AUTH login ok for '%s' via password+totp (policy: %s)", refreshed_session.username, context.policy_name)
-    return _redirect_with_cookie(request, next, refreshed_session)
+    return _redirect_with_cookie(request, context.path, refreshed_session)
 
 
 @router.get("/login/oidc/start")
@@ -218,7 +218,7 @@ async def login_oidc_start(request: Request, next: str = "/"):
     if not method_name or not method:
         return _render(request, "error.html", status_code=400, title="OIDC unavailable", message="The selected policy does not require OIDC.")
 
-    session_state = request.app.state.session_service.create_oidc_state(method_name, normalize_host(request.headers.get("host", "")), next)
+    session_state = request.app.state.session_service.create_oidc_state(method_name, normalize_host(request.headers.get("host", "")), context.path)
     redirect_uri = build_external_url(request, "/login/oidc/callback")
     return await request.app.state.oidc_service.build_authorization_redirect(
         request,

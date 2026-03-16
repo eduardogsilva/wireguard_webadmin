@@ -1,3 +1,4 @@
+import posixpath
 from dataclasses import dataclass
 from urllib.parse import unquote, urlsplit
 
@@ -22,7 +23,9 @@ def normalize_host(raw_host: str) -> str:
 def normalize_path(raw_uri: str) -> str:
     parsed = urlsplit(raw_uri or "/")
     path = unquote(parsed.path or "/")
-    return path if path.startswith("/") else f"/{path}"
+    path = path if path.startswith("/") else f"/{path}"
+    # Resolve any .. or . segments to prevent path traversal bypasses
+    return posixpath.normpath(path)
 
 
 def _path_matches(path: str, prefix: str) -> bool:
