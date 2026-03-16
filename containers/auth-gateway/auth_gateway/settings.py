@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     config_dir: Path = Field(default=Path("/caddy_json_export"))
     database_path: Path = Field(default=Path("/data/auth-gateway.sqlite3"))
     cookie_name: str = Field(default="auth_gateway_session")
+    csrf_cookie_name: str = Field(default="auth_gateway_csrf")
     external_path: str = Field(default="/auth-gateway")
     secure_cookies: bool = Field(default=True)
     session_default_minutes: int = Field(default=720)

@@ -7,6 +7,7 @@
     <div class="alert alert-error">{{ error }}</div>
     {% endif %}
     <form method="post" action="{{ external_path }}/login/totp" class="stack">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <input type="hidden" name="next" value="{{ next }}">
         <label class="field">
             <span>Verification code</span>

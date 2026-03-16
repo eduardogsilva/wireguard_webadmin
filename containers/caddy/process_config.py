@@ -11,6 +11,7 @@ Expected input files in /caddy_json_export/:
 
 import json
 import os
+import re
 from urllib.parse import urlparse
 
 JSON_DIR = os.environ.get("JSON_DIR", "/caddy_json_export")
@@ -18,6 +19,13 @@ CADDYFILE_PATH = os.environ.get("CADDYFILE_PATH", "/etc/caddy/Caddyfile")
 AUTH_GATEWAY_INTERNAL_URL = os.environ.get("AUTH_GATEWAY_INTERNAL_URL", "http://wireguard-webadmin-auth-gateway:9091")
 AUTH_GATEWAY_PORTAL_PATH = os.environ.get("AUTH_GATEWAY_EXTERNAL_PATH", "/auth-gateway")
 AUTH_GATEWAY_CHECK_URI = "/auth/check"
+AUTH_IDENTITY_HEADERS = (
+    "X-Auth-User",
+    "X-Auth-Email",
+    "X-Auth-Groups",
+    "X-Auth-Factors",
+    "X-Auth-Policy",
+)
 
 
 def load_json(filename):
@@ -69,8 +77,25 @@ def build_caddyfile(apps, auth_policies, routes):
         lines.append("  }")
         lines.append("")
 
-    def handle_open(matcher):
-        if matcher == "*":
+    def emit_identity_header_sanitization(indent="  "):
+        for header_name in AUTH_IDENTITY_HEADERS:
+            lines.append(f"{indent}request_header -{header_name}")
+
+    def emit_route_matcher(matcher_name, path_prefix):
+        matcher_name = re.sub(r"[^A-Za-z0-9_]", "_", matcher_name)
+        normalized_prefix = path_prefix.strip().rstrip("/") or "/"
+        if not normalized_prefix.startswith("/"):
+            normalized_prefix = f"/{normalized_prefix}"
+        if normalized_prefix == "/":
+            return None
+        lines.append(f"  @{matcher_name} {{")
+        lines.append(f"    path {normalized_prefix} {normalized_prefix}/*")
+        lines.append("  }")
+        lines.append("")
+        return f"@{matcher_name}"
+
+    def handle_open(matcher=None):
+        if not matcher:
             return "  handle {"
         return f"  handle {matcher} {{"
 
@@ -110,8 +135,9 @@ def build_caddyfile(apps, auth_policies, routes):
 
         lines.append(f"{', '.join(hosts)} {{")
         lines.append("  # Security: overwrite client-supplied forwarding headers with verified values")
-        lines.append("  request_header X-Forwarded-For {remote_host}")
+        lines.append("  request_header X-Forwarded-For {http.request.remote.host}")
         lines.append("  request_header -X-Forwarded-Host")
+        emit_identity_header_sanitization()
         lines.append("")
         emit_auth_portal()
 
@@ -135,10 +161,10 @@ def build_caddyfile(apps, auth_policies, routes):
             continue
 
         route_list = sorted(app_route_data.get("routes", []), key=lambda route: len(route.get("path_prefix", "")), reverse=True)
-        for route in route_list:
+        for route_index, route in enumerate(route_list):
             path_prefix = route.get("path_prefix", "/")
             policy_type = get_policy_type(route.get("policy"))
-            matcher = f"{path_prefix}*"
+            matcher = emit_route_matcher(f"route_{app_id}_{route_index}", path_prefix)
             if policy_type == "bypass":
                 lines.append(handle_open(matcher))
                 emit_reverse_proxy(base, upstream_path, allow_invalid_cert=allow_invalid_cert)
@@ -158,7 +184,7 @@ def build_caddyfile(apps, auth_policies, routes):
         elif default_policy_type == "deny":
             lines.append("  respond 403")
         else:
-            emit_protected_handle("*", base, upstream_path, allow_invalid_cert=allow_invalid_cert)
+            emit_protected_handle(None, base, upstream_path, allow_invalid_cert=allow_invalid_cert)
         lines.append("}")
         lines.append("")
 

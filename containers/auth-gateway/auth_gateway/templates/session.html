@@ -41,6 +41,7 @@
     </table>
     <hr>
     <form method="post" action="{{ external_path }}/logout">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <input type="hidden" name="next" value="/">
         <button class="btn btn-danger" type="submit">Sign out</button>
     </form>

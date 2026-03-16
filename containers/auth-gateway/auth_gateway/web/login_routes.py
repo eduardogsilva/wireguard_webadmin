@@ -13,14 +13,17 @@ from auth_gateway.web.dependencies import (
     get_effective_expiration,
     get_effective_policy,
     get_oidc_method,
+    get_or_create_csrf_token,
     get_runtime_config,
     get_session,
     get_totp_method,
     resolve_context_from_request,
+    set_csrf_cookie,
     session_is_allowed,
+    validate_csrf,
 )
 from auth_gateway.limiter import AUTH_RATE_LIMIT, limiter
-from fastapi import APIRouter, Form, Request
+from fastapi import APIRouter, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 router = APIRouter()
@@ -33,7 +36,11 @@ def _render(request: Request, template_name: str, status_code: int = 200, **cont
         "external_path": request.app.state.settings.external_path,
     }
     base_context.update(context)
-    return templates.TemplateResponse(template_name, base_context, status_code=status_code)
+    response = templates.TemplateResponse(template_name, base_context, status_code=status_code)
+    csrf_token = context.get("csrf_token")
+    if csrf_token:
+        set_csrf_cookie(request, response, csrf_token)
+    return response
 
 
 def _redirect_with_cookie(request: Request, destination: str, session) -> RedirectResponse:
@@ -49,12 +56,40 @@ def _redirect_with_cookie(request: Request, destination: str, session) -> Redire
     return response
 
 
+def _create_authenticated_session(request: Request, *, username=None, email=None, subject=None, groups=None, metadata=None, factors=None, expires_in_minutes=None):
+    existing_session = get_session(request)
+    if existing_session:
+        request.app.state.session_service.delete_session(existing_session.session_id)
+    return request.app.state.session_service.issue_session(
+        username=username,
+        email=email,
+        subject=subject,
+        groups=groups,
+        metadata=metadata,
+        add_factors=factors,
+        expires_in_minutes=expires_in_minutes,
+    )
+
+
+def _csrf_error(request: Request, next_path: str, application_name: str | None = None):
+    return _render(
+        request,
+        "error.html",
+        status_code=403,
+        title="Invalid form submission",
+        message="The form security token is missing or invalid. Please try again.",
+        next=next_path,
+        application_name=application_name,
+        csrf_token=get_or_create_csrf_token(request),
+    )
+
+
 @router.get("/", response_class=HTMLResponse)
 async def session_page(request: Request):
     session = get_session(request)
     if not session or not session.auth_factors:
         return RedirectResponse(build_external_url(request, "/login"), status_code=303)
-    return _render(request, "session.html", session=session)
+    return _render(request, "session.html", session=session, csrf_token=get_or_create_csrf_token(request))
 
 
 @router.get("/login", response_class=HTMLResponse)
@@ -117,36 +152,68 @@ async def login_password_page(request: Request, next: str = "/"):
     effective_policy = get_effective_policy(runtime_config, context.policy_name)
     if not effective_policy.password_method_names:
         return _render(request, "error.html", status_code=400, title="Password login unavailable", message="The selected policy does not require a password step.")
-    return _render(request, "login_password.html", next=next, application_name=context.application.name, error=None)
+    return _render(
+        request,
+        "login_password.html",
+        next=next,
+        application_name=context.application.name,
+        error=None,
+        csrf_token=get_or_create_csrf_token(request),
+    )
 
 
 @router.post("/login/password")
 @limiter.limit(AUTH_RATE_LIMIT)
-async def login_password_submit(request: Request, next: str = Form("/"), username: str = Form(...), password: str = Form(...)):
+async def login_password_submit(
+    request: Request,
+    next: str = Form("/"),
+    username: str = Form(...),
+    password: str = Form(...),
+    csrf_token: str = Form(...),
+):
     runtime_config = get_runtime_config(request)
     context = resolve_context_from_request(request, runtime_config, next)
     effective_policy = get_effective_policy(runtime_config, context.policy_name)
+    try:
+        validate_csrf(request, csrf_token)
+    except HTTPException:
+        return _csrf_error(request, next, context.application.name)
     user = verify_user_password(username, password, runtime_config.users)
 
     if not user:
         logger.warning("AUTH password failed for '%s' (policy: %s)", username, context.policy_name)
-        return _render(request, "login_password.html", status_code=401, next=next, application_name=context.application.name, error="Invalid username or password.")
+        return _render(
+            request,
+            "login_password.html",
+            status_code=401,
+            next=next,
+            application_name=context.application.name,
+            error="Invalid username or password.",
+            csrf_token=get_or_create_csrf_token(request),
+        )
     if effective_policy.allowed_users and username not in effective_policy.allowed_users:
         logger.warning("AUTH password denied for '%s' — not in allowed_users (policy: %s)", username, context.policy_name)
-        return _render(request, "login_password.html", status_code=403, next=next, application_name=context.application.name, error="This user is not allowed by the active policy.")
+        return _render(
+            request,
+            "login_password.html",
+            status_code=403,
+            next=next,
+            application_name=context.application.name,
+            error="This user is not allowed by the active policy.",
+            csrf_token=get_or_create_csrf_token(request),
+        )
 
     groups = [
         group_name
         for group_name, group in runtime_config.groups.items()
         if username in group.users
     ]
-    session_service = request.app.state.session_service
-    session = session_service.issue_session(
-        existing_session=get_session(request),
+    session = _create_authenticated_session(
+        request,
         username=username,
         email=user.email or None,
         groups=groups,
-        add_factors=["password"],
+        factors=["password"],
         expires_in_minutes=get_effective_expiration(request, effective_policy, ["password"]),
     )
 
@@ -168,16 +235,27 @@ async def login_totp_page(request: Request, next: str = "/"):
         session = get_session(request)
         if not session or "password" not in session.auth_factors:
             return RedirectResponse(build_external_url(request, "/login/password", next=next), status_code=303)
-    return _render(request, "login_totp.html", next=next, application_name=context.application.name, error=None)
+    return _render(
+        request,
+        "login_totp.html",
+        next=next,
+        application_name=context.application.name,
+        error=None,
+        csrf_token=get_or_create_csrf_token(request),
+    )
 
 
 @router.post("/login/totp")
 @limiter.limit(AUTH_RATE_LIMIT)
-async def login_totp_submit(request: Request, next: str = Form("/"), token: str = Form(...)):
+async def login_totp_submit(request: Request, next: str = Form("/"), token: str = Form(...), csrf_token: str = Form(...)):
     runtime_config = get_runtime_config(request)
     context = resolve_context_from_request(request, runtime_config, next)
     effective_policy = get_effective_policy(runtime_config, context.policy_name)
     session = get_session(request)
+    try:
+        validate_csrf(request, csrf_token)
+    except HTTPException:
+        return _csrf_error(request, next, context.application.name)
 
     if effective_policy.password_method_names and (not session or "password" not in session.auth_factors):
         return RedirectResponse(build_external_url(request, "/login/password", next=next), status_code=303)
@@ -196,7 +274,15 @@ async def login_totp_submit(request: Request, next: str = Form("/"), token: str 
 
     if not verify_totp(secret, token):
         logger.warning("AUTH totp failed for '%s' (policy: %s)", session.username if session else "?", context.policy_name)
-        return _render(request, "login_totp.html", status_code=401, next=next, application_name=context.application.name, error="Invalid verification code.")
+        return _render(
+            request,
+            "login_totp.html",
+            status_code=401,
+            next=next,
+            application_name=context.application.name,
+            error="Invalid verification code.",
+            csrf_token=get_or_create_csrf_token(request),
+        )
 
     session_service = request.app.state.session_service
     refreshed_session = session_service.issue_session(
@@ -252,12 +338,12 @@ async def login_oidc_callback(request: Request, state: str):
     if not is_oidc_identity_allowed(method, identity.email):
         return _render(request, "error.html", status_code=403, title="OIDC access denied", message="The authenticated OIDC identity is not allowed by the configured allowlists.")
 
-    session = request.app.state.session_service.issue_session(
-        existing_session=get_session(request),
+    session = _create_authenticated_session(
+        request,
         email=identity.email,
         subject=identity.subject,
         metadata={"oidc_claims": identity.claims},
-        add_factors=["oidc"],
+        factors=["oidc"],
         expires_in_minutes=get_effective_expiration(request, effective_policy, ["oidc"]),
     )
     if effective_policy.totp_method_names:
@@ -289,5 +375,9 @@ async def logout_get(request: Request, next: str = "/"):
 
 
 @router.post("/logout")
-async def logout_post(request: Request, next: str = Form("/")):
+async def logout_post(request: Request, next: str = Form("/"), csrf_token: str = Form(...)):
+    try:
+        validate_csrf(request, csrf_token)
+    except HTTPException:
+        return _csrf_error(request, next)
     return _do_logout(request, next)

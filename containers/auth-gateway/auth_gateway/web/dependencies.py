@@ -1,3 +1,4 @@
+from secrets import token_urlsafe
 from urllib.parse import urlencode
 
 from auth_gateway.config_loader import RuntimeConfigStore
@@ -7,6 +8,7 @@ from auth_gateway.models.session import SessionRecord
 from auth_gateway.services.policy_engine import EffectivePolicy, build_effective_policy
 from auth_gateway.services.resolver import RequestContext, normalize_host, normalize_path, resolve_request_context
 from fastapi import HTTPException, Request
+from fastapi.responses import Response
 
 
 def get_runtime_config(request: Request) -> RuntimeConfig:
@@ -80,3 +82,29 @@ def get_effective_expiration(request: Request, effective_policy: EffectivePolicy
     settings = request.app.state.settings
     expirations = [effective_policy.factor_expirations.get(factor) for factor in factors if effective_policy.factor_expirations.get(factor)]
     return min(expirations) if expirations else settings.session_default_minutes
+
+
+def get_or_create_csrf_token(request: Request) -> str:
+    cookie_name = request.app.state.settings.csrf_cookie_name
+    existing_token = request.cookies.get(cookie_name)
+    if existing_token:
+        return existing_token
+    return token_urlsafe(32)
+
+
+def set_csrf_cookie(request: Request, response: Response, csrf_token: str) -> None:
+    response.set_cookie(
+        key=request.app.state.settings.csrf_cookie_name,
+        value=csrf_token,
+        httponly=False,
+        secure=request.app.state.settings.secure_cookies,
+        samesite="strict",
+        path="/",
+    )
+
+
+def validate_csrf(request: Request, submitted_token: str | None) -> None:
+    cookie_name = request.app.state.settings.csrf_cookie_name
+    cookie_token = request.cookies.get(cookie_name)
+    if not cookie_token or not submitted_token or cookie_token != submitted_token:
+        raise HTTPException(status_code=403, detail="CSRF validation failed.")
