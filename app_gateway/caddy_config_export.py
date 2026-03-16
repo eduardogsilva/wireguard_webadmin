@@ -103,7 +103,6 @@ def build_auth_policies_data():
 def build_routes_data():
     applications = (
         Application.objects
-        .exclude(name=RESERVED_APP_NAME)
         .prefetch_related('routes__policy')
     )
     entries = {}
