@@ -317,6 +317,7 @@ async def login_oidc_start(request: Request, next: str = "/"):
 
 
 @router.get("/login/oidc/callback")
+@limiter.limit(AUTH_RATE_LIMIT)
 async def login_oidc_callback(request: Request, state: str):
     runtime_config = get_runtime_config(request)
     oidc_state = request.app.state.session_service.consume_oidc_state(state)
@@ -352,10 +353,12 @@ async def login_oidc_callback(request: Request, state: str):
 
 
 def _safe_redirect_path(url: str | None) -> str:
-    """Accept only relative paths to prevent open redirects."""
-    if not url or "://" in url or not url.startswith("/"):
+    """Accept only relative paths to prevent open redirects, including protocol-relative URLs."""
+    if not url:
         return "/"
-    return url
+    from urllib.parse import urlsplit
+    path = urlsplit(url).path or "/"
+    return path if path.startswith("/") else "/"
 
 
 def _do_logout(request: Request, next_url: str = "/") -> RedirectResponse:

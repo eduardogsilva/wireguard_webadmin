@@ -81,6 +81,19 @@ def build_caddyfile(apps, auth_policies, routes):
         for header_name in AUTH_IDENTITY_HEADERS:
             lines.append(f"{indent}request_header -{header_name}")
 
+    def emit_encoded_slash_block():
+        # Reject paths containing %2f or %2F (percent-encoded slash).
+        # Caddy's path matcher does not decode percent-encoding, so /%2fadmin
+        # would NOT match path /admin and would fall through to the default
+        # (potentially bypass) handler, even though upstreams may decode it to /admin.
+        lines.append("  @encoded_slash {")
+        lines.append("    path_regexp (?i)%2f")
+        lines.append("  }")
+        lines.append("  handle @encoded_slash {")
+        lines.append("    respond 400")
+        lines.append("  }")
+        lines.append("")
+
     def emit_route_matcher(matcher_name, path_prefix):
         matcher_name = re.sub(r"[^A-Za-z0-9_]", "_", matcher_name)
         normalized_prefix = path_prefix.strip().rstrip("/") or "/"
@@ -139,6 +152,7 @@ def build_caddyfile(apps, auth_policies, routes):
         lines.append("  request_header -X-Forwarded-Host")
         emit_identity_header_sanitization()
         lines.append("")
+        emit_encoded_slash_block()
         emit_auth_portal()
 
         for static_route in static_routes:
