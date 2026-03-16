@@ -32,7 +32,13 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Auth Gateway", lifespan=lifespan)
+app = FastAPI(
+    title="Auth Gateway",
+    lifespan=lifespan,
+    docs_url=None,
+    redoc_url=None,
+    openapi_url=None,
+)
 app.state.limiter = limiter
 
 
@@ -59,6 +65,19 @@ async def _rate_limit_handler(request: Request, exc: RateLimitExceeded) -> HTMLR
 
 
 app.add_exception_handler(RateLimitExceeded, _rate_limit_handler)
+
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; script-src 'none'; style-src 'self'; "
+        "img-src 'self' data:; frame-ancestors 'none'"
+    )
+    return response
 
 
 @app.middleware("http")

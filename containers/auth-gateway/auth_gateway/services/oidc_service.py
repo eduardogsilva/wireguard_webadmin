@@ -38,13 +38,15 @@ class OIDCService:
         client = self._client(method_name, method)
         token = await client.authorize_access_token(request)
         claims = {}
+        # Always parse and validate the ID token (validates nonce, signature, issuer, audience)
+        if "id_token" in token:
+            claims = dict(await client.parse_id_token(request, token, nonce=nonce))
+        # Merge userinfo on top for richer claims — core identity is from the validated ID token
         if "userinfo" in token and isinstance(token["userinfo"], dict):
-            claims = token["userinfo"]
-        elif "id_token" in token:
-            claims = await client.parse_id_token(request, token, nonce=nonce)
+            claims.update(token["userinfo"])
         email = claims.get("email")
         subject = claims.get("sub")
-        return OIDCIdentity(subject=subject, email=email, claims=dict(claims))
+        return OIDCIdentity(subject=subject, email=email, claims=claims)
 
 
 def is_oidc_identity_allowed(method: OIDCMethodModel, email: str | None) -> bool:
