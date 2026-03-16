@@ -279,6 +279,7 @@ class AuthMethodForm(forms.ModelForm):
                     except Exception:
                         self.add_error('totp_secret', _('Invalid TOTP secret format. Must be a valid Base32 string.'))
         elif auth_type == 'oidc':
+            self.add_error('auth_type', _('OIDC authentication is temporarily unavailable and will be available soon.'))
             if totp_secret:
                 self.add_error('totp_secret', _('TOTP secret must be empty for OIDC authentication.'))
             if cleaned_data.get('totp_pin'):
