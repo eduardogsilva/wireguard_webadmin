@@ -34,10 +34,14 @@ def build_applications_data():
 def _build_auth_method_entry(method):
     entry = {'type': method.auth_type}
 
-    if method.auth_type == 'totp':
+    if method.auth_type == 'local_password':
+        entry['session_expiration_minutes'] = method.session_expiration_minutes
+
+    elif method.auth_type == 'totp':
         entry['totp_secret'] = method.totp_secret
 
     elif method.auth_type == 'oidc':
+        entry['session_expiration_minutes'] = method.session_expiration_minutes
         entry['provider'] = method.oidc_provider
         entry['client_id'] = method.oidc_client_id
         entry['client_secret'] = method.oidc_client_secret
@@ -77,7 +81,7 @@ def build_auth_policies_data():
     for user in GatekeeperUser.objects.all():
         users[user.username] = {
             'email': user.email,
-            'password_hash': user.password_hash or '',
+            'password_hash': user.password or '',
             'totp_secret': user.totp_secret,
         }
 

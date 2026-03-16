@@ -84,7 +84,6 @@ services:
     volumes:
       - static_volume:/static
       - caddy_json_export:/caddy_json_export
-      - authelia_config:/authelia_config
       - caddy_data:/data
       - caddy_config:/config
     ports:
@@ -92,20 +91,23 @@ services:
       - "443:443"
     depends_on:
       - wireguard-webadmin
+      - wireguard-webadmin-auth-gateway
 
-  wireguard-webadmin-authelia:
-    container_name: wireguard-webadmin-authelia
+  wireguard-webadmin-auth-gateway:
+    container_name: wireguard-webadmin-auth-gateway
     restart: unless-stopped
     build:
-      context: ./containers/authelia
-      dockerfile: Dockerfile-authelia
+      context: ./containers/auth-gateway
+      dockerfile: Dockerfile-auth-gateway
     environment:
       - TZ=${TIMEZONE}
+      - AUTH_GATEWAY_CONFIG_DIR=/caddy_json_export
+      - AUTH_GATEWAY_DATABASE_PATH=/data/auth-gateway.sqlite3
     volumes:
-      - authelia_config:/config
-      - authelia_data:/data
+      - caddy_json_export:/caddy_json_export
+      - auth_gateway_data:/data
     depends_on:
-      - wireguard-webadmin-caddy
+      - wireguard-webadmin
 
 volumes:
   static_volume:
@@ -114,7 +116,6 @@ volumes:
   app_secrets:
   rrd_data:
   caddy_json_export:
-  authelia_config:
-  authelia_data:
+  auth_gateway_data:
   caddy_data:
   caddy_config:

@@ -1,6 +1,0 @@
-FROM authelia/authelia:latest
-
-COPY entrypoint.sh /usr/local/bin/authelia-entrypoint.sh
-RUN chmod +x /usr/local/bin/authelia-entrypoint.sh
-
-ENTRYPOINT ["/usr/local/bin/authelia-entrypoint.sh"]
