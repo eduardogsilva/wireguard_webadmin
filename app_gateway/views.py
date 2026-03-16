@@ -1,3 +1,4 @@
+import ipaddress
 import os
 
 from django.conf import settings
@@ -55,11 +56,21 @@ def view_application_details(request):
     hosts = application.hosts.all().order_by('hostname')
     routes = application.routes.all().order_by('order', 'path_prefix')
 
+    is_reserved = application.name == RESERVED_APP_NAME
+    django_hostnames = []
+    if is_reserved:
+        for host in settings.ALLOWED_HOSTS:
+            try:
+                ipaddress.ip_address(host)
+            except ValueError:
+                django_hostnames.append(host)
+
     context = {
         'application': application,
         'hosts': hosts,
         'routes': routes,
-        'is_reserved': application.name == RESERVED_APP_NAME,
+        'is_reserved': is_reserved,
+        'django_hostnames': django_hostnames,
         'page_title': _('Application Details'),
     }
     return render(request, 'app_gateway/application_details.html', context)

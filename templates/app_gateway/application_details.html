@@ -67,7 +67,7 @@
             {% endif %}
         </div>
 
-        {% if hosts %}
+        {% if hosts or django_hostnames %}
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead>
@@ -77,6 +77,12 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for hostname in django_hostnames %}
+                    <tr class="text-muted">
+                        <td>{{ hostname }}</td>
+                        <td style="width: 15%"></td>
+                    </tr>
+                    {% endfor %}
                     {% for host in hosts %}
                     <tr>
                         <td>{{ host.hostname }}</td>
