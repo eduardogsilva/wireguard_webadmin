@@ -16,6 +16,12 @@ class AuthMethod(models.Model):
     # TOTP-specific fields
     totp_secret = models.CharField(max_length=255, blank=True, help_text=_("Shared/global TOTP secret key"))
 
+    # Session expiration (Local Password and OIDC only)
+    session_expiration_minutes = models.PositiveIntegerField(
+        default=720,
+        help_text=_("Session expiration time in minutes")
+    )
+
     # OIDC-specific fields
     oidc_provider = models.CharField(max_length=64, blank=True)
     oidc_client_id = models.CharField(max_length=255, blank=True)
@@ -64,7 +70,7 @@ class AuthMethodAllowedEmail(models.Model):
 
 class GatekeeperUser(models.Model):
     username = models.SlugField(max_length=64, unique=True)
-    email = models.EmailField(unique=True, blank=True)
+    email = models.EmailField(blank=True)
     password = models.CharField(blank=True, max_length=250, help_text=_("Password for local authentication (leave blank if not using)"))
     totp_secret = models.CharField(max_length=255, blank=True, help_text=_("Per-user TOTP secret key"))
 

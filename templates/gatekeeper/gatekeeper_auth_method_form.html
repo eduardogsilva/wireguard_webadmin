@@ -41,18 +41,22 @@
     $(document).ready(function () {
         function toggleFields() {
             var authType = $('#id_auth_type').val();
-            if (authType === 'local_password' || authType === 'ip_address') {
+            if (authType === 'local_password') {
                 $('.totp-group').hide();
                 $('.oidc-group').hide();
+                $('.expiration-group').show();
             } else if (authType === 'totp') {
                 $('.totp-group').show();
                 $('.oidc-group').hide();
+                $('.expiration-group').hide();
             } else if (authType === 'oidc') {
                 $('.totp-group').hide();
                 $('.oidc-group').show();
+                $('.expiration-group').show();
             } else {
                 $('.totp-group').hide();
                 $('.oidc-group').hide();
+                $('.expiration-group').hide();
             }
         }
 
