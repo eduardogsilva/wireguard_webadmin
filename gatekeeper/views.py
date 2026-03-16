@@ -227,6 +227,15 @@ def view_delete_auth_method(request):
     
     cancel_url = reverse('gatekeeper_list') + '?tab=auth_methods'
 
+    from app_gateway.models import AccessPolicy
+    policies_using = AccessPolicy.objects.filter(methods=auth_method)
+    if policies_using.exists():
+        policy_names = ', '.join(str(p) for p in policies_using)
+        messages.error(request, _(
+            'Cannot delete authentication method "%(method)s" because it is used by the following policies: %(policies)s.'
+        ) % {'method': str(auth_method), 'policies': policy_names})
+        return redirect(cancel_url)
+
     if request.method == 'POST':
         auth_method.delete()
         messages.success(request, _('Authentication Method deleted successfully.'))
@@ -236,7 +245,7 @@ def view_delete_auth_method(request):
         'auth_method': auth_method,
         'title': _('Delete Authentication Method'),
         'cancel_url': cancel_url,
-        'text': _('Are you sure you want to delete the authentication method "%(name)s"?') % {'name': auth_method.name}
+        'text': _('Are you sure you want to delete the authentication method "%(name)s"?') % {'name': str(auth_method)}
     }
     return render(request, 'generic_delete_confirmation.html', context)
 
