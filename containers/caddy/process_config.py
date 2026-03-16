@@ -15,8 +15,8 @@ from urllib.parse import urlparse
 
 JSON_DIR = os.environ.get("JSON_DIR", "/caddy_json_export")
 CADDYFILE_PATH = os.environ.get("CADDYFILE_PATH", "/etc/caddy/Caddyfile")
-AUTH_GATEWAY_INTERNAL_URL = "http://wireguard-webadmin-auth-gateway:9091"
-AUTH_GATEWAY_PORTAL_PATH = "/auth-gateway"
+AUTH_GATEWAY_INTERNAL_URL = os.environ.get("AUTH_GATEWAY_INTERNAL_URL", "http://wireguard-webadmin-auth-gateway:9091")
+AUTH_GATEWAY_PORTAL_PATH = os.environ.get("AUTH_GATEWAY_EXTERNAL_PATH", "/auth-gateway")
 AUTH_GATEWAY_CHECK_URI = "/auth/check"
 
 

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session</title>
+    <link rel="stylesheet" href="{{ external_path }}/static/style.css">
+    <style>
+        .info-table { width: 100%; border-collapse: collapse; margin: 0 0 24px; }
+        .info-table tr + tr td { border-top: 1px solid var(--line); }
+        .info-table td { padding: 10px 0; font-size: 0.9rem; vertical-align: top; }
+        .info-table td:first-child { color: var(--muted); width: 40%; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 0.78rem; font-weight: 600; background: rgba(107,63,36,0.12); color: var(--accent-strong); margin: 2px 2px 2px 0; }
+    </style>
+</head>
+<body>
+    <main class="shell">
+        <section class="card">
+            <p class="eyebrow">Auth Gateway</p>
+            <h1>Active session</h1>
+            <table class="info-table">
+                {% if session.username %}
+                <tr>
+                    <td>Username</td>
+                    <td>{{ session.username }}</td>
+                </tr>
+                {% endif %}
+                {% if session.email %}
+                <tr>
+                    <td>E-mail</td>
+                    <td>{{ session.email }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td>Authenticated via</td>
+                    <td>
+                        {% for factor in session.auth_factors %}
+                        <span class="badge">{{ factor }}</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% if session.groups %}
+                <tr>
+                    <td>Groups</td>
+                    <td>
+                        {% for group in session.groups %}
+                        <span class="badge">{{ group }}</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td>Expires</td>
+                    <td>{{ session.expires_at.strftime('%Y-%m-%d %H:%M UTC') }}</td>
+                </tr>
+            </table>
+            <form method="post" action="{{ external_path }}/logout">
+                <input type="hidden" name="next" value="/">
+                <button class="button" type="submit" style="width:100%">Sign out</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

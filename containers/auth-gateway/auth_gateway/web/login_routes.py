@@ -44,6 +44,14 @@ def _redirect_with_cookie(request: Request, destination: str, session) -> Redire
     return response
 
 
+@router.get("/", response_class=HTMLResponse)
+async def session_page(request: Request):
+    session = get_session(request)
+    if not session or not session.auth_factors:
+        return RedirectResponse(build_external_url(request, "/login"), status_code=303)
+    return _render(request, "session.html", session=session)
+
+
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request, next: str = "/"):
     runtime_config = get_runtime_config(request)
@@ -236,10 +244,19 @@ async def login_oidc_callback(request: Request, state: str):
     return _redirect_with_cookie(request, oidc_state.next_url, session)
 
 
-@router.post("/logout")
-async def logout(request: Request, next: str = Form("/")):
+def _do_logout(request: Request, next_url: str = "/") -> RedirectResponse:
     session_cookie = request.cookies.get(request.app.state.settings.cookie_name)
     request.app.state.session_service.delete_session(session_cookie)
-    response = RedirectResponse(next or "/", status_code=303)
+    response = RedirectResponse(next_url or "/", status_code=303)
     response.delete_cookie(request.app.state.settings.cookie_name, path="/")
     return response
+
+
+@router.get("/logout")
+async def logout_get(request: Request, next: str = "/"):
+    return _do_logout(request, next)
+
+
+@router.post("/logout")
+async def logout_post(request: Request, next: str = Form("/")):
+    return _do_logout(request, next)
