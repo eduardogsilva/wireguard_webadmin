@@ -1,3 +1,5 @@
+import logging
+import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -8,11 +10,12 @@ from auth_gateway.settings import settings
 from auth_gateway.storage.sqlite import SQLiteStorage
 from auth_gateway.web.auth_routes import router as auth_router
 from auth_gateway.web.login_routes import router as login_router
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 BASE_DIR = Path(__file__).resolve().parent
+_access_logger = logging.getLogger("uvicorn.error")
 
 
 @asynccontextmanager
@@ -27,6 +30,20 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Auth Gateway", lifespan=lifespan)
+
+
+@app.middleware("http")
+async def access_log(request: Request, call_next):
+    start = time.monotonic()
+    response = await call_next(request)
+    if request.url.path == "/auth/check" and response.status_code == 200:
+        return response
+    ms = (time.monotonic() - start) * 1000
+    client = request.client.host if request.client else "-"
+    _access_logger.info('%s - "%s %s" %d (%.0fms)', client, request.method, request.url.path, response.status_code, ms)
+    return response
+
+
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 app.include_router(auth_router)
 app.include_router(login_router)

@@ -1,4 +1,8 @@
+import logging
+
 from auth_gateway.models.auth import OIDCMethodModel
+
+logger = logging.getLogger("uvicorn.error")
 from auth_gateway.services.oidc_service import is_oidc_identity_allowed
 from auth_gateway.services.password_service import verify_user_password
 from auth_gateway.services.policy_engine import evaluate_ip_access, extract_client_ip
@@ -121,8 +125,10 @@ async def login_password_submit(request: Request, next: str = Form("/"), usernam
     user = verify_user_password(username, password, runtime_config.users)
 
     if not user:
+        logger.warning("AUTH password failed for '%s' (policy: %s)", username, context.policy_name)
         return _render(request, "login_password.html", status_code=401, next=next, application_name=context.application.name, error="Invalid username or password.")
     if effective_policy.allowed_users and username not in effective_policy.allowed_users:
+        logger.warning("AUTH password denied for '%s' — not in allowed_users (policy: %s)", username, context.policy_name)
         return _render(request, "login_password.html", status_code=403, next=next, application_name=context.application.name, error="This user is not allowed by the active policy.")
 
     groups = [
@@ -141,7 +147,9 @@ async def login_password_submit(request: Request, next: str = Form("/"), usernam
     )
 
     if effective_policy.totp_method_names:
+        logger.info("AUTH password ok for '%s' → totp required (policy: %s)", username, context.policy_name)
         return _redirect_with_cookie(request, build_external_url(request, "/login/totp", next=next), session)
+    logger.info("AUTH login ok for '%s' (policy: %s)", username, context.policy_name)
     return _redirect_with_cookie(request, next, session)
 
 
@@ -182,6 +190,7 @@ async def login_totp_submit(request: Request, next: str = Form("/"), token: str 
             secret = user.totp_secret
 
     if not verify_totp(secret, token):
+        logger.warning("AUTH totp failed for '%s' (policy: %s)", session.username if session else "?", context.policy_name)
         return _render(request, "login_totp.html", status_code=401, next=next, application_name=context.application.name, error="Invalid verification code.")
 
     session_service = request.app.state.session_service
@@ -190,6 +199,7 @@ async def login_totp_submit(request: Request, next: str = Form("/"), token: str 
         add_factors=["totp"],
         expires_in_minutes=get_effective_expiration(request, effective_policy, ["totp"]),
     )
+    logger.info("AUTH login ok for '%s' via password+totp (policy: %s)", refreshed_session.username, context.policy_name)
     return _redirect_with_cookie(request, next, refreshed_session)
 
 
@@ -246,7 +256,10 @@ async def login_oidc_callback(request: Request, state: str):
 
 def _do_logout(request: Request, next_url: str = "/") -> RedirectResponse:
     session_cookie = request.cookies.get(request.app.state.settings.cookie_name)
+    session = request.app.state.session_service.get_session(session_cookie)
     request.app.state.session_service.delete_session(session_cookie)
+    if session:
+        logger.info("AUTH logout for '%s'", session.username or session.email or "unknown")
     response = RedirectResponse(next_url or "/", status_code=303)
     response.delete_cookie(request.app.state.settings.cookie_name, path="/")
     return response

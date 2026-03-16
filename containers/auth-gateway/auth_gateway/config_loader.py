@@ -14,8 +14,15 @@ logger = logging.getLogger(__name__)
 def _load_json(path: Path) -> dict | None:
     if not path.exists():
         return None
-    with path.open("r", encoding="utf-8") as handle:
-        return json.load(handle)
+    try:
+        with path.open("r", encoding="utf-8") as handle:
+            content = handle.read()
+        if not content.strip():
+            return None
+        return json.loads(content)
+    except json.JSONDecodeError:
+        logger.warning("Failed to parse '%s' — file may be mid-write, will retry on next request.", path.name)
+        return None
 
 
 def _is_valid_provider_url(method_name: str, method: OIDCMethodModel) -> bool:
