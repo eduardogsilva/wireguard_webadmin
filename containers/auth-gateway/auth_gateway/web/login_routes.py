@@ -69,7 +69,7 @@ async def login_page(request: Request, next: str = "/"):
     if effective_policy.mode == "deny":
         return _render(request, "error.html", status_code=403, title="Access denied", message="This route is blocked by policy.")
     if effective_policy.mode == "bypass":
-        return RedirectResponse(next, status_code=303)
+        return RedirectResponse(context.path, status_code=303)
 
     if session and session_is_allowed(session, effective_policy):
         current_factors = set(session.auth_factors)
@@ -79,11 +79,11 @@ async def login_page(request: Request, next: str = "/"):
                 current_factors.add("ip")
         missing_factors = [factor for factor in effective_policy.required_factors if factor not in current_factors]
         if not missing_factors:
-            return RedirectResponse(next, status_code=303)
+            return RedirectResponse(context.path, status_code=303)
         if missing_factors == ["totp"]:
-            return RedirectResponse(build_external_url(request, "/login/totp", next=next), status_code=303)
+            return RedirectResponse(build_external_url(request, "/login/totp", next=context.path), status_code=303)
         if missing_factors == ["oidc"]:
-            return RedirectResponse(build_external_url(request, "/login/oidc/start", next=next), status_code=303)
+            return RedirectResponse(build_external_url(request, "/login/oidc/start", next=context.path), status_code=303)
 
     available_methods = []
     if effective_policy.password_method_names:
@@ -94,16 +94,16 @@ async def login_page(request: Request, next: str = "/"):
         available_methods.append("totp")
 
     if available_methods == ["password"]:
-        return RedirectResponse(build_external_url(request, "/login/password", next=next), status_code=303)
+        return RedirectResponse(build_external_url(request, "/login/password", next=context.path), status_code=303)
     if available_methods == ["oidc"]:
-        return RedirectResponse(build_external_url(request, "/login/oidc/start", next=next), status_code=303)
+        return RedirectResponse(build_external_url(request, "/login/oidc/start", next=context.path), status_code=303)
     if available_methods == ["totp"]:
-        return RedirectResponse(build_external_url(request, "/login/totp", next=next), status_code=303)
+        return RedirectResponse(build_external_url(request, "/login/totp", next=context.path), status_code=303)
 
     return _render(
         request,
         "login.html",
-        next=next,
+        next=context.path,
         methods=available_methods,
         application_name=context.application.name,
         policy_name=context.policy_name,
@@ -265,13 +265,20 @@ async def login_oidc_callback(request: Request, state: str):
     return _redirect_with_cookie(request, oidc_state.next_url, session)
 
 
+def _safe_redirect_path(url: str | None) -> str:
+    """Accept only relative paths to prevent open redirects."""
+    if not url or "://" in url or not url.startswith("/"):
+        return "/"
+    return url
+
+
 def _do_logout(request: Request, next_url: str = "/") -> RedirectResponse:
     session_cookie = request.cookies.get(request.app.state.settings.cookie_name)
     session = request.app.state.session_service.get_session(session_cookie)
     request.app.state.session_service.delete_session(session_cookie)
     if session:
         logger.info("AUTH logout for '%s'", session.username or session.email or "unknown")
-    response = RedirectResponse(next_url or "/", status_code=303)
+    response = RedirectResponse(_safe_redirect_path(next_url), status_code=303)
     response.delete_cookie(request.app.state.settings.cookie_name, path="/")
     return response
 

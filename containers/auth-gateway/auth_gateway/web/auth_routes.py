@@ -1,3 +1,5 @@
+import re
+
 from auth_gateway.services.policy_engine import evaluate_ip_access, extract_client_ip
 from auth_gateway.services.resolver import resolve_request_context
 from auth_gateway.web.dependencies import (
@@ -51,15 +53,18 @@ async def auth_check(request: Request):
         login_url = build_external_url(request, "/login", next=context.path)
         return RedirectResponse(login_url, status_code=302)
 
+    def _safe_header(value: str) -> str:
+        return re.sub(r"[\r\n\x00]", "", value)
+
     response = PlainTextResponse("OK", status_code=200)
     if session:
         if session.username:
-            response.headers["X-Auth-User"] = session.username
+            response.headers["X-Auth-User"] = _safe_header(session.username)
         if session.email:
-            response.headers["X-Auth-Email"] = session.email
+            response.headers["X-Auth-Email"] = _safe_header(session.email)
         if session.groups:
-            response.headers["X-Auth-Groups"] = ",".join(session.groups)
+            response.headers["X-Auth-Groups"] = _safe_header(",".join(session.groups))
         if session.auth_factors:
-            response.headers["X-Auth-Factors"] = ",".join(session.auth_factors)
-    response.headers["X-Auth-Policy"] = effective_policy.name
+            response.headers["X-Auth-Factors"] = _safe_header(",".join(session.auth_factors))
+    response.headers["X-Auth-Policy"] = _safe_header(effective_policy.name)
     return response
