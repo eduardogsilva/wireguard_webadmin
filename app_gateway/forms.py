@@ -62,6 +62,8 @@ class ApplicationForm(forms.ModelForm):
 
             if not is_valid:
                 self.add_error("upstream", _("Enter a valid upstream URL starting with http:// or https://"))
+            elif parsed.path not in ("", "/") or parsed.query or parsed.fragment:
+                self.add_error("upstream", _("Upstream must be a bare host address with no path, query or fragment. Use http://host or http://host:port"))
 
         return cleaned_data
 
@@ -73,6 +75,14 @@ class ApplicationHostForm(forms.ModelForm):
         labels = {
             'hostname': _('Hostname'),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        hostname = (cleaned_data.get('hostname') or '').strip()
+        if hostname:
+            if any(c in hostname for c in ('{', '}', '\n', '\r', '\x00', ' ')):
+                self.add_error('hostname', _('Hostname contains invalid characters.'))
+        return cleaned_data
 
     def __init__(self, *args, **kwargs):
         cancel_url = kwargs.pop('cancel_url', '#')
@@ -278,6 +288,9 @@ class ApplicationRouteForm(forms.ModelForm):
             )
         )
 
+    # Reserved path prefixes that map to internal system routes
+    _RESERVED_PREFIXES = ('/auth-gateway',)
+
     def clean(self):
         cleaned_data = super().clean()
         path_prefix = (cleaned_data.get('path_prefix') or '').strip()
@@ -286,8 +299,13 @@ class ApplicationRouteForm(forms.ModelForm):
                 self.add_error('path_prefix', _('Path prefix must start with /.'))
             elif ' ' in path_prefix:
                 self.add_error('path_prefix', _('Path prefix cannot contain spaces.'))
-            elif any(c in path_prefix for c in ('{', '}', '\n', '\r')):
+            elif any(c in path_prefix for c in ('{', '}', '\n', '\r', '\x00', '%')):
                 self.add_error('path_prefix', _('Path prefix contains invalid characters.'))
+            elif any(
+                path_prefix == r or path_prefix.startswith(r + '/')
+                for r in self._RESERVED_PREFIXES
+            ):
+                self.add_error('path_prefix', _('This path prefix is reserved by the system.'))
             else:
                 cleaned_data['path_prefix'] = path_prefix
         return cleaned_data

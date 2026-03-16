@@ -61,6 +61,11 @@ def split_upstream(upstream):
     return base, path
 
 
+def _safe_value(val: str) -> str:
+    """Strip characters that would break or inject into a Caddyfile directive."""
+    return re.sub(r"[\r\n\x00]", "", val)
+
+
 def build_caddyfile(apps, auth_policies, routes):
     policies = auth_policies.get("policies", {}) if auth_policies else {}
     route_entries = routes.get("entries", {}) if routes else {}
@@ -82,12 +87,15 @@ def build_caddyfile(apps, auth_policies, routes):
             lines.append(f"{indent}request_header -{header_name}")
 
     def emit_encoded_slash_block():
-        # Reject paths containing %2f or %2F (percent-encoded slash).
-        # Caddy's path matcher does not decode percent-encoding, so /%2fadmin
-        # would NOT match path /admin and would fall through to the default
-        # (potentially bypass) handler, even though upstreams may decode it to /admin.
+        # Reject paths containing encoded slashes in any depth of percent-encoding:
+        #   %2f        = /
+        #   %252f      = %2f (double-encoded, decodes to / on second pass)
+        #   %25252f    = triple-encoded, etc.
+        # Caddy's path matcher does not decode percent-encoding, so /%2fadmin would
+        # NOT match path /admin and would fall through to the default (potentially
+        # bypass) handler even though some upstreams decode it to /admin.
         lines.append("  @encoded_slash {")
-        lines.append("    path_regexp (?i)%2f")
+        lines.append("    path_regexp (?i)%(?:25)*2f")
         lines.append("  }")
         lines.append("  handle @encoded_slash {")
         lines.append("    respond 400")
@@ -146,7 +154,8 @@ def build_caddyfile(apps, auth_policies, routes):
 
         base, upstream_path = split_upstream(upstream)
 
-        lines.append(f"{', '.join(hosts)} {{")
+        safe_hosts = [_safe_value(h) for h in hosts]
+        lines.append(f"{', '.join(safe_hosts)} {{")
         lines.append("  # Security: overwrite client-supplied forwarding headers with verified values")
         lines.append("  request_header X-Forwarded-For {http.request.remote.host}")
         lines.append("  request_header -X-Forwarded-Host")
@@ -156,9 +165,9 @@ def build_caddyfile(apps, auth_policies, routes):
         emit_auth_portal()
 
         for static_route in static_routes:
-            path_prefix = static_route.get("path_prefix", "")
-            root_dir = static_route.get("root", "")
-            cache_control = static_route.get("cache_control", "")
+            path_prefix = _safe_value(static_route.get("path_prefix", ""))
+            root_dir = _safe_value(static_route.get("root", ""))
+            cache_control = _safe_value(static_route.get("cache_control", ""))
             lines.append(f"  handle_path {path_prefix}/* {{")
             lines.append(f"    root * {root_dir}")
             lines.append("    file_server")
