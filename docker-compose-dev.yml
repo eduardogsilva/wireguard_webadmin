@@ -28,6 +28,9 @@ services:
     ports:
       # Do not directly expose the Django port to the internet, use some kind of reverse proxy with SSL.
       - "8000:8000"
+      # Caddy ports — declared here because wireguard-webadmin-caddy shares this network namespace
+      - "80:80"
+      - "443:443"
       # Warning: Docker will have a hard time handling large amount of ports. Expose only the ports that you need.
       # Ports for multiple WireGuard instances. (Probably, you just need one)
       - "51820-51839:51820-51839/udp"
@@ -96,9 +99,7 @@ services:
       - caddy_json_export:/caddy_json_export
       - caddy_data:/data
       - caddy_config:/config
-    ports:
-      - "80:80"
-      - "443:443"
+    network_mode: "service:wireguard-webadmin"
     depends_on:
       - wireguard-webadmin
       - wireguard-webadmin-auth-gateway
