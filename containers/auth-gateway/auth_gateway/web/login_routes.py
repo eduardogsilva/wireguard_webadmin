@@ -64,6 +64,8 @@ async def login_page(request: Request, next: str = "/"):
     context = resolve_context_from_request(request, runtime_config, next)
     effective_policy = get_effective_policy(runtime_config, context.policy_name)
 
+    if effective_policy.mode == "error":
+        return _render(request, "error.html", status_code=500, title="Configuration error", message=effective_policy.error_message or "A policy configuration error has been detected.")
     if effective_policy.mode == "deny":
         return _render(request, "error.html", status_code=403, title="Access denied", message="This route is blocked by policy.")
     if effective_policy.mode == "bypass":

@@ -84,11 +84,9 @@ def load_runtime_config(config_dir: Path) -> RuntimeConfig:
                 raise ValueError(f"Policy '{policy_name}' references unknown group '{group_name}'.")
         for method_name in policy.methods:
             if method_name not in auth.auth_methods:
-                logger.warning(
-                    "Policy '%s' references unavailable method '%s' — policy forced to deny.",
-                    policy_name, method_name,
-                )
-                auth.policies[policy_name] = PolicyModel(policy_type="deny")
+                msg = f"Policy '{policy_name}' references unavailable auth method '{method_name}'."
+                logger.error("CONFIG error: %s", msg)
+                auth.policies[policy_name] = PolicyModel(policy_type="error", error_message=msg)
                 break
 
     return RuntimeConfig(

@@ -23,6 +23,8 @@ async def auth_check(request: Request):
         return PlainTextResponse("Application was not found.", status_code=403)
 
     effective_policy = get_effective_policy(runtime_config, context.policy_name)
+    if effective_policy.mode == "error":
+        return PlainTextResponse(effective_policy.error_message or "Policy configuration error.", status_code=500)
     if effective_policy.mode == "deny":
         return PlainTextResponse("Access denied by policy.", status_code=403)
     if effective_policy.mode == "bypass":

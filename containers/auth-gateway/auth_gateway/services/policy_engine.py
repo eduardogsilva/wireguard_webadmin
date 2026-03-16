@@ -16,6 +16,7 @@ from auth_gateway.models.runtime import RuntimeConfig
 class EffectivePolicy:
     name: str
     mode: str
+    error_message: str | None = None
     required_factors: list[str] = field(default_factory=list)
     allowed_users: set[str] = field(default_factory=set)
     allowed_groups: set[str] = field(default_factory=set)
@@ -43,6 +44,7 @@ def build_effective_policy(runtime_config: RuntimeConfig, policy_name: str) -> E
     effective = EffectivePolicy(
         name=policy_name,
         mode=policy.policy_type,
+        error_message=policy.error_message,
         allowed_users=expand_policy_users(runtime_config, policy),
         allowed_groups=set(policy.groups),
     )

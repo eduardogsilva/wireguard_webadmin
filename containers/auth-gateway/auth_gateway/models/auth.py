@@ -53,9 +53,10 @@ class GroupModel(BaseModel):
 
 
 class PolicyModel(BaseModel):
-    policy_type: Literal["bypass", "deny", "protected"]
+    policy_type: Literal["bypass", "deny", "protected", "error"]
     groups: list[str] = Field(default_factory=list)
     methods: list[str] = Field(default_factory=list)
+    error_message: str | None = None
 
 
 class AuthPoliciesFileModel(BaseModel):
