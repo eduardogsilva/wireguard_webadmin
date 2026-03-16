@@ -2,4 +2,4 @@
 
 set -eu
 
-exec uvicorn auth_gateway.main:app --host 0.0.0.0 --port 9091 --no-access-log
+exec uvicorn auth_gateway.main:app --host 0.0.0.0 --port 9091 --no-access-log --proxy-headers --forwarded-allow-ips="*"

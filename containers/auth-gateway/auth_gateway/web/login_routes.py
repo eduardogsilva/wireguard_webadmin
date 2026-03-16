@@ -19,6 +19,7 @@ from auth_gateway.web.dependencies import (
     resolve_context_from_request,
     session_is_allowed,
 )
+from auth_gateway.limiter import AUTH_RATE_LIMIT, limiter
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 
@@ -118,6 +119,7 @@ async def login_password_page(request: Request, next: str = "/"):
 
 
 @router.post("/login/password")
+@limiter.limit(AUTH_RATE_LIMIT)
 async def login_password_submit(request: Request, next: str = Form("/"), username: str = Form(...), password: str = Form(...)):
     runtime_config = get_runtime_config(request)
     context = resolve_context_from_request(request, runtime_config, next)
@@ -168,6 +170,7 @@ async def login_totp_page(request: Request, next: str = "/"):
 
 
 @router.post("/login/totp")
+@limiter.limit(AUTH_RATE_LIMIT)
 async def login_totp_submit(request: Request, next: str = Form("/"), token: str = Form(...)):
     runtime_config = get_runtime_config(request)
     context = resolve_context_from_request(request, runtime_config, next)
@@ -204,6 +207,7 @@ async def login_totp_submit(request: Request, next: str = Form("/"), token: str 
 
 
 @router.get("/login/oidc/start")
+@limiter.limit(AUTH_RATE_LIMIT)
 async def login_oidc_start(request: Request, next: str = "/"):
     runtime_config = get_runtime_config(request)
     context = resolve_context_from_request(request, runtime_config, next)

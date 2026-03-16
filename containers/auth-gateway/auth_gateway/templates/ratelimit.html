@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Too many attempts — Gatekeeper{% endblock %}
+{% block content %}
+    <h1 class="card-title">Too many attempts</h1>
+    <p class="card-subtitle">You have made too many requests in a short period. Please wait a moment before trying again.</p>
+    <a class="btn btn-secondary" href="{{ back_url }}">Try again</a>
+{% endblock %}
