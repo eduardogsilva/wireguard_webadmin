@@ -10,6 +10,11 @@
     margin: 0 auto;
 }
 
+/* ── Sidebar ── */
+.nav-sidebar .nav-link {
+    padding-left: 0.6rem;
+}
+
 body.layout-boxed {
     background: radial-gradient(circle at center, #444 0%, #ccc 80%, #fff 100%);
 }
