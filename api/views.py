@@ -270,11 +270,24 @@ def func_process_wireguard_status() -> Dict[str, Any]:
 
 def func_apply_enhanced_filter(data: dict, user_acl: UserAcl):
     # Remove peers and instances that are not allowed for the user
-    if user_acl.enable_enhanced_filter:
-        pass
-    else:
-        pass
-    return data
+    if not user_acl.enable_enhanced_filter:
+        return data
+
+    allowed_keys = set()
+    for server_instance in WireGuardInstance.objects.all():
+        for peer in user_allowed_peers(user_acl, server_instance):
+            allowed_keys.add(peer.public_key)
+
+    filtered = {}
+    for key, value in data.items():
+        if not isinstance(value, dict) or not key.startswith('wg'):
+            filtered[key] = value
+            continue
+        filtered_peers = {pk: info for pk, info in value.items() if pk in allowed_keys}
+        if filtered_peers:
+            filtered[key] = filtered_peers
+
+    return filtered
 
 
 def func_get_wireguard_status(cache_previous: int = 0):
@@ -603,6 +616,8 @@ def wireguard_status(request):
         return HttpResponseForbidden()
 
     data = func_get_wireguard_status(cache_previous)
+    if user_acl and enhanced_filter:
+        data = func_apply_enhanced_filter(data, user_acl)
     return JsonResponse(data)
 
 
