@@ -487,6 +487,8 @@ def api_v2_manage_peer(request):
          "description": "IPv4 address for the hostname record (required for POST/PUT, ignored for DELETE)."},
         {"name": "skip_reload", "in": "json", "type": "boolean", "required": False, "example": True,
          "description": "If true, does not apply DNS changes immediately and only sets dns_settings.pending_changes=True."},
+        {"name": "create_if_missing", "in": "json", "type": "boolean", "required": False, "example": False,
+         "description": "PUT only. If true, creates the record when the hostname does not exist. If false (default), returns 404 when the hostname is not found."},
     ],
     returns=[
         {"status": 200, "body": {"status": "success", "message": "DNS record updated successfully.", "hostname": "example.com", "ip_address": "10.0.0.50", "apply": {"success": True, "message": "..."}}},
@@ -507,12 +509,19 @@ def api_v2_manage_peer(request):
                 "skip_reload": True
             }
         },
-        "put_upsert_apply": {
+        "put_update_only": {
+            "method": "PUT",
+            "json": {
+                "hostname": "app.example.com",
+                "ip_address": "10.20.30.41"
+            }
+        },
+        "put_upsert": {
             "method": "PUT",
             "json": {
                 "hostname": "app.example.com",
                 "ip_address": "10.20.30.41",
-                "skip_reload": False
+                "create_if_missing": True
             }
         },
         "delete_skip_reload": {
@@ -542,6 +551,7 @@ def api_v2_manage_dns_record(request):
         return JsonResponse({"status": "error", "error_message": hostname_error}, status=400)
 
     skip_reload = bool(payload.get("skip_reload", False))
+    create_if_missing = bool(payload.get("create_if_missing", False))
     normalized_ip = None
     if request.method in ("POST", "PUT"):
         raw_ip = payload.get("ip_address")
@@ -585,10 +595,15 @@ def api_v2_manage_dns_record(request):
                 record.save(update_fields=["ip_address", "updated"])
                 action_message = "DNS record updated successfully."
                 status_code = 200
-            else:
+            elif create_if_missing:
                 record = StaticHost.objects.create(hostname=normalized_hostname, ip_address=normalized_ip)
                 action_message = "DNS record created successfully."
                 status_code = 201
+            else:
+                return JsonResponse(
+                    {"status": "error", "error_message": "DNS record not found for the provided hostname."},
+                    status=404,
+                )
         else:
             record = StaticHost.objects.filter(hostname=normalized_hostname).first()
             if not record:
