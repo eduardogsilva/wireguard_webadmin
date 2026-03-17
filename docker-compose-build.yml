@@ -1,36 +1,48 @@
 version: '3'
 services:
   wireguard-webadmin:
-    image: eduardosilva/wireguard_webadmin:latest
+    image: eduardosilva/wireguard_webadmin:${TAG:-latest}
     build:
       context: .
 
   wireguard-webadmin-cron:
-    image: eduardosilva/wireguard_webadmin_cron:latest
+    image: eduardosilva/wireguard_webadmin_cron:${TAG:-latest}
     build:
       context: containers/cron
       dockerfile: Dockerfile-cron
 
   wireguard-webadmin-dns:
-    image: eduardosilva/wireguard_webadmin_dns:latest
+    image: eduardosilva/wireguard_webadmin_dns:${TAG:-latest}
     build:
       context: ./containers/dnsmasq
       dockerfile: Dockerfile-dnsmasq
 
   wireguard-webadmin-nginx:
-    image: eduardosilva/wireguard_webadmin_nginx:latest
+    image: eduardosilva/wireguard_webadmin_nginx:${TAG:-latest}
     build:
       context: .
       dockerfile: Dockerfile_nginx
 
   wireguard-webadmin-rrdtool:
-    image: eduardosilva/wireguard_webadmin_rrdtool:latest
+    image: eduardosilva/wireguard_webadmin_rrdtool:${TAG:-latest}
     build:
       context: ./containers/rrdtool
       dockerfile: Dockerfile-rrdtool
 
   wireguard-webadmin-cluster-node:
-    image: eduardosilva/wireguard-webadmin-cluster-node:latest
+    image: eduardosilva/wireguard-webadmin-cluster-node:${TAG:-latest}
     build:
       context: ./containers/cluster_node
       dockerfile: Dockerfile-cluster_node
+
+  wireguard-webadmin-caddy:
+    image: eduardosilva/wireguard_webadmin_caddy:${TAG:-latest}
+    build:
+      context: ./containers/caddy
+      dockerfile: Dockerfile-caddy
+
+  wireguard-webadmin-auth-gateway:
+    image: eduardosilva/wireguard_webadmin_auth_gateway:${TAG:-latest}
+    build:
+      context: ./containers/auth-gateway
+      dockerfile: Dockerfile-auth-gateway
