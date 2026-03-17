@@ -63,7 +63,7 @@ body.layout-boxed .wrapper {
 
 /* ── Dark mode ── */
 body.dark-mode.layout-boxed {
-    background: radial-gradient(circle at center, #1c2025 0%, #272c31 60%, #2d3238 100%);
+    background: radial-gradient(circle at center, #1c2025 0%, #272c31 60%, #2d3238 100%) !important;
 }
 body.dark-mode.layout-boxed .wrapper {
     background-color: #343a40;
