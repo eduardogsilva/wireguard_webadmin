@@ -104,6 +104,46 @@
 </script>
 
 <script>
+    function syncDarkModeUI() {
+        var isDark = $('body').hasClass('dark-mode');
+        if (isDark) {
+            $('.main-header').removeClass('navbar-white navbar-light').addClass('navbar-dark');
+            $('#darkModeIcon').removeClass('fa-moon').addClass('fa-sun');
+        } else {
+            $('.main-header').removeClass('navbar-dark').addClass('navbar-white navbar-light');
+            $('#darkModeIcon').removeClass('fa-sun').addClass('fa-moon');
+        }
+    }
+
+    $(document).ready(function() {
+        syncDarkModeUI();
+
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                if (!getCookie('darkMode')) {
+                    if (e.matches) {
+                        $('body').addClass('dark-mode');
+                    } else {
+                        $('body').removeClass('dark-mode');
+                    }
+                    syncDarkModeUI();
+                }
+            });
+        }
+
+        $('#darkModeToggle').on('click', function(e) {
+            e.preventDefault();
+            if ($('body').hasClass('dark-mode')) {
+                $('body').removeClass('dark-mode');
+                setCookie('darkMode', 'light', 365);
+            } else {
+                $('body').addClass('dark-mode');
+                setCookie('darkMode', 'dark', 365);
+            }
+            syncDarkModeUI();
+        });
+    });
+
     $(document).ready(function() {
         var sidebarState = getCookie('sidebarState');
         if (sidebarState === 'collapsed') {

@@ -15,8 +15,66 @@
   <link rel="stylesheet" href="/static/AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/static/AdminLTE-3.2.0/dist/css/adminlte.min.css">
+
+  <style>
+    body.dark-mode.register-page {
+        background: #1c2025;
+    }
+    body.dark-mode .register-box .card {
+        background-color: #343a40;
+        color: #dee2e6;
+    }
+    body.dark-mode .register-box .card .form-control {
+        background-color: #2d3238;
+        border-color: #4b545c;
+        color: #dee2e6;
+    }
+    body.dark-mode .register-box .card .form-control::placeholder {
+        color: #8d9aaa;
+    }
+    body.dark-mode .register-box .card .input-group-text {
+        background-color: #3f474e;
+        border-color: #4b545c;
+        color: #dee2e6;
+    }
+    body.dark-mode .register-box .register-logo a {
+        color: #dee2e6;
+    }
+    body.dark-mode .btn-primary {
+        background-color: #3d8bcd;
+        border-color: #3d8bcd;
+        color: #fff;
+    }
+    body.dark-mode .btn-primary:hover,
+    body.dark-mode .btn-primary:focus {
+        background-color: #4d9eff;
+        border-color: #4d9eff;
+        color: #fff;
+    }
+    body.dark-mode .btn-outline-primary {
+        color: #3d8bcd;
+        border-color: #3d8bcd;
+    }
+    body.dark-mode .btn-outline-primary:hover,
+    body.dark-mode .btn-outline-primary:focus {
+        background-color: #3d8bcd;
+        border-color: #3d8bcd;
+        color: #fff;
+    }
+    body.dark-mode .login-box-msg {
+        color: #dee2e6;
+    }
+  </style>
 </head>
-<body class="hold-transition register-page">
+<body class="hold-transition register-page {% if request.COOKIES.darkMode == 'dark' %}dark-mode{% endif %}">
+<script>
+(function() {
+    var m = document.cookie.match(/(?:^|; )darkMode=([^;]*)/);
+    if (!m && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    }
+})();
+</script>
 {% block content %}
 {% endblock %}
 
@@ -26,6 +84,64 @@
 <script src="/static/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/static/AdminLTE-3.2.0/dist/js/adminlte.min.js"></script>
+
+<script>
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function syncDarkModeUI() {
+        var isDark = $('body').hasClass('dark-mode');
+        $('#darkModeIcon').toggleClass('fa-sun', isDark).toggleClass('fa-moon', !isDark);
+    }
+
+    $(document).ready(function() {
+        syncDarkModeUI();
+
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                if (!getCookie('darkMode')) {
+                    if (e.matches) {
+                        $('body').addClass('dark-mode');
+                    } else {
+                        $('body').removeClass('dark-mode');
+                    }
+                    syncDarkModeUI();
+                }
+            });
+        }
+
+        $('#darkModeToggle').on('click', function(e) {
+            e.preventDefault();
+            if ($('body').hasClass('dark-mode')) {
+                $('body').removeClass('dark-mode');
+                setCookie('darkMode', 'light', 365);
+            } else {
+                $('body').addClass('dark-mode');
+                setCookie('darkMode', 'dark', 365);
+            }
+            syncDarkModeUI();
+        });
+    });
+</script>
+
 {% include 'template_parts/base_messages.html' %}
 </body>
 </html>

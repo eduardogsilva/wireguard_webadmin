@@ -27,3 +27,99 @@ body.layout-boxed .wrapper {
     50%  { opacity: 0.3; transform: scale(1.1); }
     100% { opacity: 1; transform: scale(1); }
 }
+
+
+/* ── Peer list ── */
+.peer-extra-info {
+    display: none;
+}
+.callout.position-relative {
+    padding: 0 !important;
+}
+#inviteTextContainer {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+#inviteText {
+    white-space: pre-line;
+    text-align: left;
+}
+.div-peer-text-information {
+    top: 0;
+    left: 0;
+    background: linear-gradient(to right, white, transparent);
+    width: 100%;
+    height: 100%;
+}
+.peer-lock-icon {
+    position: absolute;
+    right: 15px;
+    top: 48px;
+    opacity: 0.75;
+}
+
+
+/* ── Dark mode ── */
+body.dark-mode.layout-boxed {
+    background: radial-gradient(circle at center, #1c2025 0%, #272c31 60%, #2d3238 100%);
+}
+body.dark-mode.layout-boxed .wrapper {
+    background-color: #343a40;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+}
+
+body.dark-mode pre {
+    background-color: #2d3035;
+    color: #dee2e6;
+    border: 1px solid #4b545c;
+}
+
+body.dark-mode .btn-primary {
+    background-color: #3d8bcd;
+    border-color: #3d8bcd;
+    color: #fff;
+}
+body.dark-mode .btn-primary:hover,
+body.dark-mode .btn-primary:focus {
+    background-color: #4d9eff;
+    border-color: #4d9eff;
+    color: #fff;
+}
+body.dark-mode .btn-outline-primary {
+    color: #3d8bcd;
+    border-color: #3d8bcd;
+}
+body.dark-mode .btn-outline-primary:hover,
+body.dark-mode .btn-outline-primary:focus {
+    background-color: #3d8bcd;
+    border-color: #3d8bcd;
+    color: #fff;
+}
+body.dark-mode .text-primary {
+    color: #3d8bcd !important;
+}
+body.dark-mode a {
+    color: #3d8bcd;
+}
+body.dark-mode a:hover {
+    color: #4d9eff;
+}
+body.dark-mode .card-primary.card-outline {
+    border-top-color: #3d8bcd;
+}
+body.dark-mode .nav-pills .nav-link.active,
+body.dark-mode .nav-pills .show > .nav-link {
+    background-color: #3d8bcd;
+}
+
+body.dark-mode .div-peer-text-information {
+    background: linear-gradient(to right, #3f474e, transparent);
+}
+body.dark-mode .div-peer-text-information h5 a {
+    color: #dee2e6;
+}
+body.dark-mode .div-peer-text-information h5 a:hover {
+    color: #fff;
+}

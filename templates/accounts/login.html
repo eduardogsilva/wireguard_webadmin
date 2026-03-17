@@ -31,12 +31,16 @@
                         <div class="col-md-6">
                             <button type="submit" class="btn btn-primary btn-block">{% trans 'Login' %}</button>
                         </div>
-                        <div class="col-md-6">
-                            <a class="btn btn-outline-primary btn-block" href="/change_language/">
-                                {% trans 'Language' %}
+                        <div class="col-md-3">
+                            <a class="btn btn-outline-primary btn-block" href="/change_language/" title="{% trans 'Change Language' %}">
+                                <i class="fas fa-language"></i>
                             </a>
                         </div>
-
+                        <div class="col-md-3">
+                            <a class="btn btn-outline-primary btn-block" href="#" id="darkModeToggle" title="{% trans 'Toggle Dark Mode' %}">
+                                <i class="fas {% if request.COOKIES.darkMode == 'dark' %}fa-sun{% else %}fa-moon{% endif %}" id="darkModeIcon"></i>
+                            </a>
+                        </div>
                     </div>
                 </form>
             </div>

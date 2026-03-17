@@ -95,7 +95,8 @@
 
             $('#downloadConfigButton').attr('href', downloadUrl);
             $('#qrcodeButton').attr('href', qrUrl);
-            $('#graphImg').attr('src', '/rrd/graph/?peer=' + uuid).show();
+            var darkParam = $('body').hasClass('dark-mode') ? '&dark=1' : '';
+            $('#graphImg').attr('src', '/rrd/graph/?peer=' + uuid + darkParam).show();
             $('#peerPreviewModal').data('peer-uuid', uuid);
 
             $.ajax({
@@ -130,7 +131,8 @@
         e.preventDefault();
         var period = $(this).data('period');
         var uuid = $('#peerPreviewModal').data('peer-uuid');
-        var newSrc = '/rrd/graph/?peer=' + uuid + '&period=' + period;
+        var darkParam = $('body').hasClass('dark-mode') ? '&dark=1' : '';
+        var newSrc = '/rrd/graph/?peer=' + uuid + '&period=' + period + darkParam;
         $('#graphImg').attr('src', newSrc);
     });
 </script>

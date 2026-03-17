@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <img src="/rrd/graph/?instance={{ instance.uuid }}&period={{ request.GET.period|default:'6h' }}"
+                <img src="/rrd/graph/?instance={{ instance.uuid }}&period={{ request.GET.period|default:'6h' }}{% if request.COOKIES.darkMode == 'dark' %}&dark=1{% endif %}"
                     class="img-fluid" alt="RRD Graph">
             </div>
         </div>

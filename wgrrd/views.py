@@ -1,17 +1,16 @@
+import base64
+import os
 import subprocess
+import tempfile
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 
 from user_manager.models import UserAcl
 from wgwadmlibrary.tools import user_has_access_to_peer
 from wireguard.models import Peer, WireGuardInstance
-
-import base64
-import tempfile
-import os
 
 
 @login_required
@@ -45,21 +44,44 @@ def view_rrd_graph(request):
     if not (period[:-1].isdigit() and period[-1] in ['h', 'd']):
         period = '6h'
 
+    dark_mode = request.GET.get('dark') == '1'
+
     command = [
         "rrdtool", "graph", graph_file,
         "--start", f"-{period}",
         "--title", f"{graph_title}",
         "--vertical-label", "Value",
+    ]
+
+    if dark_mode:
+        command += [
+            "--color", "BACK#2d3035",
+            "--color", "CANVAS#353a40",
+            "--color", "SHADEA#2d3035",
+            "--color", "SHADEB#2d3035",
+            "--color", "GRID#555c63",
+            "--color", "MGRID#6c7580",
+            "--color", "FONT#c8c8c8",
+            "--color", "FRAME#2d3035",
+            "--color", "ARROW#c8c8c8",
+        ]
+        tx_color = "4a9eff"
+        rx_color = "ff6b6b"
+    else:
+        tx_color = "0000FF"
+        rx_color = "FF0000"
+
+    command += [
         f"DEF:txdata={rrd_file_path}:tx:AVERAGE",
         f"DEF:rxdata={rrd_file_path}:rx:AVERAGE",
         "CDEF:tx_mb=txdata,1048576,/",
         "CDEF:rx_mb=rxdata,1048576,/",
         "VDEF:tx_total=tx_mb,TOTAL",
         "VDEF:rx_total=rx_mb,TOTAL",
-        "LINE1:txdata#0000FF:Transmitted ",
+        f"LINE1:txdata#{tx_color}:Transmitted ",
         "GPRINT:tx_total:%6.2lf MB",
         "COMMENT:\\n",
-        "LINE1:rxdata#FF0000:Received ",
+        f"LINE1:rxdata#{rx_color}:Received ",
         "GPRINT:rx_total:%6.2lf MB",
         "COMMENT:\\n"
     ]

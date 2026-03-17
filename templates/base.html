@@ -10,7 +10,15 @@
     {% block page_custom_head %}{% endblock %}
 </head>
 
-<body class="hold-transition sidebar-mini layout-boxed {% if request.COOKIES.sidebarState == 'collapsed' %}sidebar-collapse{% endif %}">
+<body class="hold-transition sidebar-mini layout-boxed {% if request.COOKIES.sidebarState == 'collapsed' %}sidebar-collapse{% endif %} {% if request.COOKIES.darkMode == 'dark' %}dark-mode{% endif %}">
+<script>
+(function() {
+    var m = document.cookie.match(/(?:^|; )darkMode=([^;]*)/);
+    if (!m && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    }
+})();
+</script>
 <div class="wrapper">
 
     <!-- Preloader -->
