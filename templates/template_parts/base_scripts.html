@@ -136,9 +136,11 @@
             if ($('body').hasClass('dark-mode')) {
                 $('body').removeClass('dark-mode');
                 setCookie('darkMode', 'light', 365);
+                setCookie('darkModeActive', '0', 365);
             } else {
                 $('body').addClass('dark-mode');
                 setCookie('darkMode', 'dark', 365);
+                setCookie('darkModeActive', '1', 365);
             }
             syncDarkModeUI();
         });

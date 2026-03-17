@@ -148,7 +148,7 @@
                             </div>
 
                             <center>
-                                <img id="graphImg" src="/rrd/graph/?peer={{ current_peer.uuid }}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}{% if request.COOKIES.darkMode == 'dark' %}&dark=1{% endif %}"
+                                <img id="graphImg" src="/rrd/graph/?peer={{ current_peer.uuid }}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}{% if request.COOKIES.darkModeActive == '1' %}&dark=1{% endif %}"
                                      class="img-fluid" alt="{% trans 'No traffic history, please wait a few minutes' %}"
                                      onerror="this.onerror=null; this.style.display='none'; this.insertAdjacentHTML('afterend', this.alt);">
                             </center>
