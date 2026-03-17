@@ -18,13 +18,13 @@ from .models import StaticHost
 
 
 def export_dns_configuration():
-    dns_settings, _ = DNSSettings.objects.get_or_create(name='dns_settings')
-    dns_settings.pending_changes = False
-    dns_settings.save()
     dnsmasq_config = generate_dnsmasq_config()
     with open(settings.DNS_CONFIG_FILE, 'w') as f:
         f.write(dnsmasq_config)
     compress_dnsmasq_config()
+    dns_settings, dns_settings_created = DNSSettings.objects.get_or_create(name='dns_settings')
+    dns_settings.pending_changes = False
+    dns_settings.save(update_fields=['pending_changes', 'updated'])
     return
 
 
