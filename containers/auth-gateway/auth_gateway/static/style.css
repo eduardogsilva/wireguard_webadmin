@@ -14,6 +14,41 @@
     --shadow: 0 1px 3px rgba(0,0,0,.08), 0 8px 24px rgba(0,0,0,.06);
 }
 
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #18181b;
+        --card: #27272a;
+        --ink: #f4f4f5;
+        --subtle: #a1a1aa;
+        --line: #3f3f46;
+        --accent: #3b82f6;
+        --accent-hover: #2563eb;
+        --shadow: 0 1px 3px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    }
+}
+
+body.dark-mode {
+    --bg: #18181b;
+    --card: #27272a;
+    --ink: #f4f4f5;
+    --subtle: #a1a1aa;
+    --line: #3f3f46;
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
+    --shadow: 0 1px 3px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+}
+
+body.light-mode {
+    --bg: #f4f4f5;
+    --card: #ffffff;
+    --ink: #18181b;
+    --subtle: #71717a;
+    --line: #e4e4e7;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 8px 24px rgba(0,0,0,.06);
+}
+
 body {
     min-height: 100vh;
     background: var(--bg);
@@ -105,7 +140,7 @@ input[type="password"] {
     padding: 9px 12px;
     border: 1px solid var(--line);
     border-radius: 8px;
-    background: #fff;
+    background: var(--card);
     font: inherit;
     font-size: 14px;
     color: var(--ink);
@@ -201,4 +236,29 @@ input:focus {
     color: var(--accent);
     border: 1px solid #dbeafe;
     margin: 2px 2px 2px 0;
+}
+
+/* ── Dark mode toggle ── */
+#dark-mode-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--subtle);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 120ms, color 120ms, border-color 120ms;
+    z-index: 999;
+    text-decoration: none;
+}
+#dark-mode-toggle:hover {
+    background: var(--bg);
+    color: var(--ink);
 }
