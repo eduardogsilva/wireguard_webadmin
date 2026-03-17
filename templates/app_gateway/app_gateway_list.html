@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block content %}
+{% include 'app_gateway/caddy_disabled_alert.html' %}
 <div class="card card-primary card-outline">
     <div class="card-body">
 
@@ -36,12 +37,19 @@
                     </div>
                     {% if active_tab == 'applications' %}
                     <div>
+                        {% if caddy_enabled %}
                         <form method="post" action="{% url 'export_caddy_config' %}" class="d-inline">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-outline-secondary">
                                 <i class="fas fa-file-export"></i> {% trans 'Export Configuration' %}
                             </button>
                         </form>
+                        {% else %}
+                        <button type="button" class="btn btn-outline-secondary" disabled
+                                title="{% trans 'Export is not available because Caddy is not enabled.' %}">
+                            <i class="fas fa-file-export"></i> {% trans 'Export Configuration' %}
+                        </button>
+                        {% endif %}
                         <a href="{% url 'manage_application' %}" class="btn btn-outline-primary">
                             <i class="fas fa-plus"></i> {% trans 'Add Application' %}
                         </a>

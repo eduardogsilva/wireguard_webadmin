@@ -41,6 +41,7 @@ def view_app_gateway_list(request):
         'access_policies': access_policies,
         'app_policies': app_policies,
         'active_tab': tab,
+        'caddy_enabled': settings.CADDY_ENABLED,
     }
     return render(request, 'app_gateway/app_gateway_list.html', context)
 
@@ -460,17 +461,19 @@ def view_export_caddy_config(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
 
-    if settings.CADDY_ENABLED:
-        export_caddy_config('/caddy_json_export/')
-
-    if settings.DEBUG or not settings.CADDY_ENABLED:
-        export_caddy_config(os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files'))
-
     redirect_url = reverse('app_gateway_list') + '?tab=applications'
 
-    if settings.CADDY_ENABLED:
-        messages.success(request, _('Configuration exported successfully.'))
-    else:
-        messages.error(request, _('Caddy is not active. Configuration files were exported for debugging purposes.'))
+    if not settings.CADDY_ENABLED:
+        messages.error(request, _(
+            'Configuration export is not available because Caddy is not enabled. '
+            'To use App Gateway and Gatekeeper, start the application using docker-compose-caddy.yml.'
+        ))
+        return redirect(redirect_url)
 
+    export_caddy_config('/caddy_json_export/')
+
+    if settings.DEBUG:
+        export_caddy_config(os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files'))
+
+    messages.success(request, _('Configuration exported successfully.'))
     return redirect(redirect_url)

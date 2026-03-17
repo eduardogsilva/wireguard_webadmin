@@ -2,6 +2,7 @@ import io
 
 import pyotp
 import qrcode
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -40,6 +41,7 @@ def view_gatekeeper_list(request):
         'auth_emails': auth_emails,
         'auth_ips': auth_ips,
         'active_tab': active_tab,
+        'caddy_enabled': settings.CADDY_ENABLED,
     }
     return render(request, 'gatekeeper/gatekeeper_list.html', context)
 
