@@ -52,6 +52,13 @@ def build_effective_policy(runtime_config: RuntimeConfig, policy_name: str) -> E
     if policy.policy_type != "protected":
         return effective
 
+    if not policy.methods:
+        return EffectivePolicy(
+            name=policy_name,
+            mode="error",
+            error_message="Policy configuration error: protected policy has no authentication methods.",
+        )
+
     for method_name in policy.methods:
         method = runtime_config.auth_methods[method_name]
         if isinstance(method, IPAddressMethodModel):

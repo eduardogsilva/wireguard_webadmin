@@ -24,6 +24,8 @@ def get_session(request: Request) -> SessionRecord | None:
 
 def build_external_url(request: Request, path: str, **params: str) -> str:
     proto = request.headers.get("x-forwarded-proto", request.url.scheme)
+    if proto not in ("http", "https"):
+        proto = "https"
     host = request.headers.get("host", request.url.netloc)
     prefix = request.app.state.settings.external_path.rstrip("/")
     query = urlencode({key: value for key, value in params.items() if value is not None})
