@@ -1,3 +1,4 @@
+import ipaddress
 import re
 
 import pyotp
@@ -316,6 +317,25 @@ class GatekeeperIPAddressForm(forms.ModelForm):
             'action': _('Action'),
             'description': _('Description'),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        address = cleaned_data.get('address')
+        prefix_length = cleaned_data.get('prefix_length')
+        if address and prefix_length is not None:
+            try:
+                ip = ipaddress.ip_address(address)
+                max_prefix = 32 if ip.version == 4 else 128
+                if prefix_length > max_prefix:
+                    self.add_error(
+                        'prefix_length',
+                        _('Prefix length for IPv%(version)d must be between 0 and %(max)d.') % {
+                            'version': ip.version, 'max': max_prefix,
+                        },
+                    )
+            except ValueError:
+                pass  # address field validation handles invalid IPs
+        return cleaned_data
 
     def __init__(self, *args, **kwargs):
         cancel_url = kwargs.pop('cancel_url', '#')

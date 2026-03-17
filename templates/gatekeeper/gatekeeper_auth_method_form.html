@@ -88,19 +88,44 @@
             $('#qrCodeContainer').slideUp();
         });
 
+        var _qrObjectUrl = null;
+
         $('#btnShowQr').click(function (e) {
             e.preventDefault();
+
+            if ($('#qrCodeContainer').is(':visible')) {
+                $('#qrCodeContainer').slideUp();
+                return;
+            }
+
             var secret = $('#id_totp_secret').val();
-            var name = $('#id_name').val() || 'Gatekeeper';
+            var name = $('#id_display_name').val() || 'Gatekeeper';
 
             if (!secret) {
                 alert("{% trans 'Please enter a TOTP Secret first to generate the QR code.' %}");
                 return;
             }
 
-            var url = '/gatekeeper/auth_method/qr/?secret=' + encodeURIComponent(secret) + '&name=' + encodeURIComponent(name);
-            $('#qrCodeImg').attr('src', url);
-            $('#qrCodeContainer').slideToggle();
+            var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            var formData = new FormData();
+            formData.append('secret', secret);
+            formData.append('name', name);
+            formData.append('csrfmiddlewaretoken', csrfToken);
+
+            fetch('/gatekeeper/auth_method/qr/', { method: 'POST', body: formData })
+                .then(function (response) {
+                    if (!response.ok) throw new Error('Failed');
+                    return response.blob();
+                })
+                .then(function (blob) {
+                    if (_qrObjectUrl) { URL.revokeObjectURL(_qrObjectUrl); }
+                    _qrObjectUrl = URL.createObjectURL(blob);
+                    $('#qrCodeImg').attr('src', _qrObjectUrl);
+                    $('#qrCodeContainer').slideDown();
+                })
+                .catch(function () {
+                    alert("{% trans 'Error generating QR code.' %}");
+                });
         });
     });
 </script>

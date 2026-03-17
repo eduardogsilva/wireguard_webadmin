@@ -255,9 +255,12 @@ def view_generate_totp_qr(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
         return HttpResponse("Access Denied", status=403)
 
-    totp_secret = request.GET.get('secret')
-    issuer = request.GET.get('issuer', 'wireguard_webadmin')
-    name = request.GET.get('name', 'Gatekeeper')
+    if request.method != 'POST':
+        return HttpResponse("Method Not Allowed", status=405)
+
+    totp_secret = request.POST.get('secret')
+    issuer = request.POST.get('issuer', 'wireguard_webadmin')
+    name = request.POST.get('name', 'Gatekeeper')
 
     if not totp_secret:
         return HttpResponse("No secret provided", status=400)
