@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-18 10:58-0300\n"
+"POT-Creation-Date: 2026-03-18 11:16-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,7 +213,7 @@ msgstr "Upstream"
 
 #: app_gateway/forms.py:20
 msgid "Allow invalid/self-signed certificate"
-msgstr ""
+msgstr "Povoliť neplatný/samopodpísaný certifikát"
 
 #: app_gateway/forms.py:42 app_gateway/forms.py:100 app_gateway/forms.py:145
 #: app_gateway/forms.py:163 app_gateway/forms.py:242 app_gateway/forms.py:284
@@ -244,6 +244,8 @@ msgid ""
 "Upstream must be a bare host address with no path, query or fragment. Use "
 "http://host or http://host:port"
 msgstr ""
+"Upstream musí byť jednoduchá adresa hostiteľa bez cesty, parametra alebo "
+"fragmentu. Použite http://host alebo http://host:port"
 
 #: app_gateway/forms.py:76 cluster/forms.py:24 dns/forms.py:65
 #: templates/app_gateway/app_gateway_list.html:109
@@ -255,7 +257,7 @@ msgstr "Názov hostiteľa"
 
 #: app_gateway/forms.py:84
 msgid "Hostname contains invalid characters."
-msgstr ""
+msgstr "Názov hostiteľa obsahuje neplatné znaky."
 
 #: app_gateway/forms.py:114 templates/app_gateway/app_gateway_list.html:147
 msgid "Policy Type"
@@ -327,26 +329,20 @@ msgid "Order"
 msgstr "Poradie"
 
 #: app_gateway/forms.py:299
-#, fuzzy
-#| msgid "Invite URL must start with 'https://'."
 msgid "Path prefix must start with /."
-msgstr "URL pozvánky musí začínať na 'https://'."
+msgstr "Predpona cesty musí začínať znakom /."
 
 #: app_gateway/forms.py:301
-#, fuzzy
-#| msgid "Upstream URL cannot contain spaces."
 msgid "Path prefix cannot contain spaces."
-msgstr "URL adresa upstream nemôže obsahovať medzery."
+msgstr "Predpona cesty nemôže obsahovať medzery."
 
 #: app_gateway/forms.py:303
 msgid "Path prefix contains invalid characters."
-msgstr ""
+msgstr "Predpona cesty obsahuje neplatné znaky."
 
 #: app_gateway/forms.py:308
-#, fuzzy
-#| msgid "This upstream is reserved by the system."
 msgid "This path prefix is reserved by the system."
-msgstr "Tento upstream je vyhradený systémom."
+msgstr "Táto predpona cesty je vyhradená systémom."
 
 #: app_gateway/models.py:14
 msgid "Upstream address, e.g.: http://10.188.18.27:3000"
@@ -354,7 +350,7 @@ msgstr "Upstream adresa, napr.: http://10.188.18.27:3000"
 
 #: app_gateway/models.py:15
 msgid "Allow invalid or self-signed TLS certificates from the upstream"
-msgstr ""
+msgstr "Povoliť neplatné alebo samopodpísané TLS certifikáty z upstreamu"
 
 #: app_gateway/models.py:53
 #: templates/app_gateway/access_policy_type_select.html:19
@@ -378,7 +374,7 @@ msgstr "Podrobnosti o aplikácii"
 
 #: app_gateway/views.py:90 app_gateway/views.py:174 app_gateway/views.py:204
 msgid "The WireGuard WebAdmin application cannot be modified."
-msgstr ""
+msgstr "Aplikáciu WireGuard WebAdmin nie je možné upraviť."
 
 #: app_gateway/views.py:92 templates/app_gateway/application_details.html:16
 #: templates/app_gateway/application_details.html:23
@@ -429,7 +425,7 @@ msgstr ""
 
 #: app_gateway/views.py:137
 msgid "The WireGuard WebAdmin application cannot be deleted."
-msgstr ""
+msgstr "Aplikáciu WireGuard WebAdmin nie je možné odstrániť."
 
 #: app_gateway/views.py:142
 msgid "Application deleted successfully."
@@ -661,6 +657,9 @@ msgid ""
 "App Gateway and Gatekeeper, start the application using docker-compose-"
 "caddy.yml."
 msgstr ""
+"Export konfigurácie nie je dostupný, pretože Caddy nie je povolený. Ak "
+"chcete používať App Gateway a Gatekeeper, spustite aplikáciu pomocou docker-"
+"compose-caddy.yml."
 
 #: app_gateway/views.py:478
 msgid "Configuration exported successfully."
@@ -1371,22 +1370,20 @@ msgid "Members"
 msgstr "Členovia"
 
 #: gatekeeper/forms.py:169
-#, fuzzy
-#| msgid "Expiration"
 msgid "Session Expiration"
-msgstr "Expirácia"
+msgstr "Expirácia relácie"
 
 #: gatekeeper/forms.py:175
 msgid "Unit"
-msgstr ""
+msgstr "Jednotka"
 
 #: gatekeeper/forms.py:176
 msgid "Hour(s)"
-msgstr ""
+msgstr "Hodina(y)"
 
 #: gatekeeper/forms.py:176
 msgid "Day(s)"
-msgstr ""
+msgstr "Deň(dni)"
 
 #: gatekeeper/forms.py:189
 msgid "Authentication Type"
@@ -1437,7 +1434,7 @@ msgstr "TOTP tajomstvo je povinné pre autentifikáciu TOTP."
 #: gatekeeper/forms.py:285
 msgid ""
 "OIDC authentication is temporarily unavailable and will be available soon."
-msgstr ""
+msgstr "Autentifikácia OIDC je dočasne nedostupná a bude čoskoro k dispozícii."
 
 #: gatekeeper/forms.py:287
 msgid "TOTP secret must be empty for OIDC authentication."
@@ -1464,7 +1461,7 @@ msgstr "Akcia"
 #: gatekeeper/forms.py:332
 #, python-format
 msgid "Prefix length for IPv%(version)d must be between 0 and %(max)d."
-msgstr ""
+msgstr "Dĺžka prefixu pre IPv%(version)d musí byť medzi 0 a %(max)d."
 
 #: gatekeeper/forms.py:376 templates/gatekeeper/gatekeeper_list.html:238
 msgid "Domain"
@@ -1491,10 +1488,8 @@ msgid "Shared/global TOTP secret key"
 msgstr "Zdieľaný/globálny tajný kľúč TOTP"
 
 #: gatekeeper/models.py:39
-#, fuzzy
-#| msgid "Expiration (minutes)"
 msgid "Session expiration time in minutes"
-msgstr "Expirácia (minúty)"
+msgstr "Čas expirácie relácie v minútach"
 
 #: gatekeeper/models.py:96
 msgid "Password for local authentication (leave blank if not using)"
@@ -1614,26 +1609,6 @@ msgid "Authentication Method saved successfully."
 msgstr "Metóda autentifikácie bola úspešne uložená."
 
 #: gatekeeper/views.py:199
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "        <h4>Authentication Types</h4>\n"
-#| "        <p>Select how users will authenticate through this method.</p>\n"
-#| "        \n"
-#| "        <h5>Local Password</h5>\n"
-#| "        <p>Users will authenticate using a standard username and password "
-#| "stored locally. Only one of this type can be created.</p>\n"
-#| "        \n"
-#| "        <h5>OIDC (OpenID Connect)</h5>\n"
-#| "        <p>Users will authenticate via an external identity provider "
-#| "(like Keycloak, Google, or Authelia). Requires Provider URL, Client ID, "
-#| "and Client Secret.</p>\n"
-#| "        \n"
-#| "        <h5>TOTP (Time-Based One-Time Password)</h5>\n"
-#| "        <p>Users will need to enter a rotating token from an "
-#| "authenticator app. If a user does not have a personal TOTP configured, "
-#| "the <strong>Global TOTP Secret</strong> will be used instead. </p>\n"
-#| "        "
 msgid ""
 "\n"
 "        <h4>Authentication Types</h4>\n"
@@ -1656,20 +1631,23 @@ msgid ""
 msgstr ""
 "\n"
 "        <h4>Typy autentifikácie</h4>\n"
-"používateľského mena a hesla uloženého lokálne. Je možné vytvoriť iba jeden "
-"tento typ.</p>\n"
-"        \n"
-"        <h5>OIDC (OpenID Connect)</h5>\n"
-"        <p>Používatelia sa budú autentifikovať prostredníctvom externého "
-"poskytovateľa identity (ako Keycloak, Google alebo Authelia). Vyžaduje URL "
-"poskytovateľa, ID klienta a Secret klienta.</p>\n"
-"        \n"
-"        <h5>TOTP (Časovo založené jednorazové heslo)</h5>\n"
-"        <p>Používatelia budú musieť zadať rotujúci token z autentifikačnej "
-"aplikácie. Vyžaduje nastavenie globálneho tajomstva TOTP. <br>Ak je povolené "
-"<strong>Globálne TOTP pred autentifikáciou</strong>, PIN sa vyžaduje pred "
-"používateľským menom a heslom, čo pomáha bojovať proti útokom hrubou silou.</"
+"        <p>Vyberte, ako sa budú používatelia overovať pomocou tejto metódy.</"
 "p>\n"
+"\n"
+"        <h5>Lokálne heslo</h5>\n"
+"        <p>Používatelia sa budú overovať pomocou štandardného "
+"používateľského mena a hesla uloženého lokálne. Je možné vytvoriť iba jednu "
+"metódu tohto typu.</p>\n"
+"\n"
+"        <h5>OIDC (OpenID Connect)</h5>\n"
+"        <p>Používatelia sa budú overovať prostredníctvom externého "
+"poskytovateľa identity (napríklad Keycloak alebo Google). Vyžaduje URL "
+"poskytovateľa, ID klienta a tajný kľúč klienta.</p>\n"
+"\n"
+"        <h5>TOTP (časovo založené jednorazové heslo)</h5>\n"
+"        <p>Používatelia budú musieť zadať rotujúci token z autentifikačnej "
+"aplikácie. Ak používateľ nemá nakonfigurované osobné TOTP, namiesto toho sa "
+"použije <strong>globálne tajomstvo TOTP</strong>. </p>\n"
 "        "
 
 #: gatekeeper/views.py:237
@@ -1678,6 +1656,8 @@ msgid ""
 "Cannot delete authentication method \"%(method)s\" because it is used by the "
 "following policies: %(policies)s."
 msgstr ""
+"Nie je možné odstrániť metódu autentifikácie \"%(method)s\", pretože ju "
+"používajú nasledujúce politiky: %(policies)s."
 
 #: gatekeeper/views.py:243
 msgid "Authentication Method deleted successfully."
@@ -2146,7 +2126,7 @@ msgstr "Prihlásiť sa"
 #: templates/accounts/login.html:40
 #: templates/template_parts/base_navbar.html:14
 msgid "Toggle Dark Mode"
-msgstr ""
+msgstr "Prepnúť tmavý režim"
 
 #: templates/accounts/logout.html:11
 msgid "You have been successfully logged out."
@@ -2291,7 +2271,7 @@ msgstr "Exportovať konfiguráciu"
 
 #: templates/app_gateway/app_gateway_list.html:49
 msgid "Export is not available because Caddy is not enabled."
-msgstr ""
+msgstr "Export nie je dostupný, pretože Caddy nie je povolený."
 
 #: templates/app_gateway/app_gateway_list.html:54
 msgid "Add Application"
@@ -2359,13 +2339,11 @@ msgstr "Späť na zoznam"
 #: templates/app_gateway/application_details.html:91
 #: templates/app_gateway/application_details.html:94
 msgid "This application cannot be modified"
-msgstr ""
+msgstr "Túto aplikáciu nie je možné upraviť"
 
 #: templates/app_gateway/application_details.html:18
-#, fuzzy
-#| msgid "Application Route deleted successfully."
 msgid "This application cannot be deleted"
-msgstr "Trasa aplikácie bola úspešne odstránená."
+msgstr "Túto aplikáciu nie je možné odstrániť"
 
 #: templates/app_gateway/application_details.html:49
 msgid "Set Policy"
@@ -2397,10 +2375,8 @@ msgid "No Routes configured for this application."
 msgstr "Pre túto aplikáciu nie sú konfigurované žiadne trasy."
 
 #: templates/app_gateway/caddy_disabled_alert.html:5
-#, fuzzy
-#| msgid "Cluster is not enabled"
 msgid "Caddy is not enabled"
-msgstr "Cluster nie je povolený"
+msgstr "Caddy nie je povolený"
 
 #: templates/app_gateway/caddy_disabled_alert.html:6
 msgid ""
@@ -2408,24 +2384,29 @@ msgid ""
 "container to be running. Please start the application using <code>docker-"
 "compose-caddy.yml</code>."
 msgstr ""
+"Moduly App Gateway a Gatekeeper vyžadujú, aby boli spustené Caddy aj "
+"kontajner auth-gateway. Spustite aplikáciu pomocou <code>docker-compose-"
+"caddy.yml</code>."
 
 #: templates/app_gateway/caddy_disabled_alert.html:7
 msgid ""
 "Depending on your custom firewall or proxy rules, the way you access "
 "wireguard_webadmin may change slightly after enabling Caddy."
 msgstr ""
+"V závislosti od vašich vlastných pravidiel firewallu alebo proxy sa môže "
+"spôsob prístupu k wireguard_webadmin po povolení Caddy mierne zmeniť."
 
 #: templates/app_gateway/caddy_disabled_alert.html:8
 msgid ""
 "Switching to Caddy is simple, but it may require a bit of time and attention "
 "to review your current setup."
 msgstr ""
+"Prechod na Caddy je jednoduchý, ale môže si vyžadovať trochu času a "
+"pozornosti na kontrolu vášho aktuálneho nastavenia."
 
 #: templates/app_gateway/caddy_disabled_alert.html:9
-#, fuzzy
-#| msgid "For more information, please visit:"
 msgid "For more information, see the discussion:"
-msgstr "Pre viac informácií navštívte prosím:"
+msgstr "Viac informácií nájdete v diskusii:"
 
 #: templates/cluster/workers_list.html:9 templates/dns/static_host_list.html:72
 #: templates/scheduler/scheduleprofile_form.html:82
@@ -2953,10 +2934,8 @@ msgstr "Najprv zadajte TOTP tajomstvo, aby ste vygenerovali QR kód."
 
 #: templates/gatekeeper/gatekeeper_auth_method_form.html:127
 #: templates/gatekeeper/gatekeeper_user_form.html:103
-#, fuzzy
-#| msgid "Error creating invite."
 msgid "Error generating QR code."
-msgstr "Chyba pri vytváraní pozvánky."
+msgstr "Chyba pri generovaní QR kódu."
 
 #: templates/gatekeeper/gatekeeper_list.html:19
 msgid "Gatekeeper Users"

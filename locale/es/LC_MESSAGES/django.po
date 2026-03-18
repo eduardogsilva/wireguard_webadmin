@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-18 10:58-0300\n"
+"POT-Creation-Date: 2026-03-18 11:16-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,7 +213,7 @@ msgstr "Upstream"
 
 #: app_gateway/forms.py:20
 msgid "Allow invalid/self-signed certificate"
-msgstr ""
+msgstr "Permitir certificado no válido/autofirmado"
 
 #: app_gateway/forms.py:42 app_gateway/forms.py:100 app_gateway/forms.py:145
 #: app_gateway/forms.py:163 app_gateway/forms.py:242 app_gateway/forms.py:284
@@ -244,6 +244,8 @@ msgid ""
 "Upstream must be a bare host address with no path, query or fragment. Use "
 "http://host or http://host:port"
 msgstr ""
+"El upstream debe ser una dirección de host simple, sin ruta, consulta ni "
+"fragmento. Use http://host o http://host:port"
 
 #: app_gateway/forms.py:76 cluster/forms.py:24 dns/forms.py:65
 #: templates/app_gateway/app_gateway_list.html:109
@@ -255,7 +257,7 @@ msgstr "Nombre de host"
 
 #: app_gateway/forms.py:84
 msgid "Hostname contains invalid characters."
-msgstr ""
+msgstr "El nombre de host contiene caracteres no válidos."
 
 #: app_gateway/forms.py:114 templates/app_gateway/app_gateway_list.html:147
 msgid "Policy Type"
@@ -331,26 +333,20 @@ msgid "Order"
 msgstr "Orden"
 
 #: app_gateway/forms.py:299
-#, fuzzy
-#| msgid "Invite URL must start with 'https://'."
 msgid "Path prefix must start with /."
-msgstr "La URL debe empezar con 'https://'."
+msgstr "El prefijo de la ruta debe comenzar con /."
 
 #: app_gateway/forms.py:301
-#, fuzzy
-#| msgid "Upstream URL cannot contain spaces."
 msgid "Path prefix cannot contain spaces."
-msgstr "La URL de upstream no puede contener espacios."
+msgstr "El prefijo de la ruta no puede contener espacios."
 
 #: app_gateway/forms.py:303
 msgid "Path prefix contains invalid characters."
-msgstr ""
+msgstr "El prefijo de la ruta contiene caracteres no válidos."
 
 #: app_gateway/forms.py:308
-#, fuzzy
-#| msgid "This upstream is reserved by the system."
 msgid "This path prefix is reserved by the system."
-msgstr "Este upstream está reservado por el sistema."
+msgstr "Este prefijo de ruta está reservado por el sistema."
 
 #: app_gateway/models.py:14
 msgid "Upstream address, e.g.: http://10.188.18.27:3000"
@@ -358,7 +354,7 @@ msgstr "Dirección de origen (upstream), ej.: http://10.188.18.27:3000"
 
 #: app_gateway/models.py:15
 msgid "Allow invalid or self-signed TLS certificates from the upstream"
-msgstr ""
+msgstr "Permitir certificados TLS no válidos o autofirmados del upstream"
 
 #: app_gateway/models.py:53
 #: templates/app_gateway/access_policy_type_select.html:19
@@ -382,7 +378,7 @@ msgstr "Detalles de la aplicación"
 
 #: app_gateway/views.py:90 app_gateway/views.py:174 app_gateway/views.py:204
 msgid "The WireGuard WebAdmin application cannot be modified."
-msgstr ""
+msgstr "La aplicación WireGuard WebAdmin no se puede modificar."
 
 #: app_gateway/views.py:92 templates/app_gateway/application_details.html:16
 #: templates/app_gateway/application_details.html:23
@@ -433,7 +429,7 @@ msgstr ""
 
 #: app_gateway/views.py:137
 msgid "The WireGuard WebAdmin application cannot be deleted."
-msgstr ""
+msgstr "La aplicación WireGuard WebAdmin no se puede eliminar."
 
 #: app_gateway/views.py:142
 msgid "Application deleted successfully."
@@ -667,6 +663,9 @@ msgid ""
 "App Gateway and Gatekeeper, start the application using docker-compose-"
 "caddy.yml."
 msgstr ""
+"La exportación de la configuración no está disponible porque Caddy no está "
+"habilitado. Para usar App Gateway y Gatekeeper, inicie la aplicación usando "
+"docker-compose-caddy.yml."
 
 #: app_gateway/views.py:478
 msgid "Configuration exported successfully."
@@ -1384,22 +1383,20 @@ msgid "Members"
 msgstr "Miembros"
 
 #: gatekeeper/forms.py:169
-#, fuzzy
-#| msgid "Expiration"
 msgid "Session Expiration"
-msgstr "Caduca en"
+msgstr "Expiración de la sesión"
 
 #: gatekeeper/forms.py:175
 msgid "Unit"
-msgstr ""
+msgstr "Unidad"
 
 #: gatekeeper/forms.py:176
 msgid "Hour(s)"
-msgstr ""
+msgstr "Hora(s)"
 
 #: gatekeeper/forms.py:176
 msgid "Day(s)"
-msgstr ""
+msgstr "Día(s)"
 
 #: gatekeeper/forms.py:189
 msgid "Authentication Type"
@@ -1455,6 +1452,8 @@ msgstr "El secreto TOTP es obligatorio para la autenticación TOTP."
 msgid ""
 "OIDC authentication is temporarily unavailable and will be available soon."
 msgstr ""
+"La autenticación OIDC no está disponible temporalmente y estará disponible "
+"pronto."
 
 #: gatekeeper/forms.py:287
 msgid "TOTP secret must be empty for OIDC authentication."
@@ -1482,6 +1481,7 @@ msgstr "Acción"
 #, python-format
 msgid "Prefix length for IPv%(version)d must be between 0 and %(max)d."
 msgstr ""
+"La longitud del prefijo para IPv%(version)d debe estar entre 0 y %(max)d."
 
 #: gatekeeper/forms.py:376 templates/gatekeeper/gatekeeper_list.html:238
 msgid "Domain"
@@ -1508,10 +1508,8 @@ msgid "Shared/global TOTP secret key"
 msgstr "Clave secreta TOTP compartida/global"
 
 #: gatekeeper/models.py:39
-#, fuzzy
-#| msgid "Expiration (minutes)"
 msgid "Session expiration time in minutes"
-msgstr "Expira en (minutos)"
+msgstr "Tiempo de expiración de la sesión en minutos"
 
 #: gatekeeper/models.py:96
 msgid "Password for local authentication (leave blank if not using)"
@@ -1631,26 +1629,6 @@ msgid "Authentication Method saved successfully."
 msgstr "Método de autenticación guardado correctamente."
 
 #: gatekeeper/views.py:199
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "        <h4>Authentication Types</h4>\n"
-#| "        <p>Select how users will authenticate through this method.</p>\n"
-#| "        \n"
-#| "        <h5>Local Password</h5>\n"
-#| "        <p>Users will authenticate using a standard username and password "
-#| "stored locally. Only one of this type can be created.</p>\n"
-#| "        \n"
-#| "        <h5>OIDC (OpenID Connect)</h5>\n"
-#| "        <p>Users will authenticate via an external identity provider "
-#| "(like Keycloak, Google, or Authelia). Requires Provider URL, Client ID, "
-#| "and Client Secret.</p>\n"
-#| "        \n"
-#| "        <h5>TOTP (Time-Based One-Time Password)</h5>\n"
-#| "        <p>Users will need to enter a rotating token from an "
-#| "authenticator app. If a user does not have a personal TOTP configured, "
-#| "the <strong>Global TOTP Secret</strong> will be used instead. </p>\n"
-#| "        "
 msgid ""
 "\n"
 "        <h4>Authentication Types</h4>\n"
@@ -1683,8 +1661,8 @@ msgstr ""
 "\n"
 "        <h5>OIDC (OpenID Connect)</h5>\n"
 "        <p>Los usuarios se autenticarán a través de un proveedor de "
-"identidad externo (como Keycloak, Google o Authelia). Requiere URL del "
-"Proveedor, ID de Cliente y Secreto de Cliente.</p>\n"
+"identidad externo (como Keycloak o Google). Requiere URL del Proveedor, ID "
+"de Cliente y Secreto de Cliente.</p>\n"
 "\n"
 "        <h5>TOTP (Contraseña de un Solo Uso Basada en Tiempo)</h5>\n"
 "        <p>Los usuarios deberán ingresar un token rotativo de una aplicación "
@@ -1698,6 +1676,8 @@ msgid ""
 "Cannot delete authentication method \"%(method)s\" because it is used by the "
 "following policies: %(policies)s."
 msgstr ""
+"No se puede eliminar el método de autenticación \"%(method)s\" porque es "
+"utilizado por las siguientes políticas: %(policies)s."
 
 #: gatekeeper/views.py:243
 msgid "Authentication Method deleted successfully."
@@ -2182,7 +2162,7 @@ msgstr "Iniciar sesión"
 #: templates/accounts/login.html:40
 #: templates/template_parts/base_navbar.html:14
 msgid "Toggle Dark Mode"
-msgstr ""
+msgstr "Alternar modo oscuro"
 
 #: templates/accounts/logout.html:11
 msgid "You have been successfully logged out."
@@ -2327,7 +2307,7 @@ msgstr "Exportar configuración"
 
 #: templates/app_gateway/app_gateway_list.html:49
 msgid "Export is not available because Caddy is not enabled."
-msgstr ""
+msgstr "La exportación no está disponible porque Caddy no está habilitado."
 
 #: templates/app_gateway/app_gateway_list.html:54
 msgid "Add Application"
@@ -2395,13 +2375,11 @@ msgstr "Volver a la lista"
 #: templates/app_gateway/application_details.html:91
 #: templates/app_gateway/application_details.html:94
 msgid "This application cannot be modified"
-msgstr ""
+msgstr "Esta aplicación no se puede modificar"
 
 #: templates/app_gateway/application_details.html:18
-#, fuzzy
-#| msgid "Application Route deleted successfully."
 msgid "This application cannot be deleted"
-msgstr "Ruta de la aplicación eliminada correctamente."
+msgstr "Esta aplicación no se puede eliminar"
 
 #: templates/app_gateway/application_details.html:49
 msgid "Set Policy"
@@ -2433,10 +2411,8 @@ msgid "No Routes configured for this application."
 msgstr "No hay rutas configuradas para esta aplicación."
 
 #: templates/app_gateway/caddy_disabled_alert.html:5
-#, fuzzy
-#| msgid "Cluster is not enabled"
 msgid "Caddy is not enabled"
-msgstr "Cluster no está habilitado"
+msgstr "Caddy no está habilitado"
 
 #: templates/app_gateway/caddy_disabled_alert.html:6
 msgid ""
@@ -2444,24 +2420,30 @@ msgid ""
 "container to be running. Please start the application using <code>docker-"
 "compose-caddy.yml</code>."
 msgstr ""
+"Los módulos App Gateway y Gatekeeper requieren que Caddy y el contenedor "
+"auth-gateway estén en ejecución. Inicie la aplicación usando <code>docker-"
+"compose-caddy.yml</code>."
 
 #: templates/app_gateway/caddy_disabled_alert.html:7
 msgid ""
 "Depending on your custom firewall or proxy rules, the way you access "
 "wireguard_webadmin may change slightly after enabling Caddy."
 msgstr ""
+"Dependiendo de sus reglas personalizadas de firewall o proxy, la forma en "
+"que accede a wireguard_webadmin puede cambiar ligeramente después de "
+"habilitar Caddy."
 
 #: templates/app_gateway/caddy_disabled_alert.html:8
 msgid ""
 "Switching to Caddy is simple, but it may require a bit of time and attention "
 "to review your current setup."
 msgstr ""
+"Cambiar a Caddy es sencillo, pero puede requerir algo de tiempo y atención "
+"para revisar su configuración actual."
 
 #: templates/app_gateway/caddy_disabled_alert.html:9
-#, fuzzy
-#| msgid "For more information, please visit:"
 msgid "For more information, see the discussion:"
-msgstr "Para obtener más información, visite:"
+msgstr "Para obtener más información, consulte la discusión:"
 
 #: templates/cluster/workers_list.html:9 templates/dns/static_host_list.html:72
 #: templates/scheduler/scheduleprofile_form.html:82
@@ -2986,10 +2968,8 @@ msgstr ""
 
 #: templates/gatekeeper/gatekeeper_auth_method_form.html:127
 #: templates/gatekeeper/gatekeeper_user_form.html:103
-#, fuzzy
-#| msgid "Error creating invite."
 msgid "Error generating QR code."
-msgstr "Error al crear invitación."
+msgstr "Error al generar el código QR."
 
 #: templates/gatekeeper/gatekeeper_list.html:19
 msgid "Gatekeeper Users"
