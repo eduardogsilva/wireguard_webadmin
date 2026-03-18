@@ -110,3 +110,19 @@ def validate_csrf(request: Request, submitted_token: str | None) -> None:
     cookie_token = request.cookies.get(cookie_name)
     if not cookie_token or not submitted_token or cookie_token != submitted_token:
         raise HTTPException(status_code=403, detail="CSRF validation failed.")
+
+
+def challenge_is_valid(request: Request) -> bool:
+    from auth_gateway.services.challenge_service import CHALLENGE_COOKIE_NAME, verify_challenge_cookie
+    cookie = request.cookies.get(CHALLENGE_COOKIE_NAME)
+    if not cookie:
+        return False
+    return verify_challenge_cookie(cookie, request.app.state.settings.challenge_secret)
+
+
+def build_challenge_url(request: Request, login_route: str, next_url: str) -> str:
+    external_path = request.app.state.settings.external_path.rstrip("/")
+    login_path = f"{external_path}{login_route}"
+    if next_url and next_url != "/":
+        login_path = f"{login_path}?{urlencode({'next': next_url})}"
+    return build_external_url(request, "/challenge", next=login_path)

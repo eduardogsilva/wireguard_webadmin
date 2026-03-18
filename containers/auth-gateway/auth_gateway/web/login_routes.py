@@ -9,7 +9,9 @@ from auth_gateway.services.policy_engine import evaluate_ip_access, extract_clie
 from auth_gateway.services.resolver import normalize_host
 from auth_gateway.services.totp_service import verify_totp
 from auth_gateway.web.dependencies import (
+    build_challenge_url,
     build_external_url,
+    challenge_is_valid,
     get_effective_expiration,
     get_effective_policy,
     get_oidc_method,
@@ -147,6 +149,8 @@ async def login_page(request: Request, next: str = "/"):
 
 @router.get("/login/password", response_class=HTMLResponse)
 async def login_password_page(request: Request, next: str = "/"):
+    if not challenge_is_valid(request):
+        return RedirectResponse(build_challenge_url(request, "/login/password", next), status_code=303)
     runtime_config = get_runtime_config(request)
     context = resolve_context_from_request(request, runtime_config, next)
     effective_policy = get_effective_policy(runtime_config, context.policy_name)
@@ -171,6 +175,8 @@ async def login_password_submit(
     password: str = Form(...),
     csrf_token: str = Form(...),
 ):
+    if not challenge_is_valid(request):
+        return RedirectResponse(build_challenge_url(request, "/login/password", next), status_code=303)
     runtime_config = get_runtime_config(request)
     context = resolve_context_from_request(request, runtime_config, next)
     effective_policy = get_effective_policy(runtime_config, context.policy_name)
@@ -226,6 +232,8 @@ async def login_password_submit(
 
 @router.get("/login/totp", response_class=HTMLResponse)
 async def login_totp_page(request: Request, next: str = "/"):
+    if not challenge_is_valid(request):
+        return RedirectResponse(build_challenge_url(request, "/login/totp", next), status_code=303)
     runtime_config = get_runtime_config(request)
     context = resolve_context_from_request(request, runtime_config, next)
     effective_policy = get_effective_policy(runtime_config, context.policy_name)
@@ -248,6 +256,8 @@ async def login_totp_page(request: Request, next: str = "/"):
 @router.post("/login/totp")
 @limiter.limit(AUTH_RATE_LIMIT)
 async def login_totp_submit(request: Request, next: str = Form("/"), token: str = Form(...), csrf_token: str = Form(...)):
+    if not challenge_is_valid(request):
+        return RedirectResponse(build_challenge_url(request, "/login/totp", next), status_code=303)
     runtime_config = get_runtime_config(request)
     context = resolve_context_from_request(request, runtime_config, next)
     effective_policy = get_effective_policy(runtime_config, context.policy_name)

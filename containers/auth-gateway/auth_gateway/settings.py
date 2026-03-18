@@ -1,4 +1,5 @@
 from pathlib import Path
+from secrets import token_hex
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -15,6 +16,7 @@ class Settings(BaseSettings):
     secure_cookies: bool = Field(default=True)
     session_default_minutes: int = Field(default=720)
     oidc_state_ttl_minutes: int = Field(default=10)
+    challenge_secret: str = Field(default_factory=lambda: token_hex(32))
 
 
 settings = Settings()

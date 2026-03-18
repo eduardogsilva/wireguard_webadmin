@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Verifying your browser — Gatekeeper{% endblock %}
+{% block content %}
+    <div class="challenge-wrapper">
+        <div class="challenge-icon-wrap">
+            <span class="challenge-icon" id="challenge-icon">🛡</span>
+        </div>
+        <h1 class="card-title">Verifying your browser</h1>
+        {% if error %}
+        <p class="card-subtitle challenge-error-text">Verification failed. Please reload and try again.</p>
+        {% else %}
+        <p class="card-subtitle" id="challenge-status">Please wait a moment...</p>
+        {% endif %}
+        <div class="challenge-progress">
+            <div class="progress-bar">
+                <div class="progress-fill{% if error %} progress-error{% endif %}" id="progress-fill"{% if error %} style="width:100%"{% endif %}></div>
+            </div>
+        </div>
+    </div>
+
+    <form id="challenge-form" method="post" action="{{ external_path }}/challenge/verify">
+        <input type="hidden" name="next" value="{{ next }}">
+        <input type="hidden" name="altcha" id="altcha-payload">
+    </form>
+
+    {% if not error %}
+    <div aria-hidden="true" class="altcha-wrapper">
+        <altcha-widget
+            challengeurl="{{ external_path }}/challenge/data"
+            hidefooter
+            hidelogo
+            auto="onload"
+            id="altcha-widget"
+        ></altcha-widget>
+    </div>
+    <script type="module" src="{{ external_path }}/static/altcha.min.js"></script>
+    <script src="{{ external_path }}/static/challenge.js" defer></script>
+    {% endif %}
+{% endblock %}

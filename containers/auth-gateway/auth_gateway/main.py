@@ -10,6 +10,7 @@ from auth_gateway.services.session_service import SessionService
 from auth_gateway.settings import settings
 from auth_gateway.storage.sqlite import SQLiteStorage
 from auth_gateway.web.auth_routes import router as auth_router
+from auth_gateway.web.challenge_routes import router as challenge_router
 from auth_gateway.web.login_routes import router as login_router
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
@@ -70,12 +71,15 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_handler)
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
     response = await call_next(request)
+    is_challenge = request.url.path == "/challenge"
+    script_src = "'self'" if is_challenge else "'none'"
+    worker_src = "worker-src 'self' blob:; " if is_challenge else ""
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Content-Security-Policy"] = (
-        "default-src 'self'; script-src 'none'; style-src 'self'; "
-        "img-src 'self' data:; frame-ancestors 'none'"
+        f"default-src 'self'; script-src {script_src}; style-src 'self'; "
+        f"img-src 'self' data:; {worker_src}frame-ancestors 'none'"
     )
     return response
 
@@ -94,6 +98,7 @@ async def access_log(request: Request, call_next):
 
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 app.include_router(auth_router)
+app.include_router(challenge_router)
 app.include_router(login_router)
 
 
