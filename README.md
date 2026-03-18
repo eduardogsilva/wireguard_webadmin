@@ -81,31 +81,34 @@ Follow these steps to deploy the WireGuard WebAdmin:
 
 2.**Fetch the Docker Compose File:**
 
-   Depending on your deployment scenario, choose one of the following commands to download the appropriate `docker-compose.yml` file directly into your working directory. This approach ensures you're using the latest version of the deployment configuration.
+   Depending on your deployment scenario, choose one of the following commands to download the appropriate compose file directly into your working directory. This approach ensures you're using the latest version of the deployment configuration.
 
-   ### Option 1: With NGINX (Recommended)
+   ### Option 1: With Caddy (Recommended)
    
-   For a production-ready deployment with NGINX as a reverse proxy (recommended for most users), use:
+   For the recommended production deployment with Caddy as a reverse proxy, use:
 
    ```bash
-   wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose.yml
+   wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-caddy.yml
    ```
-This mode is recommended for running the web admin interface. The container deployment will automatically generate a self-signed certificate for you. If you want to update your certificates, simply navigate to the `certificates` volume and replace `nginx.pem` and `nginx.key` with your own certificates.
+This is the recommended way to run the web admin interface because it includes all supported reverse proxy features and provides automatic SSL certificate management through Caddy.
 
-   ### Option 2: Without NGINX
+> [!IMPORTANT]
+> Caddy requires a valid DNS name, either internal or public, pointing to your server so it can obtain and renew SSL certificates correctly.
+
+   ### Option 2: Without Caddy
    
-   If you prefer to use your own reverse proxy or run without one, use:
+   If you prefer to use your own reverse proxy or run the application without Caddy, use:
 
    ```bash
-   wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-nginx.yml
+   wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-caddy.yml
    ```
 
 > [!CAUTION]
-> Running the system without HTTPS (NGINX) is not recommended due to security risks. If you choose this option, ensure you are using a secure connection (e.g., through your own reverse proxy with SSL).
+> Running without Caddy means you lose the built-in secure publishing experience, including automatic SSL certificates and the recommended reverse proxy setup. If you choose this option, make sure you provide your own secure exposure layer.
 
 3.**Create the `.env` File:**
 
-   Create a `.env` file in the same directory as your `docker-compose.yml` with the following content, adjusting `my_server_address` to your server's DNS name or IP address. This step is crucial for ensuring the application functions correctly.
+   Create a `.env` file in the same directory as your `docker-compose.yml`, adjusting `my_server_address` to your server's DNS name or IP address. This step is crucial for ensuring the application functions correctly.
 
    ```env
    # Configure SERVER_ADDRESS to match the address of the server. If you don't have a DNS name, you can use the IP address.
@@ -146,7 +149,7 @@ This mode is recommended for running the web admin interface. The container depl
    docker compose up -d
    ```
    
-   Access the web interface using `https://yourserver.example.com`. If you are using a self-signed certificate, you must accept the certificate exception that your browser will present.
+   Access the web interface using `https://yourserver.example.com`. When using the recommended Caddy deployment, SSL certificates are obtained and renewed automatically.
 
 After completing these steps, your WireGuard WebAdmin should be up and running. Begin the configuration by accessing your server's web interface.
 
@@ -194,7 +197,7 @@ Upgrading your WireGuard WebAdmin installation ensures you have access to the la
    
    Follow the previously outlined [Deployment Instructions](#deployment-instructions).
 
-Don't forget to update the `docker-compose.yml` file to the latest version by re-downloading it from the repository.
+Don't forget to update your compose file to the latest version by re-downloading it from the repository.
 
 
 ### Post-Upgrade Checks:

@@ -85,28 +85,31 @@ Folge diesen Schritten, um WireGuard WebAdmin bereitzustellen:
 
 2.  **Docker‑Compose‑Datei herunterladen**
 
-    Wähle je nach Szenario einen der folgenden Befehle, um die passende `docker-compose.yml` herunterzuladen. So nutzt du stets die aktuelle Version der Deployment‑Datei.
+    Wähle je nach Szenario einen der folgenden Befehle, um die passende Compose-Datei herunterzuladen. So nutzt du stets die aktuelle Version der Deployment-Datei.
 
-    ### Option 1: Mit NGINX (empfohlen)
+    ### Option 1: Mit Caddy (empfohlen)
 
-    Für eine produktionsreife Bereitstellung mit NGINX als Reverse‑Proxy (empfohlen):
+    Für das empfohlene produktive Deployment mit Caddy als Reverse-Proxy:
 
     ```bash
-    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose.yml
+    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-caddy.yml
     ```
 
-    Im Standard generiert der Container ein selbstsigniertes Zertifikat. Eigene Zertifikate können durch Ersetzen von `nginx.pem` und `nginx.key` im Volume `certificates` hinterlegt werden.
+    Dies ist die empfohlene Methode zum Betrieb der Web-Administrationsoberfläche, da sie alle unterstützten Reverse-Proxy-Funktionen umfasst und eine automatische SSL-Zertifikatsverwaltung über Caddy bietet.
 
-    ### Option 2: Ohne NGINX
+> [!IMPORTANT]
+> Caddy benötigt einen gültigen DNS-Namen, intern oder öffentlich, der auf Ihren Server zeigt, damit SSL-Zertifikate korrekt ausgestellt und erneuert werden können.
 
-    Wenn Sie Ihren eigenen Reverse-Proxy verwenden oder das System ohne einen solchen betreiben möchten, nutzen Sie:
+    ### Option 2: Ohne Caddy
+
+    Wenn Sie Ihren eigenen Reverse-Proxy verwenden oder die Anwendung ohne Caddy betreiben möchten, nutzen Sie:
 
     ```bash
-    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-nginx.yml
+    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-caddy.yml
     ```
 
 > [!CAUTION]
-> Es wird nicht empfohlen, das System ohne HTTPS (NGINX) zu betreiben, da dies Sicherheitsrisiken birgt. Wenn Sie diese Option wählen, stellen Sie sicher, dass Sie eine sichere Verbindung verwenden (z. B. über Ihren eigenen Reverse-Proxy mit SSL).
+> Wenn Sie die Anwendung ohne Caddy betreiben, verlieren Sie die integrierte sichere Veröffentlichung, einschließlich automatischer SSL-Zertifikate und des empfohlenen Reverse-Proxy-Setups. Wenn Sie diese Option wählen, müssen Sie selbst für eine sichere Veröffentlichung sorgen.
 
 3.  **.env‑Datei erstellen**
 
@@ -149,7 +152,7 @@ Folge diesen Schritten, um WireGuard WebAdmin bereitzustellen:
     docker compose up -d
     ```
  
-    Web‑Interface unter `https://yourserver.example.com` öffnen. Bei selbstsigniertem Zertifikat muss die Ausnahme akzeptiert werden.
+    Öffnen Sie die Weboberfläche unter `https://yourserver.example.com`. Beim empfohlenen Deployment mit Caddy werden SSL-Zertifikate automatisch ausgestellt und erneuert.
 
 Nach diesen Schritten sollte WireGuard WebAdmin laufen. Konfiguriere anschließend deine Instanzen über das Web‑Interface.
 

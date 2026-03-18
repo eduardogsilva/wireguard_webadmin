@@ -81,28 +81,31 @@ Siga estos pasos para desplegar WireGuard WebAdmin:
 
 2. **Obtenga el Archivo Docker Compose:**
 
-   Según su escenario de despliegue, elija uno de los siguientes comandos para descargar el archivo `docker-compose.yml` correspondiente directamente en su directorio de trabajo. Este método garantiza que utilice la versión más reciente de la configuración.
+   Según su escenario de despliegue, elija uno de los siguientes comandos para descargar el archivo compose correspondiente directamente en su directorio de trabajo. Este método garantiza que utilice la versión más reciente de la configuración.
 
-   ### Opción 1: Con NGINX (Recomendado)
+   ### Opción 1: Con Caddy (Recomendado)
  
-    Para un despliegue de producción con NGINX como *reverse proxy* (recomendado para la mayoría), use:
+    Para el despliegue de producción recomendado con Caddy como *reverse proxy*, use:
  
     ```bash
-    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose.yml
+    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-caddy.yml
     ```
  
-    Este modo es el recomendado para ejecutar la interfaz web de administración. El despliegue del contenedor generará automáticamente un certificado autofirmado para usted. Si desea actualizar sus certificados, acceda al volumen `certificates` y sustituya `nginx.pem` y `nginx.key` por sus propios certificados.
+    Esta es la forma recomendada de ejecutar la interfaz web de administración porque incluye todas las funciones compatibles del proxy inverso y proporciona gestión automática de certificados SSL mediante Caddy.
  
-    ### Opción 2: Sin NGINX
+> [!IMPORTANT]
+> Caddy requiere un nombre DNS válido, interno o público, apuntando a su servidor para poder obtener y renovar correctamente los certificados SSL.
+
+    ### Opción 2: Sin Caddy
  
-    Si prefiere usar su propio proxy inverso o ejecutar el sistema sin uno, use:
+    Si prefiere usar su propio proxy inverso o ejecutar la aplicación sin Caddy, use:
  
     ```bash
-    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-nginx.yml
+    wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-no-caddy.yml
     ```
  
 > [!CAUTION]
-> No se recomienda servir el sistema sin HTTPS (NGINX) debido a riesgos de seguridad. Si elige esta opción, asegúrese de utilizar una conexión segura (por ejemplo, a través de su propio proxy inverso con SSL).
+> Ejecutar sin Caddy significa perder la experiencia integrada de publicación segura, incluidos los certificados SSL automáticos y la configuración recomendada de proxy inverso. Si elige esta opción, asegúrese de proporcionar su propia capa segura de exposición.
 
 3. **Cree el Archivo `.env`:**
 
@@ -147,7 +150,7 @@ Siga estos pasos para desplegar WireGuard WebAdmin:
     docker compose up -d
     ```
  
-    Acceda a la interfaz web en `https://suserver.ejemplo.com`. Si utiliza un certificado autofirmado, acepte la excepción de seguridad en su navegador.
+    Acceda a la interfaz web en `https://suserver.ejemplo.com`. Al usar el despliegue recomendado con Caddy, los certificados SSL se obtienen y renuevan automáticamente.
 
 Tras completar estos pasos, WireGuard WebAdmin estará en funcionamiento. Comience la configuración accediendo a la interfaz web de su servidor.
 
@@ -215,4 +218,3 @@ Las contribuciones hacen que la comunidad *open‑source* sea un lugar increíbl
 ## Soporte
 
 Si encuentra problemas o necesita ayuda, abra un *issue* en la página de GitHub del proyecto.
-
