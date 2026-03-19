@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>wireguard_webadmin</title><link>https://wireguard-webadmin.com/</link><description>Recent content on wireguard_webadmin</description><generator>Hugo</generator><language>en-us</language><atom:link href="https://wireguard-webadmin.com/index.xml" rel="self" type="application/rss+xml"/><item><title>Deployment Guide</title><link>https://wireguard-webadmin.com/deployment/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://wireguard-webadmin.com/deployment/</guid><description>&lt;h2 id="prerequisites"&gt;Prerequisites&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;A Linux server reachable from where you&amp;rsquo;ll manage it&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.docker.com/engine/install/"&gt;Docker&lt;/a&gt; and &lt;a href="https://docs.docker.com/compose/install/"&gt;Docker Compose&lt;/a&gt; installed&lt;/li&gt;
+&lt;li&gt;A domain name pointing to your server&amp;rsquo;s IP&lt;/li&gt;
+&lt;li&gt;Ports &lt;strong&gt;80&lt;/strong&gt; and &lt;strong&gt;443&lt;/strong&gt; open for Caddy; your WireGuard UDP port open (default &lt;strong&gt;51820&lt;/strong&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="callout"&gt;
+ &lt;p&gt;&lt;strong&gt;Caddy requires a valid DNS name&lt;/strong&gt; — either internal or public — pointing to your server so it can obtain and renew SSL certificates automatically.&lt;/p&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h2 id="deploy"&gt;Deploy&lt;/h2&gt;
+&lt;div class="tab-group"&gt;
+ &lt;div class="tabs"&gt;
+ &lt;button class="tab-btn active" data-tab="dep-step-1"&gt;1. Create directory&lt;/button&gt;
+ &lt;button class="tab-btn" data-tab="dep-step-2"&gt;2. Fetch compose file&lt;/button&gt;
+ &lt;button class="tab-btn" data-tab="dep-step-3"&gt;3. Configure .env&lt;/button&gt;
+ &lt;button class="tab-btn" data-tab="dep-step-4"&gt;4. Run&lt;/button&gt;
+ &lt;/div&gt;
+ &lt;div class="tab-wrap"&gt;
+ &lt;div class="tab-panel active" id="dep-step-1"&gt;
+&lt;pre&gt;&lt;code&gt;mkdir wireguard_webadmin &amp;&amp; cd wireguard_webadmin&lt;/code&gt;&lt;/pre&gt;
+ &lt;/div&gt;
+ &lt;div class="tab-panel" id="dep-step-2"&gt;
+&lt;pre&gt;&lt;code&gt;wget -O docker-compose.yml \
+ https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-caddy.yml&lt;/code&gt;&lt;/pre&gt;
+ &lt;/div&gt;
+ &lt;div class="tab-panel" id="dep-step-3"&gt;
+&lt;p&gt;Create a &lt;code&gt;.env&lt;/code&gt; file in the same directory. Set &lt;code&gt;SERVER_ADDRESS&lt;/code&gt; to your domain:&lt;/p&gt;</description></item><item><title>Get Involved</title><link>https://wireguard-webadmin.com/get-involved/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://wireguard-webadmin.com/get-involved/</guid><description>&lt;div class="involve-grid"&gt;
+ &lt;div class="involve-card involve-card--highlight"&gt;
+ &lt;div class="involve-card-icon"&gt;⭐&lt;/div&gt;
+ &lt;h3&gt;Star the repo&lt;/h3&gt;
+ &lt;p&gt;The simplest thing you can do. It helps the project get discovered by other sysadmins who are looking for exactly this.&lt;/p&gt;
+ &lt;a href="https://github.com/eduardogsilva/wireguard_webadmin" target="_blank" rel="noopener" class="btn btn-primary"&gt;Star on GitHub&lt;/a&gt;
+ &lt;/div&gt;
+ &lt;div class="involve-card"&gt;
+ &lt;div class="involve-card-icon"&gt;🐛&lt;/div&gt;
+ &lt;h3&gt;Report bugs&lt;/h3&gt;
+ &lt;p&gt;Found something broken? Open an issue on GitHub. No template required — just describe what you saw and how to reproduce it.&lt;/p&gt;
+ &lt;a href="https://github.com/eduardogsilva/wireguard_webadmin/issues" target="_blank" rel="noopener" class="btn btn-outline"&gt;Open an issue&lt;/a&gt;
+ &lt;/div&gt;
+ &lt;div class="involve-card"&gt;
+ &lt;div class="involve-card-icon"&gt;🔧&lt;/div&gt;
+ &lt;h3&gt;Contribute code&lt;/h3&gt;
+ &lt;p&gt;Pull requests are welcome. For anything non-trivial, open an issue first so we can align before you invest time writing code. Good starting points: issues tagged &lt;code&gt;good first issue&lt;/code&gt;, bug fixes with a clear reproduction case, and test coverage.&lt;/p&gt;</description></item><item><title>Zero Trust Application Gateway</title><link>https://wireguard-webadmin.com/zero-trust/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://wireguard-webadmin.com/zero-trust/</guid><description>&lt;h2 id="what-is-zero-trust-here"&gt;What is Zero Trust here?&lt;/h2&gt;
+&lt;p&gt;Traditional network security assumes that anything inside your network can be trusted.
+Zero Trust flips that model: &lt;strong&gt;no request is trusted by default&lt;/strong&gt;, even if it comes from inside the VPN.&lt;/p&gt;
+&lt;p&gt;In wireguard_webadmin, the Zero Trust application gateway sits in front of your internal services.
+Every request must authenticate before reaching the app — the service itself never needs to be exposed directly.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="how-a-request-flows"&gt;How a request flows&lt;/h2&gt;
+&lt;div class="flow-cards"&gt;
+ &lt;div class="flow-card"&gt;
+ &lt;div class="flow-card-header"&gt;&lt;span class="flow-card-num"&gt;1&lt;/span&gt; &lt;strong&gt;Client reaches gateway&lt;/strong&gt;&lt;/div&gt;
+ &lt;p&gt;The public endpoint receives the request instead of the internal service.&lt;/p&gt;</description></item></channel></rss>
