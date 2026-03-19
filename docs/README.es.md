@@ -18,7 +18,7 @@ Más que un panel de WireGuard: gestiona peers, reglas de firewall, DNS, redirec
 - 🔒 **Proteger** — Gateway de aplicaciones Zero Trust con TOTP, ACL por IP y anti-fuerza-bruta (Altcha PoW)
 - ⚡ **Automatizar** — Acceso programado por peer, plantillas de enrutamiento, enlaces de invitación con expiración, API REST v2
 
-### 📖 [Documentación completa, guía de instalación y consejos en wireguard-webadmin.com](https://wireguard-webadmin.com/)
+### 📖 Documentación completa, guía de instalación y consejos en [wireguard-webadmin.com](https://wireguard-webadmin.com/)
 
 ---
 

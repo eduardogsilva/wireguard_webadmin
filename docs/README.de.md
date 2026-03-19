@@ -18,7 +18,7 @@ Mehr als ein WireGuard-Panel: Verwalte Peers, Firewall-Regeln, DNS und Port-Weit
 - 🔒 **Schützen** — Zero-Trust-Anwendungs-Gateway mit TOTP, IP-ACL und Brute-Force-Schutz (Altcha PoW)
 - ⚡ **Automatisieren** — Zeitgesteuerter Peer-Zugang, Routing-Templates, ablaufende Einladungslinks, REST API v2
 
-### 📖 [Vollständige Dokumentation, Installationsanleitung und Tipps auf wireguard-webadmin.com](https://wireguard-webadmin.com/)
+### 📖 Vollständige Dokumentation, Installationsanleitung und Tipps auf [wireguard-webadmin.com](https://wireguard-webadmin.com/)
 
 ---
 

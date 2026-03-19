@@ -18,7 +18,7 @@ More than a WireGuard panel: manage peers, firewall rules, DNS, port forwarding,
 - 🔒 **Protect** — Zero Trust application gateway with TOTP, IP ACL, and anti-brute-force (Altcha PoW)
 - ⚡ **Automate** — Scheduled peer access, routing templates, expiring invite links, REST API v2
 
-### 📖 [Full documentation, installation guide and tips at wireguard-webadmin.com](https://wireguard-webadmin.com/)
+### 📖 Full documentation, installation guide and tips at [wireguard-webadmin.com](https://wireguard-webadmin.com/)
 
 ---
 

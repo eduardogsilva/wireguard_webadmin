@@ -18,7 +18,7 @@ Plus qu'un simple panneau WireGuard : gérez les pairs, les règles de pare-feu,
 - 🔒 **Protéger** — Passerelle d'applications Zero Trust avec TOTP, ACL par IP et anti-force-brute (Altcha PoW)
 - ⚡ **Automatiser** — Accès planifié par pair, modèles de routage, liens d'invitation avec expiration, API REST v2
 
-### 📖 [Documentation complète, guide d'installation et conseils sur wireguard-webadmin.com](https://wireguard-webadmin.com/)
+### 📖 Documentation complète, guide d'installation et conseils sur [wireguard-webadmin.com](https://wireguard-webadmin.com/)
 
 ---
 
