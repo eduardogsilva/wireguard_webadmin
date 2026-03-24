@@ -166,7 +166,7 @@
                         const peerElementId = `peer-stored-latest-handshake-${peerId}`;
                         const storedHandshakeElement = document.getElementById(peerElementId);
                         if (peerInfo['latest-handshakes'] === '0' && storedHandshakeElement) {
-                            peerInfo['latest-handshakes'] = storedHandshakeElement.textContent;
+                            peerInfo['latest-handshakes'] = storedHandshakeElement.textContent.trim();
                         }
                     }
                 }
