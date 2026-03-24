@@ -4,6 +4,13 @@ set -e
 # Lets wait for the DNS container to start
 sleep 5
 
+# Django startup
+python manage.py migrate --noinput
+python manage.py collectstatic --noinput
+
+# Export WireGuard, firewall and Caddy configs before bringing up interfaces
+python manage.py export_configs
+
 # Starts each WireGuard configuration file found in /etc/wireguard
 shopt -s nullglob
 config_files=(/etc/wireguard/*.conf)
@@ -11,15 +18,6 @@ if [ ${#config_files[@]} -gt 0 ]; then
     for f in "${config_files[@]}"; do
         wg-quick up "$(basename "${f}" .conf)"
     done
-fi
-
-# Django startup
-python manage.py migrate --noinput
-python manage.py collectstatic --noinput
-
-if [[ "${CADDY_ENABLED,,}" == "true" ]]; then
-    echo "Exporting Caddy configuration (auth_policies.json, applications.json, routes.json)..."
-    python manage.py shell -c "from app_gateway.caddy_config_export import export_caddy_config; export_caddy_config('/caddy_json_export')" || echo "Failed to export Caddy configuration."
 fi
 if [[ "${DEV_MODE,,}" == "true" ]]; then
     echo ""
