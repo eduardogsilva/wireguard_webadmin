@@ -291,13 +291,15 @@
         const handshakeAge = Date.now() / 1000 - parseInt(latestHandshake);
 
         if (latestHandshake === '0') {
-            calloutDiv.classList.add('callout-danger');
+            // never connected — neutral, no class
         } else if (handshakeAge < 600) {
             calloutDiv.classList.add('callout-success');
         } else if (handshakeAge < 1800) {
             calloutDiv.classList.add('callout-info');
         } else if (handshakeAge < 21600) {
             calloutDiv.classList.add('callout-warning');
+        } else {
+            calloutDiv.classList.add('callout-danger');
         }
         calloutDiv.style.transition = 'all 5s';
     };
