@@ -73,6 +73,15 @@ if [ -n "${WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL:-}" ]; then
     esac
 fi
 
+if [ -n "${WIREGUARD_MTU:-}" ]; then
+    if [[ "${WIREGUARD_MTU}" =~ ^[0-9]+$ ]] && [ "${WIREGUARD_MTU}" -ge 1280 ] && [ "${WIREGUARD_MTU}" -le 9000 ]; then
+        echo "WIREGUARD_MTU = ${WIREGUARD_MTU}" >> /app/wireguard_webadmin/production_settings.py
+    else
+        echo "Error: Invalid WIREGUARD_MTU value: ${WIREGUARD_MTU}. Must be an integer between 1280 and 9000."
+        exit 1
+    fi
+fi
+
 if [[ "${DEV_MODE,,}" != "true" ]]; then
     sed -i "/^    path('admin\/', admin.site.urls),/s/^    /    # /" /app/wireguard_webadmin/urls.py
 fi

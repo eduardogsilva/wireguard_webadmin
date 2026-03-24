@@ -181,4 +181,6 @@ CLUSTER_WORKER_MINIMUM_VERSION = 11
 
 CADDY_ENABLED = os.getenv("CADDY_ENABLED", "false").lower() == "true"
 
+WIREGUARD_MTU = None
+
 from wireguard_webadmin.production_settings import *

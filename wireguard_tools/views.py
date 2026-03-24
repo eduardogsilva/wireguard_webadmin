@@ -6,6 +6,7 @@ import subprocess
 from io import BytesIO
 
 import qrcode
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
@@ -53,6 +54,7 @@ def generate_peer_config(peer_uuid, server_address=None):
         f"PrivateKey = {peer.private_key}",
         f"Address = {client_address}",
         f"DNS = {dns_line}" if dns_line else "",
+        f"MTU = {settings.WIREGUARD_MTU}" if settings.WIREGUARD_MTU else "",
         "\n[Peer]",
         f"PublicKey = {wg_instance.public_key}",
         f"Endpoint = {endpoint}",
@@ -173,6 +175,9 @@ def export_wireguard_configuration(instance_only: WireGuardInstance = None):
             f"Address = {instance.address}/{instance.netmask}",
             f"ListenPort = {instance.listen_port}",
         ]
+
+        if settings.WIREGUARD_MTU:
+            config_lines.append(f"MTU = {settings.WIREGUARD_MTU}")
 
         if post_up_processed:
             config_lines.append(f"PostUp = {post_up_processed}")
