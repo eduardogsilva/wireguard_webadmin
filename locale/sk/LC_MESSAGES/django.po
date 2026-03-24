@@ -963,14 +963,12 @@ msgid "DNS Filter List Details"
 msgstr "Podrobnosti DNS filter zoznamu"
 
 #: dns/models.py:32 templates/dns/static_host_list.html:91
-#, fuzzy
-#| msgid "Unknown error"
 msgid "Unknown"
-msgstr "Neznáma chyba"
+msgstr "Neznáme"
 
 #: dns/models.py:35 templates/dns/static_host_list.html:89
 msgid "Unsupported"
-msgstr ""
+msgstr "Nepodporované"
 
 #: dns/views.py:49
 msgid "DNS settings applied successfully"
@@ -1042,26 +1040,20 @@ msgid "Failed to write config file: "
 msgstr "Nepodarilo sa zapísať konfiguračný súbor: "
 
 #: dns/views.py:273
-#, fuzzy
-#| msgid "DNS Filter List disabled successfully"
 msgid "DNS Filter List disabled | Unsupported format detected"
-msgstr "DNS filter zoznam bol úspešne zakázaný"
+msgstr "Zoznam filtrov DNS zakázaný | Zistený nepodporovaný formát"
 
 #: dns/views.py:286
 msgid "DNS Filter List updated successfully"
 msgstr "DNS filter zoznam bol úspešne aktualizovaný"
 
 #: dns/views.py:300
-#, fuzzy
-#| msgid "DNS Filter List not enabled | No valid hosts found"
 msgid "DNS Filter List not enabled | Unsupported format"
-msgstr "DNS filter zoznam nebol povolený | Neboli nájdení platní hostiteľia"
+msgstr "Zoznam filtrov DNS nebol povolený | Nepodporovaný formát"
 
 #: dns/views.py:302
-#, fuzzy
-#| msgid "DNS Filter List not enabled | No valid hosts found"
 msgid "DNS Filter List not enabled | List has not been downloaded yet"
-msgstr "DNS filter zoznam nebol povolený | Neboli nájdení platní hostiteľia"
+msgstr "Zoznam filtrov DNS nebol povolený | Zoznam ešte nebol stiahnutý"
 
 #: dns/views.py:307
 msgid "DNS Filter List enabled successfully"
@@ -2596,7 +2588,7 @@ msgstr "DNS filter zoznamy"
 
 #: templates/dns/static_host_list.html:70
 msgid "Format"
-msgstr ""
+msgstr "Formát"
 
 #: templates/dns/static_host_list.html:72
 msgid "Last Update"
@@ -4631,29 +4623,3 @@ msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Neboli nájdené rozhrania|Neboli nájdené žiadne WireGuard rozhrania na "
 "spracovanie."
-
-#~ msgid "Update"
-#~ msgstr "Aktualizovať"
-
-#~ msgid "This is a reserved system name."
-#~ msgstr "Toto je vyhradený systémový názov."
-
-#~ msgid ""
-#~ "TOTP must be combined with a Local Password or OpenID Connect "
-#~ "authentication method."
-#~ msgstr ""
-#~ "TOTP musí byť kombinované s metódou autentifikácie Lokálne heslo alebo "
-#~ "OpenID Connect."
-
-#~ msgid "Route identifier, used in export (e.g.: public_area)"
-#~ msgstr "Identifikátor trasy, použitý v exporte (napr.: public_area)"
-
-#~ msgid ""
-#~ "Caddy is not active. Configuration files were exported for debugging "
-#~ "purposes."
-#~ msgstr ""
-#~ "Caddy nie je aktívny. Konfiguračné súbory boli exportované na účely "
-#~ "ladenia."
-
-#~ msgid "Global TOTP Before Authentication"
-#~ msgstr "Globálne TOTP pred autentifikáciou"

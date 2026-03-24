@@ -975,14 +975,12 @@ msgid "DNS Filter List Details"
 msgstr "Detalles de la lista de filtro DNS"
 
 #: dns/models.py:32 templates/dns/static_host_list.html:91
-#, fuzzy
-#| msgid "Unknown error"
 msgid "Unknown"
-msgstr "Error desconocido"
+msgstr "Desconocido"
 
 #: dns/models.py:35 templates/dns/static_host_list.html:89
 msgid "Unsupported"
-msgstr ""
+msgstr "No soportado"
 
 #: dns/views.py:49
 msgid "DNS settings applied successfully"
@@ -1054,26 +1052,20 @@ msgid "Failed to write config file: "
 msgstr "Error al escribir archivo de configuración: "
 
 #: dns/views.py:273
-#, fuzzy
-#| msgid "DNS Filter List disabled successfully"
 msgid "DNS Filter List disabled | Unsupported format detected"
-msgstr "Lista de filtro DNS deshabilitada correctamente"
+msgstr "Lista de filtros DNS deshabilitada | Formato no soportado detectado"
 
 #: dns/views.py:286
 msgid "DNS Filter List updated successfully"
 msgstr "Lista de filtro DNS actualizada correctamente"
 
 #: dns/views.py:300
-#, fuzzy
-#| msgid "DNS Filter List not enabled | No valid hosts found"
 msgid "DNS Filter List not enabled | Unsupported format"
-msgstr "Lista de filtro DNS no habilitada | No se encontraron hosts válidos"
+msgstr "Lista de filtros DNS no habilitada | Formato no soportado"
 
 #: dns/views.py:302
-#, fuzzy
-#| msgid "DNS Filter List not enabled | No valid hosts found"
 msgid "DNS Filter List not enabled | List has not been downloaded yet"
-msgstr "Lista de filtro DNS no habilitada | No se encontraron hosts válidos"
+msgstr "Lista de filtros DNS no habilitada | La lista aún no ha sido descargada"
 
 #: dns/views.py:307
 msgid "DNS Filter List enabled successfully"
@@ -2635,7 +2627,7 @@ msgstr "Listas de filtros DNS"
 
 #: templates/dns/static_host_list.html:70
 msgid "Format"
-msgstr ""
+msgstr "Formato"
 
 #: templates/dns/static_host_list.html:72
 msgid "Last Update"
@@ -4661,29 +4653,3 @@ msgstr "Errores encontrados|Error al procesar una o más interfaces."
 msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "No se encontraron interfaces|No hay interfaces WireGuard para procesar."
-
-#~ msgid "Update"
-#~ msgstr "Actualizar"
-
-#~ msgid "This is a reserved system name."
-#~ msgstr "Este es un nombre de sistema reservado."
-
-#~ msgid ""
-#~ "TOTP must be combined with a Local Password or OpenID Connect "
-#~ "authentication method."
-#~ msgstr ""
-#~ "TOTP debe combinarse con un método de autenticación de Contraseña Local o "
-#~ "OpenID Connect."
-
-#~ msgid "Route identifier, used in export (e.g.: public_area)"
-#~ msgstr "Identificador de ruta, usado en la exportación (ej.: public_area)"
-
-#~ msgid ""
-#~ "Caddy is not active. Configuration files were exported for debugging "
-#~ "purposes."
-#~ msgstr ""
-#~ "Caddy no está activo. Los archivos de configuração se exportaron con "
-#~ "fines de depuración."
-
-#~ msgid "Global TOTP Before Authentication"
-#~ msgstr "TOTP global antes de la autenticación"

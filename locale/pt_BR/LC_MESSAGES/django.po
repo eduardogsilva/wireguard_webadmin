@@ -968,14 +968,12 @@ msgid "DNS Filter List Details"
 msgstr "Detalhes da Lista de Filtro de DNS"
 
 #: dns/models.py:32 templates/dns/static_host_list.html:91
-#, fuzzy
-#| msgid "Unknown error"
 msgid "Unknown"
-msgstr "Erro desconhecido"
+msgstr "Desconhecido"
 
 #: dns/models.py:35 templates/dns/static_host_list.html:89
 msgid "Unsupported"
-msgstr ""
+msgstr "Não suportado"
 
 #: dns/views.py:49
 msgid "DNS settings applied successfully"
@@ -1048,26 +1046,20 @@ msgid "Failed to write config file: "
 msgstr "Falha ao escrever o arquivo de configuração: "
 
 #: dns/views.py:273
-#, fuzzy
-#| msgid "DNS Filter List disabled successfully"
 msgid "DNS Filter List disabled | Unsupported format detected"
-msgstr "Lista de Filtro de DNS desabilitada com sucesso"
+msgstr "Lista de filtros DNS desativada | Formato não suportado detectado"
 
 #: dns/views.py:286
 msgid "DNS Filter List updated successfully"
 msgstr "Lista de Filtro de DNS atualizada com sucesso"
 
 #: dns/views.py:300
-#, fuzzy
-#| msgid "DNS Filter List not enabled | No valid hosts found"
 msgid "DNS Filter List not enabled | Unsupported format"
-msgstr "Lista de Filtro de DNS não habilitada | Nenhum host válido encontrado"
+msgstr "Lista de filtros DNS não ativada | Formato não suportado"
 
 #: dns/views.py:302
-#, fuzzy
-#| msgid "DNS Filter List not enabled | No valid hosts found"
 msgid "DNS Filter List not enabled | List has not been downloaded yet"
-msgstr "Lista de Filtro de DNS não habilitada | Nenhum host válido encontrado"
+msgstr "Lista de filtros DNS não ativada | A lista ainda não foi baixada"
 
 #: dns/views.py:307
 msgid "DNS Filter List enabled successfully"
@@ -2623,7 +2615,7 @@ msgstr "Listas de Filtro de DNS"
 
 #: templates/dns/static_host_list.html:70
 msgid "Format"
-msgstr ""
+msgstr "Formato"
 
 #: templates/dns/static_host_list.html:72
 msgid "Last Update"
@@ -4666,29 +4658,3 @@ msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Nenhuma interface encontrada|Nenhuma interface WireGuard foi encontrada para "
 "processar."
-
-#~ msgid "Update"
-#~ msgstr "Atualizar"
-
-#~ msgid "This is a reserved system name."
-#~ msgstr "Este é um nome de sistema reservado."
-
-#~ msgid ""
-#~ "TOTP must be combined with a Local Password or OpenID Connect "
-#~ "authentication method."
-#~ msgstr ""
-#~ "O TOTP deve ser combinado com um método de autenticação de Senha Local ou "
-#~ "OpenID Connect."
-
-#~ msgid "Route identifier, used in export (e.g.: public_area)"
-#~ msgstr "Identificador da rota, usado na exportação (ex: public_area)"
-
-#~ msgid ""
-#~ "Caddy is not active. Configuration files were exported for debugging "
-#~ "purposes."
-#~ msgstr ""
-#~ "O Caddy não está ativo. Os arquivos de configuração foram exportados para "
-#~ "fins de depuração."
-
-#~ msgid "Global TOTP Before Authentication"
-#~ msgstr "TOTP Global Antes da Autenticação"
