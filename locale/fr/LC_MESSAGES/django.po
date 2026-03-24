@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-18 11:16-0300\n"
+"POT-Creation-Date: 2026-03-24 16:01-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -978,25 +978,35 @@ msgstr "URL de la liste"
 msgid "DNS Filter List Details"
 msgstr "Détails de la liste de filtres DNS"
 
-#: dns/views.py:34
+#: dns/models.py:32 templates/dns/static_host_list.html:91
+#, fuzzy
+#| msgid "Unknown error"
+msgid "Unknown"
+msgstr "Erreur inconnue"
+
+#: dns/models.py:35 templates/dns/static_host_list.html:89
+msgid "Unsupported"
+msgstr ""
+
+#: dns/views.py:49
 msgid "DNS settings applied successfully"
 msgstr "Paramètres DNS appliqués avec succès"
 
-#: dns/views.py:69
+#: dns/views.py:84
 msgid "Default DNS Filter List created successfully"
 msgstr "Liste de filtres DNS par défaut créée avec succès"
 
-#: dns/views.py:72
+#: dns/views.py:87
 msgid ""
 "Pending Changes|There are pending DNS changes that have not been applied"
 msgstr ""
 "Modifications en attente|Des changements DNS n’ont pas encore été appliqués"
 
-#: dns/views.py:91
+#: dns/views.py:106
 msgid "DNS Forwarders"
 msgstr "Redirecteurs DNS"
 
-#: dns/views.py:92
+#: dns/views.py:107
 msgid ""
 "All DNS queries will be forwarded to the primary resolver. If the primary "
 "resolver is not available, the secondary resolver will be used."
@@ -1004,63 +1014,81 @@ msgstr ""
 "Toutes les requêtes DNS seront transmises au résolveur primaire. Si celui‑ci "
 "est indisponible, le résolveur secondaire sera utilisé."
 
-#: dns/views.py:119
+#: dns/views.py:134
 msgid "Static DNS deleted successfully"
 msgstr "Entrée DNS statique supprimée avec succès"
 
-#: dns/views.py:122
+#: dns/views.py:137
 msgid "Static DNS not deleted|Invalid confirmation"
 msgstr "DNS statique non supprimé|Confirmation invalide"
 
-#: dns/views.py:132
+#: dns/views.py:147
 msgid "Static DNS saved successfully"
 msgstr "DNS statique enregistré avec succès"
 
-#: dns/views.py:155
+#: dns/views.py:170
 msgid "DNS Filter List not deleted | Filter List is enabled"
 msgstr "Liste de filtres DNS non supprimée | La liste est activée"
 
-#: dns/views.py:162
+#: dns/views.py:177
 msgid "Error removing config file: "
 msgstr "Erreur lors de la suppression du fichier de configuration: "
 
-#: dns/views.py:165
+#: dns/views.py:180
 msgid "DNS Filter List deleted successfully"
 msgstr "Liste de filtres DNS supprimée avec succès"
 
-#: dns/views.py:168
+#: dns/views.py:183
 msgid "DNS Filter List not deleted | Invalid confirmation"
 msgstr "Liste de filtres DNS non supprimée | Confirmation invalide"
 
-#: dns/views.py:178
+#: dns/views.py:195
 msgid "DNS Filter List saved successfully"
 msgstr "Liste de filtres DNS enregistrée avec succès"
 
-#: dns/views.py:205
+#: dns/views.py:222
 msgid "Failed to read existing config file: "
 msgstr "Impossible de lire le fichier de configuration existant: "
 
-#: dns/views.py:223
+#: dns/views.py:240
 msgid "Failed to fetch the host list: "
 msgstr "Échec du téléchargement de la liste d’hôtes: "
 
-#: dns/views.py:233
+#: dns/views.py:250
 msgid "Failed to write config file: "
 msgstr "Impossible d’écrire le fichier de configuration: "
 
-#: dns/views.py:258
+#: dns/views.py:273
+#, fuzzy
+#| msgid "DNS Filter List disabled successfully"
+msgid "DNS Filter List disabled | Unsupported format detected"
+msgstr "Liste de filtres DNS désactivée avec succès"
+
+#: dns/views.py:286
 msgid "DNS Filter List updated successfully"
 msgstr "Liste de filtres DNS mise à jour avec succès"
 
-#: dns/views.py:275
+#: dns/views.py:300
+#, fuzzy
+#| msgid "DNS Filter List not enabled | No valid hosts found"
+msgid "DNS Filter List not enabled | Unsupported format"
+msgstr "Liste de filtres DNS non activée | Aucun hôte valide trouvé"
+
+#: dns/views.py:302
+#, fuzzy
+#| msgid "DNS Filter List not enabled | No valid hosts found"
+msgid "DNS Filter List not enabled | List has not been downloaded yet"
+msgstr "Liste de filtres DNS non activée | Aucun hôte valide trouvé"
+
+#: dns/views.py:307
 msgid "DNS Filter List enabled successfully"
 msgstr "Liste de filtres DNS activée avec succès"
 
-#: dns/views.py:277
+#: dns/views.py:309
 msgid "DNS Filter List not enabled | No valid hosts found"
 msgstr "Liste de filtres DNS non activée | Aucun hôte valide trouvé"
 
-#: dns/views.py:282
+#: dns/views.py:314
 msgid "DNS Filter List disabled successfully"
 msgstr "Liste de filtres DNS désactivée avec succès"
 
@@ -2258,7 +2286,6 @@ msgstr "Désactivé"
 #: templates/app_gateway/application_details.html:99
 #: templates/app_gateway/application_details.html:150
 #: templates/cluster/workers_list.html:77
-#: templates/dns/static_host_list.html:74
 #: templates/gatekeeper/gatekeeper_list.html:90
 #: templates/gatekeeper/gatekeeper_list.html:133
 #: templates/gatekeeper/gatekeeper_list.html:178
@@ -2308,7 +2335,7 @@ msgstr "Politiques d'accès"
 
 #: templates/app_gateway/app_gateway_list.html:35
 #: templates/app_gateway/app_gateway_list.html:68
-#: templates/dns/static_host_list.html:70
+#: templates/dns/static_host_list.html:71
 msgid "Hosts"
 msgstr "Hôtes"
 
@@ -2457,7 +2484,7 @@ msgstr ""
 msgid "For more information, see the discussion:"
 msgstr "Pour plus d'informations, consultez la discussion :"
 
-#: templates/cluster/workers_list.html:9 templates/dns/static_host_list.html:72
+#: templates/cluster/workers_list.html:9
 #: templates/scheduler/scheduleprofile_form.html:82
 #: templates/template_parts/base_sidebar.html:13 vpn_invite/forms.py:78
 #: vpn_invite/forms.py:79 vpn_invite/forms.py:80 vpn_invite/forms.py:81
@@ -2617,15 +2644,15 @@ msgstr "Appliquer"
 msgid "DNS Filter Lists"
 msgstr "Listes de filtres DNS"
 
-#: templates/dns/static_host_list.html:71
+#: templates/dns/static_host_list.html:70
+msgid "Format"
+msgstr ""
+
+#: templates/dns/static_host_list.html:72
 msgid "Last Update"
 msgstr "Dernière mise à jour"
 
-#: templates/dns/static_host_list.html:73
-msgid "Update"
-msgstr "Mettre à jour"
-
-#: templates/dns/static_host_list.html:116
+#: templates/dns/static_host_list.html:126
 msgid "Add Filter List"
 msgstr "Ajouter une liste de filtres"
 
@@ -4609,7 +4636,7 @@ msgstr "Profil de planification du peer mis à jour avec succès."
 msgid "Manage Peer Schedule Profile"
 msgstr "Gérer le Profil de Planification du Peer"
 
-#: wireguard_tools/views.py:237
+#: wireguard_tools/views.py:242
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/."
@@ -4617,7 +4644,7 @@ msgstr ""
 "Exportation réussie! | Les fichiers de configuration WireGuard ont été "
 "exportés vers /etc/wireguard/."
 
-#: wireguard_tools/views.py:239
+#: wireguard_tools/views.py:244
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/. Don't forget to restart the interfaces."
@@ -4625,19 +4652,19 @@ msgstr ""
 "Exportation réussie! | Les fichiers WireGuard ont été exportés vers /etc/"
 "wireguard/. N’oubliez pas de redémarrer les interfaces."
 
-#: wireguard_tools/views.py:341
+#: wireguard_tools/views.py:346
 msgid "Error reloading"
 msgstr "Erreur de rechargement"
 
-#: wireguard_tools/views.py:353
+#: wireguard_tools/views.py:358
 msgid "Error stopping"
 msgstr "Erreur à l’arrêt"
 
-#: wireguard_tools/views.py:358
+#: wireguard_tools/views.py:363
 msgid "Error starting"
 msgstr "Erreur au démarrage"
 
-#: wireguard_tools/views.py:365
+#: wireguard_tools/views.py:370
 msgid ""
 "WARNING|Please note that the interface was reloaded, not restarted. Double-"
 "check if the the peers are working as expected. If you find any issues, "
@@ -4646,23 +4673,26 @@ msgstr ""
 "AVERTISSEMENT | L’interface a été rechargée, pas redémarrée. Vérifiez que "
 "les peers fonctionnent comme prévu ; signalez tout problème rencontré."
 
-#: wireguard_tools/views.py:366
+#: wireguard_tools/views.py:371
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
 msgstr "WireGuard rechargé | Le service WireGuard a été rechargé."
 
-#: wireguard_tools/views.py:368
+#: wireguard_tools/views.py:373
 msgid "WireGuard restarted|The WireGuard service has been restarted."
 msgstr "WireGuard redémarré | Le service WireGuard a été redémarré."
 
-#: wireguard_tools/views.py:371
+#: wireguard_tools/views.py:376
 msgid "Errors encountered|Error processing one or more interfaces."
 msgstr ""
 "Erreurs rencontrées | Problème lors du traitement d’une ou plusieurs "
 "interfaces."
 
-#: wireguard_tools/views.py:374
+#: wireguard_tools/views.py:379
 msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr "Aucune interface trouvée | Aucune interface WireGuard à traiter."
+
+#~ msgid "Update"
+#~ msgstr "Mettre à jour"
 
 #~ msgid "This is a reserved system name."
 #~ msgstr "Il s'agit d'un nom de système réservé."
