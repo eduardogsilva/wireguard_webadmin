@@ -1,5 +1,6 @@
 import hashlib
 import os
+import re
 
 import requests
 from django.conf import settings
@@ -15,6 +16,20 @@ from .forms import DNSSettingsForm, StaticHostForm
 from .functions import generate_dnsmasq_config, compress_dnsmasq_config
 from .models import DNSFilterList, DNSSettings
 from .models import StaticHost
+
+
+def detect_list_format(content):
+    for line in content.splitlines():
+        line = line.strip()
+        if not line or line.startswith('#'):
+            continue
+        if line.startswith(('local=/', 'address=/', 'server=/', 'conf-file=')):
+            return 'dnsmasq'
+        parts = line.split()
+        if len(parts) >= 2 and re.match(r'^[\d\.]+$|^[0-9a-fA-F:]+$', parts[0]):
+            return 'hosts'
+        return 'unsupported'
+    return ''
 
 
 def export_dns_configuration():
@@ -172,7 +187,9 @@ def view_manage_filter_list(request):
 
     form = DNSFilterListForm(request.POST or None, instance=filter_list)
     if form.is_valid():
-        form.save()
+        saved = form.save(commit=False)
+        saved.list_format = ''
+        saved.save()
         dns_settings.pending_changes = True
         dns_settings.save()
         messages.success(request, _('DNS Filter List saved successfully'))
@@ -244,6 +261,17 @@ def view_update_dns_list(request):
         dns_settings.pending_changes = True
         dns_settings.save()
 
+    # Detect list format from content.
+    detected_format = detect_list_format(content)
+    dns_list.list_format = detected_format
+
+    # If unsupported format, disable the list.
+    if detected_format == 'unsupported' and dns_list.enabled:
+        dns_list.enabled = False
+        dns_settings.pending_changes = True
+        dns_settings.save()
+        messages.warning(request, _('DNS Filter List disabled | Unsupported format detected'))
+
     # Count the number of valid host entries (ignoring empty lines and lines starting with '#').
     host_count = sum(1 for line in content.splitlines() if line.strip() and not line.strip().startswith('#'))
     dns_list.host_count = host_count
@@ -268,7 +296,11 @@ def view_toggle_dns_list(request):
     file_path = os.path.join("/etc/dnsmasq/", f"{dns_list.uuid}.conf")
 
     if request.GET.get('action') == 'enable':
-        if dns_list.host_count > 0 and os.path.exists(file_path):
+        if dns_list.list_format == 'unsupported':
+            messages.error(request, _('DNS Filter List not enabled | Unsupported format'))
+        elif dns_list.list_format == '':
+            messages.error(request, _('DNS Filter List not enabled | List has not been downloaded yet'))
+        elif dns_list.host_count > 0 and os.path.exists(file_path):
             dns_list.enabled = True
             dns_list.save()
             export_dns_configuration()

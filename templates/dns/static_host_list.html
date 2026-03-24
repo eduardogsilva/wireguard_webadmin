@@ -67,11 +67,12 @@
                                     <th class="min-width"></th>
                                     <th>{% trans 'Name' %}</th>
                                     <th>{% trans 'Description' %}</th>
+                                    <th>{% trans 'Format' %}</th>
                                     <th>{% trans 'Hosts' %}</th>
                                     <th>{% trans 'Last Update' %}</th>
-                                    <th class="min-width">{% trans 'Status' %}</th>
-                                    <th class="min-width">{% trans 'Update' %}</th>
-                                    <th class="min-width">{% trans 'Edit' %}</th>
+                                    <th class="min-width"></th>
+                                    <th class="min-width"></th>
+                                    <th class="min-width"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -83,8 +84,17 @@
                                             {% endif %}</td>
                                             <td>{{ filter_list.name }}</td>
                                             <td>{{ filter_list.description }}</td>
+                                            <td>
+                                                {% if filter_list.list_format == 'unsupported' %}
+                                                    <span class="text-danger">{% trans 'Unsupported' %}</span>
+                                                {% elif filter_list.list_format == '' %}
+                                                    <span class="text-muted">{% trans 'Unknown' %}</span>
+                                                {% else %}
+                                                    {{ filter_list.list_format }}
+                                                {% endif %}
+                                            </td>
                                             <td>{{ filter_list.host_count }}</td>
-                                            <td>{{ filter_list.last_updated|default_if_none:"" }}</td>
+                                            <td>{{ filter_list.last_updated|date:"d/m/y H:i"|default_if_none:"" }}</td>
                                             <td>
                                                 {% if filter_list.enabled %}
                                                     <a class="text-green"  href="/dns/toggle_dns_list/?uuid={{ filter_list.uuid }}&action=disable"><i class="fas fa-toggle-on"></i></a>
@@ -103,7 +113,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <tr>
-                                        <td colspan="7"></td>
+                                        <td colspan="8"></td>
                                     </tr>
                                 {% endif %}
                                 </tbody>

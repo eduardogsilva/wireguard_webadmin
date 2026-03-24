@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class DNSSettings(models.Model):
@@ -27,6 +28,13 @@ class StaticHost(models.Model):
 
 
 class DNSFilterList(models.Model):
+    LIST_FORMAT_CHOICES = [
+        ('', _('Unknown')),
+        ('hosts', 'Hosts'),
+        ('dnsmasq', 'Dnsmasq'),
+        ('unsupported', _('Unsupported')),
+    ]
+
     name = models.SlugField(max_length=100, unique=True)
     description = models.CharField(max_length=100)
     enabled = models.BooleanField(default=False)
@@ -34,6 +42,7 @@ class DNSFilterList(models.Model):
     last_updated = models.DateTimeField(blank=True, null=True)
     host_count = models.IntegerField(default=0)
     recommended = models.BooleanField(default=False)
+    list_format = models.CharField(max_length=15, choices=LIST_FORMAT_CHOICES, default='')
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

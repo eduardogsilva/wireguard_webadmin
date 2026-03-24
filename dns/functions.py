@@ -134,6 +134,9 @@ bind-interfaces
         dnsmasq_config += '\n'
         for dns_list in dns_lists:
             file_path = os.path.join("/etc/dnsmasq/", f"{dns_list.uuid}.conf")
-            dnsmasq_config += f'addn-hosts={file_path}\n'
+            if dns_list.list_format == 'hosts':
+                dnsmasq_config += f'addn-hosts={file_path}\n'
+            elif dns_list.list_format == 'dnsmasq':
+                dnsmasq_config += f'conf-file={file_path}\n'
     return dnsmasq_config
 
