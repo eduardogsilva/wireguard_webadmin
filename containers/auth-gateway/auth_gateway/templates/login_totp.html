@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Verify identity — Gatekeeper{% endblock %}
+{% block title %}Verification required — Gatekeeper{% endblock %}
 {% block content %}
-    <h1 class="card-title">Two-factor verification</h1>
-    <p class="card-subtitle">Enter the current code from your authenticator app to access <strong>{{ application_name }}</strong></p>
+    <h1 class="card-title">Verification required</h1>
+    <p class="card-subtitle">Enter your security code to access <strong>{{ application_name }}</strong></p>
     {% if error %}
     <div class="alert alert-error">{{ error }}</div>
     {% endif %}
@@ -10,8 +10,8 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <input type="hidden" name="next" value="{{ next }}">
         <label class="field">
-            <span>Verification code</span>
-            <input type="text" name="token" inputmode="numeric" autocomplete="one-time-code" autofocus required>
+            <span>Security code</span>
+            <input type="text" name="token" inputmode="text" autocomplete="off" autofocus required>
         </label>
         <button class="btn btn-primary" type="submit">Verify</button>
     </form>
