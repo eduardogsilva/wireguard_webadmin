@@ -17,12 +17,6 @@ services:
       context: ./containers/dnsmasq
       dockerfile: Dockerfile-dnsmasq
 
-  wireguard-webadmin-nginx:
-    image: eduardosilva/wireguard_webadmin_nginx:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: Dockerfile_nginx
-
   wireguard-webadmin-rrdtool:
     image: eduardosilva/wireguard_webadmin_rrdtool:${TAG:-latest}
     build:

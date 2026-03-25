@@ -8,7 +8,6 @@ SERVICES=(
   "wireguard-webadmin|eduardosilva/wireguard_webadmin||.|"
   "wireguard-webadmin-cron|eduardosilva/wireguard_webadmin_cron||./containers/cron|Dockerfile-cron"
   "wireguard-webadmin-dns|eduardosilva/wireguard_webadmin_dns||./containers/dnsmasq|Dockerfile-dnsmasq"
-  "wireguard-webadmin-nginx|eduardosilva/wireguard_webadmin_nginx||.|Dockerfile_nginx"
   "wireguard-webadmin-rrdtool|eduardosilva/wireguard_webadmin_rrdtool||./containers/rrdtool|Dockerfile-rrdtool"
   "wireguard-webadmin-caddy|eduardosilva/wireguard_webadmin_caddy||./containers/caddy|Dockerfile-caddy"
   "wireguard-webadmin-auth-gateway|eduardosilva/wireguard_webadmin_auth_gateway||./containers/auth-gateway|Dockerfile-auth-gateway|"
