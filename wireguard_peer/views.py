@@ -20,6 +20,18 @@ from wireguard_tools.views import export_wireguard_configuration
 from .functions import func_create_new_peer
 
 
+def _auto_apply(request, instance):
+    if not settings.AUTO_APPLY:
+        return False
+    export_wireguard_configuration(instance)
+    success, message = func_reload_wireguard_interface(instance)
+    if success:
+        messages.info(request, _('wg%(id)s reloaded automatically.') % {'id': instance.instance_id})
+    else:
+        messages.warning(request, _('Auto-apply failed for wg%(id)s: ') % {'id': instance.instance_id} + message)
+    return True
+
+
 @login_required
 def view_wireguard_peer_list(request):
     user_acl = get_object_or_404(UserAcl, user=request.user)
@@ -148,8 +160,9 @@ def view_wireguard_peer_create(request):
         new_peer, message = func_create_new_peer(current_instance)
         if new_peer:
             messages.success(request, _('Peer created|Peer created successfully.'))
-            new_peer.wireguard_instance.pending_changes = True
-            new_peer.wireguard_instance.save()
+            if not _auto_apply(request, new_peer.wireguard_instance):
+                new_peer.wireguard_instance.pending_changes = True
+                new_peer.wireguard_instance.save()
             return redirect('/peer/manage/?peer=' + str(new_peer.uuid))
         else:
             messages.warning(request, message)
@@ -173,10 +186,11 @@ def view_wireguard_peer_manage(request):
         if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
             return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
         if request.GET.get('confirmation') == 'delete':
-            current_peer.wireguard_instance.pending_changes = True
-            current_peer.wireguard_instance.save()
             current_peer.delete()
             messages.success(request, _('Peer deleted|Peer deleted successfully.'))
+            if not _auto_apply(request, current_instance):
+                current_instance.pending_changes = True
+                current_instance.save()
             return redirect('/peer/list/?uuid=' + str(current_instance.uuid))
         else:
             messages.warning(request, _('Error deleting peer|Invalid confirmation message. Type "delete" to confirm.'))
@@ -224,8 +238,9 @@ def view_wireguard_peer_edit_field(request):
     form = FormClass(request.POST or None, instance=current_peer)
     if form.is_valid():
         form.save()
-        current_peer.wireguard_instance.pending_changes = True
-        current_peer.wireguard_instance.save()
+        if group != 'name' and not _auto_apply(request, current_peer.wireguard_instance):
+            current_peer.wireguard_instance.pending_changes = True
+            current_peer.wireguard_instance.save()
         messages.success(request, _('Peer updated|Peer updated successfully.'))
         return redirect('/peer/manage/?peer=' + str(current_peer.uuid))
 
@@ -266,10 +281,12 @@ def view_manage_ip_address(request):
 
         if request.GET.get('action') == 'delete':
             if request.GET.get('confirmation') == 'delete':
+                is_server_side = current_ip.config_file == 'server'
                 current_ip.delete()
                 messages.success(request, _('IP address deleted|IP address deleted successfully.'))
-                current_peer.wireguard_instance.pending_changes = True
-                current_peer.wireguard_instance.save()
+                if is_server_side and not _auto_apply(request, current_peer.wireguard_instance):
+                    current_peer.wireguard_instance.pending_changes = True
+                    current_peer.wireguard_instance.save()
                 return redirect('/peer/manage/?peer=' + str(current_peer.uuid))
             else:
                 messages.warning(request, _('Error deleting IP address|Invalid confirmation message. Type "delete" to confirm.'))
@@ -289,8 +306,9 @@ def view_manage_ip_address(request):
                 this_form.peer = current_peer
             this_form.config_file = config_file
             this_form.save()
-            current_peer.wireguard_instance.pending_changes = True
-            current_peer.wireguard_instance.save()
+            if config_file == 'server' and not _auto_apply(request, current_peer.wireguard_instance):
+                current_peer.wireguard_instance.pending_changes = True
+                current_peer.wireguard_instance.save()
             if current_ip:
                 messages.success(request, _('IP address updated|IP address updated successfully.'))
             else:

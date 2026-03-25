@@ -18,6 +18,14 @@ from .models import DNSFilterList, DNSSettings
 from .models import StaticHost
 
 
+def _auto_apply_dns(request):
+    if not settings.AUTO_APPLY:
+        return False
+    export_dns_configuration()
+    messages.info(request, _('DNS configuration reloaded automatically.'))
+    return True
+
+
 def detect_list_format(content):
     for line in content.splitlines():
         line = line.strip()
@@ -129,9 +137,10 @@ def view_manage_static_host(request):
         if request.GET.get('action') == 'delete':
             if request.GET.get('confirmation') == 'delete':
                 static_dns.delete()
-                dns_settings.pending_changes = True
-                dns_settings.save()
                 messages.success(request, _('Static DNS deleted successfully'))
+                if not _auto_apply_dns(request):
+                    dns_settings.pending_changes = True
+                    dns_settings.save()
                 return redirect('/dns/')
             else:
                 messages.warning(request, _('Static DNS not deleted|Invalid confirmation'))
@@ -142,9 +151,10 @@ def view_manage_static_host(request):
     form = StaticHostForm(request.POST or None, instance=static_dns)
     if form.is_valid():
         form.save()
-        dns_settings.pending_changes = True
-        dns_settings.save()
         messages.success(request, _('Static DNS saved successfully'))
+        if not _auto_apply_dns(request):
+            dns_settings.pending_changes = True
+            dns_settings.save()
         return redirect('/dns/')
 
     context = {
@@ -305,6 +315,7 @@ def view_toggle_dns_list(request):
             dns_list.save()
             export_dns_configuration()
             messages.success(request, _('DNS Filter List enabled successfully'))
+            messages.info(request, _('DNS configuration reloaded automatically.'))
         else:
             messages.error(request, _('DNS Filter List not enabled | No valid hosts found'))
     else:
@@ -312,4 +323,5 @@ def view_toggle_dns_list(request):
         dns_list.save()
         export_dns_configuration()
         messages.success(request, _('DNS Filter List disabled successfully'))
+        messages.info(request, _('DNS configuration reloaded automatically.'))
     return redirect('/dns/')

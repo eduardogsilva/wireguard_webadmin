@@ -73,6 +73,10 @@ if [ -n "${WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL:-}" ]; then
     esac
 fi
 
+if [[ "${DISABLE_AUTO_APPLY,,}" == "true" ]]; then
+    echo "AUTO_APPLY = False" >> /app/wireguard_webadmin/production_settings.py
+fi
+
 if [ -n "${WIREGUARD_MTU:-}" ]; then
     if [[ "${WIREGUARD_MTU}" =~ ^[0-9]+$ ]] && [ "${WIREGUARD_MTU}" -ge 1280 ] && [ "${WIREGUARD_MTU}" -le 9000 ]; then
         echo "WIREGUARD_MTU = ${WIREGUARD_MTU}" >> /app/wireguard_webadmin/production_settings.py
