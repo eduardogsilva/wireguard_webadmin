@@ -1,14 +1,687 @@
-<!doctype html><html lang=en-us><head><meta name=generator content="Hugo 0.158.0"><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>wireguard_webadmin — Self-hosted VPN management and Zero Trust access control.</title><meta name=description content="Self-hosted VPN management and Zero Trust access control."><link rel=alternate hreflang=en-us href=https://wireguard-webadmin.com/><link rel=alternate hreflang=pt-BR href=https://wireguard-webadmin.com/pt-br/><link rel=alternate hreflang=es href=https://wireguard-webadmin.com/es/><link rel=alternate hreflang=fr href=https://wireguard-webadmin.com/fr/><link rel=alternate hreflang=de href=https://wireguard-webadmin.com/de/><link rel=alternate hreflang=x-default href=https://wireguard-webadmin.com/><meta property="og:type" content="website"><meta property="og:url" content="https://wireguard-webadmin.com/"><meta property="og:title" content="wireguard_webadmin — Self-hosted VPN management and Zero Trust access control."><meta property="og:description" content="Self-hosted VPN management and Zero Trust access control."><meta property="og:image" content="https://wireguard-webadmin.com/og-image.png"><meta property="og:image:width" content="1280"><meta property="og:image:height" content="800"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="wireguard_webadmin — Self-hosted VPN management and Zero Trust access control."><meta name=twitter:description content="Self-hosted VPN management and Zero Trust access control."><meta name=twitter:image content="https://wireguard-webadmin.com/og-image.png"><link rel=icon type=image/svg+xml href=/favicon.svg><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel=stylesheet><link rel=stylesheet href=/css/main.min.css></head><body><header class=site-header><div class=container><nav class=nav-inner><a href=/ class=nav-logo>wireguard_<span>webadmin</span></a>
-<button class=hamburger aria-label="Toggle menu" aria-expanded=false>
-<span></span><span></span><span></span></button><ul class=nav-links><li><a href=/ aria-current=page>Home</a></li><li><a href=/zero-trust/>Zero Trust</a></li><li><a href=/deployment/>Deployment</a></li><li><a href=/get-involved/>Get Involved</a></li><li><a href=https://github.com/eduardogsilva/wireguard_webadmin target=_blank rel=noopener class=nav-github><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374.0.0 5.373.0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931.0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176.0.0 1.008-.322 3.301 1.23A11.509 11.509.0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221.0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-GitHub</a></li><li class=nav-lang-sep></li><li class=lang-dropdown><button class=lang-btn aria-expanded=false>
-🇬🇧 EN
-<svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button><ul class=lang-menu><li><a href=/ hreflang=en class=lang-active><span class=lang-flag>🇬🇧</span>
-<span>English</span></a></li><li><a href=/pt-br/ hreflang=pt-br><span class=lang-flag>🇧🇷</span>
-<span>Português</span></a></li><li><a href=/es/ hreflang=es><span class=lang-flag>🇪🇸</span>
-<span>Español</span></a></li><li><a href=/fr/ hreflang=fr><span class=lang-flag>🇫🇷</span>
-<span>Français</span></a></li><li><a href=/de/ hreflang=de><span class=lang-flag>🇩🇪</span>
-<span>Deutsch</span></a></li></ul></li></ul></nav></div></header><main><section class=hero><div class=container><div class=hero-eyebrow>Open Source · Self-hosted · WireGuard</div><h1>Self-hosted VPN management<br>and <em>Zero Trust</em> access control.</h1><p class=hero-sub>WireGuard instances, peer management, firewall, DNS, and secure app publishing — all running on your infrastructure.</p><p class=hero-note>Free and open source. Nothing leaves your server.</p><div class=btn-group><a href=/deployment/ class="btn btn-primary">Quick Install</a>
-<a href=https://github.com/eduardogsilva/wireguard_webadmin target=_blank rel=noopener class="btn btn-outline"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374.0.0 5.373.0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931.0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176.0.0 1.008-.322 3.301 1.23A11.509 11.509.0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221.0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-View on GitHub</a></div><div class=hero-screenshot><div class=theme-crossfade><img class=crossfade-light src=/images/peer_list_light.png alt="wireguard_webadmin — light mode" loading=eager>
-<img class=crossfade-dark src=/images/peer_list_dark.png alt="wireguard_webadmin — dark mode" loading=eager></div></div></div></section><section><div class=container><div class=section-label>What it does</div><h2 class=section-title>More than a VPN panel.</h2><p class=section-sub>A complete network management stack — from WireGuard peer control to Zero Trust application gateway.</p><div class=pillars-grid><div class=pillar-card><div class=pillar-icon>⚙️</div><h3>Manage</h3><ul class=pillar-list><li>Multiple WireGuard instances</li><li>Peer management with traffic graphs</li><li>Firewall rules & port forwarding</li><li>DNS resolver with blacklists</li><li>VPN invite links with QR code</li></ul></div><div class=pillar-card><div class=pillar-icon>🔒</div><h3>Protect</h3><ul class=pillar-list><li>Zero Trust application gateway</li><li>TOTP two-factor authentication</li><li>Altcha proof-of-work anti-brute-force</li><li>IP ACL per application</li><li>OIDC coming soon</li></ul></div><div class=pillar-card><div class=pillar-icon>⚡</div><h3>Automate</h3><ul class=pillar-list><li>Scheduled peer enable/disable</li><li>Routing templates</li><li>Invite links with expiry</li><li>API v2 for automation</li><li>Multi-user with role permissions</li></ul></div></div></div></section><section><div class=container><div class=spotlight><div class=spotlight-content><div class=section-label>Zero Trust</div><h2>Publish internal apps securely — without opening them to the world.</h2><p>The built-in application gateway lets you expose services like Grafana, Proxmox, or any internal web app with proper authentication in front, without punching holes in your firewall or relying on a third-party tunnel.</p><p>Every request passes through the gatekeeper: TOTP, local credentials, IP ACL, and browser validation with proof-of-work (Altcha) to stop automated attacks.</p><div class=tag-list><span class="tag green">TOTP</span><span class="tag blue">IP ACL</span><span class="tag purple">Altcha PoW</span><span class=tag>Self-hosted</span></div><br><a href=/zero-trust/ class="btn btn-outline">Learn more →</a></div><div class=spotlight-image><img src=/images/zero_trust_app.png alt="Zero Trust application gateway" loading=lazy></div></div></div></section><section><div class=container><div class="spotlight reverse"><div class=spotlight-content><div class=section-label>Visibility</div><h2>Full visibility into every peer.</h2><p>Each peer gets a dedicated detail view: real-time connection status, cumulative traffic, time-series bandwidth graphs, last handshake, and the QR code for instant re-provisioning.</p><p>Traffic history is stored per peer so you can audit usage over time — not just since the last restart.</p><div class=tag-list><span class="tag blue">Traffic graphs</span><span class="tag green">Last handshake</span><span class=tag>QR code</span><span class=tag>Per-peer history</span></div></div><div class=spotlight-image><img src=/images/peer_details.png alt="Peer details — traffic graph and metrics" loading=lazy></div></div></div></section><section><div class=container><div class=spotlight><div class=spotlight-content><div class=section-label>Automation</div><h2>Time-based peer access control.</h2><p>Define schedules for each VPN peer. Access is automatically enabled and disabled based on the time window you configure — no manual intervention needed.</p><p>Useful for contractors, temporary access, shift-based policies, or anything where access should be bounded in time without relying on humans to remember to revoke it.</p><div class=tag-list><span class="tag green">Time-based ACL</span><span class="tag blue">Automated</span><span class=tag>Per-peer</span></div></div><div class=spotlight-image><img src=/images/scheduler.png alt="Peer scheduling interface" loading=lazy></div></div></div></section><section><div class=container><div class=section-label>Interface</div><h2 class=section-title>Built for how sysadmins actually work.</h2><p class=section-sub>Every feature is a screen away. No buried menus, no wizard flows.</p><div class=screenshot-grid><div class=screenshot-item><img src=/images/firewall.png alt="Firewall rule management" loading=lazy><div class=screenshot-caption><span class=screenshot-label>Firewall</span><p>Per-instance iptables rules, port forwarding, and outbound ACLs — managed from the UI.</p></div></div><div class=screenshot-item><img src=/images/dns.png alt="DNS management with blacklists" loading=lazy><div class=screenshot-caption><span class=screenshot-label>DNS</span><p>Built-in resolver with category-based blacklists: ads, malware, tracking, adult content.</p></div></div><div class=screenshot-item><img src=/images/vpn_invite.png alt="VPN invite link with QR code" loading=lazy><div class=screenshot-caption><span class=screenshot-label>Invite links</span><p>Generate a shareable link with QR code and config file. The user scans or imports it directly into their WireGuard client.</p></div></div><div class=screenshot-item><img src=/images/routing_template.png alt="Routing templates" loading=lazy><div class=screenshot-caption><span class=screenshot-label>Routing templates</span><p>Define allowed IPs and routing policies once, reuse across dozens of peers.</p></div></div></div></div></section><section id=deploy><div class=container><div class=deploy-teaser><div class=deploy-teaser-text><div class=section-label>Getting started</div><h2>As easy as <span class=cmd-inline>docker compose up</span>.</h2><p class=section-sub>Runs on any Linux machine with Docker. Caddy handles HTTPS automatically.</p></div><a href=/deployment/ class="btn btn-primary">Deployment guide →</a></div></div></section><section><div class=container><div class=section-label>Full feature set</div><h2 class=section-title>Everything you need. Nothing you don't.</h2><div class=feature-grid><div class=feature-item><div class=feature-icon>🖥️</div><div><h4>Multi-arch</h4><p>Native images for amd64 and arm64</p></div></div><div class=feature-item><div class=feature-icon>🌙</div><div><h4>Dark mode</h4><p>Full dark/light interface toggle</p></div></div><div class=feature-item><div class=feature-icon>👥</div><div><h4>Multi-user</h4><p>Role-based permissions per user</p></div></div><div class=feature-item><div class=feature-icon>📊</div><div><h4>Traffic history</h4><p>Per-peer bandwidth graphs over time</p></div></div><div class=feature-item><div class=feature-icon>🚫</div><div><h4>DNS blacklist</h4><p>Block categories: ads, malware, tracking</p></div></div><div class=feature-item><div class=feature-icon>🗺️</div><div><h4>Routing templates</h4><p>Reusable routing configs across peers</p></div></div><div class=feature-item><div class=feature-icon>🔗</div><div><h4>API v2</h4><p>REST API for external automation</p></div></div><div class=feature-item><div class=feature-icon>🧪</div><div><h4>Debug console</h4><p>Built-in diagnostic and debug tools</p></div></div><div class=feature-item><div class=feature-icon>📨</div><div><h4>Invite links</h4><p>QR code invites with optional expiry</p></div></div><div class=feature-item><div class=feature-icon>🔥</div><div><h4>Firewall</h4><p>Per-instance firewall rule management</p></div></div><div class=feature-item><div class=feature-icon>📡</div><div><h4>Port forwarding</h4><p>Forward ports through VPN peers</p></div></div><div class=feature-item><div class=feature-icon>🔐</div><div><h4>TOTP / 2FA</h4><p>Two-factor auth for admin and app gateway</p></div></div></div></div></section><section><div class=container><div class=section-label>Roadmap</div><h2 class=section-title>What's coming.</h2><div class=roadmap-list><div class=roadmap-item><div class="roadmap-badge soon">Coming soon</div><div><h4>OIDC Authentication</h4><p>Sign in with your existing identity provider — Keycloak, Authentik, Google Workspace, or any OIDC-compatible IdP.</p></div></div><div class=roadmap-item><div class="roadmap-badge wip">In progress</div><div><h4>App Gateway / Gatekeeper v2</h4><p>A more capable application gateway with granular per-route policies, session management, and improved audit logging.</p></div></div><div class=roadmap-item><div class="roadmap-badge planned">Planned</div><div><h4>Peer groups & bulk actions</h4><p>Group peers by team, project, or access level. Apply firewall rules, routing templates, and schedules to whole groups at once.</p></div></div></div></div></section></main><footer class=site-footer><div class=container><div class=footer-inner><div class=footer-logo>wireguard_<span>webadmin</span></div><ul class=footer-links><li><a href=https://github.com/eduardogsilva/wireguard_webadmin target=_blank rel=noopener>GitHub</a></li><li><a href=https://github.com/eduardogsilva/wireguard_webadmin/discussions target=_blank rel=noopener>Discussions</a></li><li><a href=/zero-trust/>Zero Trust</a></li><li><a href=/deployment/>Deployment</a></li><li><a href=/get-involved/>Get Involved</a></li></ul><div class=footer-built>built by <a href=https://github.com/eduardogsilva target=_blank rel=noopener>@eduardogsilva</a></div></div></div></footer><script>document.querySelectorAll(".tab-btn").forEach(e=>{e.addEventListener("click",()=>{const t=e.closest(".tab-group");t.querySelectorAll(".tab-btn").forEach(e=>e.classList.remove("active")),t.querySelectorAll(".tab-panel").forEach(e=>e.classList.remove("active")),e.classList.add("active"),t.querySelector("#"+e.dataset.tab).classList.add("active")})});const hamburger=document.querySelector(".hamburger"),navLinks=document.querySelector(".nav-links");hamburger&&(hamburger.addEventListener("click",e=>{e.stopPropagation();const t=navLinks.classList.toggle("open");hamburger.classList.toggle("open",t),hamburger.setAttribute("aria-expanded",t)}),document.addEventListener("click",e=>{!navLinks.contains(e.target)&&!hamburger.contains(e.target)&&(navLinks.classList.remove("open"),hamburger.classList.remove("open"),hamburger.setAttribute("aria-expanded",!1))}));const langBtn=document.querySelector(".lang-btn"),langDropdown=document.querySelector(".lang-dropdown");if(langBtn&&(langBtn.addEventListener("click",e=>{e.stopPropagation();const t=langDropdown.classList.toggle("open");langBtn.setAttribute("aria-expanded",t)}),document.addEventListener("click",e=>{langDropdown.contains(e.target)||(langDropdown.classList.remove("open"),langBtn.setAttribute("aria-expanded",!1))}),langDropdown.querySelectorAll(".lang-menu a").forEach(e=>{e.addEventListener("click",()=>localStorage.setItem("lang-manual","1"))})),location.pathname==="/"&&!localStorage.getItem("lang-manual")){const t=(navigator.language||navigator.userLanguage||"en").toLowerCase(),n=[{prefix:"pt",url:"/pt-br/"},{prefix:"es",url:"/es/"},{prefix:"fr",url:"/fr/"},{prefix:"de",url:"/de/"}],e=n.find(e=>t.startsWith(e.prefix));e&&location.replace(e.url)}</script></body></html>
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta name="generator" content="Hugo 0.158.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  
+
+  <title>wireguard_webadmin — Self-hosted VPN management and Zero Trust access control.</title>
+  <meta name="description" content="Self-hosted VPN management and Zero Trust access control.">
+
+  
+  
+  <link rel="alternate" hreflang="en-us" href="https://wireguard-webadmin.com/">
+  
+  <link rel="alternate" hreflang="pt-BR" href="https://wireguard-webadmin.com/pt-br/">
+  
+  <link rel="alternate" hreflang="es" href="https://wireguard-webadmin.com/es/">
+  
+  <link rel="alternate" hreflang="fr" href="https://wireguard-webadmin.com/fr/">
+  
+  <link rel="alternate" hreflang="de" href="https://wireguard-webadmin.com/de/">
+  
+  <link rel="alternate" hreflang="x-default" href="https://wireguard-webadmin.com/">
+
+  
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://wireguard-webadmin.com/">
+  <meta property="og:title"       content="wireguard_webadmin — Self-hosted VPN management and Zero Trust access control.">
+  <meta property="og:description" content="Self-hosted VPN management and Zero Trust access control.">
+  <meta property="og:image"       content="https://wireguard-webadmin.com/og-image.png">
+  <meta property="og:image:width"  content="1280">
+  <meta property="og:image:height" content="800">
+
+  
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="wireguard_webadmin — Self-hosted VPN management and Zero Trust access control.">
+  <meta name="twitter:description" content="Self-hosted VPN management and Zero Trust access control.">
+  <meta name="twitter:image"       content="https://wireguard-webadmin.com/og-image.png">
+
+  
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="/css/main.min.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="nav-inner">
+      <a href="/" class="nav-logo">wireguard_<span>webadmin</span></a>
+      <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        
+        
+        <li>
+          <a href="/"
+             
+             aria-current="page"
+             >
+            
+            Home
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="/zero-trust/"
+             
+             
+             >
+            
+            Zero Trust
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="/deployment/"
+             
+             
+             >
+            
+            Deployment
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="/get-involved/"
+             
+             
+             >
+            
+            Get Involved
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="https://github.com/eduardogsilva/wireguard_webadmin"
+             target="_blank" rel="noopener"
+             
+             class="nav-github">
+            
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            
+            GitHub
+          </a>
+        </li>
+        
+        <li class="nav-lang-sep"></li>
+        <li class="lang-dropdown">
+          <button class="lang-btn" aria-expanded="false">
+            🇬🇧 EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          </button>
+          <ul class="lang-menu">
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/"
+                   hreflang="en"
+                   class="lang-active">
+                  <span class="lang-flag">🇬🇧</span>
+                  <span>English</span>
+                </a>
+              </li>
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/pt-br/"
+                   hreflang="pt-br"
+                   class="">
+                  <span class="lang-flag">🇧🇷</span>
+                  <span>Português</span>
+                </a>
+              </li>
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/es/"
+                   hreflang="es"
+                   class="">
+                  <span class="lang-flag">🇪🇸</span>
+                  <span>Español</span>
+                </a>
+              </li>
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/fr/"
+                   hreflang="fr"
+                   class="">
+                  <span class="lang-flag">🇫🇷</span>
+                  <span>Français</span>
+                </a>
+              </li>
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/de/"
+                   hreflang="de"
+                   class="">
+                  <span class="lang-flag">🇩🇪</span>
+                  <span>Deutsch</span>
+                </a>
+              </li>
+            
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  
+
+
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Open Source · Self-hosted · WireGuard</div>
+    <h1>Self-hosted VPN management<br>and <em>Zero Trust</em> access control.</h1>
+    <p class="hero-sub">WireGuard instances, peer management, firewall, DNS, and secure app publishing — all running on your infrastructure.</p>
+    <p class="hero-note">Free and open source. Nothing leaves your server.</p>
+    <div class="btn-group">
+      <a href="/deployment/" class="btn btn-primary">Quick Install</a>
+      <a href="https://github.com/eduardogsilva/wireguard_webadmin" target="_blank" rel="noopener" class="btn btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        View on GitHub
+      </a>
+    </div>
+
+    
+    
+    
+    <div class="hero-screenshot">
+      <div class="theme-crossfade">
+        <img class="crossfade-light" src="/images/peer_list_light.png" alt="wireguard_webadmin — light mode" loading="eager">
+        <img class="crossfade-dark"  src="/images/peer_list_dark.png"  alt="wireguard_webadmin — dark mode"  loading="eager">
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+
+<section>
+  <div class="container">
+    <div class="section-label">What it does</div>
+    <h2 class="section-title">More than a VPN panel.</h2>
+    <p class="section-sub">A complete network management stack — from WireGuard peer control to Zero Trust application gateway.</p>
+
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-icon">⚙️</div>
+        <h3>Manage</h3>
+        <ul class="pillar-list">
+          <li>Multiple WireGuard instances</li><li>Peer management with traffic graphs</li><li>Firewall rules &amp; port forwarding</li><li>DNS resolver with blacklists</li><li>VPN invite links with QR code</li>
+        </ul>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">🔒</div>
+        <h3>Protect</h3>
+        <ul class="pillar-list">
+          <li>Zero Trust application gateway</li><li>TOTP two-factor authentication</li><li>Altcha proof-of-work anti-brute-force</li><li>IP ACL per application</li><li>OIDC coming soon</li>
+        </ul>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">⚡</div>
+        <h3>Automate</h3>
+        <ul class="pillar-list">
+          <li>Scheduled peer enable/disable</li><li>Routing templates</li><li>Invite links with expiry</li><li>API v2 for automation</li><li>Multi-user with role permissions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="container">
+    <div class="spotlight">
+      <div class="spotlight-content">
+        <div class="section-label">Zero Trust</div>
+        <h2>Publish internal apps securely — without opening them to the world.</h2>
+        <p>The built-in application gateway lets you expose services like Grafana, Proxmox, or any internal web app with proper authentication in front, without punching holes in your firewall or relying on a third-party tunnel.</p>
+        <p>Every request passes through the gatekeeper: TOTP, local credentials, IP ACL, and browser validation with proof-of-work (Altcha) to stop automated attacks.</p>
+        <div class="tag-list">
+          <span class="tag green">TOTP</span><span class="tag blue">IP ACL</span><span class="tag purple">Altcha PoW</span><span class="tag ">Self-hosted</span>
+        </div>
+        <br>
+        <a href="/zero-trust/" class="btn btn-outline">Learn more →</a>
+      </div>
+      <div class="spotlight-image">
+        
+        
+        <img src="/images/zero_trust_app.png" alt="Zero Trust application gateway" loading="lazy">
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="container">
+    <div class="spotlight reverse">
+      <div class="spotlight-content">
+        <div class="section-label">Visibility</div>
+        <h2>Full visibility into every peer.</h2>
+        <p>Each peer gets a dedicated detail view: real-time connection status, cumulative traffic, time-series bandwidth graphs, last handshake, and the QR code for instant re-provisioning.</p>
+        <p>Traffic history is stored per peer so you can audit usage over time — not just since the last restart.</p>
+        <div class="tag-list">
+          <span class="tag blue">Traffic graphs</span><span class="tag green">Last handshake</span><span class="tag ">QR code</span><span class="tag ">Per-peer history</span>
+        </div>
+      </div>
+      <div class="spotlight-image">
+        
+        
+        <img src="/images/peer_details.png" alt="Peer details — traffic graph and metrics" loading="lazy">
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="container">
+    <div class="spotlight">
+      <div class="spotlight-content">
+        <div class="section-label">Automation</div>
+        <h2>Time-based peer access control.</h2>
+        <p>Define schedules for each VPN peer. Access is automatically enabled and disabled based on the time window you configure — no manual intervention needed.</p>
+        <p>Useful for contractors, temporary access, shift-based policies, or anything where access should be bounded in time without relying on humans to remember to revoke it.</p>
+        <div class="tag-list">
+          <span class="tag green">Time-based ACL</span><span class="tag blue">Automated</span><span class="tag ">Per-peer</span>
+        </div>
+      </div>
+      <div class="spotlight-image">
+        
+        
+        <img src="/images/scheduler.png" alt="Peer scheduling interface" loading="lazy">
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section>
+  <div class="container">
+    <div class="section-label">Interface</div>
+    <h2 class="section-title">Built for how sysadmins actually work.</h2>
+    <p class="section-sub">Every feature is a screen away. No buried menus, no wizard flows.</p>
+
+    <div class="screenshot-grid">
+      
+      
+      
+      <div class="screenshot-item">
+        
+        <img src="/images/firewall.png" alt="Firewall rule management" loading="lazy">
+        <div class="screenshot-caption">
+          <span class="screenshot-label">Firewall</span>
+          <p>Per-instance iptables rules, port forwarding, and outbound ACLs — managed from the UI.</p>
+        </div>
+      </div>
+      
+      
+      
+      <div class="screenshot-item">
+        
+        <img src="/images/dns.png" alt="DNS management with blacklists" loading="lazy">
+        <div class="screenshot-caption">
+          <span class="screenshot-label">DNS</span>
+          <p>Built-in resolver with category-based blacklists: ads, malware, tracking, adult content.</p>
+        </div>
+      </div>
+      
+      
+      
+      <div class="screenshot-item">
+        
+        <img src="/images/vpn_invite.png" alt="VPN invite link with QR code" loading="lazy">
+        <div class="screenshot-caption">
+          <span class="screenshot-label">Invite links</span>
+          <p>Generate a shareable link with QR code and config file. The user scans or imports it directly into their WireGuard client.</p>
+        </div>
+      </div>
+      
+      
+      
+      <div class="screenshot-item">
+        
+        <img src="/images/routing_template.png" alt="Routing templates" loading="lazy">
+        <div class="screenshot-caption">
+          <span class="screenshot-label">Routing templates</span>
+          <p>Define allowed IPs and routing policies once, reuse across dozens of peers.</p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+<section id="deploy">
+  <div class="container">
+    <div class="deploy-teaser">
+      <div class="deploy-teaser-text">
+        <div class="section-label">Getting started</div>
+        <h2>As easy as <span class="cmd-inline">docker compose up</span>.</h2>
+        <p class="section-sub">Runs on any Linux machine with Docker. Caddy handles HTTPS automatically.</p>
+      </div>
+      <a href="/deployment/" class="btn btn-primary">Deployment guide →</a>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="container">
+    <div class="section-label">Full feature set</div>
+    <h2 class="section-title">Everything you need. Nothing you don&#39;t.</h2>
+
+    <div class="feature-grid">
+      
+      <div class="feature-item">
+        <div class="feature-icon">🖥️</div>
+        <div>
+          <h4>Multi-arch</h4>
+          <p>Native images for amd64 and arm64</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">🌙</div>
+        <div>
+          <h4>Dark mode</h4>
+          <p>Full dark/light interface toggle</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">👥</div>
+        <div>
+          <h4>Multi-user</h4>
+          <p>Role-based permissions per user</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">📊</div>
+        <div>
+          <h4>Traffic history</h4>
+          <p>Per-peer bandwidth graphs over time</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">🚫</div>
+        <div>
+          <h4>DNS blacklist</h4>
+          <p>Block categories: ads, malware, tracking</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">🗺️</div>
+        <div>
+          <h4>Routing templates</h4>
+          <p>Reusable routing configs across peers</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">🔗</div>
+        <div>
+          <h4>API v2</h4>
+          <p>REST API for external automation</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">🧪</div>
+        <div>
+          <h4>Debug console</h4>
+          <p>Built-in diagnostic and debug tools</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">📨</div>
+        <div>
+          <h4>Invite links</h4>
+          <p>QR code invites with optional expiry</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">🔥</div>
+        <div>
+          <h4>Firewall</h4>
+          <p>Per-instance firewall rule management</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">📡</div>
+        <div>
+          <h4>Port forwarding</h4>
+          <p>Forward ports through VPN peers</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">🔐</div>
+        <div>
+          <h4>TOTP / 2FA</h4>
+          <p>Two-factor auth for admin and app gateway</p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="container">
+    <div class="section-label">Roadmap</div>
+    <h2 class="section-title">What&#39;s coming.</h2>
+
+    <div class="roadmap-list">
+      
+      <div class="roadmap-item">
+        <div class="roadmap-badge soon">Coming soon</div>
+        <div>
+          <h4>OIDC Authentication</h4>
+          <p>Sign in with your existing identity provider — Keycloak, Authentik, Google Workspace, or any OIDC-compatible IdP.</p>
+        </div>
+      </div>
+      
+      <div class="roadmap-item">
+        <div class="roadmap-badge wip">In progress</div>
+        <div>
+          <h4>App Gateway / Gatekeeper v2</h4>
+          <p>A more capable application gateway with granular per-route policies, session management, and improved audit logging.</p>
+        </div>
+      </div>
+      
+      <div class="roadmap-item">
+        <div class="roadmap-badge planned">Planned</div>
+        <div>
+          <h4>Peer groups &amp; bulk actions</h4>
+          <p>Group peers by team, project, or access level. Apply firewall rules, routing templates, and schedules to whole groups at once.</p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">wireguard_<span>webadmin</span></div>
+      <ul class="footer-links">
+        <li><a href="https://github.com/eduardogsilva/wireguard_webadmin" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/eduardogsilva/wireguard_webadmin/discussions" target="_blank" rel="noopener">Discussions</a></li>
+        <li><a href="/zero-trust/">Zero Trust</a></li>
+        <li><a href="/deployment/">Deployment</a></li>
+        <li><a href="/get-involved/">Get Involved</a></li>
+      </ul>
+      <div class="footer-built">
+        built by <a href="https://github.com/eduardogsilva" target="_blank" rel="noopener">@eduardogsilva</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const group = btn.closest('.tab-group');
+    group.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    group.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    group.querySelector('#' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+
+const hamburger = document.querySelector('.hamburger');
+const navLinks  = document.querySelector('.nav-links');
+if (hamburger) {
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = navLinks.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', (e) => {
+    if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+      navLinks.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', false);
+    }
+  });
+}
+
+
+const langBtn = document.querySelector('.lang-btn');
+const langDropdown = document.querySelector('.lang-dropdown');
+if (langBtn) {
+  langBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = langDropdown.classList.toggle('open');
+    langBtn.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', (e) => {
+    if (!langDropdown.contains(e.target)) {
+      langDropdown.classList.remove('open');
+      langBtn.setAttribute('aria-expanded', false);
+    }
+  });
+  
+  langDropdown.querySelectorAll('.lang-menu a').forEach(a => {
+    a.addEventListener('click', () => localStorage.setItem('lang-manual', '1'));
+  });
+}
+
+
+if (location.pathname === '/' && !localStorage.getItem('lang-manual')) {
+  const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+  const map = [
+    { prefix: 'pt', url: '/pt-br/' },
+    { prefix: 'es', url: '/es/' },
+    { prefix: 'fr', url: '/fr/' },
+    { prefix: 'de', url: '/de/' },
+  ];
+  const match = map.find(m => lang.startsWith(m.prefix));
+  if (match) location.replace(match.url);
+}
+</script>
+
+</body>
+</html>

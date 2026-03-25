@@ -1,21 +1,541 @@
-<!doctype html><html lang=pt-BR><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Guia de Deploy · wireguard_webadmin</title><meta name=description content="Guia passo a passo para fazer o deploy do wireguard_webadmin com Docker Compose, Caddy e HTTPS automático."><link rel=alternate hreflang=en-us href=https://wireguard-webadmin.com/deployment/><link rel=alternate hreflang=pt-BR href=https://wireguard-webadmin.com/pt-br/deployment/><link rel=alternate hreflang=es href=https://wireguard-webadmin.com/es/deployment/><link rel=alternate hreflang=fr href=https://wireguard-webadmin.com/fr/deployment/><link rel=alternate hreflang=de href=https://wireguard-webadmin.com/de/deployment/><link rel=alternate hreflang=x-default href=https://wireguard-webadmin.com/><meta property="og:type" content="website"><meta property="og:url" content="https://wireguard-webadmin.com/pt-br/deployment/"><meta property="og:title" content="Guia de Deploy · wireguard_webadmin"><meta property="og:description" content="Guia passo a passo para fazer o deploy do wireguard_webadmin com Docker Compose, Caddy e HTTPS automático."><meta property="og:image" content="https://wireguard-webadmin.com/og-image.png"><meta property="og:image:width" content="1280"><meta property="og:image:height" content="800"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="Guia de Deploy · wireguard_webadmin"><meta name=twitter:description content="Guia passo a passo para fazer o deploy do wireguard_webadmin com Docker Compose, Caddy e HTTPS automático."><meta name=twitter:image content="https://wireguard-webadmin.com/og-image.png"><link rel=icon type=image/svg+xml href=/favicon.svg><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel=stylesheet><link rel=stylesheet href=/css/main.min.css></head><body><header class=site-header><div class=container><nav class=nav-inner><a href=/pt-br/ class=nav-logo>wireguard_<span>webadmin</span></a>
-<button class=hamburger aria-label="Toggle menu" aria-expanded=false>
-<span></span><span></span><span></span></button><ul class=nav-links><li><a href=/pt-br/>Início</a></li><li><a href=/pt-br/zero-trust/>Zero Trust</a></li><li><a href=/pt-br/deployment/ aria-current=page>Instalação</a></li><li><a href=/pt-br/get-involved/>Contribua</a></li><li><a href=https://github.com/eduardogsilva/wireguard_webadmin target=_blank rel=noopener class=nav-github><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374.0.0 5.373.0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931.0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176.0.0 1.008-.322 3.301 1.23A11.509 11.509.0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221.0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-GitHub</a></li><li class=nav-lang-sep></li><li class=lang-dropdown><button class=lang-btn aria-expanded=false>
-🇧🇷 PT
-<svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button><ul class=lang-menu><li><a href=/deployment/ hreflang=en><span class=lang-flag>🇬🇧</span>
-<span>English</span></a></li><li><a href=/pt-br/deployment/ hreflang=pt-br class=lang-active><span class=lang-flag>🇧🇷</span>
-<span>Português</span></a></li><li><a href=/es/deployment/ hreflang=es><span class=lang-flag>🇪🇸</span>
-<span>Español</span></a></li><li><a href=/fr/deployment/ hreflang=fr><span class=lang-flag>🇫🇷</span>
-<span>Français</span></a></li><li><a href=/de/deployment/ hreflang=de><span class=lang-flag>🇩🇪</span>
-<span>Deutsch</span></a></li></ul></li></ul></nav></div></header><main><section class=page-hero><div class=container><div class=section-label>Primeiros passos</div><h1>Guia de Deploy</h1><p class=section-sub style=margin-top:1rem>Do zero até um painel administrativo de WireGuard VPN funcional em menos de cinco minutos.</p></div></section><div class=page-content><div class=container><h2 id=pré-requisitos>Pré-requisitos</h2><ul><li>Um servidor Linux acessível a partir de onde você vai administrá-lo</li><li><a href=https://docs.docker.com/engine/install/>Docker</a> e <a href=https://docs.docker.com/compose/install/>Docker Compose</a> instalados</li><li>Um nome de domínio apontando para o IP do seu servidor</li><li>Portas <strong>80</strong> e <strong>443</strong> abertas para o Caddy, além da porta UDP do WireGuard aberta (padrão <strong>51820</strong>)</li></ul><div class=callout><p><strong>O Caddy precisa de um nome DNS válido</strong>, interno ou público, apontando para o seu servidor para conseguir obter e renovar certificados SSL automaticamente.</p></div><hr><h2 id=deploy>Deploy</h2><div class=tab-group><div class=tabs><button class="tab-btn active" data-tab=dep-step-1>1. Criar diretório</button>
-<button class=tab-btn data-tab=dep-step-2>2. Baixar arquivo compose</button>
-<button class=tab-btn data-tab=dep-step-3>3. Configurar .env</button>
-<button class=tab-btn data-tab=dep-step-4>4. Executar</button></div><div class=tab-wrap><div class="tab-panel active" id=dep-step-1><pre><code>mkdir wireguard_webadmin && cd wireguard_webadmin</code></pre></div><div class=tab-panel id=dep-step-2><pre><code>wget -O docker-compose.yml \
-  https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-caddy.yml</code></pre></div><div class=tab-panel id=dep-step-3><p>Crie um arquivo <code>.env</code> no mesmo diretório. Defina <code>SERVER_ADDRESS</code> com o seu domínio:</p><pre><code>SERVER_ADDRESS=vpn.example.com
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  
+
+  <title>Guia de Deploy · wireguard_webadmin</title>
+  <meta name="description" content="Guia passo a passo para fazer o deploy do wireguard_webadmin com Docker Compose, Caddy e HTTPS automático.">
+
+  
+  
+  <link rel="alternate" hreflang="en-us" href="https://wireguard-webadmin.com/deployment/">
+  
+  <link rel="alternate" hreflang="pt-BR" href="https://wireguard-webadmin.com/pt-br/deployment/">
+  
+  <link rel="alternate" hreflang="es" href="https://wireguard-webadmin.com/es/deployment/">
+  
+  <link rel="alternate" hreflang="fr" href="https://wireguard-webadmin.com/fr/deployment/">
+  
+  <link rel="alternate" hreflang="de" href="https://wireguard-webadmin.com/de/deployment/">
+  
+  <link rel="alternate" hreflang="x-default" href="https://wireguard-webadmin.com/">
+
+  
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://wireguard-webadmin.com/pt-br/deployment/">
+  <meta property="og:title"       content="Guia de Deploy · wireguard_webadmin">
+  <meta property="og:description" content="Guia passo a passo para fazer o deploy do wireguard_webadmin com Docker Compose, Caddy e HTTPS automático.">
+  <meta property="og:image"       content="https://wireguard-webadmin.com/og-image.png">
+  <meta property="og:image:width"  content="1280">
+  <meta property="og:image:height" content="800">
+
+  
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Guia de Deploy · wireguard_webadmin">
+  <meta name="twitter:description" content="Guia passo a passo para fazer o deploy do wireguard_webadmin com Docker Compose, Caddy e HTTPS automático.">
+  <meta name="twitter:image"       content="https://wireguard-webadmin.com/og-image.png">
+
+  
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="/css/main.min.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="nav-inner">
+      <a href="/pt-br/" class="nav-logo">wireguard_<span>webadmin</span></a>
+      <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        
+        
+        <li>
+          <a href="/pt-br/"
+             
+             
+             >
+            
+            Início
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="/pt-br/zero-trust/"
+             
+             
+             >
+            
+            Zero Trust
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="/pt-br/deployment/"
+             
+             aria-current="page"
+             >
+            
+            Instalação
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="/pt-br/get-involved/"
+             
+             
+             >
+            
+            Contribua
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="https://github.com/eduardogsilva/wireguard_webadmin"
+             target="_blank" rel="noopener"
+             
+             class="nav-github">
+            
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            
+            GitHub
+          </a>
+        </li>
+        
+        <li class="nav-lang-sep"></li>
+        <li class="lang-dropdown">
+          <button class="lang-btn" aria-expanded="false">
+            🇧🇷 PT
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          </button>
+          <ul class="lang-menu">
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/deployment/"
+                   hreflang="en"
+                   class="">
+                  <span class="lang-flag">🇬🇧</span>
+                  <span>English</span>
+                </a>
+              </li>
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/pt-br/deployment/"
+                   hreflang="pt-br"
+                   class="lang-active">
+                  <span class="lang-flag">🇧🇷</span>
+                  <span>Português</span>
+                </a>
+              </li>
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/es/deployment/"
+                   hreflang="es"
+                   class="">
+                  <span class="lang-flag">🇪🇸</span>
+                  <span>Español</span>
+                </a>
+              </li>
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/fr/deployment/"
+                   hreflang="fr"
+                   class="">
+                  <span class="lang-flag">🇫🇷</span>
+                  <span>Français</span>
+                </a>
+              </li>
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/de/deployment/"
+                   hreflang="de"
+                   class="">
+                  <span class="lang-flag">🇩🇪</span>
+                  <span>Deutsch</span>
+                </a>
+              </li>
+            
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  
+<section class="page-hero">
+  <div class="container">
+    <div class="section-label">Primeiros passos</div>
+    <h1>Guia de Deploy</h1>
+    <p class="section-sub" style="margin-top:1rem">Do zero até um painel administrativo de WireGuard VPN funcional em menos de cinco minutos.</p>
+  </div>
+</section>
+
+<div class="page-content">
+  <div class="container">
+    <h2 id="pré-requisitos">Pré-requisitos</h2>
+<ul>
+<li>Um servidor Linux acessível a partir de onde você vai administrá-lo</li>
+<li><a href="https://docs.docker.com/engine/install/">Docker</a> e <a href="https://docs.docker.com/compose/install/">Docker Compose</a> instalados</li>
+<li>Um nome de domínio apontando para o IP do seu servidor</li>
+<li>Portas <strong>80</strong> e <strong>443</strong> abertas para o Caddy, além da porta UDP do WireGuard aberta (padrão <strong>51820</strong>)</li>
+</ul>
+<div class="callout">
+  <p><strong>O Caddy precisa de um nome DNS válido</strong>, interno ou público, apontando para o seu servidor para conseguir obter e renovar certificados SSL automaticamente.</p>
+</div>
+<hr>
+<h2 id="deploy">Deploy</h2>
+<div class="tab-group">
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="dep-step-1">1. Criar diretório</button>
+    <button class="tab-btn" data-tab="dep-step-2">2. Baixar arquivo compose</button>
+    <button class="tab-btn" data-tab="dep-step-3">3. Configurar .env</button>
+    <button class="tab-btn" data-tab="dep-step-4">4. Executar</button>
+  </div>
+  <div class="tab-wrap">
+    <div class="tab-panel active" id="dep-step-1">
+<pre><code>mkdir wireguard_webadmin && cd wireguard_webadmin</code></pre>
+    </div>
+    <div class="tab-panel" id="dep-step-2">
+<pre><code>wget -O docker-compose.yml \
+  https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-caddy.yml</code></pre>
+    </div>
+    <div class="tab-panel" id="dep-step-3">
+<p>Crie um arquivo <code>.env</code> no mesmo diretório. Defina <code>SERVER_ADDRESS</code> com o seu domínio:</p>
+<pre><code>SERVER_ADDRESS=vpn.example.com
 DEBUG_MODE=False
-TIMEZONE=America/Sao_Paulo</code></pre><p>Veja abaixo a <a href=#env-reference>referência do .env</a> com todas as variáveis disponíveis.</p></div><div class=tab-panel id=dep-step-4><pre><code>docker compose up -d</code></pre><p>Acesse o painel em <code>https://vpn.example.com</code>. O Caddy obtém e renova certificados SSL automaticamente.</p></div></div></div><hr><h2 id=env-reference>Referência do .env</h2><table class=env-table><thead><tr><th>Variável</th><th>Obrigatória</th><th>Descrição</th></tr></thead><tbody><tr><td>SERVER_ADDRESS</td><td>Sim</td><td>Nome DNS ou IP do seu servidor. Deve corresponder exatamente ao que você digita no navegador. Se não corresponder, ocorrerão erros de CSRF.</td></tr><tr><td>DEBUG_MODE</td><td>Não</td><td>Defina como <code>True</code> para ativar o modo debug do Django. Nunca use em produção. Padrão: <code>False</code>.</td></tr><tr><td>TIMEZONE</td><td>Não</td><td>Fuso horário da aplicação. Use um valor da <a href=https://en.wikipedia.org/wiki/List_of_tz_database_time_zones target=_blank rel=noopener>base tz</a>. Padrão: <code>America/Sao_Paulo</code>.</td></tr><tr><td>EXTRA_ALLOWED_HOSTS</td><td>Não</td><td>Hosts adicionais que o Django deve aceitar, separados por vírgula. <code>SERVER_ADDRESS</code> sempre é incluído. Exemplo: <code>app1.example.com,app2.example.com:8443</code>.</td></tr><tr><td>WIREGUARD_STATUS_CACHE_ENABLED</td><td>Não</td><td>Armazena o status do WireGuard em cache para reduzir chamadas ao <code>wg</code>. Padrão: <code>True</code>.</td></tr><tr><td>WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL</td><td>Não</td><td>Com que frequência o cache é atualizado, em segundos. Valores permitidos: <code>30</code>, <code>60</code>, <code>150</code>, <code>300</code>. Padrão: <code>60</code>.</td></tr><tr><td>WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT</td><td>Não</td><td>Quantos snapshots em cache devem ser pré-carregados ao abrir a página (0-9). Valores mais altos preenchem os gráficos de tráfego antes. Reduza se a lista de peers parecer lenta. Padrão: <code>9</code>.</td></tr></tbody></table><hr><h2 id=atualização>Atualização</h2><div class="callout green"><p><strong>Os dados ficam persistidos em volumes Docker.</strong> Atualizar não afeta seus peers, regras de firewall, entradas DNS nem qualquer outra configuração.</p></div><div class=deploy-steps><div class=deploy-step-card><div class=deploy-step-num>01</div><div class=deploy-step-body><div class=deploy-step-label>Entre no diretório do projeto</div><pre><code>cd wireguard_webadmin</code></pre></div></div><div class=deploy-step-card><div class=deploy-step-num>02</div><div class=deploy-step-body><div class=deploy-step-label>Pare os serviços e baixe as imagens mais recentes</div><pre><code>docker compose down
-docker compose pull</code></pre></div></div><div class=deploy-step-card><div class=deploy-step-num>03</div><div class=deploy-step-body><div class=deploy-step-label>Faça backup dos seus dados</div><pre><code>tar cvfz wireguard-webadmin-backup-$(date +%Y-%m-%d-%H%M%S).tar.gz \
+TIMEZONE=America/Sao_Paulo</code></pre>
+<p>Veja abaixo a <a href="#env-reference">referência do .env</a> com todas as variáveis disponíveis.</p>
+    </div>
+    <div class="tab-panel" id="dep-step-4">
+<pre><code>docker compose up -d</code></pre>
+<p>Acesse o painel em <code>https://vpn.example.com</code>. O Caddy obtém e renova certificados SSL automaticamente.</p>
+    </div>
+  </div>
+</div>
+<hr>
+<h2 id="env-reference">Referência do .env</h2>
+<table class="env-table">
+  <thead>
+    <tr>
+      <th>Variável</th>
+      <th>Obrigatória</th>
+      <th>Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>SERVER_ADDRESS</td>
+      <td>Sim</td>
+      <td>Nome DNS ou IP do seu servidor. Deve corresponder exatamente ao que você digita no navegador. Se não corresponder, ocorrerão erros de CSRF.</td>
+    </tr>
+    <tr>
+      <td>DEBUG_MODE</td>
+      <td>Não</td>
+      <td>Defina como <code>True</code> para ativar o modo debug do Django. Nunca use em produção. Padrão: <code>False</code>.</td>
+    </tr>
+    <tr>
+      <td>TIMEZONE</td>
+      <td>Não</td>
+      <td>Fuso horário da aplicação. Use um valor da <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank" rel="noopener">base tz</a>. Padrão: <code>America/Sao_Paulo</code>.</td>
+    </tr>
+    <tr>
+      <td>EXTRA_ALLOWED_HOSTS</td>
+      <td>Não</td>
+      <td>Hosts adicionais que o Django deve aceitar, separados por vírgula. <code>SERVER_ADDRESS</code> sempre é incluído. Exemplo: <code>app1.example.com,app2.example.com:8443</code>.</td>
+    </tr>
+    <tr>
+      <td>WIREGUARD_STATUS_CACHE_ENABLED</td>
+      <td>Não</td>
+      <td>Armazena o status do WireGuard em cache para reduzir chamadas ao <code>wg</code>. Padrão: <code>True</code>.</td>
+    </tr>
+    <tr>
+      <td>WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL</td>
+      <td>Não</td>
+      <td>Com que frequência o cache é atualizado, em segundos. Valores permitidos: <code>30</code>, <code>60</code>, <code>150</code>, <code>300</code>. Padrão: <code>60</code>.</td>
+    </tr>
+    <tr>
+      <td>WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT</td>
+      <td>Não</td>
+      <td>Quantos snapshots em cache devem ser pré-carregados ao abrir a página (0-9). Valores mais altos preenchem os gráficos de tráfego antes. Reduza se a lista de peers parecer lenta. Padrão: <code>9</code>.</td>
+    </tr>
+    <tr>
+      <td>DISABLE_AUTO_APPLY</td>
+      <td>Não</td>
+      <td>Desativa a aplicação automática das alterações de configuração do WireGuard e do DNS. Por padrão, mudanças em peers e DNS são aplicadas imediatamente. Defina como <code>true</code> para aplicar as alterações manualmente. Padrão: <code>false</code>.</td>
+    </tr>
+    <tr>
+      <td>WIREGUARD_MTU</td>
+      <td>Não</td>
+      <td>MTU personalizado para interfaces WireGuard (servidor e clientes). Altere somente se souber o que está fazendo. Deve ser um inteiro entre <code>1280</code> e <code>9000</code>. Após alterar, reexporte e redistribua todos os arquivos de configuração dos clientes — MTU divergente entre servidor e clientes pode causar problemas de conectividade. Padrão: <code>1420</code>.</td>
+    </tr>
+    <tr>
+      <td>VPN_CLIENTS_CAN_ACCESS_DJANGO</td>
+      <td>Não</td>
+      <td>Permite que clientes VPN acessem a interface web diretamente pela interface interna em <code>http://ip_ou_hostname:8000</code>. Quando habilitado, o endereço interno incluindo a porta <code>:8000</code> deve ser adicionado a <code>EXTRA_ALLOWED_HOSTS</code>, caso contrário o Django bloqueará a requisição. Padrão: <code>False</code>.</td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="atualização">Atualização</h2>
+<div class="callout green">
+  <p><strong>Os dados ficam persistidos em volumes Docker.</strong> Atualizar não afeta seus peers, regras de firewall, entradas DNS nem qualquer outra configuração.</p>
+</div>
+<div class="deploy-steps">
+  <div class="deploy-step-card">
+    <div class="deploy-step-num">01</div>
+    <div class="deploy-step-body">
+      <div class="deploy-step-label">Entre no diretório do projeto</div>
+      <pre><code>cd wireguard_webadmin</code></pre>
+    </div>
+  </div>
+  <div class="deploy-step-card">
+    <div class="deploy-step-num">02</div>
+    <div class="deploy-step-body">
+      <div class="deploy-step-label">Pare os serviços e baixe as imagens mais recentes</div>
+      <pre><code>docker compose down
+docker compose pull</code></pre>
+    </div>
+  </div>
+  <div class="deploy-step-card">
+    <div class="deploy-step-num">03</div>
+    <div class="deploy-step-body">
+      <div class="deploy-step-label">Faça backup dos seus dados</div>
+      <pre><code>tar cvfz wireguard-webadmin-backup-$(date +%Y-%m-%d-%H%M%S).tar.gz \
   /var/lib/docker/volumes/wireguard_webadmin_wireguard/_data/ \
-  /var/lib/docker/volumes/wireguard_webadmin_rrd_data/_data/</code></pre></div></div><div class=deploy-step-card><div class=deploy-step-num>04</div><div class=deploy-step-body><div class=deploy-step-label>Atualize o arquivo compose</div><pre><code>wget -O docker-compose.yml \
-  https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-caddy.yml</code></pre></div></div><div class=deploy-step-card><div class=deploy-step-num>05</div><div class=deploy-step-body><div class=deploy-step-label>Suba a stack atualizada</div><pre><code>docker compose up -d</code></pre></div></div><div class=deploy-step-card><div class=deploy-step-num>06</div><div class=deploy-step-body><div class=deploy-step-label>Verifique os logs em busca de erros inesperados</div><pre><code>docker compose logs wireguard_webadmin</code></pre></div></div></div><hr><h2 id=solução-de-problemas>Solução de problemas</h2><h3 id=o-caddy-não-está-obtendo-certificado>O Caddy não está obtendo certificado</h3><ul><li>Confirme que o registro A do domínio aponta para o IP público do servidor</li><li>Verifique se as portas 80 e 443 estão abertas e não bloqueadas na rede</li><li>Consulte os logs do Caddy: <code>docker compose logs caddy</code></li></ul><h3 id=o-painel-não-carrega>O painel não carrega</h3><ul><li>Verifique se todos os containers estão em execução: <code>docker compose ps</code></li><li>Procure por erros: <code>docker compose logs wireguard_webadmin</code></li><li>Confirme que <code>SERVER_ADDRESS</code> em <code>.env</code> corresponde exatamente ao que você digita no navegador</li></ul><h3 id=erros-de-csrf-no-login>Erros de CSRF no login</h3><p><code>SERVER_ADDRESS</code> está configurado incorretamente. Ele precisa corresponder ao hostname, e à porta se não for a padrão, usado para acessar o painel. Atualize o <code>.env</code> e reinicie com <code>docker compose up -d</code>.</p><h3 id=os-peers-do-wireguard-não-conseguem-se-conectar>Os peers do WireGuard não conseguem se conectar</h3><ul><li>Confirme que a porta UDP do WireGuard está aberta no firewall do host. O padrão é <strong>51820</strong>, mas se você estiver executando múltiplas instâncias cada uma precisa de sua própria porta.</li><li>Garanta que o intervalo de portas UDP declarado em <code>docker-compose.yml</code> corresponda ao que está configurado em cada instância do WireGuard dentro do painel. Se houver divergência, o container não exporá a porta correta no host.</li><li>Verifique se o IP forwarding está habilitado no host: <code>sysctl net.ipv4.ip_forward</code></li></ul><hr><h2 id=o-que-está-rodando>O que está rodando</h2><table class=env-table><thead><tr><th>Serviço</th><th>Função</th></tr></thead><tbody><tr><td>wireguard-webadmin</td><td>Aplicação Django: interface web e API</td></tr><tr><td>caddy</td><td>Proxy reverso e TLS automático</td></tr><tr><td>auth-gateway</td><td>Camada de autorização Zero Trust: aplica verificações de identidade antes de encaminhar para o upstream</td></tr><tr><td>cron</td><td>Tarefas agendadas: ativação/desativação de peers e atualização de cache</td></tr><tr><td>rrdtool</td><td>Histórico de tráfego: coleta de dados RRD e geração de gráficos</td></tr><tr><td>dns</td><td>Resolvedor baseado em dnsmasq com suporte a listas de bloqueio por categoria</td></tr></tbody></table></div></div></main><footer class=site-footer><div class=container><div class=footer-inner><div class=footer-logo>wireguard_<span>webadmin</span></div><ul class=footer-links><li><a href=https://github.com/eduardogsilva/wireguard_webadmin target=_blank rel=noopener>GitHub</a></li><li><a href=https://github.com/eduardogsilva/wireguard_webadmin/discussions target=_blank rel=noopener>Discussions</a></li><li><a href=/pt-br/zero-trust/>Zero Trust</a></li><li><a href=/pt-br/deployment/>Deployment</a></li><li><a href=/pt-br/get-involved/>Get Involved</a></li></ul><div class=footer-built>desenvolvido por <a href=https://github.com/eduardogsilva target=_blank rel=noopener>@eduardogsilva</a></div></div></div></footer><script>document.querySelectorAll(".tab-btn").forEach(e=>{e.addEventListener("click",()=>{const t=e.closest(".tab-group");t.querySelectorAll(".tab-btn").forEach(e=>e.classList.remove("active")),t.querySelectorAll(".tab-panel").forEach(e=>e.classList.remove("active")),e.classList.add("active"),t.querySelector("#"+e.dataset.tab).classList.add("active")})});const hamburger=document.querySelector(".hamburger"),navLinks=document.querySelector(".nav-links");hamburger&&(hamburger.addEventListener("click",e=>{e.stopPropagation();const t=navLinks.classList.toggle("open");hamburger.classList.toggle("open",t),hamburger.setAttribute("aria-expanded",t)}),document.addEventListener("click",e=>{!navLinks.contains(e.target)&&!hamburger.contains(e.target)&&(navLinks.classList.remove("open"),hamburger.classList.remove("open"),hamburger.setAttribute("aria-expanded",!1))}));const langBtn=document.querySelector(".lang-btn"),langDropdown=document.querySelector(".lang-dropdown");if(langBtn&&(langBtn.addEventListener("click",e=>{e.stopPropagation();const t=langDropdown.classList.toggle("open");langBtn.setAttribute("aria-expanded",t)}),document.addEventListener("click",e=>{langDropdown.contains(e.target)||(langDropdown.classList.remove("open"),langBtn.setAttribute("aria-expanded",!1))}),langDropdown.querySelectorAll(".lang-menu a").forEach(e=>{e.addEventListener("click",()=>localStorage.setItem("lang-manual","1"))})),location.pathname==="/"&&!localStorage.getItem("lang-manual")){const t=(navigator.language||navigator.userLanguage||"en").toLowerCase(),n=[{prefix:"pt",url:"/pt-br/"},{prefix:"es",url:"/es/"},{prefix:"fr",url:"/fr/"},{prefix:"de",url:"/de/"}],e=n.find(e=>t.startsWith(e.prefix));e&&location.replace(e.url)}</script></body></html>
+  /var/lib/docker/volumes/wireguard_webadmin_rrd_data/_data/</code></pre>
+    </div>
+  </div>
+  <div class="deploy-step-card">
+    <div class="deploy-step-num">04</div>
+    <div class="deploy-step-body">
+      <div class="deploy-step-label">Atualize o arquivo compose</div>
+      <pre><code>wget -O docker-compose.yml \
+  https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/docker-compose-caddy.yml</code></pre>
+    </div>
+  </div>
+  <div class="deploy-step-card">
+    <div class="deploy-step-num">05</div>
+    <div class="deploy-step-body">
+      <div class="deploy-step-label">Suba a stack atualizada</div>
+      <pre><code>docker compose up -d</code></pre>
+    </div>
+  </div>
+  <div class="deploy-step-card">
+    <div class="deploy-step-num">06</div>
+    <div class="deploy-step-body">
+      <div class="deploy-step-label">Verifique os logs em busca de erros inesperados</div>
+      <pre><code>docker compose logs wireguard_webadmin</code></pre>
+    </div>
+  </div>
+</div>
+<hr>
+<h2 id="solução-de-problemas">Solução de problemas</h2>
+<h3 id="o-caddy-não-está-obtendo-certificado">O Caddy não está obtendo certificado</h3>
+<ul>
+<li>Confirme que o registro A do domínio aponta para o IP público do servidor</li>
+<li>Verifique se as portas 80 e 443 estão abertas e não bloqueadas na rede</li>
+<li>Consulte os logs do Caddy: <code>docker compose logs caddy</code></li>
+</ul>
+<h3 id="o-painel-não-carrega">O painel não carrega</h3>
+<ul>
+<li>Verifique se todos os containers estão em execução: <code>docker compose ps</code></li>
+<li>Procure por erros: <code>docker compose logs wireguard_webadmin</code></li>
+<li>Confirme que <code>SERVER_ADDRESS</code> em <code>.env</code> corresponde exatamente ao que você digita no navegador</li>
+</ul>
+<h3 id="erros-de-csrf-no-login">Erros de CSRF no login</h3>
+<p><code>SERVER_ADDRESS</code> está configurado incorretamente. Ele precisa corresponder ao hostname, e à porta se não for a padrão, usado para acessar o painel. Atualize o <code>.env</code> e reinicie com <code>docker compose up -d</code>.</p>
+<h3 id="os-peers-do-wireguard-não-conseguem-se-conectar">Os peers do WireGuard não conseguem se conectar</h3>
+<ul>
+<li>Confirme que a porta UDP do WireGuard está aberta no firewall do host. O padrão é <strong>51820</strong>, mas se você estiver executando múltiplas instâncias cada uma precisa de sua própria porta.</li>
+<li>Garanta que o intervalo de portas UDP declarado em <code>docker-compose.yml</code> corresponda ao que está configurado em cada instância do WireGuard dentro do painel. Se houver divergência, o container não exporá a porta correta no host.</li>
+<li>Verifique se o IP forwarding está habilitado no host: <code>sysctl net.ipv4.ip_forward</code></li>
+</ul>
+<hr>
+<h2 id="o-que-está-rodando">O que está rodando</h2>
+<table class="env-table">
+  <thead>
+    <tr><th>Serviço</th><th>Função</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>wireguard-webadmin</td><td>Aplicação Django: interface web e API</td></tr>
+    <tr><td>caddy</td><td>Proxy reverso e TLS automático</td></tr>
+    <tr><td>auth-gateway</td><td>Camada de autorização Zero Trust: aplica verificações de identidade antes de encaminhar para o upstream</td></tr>
+    <tr><td>cron</td><td>Tarefas agendadas: ativação/desativação de peers e atualização de cache</td></tr>
+    <tr><td>rrdtool</td><td>Histórico de tráfego: coleta de dados RRD e geração de gráficos</td></tr>
+    <tr><td>dns</td><td>Resolvedor baseado em dnsmasq com suporte a listas de bloqueio por categoria</td></tr>
+  </tbody>
+</table>
+
+  </div>
+</div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">wireguard_<span>webadmin</span></div>
+      <ul class="footer-links">
+        <li><a href="https://github.com/eduardogsilva/wireguard_webadmin" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/eduardogsilva/wireguard_webadmin/discussions" target="_blank" rel="noopener">Discussions</a></li>
+        <li><a href="/pt-br/zero-trust/">Zero Trust</a></li>
+        <li><a href="/pt-br/deployment/">Deployment</a></li>
+        <li><a href="/pt-br/get-involved/">Get Involved</a></li>
+      </ul>
+      <div class="footer-built">
+        desenvolvido por <a href="https://github.com/eduardogsilva" target="_blank" rel="noopener">@eduardogsilva</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const group = btn.closest('.tab-group');
+    group.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    group.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    group.querySelector('#' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+
+const hamburger = document.querySelector('.hamburger');
+const navLinks  = document.querySelector('.nav-links');
+if (hamburger) {
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = navLinks.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', (e) => {
+    if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+      navLinks.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', false);
+    }
+  });
+}
+
+
+const langBtn = document.querySelector('.lang-btn');
+const langDropdown = document.querySelector('.lang-dropdown');
+if (langBtn) {
+  langBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = langDropdown.classList.toggle('open');
+    langBtn.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', (e) => {
+    if (!langDropdown.contains(e.target)) {
+      langDropdown.classList.remove('open');
+      langBtn.setAttribute('aria-expanded', false);
+    }
+  });
+  
+  langDropdown.querySelectorAll('.lang-menu a').forEach(a => {
+    a.addEventListener('click', () => localStorage.setItem('lang-manual', '1'));
+  });
+}
+
+
+if (location.pathname === '/' && !localStorage.getItem('lang-manual')) {
+  const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+  const map = [
+    { prefix: 'pt', url: '/pt-br/' },
+    { prefix: 'es', url: '/es/' },
+    { prefix: 'fr', url: '/fr/' },
+    { prefix: 'de', url: '/de/' },
+  ];
+  const match = map.find(m => lang.startsWith(m.prefix));
+  if (match) location.replace(match.url);
+}
+</script>
+
+</body>
+</html>
