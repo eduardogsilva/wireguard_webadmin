@@ -148,7 +148,7 @@ def replace_message_variables(message: str, peer_invite: PeerInvite, invite_sett
 def get_peer_invite_data(peer_invite: PeerInvite, invite_settings: InviteSettings):
     data = {
         # The & at the end is to prevent the token from being concatenated with any other template text.
-        'url': f'{invite_settings.invite_url}?token{peer_invite.uuid}&',
+        'url': f'{invite_settings.invite_url}?token={peer_invite.uuid}&',
         'password': peer_invite.invite_password,
         'expiration': peer_invite.invite_expiration.isoformat(),
         'email_subject': replace_message_variables(invite_settings.invite_email_subject, peer_invite, invite_settings),
