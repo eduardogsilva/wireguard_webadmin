@@ -8,6 +8,7 @@ from django.utils.translation import gettext as _
 from scheduler.forms import ScheduleProfileForm
 from scheduler.forms import ScheduleSlotForm
 from scheduler.models import ScheduleProfile, ScheduleSlot, PeerScheduling
+from user_manager.models import UserAcl
 
 
 @login_required
@@ -21,6 +22,9 @@ def view_scheduler_profile_list(request):
 
 @login_required
 def view_manage_scheduler_profile(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+
     profile_uuid = request.GET.get('uuid')
     if profile_uuid:
         profile = get_object_or_404(ScheduleProfile, uuid=profile_uuid)
@@ -60,6 +64,9 @@ def view_manage_scheduler_profile(request):
 
 @login_required
 def view_delete_scheduler_profile(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+
     profile_uuid = request.GET.get('uuid')
     profile = get_object_or_404(ScheduleProfile, uuid=profile_uuid)
 
@@ -79,6 +86,9 @@ def view_delete_scheduler_profile(request):
 
 @login_required
 def view_manage_scheduler_slot(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+
     slot_uuid = request.GET.get('uuid')
     profile_uuid = request.GET.get('profile_uuid')
     
@@ -115,6 +125,9 @@ def view_manage_scheduler_slot(request):
 
 @login_required
 def view_delete_scheduler_slot(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=30).exists():
+        return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+
     slot_uuid = request.GET.get('uuid')
     slot = get_object_or_404(ScheduleSlot, uuid=slot_uuid)
     profile = slot.profile
