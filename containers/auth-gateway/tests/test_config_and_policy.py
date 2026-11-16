@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 import pyotp
+
 from auth_gateway.config_loader import load_runtime_config
 from auth_gateway.services.policy_engine import build_effective_policy, evaluate_ip_rules
 from auth_gateway.services.resolver import resolve_request_context
@@ -62,9 +63,15 @@ class AuthGatewayConfigTests(unittest.TestCase):
         self.assertFalse(evaluate_ip_rules("10.10.10.10", method.rules))
 
     def test_totp_verification_accepts_valid_tokens(self):
-        secret = "JBSWY3DPEHPK3PXP"
+        secret = "JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP"
         token = pyotp.TOTP(secret).now()
         self.assertTrue(verify_totp(secret, token))
+
+    def test_totp_verification_rejects_short_secrets(self):
+        self.assertFalse(verify_totp("JBSWY3DPEHPK3PXP", "123456"))
+
+    def test_totp_verification_rejects_invalid_secrets(self):
+        self.assertFalse(verify_totp("NOT-A-BASE32-SECRET!", "123456"))
 
     def test_caddyfile_uses_boundary_matchers_and_clears_identity_headers(self):
         caddyfile = build_caddyfile(
