@@ -1,4 +1,5 @@
 import ipaddress
+import re
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Column, HTML, Layout, Row, Submit
@@ -23,13 +24,17 @@ class WireGuardInstanceForm(forms.ModelForm):
     peer_list_refresh_interval = forms.IntegerField(label=_('Web Refresh Interval'), initial=10)
     dns_primary = forms.GenericIPAddressField(label=_('Primary DNS'), initial='1.1.1.1', required=False)
     dns_secondary = forms.GenericIPAddressField(label=_('Secondary DNS'), initial='', required=False)
+    dns_search_domains = forms.CharField(
+        label=_('DNS Search Domains'), required=False, max_length=255,
+        help_text=_('Optional. One or more domains separated by commas (e.g. vpn, example.com).')
+    )
     enforce_route_policy = forms.BooleanField(label=_('Enforce Route Policy'), required=False)
 
     class Meta:
         model = WireGuardInstance
         fields = [
             'name', 'instance_id', 'private_key', 'public_key','hostname', 'listen_port', 'address', 
-            'netmask', 'peer_list_refresh_interval', 'dns_primary', 'dns_secondary', 'enforce_route_policy'
+            'netmask', 'peer_list_refresh_interval', 'dns_primary', 'dns_secondary', 'dns_search_domains', 'enforce_route_policy'
             ]
         
     def __init__(self, *args, **kwargs):
@@ -88,6 +93,10 @@ class WireGuardInstanceForm(forms.ModelForm):
                          css_class='form-row'
                     ),
                     Row(
+                        Column('dns_search_domains', css_class='form-group col-md-12 mb-0'),
+                        css_class='form-row'
+                    ),
+                    Row(
                         Column('enforce_route_policy', css_class='form-group col-md-12 mb-0'),
                         css_class='form-row'
                     ),
@@ -106,11 +115,43 @@ class WireGuardInstanceForm(forms.ModelForm):
             ),
         )
 
+    def clean_dns_search_domains(self):
+        dns_search_domains = self.cleaned_data.get('dns_search_domains')
+        if not dns_search_domains:
+            return ''
+
+        domain_list = []
+        for domain in dns_search_domains.split(','):
+            domain = domain.strip().lower().rstrip('.')
+            if not domain:
+                continue
+
+            try:
+                ipaddress.ip_address(domain)
+                is_ip_address = True
+            except ValueError:
+                is_ip_address = False
+
+            valid_labels = all(re.match(r'^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$', label) for label in domain.split('.'))
+            if is_ip_address or not valid_labels:
+                raise forms.ValidationError(_('Invalid search domain: %(domain)s') % {'domain': domain})
+
+            if domain not in domain_list:
+                domain_list.append(domain)
+
+        return ', '.join(domain_list)
+
     def clean(self):
         cleaned_data = super().clean()
         hostname = cleaned_data.get('hostname')
         address = cleaned_data.get('address')
         netmask = cleaned_data.get('netmask')
+        dns_primary = cleaned_data.get('dns_primary')
+        dns_secondary = cleaned_data.get('dns_secondary')
+        dns_search_domains = cleaned_data.get('dns_search_domains')
+
+        if dns_search_domains and not dns_primary and not dns_secondary:
+            raise forms.ValidationError(_('DNS Search Domains requires at least one DNS server.'))
 
         peer_list_refresh_interval = cleaned_data.get('peer_list_refresh_interval')
         if peer_list_refresh_interval and peer_list_refresh_interval < 5:

@@ -43,6 +43,8 @@ def generate_peer_config(peer_uuid, server_address=None):
 
     dns_entries = [wg_instance.dns_primary, wg_instance.dns_secondary]
     dns_line = ", ".join(filter(None, dns_entries))
+    if dns_line and wg_instance.dns_search_domains:
+        dns_line += f", {wg_instance.dns_search_domains}"
 
     if server_address:
         endpoint = server_address
