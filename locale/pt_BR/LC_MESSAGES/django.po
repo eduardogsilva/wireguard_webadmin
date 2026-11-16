@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 16:01-0300\n"
+"POT-Creation-Date: 2026-11-16 10:16-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,9 +67,9 @@ msgstr ""
 #: api_v2/forms.py:63 app_gateway/forms.py:41 app_gateway/forms.py:99
 #: app_gateway/forms.py:144 app_gateway/forms.py:162 app_gateway/forms.py:241
 #: app_gateway/forms.py:283 cluster/forms.py:67 cluster/forms.py:124
-#: dns/forms.py:37 dns/forms.py:84 dns/forms.py:153 gatekeeper/forms.py:71
-#: gatekeeper/forms.py:152 gatekeeper/forms.py:239 gatekeeper/forms.py:362
-#: gatekeeper/forms.py:392 gatekeeper/forms.py:423
+#: dns/forms.py:37 dns/forms.py:84 dns/forms.py:153 gatekeeper/forms.py:72
+#: gatekeeper/forms.py:155 gatekeeper/forms.py:242 gatekeeper/forms.py:367
+#: gatekeeper/forms.py:397 gatekeeper/forms.py:428
 #: routing_templates/forms.py:71 scheduler/forms.py:102
 #: templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
@@ -83,7 +83,7 @@ msgid "Save"
 msgstr "Salvar"
 
 #: api_v2/models.py:10 app_gateway/forms.py:18 app_gateway/forms.py:113
-#: cluster/forms.py:18 dns/forms.py:130 gatekeeper/forms.py:188
+#: cluster/forms.py:18 dns/forms.py:130 gatekeeper/forms.py:191
 #: routing_templates/forms.py:28 templates/api_v2/api_documentation.html:47
 #: templates/api_v2/list.html:8 templates/app_gateway/app_gateway_list.html:66
 #: templates/app_gateway/app_gateway_list.html:146
@@ -217,8 +217,8 @@ msgstr "Permitir certificado inválido/auto assinado"
 
 #: app_gateway/forms.py:42 app_gateway/forms.py:100 app_gateway/forms.py:145
 #: app_gateway/forms.py:163 app_gateway/forms.py:242 app_gateway/forms.py:284
-#: gatekeeper/forms.py:72 gatekeeper/forms.py:153 gatekeeper/forms.py:240
-#: gatekeeper/forms.py:363 gatekeeper/forms.py:393 gatekeeper/forms.py:424
+#: gatekeeper/forms.py:73 gatekeeper/forms.py:156 gatekeeper/forms.py:243
+#: gatekeeper/forms.py:368 gatekeeper/forms.py:398 gatekeeper/forms.py:429
 #: scheduler/forms.py:103
 #: templates/app_gateway/access_policy_type_select.html:50
 #: templates/generic_delete_confirmation.html:19
@@ -670,7 +670,7 @@ msgstr "Configuração exportada com sucesso."
 msgid "IP Lock"
 msgstr "Bloqueio de IP"
 
-#: cluster/forms.py:21 dns/forms.py:67 gatekeeper/forms.py:315
+#: cluster/forms.py:21 dns/forms.py:67 gatekeeper/forms.py:320
 #: templates/cluster/workers_list.html:10
 #: templates/dns/static_host_list.html:18
 #: templates/firewall/manage_redirect_rule.html:43
@@ -951,7 +951,7 @@ msgstr "DNS Estático"
 msgid "Invalid hostname."
 msgstr "Nome de host inválido."
 
-#: dns/forms.py:131 firewall/forms.py:111 gatekeeper/forms.py:318
+#: dns/forms.py:131 firewall/forms.py:111 gatekeeper/forms.py:323
 #: templates/api_v2/api_documentation.html:51
 #: templates/dns/static_host_list.html:69
 #: templates/firewall/manage_redirect_rule.html:18
@@ -975,25 +975,29 @@ msgstr "Desconhecido"
 msgid "Unsupported"
 msgstr "Não suportado"
 
-#: dns/views.py:49
+#: dns/views.py:25 dns/views.py:318 dns/views.py:326
+msgid "DNS configuration reloaded automatically."
+msgstr "Configuração de DNS recarregada automaticamente."
+
+#: dns/views.py:57
 msgid "DNS settings applied successfully"
 msgstr "Configurações de DNS aplicadas com sucesso"
 
-#: dns/views.py:84
+#: dns/views.py:92
 msgid "Default DNS Filter List created successfully"
 msgstr "Lista de Filtro de DNS padrão criada com sucesso"
 
-#: dns/views.py:87
+#: dns/views.py:95
 msgid ""
 "Pending Changes|There are pending DNS changes that have not been applied"
 msgstr ""
 "Alterações Pendentes|Há alterações de DNS pendentes que não foram aplicadas"
 
-#: dns/views.py:106
+#: dns/views.py:114
 msgid "DNS Forwarders"
 msgstr "Servidores DNS"
 
-#: dns/views.py:107
+#: dns/views.py:115
 msgid ""
 "All DNS queries will be forwarded to the primary resolver. If the primary "
 "resolver is not available, the secondary resolver will be used."
@@ -1001,75 +1005,75 @@ msgstr ""
 "Todas as consultas DNS serão encaminhadas para o DNS primário. Se o "
 "resolvedor primário não estiver disponível, o DNS secundário será usado."
 
-#: dns/views.py:134
+#: dns/views.py:140
 msgid "Static DNS deleted successfully"
 msgstr "DNS Estático excluído com sucesso"
 
-#: dns/views.py:137
+#: dns/views.py:146
 msgid "Static DNS not deleted|Invalid confirmation"
 msgstr "DNS Estático não excluído|Confirmação inválida"
 
-#: dns/views.py:147
+#: dns/views.py:154
 msgid "Static DNS saved successfully"
 msgstr "DNS Estático salvo com sucesso"
 
-#: dns/views.py:170
+#: dns/views.py:180
 msgid "DNS Filter List not deleted | Filter List is enabled"
 msgstr "Lista de Filtro de DNS não excluída | Lista de Filtro está habilitada"
 
-#: dns/views.py:177
+#: dns/views.py:187
 msgid "Error removing config file: "
 msgstr "Erro ao remover o arquivo de configuração: "
 
-#: dns/views.py:180
+#: dns/views.py:190
 msgid "DNS Filter List deleted successfully"
 msgstr "Lista de Filtro de DNS excluída com sucesso"
 
-#: dns/views.py:183
+#: dns/views.py:193
 msgid "DNS Filter List not deleted | Invalid confirmation"
 msgstr "Lista de Filtro de DNS não excluída | Confirmação inválida"
 
-#: dns/views.py:195
+#: dns/views.py:205
 msgid "DNS Filter List saved successfully"
 msgstr "Lista de Filtro de DNS salva com sucesso"
 
-#: dns/views.py:222
+#: dns/views.py:232
 msgid "Failed to read existing config file: "
 msgstr "Erro ao ler o arquivo de configuração existente: "
 
-#: dns/views.py:240
+#: dns/views.py:250
 msgid "Failed to fetch the host list: "
 msgstr "Erro ao buscar a lista de hosts: "
 
-#: dns/views.py:250
+#: dns/views.py:260
 msgid "Failed to write config file: "
 msgstr "Falha ao escrever o arquivo de configuração: "
 
-#: dns/views.py:273
+#: dns/views.py:283
 msgid "DNS Filter List disabled | Unsupported format detected"
 msgstr "Lista de filtros DNS desativada | Formato não suportado detectado"
 
-#: dns/views.py:286
+#: dns/views.py:296
 msgid "DNS Filter List updated successfully"
 msgstr "Lista de Filtro de DNS atualizada com sucesso"
 
-#: dns/views.py:300
+#: dns/views.py:310
 msgid "DNS Filter List not enabled | Unsupported format"
 msgstr "Lista de filtros DNS não ativada | Formato não suportado"
 
-#: dns/views.py:302
+#: dns/views.py:312
 msgid "DNS Filter List not enabled | List has not been downloaded yet"
 msgstr "Lista de filtros DNS não ativada | A lista ainda não foi baixada"
 
-#: dns/views.py:307
+#: dns/views.py:317
 msgid "DNS Filter List enabled successfully"
 msgstr "Lista de Filtro de DNS habilitada com sucesso"
 
-#: dns/views.py:309
+#: dns/views.py:320
 msgid "DNS Filter List not enabled | No valid hosts found"
 msgstr "Lista de Filtro de DNS não habilitada | Nenhum host válido encontrado"
 
-#: dns/views.py:314
+#: dns/views.py:325
 msgid "DNS Filter List disabled successfully"
 msgstr "Lista de Filtro de DNS desabilitada com sucesso"
 
@@ -1306,13 +1310,13 @@ msgstr "Gerenciar Configurações de Firewall"
 msgid "Firewall settings saved successfully"
 msgstr "Configurações de Firewall salvas com sucesso"
 
-#: gatekeeper/forms.py:18 templates/accounts/login.html:23
+#: gatekeeper/forms.py:19 templates/accounts/login.html:23
 #: templates/vpn_invite/invite_settings.html:19 user_manager/forms.py:14
 #: vpn_invite/forms.py:282
 msgid "Password"
 msgstr "Senha"
 
-#: gatekeeper/forms.py:21
+#: gatekeeper/forms.py:22
 msgid ""
 "Minimum 8 characters, with at least one uppercase letter, one lowercase "
 "letter, and one number."
@@ -1320,15 +1324,15 @@ msgstr ""
 "Mínimo de 8 caracteres, com pelo menos uma letra maiúscula, uma letra "
 "minúscula e um número."
 
-#: gatekeeper/forms.py:24
+#: gatekeeper/forms.py:25
 msgid "Confirm Password"
 msgstr "Confirmar Senha"
 
-#: gatekeeper/forms.py:29 gatekeeper/forms.py:163
+#: gatekeeper/forms.py:30 gatekeeper/forms.py:166
 msgid "TOTP Validation PIN"
 msgstr "PIN de Validação TOTP"
 
-#: gatekeeper/forms.py:32 gatekeeper/forms.py:166
+#: gatekeeper/forms.py:33 gatekeeper/forms.py:169
 msgid ""
 "Enter a 6-digit PIN generated by your authenticator app to validate the "
 "secret."
@@ -1336,165 +1340,169 @@ msgstr ""
 "Insira um PIN de 6 dígitos gerado pelo seu aplicativo autenticador para "
 "validar o segredo."
 
-#: gatekeeper/forms.py:39 templates/accounts/login.html:14
+#: gatekeeper/forms.py:40 templates/accounts/login.html:14
 #: templates/gatekeeper/gatekeeper_list.html:62
 #: templates/user_manager/list.html:8 user_manager/forms.py:13
 #: vpn_invite/forms.py:281
 msgid "Username"
 msgstr "Usuário"
 
-#: gatekeeper/forms.py:40 gatekeeper/forms.py:407
+#: gatekeeper/forms.py:41 gatekeeper/forms.py:412
 #: templates/gatekeeper/gatekeeper_list.html:63
 #: templates/gatekeeper/gatekeeper_list.html:221
 #: templates/wireguard/peer_list/peer_preview_modal.html:103
 msgid "Email"
 msgstr "Email"
 
-#: gatekeeper/forms.py:41
+#: gatekeeper/forms.py:42
 msgid "TOTP Secret"
 msgstr "Segredo TOTP"
 
-#: gatekeeper/forms.py:88
+#: gatekeeper/forms.py:89
 msgid "Password is required."
 msgstr "A senha é obrigatória."
 
-#: gatekeeper/forms.py:91 user_manager/forms.py:127
+#: gatekeeper/forms.py:92 user_manager/forms.py:127
 msgid "Password must be at least 8 characters long."
 msgstr "Senha deve ter pelo menos 8 caracteres."
 
-#: gatekeeper/forms.py:93
+#: gatekeeper/forms.py:94
 msgid "Password must contain at least one lowercase letter."
 msgstr "A senha deve conter pelo menos uma letra minúscula."
 
-#: gatekeeper/forms.py:95
+#: gatekeeper/forms.py:96
 msgid "Password must contain at least one uppercase letter."
 msgstr "A senha deve conter pelo menos uma letra maiúscula."
 
-#: gatekeeper/forms.py:97
+#: gatekeeper/forms.py:98
 msgid "Password must contain at least one number."
 msgstr "A senha deve conter pelo menos um número."
 
-#: gatekeeper/forms.py:99
+#: gatekeeper/forms.py:100
 msgid "Passwords do not match."
 msgstr "As senhas não coincidem."
 
-#: gatekeeper/forms.py:104 gatekeeper/forms.py:276
+#: gatekeeper/forms.py:105 gatekeeper/forms.py:279
 msgid "Please provide a PIN to validate the TOTP secret."
 msgstr "Por favor, forneça um PIN para validar o segredo TOTP."
 
-#: gatekeeper/forms.py:109 gatekeeper/forms.py:281
+#: gatekeeper/forms.py:110 gatekeeper/forms.py:284
 msgid "Invalid TOTP PIN."
 msgstr "PIN TOTP inválido."
 
-#: gatekeeper/forms.py:111 gatekeeper/forms.py:283
+#: gatekeeper/forms.py:112 gatekeeper/forms.py:286
 msgid "Invalid TOTP secret format. Must be a valid Base32 string."
 msgstr "Formato de segredo TOTP inválido. Deve ser uma string Base32 válida."
 
-#: gatekeeper/forms.py:131 templates/gatekeeper/gatekeeper_list.html:121
+#: gatekeeper/forms.py:114 gatekeeper/forms.py:288
+msgid "TOTP secret is too short. It must be at least 24 characters long."
+msgstr "O segredo TOTP é muito curto. Ele deve ter pelo menos 24 caracteres."
+
+#: gatekeeper/forms.py:134 templates/gatekeeper/gatekeeper_list.html:121
 msgid "Group Name"
 msgstr "Nome do Grupo"
 
-#: gatekeeper/forms.py:132 templates/gatekeeper/gatekeeper_list.html:122
+#: gatekeeper/forms.py:135 templates/gatekeeper/gatekeeper_list.html:122
 msgid "Members"
 msgstr "Membros"
 
-#: gatekeeper/forms.py:169
+#: gatekeeper/forms.py:172
 msgid "Session Expiration"
 msgstr "Expiração da sessão"
 
-#: gatekeeper/forms.py:175
+#: gatekeeper/forms.py:178
 msgid "Unit"
 msgstr "Unidade"
 
-#: gatekeeper/forms.py:176
+#: gatekeeper/forms.py:179
 msgid "Hour(s)"
 msgstr "Hora(s)"
 
-#: gatekeeper/forms.py:176
+#: gatekeeper/forms.py:179
 msgid "Day(s)"
 msgstr "Dia(s)"
 
-#: gatekeeper/forms.py:189
+#: gatekeeper/forms.py:192
 msgid "Authentication Type"
 msgstr "Tipo de Autenticação"
 
-#: gatekeeper/forms.py:190
+#: gatekeeper/forms.py:193
 msgid "Global TOTP Secret"
 msgstr "Segredo TOTP Global"
 
-#: gatekeeper/forms.py:191
+#: gatekeeper/forms.py:194
 msgid "OIDC Provider URL"
 msgstr "URL do Provedor OIDC"
 
-#: gatekeeper/forms.py:192
+#: gatekeeper/forms.py:195
 msgid "OIDC Client ID"
 msgstr "ID do Cliente OIDC"
 
-#: gatekeeper/forms.py:193
+#: gatekeeper/forms.py:196
 msgid "OIDC Client Secret"
 msgstr "Segredo do Cliente OIDC"
 
-#: gatekeeper/forms.py:257
+#: gatekeeper/forms.py:260
 msgid "TOTP secret must be empty for Local Password authentication."
 msgstr "O segredo TOTP deve estar vazio para autenticação por Senha Local."
 
-#: gatekeeper/forms.py:259
+#: gatekeeper/forms.py:262
 msgid "TOTP validation PIN must be empty for Local Password authentication."
 msgstr ""
 "O PIN de validação TOTP deve estar vazio para autenticação por Senha Local."
 
-#: gatekeeper/forms.py:261
+#: gatekeeper/forms.py:264
 msgid "OIDC fields must be empty for Local Password authentication."
 msgstr "Os campos OIDC devem estar vazios para autenticação por Senha Local."
 
-#: gatekeeper/forms.py:267
+#: gatekeeper/forms.py:270
 msgid "Only one Local Password authentication method can be configured."
 msgstr "Apenas um método de autenticação por Senha Local pode ser configurado."
 
-#: gatekeeper/forms.py:270
+#: gatekeeper/forms.py:273
 msgid "OIDC fields must be empty for TOTP authentication."
 msgstr "Os campos OIDC devem estar vazios para autenticação por TOTP."
 
-#: gatekeeper/forms.py:272
+#: gatekeeper/forms.py:275
 msgid "TOTP secret is required for TOTP authentication."
 msgstr "O segredo TOTP é obrigatório para autenticação por TOTP."
 
-#: gatekeeper/forms.py:285
+#: gatekeeper/forms.py:290
 msgid ""
 "OIDC authentication is temporarily unavailable and will be available soon."
 msgstr ""
 "A autenticação OIDC está temporariamente indisponível e estará disponível em "
 "breve."
 
-#: gatekeeper/forms.py:287
+#: gatekeeper/forms.py:292
 msgid "TOTP secret must be empty for OIDC authentication."
 msgstr "O segredo TOTP deve estar vazio para autenticação por OIDC."
 
-#: gatekeeper/forms.py:289
+#: gatekeeper/forms.py:294
 msgid "TOTP validation PIN must be empty for OIDC authentication."
 msgstr "O PIN de validação TOTP deve estar vazio para autenticação por OIDC."
 
-#: gatekeeper/forms.py:314 gatekeeper/forms.py:375 gatekeeper/forms.py:406
+#: gatekeeper/forms.py:319 gatekeeper/forms.py:380 gatekeeper/forms.py:411
 msgid "Authentication Method"
 msgstr "Método de Autenticação"
 
-#: gatekeeper/forms.py:316 templates/gatekeeper/gatekeeper_list.html:274
+#: gatekeeper/forms.py:321 templates/gatekeeper/gatekeeper_list.html:274
 msgid "Prefix Length"
 msgstr "Comprimento do Prefixo"
 
-#: gatekeeper/forms.py:317 templates/firewall/firewall_rule_list.html:47
+#: gatekeeper/forms.py:322 templates/firewall/firewall_rule_list.html:47
 #: templates/firewall/manage_firewall_rule.html:360
 #: templates/gatekeeper/gatekeeper_list.html:275
 msgid "Action"
 msgstr "Ação"
 
-#: gatekeeper/forms.py:332
+#: gatekeeper/forms.py:337
 #, python-format
 msgid "Prefix length for IPv%(version)d must be between 0 and %(max)d."
 msgstr ""
 "O comprimento do prefixo para IPv%(version)d deve estar entre 0 e %(max)d."
 
-#: gatekeeper/forms.py:376 templates/gatekeeper/gatekeeper_list.html:238
+#: gatekeeper/forms.py:381 templates/gatekeeper/gatekeeper_list.html:238
 msgid "Domain"
 msgstr "Domínio"
 
@@ -3254,7 +3262,7 @@ msgstr "Configurações de Email"
 msgid "Invite Settings"
 msgstr "Configurações de Convite"
 
-#: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:350
+#: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:368
 msgid "Apply Route Template"
 msgstr "Aplicar Modelo de Roteamento"
 
@@ -3294,7 +3302,7 @@ msgstr "Transferência"
 
 #: templates/wireguard/peer_list/peer_data.html:44
 #: templates/wireguard/peer_list/script_wireguard_status_update.html:146
-#: wireguard_peer/views.py:82
+#: wireguard_peer/views.py:94
 msgid "Primary Server"
 msgstr "Servidor Primário"
 
@@ -4455,7 +4463,7 @@ msgstr "O agendamento de reativação deve ser pelo menos 10 minutos no futuro."
 msgid "Error creating peer|The specified IP address is not available."
 msgstr "Erro ao criar peer|O endereço IP especificado não está disponível."
 
-#: wireguard_peer/functions.py:84 wireguard_peer/views.py:150
+#: wireguard_peer/functions.py:84 wireguard_peer/views.py:162
 msgid "Peer created|Peer created successfully."
 msgstr "Peer adicionado|Peer adicionado com sucesso."
 
@@ -4464,58 +4472,68 @@ msgid "Error creating peer|No available IP address found for peer creation."
 msgstr ""
 "Erro ao criar peer|Nenhum endereço IP disponível encontrado para alocação. "
 
-#: wireguard_peer/views.py:28
+#: wireguard_peer/views.py:29
+#, python-format
+msgid "wg%(id)s reloaded automatically."
+msgstr "wg%(id)s recarregado automaticamente."
+
+#: wireguard_peer/views.py:31
+#, python-format
+msgid "Auto-apply failed for wg%(id)s: "
+msgstr "Falha ao aplicar automaticamente wg%(id)s: "
+
+#: wireguard_peer/views.py:40
 msgid "Disabled WireGuard Peer List"
 msgstr "Lista de Peers do WireGuard Desativados"
 
-#: wireguard_peer/views.py:31
+#: wireguard_peer/views.py:43
 msgid "WireGuard Peer List"
 msgstr "Lista de Peers do WireGuard"
 
-#: wireguard_peer/views.py:158
+#: wireguard_peer/views.py:171
 msgid "Peer not created|Missing instance parameter."
 msgstr "Peer não criado|Parâmetro de instância ausente."
 
-#: wireguard_peer/views.py:179
+#: wireguard_peer/views.py:190
 msgid "Peer deleted|Peer deleted successfully."
 msgstr "Peer excluído|Peer excluído com sucesso."
 
-#: wireguard_peer/views.py:182
+#: wireguard_peer/views.py:196
 msgid ""
 "Error deleting peer|Invalid confirmation message. Type \"delete\" to confirm."
 msgstr ""
 "Erro ao excluir peer|Mensagem de confirmação inválida. Digite \"delete\" "
 "para confirmar."
 
-#: wireguard_peer/views.py:184
+#: wireguard_peer/views.py:198
 msgid "Peer Configuration: "
 msgstr "Configuração do Peer: "
 
-#: wireguard_peer/views.py:229
+#: wireguard_peer/views.py:244
 msgid "Peer updated|Peer updated successfully."
 msgstr "Peer atualizado|Peer atualizado com sucesso."
 
-#: wireguard_peer/views.py:232
+#: wireguard_peer/views.py:247
 msgid "Edit Peer"
 msgstr "Editar Peer"
 
-#: wireguard_peer/views.py:234
+#: wireguard_peer/views.py:249
 msgid "Edit Peer Name"
 msgstr "Editar Nome do Peer"
 
-#: wireguard_peer/views.py:236
+#: wireguard_peer/views.py:251
 msgid "Edit Keepalive"
 msgstr "Editar Keepalive"
 
-#: wireguard_peer/views.py:238
+#: wireguard_peer/views.py:253
 msgid "Edit Keys"
 msgstr "Editar Chaves"
 
-#: wireguard_peer/views.py:270
+#: wireguard_peer/views.py:286
 msgid "IP address deleted|IP address deleted successfully."
 msgstr "Endereço IP excluído|Endereço IP excluído com sucesso."
 
-#: wireguard_peer/views.py:275
+#: wireguard_peer/views.py:292
 msgid ""
 "Error deleting IP address|Invalid confirmation message. Type \"delete\" to "
 "confirm."
@@ -4523,27 +4541,27 @@ msgstr ""
 "Erro ao excluir endereço IP|Mensagem de confirmação inválida. Digite "
 "\"delete\" para confirmar."
 
-#: wireguard_peer/views.py:280
+#: wireguard_peer/views.py:297
 msgid "Manage client route"
 msgstr "Gerenciar rota do cliente"
 
-#: wireguard_peer/views.py:282
+#: wireguard_peer/views.py:299
 msgid "Manage IP address or Network"
 msgstr "Gerenciar Endereço IP ou Rede"
 
-#: wireguard_peer/views.py:295
+#: wireguard_peer/views.py:313
 msgid "IP address updated|IP address updated successfully."
 msgstr "Endereço IP atualizado|Endereço IP atualizado com sucesso."
 
-#: wireguard_peer/views.py:297
+#: wireguard_peer/views.py:315
 msgid "IP address added|IP address added successfully."
 msgstr "Endereço IP adicionado|Endereço IP adicionado com sucesso."
 
-#: wireguard_peer/views.py:329
+#: wireguard_peer/views.py:347
 msgid "Route template unlinked successfully."
 msgstr "Modelo de roteamento desvinculado com sucesso."
 
-#: wireguard_peer/views.py:339
+#: wireguard_peer/views.py:357
 msgid ""
 "Cannot apply template: This template does not allow custom routes, but the "
 "peer has custom client routes defined."
@@ -4551,15 +4569,15 @@ msgstr ""
 "Não é possível aplicar o modelo: Este modelo não permite rotas "
 "personalizadas, mas o peer possui rotas de cliente personalizadas definidas."
 
-#: wireguard_peer/views.py:346
+#: wireguard_peer/views.py:364
 msgid "Route template applied successfully."
 msgstr "Modelo de roteamento aplicado com sucesso."
 
-#: wireguard_peer/views.py:379
+#: wireguard_peer/views.py:397
 msgid "Peer suspension/unsuspension scheduled successfully."
 msgstr "Suspensão/reativação de peer agendada com sucesso."
 
-#: wireguard_peer/views.py:381
+#: wireguard_peer/views.py:399
 msgid ""
 "Error scheduling peer suspension/unsuspension. Please correct the errors "
 "below."
@@ -4567,39 +4585,39 @@ msgstr ""
 "Erro ao agendar a suspensão/reativação do peer. Por favor, corrija os erros "
 "abaixo."
 
-#: wireguard_peer/views.py:388
+#: wireguard_peer/views.py:406
 msgid "Schedule cleared successfully."
 msgstr "Agendamento limpo com sucesso."
 
-#: wireguard_peer/views.py:402
+#: wireguard_peer/views.py:420
 msgid "Peer suspended successfully."
 msgstr "Peer suspenso com sucesso."
 
-#: wireguard_peer/views.py:404
+#: wireguard_peer/views.py:422
 msgid "Peer suspended, but failed to reload WireGuard interface: "
 msgstr "Peer suspenso, mas falha ao recarregar a interface WireGuard: "
 
-#: wireguard_peer/views.py:414
+#: wireguard_peer/views.py:432
 msgid "Peer reactivated successfully."
 msgstr "Peer reativado com sucesso."
 
-#: wireguard_peer/views.py:416
+#: wireguard_peer/views.py:434
 msgid "Peer reactivated, but failed to reload WireGuard interface: "
 msgstr "Peer reativado, mas falha ao recarregar a interface WireGuard: "
 
-#: wireguard_peer/views.py:419
+#: wireguard_peer/views.py:437
 msgid "Invalid action."
 msgstr "Ação inválida."
 
-#: wireguard_peer/views.py:424
+#: wireguard_peer/views.py:442
 msgid "Suspend / Reactivate Peer"
 msgstr "Suspender / Reativar Peer"
 
-#: wireguard_peer/views.py:447
+#: wireguard_peer/views.py:465
 msgid "Peer scheduling profile updated successfully."
 msgstr "Perfil de agendamento do peer atualizado com sucesso."
 
-#: wireguard_peer/views.py:460
+#: wireguard_peer/views.py:478
 msgid "Manage Peer Schedule Profile"
 msgstr "Gerenciar Perfil de Agendamento do Peer"
 
