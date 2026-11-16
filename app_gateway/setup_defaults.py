@@ -7,18 +7,13 @@ def create_default_entries(**kwargs):
     from app_gateway.models import AccessPolicy, Application, ApplicationPolicy, RESERVED_APP_NAME
 
     # Default access policies
-    public_policy, created = AccessPolicy.objects.get_or_create(
-        policy_type='public',
-        defaults={'display_name': 'Public'},
-    )
-    if created:
+    public_policy = AccessPolicy.objects.filter(policy_type='public').order_by('created').first()
+    if not public_policy:
+        public_policy = AccessPolicy.objects.create(policy_type='public', display_name='Public')
         logger.info("Created default AccessPolicy: Public")
 
-    deny_policy, created = AccessPolicy.objects.get_or_create(
-        policy_type='deny',
-        defaults={'display_name': 'Deny'},
-    )
-    if created:
+    if not AccessPolicy.objects.filter(policy_type='deny').exists():
+        AccessPolicy.objects.create(policy_type='deny', display_name='Deny')
         logger.info("Created default AccessPolicy: Deny")
 
     # Reserved wireguard_webadmin application
