@@ -4321,21 +4321,21 @@ msgstr "Dirección IP interna"
 
 #: wireguard/forms.py:28
 msgid "DNS Search Domains"
-msgstr ""
+msgstr "Dominios de búsqueda DNS"
 
 #: wireguard/forms.py:29
 msgid ""
 "Optional. One or more domains separated by commas (e.g. vpn, example.com)."
-msgstr ""
+msgstr "Opcional. Uno o más dominios separados por comas (p. ej., vpn, example.com)."
 
 #: wireguard/forms.py:137
 #, python-format
 msgid "Invalid search domain: %(domain)s"
-msgstr ""
+msgstr "Dominio de búsqueda no válido: %(domain)s"
 
 #: wireguard/forms.py:154
 msgid "DNS Search Domains requires at least one DNS server."
-msgstr ""
+msgstr "Los dominios de búsqueda DNS requieren al menos un servidor DNS."
 
 #: wireguard/forms.py:158
 msgid "Peer List Refresh Interval must be at least 5 seconds"
