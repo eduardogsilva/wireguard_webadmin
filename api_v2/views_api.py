@@ -221,6 +221,8 @@ def _validate_dns_hostname(hostname: str) -> Tuple[Optional[str], Optional[str]]
          "example": ["192.168.1.0/24"],
          "description": "Client routes (priority>=1). Will be synced. Not allowed when allow_peer_custom_routes=True."},
 
+        {"name": "name", "in": "json", "type": "string", "required": False, "example": "John",
+         "description": "Peer name (create/update). Can be cleared by sending null/empty string."},
         {"name": "public_key", "in": "json", "type": "string", "required": False,
          "description": "Peer public key (create/update)."},
         {"name": "pre_shared_key", "in": "json", "type": "string", "required": False,
@@ -257,6 +259,7 @@ def _validate_dns_hostname(hostname: str) -> Tuple[Optional[str], Optional[str]]
             "json": {
                 "instance": "wg0",
                 "peer_uuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+                "name": "John Notebook",
                 "suspended": True,
                 "suspend_reason": "Maintenance window",
                 "skip_reload": False
@@ -408,6 +411,12 @@ def api_v2_manage_peer(request):
             new_persistent_keepalive = payload.get("persistent_keepalive")
             new_suspended = payload.get("suspended")
             new_suspend_reason = payload.get("suspend_reason") if "suspend_reason" in payload else None
+
+            if "name" in payload:
+                new_name = str(payload.get("name") or "").strip()
+                if len(new_name) > 100:
+                    return JsonResponse({"status": "error", "error_message": "Invalid name. Maximum length is 100 characters."}, status=400)
+                peer_for_action.name = new_name
 
             if new_public_key:
                 peer_for_action.public_key = new_public_key
