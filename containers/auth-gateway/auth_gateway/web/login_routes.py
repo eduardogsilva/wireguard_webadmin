@@ -34,11 +34,10 @@ router = APIRouter()
 def _render(request: Request, template_name: str, status_code: int = 200, **context):
     templates = request.app.state.templates
     base_context = {
-        "request": request,
         "external_path": request.app.state.settings.external_path,
     }
     base_context.update(context)
-    response = templates.TemplateResponse(template_name, base_context, status_code=status_code)
+    response = templates.TemplateResponse(request, template_name, base_context, status_code=status_code)
     csrf_token = context.get("csrf_token")
     if csrf_token:
         set_csrf_cookie(request, response, csrf_token)

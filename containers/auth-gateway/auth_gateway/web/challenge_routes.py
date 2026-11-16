@@ -1,13 +1,14 @@
 from urllib.parse import urlsplit
 
+from fastapi import APIRouter, Form, Request
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+
 from auth_gateway.services.challenge_service import (
     CHALLENGE_COOKIE_NAME,
     generate_altcha_challenge,
     generate_challenge_cookie,
     verify_altcha_solution,
 )
-from fastapi import APIRouter, Form, Request
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 
 router = APIRouter()
 
@@ -28,8 +29,9 @@ def _safe_next(url: str | None, external_path: str) -> str:
 async def challenge_page(request: Request, next: str = "/"):
     external_path = request.app.state.settings.external_path
     return request.app.state.templates.TemplateResponse(
+        request,
         "challenge.html",
-        {"request": request, "external_path": external_path, "next": next},
+        {"external_path": external_path, "next": next},
     )
 
 
@@ -47,8 +49,9 @@ async def challenge_verify(request: Request, next: str = Form("/"), altcha: str 
 
     if not verify_altcha_solution(altcha, hmac_key):
         return request.app.state.templates.TemplateResponse(
+            request,
             "challenge.html",
-            {"request": request, "external_path": external_path, "next": next, "error": True},
+            {"external_path": external_path, "next": next, "error": True},
             status_code=400,
         )
 

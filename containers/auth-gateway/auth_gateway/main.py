@@ -3,6 +3,12 @@ import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from slowapi.errors import RateLimitExceeded
+
 from auth_gateway.config_loader import RuntimeConfigStore
 from auth_gateway.limiter import get_real_client_ip, limiter
 from auth_gateway.services.oidc_service import OIDCService
@@ -12,11 +18,6 @@ from auth_gateway.storage.sqlite import SQLiteStorage
 from auth_gateway.web.auth_routes import router as auth_router
 from auth_gateway.web.challenge_routes import router as challenge_router
 from auth_gateway.web.login_routes import router as login_router
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from slowapi.errors import RateLimitExceeded
 
 BASE_DIR = Path(__file__).resolve().parent
 _access_logger = logging.getLogger("uvicorn.error")
@@ -59,8 +60,9 @@ async def _rate_limit_handler(request: Request, exc: RateLimitExceeded) -> HTMLR
     templates = request.app.state.templates
     external_path = request.app.state.settings.external_path
     return templates.TemplateResponse(
+        request,
         "ratelimit.html",
-        {"request": request, "external_path": external_path, "back_url": str(request.url.path)},
+        {"external_path": external_path, "back_url": str(request.url.path)},
         status_code=429,
     )
 
