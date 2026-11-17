@@ -145,7 +145,8 @@ def build_caddyfile(apps, auth_policies, routes):
     for app in apps:
         hosts = app.get("hosts", [])
         upstream = app.get("upstream", "")
-        allow_invalid_cert = app.get("allow_invalid_cert", False)
+        # tls_insecure_skip_verify is only valid for https upstreams
+        allow_invalid_cert = app.get("allow_invalid_cert", False) and upstream.startswith("https://")
         static_routes = app.get("static_routes", [])
         app_id = app.get("id", "")
 
