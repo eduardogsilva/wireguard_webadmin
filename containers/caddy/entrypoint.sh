@@ -3,7 +3,7 @@
 set -eu
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PYTHON="${SCRIPT_DIR}/.venv/bin/python3"
+PYTHON="python3"
 JSON_DIR="${JSON_DIR:-/caddy_json_export}"
 CADDYFILE_PATH="${CADDYFILE_PATH:-/etc/caddy/Caddyfile}"
 

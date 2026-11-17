@@ -12,7 +12,7 @@ WORKDIR /app
 
 # Install necessary runtime packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    wireguard \
+    wireguard-tools \
     iptables \
     iproute2 \
     net-tools \
