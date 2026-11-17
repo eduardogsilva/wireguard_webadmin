@@ -80,6 +80,11 @@ body.dark-mode pre {
     color: #dee2e6;
     border: 1px solid #4b545c;
 }
+body.dark-mode #inviteTextContainer {
+    background-color: #2d3035;
+    color: #dee2e6;
+    border-color: #4b545c;
+}
 
 body.dark-mode .btn-primary {
     background-color: #3d8bcd;
