@@ -24,7 +24,6 @@ pytz==2026.6
 PyYAML==6.0.3
 qrcode==8.2
 requests==2.34.2
-rrdtool-bindings==0.5.0
 setuptools==84.2.1
 sqlparse==0.6.1
 typing_extensions==4.16.0
