@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, HTML, Div
 from django import forms
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from app_gateway.models import (
@@ -64,6 +65,8 @@ class ApplicationForm(forms.ModelForm):
                 self.add_error("upstream", _("Enter a valid upstream URL starting with http:// or https://"))
             elif parsed.path not in ("", "/") or parsed.query or parsed.fragment:
                 self.add_error("upstream", _("Upstream must be a bare host address with no path, query or fragment. Use http://host or http://host:port"))
+            elif parsed.scheme == "http" and cleaned_data.get("allow_invalid_cert"):
+                self.add_error("allow_invalid_cert", _("This option is only available for https:// upstreams."))
 
         return cleaned_data
 
@@ -82,6 +85,10 @@ class ApplicationHostForm(forms.ModelForm):
         if hostname:
             if any(c in hostname for c in ('{', '}', '\n', '\r', '\x00', ' ')):
                 self.add_error('hostname', _('Hostname contains invalid characters.'))
+
+            webadmin_hostnames = [host.lower() for host in settings.ALLOWED_HOSTS]
+            if hostname.lower() in webadmin_hostnames:
+                self.add_error('hostname', _('This hostname is already used by WireGuard WebAdmin.'))
         return cleaned_data
 
     def __init__(self, *args, **kwargs):
