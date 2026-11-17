@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 16:49-0300\n"
+"POT-Creation-Date: 2026-11-16 21:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,9 +64,9 @@ msgstr ""
 "¿Está seguro de que desea regenerar el token? El antiguo token dejará de "
 "funcionar inmediatamente."
 
-#: api_v2/forms.py:63 app_gateway/forms.py:41 app_gateway/forms.py:99
-#: app_gateway/forms.py:144 app_gateway/forms.py:162 app_gateway/forms.py:241
-#: app_gateway/forms.py:283 cluster/forms.py:67 cluster/forms.py:124
+#: api_v2/forms.py:63 app_gateway/forms.py:42 app_gateway/forms.py:106
+#: app_gateway/forms.py:151 app_gateway/forms.py:169 app_gateway/forms.py:248
+#: app_gateway/forms.py:290 cluster/forms.py:67 cluster/forms.py:124
 #: dns/forms.py:37 dns/forms.py:84 dns/forms.py:153 gatekeeper/forms.py:72
 #: gatekeeper/forms.py:155 gatekeeper/forms.py:242 gatekeeper/forms.py:367
 #: gatekeeper/forms.py:397 gatekeeper/forms.py:428
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Save"
 msgstr "Guardar"
 
-#: api_v2/models.py:10 app_gateway/forms.py:18 app_gateway/forms.py:113
+#: api_v2/models.py:10 app_gateway/forms.py:19 app_gateway/forms.py:120
 #: cluster/forms.py:18 dns/forms.py:130 gatekeeper/forms.py:191
 #: routing_templates/forms.py:28 templates/api_v2/api_documentation.html:47
 #: templates/api_v2/list.html:8 templates/app_gateway/app_gateway_list.html:66
@@ -206,17 +206,17 @@ msgstr "¿Está seguro de que desea eliminar la clave de API \"%(name)s\"?"
 msgid "API Documentation"
 msgstr "Documentación de la API"
 
-#: app_gateway/forms.py:19 templates/app_gateway/app_gateway_list.html:67
+#: app_gateway/forms.py:20 templates/app_gateway/app_gateway_list.html:67
 #: templates/app_gateway/application_details.html:36
 msgid "Upstream"
 msgstr "Upstream"
 
-#: app_gateway/forms.py:20
+#: app_gateway/forms.py:21
 msgid "Allow invalid/self-signed certificate"
 msgstr "Permitir certificado no válido/autofirmado"
 
-#: app_gateway/forms.py:42 app_gateway/forms.py:100 app_gateway/forms.py:145
-#: app_gateway/forms.py:163 app_gateway/forms.py:242 app_gateway/forms.py:284
+#: app_gateway/forms.py:43 app_gateway/forms.py:107 app_gateway/forms.py:152
+#: app_gateway/forms.py:170 app_gateway/forms.py:249 app_gateway/forms.py:291
 #: gatekeeper/forms.py:73 gatekeeper/forms.py:156 gatekeeper/forms.py:243
 #: gatekeeper/forms.py:368 gatekeeper/forms.py:398 gatekeeper/forms.py:429
 #: scheduler/forms.py:103
@@ -226,20 +226,20 @@ msgstr "Permitir certificado no válido/autofirmado"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: app_gateway/forms.py:55
+#: app_gateway/forms.py:56
 msgid "This upstream is reserved by the system."
 msgstr "Este upstream está reservado por el sistema."
 
-#: app_gateway/forms.py:58
+#: app_gateway/forms.py:59
 msgid "Upstream URL cannot contain spaces."
 msgstr "La URL de upstream no puede contener espacios."
 
-#: app_gateway/forms.py:64
+#: app_gateway/forms.py:65
 msgid "Enter a valid upstream URL starting with http:// or https://"
 msgstr ""
 "Introduzca una URL de upstream válida que empiece por http:// o https://"
 
-#: app_gateway/forms.py:66
+#: app_gateway/forms.py:67
 msgid ""
 "Upstream must be a bare host address with no path, query or fragment. Use "
 "http://host or http://host:port"
@@ -247,7 +247,11 @@ msgstr ""
 "El upstream debe ser una dirección de host simple, sin ruta, consulta ni "
 "fragmento. Use http://host o http://host:port"
 
-#: app_gateway/forms.py:76 cluster/forms.py:24 dns/forms.py:65
+#: app_gateway/forms.py:69
+msgid "This option is only available for https:// upstreams."
+msgstr ""
+
+#: app_gateway/forms.py:79 cluster/forms.py:24 dns/forms.py:65
 #: templates/app_gateway/app_gateway_list.html:109
 #: templates/app_gateway/application_details.html:75
 #: templates/dns/static_host_list.html:17
@@ -255,40 +259,46 @@ msgstr ""
 msgid "Hostname"
 msgstr "Nombre de host"
 
-#: app_gateway/forms.py:84
+#: app_gateway/forms.py:87
 msgid "Hostname contains invalid characters."
 msgstr "El nombre de host contiene caracteres no válidos."
 
-#: app_gateway/forms.py:114 templates/app_gateway/app_gateway_list.html:147
+#: app_gateway/forms.py:91
+#, fuzzy
+#| msgid "Port %s is already in use by another WireGuard instance."
+msgid "This hostname is already used by WireGuard WebAdmin."
+msgstr "El puerto %s ya está en uso por otra instancia de WireGuard."
+
+#: app_gateway/forms.py:121 templates/app_gateway/app_gateway_list.html:147
 msgid "Policy Type"
 msgstr "Tipo de política"
 
-#: app_gateway/forms.py:115
+#: app_gateway/forms.py:122
 msgid "Allowed Groups"
 msgstr "Grupos permitidos"
 
-#: app_gateway/forms.py:116 templates/gatekeeper/gatekeeper_list.html:13
+#: app_gateway/forms.py:123 templates/gatekeeper/gatekeeper_list.html:13
 msgid "Authentication Methods"
 msgstr "Métodos de autenticación"
 
-#: app_gateway/forms.py:196
+#: app_gateway/forms.py:203
 msgid "Cannot select more than one Local Password authentication method."
 msgstr ""
 "No se puede seleccionar más de un método de autenticación de Contraseña "
 "Local."
 
-#: app_gateway/forms.py:200
+#: app_gateway/forms.py:207
 msgid ""
 "Cannot select more than one OpenID Connect (OIDC) authentication method."
 msgstr ""
 "No se puede seleccionar más de un método de autenticação OpenID Connect "
 "(OIDC)."
 
-#: app_gateway/forms.py:204
+#: app_gateway/forms.py:211
 msgid "Cannot select more than one TOTP authentication method."
 msgstr "No se puede seleccionar más de un método de autenticación TOTP."
 
-#: app_gateway/forms.py:208
+#: app_gateway/forms.py:215
 msgid ""
 "Cannot select both Local Password and OpenID Connect (OIDC) authentication "
 "methods."
@@ -296,7 +306,7 @@ msgstr ""
 "No se pueden seleccionar simultáneamente los métodos de autenticación de "
 "Contraseña Local y OpenID Connect (OIDC)."
 
-#: app_gateway/forms.py:212
+#: app_gateway/forms.py:219
 msgid ""
 "At least one user group must be selected when using Local Password "
 "authentication."
@@ -304,47 +314,47 @@ msgstr ""
 "Se debe seleccionar al menos um grupo de usuarios al usar la autenticación "
 "de Contraseña Local."
 
-#: app_gateway/forms.py:216
+#: app_gateway/forms.py:223
 msgid "User groups can only be used with Local Password authentication."
 msgstr ""
 "Los grupos de usuarios solo se pueden usar con la autenticación de "
 "Contraseña Local."
 
-#: app_gateway/forms.py:226 templates/app_gateway/app_gateway_list.html:70
+#: app_gateway/forms.py:233 templates/app_gateway/app_gateway_list.html:70
 #: templates/app_gateway/application_details.html:39
 #: templates/firewall/firewall_nav_tabs.html:15
 msgid "Default Policy"
 msgstr "Política predeterminada"
 
-#: app_gateway/forms.py:255 templates/app_gateway/application_details.html:134
+#: app_gateway/forms.py:262 templates/app_gateway/application_details.html:134
 msgid "Route Name"
 msgstr "Nombre de la ruta"
 
-#: app_gateway/forms.py:256 templates/app_gateway/application_details.html:135
+#: app_gateway/forms.py:263 templates/app_gateway/application_details.html:135
 msgid "Path Prefix"
 msgstr "Prefijo de ruta"
 
-#: app_gateway/forms.py:257 templates/app_gateway/application_details.html:136
+#: app_gateway/forms.py:264 templates/app_gateway/application_details.html:136
 msgid "Policy"
 msgstr "Política"
 
-#: app_gateway/forms.py:258 templates/app_gateway/application_details.html:137
+#: app_gateway/forms.py:265 templates/app_gateway/application_details.html:137
 msgid "Order"
 msgstr "Orden"
 
-#: app_gateway/forms.py:299
+#: app_gateway/forms.py:306
 msgid "Path prefix must start with /."
 msgstr "El prefijo de la ruta debe comenzar con /."
 
-#: app_gateway/forms.py:301
+#: app_gateway/forms.py:308
 msgid "Path prefix cannot contain spaces."
 msgstr "El prefijo de la ruta no puede contener espacios."
 
-#: app_gateway/forms.py:303
+#: app_gateway/forms.py:310
 msgid "Path prefix contains invalid characters."
 msgstr "El prefijo de la ruta contiene caracteres no válidos."
 
-#: app_gateway/forms.py:308
+#: app_gateway/forms.py:315
 msgid "This path prefix is reserved by the system."
 msgstr "Este prefijo de ruta está reservado por el sistema."
 
@@ -4326,7 +4336,8 @@ msgstr "Dominios de búsqueda DNS"
 #: wireguard/forms.py:29
 msgid ""
 "Optional. One or more domains separated by commas (e.g. vpn, example.com)."
-msgstr "Opcional. Uno o más dominios separados por comas (p. ej., vpn, example.com)."
+msgstr ""
+"Opcional. Uno o más dominios separados por comas (p. ej., vpn, example.com)."
 
 #: wireguard/forms.py:137
 #, python-format
