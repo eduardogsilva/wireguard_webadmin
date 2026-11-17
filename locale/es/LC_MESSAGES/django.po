@@ -211,10 +211,8 @@ msgid "API Documentation"
 msgstr "Documentación de la API"
 
 #: app_gateway/dns_providers.py:14
-#, fuzzy
-#| msgid "Token"
 msgid "API Token"
-msgstr "Token"
+msgstr "Token de API"
 
 #: app_gateway/forms.py:23 templates/app_gateway/app_gateway_list.html:73
 #: templates/app_gateway/application_details.html:36
@@ -272,11 +270,11 @@ msgstr "Nombre de host"
 #: app_gateway/forms.py:83 templates/app_gateway/app_gateway_list.html:117
 #: templates/app_gateway/application_details.html:76
 msgid "Certificate"
-msgstr ""
+msgstr "Certificado"
 
 #: app_gateway/forms.py:84 templates/app_gateway/dns_credential_form.html:24
 msgid "DNS Credential"
-msgstr ""
+msgstr "Credencial DNS"
 
 #: app_gateway/forms.py:95
 msgid "Hostname contains invalid characters."
@@ -288,11 +286,11 @@ msgstr "Este nombre de host ya está en uso por WireGuard WebAdmin."
 
 #: app_gateway/forms.py:102
 msgid "IP addresses can only use a self-signed certificate."
-msgstr ""
+msgstr "Las direcciones IP solo pueden usar un certificado autofirmado."
 
 #: app_gateway/forms.py:106
 msgid "Select a DNS credential to use the DNS challenge."
-msgstr ""
+msgstr "Seleccione una credencial DNS para usar el desafío DNS."
 
 #: app_gateway/forms.py:148 templates/app_gateway/app_gateway_list.html:158
 msgid "Policy Type"
@@ -384,43 +382,37 @@ msgid "This path prefix is reserved by the system."
 msgstr "Este prefijo de ruta está reservado por el sistema."
 
 #: app_gateway/forms.py:354 templates/app_gateway/app_gateway_list.html:205
-#, fuzzy
-#| msgid "OIDC Provider URL"
 msgid "Provider"
-msgstr "URL del proveedor OIDC"
+msgstr "Proveedor"
 
 #: app_gateway/forms.py:372
 #, python-format
 msgid "Leave blank to keep the current value (ending in %(suffix)s)."
-msgstr ""
+msgstr "Déjelo en blanco para mantener el valor actual (termina en %(suffix)s)."
 
 #: app_gateway/forms.py:425
-#, fuzzy
-#| msgid "Password is required."
 msgid "This field is required."
-msgstr "La contraseña es obligatoria."
+msgstr "Este campo es obligatorio."
 
 #: app_gateway/forms.py:427
-#, fuzzy
-#| msgid "Path prefix contains invalid characters."
 msgid "This field contains invalid characters."
-msgstr "El prefijo de la ruta contiene caracteres no válidos."
+msgstr "Este campo contiene caracteres no válidos."
 
 #: app_gateway/forms.py:429
 msgid "The value does not match the expected format for this provider."
-msgstr ""
+msgstr "El valor no coincide con el formato esperado para este proveedor."
 
 #: app_gateway/models.py:12
 msgid "Self-signed"
-msgstr ""
+msgstr "Autofirmado"
 
 #: app_gateway/models.py:13
 msgid "HTTP challenge"
-msgstr ""
+msgstr "Desafío HTTP"
 
 #: app_gateway/models.py:14
 msgid "DNS challenge"
-msgstr ""
+msgstr "Desafío DNS"
 
 #: app_gateway/models.py:45
 msgid "Upstream address, e.g.: http://10.188.18.27:3000"
@@ -550,6 +542,16 @@ msgid ""
 "used until the next successful attempt.</p>\n"
 "    "
 msgstr ""
+"\n"
+"    <h5>Certificado</h5>\n"
+"    <p>Define cómo se emite el certificado TLS de este hostname.</p>\n"
+"    <ul>\n"
+"        <li><strong>Autofirmado</strong>: un certificado emitido por la CA interna de Caddy. Los navegadores mostrarán una advertencia de seguridad.</li>\n"
+"        <li><strong>Desafío HTTP</strong>: un certificado ACME de confianza validado mediante HTTP. El hostname debe apuntar a este servidor y los puertos 80/443 deben ser accesibles desde internet.</li>\n"
+"        <li><strong>Desafío DNS</strong>: un certificado ACME de confianza validado mediante un registro DNS creado con la credencial DNS seleccionada. No es necesario que el servidor sea accesible desde internet.</li>\n"
+"    </ul>\n"
+"    <p>Si no se puede emitir un certificado ACME, se utilizará un certificado autofirmado hasta el próximo intento correcto.</p>\n"
+"    "
 
 #: app_gateway/views.py:193
 msgid ""
@@ -562,6 +564,12 @@ msgid ""
 "        </div>\n"
 "        "
 msgstr ""
+"\n"
+"        <div class=\"alert alert-warning\">\n"
+"            Este hostname se utiliza para acceder a WireGuard WebAdmin. Si no se puede emitir el certificado,\n"
+"            su navegador mostrará una advertencia de seguridad hasta que se corrija el problema.\n"
+"        </div>\n"
+"        "
 
 #: app_gateway/views.py:225
 msgid "Application Host deleted successfully."
@@ -765,45 +773,34 @@ msgstr "¿Está seguro de que desea eliminar la ruta \"%(name)s\" (%(path)s)?"
 
 #: app_gateway/views.py:483
 msgid "Edit DNS Credential"
-msgstr ""
+msgstr "Editar credencial DNS"
 
 #: app_gateway/views.py:486 templates/app_gateway/app_gateway_list.html:195
 msgid "Add DNS Credential"
-msgstr ""
+msgstr "Añadir credencial DNS"
 
 #: app_gateway/views.py:493
-#, fuzzy
-#| msgid "Time Interval saved successfully."
 msgid "DNS Credential saved successfully."
-msgstr "Intervalo de tiempo guardado con éxito."
+msgstr "Credencial DNS guardada correctamente."
 
 #: app_gateway/views.py:516
-#, fuzzy
-#| msgid "Time Interval deleted successfully."
 msgid "DNS Credential deleted successfully."
-msgstr "Intervalo de tiempo eliminado con éxito."
+msgstr "Credencial DNS eliminada correctamente."
 
 #: app_gateway/views.py:518
-#, fuzzy
-#| msgid ""
-#| "Cannot delete this Access Policy because it is currently in use by an "
-#| "Application Route or Application Default Policy."
 msgid ""
 "Cannot delete this DNS Credential because it is currently in use by an "
 "Application Host."
-msgstr ""
-"No se puede eliminar esta política de acceso porque está actualmente en uso "
-"por una ruta de aplicación o una política predeterminada de aplicación."
+msgstr "No se puede eliminar esta credencial DNS porque está en uso por un host de aplicación."
 
 #: app_gateway/views.py:523
 msgid "Delete DNS Credential"
-msgstr ""
+msgstr "Eliminar credencial DNS"
 
 #: app_gateway/views.py:525
-#, fuzzy, python-format
-#| msgid "Are you sure you want to delete the profile \"%(name)s\"?"
+#, python-format
 msgid "Are you sure you want to delete the DNS credential \"%(name)s\"?"
-msgstr "¿Está seguro de que desea eliminar el perfil \"%(name)s\"?"
+msgstr "¿Está seguro de que desea eliminar la credencial DNS \"%(name)s\"?"
 
 #: app_gateway/views.py:540
 msgid ""
@@ -2474,7 +2471,7 @@ msgstr "Políticas de acceso"
 
 #: templates/app_gateway/app_gateway_list.html:25
 msgid "DNS Credentials"
-msgstr ""
+msgstr "Credenciales DNS"
 
 #: templates/app_gateway/app_gateway_list.html:41
 #: templates/app_gateway/app_gateway_list.html:74
@@ -2550,10 +2547,8 @@ msgid "No Access Policies found."
 msgstr "No se han encontrado políticas de acceso."
 
 #: templates/app_gateway/app_gateway_list.html:233
-#, fuzzy
-#| msgid "No time intervals found."
 msgid "No DNS Credentials found."
-msgstr "No se encontraron intervalos de tiempo."
+msgstr "No se han encontrado credenciales DNS."
 
 #: templates/app_gateway/application_details.html:12
 #: templates/wireguard/server_detail.html:53
@@ -2638,20 +2633,20 @@ msgstr "Para obtener más información, consulte la discusión:"
 msgid ""
 "Credentials used to create the DNS records required by the ACME DNS "
 "challenge."
-msgstr ""
+msgstr "Credenciales utilizadas para crear los registros DNS requeridos por el desafío DNS de ACME."
 
 #: templates/app_gateway/dns_credential_form.html:26
 msgid ""
 "Use a token restricted to editing DNS records of the zones you need. For "
 "Cloudflare, create an API Token with the <strong>Zone / DNS / Edit</strong> "
 "permission."
-msgstr ""
+msgstr "Use un token limitado a la edición de los registros DNS de las zonas necesarias. En Cloudflare, cree un API Token con el permiso <strong>Zone / DNS / Edit</strong>."
 
 #: templates/app_gateway/dns_credential_form.html:30
 msgid ""
 "Secret values are never displayed after saving. Leave them blank when "
 "editing to keep the current value."
-msgstr ""
+msgstr "Los valores secretos nunca se muestran después de guardar. Déjelos en blanco al editar para mantener el valor actual."
 
 #: templates/cluster/workers_list.html:9
 #: templates/scheduler/scheduleprofile_form.html:82

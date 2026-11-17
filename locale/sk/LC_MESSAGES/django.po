@@ -211,10 +211,8 @@ msgid "API Documentation"
 msgstr "Dokumentácia API"
 
 #: app_gateway/dns_providers.py:14
-#, fuzzy
-#| msgid "Token"
 msgid "API Token"
-msgstr "Token"
+msgstr "API token"
 
 #: app_gateway/forms.py:23 templates/app_gateway/app_gateway_list.html:73
 #: templates/app_gateway/application_details.html:36
@@ -272,11 +270,11 @@ msgstr "Názov hostiteľa"
 #: app_gateway/forms.py:83 templates/app_gateway/app_gateway_list.html:117
 #: templates/app_gateway/application_details.html:76
 msgid "Certificate"
-msgstr ""
+msgstr "Certifikát"
 
 #: app_gateway/forms.py:84 templates/app_gateway/dns_credential_form.html:24
 msgid "DNS Credential"
-msgstr ""
+msgstr "Poverenie DNS"
 
 #: app_gateway/forms.py:95
 msgid "Hostname contains invalid characters."
@@ -288,11 +286,11 @@ msgstr "Tento hostname už používa WireGuard WebAdmin."
 
 #: app_gateway/forms.py:102
 msgid "IP addresses can only use a self-signed certificate."
-msgstr ""
+msgstr "IP adresy môžu používať iba samopodpísaný certifikát."
 
 #: app_gateway/forms.py:106
 msgid "Select a DNS credential to use the DNS challenge."
-msgstr ""
+msgstr "Vyberte poverenie DNS na použitie DNS výzvy."
 
 #: app_gateway/forms.py:148 templates/app_gateway/app_gateway_list.html:158
 msgid "Policy Type"
@@ -380,43 +378,37 @@ msgid "This path prefix is reserved by the system."
 msgstr "Táto predpona cesty je vyhradená systémom."
 
 #: app_gateway/forms.py:354 templates/app_gateway/app_gateway_list.html:205
-#, fuzzy
-#| msgid "OIDC Provider URL"
 msgid "Provider"
-msgstr "URL poskytovateľa OIDC"
+msgstr "Poskytovateľ"
 
 #: app_gateway/forms.py:372
 #, python-format
 msgid "Leave blank to keep the current value (ending in %(suffix)s)."
-msgstr ""
+msgstr "Ponechajte prázdne, ak chcete zachovať aktuálnu hodnotu (končí na %(suffix)s)."
 
 #: app_gateway/forms.py:425
-#, fuzzy
-#| msgid "Password is required."
 msgid "This field is required."
-msgstr "Heslo je povinné."
+msgstr "Toto pole je povinné."
 
 #: app_gateway/forms.py:427
-#, fuzzy
-#| msgid "Path prefix contains invalid characters."
 msgid "This field contains invalid characters."
-msgstr "Predpona cesty obsahuje neplatné znaky."
+msgstr "Toto pole obsahuje neplatné znaky."
 
 #: app_gateway/forms.py:429
 msgid "The value does not match the expected format for this provider."
-msgstr ""
+msgstr "Hodnota nezodpovedá očakávanému formátu pre tohto poskytovateľa."
 
 #: app_gateway/models.py:12
 msgid "Self-signed"
-msgstr ""
+msgstr "Samopodpísaný"
 
 #: app_gateway/models.py:13
 msgid "HTTP challenge"
-msgstr ""
+msgstr "HTTP výzva"
 
 #: app_gateway/models.py:14
 msgid "DNS challenge"
-msgstr ""
+msgstr "DNS výzva"
 
 #: app_gateway/models.py:45
 msgid "Upstream address, e.g.: http://10.188.18.27:3000"
@@ -546,6 +538,16 @@ msgid ""
 "used until the next successful attempt.</p>\n"
 "    "
 msgstr ""
+"\n"
+"    <h5>Certifikát</h5>\n"
+"    <p>Určuje, ako sa vydáva TLS certifikát pre tento názov hostiteľa.</p>\n"
+"    <ul>\n"
+"        <li><strong>Samopodpísaný</strong>: certifikát vydaný internou CA servera Caddy. Prehliadače zobrazia bezpečnostné upozornenie.</li>\n"
+"        <li><strong>HTTP výzva</strong>: dôveryhodný ACME certifikát overený cez HTTP. Názov hostiteľa musí smerovať na tento server a porty 80/443 musia byť dostupné z internetu.</li>\n"
+"        <li><strong>DNS výzva</strong>: dôveryhodný ACME certifikát overený pomocou DNS záznamu vytvoreného so zvoleným poverením DNS. Server nemusí byť dostupný z internetu.</li>\n"
+"    </ul>\n"
+"    <p>Ak nie je možné vydať ACME certifikát, až do ďalšieho úspešného pokusu sa použije samopodpísaný certifikát.</p>\n"
+"    "
 
 #: app_gateway/views.py:193
 msgid ""
@@ -558,6 +560,12 @@ msgid ""
 "        </div>\n"
 "        "
 msgstr ""
+"\n"
+"        <div class=\"alert alert-warning\">\n"
+"            Tento názov hostiteľa sa používa na prístup k WireGuard WebAdmin. Ak certifikát nie je možné vydať,\n"
+"            váš prehliadač bude zobrazovať bezpečnostné upozornenie, kým sa problém neodstráni.\n"
+"        </div>\n"
+"        "
 
 #: app_gateway/views.py:225
 msgid "Application Host deleted successfully."
@@ -759,45 +767,34 @@ msgstr "Naozaj chcete odstrániť trasu \"%(name)s\" (%(path)s)?"
 
 #: app_gateway/views.py:483
 msgid "Edit DNS Credential"
-msgstr ""
+msgstr "Upraviť poverenie DNS"
 
 #: app_gateway/views.py:486 templates/app_gateway/app_gateway_list.html:195
 msgid "Add DNS Credential"
-msgstr ""
+msgstr "Pridať poverenie DNS"
 
 #: app_gateway/views.py:493
-#, fuzzy
-#| msgid "Time Interval saved successfully."
 msgid "DNS Credential saved successfully."
-msgstr "Časový interval bol úspešne uložený."
+msgstr "Poverenie DNS bolo úspešne uložené."
 
 #: app_gateway/views.py:516
-#, fuzzy
-#| msgid "Time Interval deleted successfully."
 msgid "DNS Credential deleted successfully."
-msgstr "Časový interval bol úspešne vymazaný."
+msgstr "Poverenie DNS bolo úspešne odstránené."
 
 #: app_gateway/views.py:518
-#, fuzzy
-#| msgid ""
-#| "Cannot delete this Access Policy because it is currently in use by an "
-#| "Application Route or Application Default Policy."
 msgid ""
 "Cannot delete this DNS Credential because it is currently in use by an "
 "Application Host."
-msgstr ""
-"Túto prístupovú politiku nie je možné odstrániť, pretože sa momentálne "
-"používa v trase aplikácie alebo v predvolenej politike aplikácie."
+msgstr "Toto poverenie DNS nie je možné odstrániť, pretože ho používa hostiteľ aplikácie."
 
 #: app_gateway/views.py:523
 msgid "Delete DNS Credential"
-msgstr ""
+msgstr "Odstrániť poverenie DNS"
 
 #: app_gateway/views.py:525
-#, fuzzy, python-format
-#| msgid "Are you sure you want to delete the profile \"%(name)s\"?"
+#, python-format
 msgid "Are you sure you want to delete the DNS credential \"%(name)s\"?"
-msgstr "Ste si istí, že chcete odstrániť profil \"%(name)s\"?"
+msgstr "Naozaj chcete odstrániť poverenie DNS \"%(name)s\"?"
 
 #: app_gateway/views.py:540
 msgid ""
@@ -2437,7 +2434,7 @@ msgstr "Politiky prístupu"
 
 #: templates/app_gateway/app_gateway_list.html:25
 msgid "DNS Credentials"
-msgstr ""
+msgstr "Poverenia DNS"
 
 #: templates/app_gateway/app_gateway_list.html:41
 #: templates/app_gateway/app_gateway_list.html:74
@@ -2513,10 +2510,8 @@ msgid "No Access Policies found."
 msgstr "Nenašli sa žiadne politiky prístupu."
 
 #: templates/app_gateway/app_gateway_list.html:233
-#, fuzzy
-#| msgid "No time intervals found."
 msgid "No DNS Credentials found."
-msgstr "Nenašli sa žiadne časové intervaly."
+msgstr "Nenašli sa žiadne poverenia DNS."
 
 #: templates/app_gateway/application_details.html:12
 #: templates/wireguard/server_detail.html:53
@@ -2600,20 +2595,20 @@ msgstr "Viac informácií nájdete v diskusii:"
 msgid ""
 "Credentials used to create the DNS records required by the ACME DNS "
 "challenge."
-msgstr ""
+msgstr "Poverenia používané na vytvorenie DNS záznamov potrebných pre DNS výzvu ACME."
 
 #: templates/app_gateway/dns_credential_form.html:26
 msgid ""
 "Use a token restricted to editing DNS records of the zones you need. For "
 "Cloudflare, create an API Token with the <strong>Zone / DNS / Edit</strong> "
 "permission."
-msgstr ""
+msgstr "Použite token obmedzený na úpravu DNS záznamov potrebných zón. V Cloudflare vytvorte API Token s oprávnením <strong>Zone / DNS / Edit</strong>."
 
 #: templates/app_gateway/dns_credential_form.html:30
 msgid ""
 "Secret values are never displayed after saving. Leave them blank when "
 "editing to keep the current value."
-msgstr ""
+msgstr "Tajné hodnoty sa po uložení nikdy nezobrazujú. Pri úprave ich ponechajte prázdne, ak chcete zachovať aktuálnu hodnotu."
 
 #: templates/cluster/workers_list.html:9
 #: templates/scheduler/scheduleprofile_form.html:82
