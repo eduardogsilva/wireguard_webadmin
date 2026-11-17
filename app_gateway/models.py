@@ -3,9 +3,40 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from app_gateway.dns_providers import DNS_PROVIDER_CHOICES
 from gatekeeper.models import GatekeeperGroup, AuthMethod, _unique_slug
 
 RESERVED_APP_NAME = 'wireguard_webadmin'
+
+CERTIFICATE_TYPE_CHOICES = (
+    ('self_signed', _('Self-signed')),
+    ('http_challenge', _('HTTP challenge')),
+    ('dns_challenge', _('DNS challenge')),
+)
+
+
+class DnsChallengeCredential(models.Model):
+    name = models.SlugField(max_length=64, unique=True)
+    display_name = models.CharField(max_length=128, blank=True)
+    provider = models.CharField(max_length=32, choices=DNS_PROVIDER_CHOICES)
+    credentials = models.JSONField(default=dict)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+
+    def save(self, *args, **kwargs):
+        if self.display_name:
+            self.name = _unique_slug(DnsChallengeCredential, self.display_name, exclude_pk=self.pk)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.display_name or self.name} ({self.get_provider_display()})"
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'DNS Challenge Credential'
+        verbose_name_plural = 'DNS Challenge Credentials'
 
 
 class Application(models.Model):
@@ -35,6 +66,10 @@ class Application(models.Model):
 class ApplicationHost(models.Model):
     application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name='hosts')
     hostname = models.CharField(max_length=255, unique=True)
+    certificate_type = models.CharField(max_length=16, default='http_challenge', choices=CERTIFICATE_TYPE_CHOICES)
+    dns_credential = models.ForeignKey(
+        DnsChallengeCredential, on_delete=models.PROTECT, null=True, blank=True, related_name='hosts'
+    )
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

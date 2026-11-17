@@ -2,7 +2,7 @@ import json
 import os
 
 from app_gateway.models import (
-    AccessPolicy, Application, ApplicationPolicy, RESERVED_APP_NAME
+    AccessPolicy, Application, ApplicationHost, ApplicationPolicy, RESERVED_APP_NAME
 )
 from gatekeeper.models import (
     AuthMethod, GatekeeperGroup, GatekeeperIPAddress, GatekeeperUser
@@ -130,6 +130,26 @@ def build_routes_data():
     return {'entries': entries}
 
 
+def build_tls_data():
+    hosts = {}
+    dns_credentials = {}
+    for application_host in ApplicationHost.objects.select_related('dns_credential'):
+        host_entry = {'certificate_type': application_host.certificate_type}
+        dns_credential = application_host.dns_credential
+        if application_host.certificate_type == 'dns_challenge' and dns_credential:
+            host_entry['dns_credential'] = dns_credential.name
+            dns_credentials[dns_credential.name] = {
+                'provider': dns_credential.provider,
+                'credentials': dns_credential.credentials,
+            }
+        hosts[application_host.hostname.lower()] = host_entry
+
+    return {
+        'hosts': hosts,
+        'dns_credentials': dns_credentials,
+    }
+
+
 def export_caddy_config(output_dir):
     os.makedirs(output_dir, exist_ok=True)
 
@@ -137,6 +157,7 @@ def export_caddy_config(output_dir):
         'applications.json': build_applications_data,
         'auth_policies.json': build_auth_policies_data,
         'routes.json': build_routes_data,
+        'tls.json': build_tls_data,
     }
 
     for filename, builder in file_map.items():

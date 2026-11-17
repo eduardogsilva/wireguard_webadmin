@@ -67,28 +67,28 @@
             {% endif %}
         </div>
 
-        {% if hosts or django_hostnames %}
+        {% if hosts %}
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>{% trans 'Hostname' %}</th>
+                        <th>{% trans 'Certificate' %}</th>
                         <th>{% trans 'Actions' %}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for hostname in django_hostnames %}
-                    <tr class="text-muted">
-                        <td>{{ hostname }}</td>
-                        <td style="width: 15%"></td>
-                    </tr>
-                    {% endfor %}
                     {% for host in hosts %}
                     <tr>
                         <td>{{ host.hostname }}</td>
+                        <td>
+                            {{ host.get_certificate_type_display }}
+                            {% if host.dns_credential %}<small class="text-muted">({{ host.dns_credential }})</small>{% endif %}
+                        </td>
                         <td style="width: 15%">
                             {% if is_reserved %}
-                            <a class="btn btn-sm btn-secondary disabled" aria-disabled="true" tabindex="-1" title="{% trans 'This application cannot be modified' %}">
+                            <a href="{% url 'manage_application_host' %}?uuid={{ host.uuid }}"
+                                class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <a class="btn btn-sm btn-secondary disabled" aria-disabled="true" tabindex="-1" title="{% trans 'This application cannot be modified' %}">

@@ -1,4 +1,3 @@
-import ipaddress
 import os
 
 from django.conf import settings
@@ -13,10 +12,11 @@ from django.views.decorators.http import require_POST
 from app_gateway.caddy_config_export import export_caddy_config
 from app_gateway.forms import (
     ApplicationForm, ApplicationHostForm, AccessPolicyForm,
-    ApplicationPolicyForm, ApplicationRouteForm
+    ApplicationPolicyForm, ApplicationRouteForm, DnsChallengeCredentialForm
 )
 from app_gateway.models import (
-    Application, ApplicationHost, AccessPolicy, ApplicationPolicy, ApplicationRoute, RESERVED_APP_NAME
+    Application, ApplicationHost, AccessPolicy, ApplicationPolicy, ApplicationRoute, DnsChallengeCredential,
+    RESERVED_APP_NAME
 )
 from app_gateway.setup_defaults import create_default_entries
 from user_manager.models import UserAcl
@@ -32,6 +32,7 @@ def view_app_gateway_list(request):
     hosts = ApplicationHost.objects.all().order_by('hostname')
     access_policies = AccessPolicy.objects.all().order_by('name')
     app_policies = ApplicationPolicy.objects.all().order_by('application__name')
+    dns_credentials = DnsChallengeCredential.objects.all().order_by('name')
 
     tab = request.GET.get('tab', 'applications')
 
@@ -40,6 +41,7 @@ def view_app_gateway_list(request):
         'hosts': hosts,
         'access_policies': access_policies,
         'app_policies': app_policies,
+        'dns_credentials': dns_credentials,
         'active_tab': tab,
         'caddy_enabled': settings.CADDY_ENABLED,
     }
@@ -58,20 +60,12 @@ def view_application_details(request):
     routes = application.routes.all().order_by('order', 'path_prefix')
 
     is_reserved = application.name == RESERVED_APP_NAME
-    django_hostnames = []
-    if is_reserved:
-        for host in settings.ALLOWED_HOSTS:
-            try:
-                ipaddress.ip_address(host)
-            except ValueError:
-                django_hostnames.append(host)
 
     context = {
         'application': application,
         'hosts': hosts,
         'routes': routes,
         'is_reserved': is_reserved,
-        'django_hostnames': django_hostnames,
         'page_title': _('Application Details'),
     }
     return render(request, 'app_gateway/application_details.html', context)
@@ -170,11 +164,14 @@ def view_manage_application_host(request):
 
     cancel_url = reverse('view_application') + f'?uuid={application.uuid}#hosts'
 
-    if application.name == RESERVED_APP_NAME:
+    is_reserved = application.name == RESERVED_APP_NAME
+    if is_reserved and not application_host:
         messages.error(request, _('The WireGuard WebAdmin application cannot be modified.'))
         return redirect(cancel_url)
 
-    form = ApplicationHostForm(request.POST or None, instance=application_host, cancel_url=cancel_url)
+    form = ApplicationHostForm(
+        request.POST or None, instance=application_host, cancel_url=cancel_url, is_reserved=is_reserved
+    )
     if form.is_valid():
         host = form.save(commit=False)
         host.application = application
@@ -182,10 +179,29 @@ def view_manage_application_host(request):
         messages.success(request, _('Application Host saved successfully.'))
         return redirect(cancel_url)
 
+    form_description_content = _('''
+    <h5>Certificate</h5>
+    <p>Defines how the TLS certificate for this hostname is issued.</p>
+    <ul>
+        <li><strong>Self-signed</strong>: A certificate issued by the internal Caddy CA. Browsers will show a security warning.</li>
+        <li><strong>HTTP challenge</strong>: A trusted ACME certificate validated through HTTP. The hostname must point to this server and ports 80/443 must be reachable from the internet.</li>
+        <li><strong>DNS challenge</strong>: A trusted ACME certificate validated through a DNS record created using the selected DNS credential. The server does not need to be reachable from the internet.</li>
+    </ul>
+    <p>If an ACME certificate cannot be issued, a self-signed certificate is used until the next successful attempt.</p>
+    ''')
+    if is_reserved:
+        form_description_content += _('''
+        <div class="alert alert-warning">
+            This hostname is used to access WireGuard WebAdmin. If the certificate cannot be issued,
+            your browser will show a security warning until the problem is fixed.
+        </div>
+        ''')
+
     context = {
         'form': form,
         'title': title,
         'page_title': title,
+        'form_description': {'size': 'col-lg-6', 'content': form_description_content},
     }
     return render(request, 'generic_form.html', context)
 
@@ -451,6 +467,62 @@ def view_delete_application_route(request):
             'name': application_route.name,
             'path': application_route.path_prefix
         }
+    }
+    return render(request, 'generic_delete_confirmation.html', context)
+
+
+@login_required
+def view_manage_dns_credential(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
+
+    dns_credential_uuid = request.GET.get('uuid')
+
+    if dns_credential_uuid:
+        dns_credential = get_object_or_404(DnsChallengeCredential, uuid=dns_credential_uuid)
+        title = _('Edit DNS Credential')
+    else:
+        dns_credential = None
+        title = _('Add DNS Credential')
+
+    cancel_url = reverse('app_gateway_list') + '?tab=dns_credentials'
+
+    form = DnsChallengeCredentialForm(request.POST or None, instance=dns_credential, cancel_url=cancel_url)
+    if form.is_valid():
+        form.save()
+        messages.success(request, _('DNS Credential saved successfully.'))
+        return redirect(cancel_url)
+
+    context = {
+        'form': form,
+        'title': title,
+        'page_title': title,
+    }
+    return render(request, 'app_gateway/dns_credential_form.html', context)
+
+
+@login_required
+def view_delete_dns_credential(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
+
+    dns_credential = get_object_or_404(DnsChallengeCredential, uuid=request.GET.get('uuid'))
+
+    cancel_url = reverse('app_gateway_list') + '?tab=dns_credentials'
+
+    if request.method == 'POST':
+        try:
+            dns_credential.delete()
+            messages.success(request, _('DNS Credential deleted successfully.'))
+        except ProtectedError:
+            messages.error(request, _('Cannot delete this DNS Credential because it is currently in use by an Application Host.'))
+        return redirect(cancel_url)
+
+    context = {
+        'dns_credential': dns_credential,
+        'title': _('Delete DNS Credential'),
+        'cancel_url': cancel_url,
+        'text': _('Are you sure you want to delete the DNS credential "%(name)s"?') % {'name': dns_credential.display_name}
     }
     return render(request, 'generic_delete_confirmation.html', context)
 

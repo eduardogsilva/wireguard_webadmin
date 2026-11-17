@@ -10,8 +10,17 @@ CADDYFILE_PATH="${CADDYFILE_PATH:-/etc/caddy/Caddyfile}"
 echo "==> Generating wireguard_webadmin.json..."
 "$PYTHON" "${SCRIPT_DIR}/export_wireguard_webadmin_config.py"
 
+generate_caddyfile() {
+    "$PYTHON" "${SCRIPT_DIR}/process_config.py"
+    # Validation output is not printed because provider errors may include credentials
+    if ! caddy validate --config "$CADDYFILE_PATH" --adapter caddyfile >/dev/null 2>&1; then
+        echo "Warning: generated Caddyfile is invalid, regenerating with DNS challenge disabled. Check the DNS credentials."
+        DISABLE_DNS_CHALLENGE=1 "$PYTHON" "${SCRIPT_DIR}/process_config.py"
+    fi
+}
+
 echo "==> Processing config files..."
-"$PYTHON" "${SCRIPT_DIR}/process_config.py"
+generate_caddyfile
 
 echo "==> Starting Caddy..."
 caddy run --config "$CADDYFILE_PATH" --adapter caddyfile &
@@ -25,7 +34,7 @@ while true; do
     sleep 1
 
     echo "==> Config change detected, reprocessing..."
-    "$PYTHON" "${SCRIPT_DIR}/process_config.py"
+    generate_caddyfile
 
     echo "==> Reloading Caddy..."
     caddy reload --config "$CADDYFILE_PATH" --adapter caddyfile 2>/dev/null || echo "Warning: Caddy reload failed, will retry on next change."

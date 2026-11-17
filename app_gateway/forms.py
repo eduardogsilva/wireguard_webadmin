@@ -1,3 +1,4 @@
+import re
 from urllib.parse import urlparse
 
 from crispy_forms.helper import FormHelper
@@ -6,9 +7,11 @@ from django import forms
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
+from app_gateway.dns_providers import DNS_PROVIDERS
 from app_gateway.models import (
-    Application, ApplicationHost, AccessPolicy, ApplicationPolicy, ApplicationRoute
+    Application, ApplicationHost, AccessPolicy, ApplicationPolicy, ApplicationRoute, DnsChallengeCredential
 )
+from app_gateway.setup_defaults import is_ip_address
 
 
 class ApplicationForm(forms.ModelForm):
@@ -74,31 +77,55 @@ class ApplicationForm(forms.ModelForm):
 class ApplicationHostForm(forms.ModelForm):
     class Meta:
         model = ApplicationHost
-        fields = ['hostname']
+        fields = ['hostname', 'certificate_type', 'dns_credential']
         labels = {
             'hostname': _('Hostname'),
+            'certificate_type': _('Certificate'),
+            'dns_credential': _('DNS Credential'),
         }
 
     def clean(self):
         cleaned_data = super().clean()
         hostname = (cleaned_data.get('hostname') or '').strip()
-        if hostname:
+        certificate_type = cleaned_data.get('certificate_type')
+        dns_credential = cleaned_data.get('dns_credential')
+
+        if hostname and not self.is_reserved:
             if any(c in hostname for c in ('{', '}', '\n', '\r', '\x00', ' ')):
                 self.add_error('hostname', _('Hostname contains invalid characters.'))
 
             webadmin_hostnames = [host.lower() for host in settings.ALLOWED_HOSTS]
             if hostname.lower() in webadmin_hostnames:
                 self.add_error('hostname', _('This hostname is already used by WireGuard WebAdmin.'))
+
+        if hostname and is_ip_address(hostname) and certificate_type != 'self_signed':
+            self.add_error('certificate_type', _('IP addresses can only use a self-signed certificate.'))
+
+        if certificate_type == 'dns_challenge':
+            if not dns_credential:
+                self.add_error('dns_credential', _('Select a DNS credential to use the DNS challenge.'))
+        else:
+            cleaned_data['dns_credential'] = None
+
         return cleaned_data
 
     def __init__(self, *args, **kwargs):
         cancel_url = kwargs.pop('cancel_url', '#')
+        self.is_reserved = kwargs.pop('is_reserved', False)
         super().__init__(*args, **kwargs)
+        self.fields['dns_credential'].required = False
+        if self.is_reserved:
+            self.fields['hostname'].disabled = True
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
                 Div('hostname', css_class='col-md-12'),
+                css_class='row'
+            ),
+            Div(
+                Div('certificate_type', css_class='col-xl-6'),
+                Div('dns_credential', css_class='col-xl-6'),
                 css_class='row'
             ),
             Div(
@@ -315,4 +342,92 @@ class ApplicationRouteForm(forms.ModelForm):
                 self.add_error('path_prefix', _('This path prefix is reserved by the system.'))
             else:
                 cleaned_data['path_prefix'] = path_prefix
+        return cleaned_data
+
+
+class DnsChallengeCredentialForm(forms.ModelForm):
+    class Meta:
+        model = DnsChallengeCredential
+        fields = ['display_name', 'provider']
+        labels = {
+            'display_name': _('Name'),
+            'provider': _('Provider'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        cancel_url = kwargs.pop('cancel_url', '#')
+        super().__init__(*args, **kwargs)
+        self.fields['display_name'].required = True
+
+        stored_credentials = self.instance.credentials if self.instance and self.instance.pk else {}
+        provider_rows = []
+        for provider, provider_data in DNS_PROVIDERS.items():
+            provider_fields = []
+            for provider_field in provider_data['fields']:
+                field_name = self.credential_field_name(provider, provider_field['name'])
+                stored_value = stored_credentials.get(provider_field['name'], '') if self.instance.provider == provider else ''
+                if provider_field.get('secret'):
+                    help_text = ''
+                    if stored_value:
+                        help_text = _('Leave blank to keep the current value (ending in %(suffix)s).') % {
+                            'suffix': stored_value[-4:]
+                        }
+                    self.fields[field_name] = forms.CharField(
+                        label=provider_field['label'], required=False, help_text=help_text,
+                        widget=forms.PasswordInput(render_value=False),
+                    )
+                else:
+                    self.fields[field_name] = forms.CharField(
+                        label=provider_field['label'], required=False, initial=stored_value,
+                    )
+                provider_fields.append(Div(field_name, css_class='col-md-12'))
+            provider_rows.append(Div(*provider_fields, css_class=f'row provider-group provider-{provider}'))
+
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Div(
+                Div('display_name', css_class='col-xl-6'),
+                Div('provider', css_class='col-xl-6'),
+                css_class='row'
+            ),
+            *provider_rows,
+            Div(
+                Div(
+                    Submit('submit', _('Save'), css_class='btn btn-primary'),
+                    HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
+                    css_class='col-md-12'
+                ),
+                css_class='row'
+            )
+        )
+
+    @staticmethod
+    def credential_field_name(provider, field_name):
+        return f'{provider}_{field_name}'
+
+    def clean(self):
+        cleaned_data = super().clean()
+        provider = cleaned_data.get('provider')
+        if provider not in DNS_PROVIDERS:
+            return cleaned_data
+
+        stored_credentials = {}
+        if self.instance and self.instance.pk and self.instance.provider == provider:
+            stored_credentials = self.instance.credentials
+
+        credentials = {}
+        for provider_field in DNS_PROVIDERS[provider]['fields']:
+            field_name = self.credential_field_name(provider, provider_field['name'])
+            value = (cleaned_data.get(field_name) or '').strip()
+            if not value and provider_field.get('secret'):
+                value = stored_credentials.get(provider_field['name'], '')
+            if not value:
+                self.add_error(field_name, _('This field is required.'))
+            elif any(c in value for c in ('\n', '\r', '\x00')):
+                self.add_error(field_name, _('This field contains invalid characters.'))
+            elif provider_field.get('pattern') and not re.match(provider_field['pattern'], value):
+                self.add_error(field_name, _('The value does not match the expected format for this provider.'))
+            credentials[provider_field['name']] = value
+
+        self.instance.credentials = credentials
         return cleaned_data

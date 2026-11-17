@@ -7,6 +7,7 @@ Expected input files in /caddy_json_export/:
   - applications.json        (optional, exported from Django)
   - auth_policies.json       (optional, exported from Django)
   - routes.json              (optional, exported from Django)
+  - tls.json                 (optional, exported from Django)
 """
 
 import json
@@ -19,6 +20,11 @@ CADDYFILE_PATH = os.environ.get("CADDYFILE_PATH", "/etc/caddy/Caddyfile")
 AUTH_GATEWAY_INTERNAL_URL = os.environ.get("AUTH_GATEWAY_INTERNAL_URL", "http://wireguard-webadmin-auth-gateway:9091")
 AUTH_GATEWAY_PORTAL_PATH = os.environ.get("AUTH_GATEWAY_EXTERNAL_PATH", "/auth-gateway")
 AUTH_GATEWAY_CHECK_URI = "/auth/check"
+CERTIFICATE_TYPES = ("self_signed", "http_challenge", "dns_challenge")
+DEFAULT_CERTIFICATE_TYPE = "http_challenge"
+ACME_DNS_RESOLVERS = "1.1.1.1 1.0.0.1"
+# Set by entrypoint.sh when the generated Caddyfile fails validation
+DISABLE_DNS_CHALLENGE = os.environ.get("DISABLE_DNS_CHALLENGE", "") == "1"
 AUTH_IDENTITY_HEADERS = (
     "X-Auth-User",
     "X-Auth-Email",
@@ -66,7 +72,41 @@ def _safe_value(val: str) -> str:
     return re.sub(r"[\r\n\x00]", "", val)
 
 
-def build_caddyfile(apps, auth_policies, routes):
+def _quote_value(val) -> str:
+    escaped = _safe_value(str(val)).replace("\\", "\\\\").replace('"', '\\"')
+    return f'"{escaped}"'
+
+
+def _safe_identifier(val: str) -> str:
+    return re.sub(r"[^A-Za-z0-9_]", "", str(val))
+
+
+def get_host_tls(host, tls_data):
+    """Return (certificate_type, dns_credential_name) for a host. Hosts not listed use the HTTP challenge."""
+    host_tls = tls_data.get("hosts", {}).get(host.lower(), {})
+    certificate_type = host_tls.get("certificate_type", DEFAULT_CERTIFICATE_TYPE)
+    if certificate_type not in CERTIFICATE_TYPES:
+        certificate_type = DEFAULT_CERTIFICATE_TYPE
+
+    dns_credential = None
+    if certificate_type == "dns_challenge":
+        dns_credential = host_tls.get("dns_credential")
+        if DISABLE_DNS_CHALLENGE or dns_credential not in tls_data.get("dns_credentials", {}):
+            certificate_type = DEFAULT_CERTIFICATE_TYPE
+            dns_credential = None
+    return certificate_type, dns_credential
+
+
+def group_hosts_by_tls(hosts, tls_data):
+    """Hosts sharing the same certificate settings are served by the same site block."""
+    groups = {}
+    for host in hosts:
+        groups.setdefault(get_host_tls(host, tls_data), []).append(host)
+    return groups.items()
+
+
+def build_caddyfile(apps, auth_policies, routes, tls_data=None):
+    tls_data = tls_data or {}
     policies = auth_policies.get("policies", {}) if auth_policies else {}
     route_entries = routes.get("entries", {}) if routes else {}
     lines = []
@@ -79,6 +119,30 @@ def build_caddyfile(apps, auth_policies, routes):
     def emit_auth_portal():
         lines.append(f"  handle_path {AUTH_GATEWAY_PORTAL_PATH}/* {{")
         lines.append(f"    reverse_proxy {AUTH_GATEWAY_INTERNAL_URL}")
+        lines.append("  }")
+        lines.append("")
+
+    def emit_tls(certificate_type, dns_credential):
+        if certificate_type == "self_signed":
+            lines.append("  tls internal")
+            lines.append("")
+            return
+
+        lines.append("  tls {")
+        if certificate_type == "dns_challenge":
+            dns_credential_data = tls_data["dns_credentials"][dns_credential]
+            provider = _safe_identifier(dns_credential_data.get("provider", ""))
+            lines.append("    issuer acme {")
+            lines.append(f"      dns {provider} {{")
+            for field_name, field_value in dns_credential_data.get("credentials", {}).items():
+                lines.append(f"        {_safe_identifier(field_name)} {_quote_value(field_value)}")
+            lines.append("      }")
+            lines.append(f"      resolvers {ACME_DNS_RESOLVERS}")
+            lines.append("    }")
+        else:
+            lines.append("    issuer acme")
+        # Fall back to the internal CA when the ACME certificate cannot be issued
+        lines.append("    issuer internal")
         lines.append("  }")
         lines.append("")
 
@@ -142,21 +206,18 @@ def build_caddyfile(apps, auth_policies, routes):
         lines.append("  }")
         lines.append("")
 
-    for app in apps:
-        hosts = app.get("hosts", [])
+    def emit_site_block(app, hosts, certificate_type, dns_credential):
         upstream = app.get("upstream", "")
         # tls_insecure_skip_verify is only valid for https upstreams
         allow_invalid_cert = app.get("allow_invalid_cert", False) and upstream.startswith("https://")
         static_routes = app.get("static_routes", [])
         app_id = app.get("id", "")
 
-        if not hosts or not upstream:
-            continue
-
         base, upstream_path = split_upstream(upstream)
 
         safe_hosts = [_safe_value(h) for h in hosts]
         lines.append(f"{', '.join(safe_hosts)} {{")
+        emit_tls(certificate_type, dns_credential)
         lines.append("  # Security: overwrite client-supplied forwarding headers with verified values")
         lines.append("  request_header X-Forwarded-For {http.request.remote.host}")
         lines.append("  request_header -X-Forwarded-Host")
@@ -182,7 +243,7 @@ def build_caddyfile(apps, auth_policies, routes):
             emit_reverse_proxy(base, upstream_path, indent="  ", allow_invalid_cert=allow_invalid_cert)
             lines.append("}")
             lines.append("")
-            continue
+            return
 
         route_list = sorted(app_route_data.get("routes", []), key=lambda route: len(route.get("path_prefix", "")), reverse=True)
         for route_index, route in enumerate(route_list):
@@ -212,6 +273,14 @@ def build_caddyfile(apps, auth_policies, routes):
         lines.append("}")
         lines.append("")
 
+    for app in apps:
+        hosts = app.get("hosts", [])
+        if not hosts or not app.get("upstream", ""):
+            continue
+
+        for (certificate_type, dns_credential), group_hosts in group_hosts_by_tls(hosts, tls_data):
+            emit_site_block(app, group_hosts, certificate_type, dns_credential)
+
     return "\n".join(lines)
 
 
@@ -219,8 +288,9 @@ def main():
     apps = collect_all_applications()
     auth_policies = load_json("auth_policies.json")
     routes = load_json("routes.json")
+    tls_data = load_json("tls.json")
 
-    caddyfile_content = build_caddyfile(apps, auth_policies, routes)
+    caddyfile_content = build_caddyfile(apps, auth_policies, routes, tls_data)
     os.makedirs(os.path.dirname(CADDYFILE_PATH), exist_ok=True)
     with open(CADDYFILE_PATH, "w", encoding="utf-8") as caddyfile:
         caddyfile.write(caddyfile_content)

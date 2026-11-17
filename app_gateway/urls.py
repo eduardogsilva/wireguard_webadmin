@@ -28,6 +28,10 @@ urlpatterns = [
     path('route/manage/', views.view_manage_application_route, name='manage_application_route'),
     path('route/delete/', views.view_delete_application_route, name='delete_application_route'),
 
+    # DNS Challenge Credentials
+    path('dns_credential/manage/', views.view_manage_dns_credential, name='manage_dns_credential'),
+    path('dns_credential/delete/', views.view_delete_dns_credential, name='delete_dns_credential'),
+
     # Config Export
     path('export/caddy/', views.view_export_caddy_config, name='export_caddy_config'),
 ]
