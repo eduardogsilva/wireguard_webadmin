@@ -27,9 +27,8 @@ local_settings.py
 *.log
 media/
 *.pot
-*.pyc
-*__pycache__/
-__pycache__/
+**/*.pyc
+**/__pycache__/
 *.pyd
 *.pyo
 .venv
@@ -42,3 +41,11 @@ venv.bak/
 wireguard_webadmin/production_settings.py
 containers/caddy/config_files/
 CLAUDE.md
+.claude/
+**/.DS_Store
+
+# Not needed inside the main image
+.git
+containers
+docs
+screenshots
