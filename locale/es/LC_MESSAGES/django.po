@@ -249,7 +249,7 @@ msgstr ""
 
 #: app_gateway/forms.py:69
 msgid "This option is only available for https:// upstreams."
-msgstr ""
+msgstr "Esta opción solo está disponible para upstreams https://."
 
 #: app_gateway/forms.py:79 cluster/forms.py:24 dns/forms.py:65
 #: templates/app_gateway/app_gateway_list.html:109
@@ -264,10 +264,8 @@ msgid "Hostname contains invalid characters."
 msgstr "El nombre de host contiene caracteres no válidos."
 
 #: app_gateway/forms.py:91
-#, fuzzy
-#| msgid "Port %s is already in use by another WireGuard instance."
 msgid "This hostname is already used by WireGuard WebAdmin."
-msgstr "El puerto %s ya está en uso por otra instancia de WireGuard."
+msgstr "Este nombre de host ya está en uso por WireGuard WebAdmin."
 
 #: app_gateway/forms.py:121 templates/app_gateway/app_gateway_list.html:147
 msgid "Policy Type"
