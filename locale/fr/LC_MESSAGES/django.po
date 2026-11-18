@@ -278,7 +278,7 @@ msgstr "Identifiant DNS"
 #: app_gateway/forms.py:85
 msgid ""
 "Use a self-signed certificate if the trusted certificate cannot be issued"
-msgstr ""
+msgstr "Utiliser un certificat auto-signé si le certificat de confiance ne peut pas être émis"
 
 #: app_gateway/forms.py:96
 msgid "Hostname contains invalid characters."
@@ -293,16 +293,12 @@ msgid "IP addresses can only use a self-signed certificate."
 msgstr "Les adresses IP ne peuvent utiliser qu'un certificat auto-signé."
 
 #: app_gateway/forms.py:107
-#, fuzzy
-#| msgid "Select a DNS credential to use the DNS challenge."
 msgid "Select a DNS credential to use the DNS validation."
-msgstr "Sélectionnez un identifiant DNS pour utiliser le défi DNS."
+msgstr "Sélectionnez un identifiant DNS pour utiliser la validation DNS."
 
 #: app_gateway/forms.py:109
-#, fuzzy
-#| msgid "Select a DNS credential to use the DNS challenge."
 msgid "A DNS credential can only be used with the DNS validation."
-msgstr "Sélectionnez un identifiant DNS pour utiliser le défi DNS."
+msgstr "Un identifiant DNS ne peut être utilisé qu'avec la validation DNS."
 
 #: app_gateway/forms.py:158 templates/app_gateway/app_gateway_list.html:158
 msgid "Policy Type"
@@ -417,17 +413,15 @@ msgstr "La valeur ne correspond pas au format attendu pour ce fournisseur."
 
 #: app_gateway/models.py:12
 msgid "Trusted certificate (HTTP validation)"
-msgstr ""
+msgstr "Certificat de confiance (validation HTTP)"
 
 #: app_gateway/models.py:13
 msgid "Trusted certificate (DNS validation)"
-msgstr ""
+msgstr "Certificat de confiance (validation DNS)"
 
 #: app_gateway/models.py:14
-#, fuzzy
-#| msgid "Allow invalid/self-signed certificate"
 msgid "Self-signed certificate"
-msgstr "Autoriser un certificat invalide/autosigné"
+msgstr "Certificat auto-signé"
 
 #: app_gateway/models.py:45
 msgid "Upstream address, e.g.: http://10.188.18.27:3000"
@@ -461,11 +455,11 @@ msgstr "Détails de l'application"
 #: app_gateway/views.py:93
 #, python-format
 msgid "expires %(date)s"
-msgstr ""
+msgstr "expire le %(date)s"
 
 #: app_gateway/views.py:98
 msgid "Trusted"
-msgstr ""
+msgstr "De confiance"
 
 #: app_gateway/views.py:101
 msgid "Self-signed"
@@ -473,22 +467,20 @@ msgstr "Auto-signé"
 
 #: app_gateway/views.py:104
 msgid "Using fallback"
-msgstr ""
+msgstr "Certificat de secours"
 
 #: app_gateway/views.py:105
 #, python-format
 msgid "The trusted certificate could not be issued yet, %(expiration)s"
-msgstr ""
+msgstr "Le certificat de confiance n'a pas encore pu être émis, %(expiration)s"
 
 #: app_gateway/views.py:107
-#, fuzzy
-#| msgid "Update Available"
 msgid "Unavailable"
-msgstr "Mise à jour disponible"
+msgstr "Indisponible"
 
 #: app_gateway/views.py:108
 msgid "No certificate is being served for this hostname."
-msgstr ""
+msgstr "Aucun certificat n'est servi pour ce nom d'hôte."
 
 #: app_gateway/views.py:125 app_gateway/views.py:210 app_gateway/views.py:262
 msgid "The WireGuard WebAdmin application cannot be modified."
@@ -573,24 +565,6 @@ msgid "Application Host saved successfully."
 msgstr "Hôte d'application enregistré avec succès."
 
 #: app_gateway/views.py:223
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    <h5>Certificate</h5>\n"
-#| "    <p>Defines how the TLS certificate for this hostname is issued.</p>\n"
-#| "    <ul>\n"
-#| "        <li><strong>Self-signed</strong>: A certificate issued by the "
-#| "internal Caddy CA. Browsers will show a security warning.</li>\n"
-#| "        <li><strong>HTTP challenge</strong>: A trusted ACME certificate "
-#| "validated through HTTP. The hostname must point to this server and ports "
-#| "80/443 must be reachable from the internet.</li>\n"
-#| "        <li><strong>DNS challenge</strong>: A trusted ACME certificate "
-#| "validated through a DNS record created using the selected DNS credential. "
-#| "The server does not need to be reachable from the internet.</li>\n"
-#| "    </ul>\n"
-#| "    <p>If an ACME certificate cannot be issued, a self-signed certificate "
-#| "is used until the next successful attempt.</p>\n"
-#| "    "
 msgid ""
 "\n"
 "    <h5>Certificate</h5>\n"
@@ -617,22 +591,14 @@ msgid ""
 msgstr ""
 "\n"
 "    <h5>Certificat</h5>\n"
-"    <p>Définit la manière dont le certificat TLS de ce nom d'hôte est émis.</"
-"p>\n"
+"    <p>Définit la manière dont le certificat TLS de ce nom d'hôte est émis.</p>\n"
 "    <ul>\n"
-"        <li><strong>Auto-signé</strong>: un certificat émis par l'autorité "
-"de certification interne de Caddy. Les navigateurs afficheront un "
-"avertissement de sécurité.</li>\n"
-"        <li><strong>Défi HTTP</strong>: un certificat ACME de confiance "
-"validé via HTTP. Le nom d'hôte doit pointer vers ce serveur et les ports "
-"80/443 doivent être accessibles depuis Internet.</li>\n"
-"        <li><strong>Défi DNS</strong>: un certificat ACME de confiance "
-"validé par un enregistrement DNS créé à l'aide de l'identifiant DNS "
-"sélectionné. Le serveur n'a pas besoin d'être accessible depuis Internet.</"
-"li>\n"
+"        <li><strong>Certificat de confiance (validation HTTP)</strong>: émis via ACME (par ex. Let's Encrypt) et validé par HTTP. Le nom d'hôte doit pointer vers ce serveur et les ports 80/443 doivent être accessibles depuis Internet.</li>\n"
+"        <li><strong>Certificat de confiance (validation DNS)</strong>: émis via ACME et validé par un enregistrement DNS créé à l'aide de l'identifiant DNS sélectionné. Le serveur n'a pas besoin d'être accessible depuis Internet.</li>\n"
+"        <li><strong>Certificat auto-signé</strong>: émis par l'autorité de certification interne de Caddy. Les navigateurs afficheront un avertissement de sécurité.</li>\n"
 "    </ul>\n"
-"    <p>Si un certificat ACME ne peut pas être émis, un certificat auto-signé "
-"est utilisé jusqu'à la prochaine tentative réussie.</p>\n"
+"    <p>Lorsque l'option de secours est activée et que le certificat de confiance ne peut pas être émis, un certificat auto-signé est utilisé jusqu'à la prochaine tentative réussie. Sans secours, la connexion échoue jusqu'à l'émission du certificat.</p>\n"
+"    <p>Utilisez <strong>Réessayer le certificat</strong> dans la liste des hôtes pour demander immédiatement une nouvelle tentative, par exemple après avoir corrigé le DNS ou le pare-feu.</p>\n"
 "    "
 
 #: app_gateway/views.py:235
@@ -860,23 +826,19 @@ msgid "Are you sure you want to delete the route \"%(name)s\" (%(path)s)?"
 msgstr "Êtes-vous sûr de vouloir supprimer la route \"%(name)s\" (%(path)s) ?"
 
 #: app_gateway/views.py:526
-#, fuzzy
-#| msgid "IP addresses can only use a self-signed certificate."
 msgid "This host uses a self-signed certificate."
-msgstr "Les adresses IP ne peuvent utiliser qu'un certificat auto-signé."
+msgstr "Cet hôte utilise un certificat auto-signé."
 
 #: app_gateway/views.py:530
-#, fuzzy
-#| msgid "Export is not available because Caddy is not enabled."
 msgid "This action is not available because Caddy is not enabled."
-msgstr "L'export n'est pas disponible parce que Caddy n'est pas activé."
+msgstr "Cette action n'est pas disponible car Caddy n'est pas activé."
 
 #: app_gateway/views.py:539
 #, python-format
 msgid ""
 "A new certificate will be requested for %(hostname)s. The current "
 "configuration was exported."
-msgstr ""
+msgstr "Un nouveau certificat sera demandé pour %(hostname)s. La configuration actuelle a été exportée."
 
 #: app_gateway/views.py:553
 msgid "Edit DNS Credential"
@@ -2706,13 +2668,11 @@ msgstr "Statut"
 
 #: templates/app_gateway/application_details.html:89
 msgid "no fallback"
-msgstr ""
+msgstr "sans secours"
 
 #: templates/app_gateway/application_details.html:101
-#, fuzzy
-#| msgid "Certificate"
 msgid "Retry certificate"
-msgstr "Certificat"
+msgstr "Réessayer le certificat"
 
 #: templates/app_gateway/application_details.html:132
 msgid "No Hosts configured for this application."
@@ -2774,19 +2734,11 @@ msgstr ""
 "DNS ACME."
 
 #: templates/app_gateway/dns_credential_form.html:26
-#, fuzzy
-#| msgid ""
-#| "Use a token restricted to editing DNS records of the zones you need. For "
-#| "Cloudflare, create an API Token with the <strong>Zone / DNS / Edit</"
-#| "strong> permission."
 msgid ""
 "Use a token restricted to editing DNS records of the zones you need. For "
 "Cloudflare, create an API Token with the <strong>Zone / Zone / Read</strong> "
 "and <strong>Zone / DNS / Edit</strong> permissions."
-msgstr ""
-"Utilisez un jeton limité à la modification des enregistrements DNS des zones "
-"nécessaires. Pour Cloudflare, créez un API Token avec l'autorisation "
-"<strong>Zone / DNS / Edit</strong>."
+msgstr "Utilisez un jeton limité à la modification des enregistrements DNS des zones nécessaires. Pour Cloudflare, créez un API Token avec les autorisations <strong>Zone / Zone / Read</strong> et <strong>Zone / DNS / Edit</strong>."
 
 #: templates/app_gateway/dns_credential_form.html:30
 msgid ""

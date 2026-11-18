@@ -279,7 +279,7 @@ msgstr "Poverenie DNS"
 #: app_gateway/forms.py:85
 msgid ""
 "Use a self-signed certificate if the trusted certificate cannot be issued"
-msgstr ""
+msgstr "Použiť samopodpísaný certifikát, ak dôveryhodný certifikát nie je možné vydať"
 
 #: app_gateway/forms.py:96
 msgid "Hostname contains invalid characters."
@@ -294,16 +294,12 @@ msgid "IP addresses can only use a self-signed certificate."
 msgstr "IP adresy môžu používať iba samopodpísaný certifikát."
 
 #: app_gateway/forms.py:107
-#, fuzzy
-#| msgid "Select a DNS credential to use the DNS challenge."
 msgid "Select a DNS credential to use the DNS validation."
-msgstr "Vyberte poverenie DNS na použitie DNS výzvy."
+msgstr "Vyberte poverenie DNS na použitie overenia cez DNS."
 
 #: app_gateway/forms.py:109
-#, fuzzy
-#| msgid "Select a DNS credential to use the DNS challenge."
 msgid "A DNS credential can only be used with the DNS validation."
-msgstr "Vyberte poverenie DNS na použitie DNS výzvy."
+msgstr "Poverenie DNS je možné použiť iba s overením cez DNS."
 
 #: app_gateway/forms.py:158 templates/app_gateway/app_gateway_list.html:158
 msgid "Policy Type"
@@ -415,17 +411,15 @@ msgstr "Hodnota nezodpovedá očakávanému formátu pre tohto poskytovateľa."
 
 #: app_gateway/models.py:12
 msgid "Trusted certificate (HTTP validation)"
-msgstr ""
+msgstr "Dôveryhodný certifikát (overenie cez HTTP)"
 
 #: app_gateway/models.py:13
 msgid "Trusted certificate (DNS validation)"
-msgstr ""
+msgstr "Dôveryhodný certifikát (overenie cez DNS)"
 
 #: app_gateway/models.py:14
-#, fuzzy
-#| msgid "Allow invalid/self-signed certificate"
 msgid "Self-signed certificate"
-msgstr "Povoliť neplatný/samopodpísaný certifikát"
+msgstr "Samopodpísaný certifikát"
 
 #: app_gateway/models.py:45
 msgid "Upstream address, e.g.: http://10.188.18.27:3000"
@@ -458,11 +452,11 @@ msgstr "Podrobnosti o aplikácii"
 #: app_gateway/views.py:93
 #, python-format
 msgid "expires %(date)s"
-msgstr ""
+msgstr "platnosť končí %(date)s"
 
 #: app_gateway/views.py:98
 msgid "Trusted"
-msgstr ""
+msgstr "Dôveryhodný"
 
 #: app_gateway/views.py:101
 msgid "Self-signed"
@@ -470,22 +464,20 @@ msgstr "Samopodpísaný"
 
 #: app_gateway/views.py:104
 msgid "Using fallback"
-msgstr ""
+msgstr "Záložný certifikát"
 
 #: app_gateway/views.py:105
 #, python-format
 msgid "The trusted certificate could not be issued yet, %(expiration)s"
-msgstr ""
+msgstr "Dôveryhodný certifikát sa zatiaľ nepodarilo vydať, %(expiration)s"
 
 #: app_gateway/views.py:107
-#, fuzzy
-#| msgid "Update Available"
 msgid "Unavailable"
-msgstr "Aktualizácia dostupná"
+msgstr "Nedostupné"
 
 #: app_gateway/views.py:108
 msgid "No certificate is being served for this hostname."
-msgstr ""
+msgstr "Pre tento názov hostiteľa sa neposkytuje žiadny certifikát."
 
 #: app_gateway/views.py:125 app_gateway/views.py:210 app_gateway/views.py:262
 msgid "The WireGuard WebAdmin application cannot be modified."
@@ -569,24 +561,6 @@ msgid "Application Host saved successfully."
 msgstr "Hostiteľ aplikácie bol úspešne uložený."
 
 #: app_gateway/views.py:223
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    <h5>Certificate</h5>\n"
-#| "    <p>Defines how the TLS certificate for this hostname is issued.</p>\n"
-#| "    <ul>\n"
-#| "        <li><strong>Self-signed</strong>: A certificate issued by the "
-#| "internal Caddy CA. Browsers will show a security warning.</li>\n"
-#| "        <li><strong>HTTP challenge</strong>: A trusted ACME certificate "
-#| "validated through HTTP. The hostname must point to this server and ports "
-#| "80/443 must be reachable from the internet.</li>\n"
-#| "        <li><strong>DNS challenge</strong>: A trusted ACME certificate "
-#| "validated through a DNS record created using the selected DNS credential. "
-#| "The server does not need to be reachable from the internet.</li>\n"
-#| "    </ul>\n"
-#| "    <p>If an ACME certificate cannot be issued, a self-signed certificate "
-#| "is used until the next successful attempt.</p>\n"
-#| "    "
 msgid ""
 "\n"
 "    <h5>Certificate</h5>\n"
@@ -615,17 +589,12 @@ msgstr ""
 "    <h5>Certifikát</h5>\n"
 "    <p>Určuje, ako sa vydáva TLS certifikát pre tento názov hostiteľa.</p>\n"
 "    <ul>\n"
-"        <li><strong>Samopodpísaný</strong>: certifikát vydaný internou CA "
-"servera Caddy. Prehliadače zobrazia bezpečnostné upozornenie.</li>\n"
-"        <li><strong>HTTP výzva</strong>: dôveryhodný ACME certifikát overený "
-"cez HTTP. Názov hostiteľa musí smerovať na tento server a porty 80/443 musia "
-"byť dostupné z internetu.</li>\n"
-"        <li><strong>DNS výzva</strong>: dôveryhodný ACME certifikát overený "
-"pomocou DNS záznamu vytvoreného so zvoleným poverením DNS. Server nemusí byť "
-"dostupný z internetu.</li>\n"
+"        <li><strong>Dôveryhodný certifikát (overenie cez HTTP)</strong>: vydaný cez ACME (napr. Let's Encrypt) a overený cez HTTP. Názov hostiteľa musí smerovať na tento server a porty 80/443 musia byť dostupné z internetu.</li>\n"
+"        <li><strong>Dôveryhodný certifikát (overenie cez DNS)</strong>: vydaný cez ACME a overený pomocou DNS záznamu vytvoreného so zvoleným poverením DNS. Server nemusí byť dostupný z internetu.</li>\n"
+"        <li><strong>Samopodpísaný certifikát</strong>: vydaný internou CA servera Caddy. Prehliadače zobrazia bezpečnostné upozornenie.</li>\n"
 "    </ul>\n"
-"    <p>Ak nie je možné vydať ACME certifikát, až do ďalšieho úspešného "
-"pokusu sa použije samopodpísaný certifikát.</p>\n"
+"    <p>Ak je zapnutá možnosť záložného certifikátu a dôveryhodný certifikát nie je možné vydať, až do ďalšieho úspešného pokusu sa použije samopodpísaný certifikát. Bez záložného certifikátu pripojenie zlyhá, kým sa certifikát nevydá.</p>\n"
+"    <p>Pomocou <strong>Znova vyžiadať certifikát</strong> v zozname hostiteľov môžete okamžite požiadať o nový pokus, napríklad po oprave DNS alebo firewallu.</p>\n"
 "    "
 
 #: app_gateway/views.py:235
@@ -847,23 +816,19 @@ msgid "Are you sure you want to delete the route \"%(name)s\" (%(path)s)?"
 msgstr "Naozaj chcete odstrániť trasu \"%(name)s\" (%(path)s)?"
 
 #: app_gateway/views.py:526
-#, fuzzy
-#| msgid "IP addresses can only use a self-signed certificate."
 msgid "This host uses a self-signed certificate."
-msgstr "IP adresy môžu používať iba samopodpísaný certifikát."
+msgstr "Tento hostiteľ používa samopodpísaný certifikát."
 
 #: app_gateway/views.py:530
-#, fuzzy
-#| msgid "Export is not available because Caddy is not enabled."
 msgid "This action is not available because Caddy is not enabled."
-msgstr "Export nie je dostupný, pretože Caddy nie je povolený."
+msgstr "Táto akcia nie je dostupná, pretože Caddy nie je povolený."
 
 #: app_gateway/views.py:539
 #, python-format
 msgid ""
 "A new certificate will be requested for %(hostname)s. The current "
 "configuration was exported."
-msgstr ""
+msgstr "Pre %(hostname)s bude vyžiadaný nový certifikát. Aktuálna konfigurácia bola exportovaná."
 
 #: app_gateway/views.py:553
 msgid "Edit DNS Credential"
@@ -2654,13 +2619,11 @@ msgstr "Stav"
 
 #: templates/app_gateway/application_details.html:89
 msgid "no fallback"
-msgstr ""
+msgstr "bez záložného certifikátu"
 
 #: templates/app_gateway/application_details.html:101
-#, fuzzy
-#| msgid "Certificate"
 msgid "Retry certificate"
-msgstr "Certifikát"
+msgstr "Znova vyžiadať certifikát"
 
 #: templates/app_gateway/application_details.html:132
 msgid "No Hosts configured for this application."
@@ -2720,18 +2683,11 @@ msgstr ""
 "Poverenia používané na vytvorenie DNS záznamov potrebných pre DNS výzvu ACME."
 
 #: templates/app_gateway/dns_credential_form.html:26
-#, fuzzy
-#| msgid ""
-#| "Use a token restricted to editing DNS records of the zones you need. For "
-#| "Cloudflare, create an API Token with the <strong>Zone / DNS / Edit</"
-#| "strong> permission."
 msgid ""
 "Use a token restricted to editing DNS records of the zones you need. For "
 "Cloudflare, create an API Token with the <strong>Zone / Zone / Read</strong> "
 "and <strong>Zone / DNS / Edit</strong> permissions."
-msgstr ""
-"Použite token obmedzený na úpravu DNS záznamov potrebných zón. V Cloudflare "
-"vytvorte API Token s oprávnením <strong>Zone / DNS / Edit</strong>."
+msgstr "Použite token obmedzený na úpravu DNS záznamov potrebných zón. V Cloudflare vytvorte API Token s oprávneniami <strong>Zone / Zone / Read</strong> a <strong>Zone / DNS / Edit</strong>."
 
 #: templates/app_gateway/dns_credential_form.html:30
 msgid ""
