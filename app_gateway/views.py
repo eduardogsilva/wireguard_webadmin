@@ -4,12 +4,16 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, ProtectedError
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.formats import date_format
+from django.utils.timezone import localtime
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from app_gateway.caddy_config_export import export_caddy_config
+from app_gateway.certificate_status import inspect_certificate
 from app_gateway.forms import (
     ApplicationForm, ApplicationHostForm, AccessPolicyForm,
     ApplicationPolicyForm, ApplicationRouteForm, DnsChallengeCredentialForm
@@ -66,9 +70,46 @@ def view_application_details(request):
         'hosts': hosts,
         'routes': routes,
         'is_reserved': is_reserved,
+        'caddy_enabled': settings.CADDY_ENABLED,
         'page_title': _('Application Details'),
     }
     return render(request, 'app_gateway/application_details.html', context)
+
+
+@login_required
+def view_application_certificate_status(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=20).exists():
+        return JsonResponse({'error': _('Access Denied')}, status=403)
+
+    application = get_object_or_404(Application, uuid=request.GET.get('uuid'))
+    if not settings.CADDY_ENABLED:
+        return JsonResponse({'caddy_enabled': False, 'hosts': {}})
+
+    hosts_status = {}
+    for application_host in application.hosts.all():
+        certificate = inspect_certificate(application_host.hostname)
+        expiration = ''
+        if certificate['not_after']:
+            expiration = _('expires %(date)s') % {
+                'date': date_format(localtime(certificate['not_after']), 'SHORT_DATETIME_FORMAT')
+            }
+
+        if certificate['status'] == 'trusted':
+            css_class, label = 'success', _('Trusted')
+            detail = f"{certificate['issuer']}, {expiration}"
+        elif certificate['status'] == 'untrusted' and application_host.certificate_type == 'self_signed':
+            css_class, label = 'secondary', _('Self-signed')
+            detail = expiration
+        elif certificate['status'] == 'untrusted':
+            css_class, label = 'warning', _('Using fallback')
+            detail = _('The trusted certificate could not be issued yet, %(expiration)s') % {'expiration': expiration}
+        else:
+            css_class, label = 'danger', _('Unavailable')
+            detail = _('No certificate is being served for this hostname.')
+
+        hosts_status[str(application_host.uuid)] = {'css_class': css_class, 'label': label, 'detail': detail}
+
+    return JsonResponse({'caddy_enabled': True, 'hosts': hosts_status})
 
 
 @login_required

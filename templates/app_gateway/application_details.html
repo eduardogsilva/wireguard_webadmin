@@ -74,6 +74,7 @@
                     <tr>
                         <th>{% trans 'Hostname' %}</th>
                         <th>{% trans 'Certificate' %}</th>
+                        {% if caddy_enabled %}<th>{% trans 'Status' %}</th>{% endif %}
                         <th>{% trans 'Actions' %}</th>
                     </tr>
                 </thead>
@@ -88,6 +89,11 @@
                             <small class="text-muted">({% trans 'no fallback' %})</small>
                             {% endif %}
                         </td>
+                        {% if caddy_enabled %}
+                        <td class="certificate-status" data-host-uuid="{{ host.uuid }}">
+                            <i class="fas fa-spinner fa-spin text-muted"></i>
+                        </td>
+                        {% endif %}
                         <td style="width: 15%" class="text-nowrap">
                             {% if host.certificate_type != 'self_signed' %}
                             <form method="post" action="{% url 'retry_application_host_certificate' %}?uuid={{ host.uuid }}" class="d-inline">
@@ -179,4 +185,31 @@
 
     </div>
 </div>
+{% endblock %}
+
+{% block custom_page_scripts %}
+{% if caddy_enabled and hosts %}
+<script>
+    $(document).ready(function () {
+        $.getJSON("{% url 'application_certificate_status' %}?uuid={{ application.uuid }}", function (data) {
+            $('.certificate-status').each(function () {
+                var cell = $(this);
+                var hostStatus = data.hosts[cell.data('host-uuid')];
+                cell.empty();
+                if (!hostStatus) {
+                    return;
+                }
+                cell.append(
+                    $('<span class="badge"></span>')
+                        .addClass('badge-' + hostStatus.css_class)
+                        .attr('title', hostStatus.detail)
+                        .text(hostStatus.label)
+                );
+            });
+        }).fail(function () {
+            $('.certificate-status').html('<span class="text-muted">-</span>');
+        });
+    });
+</script>
+{% endif %}
 {% endblock %}
