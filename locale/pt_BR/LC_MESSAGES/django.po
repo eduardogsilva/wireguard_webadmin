@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-17 15:59-0300\n"
+"POT-Creation-Date: 2026-11-18 17:47-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,8 +35,8 @@ msgstr "Voltar"
 #: routing_templates/forms.py:37
 #: templates/app_gateway/app_gateway_list.html:177
 #: templates/app_gateway/app_gateway_list.html:222
-#: templates/app_gateway/application_details.html:103
-#: templates/app_gateway/application_details.html:154
+#: templates/app_gateway/application_details.html:120
+#: templates/app_gateway/application_details.html:171
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
 #: templates/gatekeeper/gatekeeper_list.html:94
@@ -65,9 +65,9 @@ msgstr ""
 "Tem certeza de que deseja regenerar o token? O token antigo parará de "
 "funcionar imediatamente."
 
-#: api_v2/forms.py:63 app_gateway/forms.py:45 app_gateway/forms.py:133
-#: app_gateway/forms.py:178 app_gateway/forms.py:196 app_gateway/forms.py:275
-#: app_gateway/forms.py:317 app_gateway/forms.py:396 cluster/forms.py:67
+#: api_v2/forms.py:63 app_gateway/forms.py:45 app_gateway/forms.py:143
+#: app_gateway/forms.py:188 app_gateway/forms.py:206 app_gateway/forms.py:285
+#: app_gateway/forms.py:327 app_gateway/forms.py:406 cluster/forms.py:67
 #: cluster/forms.py:124 dns/forms.py:37 dns/forms.py:84 dns/forms.py:153
 #: gatekeeper/forms.py:72 gatekeeper/forms.py:155 gatekeeper/forms.py:242
 #: gatekeeper/forms.py:367 gatekeeper/forms.py:397 gatekeeper/forms.py:428
@@ -83,8 +83,8 @@ msgstr ""
 msgid "Save"
 msgstr "Salvar"
 
-#: api_v2/models.py:10 app_gateway/forms.py:22 app_gateway/forms.py:147
-#: app_gateway/forms.py:353 cluster/forms.py:18 dns/forms.py:130
+#: api_v2/models.py:10 app_gateway/forms.py:22 app_gateway/forms.py:157
+#: app_gateway/forms.py:363 cluster/forms.py:18 dns/forms.py:130
 #: gatekeeper/forms.py:191 routing_templates/forms.py:28
 #: templates/api_v2/api_documentation.html:47 templates/api_v2/list.html:8
 #: templates/app_gateway/app_gateway_list.html:72
@@ -130,18 +130,18 @@ msgid "Enabled"
 msgstr "Habilitado"
 
 #: api_v2/views.py:17 api_v2/views.py:27 api_v2/views.py:82 api_v2/views.py:106
-#: app_gateway/views.py:28 app_gateway/views.py:54 app_gateway/views.py:77
-#: app_gateway/views.py:124 app_gateway/views.py:151 app_gateway/views.py:212
-#: app_gateway/views.py:240 app_gateway/views.py:251 app_gateway/views.py:313
-#: app_gateway/views.py:339 app_gateway/views.py:374 app_gateway/views.py:400
-#: app_gateway/views.py:450 app_gateway/views.py:477 app_gateway/views.py:507
-#: app_gateway/views.py:534 cluster/views.py:18 cluster/views.py:45
-#: cluster/views.py:114 gatekeeper/views.py:25 gatekeeper/views.py:52
-#: gatekeeper/views.py:102 gatekeeper/views.py:125 gatekeeper/views.py:155
-#: gatekeeper/views.py:178 gatekeeper/views.py:226 gatekeeper/views.py:297
-#: gatekeeper/views.py:327 gatekeeper/views.py:350 gatekeeper/views.py:380
-#: gatekeeper/views.py:403 gatekeeper/views.py:452
-#: templates/access_denied.html:9
+#: app_gateway/views.py:32 app_gateway/views.py:58 app_gateway/views.py:82
+#: app_gateway/views.py:118 app_gateway/views.py:165 app_gateway/views.py:192
+#: app_gateway/views.py:254 app_gateway/views.py:282 app_gateway/views.py:293
+#: app_gateway/views.py:355 app_gateway/views.py:381 app_gateway/views.py:416
+#: app_gateway/views.py:442 app_gateway/views.py:492 app_gateway/views.py:520
+#: app_gateway/views.py:547 app_gateway/views.py:577 app_gateway/views.py:604
+#: cluster/views.py:18 cluster/views.py:45 cluster/views.py:114
+#: gatekeeper/views.py:25 gatekeeper/views.py:52 gatekeeper/views.py:102
+#: gatekeeper/views.py:125 gatekeeper/views.py:155 gatekeeper/views.py:178
+#: gatekeeper/views.py:226 gatekeeper/views.py:297 gatekeeper/views.py:327
+#: gatekeeper/views.py:350 gatekeeper/views.py:380 gatekeeper/views.py:403
+#: gatekeeper/views.py:452 templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Acesso Negado"
 
@@ -223,9 +223,9 @@ msgstr "Upstream"
 msgid "Allow invalid/self-signed certificate"
 msgstr "Permitir certificado inválido/auto assinado"
 
-#: app_gateway/forms.py:46 app_gateway/forms.py:134 app_gateway/forms.py:179
-#: app_gateway/forms.py:197 app_gateway/forms.py:276 app_gateway/forms.py:318
-#: app_gateway/forms.py:397 gatekeeper/forms.py:73 gatekeeper/forms.py:156
+#: app_gateway/forms.py:46 app_gateway/forms.py:144 app_gateway/forms.py:189
+#: app_gateway/forms.py:207 app_gateway/forms.py:286 app_gateway/forms.py:328
+#: app_gateway/forms.py:407 gatekeeper/forms.py:73 gatekeeper/forms.py:156
 #: gatekeeper/forms.py:243 gatekeeper/forms.py:368 gatekeeper/forms.py:398
 #: gatekeeper/forms.py:429 scheduler/forms.py:103
 #: templates/app_gateway/access_policy_type_select.html:50
@@ -275,51 +275,64 @@ msgstr "Certificado"
 msgid "DNS Credential"
 msgstr "Credencial DNS"
 
-#: app_gateway/forms.py:95
+#: app_gateway/forms.py:85
+msgid ""
+"Use a self-signed certificate if the trusted certificate cannot be issued"
+msgstr ""
+
+#: app_gateway/forms.py:96
 msgid "Hostname contains invalid characters."
 msgstr "O hostname contém caracteres inválidos."
 
-#: app_gateway/forms.py:99
+#: app_gateway/forms.py:100
 msgid "This hostname is already used by WireGuard WebAdmin."
 msgstr "Este hostname já está em uso pelo WireGuard WebAdmin."
 
-#: app_gateway/forms.py:102
+#: app_gateway/forms.py:103
 msgid "IP addresses can only use a self-signed certificate."
 msgstr "Endereços IP só podem usar um certificado autoassinado."
 
-#: app_gateway/forms.py:106
-msgid "Select a DNS credential to use the DNS challenge."
+#: app_gateway/forms.py:107
+#, fuzzy
+#| msgid "Select a DNS credential to use the DNS challenge."
+msgid "Select a DNS credential to use the DNS validation."
 msgstr "Selecione uma credencial DNS para usar o desafio DNS."
 
-#: app_gateway/forms.py:148 templates/app_gateway/app_gateway_list.html:158
+#: app_gateway/forms.py:109
+#, fuzzy
+#| msgid "Select a DNS credential to use the DNS challenge."
+msgid "A DNS credential can only be used with the DNS validation."
+msgstr "Selecione uma credencial DNS para usar o desafio DNS."
+
+#: app_gateway/forms.py:158 templates/app_gateway/app_gateway_list.html:158
 msgid "Policy Type"
 msgstr "Tipo de Política"
 
-#: app_gateway/forms.py:149
+#: app_gateway/forms.py:159
 msgid "Allowed Groups"
 msgstr "Grupos Permitidos"
 
-#: app_gateway/forms.py:150 templates/gatekeeper/gatekeeper_list.html:13
+#: app_gateway/forms.py:160 templates/gatekeeper/gatekeeper_list.html:13
 msgid "Authentication Methods"
 msgstr "Métodos de Autenticação"
 
-#: app_gateway/forms.py:230
+#: app_gateway/forms.py:240
 msgid "Cannot select more than one Local Password authentication method."
 msgstr ""
 "Não é possível selecionar mais de um método de autenticação por Senha Local."
 
-#: app_gateway/forms.py:234
+#: app_gateway/forms.py:244
 msgid ""
 "Cannot select more than one OpenID Connect (OIDC) authentication method."
 msgstr ""
 "Não é possível selecionar mais de um método de autenticação OpenID Connect "
 "(OIDC)."
 
-#: app_gateway/forms.py:238
+#: app_gateway/forms.py:248
 msgid "Cannot select more than one TOTP authentication method."
 msgstr "Não é possível selecionar mais de um método de autenticação TOTP."
 
-#: app_gateway/forms.py:242
+#: app_gateway/forms.py:252
 msgid ""
 "Cannot select both Local Password and OpenID Connect (OIDC) authentication "
 "methods."
@@ -327,7 +340,7 @@ msgstr ""
 "Não é possível selecionar simultaneamente os métodos de autenticação por "
 "Senha Local e OpenID Connect (OIDC)."
 
-#: app_gateway/forms.py:246
+#: app_gateway/forms.py:256
 msgid ""
 "At least one user group must be selected when using Local Password "
 "authentication."
@@ -335,81 +348,83 @@ msgstr ""
 "Pelo menos um grupo de usuários deve ser selecionado ao usar a autenticação "
 "por Senha Local."
 
-#: app_gateway/forms.py:250
+#: app_gateway/forms.py:260
 msgid "User groups can only be used with Local Password authentication."
 msgstr ""
 "Grupos de usuários só podem ser usados com autenticação por Senha Local."
 
-#: app_gateway/forms.py:260 templates/app_gateway/app_gateway_list.html:76
+#: app_gateway/forms.py:270 templates/app_gateway/app_gateway_list.html:76
 #: templates/app_gateway/application_details.html:39
 #: templates/firewall/firewall_nav_tabs.html:15
 msgid "Default Policy"
 msgstr "Política Padrão"
 
-#: app_gateway/forms.py:289 templates/app_gateway/application_details.html:134
+#: app_gateway/forms.py:299 templates/app_gateway/application_details.html:151
 msgid "Route Name"
 msgstr "Nome da Rota"
 
-#: app_gateway/forms.py:290 templates/app_gateway/application_details.html:135
+#: app_gateway/forms.py:300 templates/app_gateway/application_details.html:152
 msgid "Path Prefix"
 msgstr "Prefixo do Caminho"
 
-#: app_gateway/forms.py:291 templates/app_gateway/application_details.html:136
+#: app_gateway/forms.py:301 templates/app_gateway/application_details.html:153
 msgid "Policy"
 msgstr "Política"
 
-#: app_gateway/forms.py:292 templates/app_gateway/application_details.html:137
+#: app_gateway/forms.py:302 templates/app_gateway/application_details.html:154
 msgid "Order"
 msgstr "Ordem"
 
-#: app_gateway/forms.py:333
+#: app_gateway/forms.py:343
 msgid "Path prefix must start with /."
 msgstr "O prefixo do caminho deve começar com /."
 
-#: app_gateway/forms.py:335
+#: app_gateway/forms.py:345
 msgid "Path prefix cannot contain spaces."
 msgstr "O prefixo do caminho não pode conter espaços."
 
-#: app_gateway/forms.py:337
+#: app_gateway/forms.py:347
 msgid "Path prefix contains invalid characters."
 msgstr "O prefixo do caminho contém caracteres inválidos."
 
-#: app_gateway/forms.py:342
+#: app_gateway/forms.py:352
 msgid "This path prefix is reserved by the system."
 msgstr "Este prefixo de caminho é reservado pelo sistema."
 
-#: app_gateway/forms.py:354 templates/app_gateway/app_gateway_list.html:205
+#: app_gateway/forms.py:364 templates/app_gateway/app_gateway_list.html:205
 msgid "Provider"
 msgstr "Provedor"
 
-#: app_gateway/forms.py:372
+#: app_gateway/forms.py:382
 #, python-format
 msgid "Leave blank to keep the current value (ending in %(suffix)s)."
 msgstr "Deixe em branco para manter o valor atual (terminado em %(suffix)s)."
 
-#: app_gateway/forms.py:425
+#: app_gateway/forms.py:435
 msgid "This field is required."
 msgstr "Este campo é obrigatório."
 
-#: app_gateway/forms.py:427
+#: app_gateway/forms.py:437
 msgid "This field contains invalid characters."
 msgstr "Este campo contém caracteres inválidos."
 
-#: app_gateway/forms.py:429
+#: app_gateway/forms.py:439
 msgid "The value does not match the expected format for this provider."
 msgstr "O valor não corresponde ao formato esperado para este provedor."
 
 #: app_gateway/models.py:12
-msgid "Self-signed"
-msgstr "Autoassinado"
+msgid "Trusted certificate (HTTP validation)"
+msgstr ""
 
 #: app_gateway/models.py:13
-msgid "HTTP challenge"
-msgstr "Desafio HTTP"
+msgid "Trusted certificate (DNS validation)"
+msgstr ""
 
 #: app_gateway/models.py:14
-msgid "DNS challenge"
-msgstr "Desafio DNS"
+#, fuzzy
+#| msgid "Allow invalid/self-signed certificate"
+msgid "Self-signed certificate"
+msgstr "Permitir certificado inválido/auto assinado"
 
 #: app_gateway/models.py:45
 msgid "Upstream address, e.g.: http://10.188.18.27:3000"
@@ -419,44 +434,76 @@ msgstr "Endereço upstream, ex: http://10.188.18.27:3000"
 msgid "Allow invalid or self-signed TLS certificates from the upstream"
 msgstr "Permitir certificados TLS inválidos ou auto assinados do upstream"
 
-#: app_gateway/models.py:88
+#: app_gateway/models.py:91
 #: templates/app_gateway/access_policy_type_select.html:19
 msgid "Public"
 msgstr "Público"
 
-#: app_gateway/models.py:88
+#: app_gateway/models.py:91
 #: templates/app_gateway/access_policy_type_select.html:30
 msgid "Protected"
 msgstr "Protegido"
 
-#: app_gateway/models.py:88 gatekeeper/models.py:142
+#: app_gateway/models.py:91 gatekeeper/models.py:142
 #: templates/app_gateway/access_policy_type_select.html:41
 #: templates/gatekeeper/gatekeeper_list.html:289
 msgid "Deny"
 msgstr "Negar"
 
-#: app_gateway/views.py:69
+#: app_gateway/views.py:74
 msgid "Application Details"
 msgstr "Detalhes da Aplicação"
 
-#: app_gateway/views.py:84 app_gateway/views.py:169 app_gateway/views.py:220
+#: app_gateway/views.py:93
+#, python-format
+msgid "expires %(date)s"
+msgstr ""
+
+#: app_gateway/views.py:98
+msgid "Trusted"
+msgstr ""
+
+#: app_gateway/views.py:101
+msgid "Self-signed"
+msgstr "Autoassinado"
+
+#: app_gateway/views.py:104
+msgid "Using fallback"
+msgstr ""
+
+#: app_gateway/views.py:105
+#, python-format
+msgid "The trusted certificate could not be issued yet, %(expiration)s"
+msgstr ""
+
+#: app_gateway/views.py:107
+#, fuzzy
+#| msgid "Update Available"
+msgid "Unavailable"
+msgstr "Atualização Disponível"
+
+#: app_gateway/views.py:108
+msgid "No certificate is being served for this hostname."
+msgstr ""
+
+#: app_gateway/views.py:125 app_gateway/views.py:210 app_gateway/views.py:262
 msgid "The WireGuard WebAdmin application cannot be modified."
 msgstr "A aplicação WireGuard WebAdmin não pode ser modificada."
 
-#: app_gateway/views.py:86 templates/app_gateway/application_details.html:16
+#: app_gateway/views.py:127 templates/app_gateway/application_details.html:16
 #: templates/app_gateway/application_details.html:23
 msgid "Edit Application"
 msgstr "Editar Aplicação"
 
-#: app_gateway/views.py:89
+#: app_gateway/views.py:130
 msgid "Create Application"
 msgstr "Criar Aplicação"
 
-#: app_gateway/views.py:96
+#: app_gateway/views.py:137
 msgid "Application saved successfully."
 msgstr "Aplicação salva com sucesso."
 
-#: app_gateway/views.py:101
+#: app_gateway/views.py:142
 msgid ""
 "\n"
 "        <h5>Application</h5>\n"
@@ -490,67 +537,97 @@ msgstr ""
 "        </ul>\n"
 "        "
 
-#: app_gateway/views.py:131
+#: app_gateway/views.py:172
 msgid "The WireGuard WebAdmin application cannot be deleted."
 msgstr "A aplicação WireGuard WebAdmin não pode ser excluída."
 
-#: app_gateway/views.py:136
+#: app_gateway/views.py:177
 msgid "Application deleted successfully."
 msgstr "Aplicação excluída com sucesso."
 
-#: app_gateway/views.py:141 templates/app_gateway/application_details.html:19
+#: app_gateway/views.py:182 templates/app_gateway/application_details.html:19
 #: templates/app_gateway/application_details.html:26
 msgid "Delete Application"
 msgstr "Excluir Aplicação"
 
-#: app_gateway/views.py:143
+#: app_gateway/views.py:184
 #, python-format
 msgid "Are you sure you want to delete the application \"%(name)s\"?"
 msgstr "Tem certeza de que deseja excluir a aplicação \"%(name)s\"?"
 
-#: app_gateway/views.py:159
+#: app_gateway/views.py:200
 msgid "Edit Application Host"
 msgstr "Editar Host da Aplicação"
 
-#: app_gateway/views.py:163
+#: app_gateway/views.py:204
 msgid "Add Application Host"
 msgstr "Adicionar Host da Aplicação"
 
-#: app_gateway/views.py:179
+#: app_gateway/views.py:220
 msgid "Application Host saved successfully."
 msgstr "Host da Aplicação salvo com sucesso."
 
-#: app_gateway/views.py:182
+#: app_gateway/views.py:223
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "    <h5>Certificate</h5>\n"
+#| "    <p>Defines how the TLS certificate for this hostname is issued.</p>\n"
+#| "    <ul>\n"
+#| "        <li><strong>Self-signed</strong>: A certificate issued by the "
+#| "internal Caddy CA. Browsers will show a security warning.</li>\n"
+#| "        <li><strong>HTTP challenge</strong>: A trusted ACME certificate "
+#| "validated through HTTP. The hostname must point to this server and ports "
+#| "80/443 must be reachable from the internet.</li>\n"
+#| "        <li><strong>DNS challenge</strong>: A trusted ACME certificate "
+#| "validated through a DNS record created using the selected DNS credential. "
+#| "The server does not need to be reachable from the internet.</li>\n"
+#| "    </ul>\n"
+#| "    <p>If an ACME certificate cannot be issued, a self-signed certificate "
+#| "is used until the next successful attempt.</p>\n"
+#| "    "
 msgid ""
 "\n"
 "    <h5>Certificate</h5>\n"
 "    <p>Defines how the TLS certificate for this hostname is issued.</p>\n"
 "    <ul>\n"
-"        <li><strong>Self-signed</strong>: A certificate issued by the "
-"internal Caddy CA. Browsers will show a security warning.</li>\n"
-"        <li><strong>HTTP challenge</strong>: A trusted ACME certificate "
-"validated through HTTP. The hostname must point to this server and ports "
-"80/443 must be reachable from the internet.</li>\n"
-"        <li><strong>DNS challenge</strong>: A trusted ACME certificate "
-"validated through a DNS record created using the selected DNS credential. "
-"The server does not need to be reachable from the internet.</li>\n"
+"        <li><strong>Trusted certificate (HTTP validation)</strong>: Issued "
+"through ACME (e.g. Let's Encrypt) and validated over HTTP. The hostname must "
+"point to this server and ports 80/443 must be reachable from the internet.</"
+"li>\n"
+"        <li><strong>Trusted certificate (DNS validation)</strong>: Issued "
+"through ACME and validated with a DNS record created using the selected DNS "
+"credential. The server does not need to be reachable from the internet.</"
+"li>\n"
+"        <li><strong>Self-signed certificate</strong>: Issued by the internal "
+"Caddy CA. Browsers will show a security warning.</li>\n"
 "    </ul>\n"
-"    <p>If an ACME certificate cannot be issued, a self-signed certificate is "
-"used until the next successful attempt.</p>\n"
+"    <p>When the fallback option is enabled and a trusted certificate cannot "
+"be issued, a self-signed certificate is used until the next successful "
+"attempt. Without the fallback, the connection fails until the certificate is "
+"issued.</p>\n"
+"    <p>Use <strong>Retry certificate</strong> in the host list to request a "
+"new attempt right away, for example after fixing the DNS or firewall.</p>\n"
 "    "
 msgstr ""
 "\n"
 "    <h5>Certificado</h5>\n"
 "    <p>Define como o certificado TLS deste hostname é emitido.</p>\n"
 "    <ul>\n"
-"        <li><strong>Autoassinado</strong>: um certificado emitido pela CA interna do Caddy. Os navegadores exibirão um alerta de segurança.</li>\n"
-"        <li><strong>Desafio HTTP</strong>: um certificado ACME confiável, validado via HTTP. O hostname precisa apontar para este servidor e as portas 80/443 precisam estar acessíveis pela internet.</li>\n"
-"        <li><strong>Desafio DNS</strong>: um certificado ACME confiável, validado por meio de um registro DNS criado com a credencial DNS selecionada. O servidor não precisa estar acessível pela internet.</li>\n"
+"        <li><strong>Autoassinado</strong>: um certificado emitido pela CA "
+"interna do Caddy. Os navegadores exibirão um alerta de segurança.</li>\n"
+"        <li><strong>Desafio HTTP</strong>: um certificado ACME confiável, "
+"validado via HTTP. O hostname precisa apontar para este servidor e as portas "
+"80/443 precisam estar acessíveis pela internet.</li>\n"
+"        <li><strong>Desafio DNS</strong>: um certificado ACME confiável, "
+"validado por meio de um registro DNS criado com a credencial DNS "
+"selecionada. O servidor não precisa estar acessível pela internet.</li>\n"
 "    </ul>\n"
-"    <p>Se não for possível emitir um certificado ACME, um certificado autoassinado será usado até a próxima tentativa bem-sucedida.</p>\n"
+"    <p>Se não for possível emitir um certificado ACME, um certificado "
+"autoassinado será usado até a próxima tentativa bem-sucedida.</p>\n"
 "    "
 
-#: app_gateway/views.py:193
+#: app_gateway/views.py:235
 msgid ""
 "\n"
 "        <div class=\"alert alert-warning\">\n"
@@ -563,42 +640,44 @@ msgid ""
 msgstr ""
 "\n"
 "        <div class=\"alert alert-warning\">\n"
-"            Este hostname é usado para acessar o WireGuard WebAdmin. Se o certificado não puder ser emitido,\n"
-"            seu navegador exibirá um alerta de segurança até que o problema seja corrigido.\n"
+"            Este hostname é usado para acessar o WireGuard WebAdmin. Se o "
+"certificado não puder ser emitido,\n"
+"            seu navegador exibirá um alerta de segurança até que o problema "
+"seja corrigido.\n"
 "        </div>\n"
 "        "
 
-#: app_gateway/views.py:225
+#: app_gateway/views.py:267
 msgid "Application Host deleted successfully."
 msgstr "Host da Aplicação excluído com sucesso."
 
-#: app_gateway/views.py:230
+#: app_gateway/views.py:272
 msgid "Delete Application Host"
 msgstr "Excluir Host da Aplicação"
 
-#: app_gateway/views.py:232
+#: app_gateway/views.py:274
 #, python-format
 msgid "Are you sure you want to delete the host \"%(hostname)s\"?"
 msgstr "Tem certeza de que deseja excluir o host \"%(hostname)s\"?"
 
-#: app_gateway/views.py:243
+#: app_gateway/views.py:285
 #: templates/app_gateway/access_policy_type_select.html:9
 msgid "Select Access Policy Type"
 msgstr "Selecionar Tipo de Política de Acesso"
 
-#: app_gateway/views.py:258
+#: app_gateway/views.py:300
 msgid "Edit Access Policy"
 msgstr "Editar Política de Acesso"
 
-#: app_gateway/views.py:262
+#: app_gateway/views.py:304
 msgid "Create Access Policy"
 msgstr "Criar Política de Acesso"
 
-#: app_gateway/views.py:269
+#: app_gateway/views.py:311
 msgid "Access Policy saved successfully."
 msgstr "Política de Acesso salva com sucesso."
 
-#: app_gateway/views.py:275
+#: app_gateway/views.py:317
 msgid ""
 "\n"
 "            <h5>Public Policy</h5>\n"
@@ -612,7 +691,7 @@ msgstr ""
 "exigir nenhuma autenticação.</p>\n"
 "            "
 
-#: app_gateway/views.py:283
+#: app_gateway/views.py:325
 msgid ""
 "\n"
 "            <h5>Deny Policy</h5>\n"
@@ -625,7 +704,7 @@ msgstr ""
 "correspondentes.</p>\n"
 "            "
 
-#: app_gateway/views.py:291
+#: app_gateway/views.py:333
 msgid ""
 "\n"
 "            <h5>Protected Policy</h5>\n"
@@ -655,11 +734,11 @@ msgstr ""
 "            </ul>\n"
 "            "
 
-#: app_gateway/views.py:322
+#: app_gateway/views.py:364
 msgid "Access Policy deleted successfully."
 msgstr "Política de Acesso excluída com sucesso."
 
-#: app_gateway/views.py:324
+#: app_gateway/views.py:366
 msgid ""
 "Cannot delete this Access Policy because it is currently in use by an "
 "Application Route or Application Default Policy."
@@ -667,53 +746,53 @@ msgstr ""
 "Não é possível excluir esta Política de Acesso porque ela está em uso por "
 "uma Rota de Aplicativo ou Política Padrão de Aplicativo."
 
-#: app_gateway/views.py:329
+#: app_gateway/views.py:371
 msgid "Delete Access Policy"
 msgstr "Excluir Política de Acesso"
 
-#: app_gateway/views.py:331
+#: app_gateway/views.py:373
 #, python-format
 msgid "Are you sure you want to delete the access policy \"%(name)s\"?"
 msgstr "Tem certeza de que deseja excluir a política de acesso \"%(name)s\"?"
 
-#: app_gateway/views.py:347
+#: app_gateway/views.py:389
 msgid "Edit Application Default Policy"
 msgstr "Editar Política Padrão da Aplicação"
 
-#: app_gateway/views.py:351
+#: app_gateway/views.py:393
 msgid "Set Application Default Policy"
 msgstr "Configurar Política Padrão da Aplicação"
 
-#: app_gateway/views.py:360
+#: app_gateway/views.py:402
 msgid "Application Default Policy saved successfully."
 msgstr "Política Padrão da Aplicação salva com sucesso."
 
-#: app_gateway/views.py:383
+#: app_gateway/views.py:425
 msgid "Application Default Policy deleted successfully."
 msgstr "Política Padrão da Aplicação excluída com sucesso."
 
-#: app_gateway/views.py:388
+#: app_gateway/views.py:430
 msgid "Delete Application Default Policy"
 msgstr "Excluir Política Padrão da Aplicação"
 
-#: app_gateway/views.py:390
+#: app_gateway/views.py:432
 #, python-format
 msgid "Are you sure you want to remove the default policy for \"%(name)s\"?"
 msgstr "Tem certeza de que deseja remover a política padrão para \"%(name)s\"?"
 
-#: app_gateway/views.py:408
+#: app_gateway/views.py:450
 msgid "Edit Application Route"
 msgstr "Editar Rota da Aplicação"
 
-#: app_gateway/views.py:412
+#: app_gateway/views.py:454
 msgid "Add Application Route"
 msgstr "Adicionar Rota da Aplicação"
 
-#: app_gateway/views.py:421
+#: app_gateway/views.py:463
 msgid "Application Route saved successfully."
 msgstr "Rota da Aplicação salva com sucesso."
 
-#: app_gateway/views.py:426
+#: app_gateway/views.py:468
 msgid ""
 "\n"
 "        <h5>Application Route</h5>\n"
@@ -753,51 +832,72 @@ msgstr ""
 "        </ul>\n"
 "        "
 
-#: app_gateway/views.py:459
+#: app_gateway/views.py:501
 msgid "Application Route deleted successfully."
 msgstr "Rota da Aplicação excluída com sucesso."
 
-#: app_gateway/views.py:464
+#: app_gateway/views.py:506
 msgid "Delete Application Route"
 msgstr "Excluir Rota da Aplicação"
 
-#: app_gateway/views.py:466
+#: app_gateway/views.py:508
 #, python-format
 msgid "Are you sure you want to delete the route \"%(name)s\" (%(path)s)?"
 msgstr "Tem certeza de que deseja excluir a rota \"%(name)s\" (%(path)s)?"
 
-#: app_gateway/views.py:483
+#: app_gateway/views.py:526
+#, fuzzy
+#| msgid "IP addresses can only use a self-signed certificate."
+msgid "This host uses a self-signed certificate."
+msgstr "Endereços IP só podem usar um certificado autoassinado."
+
+#: app_gateway/views.py:530
+#, fuzzy
+#| msgid "Export is not available because Caddy is not enabled."
+msgid "This action is not available because Caddy is not enabled."
+msgstr "A exportação não está disponível porque o Caddy não está habilitado."
+
+#: app_gateway/views.py:539
+#, python-format
+msgid ""
+"A new certificate will be requested for %(hostname)s. The current "
+"configuration was exported."
+msgstr ""
+
+#: app_gateway/views.py:553
 msgid "Edit DNS Credential"
 msgstr "Editar Credencial DNS"
 
-#: app_gateway/views.py:486 templates/app_gateway/app_gateway_list.html:195
+#: app_gateway/views.py:556 templates/app_gateway/app_gateway_list.html:195
 msgid "Add DNS Credential"
 msgstr "Adicionar Credencial DNS"
 
-#: app_gateway/views.py:493
+#: app_gateway/views.py:563
 msgid "DNS Credential saved successfully."
 msgstr "Credencial DNS salva com sucesso."
 
-#: app_gateway/views.py:516
+#: app_gateway/views.py:586
 msgid "DNS Credential deleted successfully."
 msgstr "Credencial DNS excluída com sucesso."
 
-#: app_gateway/views.py:518
+#: app_gateway/views.py:588
 msgid ""
 "Cannot delete this DNS Credential because it is currently in use by an "
 "Application Host."
-msgstr "Não é possível excluir esta Credencial DNS porque ela está em uso por um Host da Aplicação."
+msgstr ""
+"Não é possível excluir esta Credencial DNS porque ela está em uso por um "
+"Host da Aplicação."
 
-#: app_gateway/views.py:523
+#: app_gateway/views.py:593
 msgid "Delete DNS Credential"
 msgstr "Excluir Credencial DNS"
 
-#: app_gateway/views.py:525
+#: app_gateway/views.py:595
 #, python-format
 msgid "Are you sure you want to delete the DNS credential \"%(name)s\"?"
 msgstr "Tem certeza de que deseja excluir a credencial DNS \"%(name)s\"?"
 
-#: app_gateway/views.py:540
+#: app_gateway/views.py:610
 msgid ""
 "Configuration export is not available because Caddy is not enabled. To use "
 "App Gateway and Gatekeeper, start the application using docker-compose-"
@@ -807,7 +907,7 @@ msgstr ""
 "habilitado. Para usar App Gateway e Gatekeeper, inicie a aplicação usando "
 "docker-compose-caddy.yml."
 
-#: app_gateway/views.py:550
+#: app_gateway/views.py:620
 msgid "Configuration exported successfully."
 msgstr "Configuração exportada com sucesso."
 
@@ -2407,9 +2507,9 @@ msgstr "Desabilitado"
 #: templates/api_v2/list.html:68
 #: templates/app_gateway/app_gateway_list.html:173
 #: templates/app_gateway/app_gateway_list.html:218
-#: templates/app_gateway/application_details.html:91
-#: templates/app_gateway/application_details.html:99
-#: templates/app_gateway/application_details.html:150
+#: templates/app_gateway/application_details.html:108
+#: templates/app_gateway/application_details.html:116
+#: templates/app_gateway/application_details.html:167
 #: templates/cluster/workers_list.html:77
 #: templates/gatekeeper/gatekeeper_list.html:90
 #: templates/gatekeeper/gatekeeper_list.html:133
@@ -2518,8 +2618,8 @@ msgstr "Métodos de Autenticação"
 
 #: templates/app_gateway/app_gateway_list.html:161
 #: templates/app_gateway/app_gateway_list.html:207
-#: templates/app_gateway/application_details.html:77
-#: templates/app_gateway/application_details.html:138
+#: templates/app_gateway/application_details.html:78
+#: templates/app_gateway/application_details.html:155
 #: templates/gatekeeper/gatekeeper_list.html:66
 #: templates/gatekeeper/gatekeeper_list.html:123
 #: templates/gatekeeper/gatekeeper_list.html:168
@@ -2545,7 +2645,7 @@ msgstr "Voltar para a Lista"
 
 #: templates/app_gateway/application_details.html:15
 #: templates/app_gateway/application_details.html:59
-#: templates/app_gateway/application_details.html:94
+#: templates/app_gateway/application_details.html:111
 msgid "This application cannot be modified"
 msgstr "Esta aplicação não pode ser modificada"
 
@@ -2566,19 +2666,38 @@ msgstr "Hosts da Aplicação"
 msgid "Add Host"
 msgstr "Adicionar Host"
 
-#: templates/app_gateway/application_details.html:115
+#: templates/app_gateway/application_details.html:77
+#: templates/cluster/workers_list.html:9
+#: templates/scheduler/scheduleprofile_form.html:82
+#: templates/template_parts/base_sidebar.html:13 vpn_invite/forms.py:78
+#: vpn_invite/forms.py:79 vpn_invite/forms.py:80 vpn_invite/forms.py:81
+#: vpn_invite/forms.py:82
+msgid "Status"
+msgstr "Estado"
+
+#: templates/app_gateway/application_details.html:89
+msgid "no fallback"
+msgstr ""
+
+#: templates/app_gateway/application_details.html:101
+#, fuzzy
+#| msgid "Certificate"
+msgid "Retry certificate"
+msgstr "Certificado"
+
+#: templates/app_gateway/application_details.html:132
 msgid "No Hosts configured for this application."
 msgstr "Nenhum Host configurado para esta aplicação."
 
-#: templates/app_gateway/application_details.html:121
+#: templates/app_gateway/application_details.html:138
 msgid "Application Routes"
 msgstr "Rotas da Aplicação"
 
-#: templates/app_gateway/application_details.html:125
+#: templates/app_gateway/application_details.html:142
 msgid "Add Route"
 msgstr "Adicionar Rota"
 
-#: templates/app_gateway/application_details.html:165
+#: templates/app_gateway/application_details.html:182
 msgid "No Routes configured for this application."
 msgstr "Nenhuma Rota configurada para esta aplicação."
 
@@ -2620,28 +2739,32 @@ msgstr "Para mais informações, veja a discussão:"
 msgid ""
 "Credentials used to create the DNS records required by the ACME DNS "
 "challenge."
-msgstr "Credenciais usadas para criar os registros DNS exigidos pelo desafio DNS do ACME."
+msgstr ""
+"Credenciais usadas para criar os registros DNS exigidos pelo desafio DNS do "
+"ACME."
 
 #: templates/app_gateway/dns_credential_form.html:26
+#, fuzzy
+#| msgid ""
+#| "Use a token restricted to editing DNS records of the zones you need. For "
+#| "Cloudflare, create an API Token with the <strong>Zone / DNS / Edit</"
+#| "strong> permission."
 msgid ""
 "Use a token restricted to editing DNS records of the zones you need. For "
-"Cloudflare, create an API Token with the <strong>Zone / DNS / Edit</strong> "
-"permission."
-msgstr "Use um token restrito à edição dos registros DNS das zonas necessárias. No Cloudflare, crie um API Token com a permissão <strong>Zone / DNS / Edit</strong>."
+"Cloudflare, create an API Token with the <strong>Zone / Zone / Read</strong> "
+"and <strong>Zone / DNS / Edit</strong> permissions."
+msgstr ""
+"Use um token restrito à edição dos registros DNS das zonas necessárias. No "
+"Cloudflare, crie um API Token com a permissão <strong>Zone / DNS / Edit</"
+"strong>."
 
 #: templates/app_gateway/dns_credential_form.html:30
 msgid ""
 "Secret values are never displayed after saving. Leave them blank when "
 "editing to keep the current value."
-msgstr "Valores secretos nunca são exibidos após salvar. Deixe-os em branco ao editar para manter o valor atual."
-
-#: templates/cluster/workers_list.html:9
-#: templates/scheduler/scheduleprofile_form.html:82
-#: templates/template_parts/base_sidebar.html:13 vpn_invite/forms.py:78
-#: vpn_invite/forms.py:79 vpn_invite/forms.py:80 vpn_invite/forms.py:81
-#: vpn_invite/forms.py:82
-msgid "Status"
-msgstr "Estado"
+msgstr ""
+"Valores secretos nunca são exibidos após salvar. Deixe-os em branco ao "
+"editar para manter o valor atual."
 
 #: templates/cluster/workers_list.html:11
 #: templates/wireguard/peer_list/peer_data.html:43
@@ -4870,3 +4993,9 @@ msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Nenhuma interface encontrada|Nenhuma interface WireGuard foi encontrada para "
 "processar."
+
+#~ msgid "HTTP challenge"
+#~ msgstr "Desafio HTTP"
+
+#~ msgid "DNS challenge"
+#~ msgstr "Desafio DNS"
