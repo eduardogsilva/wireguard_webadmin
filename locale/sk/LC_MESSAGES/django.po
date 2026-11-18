@@ -2715,17 +2715,12 @@ msgstr ""
 "prázdne, ak chcete zachovať aktuálnu hodnotu."
 
 #: templates/app_gateway/pending_export_alert.html:6
-#, fuzzy
-#| msgid ""
-#| "Pending Changes|There are pending DNS changes that have not been applied"
 msgid "There are changes that have not been exported to Caddy yet."
-msgstr "Čakajúce zmeny|Existujú čakajúce DNS zmeny, ktoré neboli aplikované"
+msgstr "Existujú zmeny, ktoré ešte neboli exportované do Caddy."
 
 #: templates/app_gateway/pending_export_alert.html:12
-#, fuzzy
-#| msgid "Export Configuration"
 msgid "Export now"
-msgstr "Exportovať konfiguráciu"
+msgstr "Exportovať teraz"
 
 #: templates/cluster/workers_list.html:11
 #: templates/wireguard/peer_list/peer_data.html:43

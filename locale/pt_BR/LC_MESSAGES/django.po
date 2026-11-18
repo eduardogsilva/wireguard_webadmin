@@ -2740,18 +2740,12 @@ msgstr ""
 "editar para manter o valor atual."
 
 #: templates/app_gateway/pending_export_alert.html:6
-#, fuzzy
-#| msgid ""
-#| "Pending Changes|There are pending DNS changes that have not been applied"
 msgid "There are changes that have not been exported to Caddy yet."
-msgstr ""
-"Alterações Pendentes|Há alterações de DNS pendentes que não foram aplicadas"
+msgstr "Existem alterações que ainda não foram exportadas para o Caddy."
 
 #: templates/app_gateway/pending_export_alert.html:12
-#, fuzzy
-#| msgid "Export Configuration"
 msgid "Export now"
-msgstr "Exportar Configuração"
+msgstr "Exportar agora"
 
 #: templates/cluster/workers_list.html:11
 #: templates/wireguard/peer_list/peer_data.html:43
