@@ -10,6 +10,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from app_gateway.caddy_config_export import caddy_export_pending
 from app_gateway.setup_defaults import create_default_entries
 from gatekeeper.forms import GatekeeperUserForm, GatekeeperGroupForm, AuthMethodForm, AuthMethodAllowedDomainForm, \
     AuthMethodAllowedEmailForm, GatekeeperIPAddressForm
@@ -42,6 +43,7 @@ def view_gatekeeper_list(request):
         'auth_ips': auth_ips,
         'active_tab': active_tab,
         'caddy_enabled': settings.CADDY_ENABLED,
+        'pending_export': caddy_export_pending(),
     }
     return render(request, 'gatekeeper/gatekeeper_list.html', context)
 

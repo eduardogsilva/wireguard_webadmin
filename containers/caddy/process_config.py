@@ -363,9 +363,14 @@ def sync_tls_state():
     restart_required = False
     if applied_state is not None:
         for host, host_state in pending_state.items():
-            if host_state[0] not in ACME_CERTIFICATE_TYPES or applied_state.get(host) in (None, host_state):
+            if applied_state.get(host) in (None, host_state):
                 continue
             if "/" in host or host in ("", ".", ".."):
+                continue
+            if host_state[0] not in ACME_CERTIFICATE_TYPES:
+                # A cached ACME certificate would keep being served instead of the self-signed one
+                if has_acme_certificate(host):
+                    restart_required = True
                 continue
             fallback_removed = False
             fallback_certificate_dir = os.path.join(CERTIFICATES_DIR, INTERNAL_ISSUER_DIR_NAME, host)

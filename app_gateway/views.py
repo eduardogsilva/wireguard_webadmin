@@ -8,11 +8,12 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.formats import date_format
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import localtime
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
-from app_gateway.caddy_config_export import export_caddy_config
+from app_gateway.caddy_config_export import CADDY_EXPORT_DIR, caddy_export_pending, export_caddy_config
 from app_gateway.certificate_status import inspect_certificate
 from app_gateway.forms import (
     ApplicationForm, ApplicationHostForm, AccessPolicyForm,
@@ -48,6 +49,7 @@ def view_app_gateway_list(request):
         'dns_credentials': dns_credentials,
         'active_tab': tab,
         'caddy_enabled': settings.CADDY_ENABLED,
+        'pending_export': caddy_export_pending(),
     }
     return render(request, 'app_gateway/app_gateway_list.html', context)
 
@@ -71,6 +73,7 @@ def view_application_details(request):
         'routes': routes,
         'is_reserved': is_reserved,
         'caddy_enabled': settings.CADDY_ENABLED,
+        'pending_export': caddy_export_pending(),
         'page_title': _('Application Details'),
     }
     return render(request, 'app_gateway/application_details.html', context)
@@ -531,7 +534,7 @@ def view_retry_application_host_certificate(request):
         return redirect(redirect_url)
 
     ApplicationHost.objects.filter(pk=application_host.pk).update(certificate_generation=F('certificate_generation') + 1)
-    export_caddy_config('/caddy_json_export/')
+    export_caddy_config(CADDY_EXPORT_DIR)
     if settings.DEBUG:
         export_caddy_config(os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files'))
 
@@ -604,6 +607,9 @@ def view_export_caddy_config(request):
         return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
 
     redirect_url = reverse('app_gateway_list') + '?tab=applications'
+    next_url = request.POST.get('next', '')
+    if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+        redirect_url = next_url
 
     if not settings.CADDY_ENABLED:
         messages.error(request, _(
@@ -612,7 +618,7 @@ def view_export_caddy_config(request):
         ))
         return redirect(redirect_url)
 
-    export_caddy_config('/caddy_json_export/')
+    export_caddy_config(CADDY_EXPORT_DIR)
 
     if settings.DEBUG:
         export_caddy_config(os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files'))

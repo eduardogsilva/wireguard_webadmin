@@ -1,6 +1,8 @@
 import json
 import os
 
+from django.conf import settings
+
 from app_gateway.models import (
     AccessPolicy, Application, ApplicationHost, ApplicationPolicy, RESERVED_APP_NAME
 )
@@ -154,18 +156,40 @@ def build_tls_data():
     }
 
 
+CADDY_EXPORT_DIR = '/caddy_json_export/'
+
+EXPORT_FILES = {
+    'applications.json': build_applications_data,
+    'auth_policies.json': build_auth_policies_data,
+    'routes.json': build_routes_data,
+    'tls.json': build_tls_data,
+}
+
+
 def export_caddy_config(output_dir):
     os.makedirs(output_dir, exist_ok=True)
 
-    file_map = {
-        'applications.json': build_applications_data,
-        'auth_policies.json': build_auth_policies_data,
-        'routes.json': build_routes_data,
-        'tls.json': build_tls_data,
-    }
-
-    for filename, builder in file_map.items():
+    for filename, builder in EXPORT_FILES.items():
         filepath = os.path.join(output_dir, filename)
         with open(filepath, 'w', encoding='utf-8') as output_file:
             json.dump(builder(), output_file, indent=2)
             output_file.write('\n')
+
+
+def has_pending_export(output_dir):
+    """Return True when the current configuration differs from the files last exported to output_dir."""
+    for filename, builder in EXPORT_FILES.items():
+        filepath = os.path.join(output_dir, filename)
+        try:
+            with open(filepath, 'r', encoding='utf-8') as exported_file:
+                exported_data = json.load(exported_file)
+        except (OSError, ValueError):
+            return True
+        # Round-trip through JSON so the comparison matches what export_caddy_config writes
+        if json.loads(json.dumps(builder())) != exported_data:
+            return True
+    return False
+
+
+def caddy_export_pending():
+    return settings.CADDY_ENABLED and has_pending_export(CADDY_EXPORT_DIR)
