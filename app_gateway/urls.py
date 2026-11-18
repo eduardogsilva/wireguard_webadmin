@@ -14,6 +14,7 @@ urlpatterns = [
     # Application Hosts
     path('host/manage/', views.view_manage_application_host, name='manage_application_host'),
     path('host/delete/', views.view_delete_application_host, name='delete_application_host'),
+    path('host/retry_certificate/', views.view_retry_application_host_certificate, name='retry_application_host_certificate'),
 
     # Access Policies
     path('policy/select-type/', views.view_select_policy_type, name='select_policy_type'),

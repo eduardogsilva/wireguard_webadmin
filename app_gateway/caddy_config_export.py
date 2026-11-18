@@ -134,7 +134,11 @@ def build_tls_data():
     hosts = {}
     dns_credentials = {}
     for application_host in ApplicationHost.objects.select_related('dns_credential'):
-        host_entry = {'certificate_type': application_host.certificate_type}
+        host_entry = {
+            'certificate_type': application_host.certificate_type,
+            'certificate_fallback': application_host.certificate_fallback,
+            'certificate_generation': application_host.certificate_generation,
+        }
         dns_credential = application_host.dns_credential
         if application_host.certificate_type == 'dns_challenge' and dns_credential:
             host_entry['dns_credential'] = dns_credential.name

@@ -9,9 +9,9 @@ from gatekeeper.models import GatekeeperGroup, AuthMethod, _unique_slug
 RESERVED_APP_NAME = 'wireguard_webadmin'
 
 CERTIFICATE_TYPE_CHOICES = (
-    ('self_signed', _('Self-signed')),
-    ('http_challenge', _('HTTP challenge')),
-    ('dns_challenge', _('DNS challenge')),
+    ('http_challenge', _('Trusted certificate (HTTP validation)')),
+    ('dns_challenge', _('Trusted certificate (DNS validation)')),
+    ('self_signed', _('Self-signed certificate')),
 )
 
 
@@ -70,6 +70,9 @@ class ApplicationHost(models.Model):
     dns_credential = models.ForeignKey(
         DnsChallengeCredential, on_delete=models.PROTECT, null=True, blank=True, related_name='hosts'
     )
+    certificate_fallback = models.BooleanField(default=True)
+    # Incremented to request a new ACME attempt; exported so every Caddy instance applies it
+    certificate_generation = models.PositiveIntegerField(default=0)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

@@ -10,9 +10,12 @@ Expected input files in /caddy_json_export/:
   - tls.json                 (optional, exported from Django)
 """
 
+import hashlib
 import json
 import os
 import re
+import shutil
+import sys
 from urllib.parse import urlparse
 
 JSON_DIR = os.environ.get("JSON_DIR", "/caddy_json_export")
@@ -22,7 +25,15 @@ AUTH_GATEWAY_PORTAL_PATH = os.environ.get("AUTH_GATEWAY_EXTERNAL_PATH", "/auth-g
 AUTH_GATEWAY_CHECK_URI = "/auth/check"
 CERTIFICATE_TYPES = ("self_signed", "http_challenge", "dns_challenge")
 DEFAULT_CERTIFICATE_TYPE = "http_challenge"
-ACME_DNS_RESOLVERS = "1.1.1.1 1.0.0.1"
+ACME_CERTIFICATE_TYPES = ("http_challenge", "dns_challenge")
+# The propagation check queries DNS from this server, which fails on networks that intercept
+# port 53 traffic. Waiting a fixed delay and letting the CA validate from outside is more reliable.
+ACME_DNS_PROPAGATION_DELAY = "30s"
+CADDY_DATA_DIR = os.path.join(os.environ.get("XDG_DATA_HOME", "/data"), "caddy")
+CERTIFICATES_DIR = os.path.join(CADDY_DATA_DIR, "certificates")
+INTERNAL_ISSUER_DIR_NAME = "local"
+TLS_STATE_PATH = os.path.join(CADDY_DATA_DIR, "wireguard_webadmin_tls_state.json")
+TLS_STATE_PENDING_PATH = f"{CADDYFILE_PATH}.tls_state.json"
 # Set by entrypoint.sh when the generated Caddyfile fails validation
 DISABLE_DNS_CHALLENGE = os.environ.get("DISABLE_DNS_CHALLENGE", "") == "1"
 AUTH_IDENTITY_HEADERS = (
@@ -82,7 +93,10 @@ def _safe_identifier(val: str) -> str:
 
 
 def get_host_tls(host, tls_data):
-    """Return (certificate_type, dns_credential_name) for a host. Hosts not listed use the HTTP challenge."""
+    """
+    Return (certificate_type, dns_credential_name, certificate_fallback) for a host.
+    Hosts not listed use the HTTP challenge with fallback.
+    """
     host_tls = tls_data.get("hosts", {}).get(host.lower(), {})
     certificate_type = host_tls.get("certificate_type", DEFAULT_CERTIFICATE_TYPE)
     if certificate_type not in CERTIFICATE_TYPES:
@@ -94,7 +108,9 @@ def get_host_tls(host, tls_data):
         if DISABLE_DNS_CHALLENGE or dns_credential not in tls_data.get("dns_credentials", {}):
             certificate_type = DEFAULT_CERTIFICATE_TYPE
             dns_credential = None
-    return certificate_type, dns_credential
+
+    certificate_fallback = certificate_type == "self_signed" or host_tls.get("certificate_fallback", True) is not False
+    return certificate_type, dns_credential, certificate_fallback
 
 
 def group_hosts_by_tls(hosts, tls_data):
@@ -122,7 +138,7 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
         lines.append("  }")
         lines.append("")
 
-    def emit_tls(certificate_type, dns_credential):
+    def emit_tls(certificate_type, dns_credential, certificate_fallback):
         if certificate_type == "self_signed":
             lines.append("  tls internal")
             lines.append("")
@@ -137,12 +153,14 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
             for field_name, field_value in dns_credential_data.get("credentials", {}).items():
                 lines.append(f"        {_safe_identifier(field_name)} {_quote_value(field_value)}")
             lines.append("      }")
-            lines.append(f"      resolvers {ACME_DNS_RESOLVERS}")
+            lines.append(f"      propagation_delay {ACME_DNS_PROPAGATION_DELAY}")
+            lines.append("      propagation_timeout -1")
             lines.append("    }")
         else:
             lines.append("    issuer acme")
-        # Fall back to the internal CA when the ACME certificate cannot be issued
-        lines.append("    issuer internal")
+        if certificate_fallback:
+            # Fall back to the internal CA when the ACME certificate cannot be issued
+            lines.append("    issuer internal")
         lines.append("  }")
         lines.append("")
 
@@ -206,7 +224,7 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
         lines.append("  }")
         lines.append("")
 
-    def emit_site_block(app, hosts, certificate_type, dns_credential):
+    def emit_site_block(app, hosts, certificate_type, dns_credential, certificate_fallback):
         upstream = app.get("upstream", "")
         # tls_insecure_skip_verify is only valid for https upstreams
         allow_invalid_cert = app.get("allow_invalid_cert", False) and upstream.startswith("https://")
@@ -217,7 +235,7 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
 
         safe_hosts = [_safe_value(h) for h in hosts]
         lines.append(f"{', '.join(safe_hosts)} {{")
-        emit_tls(certificate_type, dns_credential)
+        emit_tls(certificate_type, dns_credential, certificate_fallback)
         lines.append("  # Security: overwrite client-supplied forwarding headers with verified values")
         lines.append("  request_header X-Forwarded-For {http.request.remote.host}")
         lines.append("  request_header -X-Forwarded-Host")
@@ -278,10 +296,89 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
         if not hosts or not app.get("upstream", ""):
             continue
 
-        for (certificate_type, dns_credential), group_hosts in group_hosts_by_tls(hosts, tls_data):
-            emit_site_block(app, group_hosts, certificate_type, dns_credential)
+        for (certificate_type, dns_credential, certificate_fallback), group_hosts in group_hosts_by_tls(hosts, tls_data):
+            emit_site_block(app, group_hosts, certificate_type, dns_credential, certificate_fallback)
 
     return "\n".join(lines)
+
+
+def build_tls_state(apps, tls_data):
+    """Map each host to a fingerprint of the certificate settings used in the generated Caddyfile."""
+    tls_data = tls_data or {}
+    tls_state = {}
+    for app in apps:
+        if not app.get("hosts") or not app.get("upstream"):
+            continue
+        for host in app["hosts"]:
+            certificate_type, dns_credential, certificate_fallback = get_host_tls(host, tls_data)
+            credential_hash = ""
+            if dns_credential:
+                credential_data = json.dumps(tls_data["dns_credentials"][dns_credential], sort_keys=True)
+                credential_hash = hashlib.sha256(credential_data.encode()).hexdigest()
+            certificate_generation = tls_data.get("hosts", {}).get(host.lower(), {}).get("certificate_generation", 0)
+            tls_state[host.lower()] = [
+                certificate_type, dns_credential or "", credential_hash, certificate_fallback, certificate_generation
+            ]
+    return tls_state
+
+
+def _write_json(filepath, data):
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    with open(filepath, "w", encoding="utf-8") as json_file:
+        json.dump(data, json_file)
+
+
+def _read_json(filepath):
+    if not os.path.exists(filepath):
+        return None
+    with open(filepath, "r", encoding="utf-8") as json_file:
+        return json.load(json_file)
+
+
+def has_acme_certificate(host):
+    if not os.path.isdir(CERTIFICATES_DIR):
+        return False
+    for issuer_dir_name in os.listdir(CERTIFICATES_DIR):
+        if issuer_dir_name == INTERNAL_ISSUER_DIR_NAME:
+            continue
+        if os.path.isfile(os.path.join(CERTIFICATES_DIR, issuer_dir_name, host, f"{host}.crt")):
+            return True
+    return False
+
+
+def sync_tls_state():
+    """
+    Compare the certificate settings of the last generated Caddyfile with the ones currently applied.
+
+    For hosts whose ACME settings changed (including a retry request), the fallback certificate from the
+    internal CA is removed so a new ACME certificate is requested right away instead of on the next renewal.
+    Prints "restart" when Caddy must be restarted, since a reload keeps cached certificates in memory. Hosts
+    that already hold an ACME certificate and had no fallback certificate removed do not require a restart.
+    """
+    pending_state = _read_json(TLS_STATE_PENDING_PATH)
+    if pending_state is None:
+        return
+    applied_state = _read_json(TLS_STATE_PATH)
+
+    restart_required = False
+    if applied_state is not None:
+        for host, host_state in pending_state.items():
+            if host_state[0] not in ACME_CERTIFICATE_TYPES or applied_state.get(host) in (None, host_state):
+                continue
+            if "/" in host or host in ("", ".", ".."):
+                continue
+            fallback_removed = False
+            fallback_certificate_dir = os.path.join(CERTIFICATES_DIR, INTERNAL_ISSUER_DIR_NAME, host)
+            if os.path.isdir(fallback_certificate_dir):
+                shutil.rmtree(fallback_certificate_dir)
+                fallback_removed = True
+                print(f"Removed fallback certificate for {host}", file=sys.stderr)
+            if fallback_removed or not has_acme_certificate(host):
+                restart_required = True
+
+    _write_json(TLS_STATE_PATH, pending_state)
+    if restart_required:
+        print("restart")
 
 
 def main():
@@ -294,8 +391,12 @@ def main():
     os.makedirs(os.path.dirname(CADDYFILE_PATH), exist_ok=True)
     with open(CADDYFILE_PATH, "w", encoding="utf-8") as caddyfile:
         caddyfile.write(caddyfile_content)
+    _write_json(TLS_STATE_PENDING_PATH, build_tls_state(apps, tls_data))
     print(f"Caddyfile written to {CADDYFILE_PATH}")
 
 
 if __name__ == "__main__":
-    main()
+    if "--sync-tls-state" in sys.argv:
+        sync_tls_state()
+    else:
+        main()

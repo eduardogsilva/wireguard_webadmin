@@ -84,8 +84,19 @@
                         <td>
                             {{ host.get_certificate_type_display }}
                             {% if host.dns_credential %}<small class="text-muted">({{ host.dns_credential }})</small>{% endif %}
+                            {% if host.certificate_type != 'self_signed' and not host.certificate_fallback %}
+                            <small class="text-muted">({% trans 'no fallback' %})</small>
+                            {% endif %}
                         </td>
-                        <td style="width: 15%">
+                        <td style="width: 15%" class="text-nowrap">
+                            {% if host.certificate_type != 'self_signed' %}
+                            <form method="post" action="{% url 'retry_application_host_certificate' %}?uuid={{ host.uuid }}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-secondary" title="{% trans 'Retry certificate' %}">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </form>
+                            {% endif %}
                             {% if is_reserved %}
                             <a href="{% url 'manage_application_host' %}?uuid={{ host.uuid }}"
                                 class="btn btn-sm btn-info" title="{% trans 'Edit' %}">

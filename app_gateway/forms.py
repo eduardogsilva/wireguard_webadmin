@@ -77,11 +77,12 @@ class ApplicationForm(forms.ModelForm):
 class ApplicationHostForm(forms.ModelForm):
     class Meta:
         model = ApplicationHost
-        fields = ['hostname', 'certificate_type', 'dns_credential']
+        fields = ['hostname', 'certificate_type', 'dns_credential', 'certificate_fallback']
         labels = {
             'hostname': _('Hostname'),
             'certificate_type': _('Certificate'),
             'dns_credential': _('DNS Credential'),
+            'certificate_fallback': _('Use a self-signed certificate if the trusted certificate cannot be issued'),
         }
 
     def clean(self):
@@ -103,9 +104,13 @@ class ApplicationHostForm(forms.ModelForm):
 
         if certificate_type == 'dns_challenge':
             if not dns_credential:
-                self.add_error('dns_credential', _('Select a DNS credential to use the DNS challenge.'))
-        else:
-            cleaned_data['dns_credential'] = None
+                self.add_error('dns_credential', _('Select a DNS credential to use the DNS validation.'))
+        elif dns_credential:
+            self.add_error('dns_credential', _('A DNS credential can only be used with the DNS validation.'))
+
+        # The fallback keeps WireGuard WebAdmin reachable when the ACME certificate cannot be issued
+        if self.is_reserved or certificate_type == 'self_signed':
+            cleaned_data['certificate_fallback'] = True
 
         return cleaned_data
 
@@ -116,6 +121,7 @@ class ApplicationHostForm(forms.ModelForm):
         self.fields['dns_credential'].required = False
         if self.is_reserved:
             self.fields['hostname'].disabled = True
+            self.fields['certificate_fallback'].disabled = True
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
@@ -124,8 +130,12 @@ class ApplicationHostForm(forms.ModelForm):
                 css_class='row'
             ),
             Div(
-                Div('certificate_type', css_class='col-xl-6'),
-                Div('dns_credential', css_class='col-xl-6'),
+                Div('certificate_type', css_class='col-md-12'),
+                Div('dns_credential', css_class='col-md-12'),
+                css_class='row'
+            ),
+            Div(
+                Div('certificate_fallback', css_class='col-md-12'),
                 css_class='row'
             ),
             Div(

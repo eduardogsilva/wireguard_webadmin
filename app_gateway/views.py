@@ -3,7 +3,7 @@ import os
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import ProtectedError
+from django.db.models import F, ProtectedError
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -183,11 +183,12 @@ def view_manage_application_host(request):
     <h5>Certificate</h5>
     <p>Defines how the TLS certificate for this hostname is issued.</p>
     <ul>
-        <li><strong>Self-signed</strong>: A certificate issued by the internal Caddy CA. Browsers will show a security warning.</li>
-        <li><strong>HTTP challenge</strong>: A trusted ACME certificate validated through HTTP. The hostname must point to this server and ports 80/443 must be reachable from the internet.</li>
-        <li><strong>DNS challenge</strong>: A trusted ACME certificate validated through a DNS record created using the selected DNS credential. The server does not need to be reachable from the internet.</li>
+        <li><strong>Trusted certificate (HTTP validation)</strong>: Issued through ACME (e.g. Let's Encrypt) and validated over HTTP. The hostname must point to this server and ports 80/443 must be reachable from the internet.</li>
+        <li><strong>Trusted certificate (DNS validation)</strong>: Issued through ACME and validated with a DNS record created using the selected DNS credential. The server does not need to be reachable from the internet.</li>
+        <li><strong>Self-signed certificate</strong>: Issued by the internal Caddy CA. Browsers will show a security warning.</li>
     </ul>
-    <p>If an ACME certificate cannot be issued, a self-signed certificate is used until the next successful attempt.</p>
+    <p>When the fallback option is enabled and a trusted certificate cannot be issued, a self-signed certificate is used until the next successful attempt. Without the fallback, the connection fails until the certificate is issued.</p>
+    <p>Use <strong>Retry certificate</strong> in the host list to request a new attempt right away, for example after fixing the DNS or firewall.</p>
     ''')
     if is_reserved:
         form_description_content += _('''
@@ -469,6 +470,34 @@ def view_delete_application_route(request):
         }
     }
     return render(request, 'generic_delete_confirmation.html', context)
+
+
+@login_required
+@require_POST
+def view_retry_application_host_certificate(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
+
+    application_host = get_object_or_404(ApplicationHost, uuid=request.GET.get('uuid'))
+    redirect_url = reverse('view_application') + f'?uuid={application_host.application.uuid}#hosts'
+
+    if application_host.certificate_type == 'self_signed':
+        messages.error(request, _('This host uses a self-signed certificate.'))
+        return redirect(redirect_url)
+
+    if not settings.CADDY_ENABLED:
+        messages.error(request, _('This action is not available because Caddy is not enabled.'))
+        return redirect(redirect_url)
+
+    ApplicationHost.objects.filter(pk=application_host.pk).update(certificate_generation=F('certificate_generation') + 1)
+    export_caddy_config('/caddy_json_export/')
+    if settings.DEBUG:
+        export_caddy_config(os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files'))
+
+    messages.success(request, _(
+        'A new certificate will be requested for %(hostname)s. The current configuration was exported.'
+    ) % {'hostname': application_host.hostname})
+    return redirect(redirect_url)
 
 
 @login_required
