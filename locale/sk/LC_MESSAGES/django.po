@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-18 18:00-0300\n"
+"POT-Creation-Date: 2026-11-20 20:42-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n "
 ">= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 
-#: api_v2/forms.py:29 cluster/forms.py:27 cluster/forms.py:103 dns/forms.py:25
+#: api_v2/forms.py:29 cluster/forms.py:28 cluster/forms.py:105 dns/forms.py:25
 #: dns/forms.py:68 dns/forms.py:128 routing_templates/forms.py:36
 #: templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
@@ -27,12 +27,12 @@ msgstr ""
 #: templates/wireguard/peer_list/peer_preview_modal.html:79
 #: templates/wireguard/wireguard_manage_ip.html:42 user_manager/forms.py:49
 #: user_manager/forms.py:180 vpn_invite/forms.py:192 vpn_invite/forms.py:326
-#: wireguard/forms.py:56 wireguard_peer/forms.py:27 wireguard_peer/forms.py:156
-#: wireguard_peer/forms.py:210
+#: wireguard/forms.py:71 wireguard_peer/forms.py:28 wireguard_peer/forms.py:164
+#: wireguard_peer/forms.py:218
 msgid "Back"
 msgstr "Späť"
 
-#: api_v2/forms.py:30 cluster/forms.py:28 dns/forms.py:69 dns/forms.py:129
+#: api_v2/forms.py:30 cluster/forms.py:29 dns/forms.py:69 dns/forms.py:129
 #: routing_templates/forms.py:37
 #: templates/app_gateway/app_gateway_list.html:178
 #: templates/app_gateway/app_gateway_list.html:223
@@ -50,7 +50,7 @@ msgstr "Späť"
 #: templates/scheduler/scheduleprofile_list.html:39
 #: templates/wireguard/peer_list/peer_preview_modal.html:109
 #: templates/wireguard/wireguard_manage_ip.html:43 user_manager/forms.py:48
-#: user_manager/forms.py:181 wireguard/forms.py:57
+#: user_manager/forms.py:181 wireguard/forms.py:72
 msgid "Delete"
 msgstr "Vymazať"
 
@@ -65,10 +65,10 @@ msgid ""
 msgstr ""
 "Naozaj chcete regenerovať token? Starý token okamžite prestane fungovať."
 
-#: api_v2/forms.py:63 app_gateway/forms.py:45 app_gateway/forms.py:143
-#: app_gateway/forms.py:188 app_gateway/forms.py:206 app_gateway/forms.py:285
-#: app_gateway/forms.py:327 app_gateway/forms.py:406 cluster/forms.py:67
-#: cluster/forms.py:124 dns/forms.py:37 dns/forms.py:84 dns/forms.py:153
+#: api_v2/forms.py:63 app_gateway/forms.py:68 app_gateway/forms.py:189
+#: app_gateway/forms.py:234 app_gateway/forms.py:252 app_gateway/forms.py:331
+#: app_gateway/forms.py:373 app_gateway/forms.py:452 cluster/forms.py:70
+#: cluster/forms.py:122 dns/forms.py:37 dns/forms.py:84 dns/forms.py:153
 #: gatekeeper/forms.py:72 gatekeeper/forms.py:155 gatekeeper/forms.py:242
 #: gatekeeper/forms.py:367 gatekeeper/forms.py:397 gatekeeper/forms.py:428
 #: routing_templates/forms.py:71 scheduler/forms.py:102
@@ -78,20 +78,20 @@ msgstr ""
 #: templates/scheduler/scheduleprofile_form.html:200
 #: templates/wireguard/wireguard_manage_ip.html:41 user_manager/forms.py:98
 #: user_manager/forms.py:205 vpn_invite/forms.py:191 vpn_invite/forms.py:325
-#: wireguard/forms.py:109 wireguard_peer/forms.py:26
-#: wireguard_peer/forms.py:205
+#: wireguard/forms.py:128 wireguard_peer/forms.py:27
+#: wireguard_peer/forms.py:213
 msgid "Save"
 msgstr "Uložiť"
 
-#: api_v2/models.py:10 app_gateway/forms.py:22 app_gateway/forms.py:157
-#: app_gateway/forms.py:363 cluster/forms.py:18 dns/forms.py:130
+#: api_v2/models.py:10 app_gateway/forms.py:23 app_gateway/forms.py:203
+#: app_gateway/forms.py:409 cluster/forms.py:19 dns/forms.py:130
 #: gatekeeper/forms.py:191 routing_templates/forms.py:28
 #: templates/api_v2/api_documentation.html:47 templates/api_v2/list.html:8
 #: templates/app_gateway/app_gateway_list.html:73
 #: templates/app_gateway/app_gateway_list.html:158
 #: templates/app_gateway/app_gateway_list.html:205
 #: templates/app_gateway/application_details.html:36
-#: templates/cluster/workers_list.html:8 templates/dns/static_host_list.html:68
+#: templates/dns/static_host_list.html:68
 #: templates/gatekeeper/gatekeeper_list.html:167
 #: templates/routing_templates/list.html:8
 #: templates/scheduler/scheduleprofile_list.html:13
@@ -99,11 +99,11 @@ msgstr "Uložiť"
 #: templates/wireguard/server_detail.html:12
 #: templates/wireguard/server_list.html:19
 #: templates/wireguard/wireguard_manage_peer.html:15 user_manager/forms.py:177
-#: wireguard_peer/forms.py:32
+#: wireguard_peer/forms.py:33
 msgid "Name"
 msgstr "Názov"
 
-#: api_v2/models.py:11 cluster/forms.py:25 templates/api_v2/list.html:9
+#: api_v2/models.py:11 cluster/forms.py:26 templates/api_v2/list.html:9
 msgid "Token"
 msgstr "Token"
 
@@ -123,25 +123,27 @@ msgstr "Povoliť opätovné načítanie"
 msgid "Allow Export"
 msgstr "Povoliť export"
 
-#: api_v2/models.py:16 cluster/forms.py:19 templates/api_v2/list.html:11
-#: templates/api_v2/list.html:41 templates/cluster/workers_list.html:96
-#: vpn_invite/forms.py:49 vpn_invite/forms.py:294
+#: api_v2/models.py:16 cluster/forms.py:20 templates/api_v2/list.html:11
+#: templates/api_v2/list.html:41 templates/cluster/worker_details.html:62
+#: templates/cluster/workers_list.html:61 vpn_invite/forms.py:49
+#: vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Povolené"
 
 #: api_v2/views.py:17 api_v2/views.py:27 api_v2/views.py:82 api_v2/views.py:106
-#: app_gateway/views.py:33 app_gateway/views.py:60 app_gateway/views.py:85
-#: app_gateway/views.py:121 app_gateway/views.py:168 app_gateway/views.py:195
-#: app_gateway/views.py:257 app_gateway/views.py:285 app_gateway/views.py:296
-#: app_gateway/views.py:358 app_gateway/views.py:384 app_gateway/views.py:419
-#: app_gateway/views.py:445 app_gateway/views.py:495 app_gateway/views.py:523
-#: app_gateway/views.py:550 app_gateway/views.py:580 app_gateway/views.py:607
-#: cluster/views.py:18 cluster/views.py:45 cluster/views.py:114
-#: gatekeeper/views.py:26 gatekeeper/views.py:54 gatekeeper/views.py:104
-#: gatekeeper/views.py:127 gatekeeper/views.py:157 gatekeeper/views.py:180
-#: gatekeeper/views.py:228 gatekeeper/views.py:299 gatekeeper/views.py:329
-#: gatekeeper/views.py:352 gatekeeper/views.py:382 gatekeeper/views.py:405
-#: gatekeeper/views.py:454 templates/access_denied.html:9
+#: app_gateway/views.py:39 app_gateway/views.py:66 app_gateway/views.py:121
+#: app_gateway/views.py:181 app_gateway/views.py:232 app_gateway/views.py:260
+#: app_gateway/views.py:325 app_gateway/views.py:354 app_gateway/views.py:365
+#: app_gateway/views.py:428 app_gateway/views.py:455 app_gateway/views.py:491
+#: app_gateway/views.py:518 app_gateway/views.py:569 app_gateway/views.py:598
+#: app_gateway/views.py:623 app_gateway/views.py:654 app_gateway/views.py:682
+#: cluster/views.py:55 cluster/views.py:101 cluster/views.py:147
+#: cluster/views.py:214 gatekeeper/views.py:26 gatekeeper/views.py:54
+#: gatekeeper/views.py:105 gatekeeper/views.py:129 gatekeeper/views.py:160
+#: gatekeeper/views.py:184 gatekeeper/views.py:233 gatekeeper/views.py:305
+#: gatekeeper/views.py:336 gatekeeper/views.py:360 gatekeeper/views.py:391
+#: gatekeeper/views.py:415 gatekeeper/views.py:465
+#: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Prístup zamietnutý"
 
@@ -210,22 +212,56 @@ msgstr "Ste si istí, že chcete odstrániť kľúč API \"%(name)s\"?"
 msgid "API Documentation"
 msgstr "Dokumentácia API"
 
+#: app_gateway/caddy_config_export.py:322
+#, fuzzy
+#| msgid "DNS configuration reloaded automatically."
+msgid "Gateway configuration applied automatically."
+msgstr "Konfigurácia DNS bola automaticky znovu načítaná."
+
 #: app_gateway/dns_providers.py:14
 msgid "API Token"
 msgstr "API token"
 
-#: app_gateway/forms.py:23 templates/app_gateway/app_gateway_list.html:74
+#: app_gateway/forms.py:24 templates/app_gateway/app_gateway_list.html:74
 #: templates/app_gateway/application_details.html:37
 msgid "Upstream"
 msgstr "Upstream"
 
-#: app_gateway/forms.py:24
+#: app_gateway/forms.py:25
 msgid "Allow invalid/self-signed certificate"
 msgstr "Povoliť neplatný/samopodpísaný certifikát"
 
-#: app_gateway/forms.py:46 app_gateway/forms.py:144 app_gateway/forms.py:189
-#: app_gateway/forms.py:207 app_gateway/forms.py:286 app_gateway/forms.py:328
-#: app_gateway/forms.py:407 gatekeeper/forms.py:73 gatekeeper/forms.py:156
+#: app_gateway/forms.py:26
+msgid "Serve on the primary server"
+msgstr ""
+
+#: app_gateway/forms.py:27
+msgid "Serve on all cluster workers"
+msgstr ""
+
+#: app_gateway/forms.py:28
+#, fuzzy
+#| msgid "Cluster Mode"
+msgid "Cluster workers"
+msgstr "Režim clustra"
+
+#: app_gateway/forms.py:40
+msgid ""
+"Select specific workers, or leave empty when serving on all cluster workers."
+msgstr ""
+
+#: app_gateway/forms.py:42 cluster/views.py:69
+#: templates/template_parts/base_sidebar.html:135
+msgid "Cluster"
+msgstr "Cluster"
+
+#: app_gateway/forms.py:42
+msgid "Servers that publish this application."
+msgstr ""
+
+#: app_gateway/forms.py:69 app_gateway/forms.py:190 app_gateway/forms.py:235
+#: app_gateway/forms.py:253 app_gateway/forms.py:332 app_gateway/forms.py:374
+#: app_gateway/forms.py:453 gatekeeper/forms.py:73 gatekeeper/forms.py:156
 #: gatekeeper/forms.py:243 gatekeeper/forms.py:368 gatekeeper/forms.py:398
 #: gatekeeper/forms.py:429 scheduler/forms.py:103
 #: templates/app_gateway/access_policy_type_select.html:50
@@ -234,20 +270,20 @@ msgstr "Povoliť neplatný/samopodpísaný certifikát"
 msgid "Cancel"
 msgstr "Zrušiť"
 
-#: app_gateway/forms.py:59
+#: app_gateway/forms.py:82
 msgid "This upstream is reserved by the system."
 msgstr "Tento upstream je vyhradený systémom."
 
-#: app_gateway/forms.py:62
+#: app_gateway/forms.py:85
 msgid "Upstream URL cannot contain spaces."
 msgstr "URL adresa upstream nemôže obsahovať medzery."
 
-#: app_gateway/forms.py:68
+#: app_gateway/forms.py:91
 msgid "Enter a valid upstream URL starting with http:// or https://"
 msgstr ""
 "Zadajte platnú URL adresu upstream začínajúcu na http:// alebo https://"
 
-#: app_gateway/forms.py:70
+#: app_gateway/forms.py:93
 msgid ""
 "Upstream must be a bare host address with no path, query or fragment. Use "
 "http://host or http://host:port"
@@ -255,80 +291,102 @@ msgstr ""
 "Upstream musí byť jednoduchá adresa hostiteľa bez cesty, parametra alebo "
 "fragmentu. Použite http://host alebo http://host:port"
 
-#: app_gateway/forms.py:72
+#: app_gateway/forms.py:95
 msgid "This option is only available for https:// upstreams."
 msgstr "Táto možnosť je dostupná iba pre upstreamy https://."
 
-#: app_gateway/forms.py:82 cluster/forms.py:24 dns/forms.py:65
+#: app_gateway/forms.py:101
+msgid "Leave this empty when the application is served on all cluster workers."
+msgstr ""
+
+#: app_gateway/forms.py:103
+msgid "Select at least one server to publish this application."
+msgstr ""
+
+#: app_gateway/forms.py:109
+#, python-format
+msgid ""
+"Applications served by cluster workers require DNS validation or self-signed "
+"certificates. Change the certificate of these hosts first: %(hosts)s"
+msgstr ""
+
+#: app_gateway/forms.py:121 cluster/forms.py:25 dns/forms.py:65
 #: templates/app_gateway/app_gateway_list.html:116
 #: templates/app_gateway/application_details.html:76
+#: templates/cluster/worker_details.html:37
 #: templates/dns/static_host_list.html:17
 #: templates/wireguard/server_detail.html:39
 msgid "Hostname"
 msgstr "Názov hostiteľa"
 
-#: app_gateway/forms.py:83 templates/app_gateway/app_gateway_list.html:118
+#: app_gateway/forms.py:122 templates/app_gateway/app_gateway_list.html:118
 #: templates/app_gateway/application_details.html:77
 msgid "Certificate"
 msgstr "Certifikát"
 
-#: app_gateway/forms.py:84 templates/app_gateway/dns_credential_form.html:24
+#: app_gateway/forms.py:123 templates/app_gateway/dns_credential_form.html:24
 msgid "DNS Credential"
 msgstr "Poverenie DNS"
 
-#: app_gateway/forms.py:85
+#: app_gateway/forms.py:124
 msgid ""
 "Use a self-signed certificate if the trusted certificate cannot be issued"
 msgstr ""
 "Použiť samopodpísaný certifikát, ak dôveryhodný certifikát nie je možné vydať"
 
-#: app_gateway/forms.py:96
+#: app_gateway/forms.py:135
 msgid "Hostname contains invalid characters."
 msgstr "Názov hostiteľa obsahuje neplatné znaky."
 
-#: app_gateway/forms.py:100
+#: app_gateway/forms.py:139
 msgid "This hostname is already used by WireGuard WebAdmin."
 msgstr "Tento hostname už používa WireGuard WebAdmin."
 
-#: app_gateway/forms.py:103
+#: app_gateway/forms.py:144
+msgid ""
+"This application is served by cluster workers. Use DNS validation or a self-"
+"signed certificate."
+msgstr ""
+
+#: app_gateway/forms.py:148
 msgid "IP addresses can only use a self-signed certificate."
 msgstr "IP adresy môžu používať iba samopodpísaný certifikát."
 
-#: app_gateway/forms.py:107
+#: app_gateway/forms.py:152
 msgid "Select a DNS credential to use the DNS validation."
 msgstr "Vyberte poverenie DNS na použitie overenia cez DNS."
 
-#: app_gateway/forms.py:109
+#: app_gateway/forms.py:154
 msgid "A DNS credential can only be used with the DNS validation."
 msgstr "Poverenie DNS je možné použiť iba s overením cez DNS."
 
-#: app_gateway/forms.py:158 templates/app_gateway/app_gateway_list.html:159
+#: app_gateway/forms.py:204 templates/app_gateway/app_gateway_list.html:159
 msgid "Policy Type"
 msgstr "Typ politiky"
 
-#: app_gateway/forms.py:159
+#: app_gateway/forms.py:205
 msgid "Allowed Groups"
 msgstr "Povolené skupiny"
 
-#: app_gateway/forms.py:160 templates/gatekeeper/gatekeeper_list.html:14
+#: app_gateway/forms.py:206 templates/gatekeeper/gatekeeper_list.html:14
 msgid "Authentication Methods"
 msgstr "Metódy autentifikácie"
 
-#: app_gateway/forms.py:240
+#: app_gateway/forms.py:286
 msgid "Cannot select more than one Local Password authentication method."
 msgstr "Nemožno vybrať viac ako jednu metódu autentifikácie lokálnym heslom."
 
-#: app_gateway/forms.py:244
+#: app_gateway/forms.py:290
 msgid ""
 "Cannot select more than one OpenID Connect (OIDC) authentication method."
 msgstr ""
 "Nemožno vybrať viac ako jednu metódu autentifikácie OpenID Connect (OIDC)."
 
-#: app_gateway/forms.py:248
+#: app_gateway/forms.py:294
 msgid "Cannot select more than one TOTP authentication method."
 msgstr "Nemožno vybrať viac ako jednu metódu autentifikácie TOTP."
 
-#: app_gateway/forms.py:252
+#: app_gateway/forms.py:298
 msgid ""
 "Cannot select both Local Password and OpenID Connect (OIDC) authentication "
 "methods."
@@ -336,7 +394,7 @@ msgstr ""
 "Nemožno vybrať súčasne metódy autentifikácie lokálnym heslom a OpenID "
 "Connect (OIDC)."
 
-#: app_gateway/forms.py:256
+#: app_gateway/forms.py:302
 msgid ""
 "At least one user group must be selected when using Local Password "
 "authentication."
@@ -344,160 +402,185 @@ msgstr ""
 "Pri použití autentifikácie lokálnym heslom musí byť vybraná aspoň jedna "
 "skupina používateľov."
 
-#: app_gateway/forms.py:260
+#: app_gateway/forms.py:306
 msgid "User groups can only be used with Local Password authentication."
 msgstr ""
 "Skupiny používateľov možno použiť len s autentifikáciou lokálnym heslom."
 
-#: app_gateway/forms.py:270 templates/app_gateway/app_gateway_list.html:77
+#: app_gateway/forms.py:316 templates/app_gateway/app_gateway_list.html:77
 #: templates/app_gateway/application_details.html:40
 #: templates/firewall/firewall_nav_tabs.html:15
 msgid "Default Policy"
 msgstr "Predvolená politika"
 
-#: app_gateway/forms.py:299 templates/app_gateway/application_details.html:152
+#: app_gateway/forms.py:345 templates/app_gateway/application_details.html:152
 msgid "Route Name"
 msgstr "Názov trasy"
 
-#: app_gateway/forms.py:300 templates/app_gateway/application_details.html:153
+#: app_gateway/forms.py:346 templates/app_gateway/application_details.html:153
 msgid "Path Prefix"
 msgstr "Prefix cesty"
 
-#: app_gateway/forms.py:301 templates/app_gateway/application_details.html:154
+#: app_gateway/forms.py:347 templates/app_gateway/application_details.html:154
 msgid "Policy"
 msgstr "Politika"
 
-#: app_gateway/forms.py:302 templates/app_gateway/application_details.html:155
+#: app_gateway/forms.py:348 templates/app_gateway/application_details.html:155
 msgid "Order"
 msgstr "Poradie"
 
-#: app_gateway/forms.py:343
+#: app_gateway/forms.py:389
 msgid "Path prefix must start with /."
 msgstr "Predpona cesty musí začínať znakom /."
 
-#: app_gateway/forms.py:345
+#: app_gateway/forms.py:391
 msgid "Path prefix cannot contain spaces."
 msgstr "Predpona cesty nemôže obsahovať medzery."
 
-#: app_gateway/forms.py:347
+#: app_gateway/forms.py:393
 msgid "Path prefix contains invalid characters."
 msgstr "Predpona cesty obsahuje neplatné znaky."
 
-#: app_gateway/forms.py:352
+#: app_gateway/forms.py:398
 msgid "This path prefix is reserved by the system."
 msgstr "Táto predpona cesty je vyhradená systémom."
 
-#: app_gateway/forms.py:364 templates/app_gateway/app_gateway_list.html:206
+#: app_gateway/forms.py:410 templates/app_gateway/app_gateway_list.html:206
 msgid "Provider"
 msgstr "Poskytovateľ"
 
-#: app_gateway/forms.py:382
+#: app_gateway/forms.py:428
 #, python-format
 msgid "Leave blank to keep the current value (ending in %(suffix)s)."
 msgstr ""
 "Ponechajte prázdne, ak chcete zachovať aktuálnu hodnotu (končí na "
 "%(suffix)s)."
 
-#: app_gateway/forms.py:435
+#: app_gateway/forms.py:481
 msgid "This field is required."
 msgstr "Toto pole je povinné."
 
-#: app_gateway/forms.py:437
+#: app_gateway/forms.py:483
 msgid "This field contains invalid characters."
 msgstr "Toto pole obsahuje neplatné znaky."
 
-#: app_gateway/forms.py:439
+#: app_gateway/forms.py:485
 msgid "The value does not match the expected format for this provider."
 msgstr "Hodnota nezodpovedá očakávanému formátu pre tohto poskytovateľa."
 
-#: app_gateway/models.py:12
+#: app_gateway/models.py:13
 msgid "Trusted certificate (HTTP validation)"
 msgstr "Dôveryhodný certifikát (overenie cez HTTP)"
 
-#: app_gateway/models.py:13
+#: app_gateway/models.py:14
 msgid "Trusted certificate (DNS validation)"
 msgstr "Dôveryhodný certifikát (overenie cez DNS)"
 
-#: app_gateway/models.py:14
+#: app_gateway/models.py:15
 msgid "Self-signed certificate"
 msgstr "Samopodpísaný certifikát"
 
-#: app_gateway/models.py:45
+#: app_gateway/models.py:46
 msgid "Upstream address, e.g.: http://10.188.18.27:3000"
 msgstr "Upstream adresa, napr.: http://10.188.18.27:3000"
 
-#: app_gateway/models.py:46
+#: app_gateway/models.py:47
 msgid "Allow invalid or self-signed TLS certificates from the upstream"
 msgstr "Povoliť neplatné alebo samopodpísané TLS certifikáty z upstreamu"
 
-#: app_gateway/models.py:91
+#: app_gateway/models.py:107
 #: templates/app_gateway/access_policy_type_select.html:19
 msgid "Public"
 msgstr "Verejné"
 
-#: app_gateway/models.py:91
+#: app_gateway/models.py:107
 #: templates/app_gateway/access_policy_type_select.html:30
 msgid "Protected"
 msgstr "Chránené"
 
-#: app_gateway/models.py:91 gatekeeper/models.py:142
+#: app_gateway/models.py:107 gatekeeper/models.py:142
 #: templates/app_gateway/access_policy_type_select.html:41
 #: templates/gatekeeper/gatekeeper_list.html:290
 msgid "Deny"
 msgstr "Odmietnuť"
 
-#: app_gateway/views.py:77
+#: app_gateway/views.py:83
 msgid "Application Details"
 msgstr "Podrobnosti o aplikácii"
 
-#: app_gateway/views.py:96
+#: app_gateway/views.py:102
 #, python-format
 msgid "expires %(date)s"
 msgstr "platnosť končí %(date)s"
 
-#: app_gateway/views.py:101
+#: app_gateway/views.py:105 templates/cluster/worker_details.html:115
 msgid "Trusted"
 msgstr "Dôveryhodný"
 
-#: app_gateway/views.py:104
+#: app_gateway/views.py:107 templates/cluster/worker_details.html:116
 msgid "Self-signed"
 msgstr "Samopodpísaný"
 
-#: app_gateway/views.py:107
-msgid "Using fallback"
-msgstr "Záložný certifikát"
-
-#: app_gateway/views.py:108
+#: app_gateway/views.py:109
 #, python-format
 msgid "The trusted certificate could not be issued yet, %(expiration)s"
 msgstr "Dôveryhodný certifikát sa zatiaľ nepodarilo vydať, %(expiration)s"
 
 #: app_gateway/views.py:110
+msgid "Using fallback"
+msgstr "Záložný certifikát"
+
+#: app_gateway/views.py:112 dns/models.py:32
+#: templates/cluster/workers_list.html:132
+#: templates/dns/static_host_list.html:91
+msgid "Unknown"
+msgstr "Neznáme"
+
+#: app_gateway/views.py:112
+msgid "No recent report from this server."
+msgstr ""
+
+#: app_gateway/views.py:114
+msgid "Pending export"
+msgstr ""
+
+#: app_gateway/views.py:114
+msgid "Export the configuration to publish this host on this server."
+msgstr ""
+
+#: app_gateway/views.py:115 templates/cluster/worker_details.html:117
 msgid "Unavailable"
 msgstr "Nedostupné"
 
-#: app_gateway/views.py:111
+#: app_gateway/views.py:115
 msgid "No certificate is being served for this hostname."
 msgstr "Pre tento názov hostiteľa sa neposkytuje žiadny certifikát."
 
-#: app_gateway/views.py:128 app_gateway/views.py:213 app_gateway/views.py:265
+#: app_gateway/views.py:156 templates/wireguard/peer_list/peer_data.html:44
+#: templates/wireguard/peer_list/script_wireguard_status_update.html:146
+#: wireguard/forms.py:60 wireguard_tools/functions.py:31
+#: wireguard_tools/functions.py:35
+msgid "Primary Server"
+msgstr "Primárny server"
+
+#: app_gateway/views.py:188 app_gateway/views.py:278 app_gateway/views.py:333
 msgid "The WireGuard WebAdmin application cannot be modified."
 msgstr "Aplikáciu WireGuard WebAdmin nie je možné upraviť."
 
-#: app_gateway/views.py:130 templates/app_gateway/application_details.html:17
+#: app_gateway/views.py:190 templates/app_gateway/application_details.html:17
 #: templates/app_gateway/application_details.html:24
 msgid "Edit Application"
 msgstr "Upraviť aplikáciu"
 
-#: app_gateway/views.py:133
+#: app_gateway/views.py:193
 msgid "Create Application"
 msgstr "Vytvoriť aplikáciu"
 
-#: app_gateway/views.py:140
+#: app_gateway/views.py:203
 msgid "Application saved successfully."
 msgstr "Aplikácia bola úspešne uložená."
 
-#: app_gateway/views.py:145
+#: app_gateway/views.py:209
 msgid ""
 "\n"
 "        <h5>Application</h5>\n"
@@ -531,37 +614,62 @@ msgstr ""
 "        </ul>\n"
 "        "
 
-#: app_gateway/views.py:175
+#: app_gateway/views.py:239
 msgid "The WireGuard WebAdmin application cannot be deleted."
 msgstr "Aplikáciu WireGuard WebAdmin nie je možné odstrániť."
 
-#: app_gateway/views.py:180
+#: app_gateway/views.py:244
 msgid "Application deleted successfully."
 msgstr "Aplikácia bola úspešne odstránená."
 
-#: app_gateway/views.py:185 templates/app_gateway/application_details.html:20
+#: app_gateway/views.py:250 templates/app_gateway/application_details.html:20
 #: templates/app_gateway/application_details.html:27
 msgid "Delete Application"
 msgstr "Odstrániť aplikáciu"
 
-#: app_gateway/views.py:187
+#: app_gateway/views.py:252
 #, python-format
 msgid "Are you sure you want to delete the application \"%(name)s\"?"
 msgstr "Ste si istí, že chcete odstrániť aplikáciu \"%(name)s\"?"
 
-#: app_gateway/views.py:203
+#: app_gateway/views.py:268
 msgid "Edit Application Host"
 msgstr "Upraviť hostiteľa aplikácie"
 
-#: app_gateway/views.py:207
+#: app_gateway/views.py:272
 msgid "Add Application Host"
 msgstr "Pridať hostiteľa aplikácie"
 
-#: app_gateway/views.py:223
+#: app_gateway/views.py:289
 msgid "Application Host saved successfully."
 msgstr "Hostiteľ aplikácie bol úspešne uložený."
 
-#: app_gateway/views.py:226
+#: app_gateway/views.py:293
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "    <h5>Certificate</h5>\n"
+#| "    <p>Defines how the TLS certificate for this hostname is issued.</p>\n"
+#| "    <ul>\n"
+#| "        <li><strong>Trusted certificate (HTTP validation)</strong>: "
+#| "Issued through ACME (e.g. Let's Encrypt) and validated over HTTP. The "
+#| "hostname must point to this server and ports 80/443 must be reachable "
+#| "from the internet.</li>\n"
+#| "        <li><strong>Trusted certificate (DNS validation)</strong>: Issued "
+#| "through ACME and validated with a DNS record created using the selected "
+#| "DNS credential. The server does not need to be reachable from the "
+#| "internet.</li>\n"
+#| "        <li><strong>Self-signed certificate</strong>: Issued by the "
+#| "internal Caddy CA. Browsers will show a security warning.</li>\n"
+#| "    </ul>\n"
+#| "    <p>When the fallback option is enabled and a trusted certificate "
+#| "cannot be issued, a self-signed certificate is used until the next "
+#| "successful attempt. Without the fallback, the connection fails until the "
+#| "certificate is issued.</p>\n"
+#| "    <p>Use <strong>Retry certificate</strong> in the host list to request "
+#| "a new attempt right away, for example after fixing the DNS or firewall.</"
+#| "p>\n"
+#| "    "
 msgid ""
 "\n"
 "    <h5>Certificate</h5>\n"
@@ -584,6 +692,11 @@ msgid ""
 "issued.</p>\n"
 "    <p>Use <strong>Retry certificate</strong> in the host list to request a "
 "new attempt right away, for example after fixing the DNS or firewall.</p>\n"
+"    <p><strong>Important:</strong> the certificate is requested as soon as "
+"the configuration is applied. With HTTP validation, the hostname must "
+"already point to this server: failed attempts count towards the Let's "
+"Encrypt limit (5 per hour per hostname). If the DNS is not ready yet, use "
+"DNS validation.</p>\n"
 "    "
 msgstr ""
 "\n"
@@ -609,7 +722,7 @@ msgstr ""
 "alebo firewallu.</p>\n"
 "    "
 
-#: app_gateway/views.py:238
+#: app_gateway/views.py:306
 msgid ""
 "\n"
 "        <div class=\"alert alert-warning\">\n"
@@ -629,37 +742,37 @@ msgstr ""
 "        </div>\n"
 "        "
 
-#: app_gateway/views.py:270
+#: app_gateway/views.py:338
 msgid "Application Host deleted successfully."
 msgstr "Hostiteľ aplikácie bol úspešne odstránený."
 
-#: app_gateway/views.py:275
+#: app_gateway/views.py:344
 msgid "Delete Application Host"
 msgstr "Odstrániť hostiteľa aplikácie"
 
-#: app_gateway/views.py:277
+#: app_gateway/views.py:346
 #, python-format
 msgid "Are you sure you want to delete the host \"%(hostname)s\"?"
 msgstr "Naozaj chcete odstrániť hostiteľa \"%(hostname)s\"?"
 
-#: app_gateway/views.py:288
+#: app_gateway/views.py:357
 #: templates/app_gateway/access_policy_type_select.html:9
 msgid "Select Access Policy Type"
 msgstr "Vyberte typ prístupovej politiky"
 
-#: app_gateway/views.py:303
+#: app_gateway/views.py:372
 msgid "Edit Access Policy"
 msgstr "Upraviť politiku prístupu"
 
-#: app_gateway/views.py:307
+#: app_gateway/views.py:376
 msgid "Create Access Policy"
 msgstr "Vytvoriť politiku prístupu"
 
-#: app_gateway/views.py:314
+#: app_gateway/views.py:383
 msgid "Access Policy saved successfully."
 msgstr "Politika prístupu bola úspešne uložená."
 
-#: app_gateway/views.py:320
+#: app_gateway/views.py:390
 msgid ""
 "\n"
 "            <h5>Public Policy</h5>\n"
@@ -673,7 +786,7 @@ msgstr ""
 "akéhokoľvek overenia.</p>\n"
 "            "
 
-#: app_gateway/views.py:328
+#: app_gateway/views.py:398
 msgid ""
 "\n"
 "            <h5>Deny Policy</h5>\n"
@@ -686,7 +799,7 @@ msgstr ""
 "trasám.</p>\n"
 "            "
 
-#: app_gateway/views.py:336
+#: app_gateway/views.py:406
 msgid ""
 "\n"
 "            <h5>Protected Policy</h5>\n"
@@ -716,11 +829,11 @@ msgstr ""
 "            </ul>\n"
 "            "
 
-#: app_gateway/views.py:367
+#: app_gateway/views.py:437
 msgid "Access Policy deleted successfully."
 msgstr "Politika prístupu bola úspešne odstránená."
 
-#: app_gateway/views.py:369
+#: app_gateway/views.py:440
 msgid ""
 "Cannot delete this Access Policy because it is currently in use by an "
 "Application Route or Application Default Policy."
@@ -728,53 +841,53 @@ msgstr ""
 "Túto prístupovú politiku nie je možné odstrániť, pretože sa momentálne "
 "používa v trase aplikácie alebo v predvolenej politike aplikácie."
 
-#: app_gateway/views.py:374
+#: app_gateway/views.py:445
 msgid "Delete Access Policy"
 msgstr "Odstrániť politiku prístupu"
 
-#: app_gateway/views.py:376
+#: app_gateway/views.py:447
 #, python-format
 msgid "Are you sure you want to delete the access policy \"%(name)s\"?"
 msgstr "Ste si istí, že chcete odstrániť politiku prístupu \"%(name)s\"?"
 
-#: app_gateway/views.py:392
+#: app_gateway/views.py:463
 msgid "Edit Application Default Policy"
 msgstr "Upraviť predvolenú politiku aplikácie"
 
-#: app_gateway/views.py:396
+#: app_gateway/views.py:467
 msgid "Set Application Default Policy"
 msgstr "Nastaviť predvolenú politiku aplikácie"
 
-#: app_gateway/views.py:405
+#: app_gateway/views.py:476
 msgid "Application Default Policy saved successfully."
 msgstr "Predvolená politika aplikácie bola úspešne uložená."
 
-#: app_gateway/views.py:428
+#: app_gateway/views.py:500
 msgid "Application Default Policy deleted successfully."
 msgstr "Predvolená politika aplikácie bola úspešne odstránená."
 
-#: app_gateway/views.py:433
+#: app_gateway/views.py:506
 msgid "Delete Application Default Policy"
 msgstr "Odstrániť predvolenú politiku aplikácie"
 
-#: app_gateway/views.py:435
+#: app_gateway/views.py:508
 #, python-format
 msgid "Are you sure you want to remove the default policy for \"%(name)s\"?"
 msgstr "Ste si istí, že chcete odstrániť predvolenú politiku pre \"%(name)s\"?"
 
-#: app_gateway/views.py:453
+#: app_gateway/views.py:526
 msgid "Edit Application Route"
 msgstr "Upraviť trasu aplikácie"
 
-#: app_gateway/views.py:457
+#: app_gateway/views.py:530
 msgid "Add Application Route"
 msgstr "Pridať trasu aplikácie"
 
-#: app_gateway/views.py:466
+#: app_gateway/views.py:539
 msgid "Application Route saved successfully."
 msgstr "Trasa aplikácie bola úspešne uložená."
 
-#: app_gateway/views.py:471
+#: app_gateway/views.py:545
 msgid ""
 "\n"
 "        <h5>Application Route</h5>\n"
@@ -814,28 +927,28 @@ msgstr ""
 "        </ul>\n"
 "        "
 
-#: app_gateway/views.py:504
+#: app_gateway/views.py:578
 msgid "Application Route deleted successfully."
 msgstr "Trasa aplikácie bola úspešne odstránená."
 
-#: app_gateway/views.py:509
+#: app_gateway/views.py:584
 msgid "Delete Application Route"
 msgstr "Odstrániť trasu aplikácie"
 
-#: app_gateway/views.py:511
+#: app_gateway/views.py:586
 #, python-format
 msgid "Are you sure you want to delete the route \"%(name)s\" (%(path)s)?"
 msgstr "Naozaj chcete odstrániť trasu \"%(name)s\" (%(path)s)?"
 
-#: app_gateway/views.py:529
+#: app_gateway/views.py:604
 msgid "This host uses a self-signed certificate."
 msgstr "Tento hostiteľ používa samopodpísaný certifikát."
 
-#: app_gateway/views.py:533
+#: app_gateway/views.py:608
 msgid "This action is not available because Caddy is not enabled."
 msgstr "Táto akcia nie je dostupná, pretože Caddy nie je povolený."
 
-#: app_gateway/views.py:542
+#: app_gateway/views.py:615
 #, python-format
 msgid ""
 "A new certificate will be requested for %(hostname)s. The current "
@@ -844,23 +957,23 @@ msgstr ""
 "Pre %(hostname)s bude vyžiadaný nový certifikát. Aktuálna konfigurácia bola "
 "exportovaná."
 
-#: app_gateway/views.py:556
+#: app_gateway/views.py:629
 msgid "Edit DNS Credential"
 msgstr "Upraviť poverenie DNS"
 
-#: app_gateway/views.py:559 templates/app_gateway/app_gateway_list.html:196
+#: app_gateway/views.py:632 templates/app_gateway/app_gateway_list.html:196
 msgid "Add DNS Credential"
 msgstr "Pridať poverenie DNS"
 
-#: app_gateway/views.py:566
+#: app_gateway/views.py:639
 msgid "DNS Credential saved successfully."
 msgstr "Poverenie DNS bolo úspešne uložené."
 
-#: app_gateway/views.py:589
+#: app_gateway/views.py:663
 msgid "DNS Credential deleted successfully."
 msgstr "Poverenie DNS bolo úspešne odstránené."
 
-#: app_gateway/views.py:591
+#: app_gateway/views.py:666
 msgid ""
 "Cannot delete this DNS Credential because it is currently in use by an "
 "Application Host."
@@ -868,16 +981,16 @@ msgstr ""
 "Toto poverenie DNS nie je možné odstrániť, pretože ho používa hostiteľ "
 "aplikácie."
 
-#: app_gateway/views.py:596
+#: app_gateway/views.py:671
 msgid "Delete DNS Credential"
 msgstr "Odstrániť poverenie DNS"
 
-#: app_gateway/views.py:598
+#: app_gateway/views.py:673
 #, python-format
 msgid "Are you sure you want to delete the DNS credential \"%(name)s\"?"
 msgstr "Naozaj chcete odstrániť poverenie DNS \"%(name)s\"?"
 
-#: app_gateway/views.py:616
+#: app_gateway/views.py:691
 msgid ""
 "Configuration export is not available because Caddy is not enabled. To use "
 "App Gateway and Gatekeeper, start the application using docker-compose-"
@@ -887,16 +1000,16 @@ msgstr ""
 "chcete používať App Gateway a Gatekeeper, spustite aplikáciu pomocou docker-"
 "compose-caddy.yml."
 
-#: app_gateway/views.py:626
+#: app_gateway/views.py:697
 msgid "Configuration exported successfully."
 msgstr "Konfigurácia bola úspešne exportovaná."
 
-#: cluster/forms.py:20
+#: cluster/forms.py:21
 msgid "IP Lock"
 msgstr "IP zámok"
 
-#: cluster/forms.py:21 dns/forms.py:67 gatekeeper/forms.py:320
-#: templates/cluster/workers_list.html:10
+#: cluster/forms.py:22 dns/forms.py:67 gatekeeper/forms.py:320
+#: templates/cluster/worker_details.html:39
 #: templates/dns/static_host_list.html:18
 #: templates/firewall/manage_redirect_rule.html:43
 #: templates/firewall/manage_redirect_rule.html:67
@@ -906,190 +1019,165 @@ msgstr "IP zámok"
 msgid "IP Address"
 msgstr "IP adresa"
 
-#: cluster/forms.py:22
+#: cluster/forms.py:23
 msgid "Country"
 msgstr "Krajina"
 
-#: cluster/forms.py:23
+#: cluster/forms.py:24
 msgid "City"
 msgstr "Mesto"
 
-#: cluster/forms.py:82
+#: cluster/forms.py:85
 msgid "A worker with that name already exists."
 msgstr "Worker s týmto názvom už existuje."
 
-#: cluster/forms.py:85
+#: cluster/forms.py:88
 msgid "IP Address is required when IP Lock is enabled."
 msgstr "IP adresa je povinná, keď je povolený IP zámok."
 
-#: cluster/forms.py:97
+#: cluster/forms.py:100
 msgid "Cluster Enabled"
 msgstr "Cluster povolený"
 
-#: cluster/forms.py:98
+#: cluster/forms.py:101
 msgid "Primary Enable WireGuard"
 msgstr "Primárne povolenie WireGuard"
 
-#: cluster/forms.py:99 templates/cluster/workers_list.html:106
+#: cluster/forms.py:102 templates/cluster/workers_list.html:197
 msgid "Cluster Mode"
 msgstr "Režim clustra"
 
-#: cluster/forms.py:100 templates/cluster/workers_list.html:145
-msgid "Restart Mode"
-msgstr "Režim reštartu"
-
-#: cluster/forms.py:101 templates/cluster/workers_list.html:149
+#: cluster/forms.py:103 templates/cluster/workers_list.html:199
 msgid "Worker Display"
 msgstr "Zobrazenie workera"
 
-#: cluster/forms.py:136
+#: cluster/forms.py:134
 msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgstr "Režim klastra vyžaduje povolenie vyrovnávacej pamäte stavu WireGuard."
 
-#: cluster/models.py:46
+#: cluster/forms.py:143
+#, python-format
+msgid ""
+"The distributed cluster mode does not allow firewall rules bound to a "
+"specific WireGuard instance. Change them to wg+ or IP addresses first: "
+"%(rules)s"
+msgstr ""
+
+#: cluster/models.py:53
 msgid ""
 "IP lock is enabled, but the worker is attempting to access from a different "
 "IP address."
 msgstr "IP zámok je povolený, ale worker sa pokúša o prístup z inej IP adresy."
 
-#: cluster/models.py:47
+#: cluster/models.py:54
 msgid "Worker is not enabled"
 msgstr "Worker nie je povolený"
 
-#: cluster/models.py:48
+#: cluster/models.py:55
 msgid "Cluster is not enabled"
 msgstr "Cluster nie je povolený"
 
-#: cluster/models.py:49
-msgid ""
-"Please report worker_config_version, worker_dns_version and worker_version "
-"in the API request."
-msgstr ""
-"Prosím, uveďte worker_config_version, worker_dns_version a worker_version v "
-"požiadavke API."
-
-#: cluster/models.py:50
+#: cluster/models.py:56
 msgid "Worker update is required."
 msgstr "Vyžaduje sa aktualizácia workera."
 
-#: cluster/views.py:21 templates/template_parts/base_sidebar.html:135
-msgid "Cluster"
-msgstr "Cluster"
-
-#: cluster/views.py:51
+#: cluster/views.py:152
 msgid "Edit Worker: "
 msgstr "Upraviť Worker: "
 
-#: cluster/views.py:57
+#: cluster/views.py:159
 msgid "Worker deleted|Worker deleted: "
 msgstr "Worker vymazaný|Worker vymazaný: "
 
-#: cluster/views.py:60
+#: cluster/views.py:162
+msgid ""
+"Worker not deleted|Move the WireGuard instances of this worker to another "
+"server first: "
+msgstr ""
+
+#: cluster/views.py:166
 msgid "Worker not deleted|Invalid confirmation."
 msgstr "Worker nebol vymazaný|Neplatné potvrdenie."
 
-#: cluster/views.py:64 templates/cluster/workers_list.html:87
+#: cluster/views.py:169 templates/cluster/workers_list.html:76
+#: templates/cluster/workers_list.html:181
 msgid "Add Worker"
 msgstr "Pridať Worker"
 
-#: cluster/views.py:75
-msgid "Worker updated|Worker updated: "
-msgstr "Worker aktualizovaný|Worker aktualizovaný: "
-
-#: cluster/views.py:77
+#: cluster/views.py:176
 msgid "Worker created|Worker created: "
 msgstr "Worker vytvorený|Worker vytvorený: "
 
-#: cluster/views.py:82
+#: cluster/views.py:178
+msgid "Worker updated|Worker updated: "
+msgstr "Worker aktualizovaný|Worker aktualizovaný: "
+
+#: cluster/views.py:183
 msgid ""
 "\n"
-"        <h5>Worker Configuration</h5>\n"
-"        <p>Configure a cluster worker node that will synchronize with this "
-"primary instance.</p>\n"
-"        \n"
-"        <h5>Name</h5>\n"
-"        <p>A unique name to identify this worker.</p>\n"
-"        \n"
-"        <h5>IP Address</h5>\n"
-"        <p>The IP address of the worker node. Leave empty if IP lock is "
-"disabled.</p>\n"
-"        \n"
-"        <h5>IP Lock</h5>\n"
-"        <p>When enabled, the worker can only connect from the specified IP "
-"address.</p>\n"
-"        \n"
-"        <h5>Location Information</h5>\n"
-"        <p>Optional location details for this worker (country, city, "
-"hostname).</p>\n"
+"        <h5>Worker</h5>\n"
+"        <p>A worker is a cluster node that replicates WireGuard, firewall "
+"and DNS from this primary server and, optionally, publishes App Gateway "
+"applications.</p>\n"
+"\n"
+"        <h5>Name and location</h5>\n"
+"        <p>Used to identify the worker. The <strong>hostname</strong> is the "
+"address clients use to connect to this worker: it is written as the endpoint "
+"of the peer configurations downloaded for this server.</p>\n"
+"\n"
+"        <h5>Token</h5>\n"
+"        <p>Secret used by the worker to authenticate with this primary "
+"server. Changing it disconnects the worker until its configuration is "
+"updated.</p>\n"
+"\n"
+"        <h5>IP lock</h5>\n"
+"        <p>When enabled, the worker is only accepted from the IP address "
+"below. Without it, the address is updated automatically from the last "
+"connection.</p>\n"
+"\n"
+"        <h5>Enabled</h5>\n"
+"        <p>Disabled workers are refused and shut down their WireGuard "
+"interfaces until enabled again.</p>\n"
 "        "
 msgstr ""
-"\n"
-"        <h5>Konfigurácia workera</h5>\n"
-"        <p>Nakonfigurujte worker uzol clustra, ktorý sa bude synchronizovať "
-"s touto primárnou inštanciou.</p>\n"
-"        \n"
-"        <h5>Názov</h5>\n"
-"        <p>Jedinečný názov na identifikáciu tohto workera.</p>\n"
-"        \n"
-"        <h5>IP adresa</h5>\n"
-"        <p>IP adresa worker uzla. Ak je IP zámok zakázaný, nechajte prázdne."
-"</p>\n"
-"        \n"
-"        <h5>IP zámok</h5>\n"
-"        <p>Keď je povolený, worker sa môže pripojiť iba zo špecifikovanej IP "
-"adresy.</p>\n"
-"        \n"
-"        <h5>Informácie o umiestnení</h5>\n"
-"        <p>Voliteľné podrobnosti o umiestnení pre tohto workera (krajina, "
-"mesto, názov hostiteľa).</p>\n"
-"        "
 
-#: cluster/views.py:117 templates/cluster/workers_list.html:88
-msgid "Cluster Settings"
-msgstr "Nastavenia Clustra"
-
-#: cluster/views.py:123
+#: cluster/views.py:222
 msgid "Cluster settings updated successfully."
 msgstr "Nastavenia clustra úspešne aktualizované."
 
-#: cluster/views.py:135
+#: cluster/views.py:233
 msgid ""
 "\n"
+"        <h5>Cluster Enabled</h5>\n"
+"        <p>When disabled, workers are refused and shut down their WireGuard "
+"interfaces, and App Gateway applications are only published by this primary "
+"server. Requires the WireGuard status cache.</p>\n"
+"\n"
+"        <h5>Primary Enable WireGuard</h5>\n"
+"        <p>Lists this primary server as an option when downloading peer "
+"configurations and VPN invites.</p>\n"
+"\n"
 "        <h5>Cluster Mode</h5>\n"
-"        <p>Configure how the cluster operates and synchronizes "
-"configurations between nodes.</p>\n"
-"        \n"
-"        <h5>Sync Intervals</h5>\n"
-"        <p>Configure how frequently statistics and cache data are "
-"synchronized between cluster nodes.</p>\n"
-"        \n"
-"        <h5>Restart Mode</h5>\n"
-"        <p>Choose whether WireGuard services should be automatically "
-"restarted when configurations change, or if manual intervention is required."
-"</p>\n"
-"        \n"
+"        <p><strong>Mirror</strong>: every worker receives the same WireGuard "
+"instances, peers, firewall and DNS configuration. Peers can connect to any "
+"server.</p>\n"
+"        <p><strong>Distributed</strong>: each WireGuard instance runs only "
+"on the server selected in the instance settings (the primary server by "
+"default). Peers connect to that server. Firewall rules cannot be bound to a "
+"specific instance interface: use wg+ or IP addresses. After changing the "
+"mode, apply the WireGuard configuration so the primary server stops the "
+"instances that moved to workers.</p>\n"
+"\n"
 "        <h5>Worker Display</h5>\n"
-"        <p>Select how workers should be identified in the interface - by "
-"name, server address, location, or a combination.</p>\n"
+"        <p>How workers are named in server selections (peer configuration "
+"downloads and VPN invites).</p>\n"
 "        "
 msgstr ""
-"\n"
-"        <h5>Režim clustra</h5>\n"
-"        <p>Nakonfigurujte, ako cluster funguje a ako sa synchronizujú "
-"konfigurácie medzi uzlami.</p>\n"
-"        \n"
-"        <h5>Intervaly synchronizácie</h5>\n"
-"        <p>Nakonfigurujte, ako často sa synchronizujú štatistiky a údaje "
-"vyrovnávacej pamäte medzi uzlami clustra.</p>\n"
-"        \n"
-"        <h5>Režim reštartu</h5>\n"
-"        <p>Vyberte, či sa majú služby WireGuard automaticky reštartovať pri "
-"zmene konfigurácie, alebo či je potrebný manuálny zásah.</p>\n"
-"        \n"
-"        <h5>Zobrazenie workera</h5>\n"
-"        <p>Vyberte, ako sa majú workery identifikovať v rozhraní – podľa "
-"názvu, adresy servera, umiestnenia alebo ich kombinácie.</p>\n"
-"        "
+
+#: cluster/views.py:250 templates/cluster/workers_list.html:9
+#: templates/cluster/workers_list.html:77
+msgid "Cluster Settings"
+msgstr "Nastavenia Clustra"
 
 #: console/views.py:27 console/views.py:67 user_manager/forms.py:16
 msgid "Console"
@@ -1143,11 +1231,11 @@ msgstr "Vymazané záznamy vyrovnávacej pamäte stavu WireGuard: "
 msgid "Invalid target"
 msgstr "Neplatný cieľ"
 
-#: dns/forms.py:22 wireguard/forms.py:25
+#: dns/forms.py:22 wireguard/forms.py:26
 msgid "Primary DNS"
 msgstr "Primárny DNS"
 
-#: dns/forms.py:23 wireguard/forms.py:26
+#: dns/forms.py:23 wireguard/forms.py:27
 msgid "Secondary DNS"
 msgstr "Sekundárny DNS"
 
@@ -1172,7 +1260,7 @@ msgstr "Statický DNS"
 msgid "Invalid hostname."
 msgstr "Neplatný názov hostiteľa."
 
-#: dns/forms.py:131 firewall/forms.py:111 gatekeeper/forms.py:323
+#: dns/forms.py:131 firewall/forms.py:112 gatekeeper/forms.py:323
 #: templates/api_v2/api_documentation.html:51
 #: templates/dns/static_host_list.html:69
 #: templates/firewall/manage_redirect_rule.html:18
@@ -1188,36 +1276,32 @@ msgstr "URL zoznamu"
 msgid "DNS Filter List Details"
 msgstr "Podrobnosti DNS filter zoznamu"
 
-#: dns/models.py:32 templates/dns/static_host_list.html:91
-msgid "Unknown"
-msgstr "Neznáme"
-
 #: dns/models.py:35 templates/dns/static_host_list.html:89
 msgid "Unsupported"
 msgstr "Nepodporované"
 
-#: dns/views.py:25 dns/views.py:318 dns/views.py:326
+#: dns/views.py:25 dns/views.py:317 dns/views.py:325
 msgid "DNS configuration reloaded automatically."
 msgstr "Konfigurácia DNS bola automaticky znovu načítaná."
 
-#: dns/views.py:57
+#: dns/views.py:56
 msgid "DNS settings applied successfully"
 msgstr "DNS nastavenia boli úspešne aplikované"
 
-#: dns/views.py:92
+#: dns/views.py:91
 msgid "Default DNS Filter List created successfully"
 msgstr "Predvolený DNS filter zoznam bol úspešne vytvorený"
 
-#: dns/views.py:95
+#: dns/views.py:94
 msgid ""
 "Pending Changes|There are pending DNS changes that have not been applied"
 msgstr "Čakajúce zmeny|Existujú čakajúce DNS zmeny, ktoré neboli aplikované"
 
-#: dns/views.py:114
+#: dns/views.py:113
 msgid "DNS Forwarders"
 msgstr "DNS servery"
 
-#: dns/views.py:115
+#: dns/views.py:114
 msgid ""
 "All DNS queries will be forwarded to the primary resolver. If the primary "
 "resolver is not available, the secondary resolver will be used."
@@ -1225,249 +1309,255 @@ msgstr ""
 "Všetky DNS dotazy budú presmerované na primárny DNS server. Ak primárny "
 "server nebude dostupný, použije sa sekundárny DNS server."
 
-#: dns/views.py:140
+#: dns/views.py:139
 msgid "Static DNS deleted successfully"
 msgstr "Statický DNS bol úspešne vymazaný"
 
-#: dns/views.py:146
+#: dns/views.py:145
 msgid "Static DNS not deleted|Invalid confirmation"
 msgstr "Statický DNS nebol vymazaný|Neplatné potvrdenie"
 
-#: dns/views.py:154
+#: dns/views.py:153
 msgid "Static DNS saved successfully"
 msgstr "Statický DNS bol úspešne uložený"
 
-#: dns/views.py:180
+#: dns/views.py:179
 msgid "DNS Filter List not deleted | Filter List is enabled"
 msgstr "DNS filter zoznam nebol vymazaný | Filter zoznam je povolený"
 
-#: dns/views.py:187
+#: dns/views.py:186
 msgid "Error removing config file: "
 msgstr "Chyba pri odstraňovaní konfiguračného súboru: "
 
-#: dns/views.py:190
+#: dns/views.py:189
 msgid "DNS Filter List deleted successfully"
 msgstr "DNS filter zoznam bol úspešne vymazaný"
 
-#: dns/views.py:193
+#: dns/views.py:192
 msgid "DNS Filter List not deleted | Invalid confirmation"
 msgstr "DNS filter zoznam nebol vymazaný | Neplatné potvrdenie"
 
-#: dns/views.py:205
+#: dns/views.py:204
 msgid "DNS Filter List saved successfully"
 msgstr "DNS filter zoznam bol úspešne uložený"
 
-#: dns/views.py:232
+#: dns/views.py:231
 msgid "Failed to read existing config file: "
 msgstr "Nepodarilo sa čítať existujúci konfiguračný súbor: "
 
-#: dns/views.py:250
+#: dns/views.py:249
 msgid "Failed to fetch the host list: "
 msgstr "Nepodarilo sa získať zoznam hostiteľov: "
 
-#: dns/views.py:260
+#: dns/views.py:259
 msgid "Failed to write config file: "
 msgstr "Nepodarilo sa zapísať konfiguračný súbor: "
 
-#: dns/views.py:283
+#: dns/views.py:282
 msgid "DNS Filter List disabled | Unsupported format detected"
 msgstr "Zoznam filtrov DNS zakázaný | Zistený nepodporovaný formát"
 
-#: dns/views.py:296
+#: dns/views.py:295
 msgid "DNS Filter List updated successfully"
 msgstr "DNS filter zoznam bol úspešne aktualizovaný"
 
-#: dns/views.py:310
+#: dns/views.py:309
 msgid "DNS Filter List not enabled | Unsupported format"
 msgstr "Zoznam filtrov DNS nebol povolený | Nepodporovaný formát"
 
-#: dns/views.py:312
+#: dns/views.py:311
 msgid "DNS Filter List not enabled | List has not been downloaded yet"
 msgstr "Zoznam filtrov DNS nebol povolený | Zoznam ešte nebol stiahnutý"
 
-#: dns/views.py:317
+#: dns/views.py:316
 msgid "DNS Filter List enabled successfully"
 msgstr "DNS filter zoznam bol úspešne povolený"
 
-#: dns/views.py:320
+#: dns/views.py:319
 msgid "DNS Filter List not enabled | No valid hosts found"
 msgstr "DNS filter zoznam nebol povolený | Neboli nájdení platní hostiteľia"
 
-#: dns/views.py:325
+#: dns/views.py:324
 msgid "DNS Filter List disabled successfully"
 msgstr "DNS filter zoznam bol úspešne zakázaný"
 
-#: firewall/forms.py:41
+#: firewall/forms.py:42
 msgid "Port is required."
 msgstr "Port je povinný."
 
-#: firewall/forms.py:44
+#: firewall/forms.py:45
 msgid "Port 8000 (tcp) is reserved for wireguard-webadmin."
 msgstr "Port 8000 (tcp) je rezervovaný pre wireguard-webadmin."
 
-#: firewall/forms.py:48
+#: firewall/forms.py:49
 #, python-format
 msgid "Port %s is already in use by another WireGuard instance."
 msgstr "Port %s je už používaný inou inštanciou WireGuard."
 
-#: firewall/forms.py:51
+#: firewall/forms.py:52
 msgid "Invalid Destination. Either Peer or IP Address must be informed."
 msgstr "Neplatný cieľ. Musí byť zadaný buď peer alebo IP adresa."
 
-#: firewall/forms.py:54
+#: firewall/forms.py:55
 msgid "Peer and IP Address cannot be selected at the same time."
 msgstr "Peer a IP adresa nemôžu byť vybrané súčasne."
 
-#: firewall/forms.py:57
+#: firewall/forms.py:58
 msgid "IP Address cannot be used without selecting a WireGuard instance."
 msgstr "IP adresa nemôže byť použitá bez výberu inštancie WireGuard."
 
-#: firewall/forms.py:81
+#: firewall/forms.py:82
 msgid "wg+ (Any WireGuard Interface)"
 msgstr "wg+ (Akékoľvek WireGuard rozhranie)"
 
-#: firewall/forms.py:112
+#: firewall/forms.py:113
 msgid "Firewall Chain"
 msgstr "Firewall reťazec"
 
-#: firewall/forms.py:113
+#: firewall/forms.py:114
 msgid "In Interface"
 msgstr "Vstupné rozhranie"
 
-#: firewall/forms.py:114
+#: firewall/forms.py:115
 msgid "Out Interface"
 msgstr "Výstupné rozhranie"
 
-#: firewall/forms.py:115
+#: firewall/forms.py:116
 msgid "Source IP"
 msgstr "Zdrojová IP"
 
-#: firewall/forms.py:116 firewall/forms.py:121 wireguard/forms.py:23
-#: wireguard_peer/forms.py:70
+#: firewall/forms.py:117 firewall/forms.py:122 wireguard/forms.py:24
+#: wireguard_peer/forms.py:71
 msgid "Netmask"
 msgstr "Sieťová maska"
 
-#: firewall/forms.py:117
+#: firewall/forms.py:118
 msgid "Source Peer"
 msgstr "Zdrojový peer"
 
-#: firewall/forms.py:118
+#: firewall/forms.py:119
 msgid "Source Peer Include Networks"
 msgstr "Zahrnúť siete zdrojového peer"
 
-#: firewall/forms.py:119
+#: firewall/forms.py:120
 msgid "Not Source"
 msgstr "Nie zdrojový"
 
-#: firewall/forms.py:120
+#: firewall/forms.py:121
 msgid "Destination IP"
 msgstr "Cieľová IP"
 
-#: firewall/forms.py:122
+#: firewall/forms.py:123
 msgid "Destination Peer"
 msgstr "Cieľový peer"
 
-#: firewall/forms.py:123
+#: firewall/forms.py:124
 msgid "Destination Peer Include Networks"
 msgstr "Zahrnúť siete cieľového peer"
 
-#: firewall/forms.py:124
+#: firewall/forms.py:125
 msgid "Not Destination"
 msgstr "Nie cieľový"
 
-#: firewall/forms.py:125 templates/firewall/firewall_rule_list.html:44
+#: firewall/forms.py:126 templates/firewall/firewall_rule_list.html:44
 #: templates/firewall/manage_firewall_rule.html:263
 #: templates/firewall/manage_redirect_rule.html:22
 #: templates/firewall/redirect_rule_list.html:13
 msgid "Protocol"
 msgstr "Protokol"
 
-#: firewall/forms.py:126 templates/firewall/manage_redirect_rule.html:35
+#: firewall/forms.py:127 templates/firewall/manage_redirect_rule.html:35
 msgid "Destination Port"
 msgstr "Cieľový port"
 
-#: firewall/forms.py:127 templates/firewall/firewall_rule_list.html:155
+#: firewall/forms.py:128 templates/firewall/firewall_rule_list.html:155
 msgid "New"
 msgstr "Nový"
 
-#: firewall/forms.py:128 templates/firewall/firewall_rule_list.html:60
+#: firewall/forms.py:129 templates/firewall/firewall_rule_list.html:60
 #: templates/firewall/firewall_rule_list.html:156
 msgid "Related"
 msgstr "Súvisiaci"
 
-#: firewall/forms.py:129 templates/firewall/firewall_rule_list.html:61
+#: firewall/forms.py:130 templates/firewall/firewall_rule_list.html:61
 #: templates/firewall/firewall_rule_list.html:157
 msgid "Established"
 msgstr "Nadviazaný"
 
-#: firewall/forms.py:130 templates/firewall/firewall_rule_list.html:158
+#: firewall/forms.py:131 templates/firewall/firewall_rule_list.html:158
 msgid "Invalid"
 msgstr "Neplatný"
 
-#: firewall/forms.py:131 templates/firewall/firewall_rule_list.html:159
+#: firewall/forms.py:132 templates/firewall/firewall_rule_list.html:159
 msgid "Untracked"
 msgstr "Nesledovaný"
 
-#: firewall/forms.py:132
+#: firewall/forms.py:133
 msgid "Not State"
 msgstr "Bez stavu"
 
-#: firewall/forms.py:133
+#: firewall/forms.py:134
 msgid "Rule Action"
 msgstr "Akcia pravidla"
 
-#: firewall/forms.py:134
+#: firewall/forms.py:135
 msgid "Sort Order"
 msgstr "Poradie zoradenia"
 
-#: firewall/forms.py:182
+#: firewall/forms.py:155
+msgid ""
+"The distributed cluster mode does not allow rules bound to a specific "
+"WireGuard instance. Use wg+ or IP addresses instead."
+msgstr ""
+
+#: firewall/forms.py:192
 msgid "Default Forward Policy"
 msgstr "Predvolená politika presmerovania"
 
-#: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
-#: firewall/models.py:76 templates/firewall/firewall_rule_list.html:63
+#: firewall/forms.py:192 firewall/models.py:66 firewall/models.py:86
+#: firewall/models.py:87 templates/firewall/firewall_rule_list.html:63
 #: templates/firewall/firewall_rule_list.html:105
 #: templates/firewall/firewall_rule_list.html:182
 #: templates/firewall/firewall_rule_list.html:201
 msgid "ACCEPT"
 msgstr "PRIJAŤ"
 
-#: firewall/forms.py:182 firewall/models.py:62
+#: firewall/forms.py:192 firewall/models.py:66
 #: templates/firewall/firewall_rule_list.html:184
 #: templates/firewall/firewall_rule_list.html:201
 msgid "REJECT"
 msgstr "ODMIETNUŤ"
 
-#: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
-#: firewall/models.py:76
+#: firewall/forms.py:192 firewall/models.py:66 firewall/models.py:86
+#: firewall/models.py:87
 msgid "DROP"
 msgstr "ZAHODIŤ"
 
-#: firewall/forms.py:183
+#: firewall/forms.py:193
 msgid "Allow Peer to Peer"
 msgstr "Povoliť peer-to-peer"
 
-#: firewall/forms.py:184
+#: firewall/forms.py:194
 msgid "Allow Instance to Instance"
 msgstr "Povoliť inštancia-to-inštancia"
 
-#: firewall/forms.py:185
+#: firewall/forms.py:195
 msgid "WAN Interface"
 msgstr "WAN rozhranie"
 
-#: firewall/models.py:62
+#: firewall/models.py:66
 msgid "MASQUERADE"
 msgstr "MASKOVANIE"
 
-#: firewall/tools.py:46
+#: firewall/tools.py:50
 msgid "Masquerade traffic from VPN to WAN"
 msgstr "Maskovať komunikáciu z VPN do WAN"
 
-#: firewall/tools.py:56 firewall/tools.py:60 firewall/tools.py:64
+#: firewall/tools.py:60 firewall/tools.py:64 firewall/tools.py:68
 msgid "Reject traffic to private networks exiting on WAN interface"
 msgstr "Odmietnuť komunikáciu do privátnych sietí cez WAN rozhranie"
 
-#: firewall/tools.py:68
+#: firewall/tools.py:72
 msgid "Allow traffic from VPN to WAN"
 msgstr "Povoliť komunikáciu z VPN do WAN"
 
@@ -1769,7 +1859,7 @@ msgstr "Vytvoriť používateľa Gatekeeper"
 msgid "Gatekeeper User saved successfully."
 msgstr "Používateľ Gatekeeper bol úspešne uložený."
 
-#: gatekeeper/views.py:75
+#: gatekeeper/views.py:76
 msgid ""
 "\n"
 "        <h4>Gatekeeper User</h4>\n"
@@ -1812,57 +1902,57 @@ msgstr ""
 "        6-miestneho kódu PIN.</p>\n"
 "        "
 
-#: gatekeeper/views.py:112
+#: gatekeeper/views.py:113
 msgid "Gatekeeper User deleted successfully."
 msgstr "Používateľ Gatekeeper bol úspešne odstránený."
 
-#: gatekeeper/views.py:117
+#: gatekeeper/views.py:119
 msgid "Delete Gatekeeper User"
 msgstr "Odstrániť používateľa Gatekeeper"
 
-#: gatekeeper/views.py:119
+#: gatekeeper/views.py:121
 #, python-format
 msgid "Are you sure you want to delete the user \"%(username)s\"?"
 msgstr "Naozaj chcete odstrániť používateľa \"%(username)s\"?"
 
-#: gatekeeper/views.py:133
+#: gatekeeper/views.py:135
 msgid "Edit Gatekeeper Group"
 msgstr "Upraviť skupinu Gatekeeper"
 
-#: gatekeeper/views.py:136
+#: gatekeeper/views.py:138
 msgid "Create Gatekeeper Group"
 msgstr "Vytvoriť skupinu Gatekeeper"
 
-#: gatekeeper/views.py:143
+#: gatekeeper/views.py:145
 msgid "Gatekeeper Group saved successfully."
 msgstr "Skupina Gatekeeper bola úspešne uložená."
 
-#: gatekeeper/views.py:165
+#: gatekeeper/views.py:168
 msgid "Gatekeeper Group deleted successfully."
 msgstr "Skupina Gatekeeper bola úspešne odstránená."
 
-#: gatekeeper/views.py:170
+#: gatekeeper/views.py:174
 msgid "Delete Gatekeeper Group"
 msgstr "Odstrániť skupinu Gatekeeper"
 
-#: gatekeeper/views.py:172
+#: gatekeeper/views.py:176
 #, python-format
 msgid "Are you sure you want to delete the group \"%(name)s\"?"
 msgstr "Naozaj chcete odstrániť skupinu \"%(name)s\"?"
 
-#: gatekeeper/views.py:186
+#: gatekeeper/views.py:190
 msgid "Edit Authentication Method"
 msgstr "Upraviť metódu autentifikácie"
 
-#: gatekeeper/views.py:189
+#: gatekeeper/views.py:193
 msgid "Create Authentication Method"
 msgstr "Vytvoriť metódu autentifikácie"
 
-#: gatekeeper/views.py:196
+#: gatekeeper/views.py:200
 msgid "Authentication Method saved successfully."
 msgstr "Metóda autentifikácie bola úspešne uložená."
 
-#: gatekeeper/views.py:201
+#: gatekeeper/views.py:206
 msgid ""
 "\n"
 "        <h4>Authentication Types</h4>\n"
@@ -1904,7 +1994,7 @@ msgstr ""
 "použije <strong>globálne tajomstvo TOTP</strong>. </p>\n"
 "        "
 
-#: gatekeeper/views.py:239
+#: gatekeeper/views.py:244
 #, python-format
 msgid ""
 "Cannot delete authentication method \"%(method)s\" because it is used by the "
@@ -1913,83 +2003,83 @@ msgstr ""
 "Nie je možné odstrániť metódu autentifikácie \"%(method)s\", pretože ju "
 "používajú nasledujúce politiky: %(policies)s."
 
-#: gatekeeper/views.py:245
+#: gatekeeper/views.py:250
 msgid "Authentication Method deleted successfully."
 msgstr "Metóda autentifikácie bola úspešne odstránená."
 
-#: gatekeeper/views.py:250
+#: gatekeeper/views.py:256
 msgid "Delete Authentication Method"
 msgstr "Odstrániť metódu autentifikácie"
 
-#: gatekeeper/views.py:252
+#: gatekeeper/views.py:258
 #, python-format
 msgid "Are you sure you want to delete the authentication method \"%(name)s\"?"
 msgstr "Naozaj chcete odstrániť metódu autentifikácie \"%(name)s\"?"
 
-#: gatekeeper/views.py:305
+#: gatekeeper/views.py:311
 msgid "Edit Allowed Domain"
 msgstr "Upraviť povolenú doménu"
 
-#: gatekeeper/views.py:308 templates/gatekeeper/gatekeeper_list.html:204
+#: gatekeeper/views.py:314 templates/gatekeeper/gatekeeper_list.html:204
 msgid "Add Allowed Domain"
 msgstr "Pridať povolenú doménu"
 
-#: gatekeeper/views.py:315
+#: gatekeeper/views.py:321
 msgid "Allowed Domain saved successfully."
 msgstr "Povolená doména bola úspešne uložená."
 
-#: gatekeeper/views.py:337
+#: gatekeeper/views.py:344
 msgid "Allowed Domain deleted successfully."
 msgstr "Povolená doména bola úspešne odstránená."
 
-#: gatekeeper/views.py:342
+#: gatekeeper/views.py:350
 msgid "Delete Allowed Domain"
 msgstr "Odstrániť povolenú doménu"
 
-#: gatekeeper/views.py:344
+#: gatekeeper/views.py:352
 #, python-format
 msgid "Are you sure you want to delete the allowed domain \"%(domain)s\"?"
 msgstr "Naozaj chcete odstrániť povolenú doménu \"%(domain)s\"?"
 
-#: gatekeeper/views.py:358
+#: gatekeeper/views.py:366
 msgid "Edit Allowed Email"
 msgstr "Upraviť povolený e-mail"
 
-#: gatekeeper/views.py:361 templates/gatekeeper/gatekeeper_list.html:201
+#: gatekeeper/views.py:369 templates/gatekeeper/gatekeeper_list.html:201
 msgid "Add Allowed Email"
 msgstr "Pridať povolený e-mail"
 
-#: gatekeeper/views.py:368
+#: gatekeeper/views.py:376
 msgid "Allowed Email saved successfully."
 msgstr "Povolený e-mail bol úspešne uložený."
 
-#: gatekeeper/views.py:390
+#: gatekeeper/views.py:399
 msgid "Allowed Email deleted successfully."
 msgstr "Povolený e-mail bol úspešne odstránený."
 
-#: gatekeeper/views.py:395
+#: gatekeeper/views.py:405
 msgid "Delete Allowed Email"
 msgstr "Odstrániť povolený e-mail"
 
-#: gatekeeper/views.py:397
+#: gatekeeper/views.py:407
 #, python-format
 msgid "Are you sure you want to delete the allowed email \"%(email)s\"?"
 msgstr "Naozaj chcete odstrániť povolený e-mail \"%(email)s\"?"
 
-#: gatekeeper/views.py:411
+#: gatekeeper/views.py:421
 msgid "Edit IP Address"
 msgstr "Upraviť IP adresu"
 
-#: gatekeeper/views.py:414 templates/gatekeeper/gatekeeper_list.html:265
+#: gatekeeper/views.py:424 templates/gatekeeper/gatekeeper_list.html:265
 #: templates/wireguard/wireguard_manage_peer.html:171
 msgid "Add IP Address"
 msgstr "Pridať IP adresu"
 
-#: gatekeeper/views.py:421
+#: gatekeeper/views.py:431
 msgid "IP Address saved successfully."
 msgstr "IP adresa bola úspešne uložená."
 
-#: gatekeeper/views.py:426
+#: gatekeeper/views.py:437
 msgid ""
 "\n"
 "        <h5>IP Address List</h5>\n"
@@ -2036,15 +2126,15 @@ msgstr ""
 "(napr. „Kancelárska sieť“, „Blokovaný útočník“).</p>\n"
 "        "
 
-#: gatekeeper/views.py:462
+#: gatekeeper/views.py:473
 msgid "IP Address deleted successfully."
 msgstr "IP adresa bola úspešne odstránená."
 
-#: gatekeeper/views.py:467
+#: gatekeeper/views.py:479
 msgid "Delete IP Address"
 msgstr "Odstrániť IP adresu"
 
-#: gatekeeper/views.py:469
+#: gatekeeper/views.py:481
 #, python-format
 msgid "Are you sure you want to delete the IP address \"%(address)s\"?"
 msgstr "Naozaj chcete odstrániť IP adresu \"%(address)s\"?"
@@ -2089,7 +2179,7 @@ msgid "Allow Peer Custom Routes"
 msgstr "Povoliť Vlastné Trasy Peera"
 
 #: routing_templates/forms.py:34
-#: templates/wireguard/wireguard_manage_server.html:69 wireguard/forms.py:31
+#: templates/wireguard/wireguard_manage_server.html:69 wireguard/forms.py:32
 msgid "Enforce Route Policy"
 msgstr "Vynútiť Smerovaciu Politiku"
 
@@ -2456,7 +2546,9 @@ msgstr "Otvoriť problém na GitHub"
 msgid "All"
 msgstr "Všetko"
 
-#: templates/api_v2/list.html:43 vpn_invite/forms.py:49
+#: templates/api_v2/list.html:43 templates/cluster/worker_details.html:10
+#: templates/cluster/workers_list.html:61
+#: templates/cluster/workers_list.html:116 vpn_invite/forms.py:49
 msgid "Disabled"
 msgstr "Zakázané"
 
@@ -2466,7 +2558,7 @@ msgstr "Zakázané"
 #: templates/app_gateway/application_details.html:109
 #: templates/app_gateway/application_details.html:117
 #: templates/app_gateway/application_details.html:168
-#: templates/cluster/workers_list.html:77
+#: templates/cluster/workers_list.html:171
 #: templates/gatekeeper/gatekeeper_list.html:91
 #: templates/gatekeeper/gatekeeper_list.html:134
 #: templates/gatekeeper/gatekeeper_list.html:179
@@ -2576,6 +2668,7 @@ msgstr "Metódy autentifikácie"
 #: templates/app_gateway/app_gateway_list.html:208
 #: templates/app_gateway/application_details.html:79
 #: templates/app_gateway/application_details.html:156
+#: templates/cluster/workers_list.html:91
 #: templates/gatekeeper/gatekeeper_list.html:67
 #: templates/gatekeeper/gatekeeper_list.html:124
 #: templates/gatekeeper/gatekeeper_list.html:169
@@ -2595,6 +2688,7 @@ msgid "No DNS Credentials found."
 msgstr "Nenašli sa žiadne poverenia DNS."
 
 #: templates/app_gateway/application_details.html:13
+#: templates/cluster/worker_details.html:20
 #: templates/wireguard/server_detail.html:53
 msgid "Back to List"
 msgstr "Späť na zoznam"
@@ -2623,7 +2717,8 @@ msgid "Add Host"
 msgstr "Pridať hostiteľa"
 
 #: templates/app_gateway/application_details.html:78
-#: templates/cluster/workers_list.html:9
+#: templates/cluster/worker_details.html:75
+#: templates/cluster/workers_list.html:87
 #: templates/scheduler/scheduleprofile_form.html:82
 #: templates/template_parts/base_sidebar.html:13 vpn_invite/forms.py:78
 #: vpn_invite/forms.py:79 vpn_invite/forms.py:80 vpn_invite/forms.py:81
@@ -2722,127 +2817,300 @@ msgstr "Existujú zmeny, ktoré ešte neboli exportované do Caddy."
 msgid "Export now"
 msgstr "Exportovať teraz"
 
-#: templates/cluster/workers_list.html:11
+#: templates/cluster/worker_details.html:12
+#: templates/cluster/workers_list.html:118
+msgid "Refused"
+msgstr ""
+
+#: templates/cluster/worker_details.html:14
+#: templates/cluster/workers_list.html:120
+#, fuzzy
+#| msgid "Unlink"
+msgid "Online"
+msgstr "Zrušiť prepojenie"
+
+#: templates/cluster/worker_details.html:16
+#: templates/cluster/workers_list.html:122
+msgid "Offline"
+msgstr ""
+
+#: templates/cluster/worker_details.html:21
+#, fuzzy
+#| msgid "Edit Worker: "
+msgid "Edit Worker"
+msgstr "Upraviť Worker: "
+
+#: templates/cluster/worker_details.html:29
+msgid ""
+"The worker is offline. The information below is the last state it reported."
+msgstr ""
+
+#: templates/cluster/worker_details.html:32
+#: templates/cluster/workers_list.html:162
+msgid "The worker is outdated. Please update it to the latest version."
+msgstr "Tento worker je zastaraný. Prosím aktualizujte ho na najnovšiu verziu."
+
+#: templates/cluster/worker_details.html:40
+#: templates/cluster/workers_list.html:101
+msgid "IP Lock Enabled"
+msgstr "IP zámok povolený"
+
+#: templates/cluster/worker_details.html:41
 #: templates/wireguard/peer_list/peer_data.html:43
 #: templates/wireguard/peer_list/peer_preview_modal.html:28
 msgid "Location"
 msgstr "Umiestnenie"
 
-#: templates/cluster/workers_list.html:12
+#: templates/cluster/worker_details.html:47
+#: templates/cluster/workers_list.html:124
 msgid "Last Seen"
 msgstr "Naposledy videný"
 
-#: templates/cluster/workers_list.html:13
-#: templates/cluster/workers_list.html:110
-msgid "Config Version"
-msgstr "Verzia konfigurácie"
-
-#: templates/cluster/workers_list.html:28
-msgid "Configuration sync in progress"
-msgstr "Synchronizácia konfigurácie prebieha"
-
-#: templates/cluster/workers_list.html:37
-msgid "The worker is outdated. Please update it to the latest version."
-msgstr "Tento worker je zastaraný. Prosím aktualizujte ho na najnovšiu verziu."
-
-#: templates/cluster/workers_list.html:44
-msgid "IP Lock Enabled"
-msgstr "IP zámok povolený"
-
-#: templates/cluster/workers_list.html:47
-#: templates/cluster/workers_list.html:54
-#: templates/wireguard/wireguard_manage_peer.html:112
-#: templates/wireguard/wireguard_manage_peer.html:121
-msgid "Not set"
-msgstr "Nenastavené"
-
-#: templates/cluster/workers_list.html:61
+#: templates/cluster/worker_details.html:48
+#: templates/cluster/workers_list.html:125
 msgid "Never"
 msgstr "Nikdy"
 
-#: templates/cluster/workers_list.html:64
-msgid "Last seen more than 10 minutes ago or never seen."
-msgstr "Naposledy videný pred viac ako 10 minútami alebo nikdy videný."
+#: templates/cluster/worker_details.html:49
+#: templates/cluster/workers_list.html:90
+#: templates/template_parts/base_footer.html:7
+msgid "Version"
+msgstr "Verzia"
 
-#: templates/cluster/workers_list.html:82
-msgid "No workers configured"
-msgstr "Nie sú nakonfigurovaní žiadni workery"
+#: templates/cluster/worker_details.html:50
+#, fuzzy
+#| msgid "Current time"
+msgid "current"
+msgstr "Aktuálny čas"
 
+#: templates/cluster/worker_details.html:52
+#, fuzzy
+#| msgid "WireGuard Instances"
+msgid "WireGuard instances"
+msgstr "WireGuard inštancie"
+
+#: templates/cluster/worker_details.html:61
+msgid "App Gateway"
+msgstr ""
+
+#: templates/cluster/worker_details.html:62
+#, fuzzy
+#| msgid "Not State"
+msgid "Not installed"
+msgstr "Bez stavu"
+
+#: templates/cluster/worker_details.html:72
+#: templates/cluster/workers_list.html:88
+#, fuzzy
+#| msgid "Traffic data synchronization"
+msgid "Synchronization"
+msgstr "Synchronizácia údajov o návštevnosti"
+
+#: templates/cluster/worker_details.html:75
+#, fuzzy
+#| msgid "Action"
+msgid "Section"
+msgstr "Akcia"
+
+#: templates/cluster/worker_details.html:75
+#, fuzzy
+#| msgid "Last Update"
+msgid "Last update"
+msgstr "Posledná aktualizácia"
+
+#: templates/cluster/worker_details.html:81
+#: templates/cluster/workers_list.html:42
+#: templates/cluster/workers_list.html:134
+msgid "Synchronized"
+msgstr ""
+
+#: templates/cluster/worker_details.html:82
+#: templates/cluster/workers_list.html:136
+msgid "Error"
+msgstr ""
+
+#: templates/cluster/worker_details.html:83
+#: templates/cluster/workers_list.html:139
+msgid "Pending"
+msgstr ""
+
+#: templates/cluster/worker_details.html:96
 #: templates/cluster/workers_list.html:89
-#: templates/cluster/workers_list.html:92
-msgid "Cluster Information"
-msgstr "Informácie o klastri"
+#, fuzzy
+#| msgid "Server"
+msgid "Services"
+msgstr "Primárny server"
 
-#: templates/cluster/workers_list.html:114
-msgid "DNS Version"
-msgstr "Verzia DNS"
+#: templates/cluster/worker_details.html:101
+msgid "No report received yet."
+msgstr ""
 
-#: templates/cluster/workers_list.html:119
-msgid "Stats Cache Refresh Interval"
-msgstr "Interval obnovy vyrovnávacej pamäte štatistík"
+#: templates/cluster/worker_details.html:107
+#, fuzzy
+#| msgid "Certificate"
+msgid "Certificates served"
+msgstr "Certifikát"
 
-#: templates/cluster/workers_list.html:123
-msgid "Cache Enabled"
-msgstr "Vyrovnávacia pamäť povolená"
+#: templates/cluster/worker_details.html:131
+#, fuzzy
+#| msgid "Invalid action."
+msgid "Installation"
+msgstr "Neplatná akcia."
 
-#: templates/cluster/workers_list.html:133
-msgid "Cache Web Load Previous Count"
-msgstr "Počet predchádzajúcich načítaní webovej vyrovnávacej pamäte"
+#: templates/cluster/worker_details.html:133
+msgid ""
+"Copy <code>cluster_node.yml</code> (and <code>cluster_node-gateway.yml</"
+"code> to publish App Gateway applications) from the <a href=\"https://"
+"github.com/eduardogsilva/wireguard_webadmin\" target=\"_blank\" "
+"rel=\"noopener noreferrer\">project repository</a> to the worker, and create "
+"a <code>.env</code> file next to them:"
+msgstr ""
 
-#: templates/cluster/workers_list.html:137
-msgid "Master Cache Processing Time"
-msgstr "Čas spracovania vyrovnávacej pamäte Master"
+#: templates/cluster/worker_details.html:139
+#: templates/cluster/worker_details.html:147
+#: templates/cluster/worker_details.html:153
+#, fuzzy
+#| msgid "Copy Text"
+msgid "Copy"
+msgstr "Kopírovať text"
 
-#: templates/cluster/workers_list.html:141
-msgid "Cluster Cache Processing Time"
-msgstr "Čas spracovania vyrovnávacej pamäte Cluster"
+#: templates/cluster/worker_details.html:145
+msgid "VPN only"
+msgstr ""
 
-#: templates/cluster/workers_list.html:153
+#: templates/cluster/worker_details.html:151
+msgid "VPN and App Gateway"
+msgstr ""
+
+#: templates/cluster/worker_details.html:158
+msgid ""
+"To update, run docker compose pull followed by the same up -d command, "
+"always with every compose file of the worker."
+msgstr ""
+
+#: templates/cluster/worker_details.html:159
+msgid ""
+"Applications published by workers must use DNS validation or self-signed "
+"certificates: certificates are issued by this primary server and distributed "
+"to the workers."
+msgstr ""
+
+#: templates/cluster/worker_details.html:160
+msgid ""
+"Publish the WireGuard ports (51820-51839/udp) and, with the App Gateway, "
+"ports 80 and 443 of the worker."
+msgstr ""
+
+#: templates/cluster/workers_list.html:8
+msgid ""
+"The cluster is disabled. Workers are refused and App Gateway applications "
+"are only published by this primary server."
+msgstr ""
+
+#: templates/cluster/workers_list.html:15
+msgid "These WireGuard instances are offline because their worker is disabled:"
+msgstr ""
+
+#: templates/cluster/workers_list.html:17
+msgid "Enable the worker or move the instances to another server."
+msgstr ""
+
+#: templates/cluster/workers_list.html:23
+msgid ""
+"The cluster requires the WireGuard status cache. Enable "
+"WIREGUARD_STATUS_CACHE_ENABLED in the .env file."
+msgstr ""
+
+#: templates/cluster/workers_list.html:33
+#, fuzzy
+#| msgid "Worker is not enabled"
+msgid "Workers online"
+msgstr "Worker nie je povolený"
+
+#: templates/cluster/workers_list.html:51
+msgid "Need attention"
+msgstr ""
+
+#: templates/cluster/workers_list.html:60
 msgid "Primary WireGuard"
 msgstr "Povoliť primárny WireGuard"
 
-#: templates/cluster/workers_list.html:171
-msgid "Cluster Feature – Testing Phase"
-msgstr "Funkcia klastra – testovacia fáza"
+#: templates/cluster/workers_list.html:63
+#, fuzzy
+#| msgid "No WireGuard instances found."
+msgid "WireGuard instances on the primary server"
+msgstr "Nenašli sa žiadne inštancie WireGuard."
 
-#: templates/cluster/workers_list.html:178
-msgid "The cluster functionality is currently released as experimental."
-msgstr "Funkcia klastra je v súčasnosti vydaná ako experimentálna."
+#: templates/cluster/workers_list.html:64
+#: templates/cluster/workers_list.html:109
+#, fuzzy
+#| msgid "WireGuard Instances"
+msgid "No WireGuard instances"
+msgstr "WireGuard inštancie"
 
-#: templates/cluster/workers_list.html:179
-msgid "At this stage, only core features are implemented:"
-msgstr "V tejto fáze sú implementované iba základné funkcie:"
+#: templates/cluster/workers_list.html:74
+#, fuzzy
+#| msgid "Add Worker"
+msgid "Workers"
+msgstr "Pridať Worker"
 
-#: templates/cluster/workers_list.html:181
-msgid "Configuration synchronization service"
-msgstr "Služba synchronizácie konfigurácie"
+#: templates/cluster/workers_list.html:86
+#, fuzzy
+#| msgid "Add Worker"
+msgid "Worker"
+msgstr "Pridať Worker"
 
-#: templates/cluster/workers_list.html:182
-msgid "Primary node mirroring (WireGuard and firewall rules)"
-msgstr "Zrkadlenie primárneho uzla (WireGuard a pravidlá firewallu)"
+#: templates/cluster/workers_list.html:107
+#, fuzzy
+#| msgid "WireGuard Instance"
+msgid "WireGuard instance"
+msgstr "WireGuard Inštancia"
 
-#: templates/cluster/workers_list.html:183
-msgid "DNS rules mirroring"
-msgstr "Zrkadlenie pravidiel DNS"
-
-#: templates/cluster/workers_list.html:184
-msgid "Traffic data synchronization"
-msgstr "Synchronizácia údajov o návštevnosti"
-
-#: templates/cluster/workers_list.html:185
-msgid ""
-"Server selection dropdown before downloading peer configs or VPN invites"
+#: templates/cluster/workers_list.html:132
+msgid "The worker is not receiving updates."
 msgstr ""
-"Rozbaľovací zoznam výberu servera pred stiahnutím konfigurácií peerov alebo "
-"pozvánok VPN"
 
-#: templates/cluster/workers_list.html:191
-msgid "For more information, please visit:"
-msgstr "Pre viac informácií navštívte prosím:"
+#: templates/cluster/workers_list.html:148
+#, fuzzy
+#| msgid "Last Update"
+msgid "Last reported state"
+msgstr "Posledná aktualizácia"
 
-#: templates/cluster/workers_list.html:195
-msgid "I Understand"
-msgstr "Rozumiem"
+#: templates/cluster/workers_list.html:155
+msgid "Certificates unavailable or expiring soon"
+msgstr ""
+
+#: templates/cluster/workers_list.html:170
+msgid "Details"
+msgstr ""
+
+#: templates/cluster/workers_list.html:180
+msgid "No workers configured"
+msgstr "Nie sú nakonfigurovaní žiadni workery"
+
+#: templates/cluster/workers_list.html:190
+msgid "Diagnostics"
+msgstr ""
+
+#: templates/cluster/workers_list.html:201
+msgid "Current worker version"
+msgstr ""
+
+#: templates/cluster/workers_list.html:203
+msgid "Stats Cache Refresh Interval"
+msgstr "Interval obnovy vyrovnávacej pamäte štatistík"
+
+#: templates/cluster/workers_list.html:205
+msgid "Cache Web Load Previous Count"
+msgstr "Počet predchádzajúcich načítaní webovej vyrovnávacej pamäte"
+
+#: templates/cluster/workers_list.html:207
+msgid "Master Cache Processing Time"
+msgstr "Čas spracovania vyrovnávacej pamäte Master"
+
+#: templates/cluster/workers_list.html:209
+msgid "Cluster Cache Processing Time"
+msgstr "Čas spracovania vyrovnávacej pamäte Cluster"
 
 #: templates/console/console.html:12
 msgid "Clear"
@@ -3409,10 +3677,6 @@ msgstr "Pridať profil"
 msgid "Update Available"
 msgstr "Aktualizácia dostupná"
 
-#: templates/template_parts/base_footer.html:7
-msgid "Version"
-msgstr "Verzia"
-
 #: templates/template_parts/base_pending_changes_warning.html:4
 msgid "Update Required"
 msgstr "Aktualizácia potrebná"
@@ -3550,12 +3814,6 @@ msgstr "Priepustnosť"
 msgid "Transfer"
 msgstr "Prenos"
 
-#: templates/wireguard/peer_list/peer_data.html:44
-#: templates/wireguard/peer_list/script_wireguard_status_update.html:146
-#: wireguard_peer/views.py:94
-msgid "Primary Server"
-msgstr "Primárny server"
-
 #: templates/wireguard/peer_list/peer_data.html:47
 #: templates/wireguard/peer_list/peer_preview_modal.html:24
 msgid "Latest Handshake"
@@ -3626,6 +3884,7 @@ msgid "QR Code"
 msgstr "QR kód"
 
 #: templates/wireguard/peer_list/peer_preview_modal.html:145
+#: wireguard/forms.py:59
 msgid "Server"
 msgstr "Primárny server"
 
@@ -3731,13 +3990,13 @@ msgstr ""
 "súbor je zastaraný."
 
 #: templates/wireguard/server_detail.html:17
-#: templates/wireguard/wireguard_manage_peer.html:104 wireguard/forms.py:19
-#: wireguard_peer/forms.py:52
+#: templates/wireguard/wireguard_manage_peer.html:104 wireguard/forms.py:20
+#: wireguard_peer/forms.py:53
 msgid "Public Key"
 msgstr "Verejný kľúč"
 
 #: templates/wireguard/server_detail.html:31
-#: templates/wireguard/server_list.html:20 wireguard/forms.py:21
+#: templates/wireguard/server_list.html:20 wireguard/forms.py:22
 msgid "Listen Port"
 msgstr "Počúvací port"
 
@@ -3754,7 +4013,7 @@ msgstr "Upraviť inštanciu"
 msgid "Traffic Graph"
 msgstr "Graf prevádzky"
 
-#: templates/wireguard/server_list.html:7 wireguard/views.py:224
+#: templates/wireguard/server_list.html:7 wireguard/views.py:225
 msgid "WireGuard Instances"
 msgstr "WireGuard inštancie"
 
@@ -3773,7 +4032,7 @@ msgstr "Zadajte povolenú IP"
 #: templates/wireguard/wireguard_manage_ip.html:34
 #: templates/wireguard/wireguard_manage_peer.html:187
 #: templates/wireguard/wireguard_manage_peer.html:276
-#: wireguard_peer/forms.py:71
+#: wireguard_peer/forms.py:72
 msgid "Priority"
 msgstr "Priorita"
 
@@ -3825,7 +4084,7 @@ msgstr "Nasledujúce zakázanie"
 msgid "No profile associated"
 msgstr "Nie je priradený žiadny profil"
 
-#: templates/wireguard/wireguard_manage_peer.html:83 wireguard_peer/forms.py:41
+#: templates/wireguard/wireguard_manage_peer.html:83 wireguard_peer/forms.py:42
 msgid "Persistent Keepalive"
 msgstr "Trvalý keepalive"
 
@@ -3833,13 +4092,18 @@ msgstr "Trvalý keepalive"
 msgid "Keys"
 msgstr "Kľúče"
 
-#: templates/wireguard/wireguard_manage_peer.html:107 wireguard/forms.py:18
-#: wireguard_peer/forms.py:53
+#: templates/wireguard/wireguard_manage_peer.html:107 wireguard/forms.py:19
+#: wireguard_peer/forms.py:54
 msgid "Private Key"
 msgstr "Súkromný kľúč"
 
+#: templates/wireguard/wireguard_manage_peer.html:112
+#: templates/wireguard/wireguard_manage_peer.html:121
+msgid "Not set"
+msgstr "Nenastavené"
+
 #: templates/wireguard/wireguard_manage_peer.html:116
-#: wireguard_peer/forms.py:54
+#: wireguard_peer/forms.py:55
 msgid "Pre-Shared Key"
 msgstr "Vopred zdieľaný kľúč"
 
@@ -3928,7 +4192,7 @@ msgstr "Vymazať peer"
 msgid "Please type \\\"delete\\\" to remove peer configuration."
 msgstr "Prosím napíšte \\\"delete\\\" pre odstránenie konfigurácie peer."
 
-#: templates/wireguard/wireguard_manage_server.html:25 wireguard/forms.py:16
+#: templates/wireguard/wireguard_manage_server.html:25 wireguard/forms.py:17
 msgid "Display Name"
 msgstr "Zobrazovací názov"
 
@@ -3944,7 +4208,7 @@ msgstr ""
 "vo webovom rozhraní.\n"
 "                            "
 
-#: templates/wireguard/wireguard_manage_server.html:31 wireguard/forms.py:24
+#: templates/wireguard/wireguard_manage_server.html:31 wireguard/forms.py:25
 msgid "Web Refresh Interval"
 msgstr "Interval obnovenia webu"
 
@@ -3961,7 +4225,7 @@ msgstr ""
 "                            "
 
 #: templates/wireguard/wireguard_manage_server.html:37
-#: templates/wireguard/wireguard_status.html:46 wireguard/forms.py:20
+#: templates/wireguard/wireguard_status.html:46 wireguard/forms.py:21
 msgid "Public Address"
 msgstr "Verejná adresa"
 
@@ -4556,63 +4820,69 @@ msgstr "Nastavenia VPN pozvánky"
 msgid "Email Settings|Settings saved successfully."
 msgstr "Nastavenia e-mailu|Nastavenia boli úspešne uložené."
 
-#: wireguard/forms.py:17
+#: wireguard/forms.py:18
 msgid "Instance ID"
 msgstr "ID inštancie"
 
-#: wireguard/forms.py:22
+#: wireguard/forms.py:23
 msgid "Internal IP Address"
 msgstr "Interná IP adresa"
 
-#: wireguard/forms.py:28
+#: wireguard/forms.py:29
 msgid "DNS Search Domains"
 msgstr "Vyhľadávacie domény DNS"
 
-#: wireguard/forms.py:29
+#: wireguard/forms.py:30
 msgid ""
 "Optional. One or more domains separated by commas (e.g. vpn, example.com)."
 msgstr ""
 "Voliteľné. Jedna alebo viac domén oddelených čiarkami (napr. vpn, "
 "example.com)."
 
-#: wireguard/forms.py:137
+#: wireguard/forms.py:62
+msgid ""
+"The instance runs only on this server. Peer configurations of instances on a "
+"worker use the hostname of the worker as endpoint."
+msgstr ""
+
+#: wireguard/forms.py:156
 #, python-format
 msgid "Invalid search domain: %(domain)s"
 msgstr "Neplatná vyhľadávacia doména: %(domain)s"
 
-#: wireguard/forms.py:154
+#: wireguard/forms.py:173
 msgid "DNS Search Domains requires at least one DNS server."
 msgstr "Vyhľadávacie domény DNS vyžadujú aspoň jeden DNS server."
 
-#: wireguard/forms.py:158
+#: wireguard/forms.py:177
 msgid "Peer List Refresh Interval must be at least 5 seconds"
 msgstr "Interval obnovenia zoznamu peerov musí byť aspoň 5 sekúnd"
 
-#: wireguard/forms.py:161
+#: wireguard/forms.py:180
 msgid "Invalid hostname or IP Address"
 msgstr "Neplatný názov hostiteľa alebo IP adresa"
 
-#: wireguard/forms.py:171
+#: wireguard/forms.py:190
 msgid "The selected network range overlaps with another instance."
 msgstr "Vybraný rozsah siete sa prekrýva s inou inštanciou."
 
-#: wireguard/views.py:98
+#: wireguard/views.py:99
 msgid "WireGuard Status"
 msgstr "Stav WireGuard"
 
-#: wireguard/views.py:131
+#: wireguard/views.py:132
 msgid "Update WireGuard Instance"
 msgstr "Aktualizovať WireGuard inštanciu"
 
-#: wireguard/views.py:135
+#: wireguard/views.py:136
 msgid "Delete WireGuard Instance"
 msgstr "Vymazať WireGuard inštanciu"
 
-#: wireguard/views.py:138
+#: wireguard/views.py:139
 msgid "Error removing instance: wg"
 msgstr "Chyba pri odstraňovaní inštancie: wg"
 
-#: wireguard/views.py:138
+#: wireguard/views.py:139
 msgid ""
 "|Cannot delete the requested WireGuard instance. There are still peers "
 "associated with this instance."
@@ -4620,39 +4890,39 @@ msgstr ""
 "|Nemožno vymazať požadovanú WireGuard inštanciu. Stále sú s touto inštanciou "
 "spojené peeri."
 
-#: wireguard/views.py:141
+#: wireguard/views.py:142
 msgid "|WireGuard instance deleted: wg"
 msgstr "|WireGuard inštancia vymazaná: wg"
 
-#: wireguard/views.py:144
+#: wireguard/views.py:145
 msgid "Invalid confirmation|Please confirm deletion of WireGuard instance: wg"
 msgstr "Neplatné potvrdenie|Prosím potvrďte vymazanie WireGuard inštancie: wg"
 
-#: wireguard/views.py:148
+#: wireguard/views.py:149
 msgid "Create a new WireGuard Instance"
 msgstr "Vytvoriť novú WireGuard inštanciu"
 
-#: wireguard/views.py:149
+#: wireguard/views.py:150
 msgid "New WireGuard Instance"
 msgstr "Nová WireGuard inštancia"
 
-#: wireguard_peer/forms.py:69
+#: wireguard_peer/forms.py:70
 msgid "Allowed IP or Network"
 msgstr "Povolená IP alebo sieť"
 
-#: wireguard_peer/forms.py:79
+#: wireguard_peer/forms.py:80
 msgid "Please provide a valid IP address."
 msgstr "Prosím zadajte platnú IP adresu."
 
-#: wireguard_peer/forms.py:88
+#: wireguard_peer/forms.py:89
 msgid "A peer can have only one IP with priority zero."
 msgstr "Peer môže mať iba jednu IP adresu s prioritou nula."
 
-#: wireguard_peer/forms.py:94
+#: wireguard_peer/forms.py:95
 msgid "This IP is already in use by another peer."
 msgstr "Táto IP adresa je už používaná iným peerom."
 
-#: wireguard_peer/forms.py:96
+#: wireguard_peer/forms.py:97
 msgid ""
 "The IP address does not belong to the Peer's WireGuard instance network "
 "range. Please check the IP address or change the priority."
@@ -4660,15 +4930,15 @@ msgstr ""
 "IP adresa nepatrí do rozsahu siete WireGuard inštancie peer. Prosím "
 "skontrolujte IP adresu alebo zmeňte prioritu."
 
-#: wireguard_peer/forms.py:98
+#: wireguard_peer/forms.py:99
 msgid "The netmask for priority 0 IP must be 32."
 msgstr "Sieťová maska pre IP s prioritou 0 musí byť 32."
 
-#: wireguard_peer/forms.py:100
+#: wireguard_peer/forms.py:101
 msgid "The IP address is the same as the Peer's WireGuard instance address."
 msgstr "IP adresa je rovnaká ako adresa WireGuard inštancie peer."
 
-#: wireguard_peer/forms.py:103
+#: wireguard_peer/forms.py:104
 msgid ""
 "The IP address belongs to the Peer's WireGuard instance network range. "
 "Please check the IP address or change use priority 0 instead."
@@ -4676,57 +4946,64 @@ msgstr ""
 "IP adresa patrí do rozsahu siete WireGuard inštancie peer. Prosím "
 "skontrolujte IP adresu alebo namiesto toho použite prioritu 0."
 
-#: wireguard_peer/forms.py:106
+#: wireguard_peer/forms.py:108
+#, python-format
+msgid ""
+"This network is already used by peer %(peer)s of wg%(instance)s. A network "
+"can be routed to only one WireGuard instance."
+msgstr ""
+
+#: wireguard_peer/forms.py:114
 msgid "The peer's routing template does not allow custom routes."
 msgstr "Smerovacia šablóna peera nepovoľuje vlastné trasy."
 
-#: wireguard_peer/forms.py:108
+#: wireguard_peer/forms.py:116
 msgid "Priority must be greater than or equal to 1"
 msgstr "Priorita musí byť väčšia alebo rovná 1"
 
-#: wireguard_peer/forms.py:110
+#: wireguard_peer/forms.py:118
 msgid "Invalid config file"
 msgstr "Neplatný konfiguračný súbor"
 
-#: wireguard_peer/forms.py:125
+#: wireguard_peer/forms.py:133
 msgid "Reactivate now"
 msgstr "Reaktivovať teraz"
 
-#: wireguard_peer/forms.py:128
+#: wireguard_peer/forms.py:136
 msgid "Suspend now"
 msgstr "Pozastaviť teraz"
 
-#: wireguard_peer/forms.py:139
+#: wireguard_peer/forms.py:147
 msgid "Schedule"
 msgstr "Naplánovať"
 
-#: wireguard_peer/forms.py:143
+#: wireguard_peer/forms.py:151
 msgid "Clear Schedule"
 msgstr "Vymazať plán"
 
-#: wireguard_peer/forms.py:181
+#: wireguard_peer/forms.py:189
 msgid ""
 "The difference between suspend and unsuspend times must be at least 5 "
 "minutes."
 msgstr "Rozdiel medzi časom pozastavenia a reaktivácie musí byť aspoň 5 minút."
 
-#: wireguard_peer/forms.py:185
+#: wireguard_peer/forms.py:193
 msgid "Scheduled suspension time must be at least 10 minutes in the future."
 msgstr "Plánovaný čas pozastavenia musí byť aspoň 10 minút v budúcnosti."
 
-#: wireguard_peer/forms.py:188
+#: wireguard_peer/forms.py:196
 msgid "Scheduled unsuspension time must be at least 10 minutes in the future."
 msgstr "Plánovaný čas reaktivácie musí byť aspoň 10 minút v budúcnosti."
 
-#: wireguard_peer/functions.py:58
+#: wireguard_peer/functions.py:80
 msgid "Error creating peer|The specified IP address is not available."
 msgstr "Chyba pri vytváraní peer|Zadaná IP adresa nie je k dispozícii."
 
-#: wireguard_peer/functions.py:84 wireguard_peer/views.py:162
+#: wireguard_peer/functions.py:106 wireguard_peer/views.py:162
 msgid "Peer created|Peer created successfully."
 msgstr "Peer vytvorený|Peer bol úspešne vytvorený."
 
-#: wireguard_peer/functions.py:87
+#: wireguard_peer/functions.py:109
 msgid "Error creating peer|No available IP address found for peer creation."
 msgstr ""
 "Chyba pri vytváraní peer|Nebola nájdená dostupná IP adresa pre vytvorenie "
@@ -4734,19 +5011,26 @@ msgstr ""
 
 #: wireguard_peer/views.py:29
 #, python-format
+msgid ""
+"wg%(id)s runs on %(worker)s, which applies the change on its next "
+"synchronization."
+msgstr ""
+
+#: wireguard_peer/views.py:35
+#, python-format
 msgid "wg%(id)s reloaded automatically."
 msgstr "wg%(id)s bol automaticky znovu načítaný."
 
-#: wireguard_peer/views.py:31
+#: wireguard_peer/views.py:37
 #, python-format
 msgid "Auto-apply failed for wg%(id)s: "
 msgstr "Automatické použitie pre wg%(id)s zlyhalo: "
 
-#: wireguard_peer/views.py:40
+#: wireguard_peer/views.py:46
 msgid "Disabled WireGuard Peer List"
 msgstr "Zoznam zakázaných WireGuard peerov"
 
-#: wireguard_peer/views.py:43
+#: wireguard_peer/views.py:49
 msgid "WireGuard Peer List"
 msgstr "Zoznam WireGuard peerov"
 
@@ -4884,7 +5168,7 @@ msgstr "Profil plánovania peera bol úspešne aktualizovaný."
 msgid "Manage Peer Schedule Profile"
 msgstr "Spravovať profil plánovania peera"
 
-#: wireguard_tools/views.py:244
+#: wireguard_tools/views.py:249
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/."
@@ -4892,7 +5176,7 @@ msgstr ""
 "Export úspešný!|WireGuard konfiguračné súbory boli exportované do /etc/"
 "wireguard/."
 
-#: wireguard_tools/views.py:246
+#: wireguard_tools/views.py:251
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/. Don't forget to restart the interfaces."
@@ -4900,19 +5184,19 @@ msgstr ""
 "Export úspešný!|WireGuard konfiguračné súbory boli exportované do /etc/"
 "wireguard/. Nezabudnite reštartovať rozhrania."
 
-#: wireguard_tools/views.py:348
-msgid "Error reloading"
-msgstr "Chyba pri opätovnom načítaní"
-
-#: wireguard_tools/views.py:360
+#: wireguard_tools/views.py:335 wireguard_tools/views.py:381
 msgid "Error stopping"
 msgstr "Chyba pri zastavovaní"
 
-#: wireguard_tools/views.py:365
+#: wireguard_tools/views.py:367
+msgid "Error reloading"
+msgstr "Chyba pri opätovnom načítaní"
+
+#: wireguard_tools/views.py:386
 msgid "Error starting"
 msgstr "Chyba pri spúšťaní"
 
-#: wireguard_tools/views.py:372
+#: wireguard_tools/views.py:393
 msgid ""
 "WARNING|Please note that the interface was reloaded, not restarted. Double-"
 "check if the the peers are working as expected. If you find any issues, "
@@ -4922,24 +5206,163 @@ msgstr ""
 "reštartované. Dôkladne skontrolujte či peeri fungujú podľa očakávania. Ak "
 "nájdete problémy, prosím nahláste ich."
 
-#: wireguard_tools/views.py:373
+#: wireguard_tools/views.py:394
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
 msgstr "WireGuard znovu načítaný|Služba WireGuard bola znovu načítaná."
 
-#: wireguard_tools/views.py:375
+#: wireguard_tools/views.py:396
 msgid "WireGuard restarted|The WireGuard service has been restarted."
 msgstr "WireGuard reštartovaný|Služba WireGuard bola reštartovaná."
 
-#: wireguard_tools/views.py:378
+#: wireguard_tools/views.py:399
 msgid "Errors encountered|Error processing one or more interfaces."
 msgstr ""
 "Vyskytli sa chyby|Chyba pri spracovaní jedného alebo viacerých rozhraní."
 
-#: wireguard_tools/views.py:381
+#: wireguard_tools/views.py:402
 msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Neboli nájdené rozhrania|Neboli nájdené žiadne WireGuard rozhrania na "
 "spracovanie."
+
+#~ msgid "Restart Mode"
+#~ msgstr "Režim reštartu"
+
+#~ msgid ""
+#~ "Please report worker_config_version, worker_dns_version and "
+#~ "worker_version in the API request."
+#~ msgstr ""
+#~ "Prosím, uveďte worker_config_version, worker_dns_version a worker_version "
+#~ "v požiadavke API."
+
+#~ msgid ""
+#~ "\n"
+#~ "        <h5>Worker Configuration</h5>\n"
+#~ "        <p>Configure a cluster worker node that will synchronize with "
+#~ "this primary instance.</p>\n"
+#~ "        \n"
+#~ "        <h5>Name</h5>\n"
+#~ "        <p>A unique name to identify this worker.</p>\n"
+#~ "        \n"
+#~ "        <h5>IP Address</h5>\n"
+#~ "        <p>The IP address of the worker node. Leave empty if IP lock is "
+#~ "disabled.</p>\n"
+#~ "        \n"
+#~ "        <h5>IP Lock</h5>\n"
+#~ "        <p>When enabled, the worker can only connect from the specified "
+#~ "IP address.</p>\n"
+#~ "        \n"
+#~ "        <h5>Location Information</h5>\n"
+#~ "        <p>Optional location details for this worker (country, city, "
+#~ "hostname).</p>\n"
+#~ "        "
+#~ msgstr ""
+#~ "\n"
+#~ "        <h5>Konfigurácia workera</h5>\n"
+#~ "        <p>Nakonfigurujte worker uzol clustra, ktorý sa bude "
+#~ "synchronizovať s touto primárnou inštanciou.</p>\n"
+#~ "        \n"
+#~ "        <h5>Názov</h5>\n"
+#~ "        <p>Jedinečný názov na identifikáciu tohto workera.</p>\n"
+#~ "        \n"
+#~ "        <h5>IP adresa</h5>\n"
+#~ "        <p>IP adresa worker uzla. Ak je IP zámok zakázaný, nechajte "
+#~ "prázdne.</p>\n"
+#~ "        \n"
+#~ "        <h5>IP zámok</h5>\n"
+#~ "        <p>Keď je povolený, worker sa môže pripojiť iba zo špecifikovanej "
+#~ "IP adresy.</p>\n"
+#~ "        \n"
+#~ "        <h5>Informácie o umiestnení</h5>\n"
+#~ "        <p>Voliteľné podrobnosti o umiestnení pre tohto workera (krajina, "
+#~ "mesto, názov hostiteľa).</p>\n"
+#~ "        "
+
+#~ msgid ""
+#~ "\n"
+#~ "        <h5>Cluster Mode</h5>\n"
+#~ "        <p>Configure how the cluster operates and synchronizes "
+#~ "configurations between nodes.</p>\n"
+#~ "        \n"
+#~ "        <h5>Sync Intervals</h5>\n"
+#~ "        <p>Configure how frequently statistics and cache data are "
+#~ "synchronized between cluster nodes.</p>\n"
+#~ "        \n"
+#~ "        <h5>Restart Mode</h5>\n"
+#~ "        <p>Choose whether WireGuard services should be automatically "
+#~ "restarted when configurations change, or if manual intervention is "
+#~ "required.</p>\n"
+#~ "        \n"
+#~ "        <h5>Worker Display</h5>\n"
+#~ "        <p>Select how workers should be identified in the interface - by "
+#~ "name, server address, location, or a combination.</p>\n"
+#~ "        "
+#~ msgstr ""
+#~ "\n"
+#~ "        <h5>Režim clustra</h5>\n"
+#~ "        <p>Nakonfigurujte, ako cluster funguje a ako sa synchronizujú "
+#~ "konfigurácie medzi uzlami.</p>\n"
+#~ "        \n"
+#~ "        <h5>Intervaly synchronizácie</h5>\n"
+#~ "        <p>Nakonfigurujte, ako často sa synchronizujú štatistiky a údaje "
+#~ "vyrovnávacej pamäte medzi uzlami clustra.</p>\n"
+#~ "        \n"
+#~ "        <h5>Režim reštartu</h5>\n"
+#~ "        <p>Vyberte, či sa majú služby WireGuard automaticky reštartovať "
+#~ "pri zmene konfigurácie, alebo či je potrebný manuálny zásah.</p>\n"
+#~ "        \n"
+#~ "        <h5>Zobrazenie workera</h5>\n"
+#~ "        <p>Vyberte, ako sa majú workery identifikovať v rozhraní – podľa "
+#~ "názvu, adresy servera, umiestnenia alebo ich kombinácie.</p>\n"
+#~ "        "
+
+#~ msgid "Config Version"
+#~ msgstr "Verzia konfigurácie"
+
+#~ msgid "Configuration sync in progress"
+#~ msgstr "Synchronizácia konfigurácie prebieha"
+
+#~ msgid "Last seen more than 10 minutes ago or never seen."
+#~ msgstr "Naposledy videný pred viac ako 10 minútami alebo nikdy videný."
+
+#~ msgid "Cluster Information"
+#~ msgstr "Informácie o klastri"
+
+#~ msgid "DNS Version"
+#~ msgstr "Verzia DNS"
+
+#~ msgid "Cache Enabled"
+#~ msgstr "Vyrovnávacia pamäť povolená"
+
+#~ msgid "Cluster Feature – Testing Phase"
+#~ msgstr "Funkcia klastra – testovacia fáza"
+
+#~ msgid "The cluster functionality is currently released as experimental."
+#~ msgstr "Funkcia klastra je v súčasnosti vydaná ako experimentálna."
+
+#~ msgid "At this stage, only core features are implemented:"
+#~ msgstr "V tejto fáze sú implementované iba základné funkcie:"
+
+#~ msgid "Configuration synchronization service"
+#~ msgstr "Služba synchronizácie konfigurácie"
+
+#~ msgid "Primary node mirroring (WireGuard and firewall rules)"
+#~ msgstr "Zrkadlenie primárneho uzla (WireGuard a pravidlá firewallu)"
+
+#~ msgid "DNS rules mirroring"
+#~ msgstr "Zrkadlenie pravidiel DNS"
+
+#~ msgid ""
+#~ "Server selection dropdown before downloading peer configs or VPN invites"
+#~ msgstr ""
+#~ "Rozbaľovací zoznam výberu servera pred stiahnutím konfigurácií peerov "
+#~ "alebo pozvánok VPN"
+
+#~ msgid "For more information, please visit:"
+#~ msgstr "Pre viac informácií navštívte prosím:"
+
+#~ msgid "I Understand"
+#~ msgstr "Rozumiem"
 
 #~ msgid "HTTP challenge"
 #~ msgstr "HTTP výzva"
