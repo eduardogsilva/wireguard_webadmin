@@ -1,11 +1,10 @@
-import os
 import sys
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
-from app_gateway.caddy_config_export import export_caddy_config
+from app_gateway.caddy_config_export import apply_caddy_config
 from app_gateway.models import AccessPolicy, Application, ApplicationPolicy, RESERVED_APP_NAME
 from app_gateway.setup_defaults import create_default_entries
 
@@ -86,9 +85,7 @@ class Command(BaseCommand):
 
         if settings.CADDY_ENABLED:
             self.stdout.write('Exporting Caddy configuration...')
-            export_caddy_config('/caddy_json_export/')
-            if settings.DEBUG:
-                export_caddy_config(os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files'))
+            apply_caddy_config()
             self.stdout.write(self.style.SUCCESS('Caddy configuration exported.'))
         else:
             self.stdout.write('Skipping Caddy configuration export (CADDY_ENABLED is not set).')

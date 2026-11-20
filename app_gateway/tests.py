@@ -8,13 +8,20 @@ from pathlib import Path
 from unittest.mock import patch
 
 from django.conf import settings
-from django.test import TestCase
+from django.contrib.auth.models import User
+from django.test import TestCase, override_settings
 
 from app_gateway.caddy_config_export import export_caddy_config
-from app_gateway.models import AccessPolicy, Application, ApplicationHost, ApplicationPolicy, ApplicationRoute
+from app_gateway.forms import ApplicationForm, ApplicationHostForm
+from app_gateway.models import (
+    AccessPolicy, Application, ApplicationHost, ApplicationPolicy, ApplicationRoute, DnsChallengeCredential
+)
+from app_gateway.setup_defaults import create_default_entries
+from cluster.models import ClusterSettings, Worker
 from gatekeeper.models import (
     AuthMethod, AuthMethodAllowedDomain, AuthMethodAllowedEmail, GatekeeperGroup, GatekeeperIPAddress, GatekeeperUser
 )
+from user_manager.models import UserAcl
 
 AUTH_GATEWAY_FIXTURES_DIR = Path(settings.BASE_DIR) / 'containers' / 'auth-gateway' / 'tests' / 'fixtures' / 'config_files'
 UPDATE_FIXTURES_ENV = 'UPDATE_AUTH_GATEWAY_FIXTURES'
@@ -28,6 +35,11 @@ _WEBADMIN_EXPORT_PATH = Path(settings.BASE_DIR) / 'containers' / 'caddy' / 'expo
 _WEBADMIN_EXPORT_SPEC = importlib.util.spec_from_file_location('caddy_export_wireguard_webadmin_config', _WEBADMIN_EXPORT_PATH)
 _WEBADMIN_EXPORT_MODULE = importlib.util.module_from_spec(_WEBADMIN_EXPORT_SPEC)
 _WEBADMIN_EXPORT_SPEC.loader.exec_module(_WEBADMIN_EXPORT_MODULE)
+
+_PROCESS_CONFIG_PATH = Path(settings.BASE_DIR) / 'containers' / 'caddy' / 'process_config.py'
+_PROCESS_CONFIG_SPEC = importlib.util.spec_from_file_location('caddy_process_config', _PROCESS_CONFIG_PATH)
+process_config = importlib.util.module_from_spec(_PROCESS_CONFIG_SPEC)
+_PROCESS_CONFIG_SPEC.loader.exec_module(process_config)
 
 
 def create_auth_gateway_scenario():
@@ -106,10 +118,16 @@ def export_auth_gateway_fixtures(output_dir):
         _WEBADMIN_EXPORT_MODULE._write_config(os.path.join(output_dir, 'wireguard_webadmin.json'), webadmin_config)
 
 
+# Same hosts used for wireguard_webadmin.json, so the WireGuard WebAdmin hosts do not depend on the local .env
+FIXTURE_ALLOWED_HOSTS = ['wireguard-webadmin', 'webadmin.example.test', 'webadmin2.example.test', '10.0.0.1']
+
+
+@override_settings(ALLOWED_HOSTS=FIXTURE_ALLOWED_HOSTS)
 class AuthGatewayFixturesTests(TestCase):
     maxDiff = None
 
     def setUp(self):
+        create_default_entries()
         create_auth_gateway_scenario()
 
     def test_auth_gateway_fixtures_match_exporter(self):
@@ -131,3 +149,289 @@ class AuthGatewayFixturesTests(TestCase):
                     f"{filename} is out of date. Regenerate it with: "
                     f"{UPDATE_FIXTURES_ENV}=1 python manage.py test app_gateway"
                 )
+
+
+CLOUDFLARE_TOKEN = 'cfut_' + 'a' * 40
+
+
+def caddy_app(app_id, hosts):
+    return {'id': app_id, 'hosts': hosts, 'upstream': 'http://10.0.0.10:8080'}
+
+
+def site_block(caddyfile, host):
+    """Return the lines of the site block that starts with the given host."""
+    lines = caddyfile.splitlines()
+    start = next(index for index, line in enumerate(lines) if line.startswith(host) and line.endswith('{'))
+    end = next(index for index in range(start + 1, len(lines)) if lines[index] == '}')
+    return lines[start:end + 1]
+
+
+class CaddyfileTlsTests(TestCase):
+    tls_data = {
+        'hosts': {
+            'http.example.test': {'certificate_type': 'http_challenge'},
+            'strict.example.test': {'certificate_type': 'http_challenge', 'certificate_fallback': False},
+            'dns.example.test': {'certificate_type': 'dns_challenge', 'dns_credential': 'cloudflare'},
+            'internal.example.test': {'certificate_type': 'self_signed'},
+            'worker-only.example.test': {'certificate_type': 'dns_challenge', 'dns_credential': 'cloudflare',
+                                         'certificate_only': True, 'export_certificate': True},
+        },
+        'dns_credentials': {'cloudflare': {'provider': 'cloudflare', 'credentials': {'api_token': CLOUDFLARE_TOKEN}}},
+    }
+
+    def build(self, apps, tls_data=None):
+        return process_config.build_caddyfile(apps, None, None, tls_data or self.tls_data)
+
+    def test_hosts_are_grouped_by_certificate_settings(self):
+        caddyfile = self.build([caddy_app('app', [
+            'http.example.test', 'strict.example.test', 'dns.example.test', 'internal.example.test', 'unknown.example.test'
+        ])])
+        self.assertEqual(
+            site_block(caddyfile, 'http.example.test')[:5],
+            ['http.example.test, unknown.example.test {', '  tls {', '    issuer acme', '    issuer internal', '  }'],
+        )
+        self.assertEqual(site_block(caddyfile, 'strict.example.test')[:4], ['strict.example.test {', '  tls {', '    issuer acme', '  }'])
+        self.assertEqual(site_block(caddyfile, 'internal.example.test')[1], '  tls internal')
+
+        dns_block = '\n'.join(site_block(caddyfile, 'dns.example.test'))
+        self.assertIn(f'api_token "{CLOUDFLARE_TOKEN}"', dns_block)
+        self.assertIn('propagation_delay 30s', dns_block)
+        self.assertIn('propagation_timeout -1', dns_block)
+        self.assertIn('issuer internal', dns_block)
+
+    def test_dns_challenge_can_be_disabled_after_invalid_configuration(self):
+        with patch.object(process_config, 'DISABLE_DNS_CHALLENGE', True):
+            caddyfile = self.build([caddy_app('app', ['dns.example.test'])])
+        self.assertNotIn('dns cloudflare', caddyfile)
+        self.assertIn('issuer acme', '\n'.join(site_block(caddyfile, 'dns.example.test')))
+
+    def test_primary_keeps_certificates_of_worker_only_hosts(self):
+        caddyfile = self.build([caddy_app('app', ['http.example.test'])])
+        worker_only_block = site_block(caddyfile, 'worker-only.example.test')
+        self.assertIn('  respond 404', worker_only_block)
+        self.assertIn('      dns cloudflare {', worker_only_block)
+
+    def test_cluster_node_never_requests_acme_certificates(self):
+        node_tls = {'hosts': {
+            'ready.example.test': {'certificate_type': 'dns_challenge', 'certificate_file': 'a' * 64},
+            'waiting.example.test': {'certificate_type': 'dns_challenge', 'certificate_file': ''},
+            'strict.example.test': {'certificate_type': 'dns_challenge', 'certificate_fallback': False, 'certificate_file': ''},
+            'internal.example.test': {'certificate_type': 'self_signed'},
+        }, 'dns_credentials': {}}
+        apps = [caddy_app('app', list(node_tls['hosts']))]
+        with patch.object(process_config, 'CLUSTER_NODE', True), \
+                patch.object(process_config, 'NODE_CERTIFICATES_DIR', '/caddy_certificates'):
+            caddyfile = self.build(apps, node_tls)
+
+        self.assertNotIn('issuer acme', caddyfile)
+        self.assertNotIn('strict.example.test', caddyfile)
+        certificate_path = '/caddy_certificates/' + 'a' * 64
+        self.assertEqual(site_block(caddyfile, 'ready.example.test')[1], f'  tls {certificate_path}.crt {certificate_path}.key')
+        self.assertEqual(site_block(caddyfile, 'waiting.example.test')[0], 'waiting.example.test, internal.example.test {')
+        self.assertEqual(site_block(caddyfile, 'waiting.example.test')[1], '  tls internal')
+
+
+class CaddyTlsStateTests(TestCase):
+    """Fallback certificates are removed and Caddy is restarted only when the certificate settings change."""
+
+    def setUp(self):
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp_dir.cleanup)
+        self.certificates_dir = os.path.join(self.temp_dir.name, 'certificates')
+        self.json_dir = os.path.join(self.temp_dir.name, 'json')
+        self.export_dir = os.path.join(self.temp_dir.name, 'export')
+        for directory in (self.certificates_dir, self.json_dir, self.export_dir):
+            os.makedirs(directory)
+        for attribute, value in (
+            ('CERTIFICATES_DIR', self.certificates_dir),
+            ('TLS_STATE_PATH', os.path.join(self.temp_dir.name, 'tls_state.json')),
+            ('TLS_STATE_PENDING_PATH', os.path.join(self.temp_dir.name, 'tls_state_pending.json')),
+            ('JSON_DIR', self.json_dir),
+            ('CERTIFICATE_EXPORT_DIR', self.export_dir),
+        ):
+            patcher = patch.object(process_config, attribute, value)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+
+    def store_certificate(self, issuer_dir_name, host, content='certificate'):
+        host_dir = os.path.join(self.certificates_dir, issuer_dir_name, host)
+        os.makedirs(host_dir, exist_ok=True)
+        for extension in ('crt', 'key'):
+            with open(os.path.join(host_dir, f'{host}.{extension}'), 'w', encoding='utf-8') as certificate_file:
+                certificate_file.write(f'{content}-{extension}')
+        return host_dir
+
+    def apply(self, host_tls):
+        apps = [caddy_app('app', ['app.example.test'])]
+        tls_data = {'hosts': {'app.example.test': host_tls}, 'dns_credentials': {}}
+        process_config._write_json(process_config.TLS_STATE_PENDING_PATH, process_config.build_tls_state(apps, tls_data))
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output), contextlib.redirect_stderr(io.StringIO()):
+            process_config.sync_tls_state()
+        return output.getvalue().strip() == 'restart'
+
+    def test_first_run_never_restarts(self):
+        fallback_dir = self.store_certificate('local', 'app.example.test')
+        self.assertFalse(self.apply({'certificate_type': 'http_challenge'}))
+        self.assertTrue(os.path.isdir(fallback_dir))
+
+    def test_retry_removes_fallback_certificate(self):
+        self.apply({'certificate_type': 'http_challenge'})
+        fallback_dir = self.store_certificate('local', 'app.example.test')
+        self.assertTrue(self.apply({'certificate_type': 'http_challenge', 'certificate_generation': 1}))
+        self.assertFalse(os.path.isdir(fallback_dir))
+
+    def test_retry_keeps_valid_acme_certificate_without_restart(self):
+        self.apply({'certificate_type': 'http_challenge'})
+        acme_dir = self.store_certificate('acme-v02.api.letsencrypt.org-directory', 'app.example.test')
+        self.assertFalse(self.apply({'certificate_type': 'http_challenge', 'certificate_generation': 1}))
+        self.assertTrue(os.path.isdir(acme_dir))
+
+    def test_switching_to_self_signed_restarts_when_acme_certificate_is_cached(self):
+        self.apply({'certificate_type': 'http_challenge'})
+        self.store_certificate('acme-v02.api.letsencrypt.org-directory', 'app.example.test')
+        self.assertTrue(self.apply({'certificate_type': 'self_signed'}))
+
+    def test_unchanged_settings_do_not_restart(self):
+        self.apply({'certificate_type': 'http_challenge'})
+        self.store_certificate('local', 'app.example.test')
+        self.assertFalse(self.apply({'certificate_type': 'http_challenge'}))
+
+    def test_readded_host_with_leftover_fallback_is_retried(self):
+        self.apply({'certificate_type': 'http_challenge'})
+        fallback_dir = self.store_certificate('local', 'other.example.test')
+        apps = [caddy_app('app', ['app.example.test', 'other.example.test'])]
+        tls_data = {'hosts': {'app.example.test': {'certificate_type': 'http_challenge'},
+                              'other.example.test': {'certificate_type': 'dns_challenge', 'dns_credential': 'cloudflare'}},
+                    'dns_credentials': {'cloudflare': {'provider': 'cloudflare', 'credentials': {'api_token': CLOUDFLARE_TOKEN}}}}
+        process_config._write_json(process_config.TLS_STATE_PENDING_PATH, process_config.build_tls_state(apps, tls_data))
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output), contextlib.redirect_stderr(io.StringIO()):
+            process_config.sync_tls_state()
+        self.assertEqual(output.getvalue().strip(), 'restart')
+        self.assertFalse(os.path.isdir(fallback_dir))
+
+    def test_new_host_without_cached_certificate_does_not_restart(self):
+        self.apply({'certificate_type': 'http_challenge'})
+        apps = [caddy_app('app', ['app.example.test', 'new.example.test'])]
+        tls_data = {'hosts': {'app.example.test': {'certificate_type': 'http_challenge'},
+                              'new.example.test': {'certificate_type': 'http_challenge'}}, 'dns_credentials': {}}
+        process_config._write_json(process_config.TLS_STATE_PENDING_PATH, process_config.build_tls_state(apps, tls_data))
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output), contextlib.redirect_stderr(io.StringIO()):
+            process_config.sync_tls_state()
+        self.assertEqual(output.getvalue().strip(), '')
+
+    def test_cluster_node_restarts_when_certificate_changes(self):
+        with patch.object(process_config, 'CLUSTER_NODE', True):
+            self.apply({'certificate_type': 'dns_challenge', 'certificate_file': ''})
+            fallback_dir = self.store_certificate('local', 'app.example.test')
+            self.assertTrue(self.apply({'certificate_type': 'dns_challenge', 'certificate_file': 'a' * 64}))
+            self.assertFalse(os.path.isdir(fallback_dir))
+            self.assertTrue(self.apply({'certificate_type': 'dns_challenge', 'certificate_file': 'b' * 64}))
+
+    def test_only_acme_certificates_are_exported(self):
+        tls_data = {'hosts': {
+            'exported.example.test': {'certificate_type': 'dns_challenge', 'export_certificate': True},
+            'fallback.example.test': {'certificate_type': 'dns_challenge', 'export_certificate': True},
+            'local.example.test': {'certificate_type': 'dns_challenge'},
+        }}
+        with open(os.path.join(self.json_dir, 'tls.json'), 'w', encoding='utf-8') as tls_file:
+            json.dump(tls_data, tls_file)
+        self.store_certificate('acme-v02.api.letsencrypt.org-directory', 'exported.example.test', 'acme')
+        self.store_certificate('acme-v02.api.letsencrypt.org-directory', 'local.example.test', 'acme')
+        self.store_certificate('local', 'fallback.example.test', 'internal')
+        os.makedirs(os.path.join(self.export_dir, 'removed.example.test'))
+
+        with contextlib.redirect_stdout(io.StringIO()):
+            process_config.export_certificates()
+
+        self.assertEqual(sorted(os.listdir(self.export_dir)), ['exported.example.test'])
+        with open(os.path.join(self.export_dir, 'exported.example.test', 'certificate.crt'), encoding='utf-8') as certificate_file:
+            self.assertEqual(certificate_file.read(), 'acme-crt')
+
+
+@override_settings(ALLOWED_HOSTS=FIXTURE_ALLOWED_HOSTS)
+class ClusterApplicationFormTests(TestCase):
+    def setUp(self):
+        ClusterSettings.objects.update_or_create(name='cluster_settings', defaults={'enabled': True})
+        self.worker = Worker.objects.create(name='node-a')
+        self.application = Application.objects.create(display_name='Wiki', upstream='http://10.0.0.30:8080')
+        self.credential = DnsChallengeCredential.objects.create(
+            display_name='Cloudflare', provider='cloudflare', credentials={'api_token': CLOUDFLARE_TOKEN}
+        )
+
+    def test_application_with_http_validation_hosts_cannot_be_served_by_workers(self):
+        ApplicationHost.objects.create(application=self.application, hostname='wiki.example.test')
+        form = ApplicationForm(data={
+            'display_name': 'Wiki', 'upstream': 'http://10.0.0.30:8080', 'serve_on_primary': 'on',
+            'workers': [self.worker.pk],
+        }, instance=self.application)
+        self.assertFalse(form.is_valid())
+        self.assertIn('wiki.example.test', str(form.errors))
+
+    def test_all_workers_and_specific_workers_are_exclusive(self):
+        form = ApplicationForm(data={
+            'display_name': 'Wiki', 'upstream': 'http://10.0.0.30:8080', 'serve_on_primary': 'on',
+            'all_workers': 'on', 'workers': [self.worker.pk],
+        }, instance=self.application)
+        self.assertIn('workers', form.errors)
+
+    def test_application_must_be_published_somewhere(self):
+        form = ApplicationForm(data={'display_name': 'Wiki', 'upstream': 'http://10.0.0.30:8080'}, instance=self.application)
+        self.assertFalse(form.is_valid())
+        self.assertIn('__all__', form.errors)
+
+    def test_without_cluster_everything_is_served_by_the_primary(self):
+        self.application.serve_on_primary = False
+        self.application.save()
+        self.application.workers.add(self.worker)
+        ClusterSettings.objects.filter(name='cluster_settings').update(enabled=False)
+        self.assertTrue(self.application.is_served_by(None))
+        self.assertFalse(self.application.is_served_by(self.worker))
+        self.assertFalse(self.application.served_by_workers)
+        form = ApplicationForm(data={'display_name': 'Wiki', 'upstream': 'http://10.0.0.30:8080'}, instance=self.application)
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertNotIn('workers', form.fields)
+
+    def test_host_of_application_served_by_workers_requires_dns_or_self_signed(self):
+        self.application.workers.add(self.worker)
+        form = ApplicationHostForm(
+            data={'hostname': 'wiki.example.test', 'certificate_type': 'http_challenge', 'certificate_fallback': 'on'},
+            application=self.application,
+        )
+        self.assertIn('certificate_type', form.errors)
+        form = ApplicationHostForm(data={
+            'hostname': 'wiki.example.test', 'certificate_type': 'dns_challenge',
+            'dns_credential': self.credential.pk, 'certificate_fallback': 'on',
+        }, application=self.application)
+        self.assertTrue(form.is_valid(), form.errors)
+
+
+@override_settings(ALLOWED_HOSTS=FIXTURE_ALLOWED_HOSTS + ['testserver'], CADDY_ENABLED=True, DEBUG=False)
+class GatewayAutoApplyTests(TestCase):
+    def setUp(self):
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp_dir.cleanup)
+        patcher = patch('app_gateway.caddy_config_export.CADDY_EXPORT_DIR', self.temp_dir.name)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        user = User.objects.create_user(username='gateway-admin', password='unused-test-password')
+        UserAcl.objects.create(user=user, user_level=50)
+        self.client.force_login(user)
+
+    def save_application(self):
+        return self.client.post('/app_gateway/application/manage/', {
+            'display_name': 'Auto Apply', 'upstream': 'http://10.0.0.40:8080',
+        })
+
+    @override_settings(AUTO_APPLY=True)
+    def test_saving_applies_configuration(self):
+        self.save_application()
+        with open(os.path.join(self.temp_dir.name, 'applications.json'), encoding='utf-8') as applications_file:
+            self.assertIn('auto-apply', [entry['id'] for entry in json.load(applications_file)['entries']])
+
+    @override_settings(AUTO_APPLY=False)
+    def test_disabled_auto_apply_keeps_changes_pending(self):
+        self.save_application()
+        self.assertFalse(os.path.exists(os.path.join(self.temp_dir.name, 'applications.json')))

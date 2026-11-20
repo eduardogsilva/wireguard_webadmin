@@ -1,4 +1,3 @@
-import os
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -21,10 +20,8 @@ class Command(BaseCommand):
         if settings.CADDY_ENABLED:
             self.stdout.write('Exporting Caddy configuration...')
             try:
-                from app_gateway.caddy_config_export import export_caddy_config
-                export_caddy_config('/caddy_json_export/')
-                if settings.DEBUG:
-                    export_caddy_config(os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files'))
+                from app_gateway.caddy_config_export import apply_caddy_config
+                apply_caddy_config()
                 self.stdout.write(self.style.SUCCESS('Caddy configuration exported.'))
             except Exception as e:
                 self.stdout.write(self.style.WARNING(f'Failed to export Caddy configuration: {e}'))

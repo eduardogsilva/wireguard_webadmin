@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# Containers sharing this network namespace (Caddy) restart themselves when it changes
+if [ -d /caddy_json_export ]; then
+    readlink /proc/self/ns/net > /caddy_json_export/.netns_owner
+fi
+
 # Lets wait for the DNS container to start
 sleep 5
 

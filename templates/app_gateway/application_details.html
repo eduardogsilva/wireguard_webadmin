@@ -195,17 +195,18 @@
         $.getJSON("{% url 'application_certificate_status' %}?uuid={{ application.uuid }}", function (data) {
             $('.certificate-status').each(function () {
                 var cell = $(this);
-                var hostStatus = data.hosts[cell.data('host-uuid')];
+                var serversStatus = data.hosts[cell.data('host-uuid')] || [];
                 cell.empty();
-                if (!hostStatus) {
-                    return;
-                }
-                cell.append(
-                    $('<span class="badge"></span>')
-                        .addClass('badge-' + hostStatus.css_class)
-                        .attr('title', hostStatus.detail)
-                        .text(hostStatus.label)
-                );
+                $.each(serversStatus, function (index, serverStatus) {
+                    var title = serverStatus.server ? serverStatus.server + ': ' + serverStatus.detail : serverStatus.detail;
+                    var label = serverStatus.server ? serverStatus.server + ': ' + serverStatus.label : serverStatus.label;
+                    cell.append(
+                        $('<span class="badge mr-1"></span>')
+                            .addClass('badge-' + serverStatus.css_class)
+                            .attr('title', title)
+                            .text(label)
+                    );
+                });
             });
         }).fail(function () {
             $('.certificate-status').html('<span class="text-muted">-</span>');

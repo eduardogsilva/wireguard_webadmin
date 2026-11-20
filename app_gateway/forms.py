@@ -12,22 +12,44 @@ from app_gateway.models import (
     Application, ApplicationHost, AccessPolicy, ApplicationPolicy, ApplicationRoute, DnsChallengeCredential
 )
 from app_gateway.setup_defaults import is_ip_address
+from cluster.models import ClusterSettings, Worker
 
 
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
-        fields = ['display_name', 'upstream', 'allow_invalid_cert']
+        fields = ['display_name', 'upstream', 'allow_invalid_cert', 'serve_on_primary', 'all_workers', 'workers']
         labels = {
             'display_name': _('Name'),
             'upstream': _('Upstream'),
             'allow_invalid_cert': _('Allow invalid/self-signed certificate'),
+            'serve_on_primary': _('Serve on the primary server'),
+            'all_workers': _('Serve on all cluster workers'),
+            'workers': _('Cluster workers'),
         }
 
     def __init__(self, *args, **kwargs):
         cancel_url = kwargs.pop('cancel_url', '#')
         super().__init__(*args, **kwargs)
         self.fields['display_name'].required = True
+        self.cluster_enabled = ClusterSettings.cluster_enabled()
+
+        cluster_rows = []
+        if self.cluster_enabled:
+            self.fields['workers'].queryset = Worker.objects.order_by('name')
+            self.fields['workers'].help_text = _('Select specific workers, or leave empty when serving on all cluster workers.')
+            cluster_rows = [
+                HTML(f'<hr><h5>{_("Cluster")}</h5><p class="text-muted">{_("Servers that publish this application.")}</p>'),
+                Div(
+                    Div('serve_on_primary', css_class='col-md-12'),
+                    Div('all_workers', css_class='col-md-12'),
+                    Div('workers', css_class='col-md-12'),
+                    css_class='row'
+                ),
+            ]
+        else:
+            for field_name in ('serve_on_primary', 'all_workers', 'workers'):
+                del self.fields[field_name]
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
@@ -40,6 +62,7 @@ class ApplicationForm(forms.ModelForm):
                 Div('allow_invalid_cert', css_class='col-md-12'),
                 css_class='row'
             ),
+            *cluster_rows,
             Div(
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
@@ -71,6 +94,22 @@ class ApplicationForm(forms.ModelForm):
             elif parsed.scheme == "http" and cleaned_data.get("allow_invalid_cert"):
                 self.add_error("allow_invalid_cert", _("This option is only available for https:// upstreams."))
 
+        if self.cluster_enabled:
+            all_workers = cleaned_data.get('all_workers')
+            selected_workers = cleaned_data.get('workers')
+            if all_workers and selected_workers:
+                self.add_error('workers', _('Leave this empty when the application is served on all cluster workers.'))
+            if not cleaned_data.get('serve_on_primary') and not all_workers and not selected_workers:
+                self.add_error(None, _('Select at least one server to publish this application.'))
+            served_by_workers = all_workers or bool(selected_workers)
+            if served_by_workers and self.instance.pk:
+                http_hosts = self.instance.hosts.filter(certificate_type='http_challenge').values_list('hostname', flat=True)
+                if http_hosts:
+                    self.add_error(None, _(
+                        'Applications served by cluster workers require DNS validation or self-signed certificates. '
+                        'Change the certificate of these hosts first: %(hosts)s'
+                    ) % {'hosts': ', '.join(http_hosts)})
+
         return cleaned_data
 
 
@@ -99,6 +138,12 @@ class ApplicationHostForm(forms.ModelForm):
             if hostname.lower() in webadmin_hostnames:
                 self.add_error('hostname', _('This hostname is already used by WireGuard WebAdmin.'))
 
+        application = self.instance.application if self.instance.pk else self.application
+        if certificate_type == 'http_challenge' and application and application.served_by_workers:
+            self.add_error('certificate_type', _(
+                'This application is served by cluster workers. Use DNS validation or a self-signed certificate.'
+            ))
+
         if hostname and is_ip_address(hostname) and certificate_type != 'self_signed':
             self.add_error('certificate_type', _('IP addresses can only use a self-signed certificate.'))
 
@@ -117,6 +162,7 @@ class ApplicationHostForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         cancel_url = kwargs.pop('cancel_url', '#')
         self.is_reserved = kwargs.pop('is_reserved', False)
+        self.application = kwargs.pop('application', None)
         super().__init__(*args, **kwargs)
         self.fields['dns_credential'].required = False
         if self.is_reserved:

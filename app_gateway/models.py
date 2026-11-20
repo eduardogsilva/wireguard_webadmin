@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from app_gateway.dns_providers import DNS_PROVIDER_CHOICES
+from cluster.models import ClusterSettings
 from gatekeeper.models import GatekeeperGroup, AuthMethod, _unique_slug
 
 RESERVED_APP_NAME = 'wireguard_webadmin'
@@ -44,6 +45,9 @@ class Application(models.Model):
     display_name = models.CharField(max_length=128, blank=True)
     upstream = models.CharField(max_length=255, help_text=_("Upstream address, e.g.: http://10.188.18.27:3000"))
     allow_invalid_cert = models.BooleanField(default=False, help_text=_("Allow invalid or self-signed TLS certificates from the upstream"))
+    serve_on_primary = models.BooleanField(default=True)
+    all_workers = models.BooleanField(default=False)
+    workers = models.ManyToManyField('cluster.Worker', blank=True, related_name='applications')
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -58,6 +62,18 @@ class Application(models.Model):
 
     def __str__(self):
         return self.display_name or self.name
+
+    # Without an active cluster every application is served by the primary server only
+    @property
+    def served_by_workers(self):
+        return ClusterSettings.cluster_enabled() and (self.all_workers or self.workers.exists())
+
+    def is_served_by(self, worker):
+        if not ClusterSettings.cluster_enabled():
+            return worker is None
+        if worker is None:
+            return self.serve_on_primary
+        return self.all_workers or self.workers.filter(pk=worker.pk).exists()
 
     class Meta:
         ordering = ['name']

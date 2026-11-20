@@ -13,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 from user_manager.models import UserAcl
 from .forms import DNSFilterListForm
 from .forms import DNSSettingsForm, StaticHostForm
-from .functions import generate_dnsmasq_config, compress_dnsmasq_config
+from .functions import generate_dnsmasq_config
 from .models import DNSFilterList, DNSSettings
 from .models import StaticHost
 
@@ -44,7 +44,6 @@ def export_dns_configuration():
     dnsmasq_config = generate_dnsmasq_config()
     with open(settings.DNS_CONFIG_FILE, 'w') as f:
         f.write(dnsmasq_config)
-    compress_dnsmasq_config()
     dns_settings, dns_settings_created = DNSSettings.objects.get_or_create(name='dns_settings')
     dns_settings.pending_changes = False
     dns_settings.save(update_fields=['pending_changes', 'updated'])

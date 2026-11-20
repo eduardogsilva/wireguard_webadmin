@@ -31,8 +31,10 @@ class WorkerForm(forms.ModelForm):
         
         if self.instance.pk:
             delete_html = f"<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{delete_label}</a>"
+            back_url = f"/cluster/worker/view/?uuid={self.instance.uuid}"
         else:
             delete_html = ''
+            back_url = '/cluster/'
             
         self.helper.layout = Layout(
             Row(
@@ -65,7 +67,7 @@ class WorkerForm(forms.ModelForm):
             Row(
                 Column(
                     Submit('submit', _('Save'), css_class='btn btn-success'),
-                    HTML(f' <a class="btn btn-secondary" href="/cluster/">{back_label}</a> '),
+                    HTML(f' <a class="btn btn-secondary" href="{back_url}">{back_label}</a> '),
                     HTML(delete_html),
                     css_class='col-md-12'),
                 css_class='form-row'
@@ -90,14 +92,13 @@ class WorkerForm(forms.ModelForm):
 class ClusterSettingsForm(forms.ModelForm):
     class Meta:
         model = ClusterSettings
-        fields = ['enabled', 'primary_enable_wireguard', 'cluster_mode', 'restart_mode', 'worker_display']
+        fields = ['enabled', 'primary_enable_wireguard', 'cluster_mode', 'worker_display']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['enabled'].label = _("Cluster Enabled")
         self.fields['primary_enable_wireguard'].label = _("Primary Enable WireGuard")
         self.fields['cluster_mode'].label = _("Cluster Mode")
-        self.fields['restart_mode'].label = _("Restart Mode")
         self.fields['worker_display'].label = _("Worker Display")
 
         back_label = _("Back")
@@ -112,11 +113,7 @@ class ClusterSettingsForm(forms.ModelForm):
             ),
             Row(
                 Column('cluster_mode', css_class='form-group col-md-6 mb-0'),
-                Column('restart_mode', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('worker_display', css_class='form-group col-md-12 mb-0'),
+                Column('worker_display', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(

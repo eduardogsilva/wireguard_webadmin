@@ -401,11 +401,21 @@ def func_concatenate_cluster_wireguard_status_cache() -> None:
 
                 existing_peer = combined_data[interface][peer_key]
 
+                # Each server keeps its own counters, so the peer traffic is the sum of all sources
+                existing_transfer = existing_peer.get("transfer") or {}
+                new_transfer = peer_info_copy.get("transfer") or {}
+                combined_transfer = {
+                    "tx": int(existing_transfer.get("tx", 0) or 0) + int(new_transfer.get("tx", 0) or 0),
+                    "rx": int(existing_transfer.get("rx", 0) or 0) + int(new_transfer.get("rx", 0) or 0),
+                }
+
                 new_hs = _latest_handshake_as_int(peer_info_copy)
                 old_hs = _latest_handshake_as_int(existing_peer)
 
+                # Handshake, endpoint and source come from the server where the peer connected last
                 if new_hs > old_hs:
                     combined_data[interface][peer_key] = peer_info_copy
+                combined_data[interface][peer_key]["transfer"] = combined_transfer
 
     processing_time_ms = int((time.monotonic() - start_time) * 1000)
     WireguardStatusCache.objects.create(data=combined_data, processing_time_ms=processing_time_ms, cache_type="cluster")

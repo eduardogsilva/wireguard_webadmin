@@ -9,15 +9,12 @@ class ClusterSettings(models.Model):
     enabled = models.BooleanField(default=False)
     primary_enable_wireguard = models.BooleanField(default=True)
     cluster_mode = models.CharField(default='mirror', max_length=16, choices=(('mirror', 'Mirror'), ))
-    restart_mode = models.CharField(default='auto', max_length=16, choices=(('auto', 'Automatic restart'),))
     worker_display = models.CharField(
         default='server_address', max_length=16, choices=(
             ('name', 'Name'), ('server_address', 'Server Address'),
             ('location', 'Location'), ('address_location', 'Address + Location')
         )
     )
-    config_version = models.PositiveIntegerField(default=0)
-    dns_version = models.PositiveIntegerField(default=0)
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -26,6 +23,10 @@ class ClusterSettings(models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def cluster_enabled(cls):
+        return cls.objects.filter(name='cluster_settings', enabled=True).exists()
+
 
 class Worker(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -33,9 +34,6 @@ class Worker(models.Model):
     token = models.UUIDField(default=uuid.uuid4, unique=True)
     ip_lock = models.BooleanField(default=False)
     ip_address = models.GenericIPAddressField(blank=True, null=True)
-
-    force_reload = models.BooleanField(default=False)
-    force_restart = models.BooleanField(default=False)
 
     country = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
@@ -46,7 +44,6 @@ class Worker(models.Model):
         ('ip_lock', _('IP lock is enabled, but the worker is attempting to access from a different IP address.')),
         ('worker_disabled', _('Worker is not enabled')),
         ('cluster_disabled', _('Cluster is not enabled')),
-        ('missing_version', _('Please report worker_config_version, worker_dns_version and worker_version in the API request.')),
         ('update_required', _('Worker update is required.'))
     ))
 
@@ -105,14 +102,15 @@ class Worker(models.Model):
 class WorkerStatus(models.Model):
     worker = models.OneToOneField(Worker, on_delete=models.CASCADE)
     last_seen = models.DateTimeField(auto_now=True)
-    last_reload = models.DateTimeField(blank=True, null=True)
-    last_restart = models.DateTimeField(blank=True, null=True)
-    dns_version = models.PositiveIntegerField(default=0)
-    config_version = models.PositiveIntegerField(default=0)
     worker_version = models.PositiveIntegerField(default=0)
-    active_peers = models.PositiveIntegerField(default=0)
     wireguard_status = models.JSONField(blank=True, null=True)
     wireguard_status_updated = models.DateTimeField(blank=True, null=True)
+    # {section: {"hash": ..., "status": "ok"|"error", "message": ..., "updated": ...}}
+    section_status = models.JSONField(default=dict, blank=True)
+    services_status = models.JSONField(default=dict, blank=True)
+    # {hostname: {"status": ..., "issuer": ..., "not_after": ..., "generation": ...}}
+    certificate_status = models.JSONField(default=dict, blank=True)
+    certificate_status_updated = models.DateTimeField(blank=True, null=True)
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

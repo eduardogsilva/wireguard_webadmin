@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     inetutils-traceroute \
     procps \
     curl \
+    openssl \
     nano \
     && rm -rf /var/lib/apt/lists/*
 

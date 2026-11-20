@@ -1,4 +1,4 @@
-import os
+from datetime import timedelta
 
 from django.conf import settings
 from django.contrib import messages
@@ -7,13 +7,18 @@ from django.db.models import F, ProtectedError
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 from django.utils.formats import date_format
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import localtime
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
-from app_gateway.caddy_config_export import CADDY_EXPORT_DIR, caddy_export_pending, export_caddy_config
+from app_gateway.caddy_config_export import (
+    ACME_CERTIFICATE_TYPES, CADDY_EXPORT_DIR, apply_caddy_config, auto_apply_caddy_config, caddy_export_pending,
+    load_exported_files, load_worker_export
+)
 from app_gateway.certificate_status import inspect_certificate
 from app_gateway.forms import (
     ApplicationForm, ApplicationHostForm, AccessPolicyForm,
@@ -24,6 +29,7 @@ from app_gateway.models import (
     RESERVED_APP_NAME
 )
 from app_gateway.setup_defaults import create_default_entries
+from cluster.models import ClusterSettings, Worker
 from user_manager.models import UserAcl
 
 
@@ -79,6 +85,36 @@ def view_application_details(request):
     return render(request, 'app_gateway/application_details.html', context)
 
 
+def worker_runs_gateway(worker):
+    # Workers running the App Gateway report the Caddy service; VPN-only workers do not serve applications
+    worker_status = getattr(worker, 'workerstatus', None)
+    return bool(worker_status and 'caddy' in (worker_status.services_status or {}))
+
+
+def describe_certificate_status(certificate, certificate_type):
+    """Badge information for a certificate inspected on the primary server or reported by a cluster worker."""
+    expiration = ''
+    if certificate.get('not_after'):
+        not_after = certificate['not_after']
+        if isinstance(not_after, str):
+            not_after = parse_datetime(not_after)
+        if not_after:
+            expiration = _('expires %(date)s') % {'date': date_format(localtime(not_after), 'SHORT_DATETIME_FORMAT')}
+
+    if certificate.get('status') == 'trusted':
+        return 'success', _('Trusted'), f"{certificate.get('issuer', '')}, {expiration}"
+    if certificate.get('status') == 'untrusted' and certificate_type == 'self_signed':
+        return 'secondary', _('Self-signed'), expiration
+    if certificate.get('status') == 'untrusted':
+        detail = _('The trusted certificate could not be issued yet, %(expiration)s') % {'expiration': expiration}
+        return 'warning', _('Using fallback'), detail
+    if certificate.get('status') == 'unknown':
+        return 'light', _('Unknown'), _('No recent report from this server.')
+    if certificate.get('status') == 'pending_export':
+        return 'info', _('Pending export'), _('Export the configuration to publish this host on this server.')
+    return 'danger', _('Unavailable'), _('No certificate is being served for this hostname.')
+
+
 @login_required
 def view_application_certificate_status(request):
     if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=20).exists():
@@ -88,29 +124,53 @@ def view_application_certificate_status(request):
     if not settings.CADDY_ENABLED:
         return JsonResponse({'caddy_enabled': False, 'hosts': {}})
 
+    workers = []
+    if application.name != RESERVED_APP_NAME and ClusterSettings.objects.filter(name='cluster_settings', enabled=True).exists():
+        workers = [
+            worker for worker in Worker.objects.filter(enabled=True).select_related('workerstatus').order_by('name')
+            if application.is_served_by(worker) and worker_runs_gateway(worker)
+        ]
+    report_limit = timezone.now() - timedelta(minutes=10)
+
+    # Servers only publish what was exported, so hosts missing from their exported files are pending
+    primary_export = load_exported_files(CADDY_EXPORT_DIR) or {}
+    primary_exported_hosts = primary_export.get('tls.json', {}).get('hosts', {})
+    worker_exported_hosts = {}
+    for worker in workers:
+        worker_export = load_worker_export(worker) or {}
+        worker_exported_hosts[worker.pk] = worker_export.get('tls.json', {}).get('hosts', {})
+
     hosts_status = {}
     for application_host in application.hosts.all():
-        certificate = inspect_certificate(application_host.hostname)
-        expiration = ''
-        if certificate['not_after']:
-            expiration = _('expires %(date)s') % {
-                'date': date_format(localtime(certificate['not_after']), 'SHORT_DATETIME_FORMAT')
-            }
+        hostname = application_host.hostname.lower()
+        servers = []
+        # The primary server also manages ACME certificates of applications only served by workers
+        primary_handles_host = application.is_served_by(None) or (
+            application_host.certificate_type in ACME_CERTIFICATE_TYPES and application.served_by_workers
+        )
+        if primary_handles_host:
+            if hostname in primary_exported_hosts:
+                certificate = inspect_certificate(application_host.hostname)
+            else:
+                certificate = {'status': 'pending_export'}
+            servers.append((_('Primary Server'), certificate))
 
-        if certificate['status'] == 'trusted':
-            css_class, label = 'success', _('Trusted')
-            detail = f"{certificate['issuer']}, {expiration}"
-        elif certificate['status'] == 'untrusted' and application_host.certificate_type == 'self_signed':
-            css_class, label = 'secondary', _('Self-signed')
-            detail = expiration
-        elif certificate['status'] == 'untrusted':
-            css_class, label = 'warning', _('Using fallback')
-            detail = _('The trusted certificate could not be issued yet, %(expiration)s') % {'expiration': expiration}
-        else:
-            css_class, label = 'danger', _('Unavailable')
-            detail = _('No certificate is being served for this hostname.')
+        for worker in workers:
+            worker_status = getattr(worker, 'workerstatus', None)
+            if hostname not in worker_exported_hosts[worker.pk]:
+                certificate = {'status': 'pending_export'}
+            elif worker_status and worker_status.certificate_status_updated and worker_status.certificate_status_updated > report_limit:
+                certificate = worker_status.certificate_status.get(hostname, {'status': 'unavailable'})
+            else:
+                certificate = {'status': 'unknown'}
+            servers.append((worker.display_name, certificate))
 
-        hosts_status[str(application_host.uuid)] = {'css_class': css_class, 'label': label, 'detail': detail}
+        hosts_status[str(application_host.uuid)] = []
+        for server_name, certificate in servers:
+            css_class, label, detail = describe_certificate_status(certificate, application_host.certificate_type)
+            hosts_status[str(application_host.uuid)].append({
+                'server': server_name if workers else '', 'css_class': css_class, 'label': label, 'detail': detail,
+            })
 
     return JsonResponse({'caddy_enabled': True, 'hosts': hosts_status})
 
@@ -132,13 +192,17 @@ def view_manage_application(request):
         application = None
         title = _('Create Application')
 
-    cancel_url = reverse('app_gateway_list') + '?tab=applications'
+    if application:
+        cancel_url = reverse('view_application') + f'?uuid={application.uuid}'
+    else:
+        cancel_url = reverse('app_gateway_list') + '?tab=applications'
 
     form = ApplicationForm(request.POST or None, instance=application, cancel_url=cancel_url)
     if form.is_valid():
-        form.save()
+        application = form.save()
         messages.success(request, _('Application saved successfully.'))
-        return redirect(cancel_url)
+        auto_apply_caddy_config(request)
+        return redirect(reverse('view_application') + f'?uuid={application.uuid}')
 
     form_description = {
         'size': 'col-lg-6',
@@ -178,6 +242,7 @@ def view_delete_application(request):
     if request.method == 'POST':
         application.delete()
         messages.success(request, _('Application deleted successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -214,13 +279,15 @@ def view_manage_application_host(request):
         return redirect(cancel_url)
 
     form = ApplicationHostForm(
-        request.POST or None, instance=application_host, cancel_url=cancel_url, is_reserved=is_reserved
+        request.POST or None, instance=application_host, cancel_url=cancel_url, is_reserved=is_reserved,
+        application=application,
     )
     if form.is_valid():
         host = form.save(commit=False)
         host.application = application
         host.save()
         messages.success(request, _('Application Host saved successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     form_description_content = _('''
@@ -233,6 +300,7 @@ def view_manage_application_host(request):
     </ul>
     <p>When the fallback option is enabled and a trusted certificate cannot be issued, a self-signed certificate is used until the next successful attempt. Without the fallback, the connection fails until the certificate is issued.</p>
     <p>Use <strong>Retry certificate</strong> in the host list to request a new attempt right away, for example after fixing the DNS or firewall.</p>
+    <p><strong>Important:</strong> the certificate is requested as soon as the configuration is applied. With HTTP validation, the hostname must already point to this server: failed attempts count towards the Let's Encrypt limit (5 per hour per hostname). If the DNS is not ready yet, use DNS validation.</p>
     ''')
     if is_reserved:
         form_description_content += _('''
@@ -268,6 +336,7 @@ def view_delete_application_host(request):
     if request.method == 'POST':
         application_host.delete()
         messages.success(request, _('Application Host deleted successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -312,6 +381,7 @@ def view_manage_access_policy(request):
     if form.is_valid():
         form.save()
         messages.success(request, _('Access Policy saved successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     if policy_type == 'public':
@@ -365,6 +435,7 @@ def view_delete_access_policy(request):
         try:
             access_policy.delete()
             messages.success(request, _('Access Policy deleted successfully.'))
+            auto_apply_caddy_config(request)
         except ProtectedError:
             messages.error(request, _('Cannot delete this Access Policy because it is currently in use by an Application Route or Application Default Policy.'))
         return redirect(cancel_url)
@@ -403,6 +474,7 @@ def view_manage_application_policy(request):
         policy_config.application = application
         policy_config.save()
         messages.success(request, _('Application Default Policy saved successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -426,6 +498,7 @@ def view_delete_application_policy(request):
     if request.method == 'POST':
         application_policy.delete()
         messages.success(request, _('Application Default Policy deleted successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -464,6 +537,7 @@ def view_manage_application_route(request):
         route.application = application
         route.save()
         messages.success(request, _('Application Route saved successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     form_description = {
@@ -502,6 +576,7 @@ def view_delete_application_route(request):
     if request.method == 'POST':
         application_route.delete()
         messages.success(request, _('Application Route deleted successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -534,9 +609,7 @@ def view_retry_application_host_certificate(request):
         return redirect(redirect_url)
 
     ApplicationHost.objects.filter(pk=application_host.pk).update(certificate_generation=F('certificate_generation') + 1)
-    export_caddy_config(CADDY_EXPORT_DIR)
-    if settings.DEBUG:
-        export_caddy_config(os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files'))
+    apply_caddy_config()
 
     messages.success(request, _(
         'A new certificate will be requested for %(hostname)s. The current configuration was exported.'
@@ -564,6 +637,7 @@ def view_manage_dns_credential(request):
     if form.is_valid():
         form.save()
         messages.success(request, _('DNS Credential saved successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -587,6 +661,7 @@ def view_delete_dns_credential(request):
         try:
             dns_credential.delete()
             messages.success(request, _('DNS Credential deleted successfully.'))
+            auto_apply_caddy_config(request)
         except ProtectedError:
             messages.error(request, _('Cannot delete this DNS Credential because it is currently in use by an Application Host.'))
         return redirect(cancel_url)
@@ -618,10 +693,6 @@ def view_export_caddy_config(request):
         ))
         return redirect(redirect_url)
 
-    export_caddy_config(CADDY_EXPORT_DIR)
-
-    if settings.DEBUG:
-        export_caddy_config(os.path.join(settings.BASE_DIR, 'containers', 'caddy', 'config_files'))
-
+    apply_caddy_config()
     messages.success(request, _('Configuration exported successfully.'))
     return redirect(redirect_url)

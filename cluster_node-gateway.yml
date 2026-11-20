@@ -1,0 +1,48 @@
+# App Gateway for cluster nodes. Use together with cluster_node.yml:
+#   docker compose -f cluster_node.yml -f cluster_node-gateway.yml up -d
+services:
+  cluster-node:
+    volumes:
+      - cluster_node_caddy_json:/caddy_json_export/
+      - cluster_node_caddy_certificates:/caddy_certificates/
+    ports:
+      # Caddy shares the network of cluster-node, so its ports are published here
+      - "80:80"
+      - "443:443"
+
+  cluster-node-caddy:
+    container_name: cluster-node-caddy
+    restart: unless-stopped
+    image: eduardosilva/wireguard_webadmin_caddy:latest
+    network_mode: "service:cluster-node"
+    environment:
+      - TZ=${TIMEZONE}
+      - CLUSTER_NODE=true
+      - AUTH_GATEWAY_INTERNAL_URL=http://cluster-node-auth-gateway:9091
+    volumes:
+      - cluster_node_caddy_json:/caddy_json_export/
+      - cluster_node_caddy_certificates:/caddy_certificates/:ro
+      - cluster_node_caddy_data:/data
+      - cluster_node_caddy_config:/config
+    depends_on:
+      - cluster-node
+      - cluster-node-auth-gateway
+
+  cluster-node-auth-gateway:
+    container_name: cluster-node-auth-gateway
+    restart: unless-stopped
+    image: eduardosilva/wireguard_webadmin_auth_gateway:latest
+    environment:
+      - TZ=${TIMEZONE}
+      - AUTH_GATEWAY_CONFIG_DIR=/caddy_json_export
+      - AUTH_GATEWAY_DATABASE_PATH=/data/auth-gateway.sqlite3
+    volumes:
+      - cluster_node_caddy_json:/caddy_json_export/
+      - cluster_node_auth_gateway_data:/data
+
+volumes:
+  cluster_node_caddy_json:
+  cluster_node_caddy_certificates:
+  cluster_node_caddy_data:
+  cluster_node_caddy_config:
+  cluster_node_auth_gateway_data:

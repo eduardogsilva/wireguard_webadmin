@@ -15,10 +15,9 @@ from django.shortcuts import Http404, get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from cluster.models import ClusterSettings, Worker
+from cluster.models import Worker
 from firewall.models import RedirectRule, FirewallSettings
-from firewall.tools import export_user_firewall, generate_firewall_footer, generate_firewall_header, \
-    generate_port_forward_firewall, generate_redirect_dns_rules, generate_route_policy_rules
+from firewall.tools import generate_firewall_script
 from user_manager.models import UserAcl
 from vpn_invite.models import PeerInvite
 from wgwadmlibrary.tools import user_has_access_to_peer
@@ -68,12 +67,7 @@ def generate_peer_config(peer_uuid, server_address=None):
 
 
 def export_firewall_configuration():
-    firewall_content = generate_firewall_header()
-    firewall_content += generate_redirect_dns_rules()
-    firewall_content += generate_port_forward_firewall()
-    firewall_content += generate_route_policy_rules()
-    firewall_content += export_user_firewall()
-    firewall_content += generate_firewall_footer()
+    firewall_content = generate_firewall_script()
     firewall_path = "/etc/wireguard/wg-firewall.sh"
     with open(firewall_path, "w") as firewall_file:
         firewall_file.write(firewall_content)
@@ -96,12 +90,6 @@ def set_instance_to_include_firewall():
 
 
 def export_wireguard_configuration(instance_only: WireGuardInstance = None):
-    cluster_settings = ClusterSettings.objects.filter(name='cluster_settings', enabled=True).first()
-    if cluster_settings:
-        if WireGuardInstance.objects.filter(pending_changes=True).exists():
-            cluster_settings.config_version += 1
-            cluster_settings.save()
-
     cleanup_orphaned = True
     instance_to_execute_firewall, force_export_all_instances = set_instance_to_include_firewall()
 

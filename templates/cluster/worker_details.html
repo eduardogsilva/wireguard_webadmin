@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-server"></i> {{ worker.name }}
+            {% if not worker.enabled %}
+                <span class="badge badge-secondary">{% trans 'Disabled' %}</span>
+            {% elif worker.error_status %}
+                <span class="badge badge-danger">{% trans 'Refused' %}</span>
+            {% elif worker.is_online %}
+                <span class="badge badge-success">{% trans 'Online' %}</span>
+            {% else %}
+                <span class="badge badge-danger">{% trans 'Offline' %}</span>
+            {% endif %}
+        </h3>
+        <div class="card-tools">
+            <a href="{% url 'cluster_main' %}" class="btn btn-sm btn-secondary"><i class="fas fa-arrow-left"></i> {% trans 'Back to List' %}</a>
+            <a href="{% url 'worker_manage' %}?uuid={{ worker.uuid }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i> {% trans 'Edit Worker' %}</a>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if worker.error_status %}
+        <div class="alert alert-danger"><i class="icon fas fa-ban"></i> {{ worker.get_error_status_display }}</div>
+        {% endif %}
+        {% if worker.enabled and not worker.error_status and not worker.is_online %}
+        <div class="alert alert-warning"><i class="icon fas fa-plug"></i> {% trans 'The worker is offline. The information below is the last state it reported.' %}</div>
+        {% endif %}
+        {% if worker.outdated %}
+        <div class="alert alert-warning"><i class="icon fas fa-cloud-download-alt"></i> {% trans 'The worker is outdated. Please update it to the latest version.' %}</div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5">{% trans 'Hostname' %}</dt>
+                    <dd class="col-sm-7">{{ worker.hostname|default:'-' }}</dd>
+                    <dt class="col-sm-5">{% trans 'IP Address' %}</dt>
+                    <dd class="col-sm-7">{{ worker.ip_address|default:'-' }} {% if worker.ip_lock %}<i class="fas fa-lock text-warning" title="{% trans 'IP Lock Enabled' %}"></i>{% endif %}</dd>
+                    <dt class="col-sm-5">{% trans 'Location' %}</dt>
+                    <dd class="col-sm-7">{{ worker.city|default:'' }}{% if worker.city and worker.country %}, {% endif %}{{ worker.country|default:'' }}{% if not worker.city and not worker.country %}-{% endif %}</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5">{% trans 'Last Seen' %}</dt>
+                    <dd class="col-sm-7">{% if worker.status %}{{ worker.status.last_seen|date:"SHORT_DATETIME_FORMAT" }}{% else %}{% trans 'Never' %}{% endif %}</dd>
+                    <dt class="col-sm-5">{% trans 'Version' %}</dt>
+                    <dd class="col-sm-7">{% if worker.status %}v{{ worker.status.worker_version }}{% else %}-{% endif %} <small class="text-muted">({% trans 'current' %}: v{{ current_worker_version }})</small></dd>
+                    <dt class="col-sm-5">{% trans 'App Gateway' %}</dt>
+                    <dd class="col-sm-7">{% if worker.runs_gateway %}<span class="badge badge-success">{% trans 'Enabled' %}</span>{% else %}<span class="badge badge-secondary">{% trans 'Not installed' %}</span>{% endif %}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card card-outline card-info">
+            <div class="card-header"><h3 class="card-title"><i class="fas fa-sync"></i> {% trans 'Synchronization' %}</h3></div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead><tr><th>{% trans 'Section' %}</th><th>{% trans 'Status' %}</th><th>{% trans 'Last update' %}</th></tr></thead>
+                    <tbody>
+                    {% for section in sections %}
+                        <tr>
+                            <td><code>{{ section.name }}</code></td>
+                            <td>
+                                {% if section.state == 'synced' %}<span class="badge badge-success">{% trans 'Synchronized' %}</span>
+                                {% elif section.state == 'error' %}<span class="badge badge-danger">{% trans 'Error' %}</span>
+                                {% else %}<span class="badge badge-secondary">{% trans 'Pending' %}</span>{% endif %}
+                                {% if section.message %}<br><small class="text-muted text-break">{{ section.message|truncatechars:300 }}</small>{% endif %}
+                            </td>
+                            <td class="text-nowrap"><small>{{ section.updated|date:"SHORT_DATETIME_FORMAT"|default:'-' }}</small></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card card-outline card-info">
+            <div class="card-header"><h3 class="card-title"><i class="fas fa-heartbeat"></i> {% trans 'Services' %}</h3></div>
+            <div class="card-body">
+                {% for service, state in worker.services %}
+                    <span class="badge {% if state == 'running' %}badge-success{% else %}badge-danger{% endif %} mr-1">{{ service }}: {{ state }}</span>
+                {% empty %}
+                    <span class="text-muted">{% trans 'No report received yet.' %}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% if certificates %}
+        <div class="card card-outline card-info">
+            <div class="card-header"><h3 class="card-title"><i class="fas fa-certificate"></i> {% trans 'Certificates served' %}</h3></div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <tbody>
+                    {% for certificate in certificates %}
+                        <tr>
+                            <td>{{ certificate.hostname }}</td>
+                            <td>
+                                {% if certificate.status == 'trusted' %}<span class="badge badge-success">{% trans 'Trusted' %}</span>
+                                {% elif certificate.status == 'untrusted' %}<span class="badge badge-warning">{% trans 'Self-signed' %}</span>
+                                {% else %}<span class="badge badge-danger">{% trans 'Unavailable' %}</span>{% endif %}
+                                <small class="text-muted">{{ certificate.issuer }}{% if certificate.not_after %} · {{ certificate.not_after|date:"SHORT_DATE_FORMAT" }}{% endif %}</small>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card card-outline card-secondary">
+    <div class="card-header"><h3 class="card-title"><i class="fas fa-download"></i> {% trans 'Installation' %}</h3></div>
+    <div class="card-body">
+        <p>{% blocktrans trimmed %}
+            Copy <code>cluster_node.yml</code> (and <code>cluster_node-gateway.yml</code> to publish App Gateway applications)
+            from the <a href="https://github.com/eduardogsilva/wireguard_webadmin" target="_blank" rel="noopener noreferrer">project repository</a>
+            to the worker, and create a <code>.env</code> file next to them:
+        {% endblocktrans %}</p>
+        <div class="position-relative">
+            <button type="button" class="btn btn-xs btn-outline-secondary position-absolute copy-button" style="top: 6px; right: 6px;" data-target="#worker-env" title="{% trans 'Copy' %}"><i class="far fa-copy"></i></button>
+<pre id="worker-env" class="p-2 pr-5">MASTER_SERVER_ADDRESS={{ primary_address }}
+TOKEN={{ worker.token }}
+TIMEZONE={{ time_zone }}</pre>
+        </div>
+
+        <p class="mb-1"><strong>{% trans 'VPN only' %}</strong></p>
+        <div class="position-relative">
+            <button type="button" class="btn btn-xs btn-outline-secondary position-absolute copy-button" style="top: 6px; right: 6px;" data-target="#worker-vpn" title="{% trans 'Copy' %}"><i class="far fa-copy"></i></button>
+<pre id="worker-vpn" class="p-2 pr-5">docker compose -f cluster_node.yml up -d</pre>
+        </div>
+
+        <p class="mb-1"><strong>{% trans 'VPN and App Gateway' %}</strong></p>
+        <div class="position-relative">
+            <button type="button" class="btn btn-xs btn-outline-secondary position-absolute copy-button" style="top: 6px; right: 6px;" data-target="#worker-gateway" title="{% trans 'Copy' %}"><i class="far fa-copy"></i></button>
+<pre id="worker-gateway" class="p-2 pr-5" style="white-space: pre-wrap;">docker compose -f cluster_node.yml -f cluster_node-gateway.yml up -d</pre>
+        </div>
+
+        <ul class="text-muted mb-0">
+            <li>{% trans 'To update, run docker compose pull followed by the same up -d command, always with every compose file of the worker.' %}</li>
+            <li>{% trans 'Applications published by workers must use DNS validation or self-signed certificates: certificates are issued by this primary server and distributed to the workers.' %}</li>
+            <li>{% trans 'Publish the WireGuard ports (51820-51839/udp) and, with the App Gateway, ports 80 and 443 of the worker.' %}</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_page_scripts %}
+<script>
+    $(document).ready(function () {
+        $('.copy-button').click(function () {
+            var button = $(this);
+            navigator.clipboard.writeText($(button.data('target')).text()).then(function () {
+                button.find('i').removeClass('fa-copy far').addClass('fas fa-check');
+                setTimeout(function () { button.find('i').removeClass('fas fa-check').addClass('far fa-copy'); }, 1500);
+            });
+        });
+    });
+</script>
+{% endblock %}
