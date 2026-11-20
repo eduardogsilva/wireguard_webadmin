@@ -1,12 +1,12 @@
-from django.shortcuts import render, Http404, redirect
-from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib import messages
+from django.contrib.auth.models import User
+from django.http import Http404
+from django.shortcuts import render, redirect
 
 from api.views import get_api_key
-from .forms import CreateUserForm, LoginForm
-from django.http import HttpResponse
 from user_manager.models import UserAcl
+from .forms import CreateUserForm, LoginForm
 
 
 def view_create_first_user(request):
