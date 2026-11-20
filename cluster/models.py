@@ -3,12 +3,16 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+DISTRIBUTED_MODES = ('distributed',)
+
 
 class ClusterSettings(models.Model):
     name = models.CharField(default='cluster_settings', max_length=16, unique=True)
     enabled = models.BooleanField(default=False)
     primary_enable_wireguard = models.BooleanField(default=True)
-    cluster_mode = models.CharField(default='mirror', max_length=16, choices=(('mirror', 'Mirror'), ))
+    cluster_mode = models.CharField(
+        default='mirror', max_length=16, choices=(('mirror', 'Mirror'), ('distributed', 'Distributed'))
+    )
     worker_display = models.CharField(
         default='server_address', max_length=16, choices=(
             ('name', 'Name'), ('server_address', 'Server Address'),
@@ -26,6 +30,11 @@ class ClusterSettings(models.Model):
     @classmethod
     def cluster_enabled(cls):
         return cls.objects.filter(name='cluster_settings', enabled=True).exists()
+
+    @classmethod
+    def is_distributed(cls):
+        """Each WireGuard instance runs on a single server. Only applies while the cluster is enabled."""
+        return cls.objects.filter(name='cluster_settings', enabled=True, cluster_mode__in=DISTRIBUTED_MODES).exists()
 
 
 class Worker(models.Model):

@@ -11,12 +11,13 @@ from django.utils.dateparse import parse_datetime
 from app_gateway.caddy_config_export import (
     add_certificate_files, certificate_file_name, load_worker_export, read_exported_certificate
 )
-from cluster.models import WorkerStatus
+from cluster.models import ClusterSettings, WorkerStatus
 from dns.functions import generate_dnsmasq_config
 from dns.models import DNSFilterList
 from firewall.tools import generate_firewall_script
+from wireguard.models import WireGuardInstance
+from wireguard_tools.functions import CLUSTER_WIREGUARD_CONFIG_DIR, WIREGUARD_CONFIG_DIR
 
-WIREGUARD_CONFIG_DIR = '/etc/wireguard'
 DNSMASQ_CONFIG_DIR = '/etc/dnsmasq'
 DNSMASQ_MAIN_CONFIG = 'wireguard_webadmin_dns.conf'
 
@@ -67,7 +68,17 @@ class Section:
 
 def build_wireguard_section(worker):
     section = Section()
-    for config_path in sorted(glob.glob(os.path.join(WIREGUARD_CONFIG_DIR, 'wg[0-9]*.conf'))):
+    if ClusterSettings.is_distributed():
+        # Only the instances that run on this worker
+        config_paths = [
+            os.path.join(CLUSTER_WIREGUARD_CONFIG_DIR, f'wg{instance_id}.conf')
+            for instance_id in WireGuardInstance.objects.filter(worker=worker).values_list('instance_id', flat=True)
+        ]
+    else:
+        config_paths = glob.glob(os.path.join(WIREGUARD_CONFIG_DIR, 'wg[0-9]*.conf'))
+    for config_path in sorted(config_paths):
+        if not os.path.isfile(config_path):
+            continue
         content, content_sha256 = _read_file(config_path)
         section.add_file(os.path.basename(config_path), content, content_sha256)
     return section
@@ -75,7 +86,7 @@ def build_wireguard_section(worker):
 
 def build_firewall_section(worker):
     section = Section()
-    section.add_file('wg-firewall.sh', generate_firewall_script(cluster_node=True))
+    section.add_file('wg-firewall.sh', generate_firewall_script(cluster_node=True, worker=worker))
     return section
 
 

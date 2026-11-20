@@ -4,6 +4,7 @@ from typing import Optional
 
 from django.db import models
 
+from cluster.models import ClusterSettings
 from wireguard_tools.networks import normalize_cidr_list, normalize_cidr_pairs, safe_network_cidr
 
 NETMASK_CHOICES = (
@@ -68,6 +69,10 @@ class WireGuardInstance(models.Model):
     pending_changes = models.BooleanField(default=True)
     legacy_firewall = models.BooleanField(default=False)
     enforce_route_policy = models.BooleanField(default=False)
+    # Server that runs the instance in the distributed cluster mode. Empty means the primary server.
+    worker = models.ForeignKey(
+        'cluster.Worker', on_delete=models.PROTECT, blank=True, null=True, related_name='wireguard_instances'
+    )
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -78,6 +83,13 @@ class WireGuardInstance(models.Model):
             return self.name    
         else:
             return 'wg' + str(self.instance_id)
+
+    @property
+    def hosting_worker(self):
+        """Worker that runs this instance, or None when it runs on the primary server."""
+        if self.worker_id and ClusterSettings.is_distributed():
+            return self.worker
+        return None
 
     @property
     def network_cidr(self):

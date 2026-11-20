@@ -3,6 +3,7 @@ import os
 import tempfile
 from unittest.mock import patch
 
+from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
 from django.utils import timezone
 
@@ -12,9 +13,16 @@ from app_gateway import caddy_config_export
 from app_gateway.caddy_config_export import certificate_file_name, export_caddy_config
 from app_gateway.models import Application, ApplicationHost, DnsChallengeCredential
 from cluster import sync
+from cluster.forms import ClusterSettingsForm
 from cluster.models import ClusterSettings, Worker, WorkerStatus
 from dns.models import DNSSettings
+from firewall.forms import FirewallRuleForm
+from firewall.models import FirewallRule, FirewallSettings, RedirectRule
 from firewall.tools import generate_firewall_script
+from user_manager.models import UserAcl
+from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
+from wireguard_tools.functions import get_config_servers
+from wireguard_tools.views import export_wireguard_configuration, generate_peer_config
 
 FAKE_CERTIFICATE = '-----BEGIN CERTIFICATE-----\nfake\n-----END CERTIFICATE-----\n'
 FAKE_PRIVATE_KEY = '-----BEGIN PRIVATE KEY-----\nfake\n-----END PRIVATE KEY-----\n'
@@ -271,3 +279,159 @@ class ClusterTrafficAggregationTests(TestCase):
         self.assertEqual(combined['PEER']['endpoints'], 'node:1')
         self.assertEqual(combined['PEER']['source_name'], 'worker_node-a')
         self.assertEqual(combined['NODE_ONLY']['transfer'], {'tx': 7, 'rx': 3})
+
+
+def create_instance(instance_id, worker=None):
+    return WireGuardInstance.objects.create(
+        instance_id=instance_id, private_key=f'private-{instance_id}', public_key=f'public-{instance_id}',
+        hostname='primary.example.test', listen_port=51820 + instance_id, address=f'10.188.{instance_id}.1',
+        worker=worker,
+    )
+
+
+@override_settings(WIREGUARD_STATUS_CACHE_ENABLED=True)
+class DistributedModeTests(ClusterTestMixin, TestCase):
+    """wg0 runs on the primary server, wg1 on node-a and node-b runs no instance."""
+
+    def setUp(self):
+        super().setUp()
+        self.cluster_wireguard_dir = os.path.join(self.wireguard_dir, 'cluster')
+        for target, value in (
+            ('cluster.sync.CLUSTER_WIREGUARD_CONFIG_DIR', self.cluster_wireguard_dir),
+            ('wireguard_tools.functions.WIREGUARD_CONFIG_DIR', self.wireguard_dir),
+            ('wireguard_tools.functions.CLUSTER_WIREGUARD_CONFIG_DIR', self.cluster_wireguard_dir),
+            ('wireguard_tools.views.WIREGUARD_CONFIG_DIR', self.wireguard_dir),
+            ('wireguard_tools.views.CLUSTER_WIREGUARD_CONFIG_DIR', self.cluster_wireguard_dir),
+        ):
+            patcher = patch(target, value)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+
+        self.worker_b = Worker.objects.create(name='node-b', hostname='node-b.example.test')
+        self.primary_instance = create_instance(0)
+        self.worker_instance = create_instance(1, worker=self.worker)
+        ClusterSettings.objects.filter(name='cluster_settings').update(cluster_mode='distributed')
+
+    def set_mode(self, enabled=True, cluster_mode='distributed'):
+        ClusterSettings.objects.filter(name='cluster_settings').update(enabled=enabled, cluster_mode=cluster_mode)
+
+    def create_peer(self, instance):
+        peer = Peer.objects.create(
+            name=f'peer-wg{instance.instance_id}', public_key=f'peer-public-{instance.instance_id}',
+            pre_shared_key='', private_key=f'peer-private-{instance.instance_id}', wireguard_instance=instance,
+        )
+        PeerAllowedIP.objects.create(
+            peer=peer, priority=0, allowed_ip=f'10.188.{instance.instance_id}.10', netmask=32, config_file='server'
+        )
+        return peer
+
+    def test_hosting_worker_only_in_distributed_mode(self):
+        self.assertTrue(ClusterSettings.is_distributed())
+        self.assertEqual(self.worker_instance.hosting_worker, self.worker)
+        self.assertIsNone(self.primary_instance.hosting_worker)
+
+        self.set_mode(cluster_mode='mirror')
+        self.assertIsNone(WireGuardInstance.objects.get(instance_id=1).hosting_worker)
+        self.set_mode(enabled=False)
+        self.assertFalse(ClusterSettings.is_distributed())
+        self.assertIsNone(WireGuardInstance.objects.get(instance_id=1).hosting_worker)
+
+    def test_export_places_configs_by_server(self):
+        FirewallSettings.objects.update_or_create(name='global', defaults={'instance_to_execute_firewall': self.worker_instance})
+        export_wireguard_configuration()
+        self.assertEqual(sorted(os.listdir(self.cluster_wireguard_dir)), ['wg1.conf'])
+        self.assertIn('wg0.conf', os.listdir(self.wireguard_dir))
+        self.assertNotIn('wg1.conf', os.listdir(self.wireguard_dir))
+        # The firewall script must run from an instance of the primary server
+        self.assertEqual(FirewallSettings.objects.get(name='global').instance_to_execute_firewall, self.primary_instance)
+        with open(os.path.join(self.wireguard_dir, 'wg0.conf'), encoding='utf-8') as config_file:
+            self.assertIn('PostUp = /etc/wireguard/wg-firewall.sh', config_file.read())
+
+        # Moving a single instance back to the primary server removes it from the cluster directory
+        WireGuardInstance.objects.filter(instance_id=1).update(worker=None)
+        export_wireguard_configuration(WireGuardInstance.objects.get(instance_id=1))
+        self.assertIn('wg1.conf', os.listdir(self.wireguard_dir))
+        self.assertEqual(os.listdir(self.cluster_wireguard_dir), [])
+
+    def test_wireguard_section_only_has_worker_instances(self):
+        export_wireguard_configuration()
+        self.assertEqual(sorted(sync.build_section('wireguard', self.worker).files), ['wg1.conf'])
+        self.assertEqual(sync.build_section('wireguard', self.worker_b).files, {})
+
+        self.set_mode(cluster_mode='mirror')
+        export_wireguard_configuration()
+        self.assertEqual(sorted(sync.build_section('wireguard', self.worker_b).files), ['wg0.conf', 'wg1.conf'])
+
+    def test_port_forwards_only_on_instance_server(self):
+        RedirectRule.objects.create(port=8081, wireguard_instance=self.worker_instance, ip_address='10.188.1.10')
+        RedirectRule.objects.create(port=8082, wireguard_instance=self.primary_instance, ip_address='10.188.0.10')
+        worker_script = generate_firewall_script(cluster_node=True, worker=self.worker)
+        other_worker_script = generate_firewall_script(cluster_node=True, worker=self.worker_b)
+        primary_script = generate_firewall_script()
+
+        self.assertIn('--dport 8081', worker_script)
+        self.assertNotIn('--dport 8082', worker_script)
+        self.assertNotIn('--dport 808', other_worker_script)
+        self.assertIn('--dport 8082', primary_script)
+        self.assertNotIn('--dport 8081', primary_script)
+
+        self.set_mode(cluster_mode='mirror')
+        self.assertIn('--dport 8082', generate_firewall_script(cluster_node=True, worker=self.worker_b))
+
+    def test_activation_blocked_by_instance_interface_rules(self):
+        self.set_mode(cluster_mode='mirror')
+        FirewallRule.objects.create(description='wg0 to internet', in_interface='wg0', out_interface='eth0')
+        cluster_settings = ClusterSettings.objects.get(name='cluster_settings')
+        data = {'enabled': True, 'primary_enable_wireguard': True, 'cluster_mode': 'distributed', 'worker_display': 'name'}
+
+        form = ClusterSettingsForm(data=data, instance=cluster_settings)
+        self.assertFalse(form.is_valid())
+        self.assertIn('wg0 to internet', str(form.non_field_errors()))
+
+        FirewallRule.objects.update(in_interface='wg+')
+        self.assertTrue(ClusterSettingsForm(data=data, instance=cluster_settings).is_valid())
+
+    def test_firewall_rule_form_rejects_instance_interface(self):
+        def rule_form(in_interface):
+            return FirewallRuleForm(data={
+                'firewall_chain': 'forward', 'in_interface': in_interface, 'out_interface': '', 'rule_action': 'accept',
+                'source_netmask': 32, 'destination_netmask': 32, 'protocol': '', 'sort_order': 10,
+            })
+
+        form = rule_form('wg0')
+        self.assertFalse(form.is_valid())
+        self.assertIn('distributed cluster mode', str(form.non_field_errors()))
+        self.assertTrue(rule_form('wg+').is_valid())
+
+        self.set_mode(cluster_mode='mirror')
+        self.assertTrue(rule_form('wg0').is_valid())
+
+    def test_peer_config_uses_instance_server(self):
+        worker_peer = self.create_peer(self.worker_instance)
+        primary_peer = self.create_peer(self.primary_instance)
+
+        self.assertIn('Endpoint = node-a.example.test:51821', generate_peer_config(worker_peer.uuid))
+        # A server picked for another worker is ignored: the instance only runs on node-a
+        self.assertIn(
+            'Endpoint = node-a.example.test:51821',
+            generate_peer_config(worker_peer.uuid, server_address='node-b.example.test:51821'),
+        )
+        self.assertIn('Endpoint = primary.example.test:51820', generate_peer_config(primary_peer.uuid))
+
+        self.assertEqual(get_config_servers(self.worker_instance), [{'name': 'node-a.example.test', 'uuid': str(self.worker.uuid)}])
+        self.assertEqual([server['uuid'] for server in get_config_servers(self.primary_instance)], [''])
+
+        self.set_mode(cluster_mode='mirror')
+        self.assertEqual(len(get_config_servers(self.worker_instance)), 3)
+
+    def test_worker_with_instances_cannot_be_deleted(self):
+        user = User.objects.create_user(username='cluster-admin', password='unused-test-password')
+        UserAcl.objects.create(user=user, user_level=50)
+        self.client.force_login(user)
+
+        response = self.client.get(f'/cluster/worker/manage/?uuid={self.worker.uuid}&action=delete&confirmation=delete')
+        self.assertRedirects(response, f'/cluster/worker/view/?uuid={self.worker.uuid}', fetch_redirect_response=False)
+        self.assertTrue(Worker.objects.filter(pk=self.worker.pk).exists())
+
+        self.client.get(f'/cluster/worker/manage/?uuid={self.worker_b.uuid}&action=delete&confirmation=delete')
+        self.assertFalse(Worker.objects.filter(pk=self.worker_b.pk).exists())

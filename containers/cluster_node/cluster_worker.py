@@ -1,4 +1,5 @@
 import glob
+import ipaddress
 import json
 import logging
 import os
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 MASTER_SERVER_ADDRESS = os.environ.get('MASTER_SERVER_ADDRESS', '')
 TOKEN = os.environ.get('TOKEN', '')
-WORKER_VERSION = 12
+WORKER_VERSION = 13
 REQUEST_TIMEOUT = 30
 MANIFEST_INTERVAL = 60
 DEFAULT_STATS_INTERVAL = 60
@@ -56,6 +57,48 @@ def run_command(command, check=True):
 def interface_is_up(interface):
     return run_command(['wg', 'show', interface], check=False).returncode == 0
 
+
+def sync_interface_routes(interface):
+    """
+    Bring the IPv4 routes of a running interface in line with its allowed IPs, as wg-quick does on start.
+    wg syncconf only updates the peers. Default routes (/0) are left to wg-quick.
+    """
+    allowed_networks = set()
+    for line in run_command(['wg', 'show', interface, 'allowed-ips']).stdout.splitlines():
+        for value in line.split()[1:]:
+            try:
+                network = ipaddress.IPv4Network(value, strict=False)
+            except ValueError:
+                continue
+            if network.prefixlen:
+                allowed_networks.add(network)
+    allowed_networks = sorted(allowed_networks, key=lambda network: network.prefixlen)
+
+    errors = []
+    for network in allowed_networks:
+        if run_command(['ip', '-4', 'route', 'show', 'dev', interface, 'match', str(network)], check=False).stdout.strip():
+            continue
+        # replace instead of add: the network may still be routed to another instance it was moved from
+        result = run_command(['ip', '-4', 'route', 'replace', str(network), 'dev', interface], check=False)
+        if result.returncode != 0:
+            errors.append(f'{network}: {result.stderr.strip()}')
+
+    for route in run_command(['ip', '-o', '-4', 'route', 'show', 'dev', interface], check=False).stdout.splitlines():
+        fields = route.split()
+        if not fields or 'kernel' in fields:
+            continue
+        try:
+            route_network = ipaddress.IPv4Network(fields[0], strict=False)
+        except ValueError:
+            continue
+        # Only routes that no allowed IP covers are removed: the interface drops their traffic anyway
+        if any(route_network.subnet_of(network) for network in allowed_networks):
+            continue
+        result = run_command(['ip', '-4', 'route', 'delete', str(route_network), 'dev', interface], check=False)
+        if result.returncode != 0:
+            errors.append(f'{route_network}: {result.stderr.strip()}')
+    if errors:
+        raise SectionError(f"{interface} routes: {'; '.join(errors)}")
 
 def interface_section(config):
     """Return the [Interface] part of a WireGuard config, used to decide between syncconf and restart."""
@@ -247,6 +290,9 @@ class ClusterNodeAgent:
                     logger.info('Synchronized peers of WireGuard interface %s', interface)
             except SectionError as error:
                 errors.append(str(error))
+                # Back to the content actually applied, so the next attempt sees the change again
+                if previous_content is not None:
+                    write_file(config_path, previous_content)
 
         self.wireguard_active = True
         if errors:
@@ -261,6 +307,7 @@ class ClusterNodeAgent:
             run_command(['wg', 'syncconf', interface, stripped_file.name])
         finally:
             os.remove(stripped_file.name)
+        sync_interface_routes(interface)
 
     def apply_dns(self, section):
         files = section['files']

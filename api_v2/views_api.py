@@ -13,7 +13,7 @@ from dns.models import DNSSettings, StaticHost
 from dns.views import export_dns_configuration
 from routing_templates.models import RoutingTemplate
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
-from wireguard_peer.functions import func_create_new_peer
+from wireguard_peer.functions import find_network_in_other_instance, func_create_new_peer
 from wireguard_tools.functions import func_reload_wireguard_interface
 from wireguard_tools.views import export_wireguard_configuration
 from .models import ApiKey
@@ -307,6 +307,15 @@ def api_v2_manage_peer(request):
     announced_pairs, announced_error = _parse_ipv4_cidrs(payload.get("announced_networks"))
     if announced_error:
         return JsonResponse({"status": "error", "error_message": announced_error}, status=400)
+    for allowed_ip, netmask in announced_pairs or []:
+        other_network = find_network_in_other_instance(wireguard_instance, allowed_ip, netmask)
+        if other_network:
+            return JsonResponse({
+                "status": "error",
+                "error_message": f"Network {allowed_ip}/{netmask} is already used by a peer of "
+                                 f"wg{other_network.peer.wireguard_instance.instance_id}. A network can be routed to "
+                                 f"only one WireGuard instance.",
+            }, status=400)
 
     client_route_pairs, client_route_error = _parse_ipv4_cidrs(payload.get("client_routes"))
     if client_route_error:

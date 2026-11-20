@@ -1,3 +1,4 @@
+import ipaddress
 import subprocess
 from typing import Any, Dict, Optional, Tuple
 
@@ -6,6 +7,27 @@ from django.utils.translation import gettext_lazy as _
 from routing_templates.models import RoutingTemplate
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 
+
+def find_network_in_other_instance(wireguard_instance, allowed_ip, netmask):
+    """
+    Server side network of a peer of another instance that is the same as the given one. Each instance routes its
+    peer networks to its own interface, so the same network on two instances cannot be routed: the second interface
+    fails to start.
+    """
+    try:
+        network = ipaddress.ip_network(f'{allowed_ip}/{netmask}', strict=False)
+    except ValueError:
+        return None
+    other_networks = PeerAllowedIP.objects.filter(config_file='server').exclude(
+        peer__wireguard_instance=wireguard_instance
+    ).select_related('peer__wireguard_instance')
+    for other_network in other_networks:
+        try:
+            if ipaddress.ip_network(f'{other_network.allowed_ip}/{other_network.netmask}', strict=False) == network:
+                return other_network
+        except ValueError:
+            continue
+    return None
 
 def generate_peer_default(wireguard_instance):
     private_key = subprocess.check_output('wg genkey', shell=True).decode('utf-8').strip()

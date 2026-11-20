@@ -3,6 +3,7 @@ from django.db.models import Q, Prefetch
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from cluster.models import ClusterSettings
 from firewall.models import FirewallRule, FirewallSettings, RedirectRule
 from wireguard.models import PeerAllowedIP, WireGuardInstance, Peer
 
@@ -281,12 +282,17 @@ def generate_firewall_footer():
     return footer
 
 
-def generate_port_forward_firewall(server_hostname=PRIMARY_HOSTNAME):
+def generate_port_forward_firewall(server_hostname=PRIMARY_HOSTNAME, worker=None):
     firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
     redirect_firewall = ''
     wan_interface = firewall_settings.wan_interface
+    distributed = ClusterSettings.is_distributed()
+    server_worker_id = worker.id if worker else None
 
-    for redirect_rule in RedirectRule.objects.all().order_by('port'):
+    for redirect_rule in RedirectRule.objects.select_related('wireguard_instance').order_by('port'):
+        # In the distributed cluster mode only the server that runs the instance forwards the port
+        if distributed and redirect_rule.wireguard_instance and redirect_rule.wireguard_instance.worker_id != server_worker_id:
+            continue
         description = f" - {redirect_rule.description} " if redirect_rule.description else ""
         rule_destination = redirect_rule.ip_address
         try:
@@ -319,16 +325,17 @@ def generate_port_forward_firewall(server_hostname=PRIMARY_HOSTNAME):
             
     return redirect_firewall
 
-def generate_firewall_script(cluster_node=False):
+def generate_firewall_script(cluster_node=False, worker=None):
     """
     Build wg-firewall.sh for the primary server or for a cluster node. On cluster nodes dnsmasq shares the
     network namespace of the node, so DNS is answered directly on the instance address without DNAT.
+    The worker selects the port forwards of the instances it runs in the distributed cluster mode.
     """
     firewall_content = generate_firewall_header(cluster_node=cluster_node)
     if not cluster_node:
         firewall_content += generate_redirect_dns_rules()
     firewall_content += generate_port_forward_firewall(
-        server_hostname=CLUSTER_NODE_HOSTNAME if cluster_node else PRIMARY_HOSTNAME
+        server_hostname=CLUSTER_NODE_HOSTNAME if cluster_node else PRIMARY_HOSTNAME, worker=worker
     )
     firewall_content += generate_route_policy_rules()
     firewall_content += export_user_firewall()

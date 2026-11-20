@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import ProtectedError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.dateparse import parse_datetime
@@ -9,6 +10,8 @@ from django.utils.translation import gettext_lazy as _
 from api.models import WireguardStatusCache
 from app_gateway.setup_defaults import get_webadmin_hostnames
 from user_manager.models import UserAcl
+from wireguard.models import WireGuardInstance
+from wireguard_tools.views import export_firewall_configuration, export_wireguard_configuration
 from .forms import WorkerForm, ClusterSettingsForm
 from .models import ClusterSettings, Worker, WorkerStatus
 from .sync import SECTION_NAMES, get_worker_sync_state, get_worker_warnings
@@ -39,6 +42,10 @@ def describe_worker(worker):
     worker.services = sorted((worker_status.services_status or {}).items()) if worker_status else []
     worker.runs_gateway = any(service == 'caddy' for service, state in worker.services)
     worker.outdated = bool(worker_status and worker_status.worker_version != settings.CLUSTER_WORKER_CURRENT_VERSION)
+    # WireGuard instances that run only on this worker (distributed cluster mode)
+    worker.hosted_instances = (
+        list(worker.wireguard_instances.order_by('instance_id')) if ClusterSettings.is_distributed() else []
+    )
     return worker
 
 
@@ -63,6 +70,12 @@ def cluster_main(request):
         'workers': workers,
         'cluster_settings': cluster_settings,
         'current_worker_version': settings.CLUSTER_WORKER_CURRENT_VERSION,
+        'distributed': ClusterSettings.is_distributed(),
+        'primary_instances': WireGuardInstance.objects.filter(worker__isnull=True).order_by('instance_id'),
+        # Instances that no server runs: their worker is disabled
+        'stopped_instances': [
+            instance for worker in workers if not worker.enabled for instance in worker.hosted_instances
+        ],
         'summary': {
             'enabled': len(enabled_workers),
             'online': sum(1 for worker in enabled_workers if worker.operational),
@@ -119,6 +132,7 @@ def worker_details(request):
         'worker': worker,
         'cluster_settings': cluster_settings,
         'current_worker_version': settings.CLUSTER_WORKER_CURRENT_VERSION,
+        'distributed': ClusterSettings.is_distributed(),
         'sections': sections,
         'certificates': certificates,
         'primary_address': primary_address,
@@ -140,8 +154,14 @@ def worker_manage(request):
         if request.GET.get('action') == 'delete':
             worker_name = worker.name
             if request.GET.get('confirmation') == 'delete':
-                worker.delete()
-                messages.success(request, _('Worker deleted|Worker deleted: ') + worker_name)
+                try:
+                    worker.delete()
+                    messages.success(request, _('Worker deleted|Worker deleted: ') + worker_name)
+                except ProtectedError:
+                    messages.warning(request, _(
+                        'Worker not deleted|Move the WireGuard instances of this worker to another server first: '
+                    ) + ', '.join(str(instance) for instance in worker.wireguard_instances.all()))
+                    return redirect(reverse('worker_details') + f'?uuid={worker.uuid}')
             else:
                 messages.warning(request, _('Worker not deleted|Invalid confirmation.'))
             return redirect(reverse('cluster_main'))
@@ -195,10 +215,17 @@ def cluster_settings(request):
 
     cluster_settings, cluster_settings_created = ClusterSettings.objects.get_or_create(name='cluster_settings')
 
+    was_distributed = ClusterSettings.is_distributed()
     form = ClusterSettingsForm(request.POST or None, instance=cluster_settings)
     if form.is_valid():
-        form.save()
+        cluster_settings = form.save()
         messages.success(request, _('Cluster settings updated successfully.'))
+        if ClusterSettings.is_distributed() != was_distributed:
+            # Where each instance runs may have changed: workers synchronize the new files right away and the
+            # primary server moves its interfaces when the configuration is applied
+            export_wireguard_configuration()
+            export_firewall_configuration()
+            WireGuardInstance.objects.update(pending_changes=True)
         return redirect(reverse('cluster_main'))
 
     form_description = {
@@ -212,6 +239,7 @@ def cluster_settings(request):
 
         <h5>Cluster Mode</h5>
         <p><strong>Mirror</strong>: every worker receives the same WireGuard instances, peers, firewall and DNS configuration. Peers can connect to any server.</p>
+        <p><strong>Distributed</strong>: each WireGuard instance runs only on the server selected in the instance settings (the primary server by default). Peers connect to that server. Firewall rules cannot be bound to a specific instance interface: use wg+ or IP addresses. After changing the mode, apply the WireGuard configuration so the primary server stops the instances that moved to workers.</p>
 
         <h5>Worker Display</h5>
         <p>How workers are named in server selections (peer configuration downloads and VPN invites).</p>

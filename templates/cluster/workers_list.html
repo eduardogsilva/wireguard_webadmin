@@ -9,6 +9,14 @@
     <a href="{% url 'cluster_settings' %}" class="alert-link">{% trans 'Cluster Settings' %}</a>
 </div>
 {% endif %}
+{% if stopped_instances %}
+<div class="alert alert-danger">
+    <i class="icon fas fa-exclamation-circle"></i>
+    {% trans 'These WireGuard instances are offline because their worker is disabled:' %}
+    {% for instance in stopped_instances %}<strong>wg{{ instance.instance_id }}</strong> ({{ instance.worker }}){% if not forloop.last %}, {% endif %}{% endfor %}.
+    {% trans 'Enable the worker or move the instances to another server.' %}
+</div>
+{% endif %}
 {% if not cache_enabled %}
 <div class="alert alert-danger">
     <i class="icon fas fa-exclamation-circle"></i>
@@ -51,6 +59,11 @@
             <div class="info-box-content">
                 <span class="info-box-text">{% trans 'Primary WireGuard' %}</span>
                 <span class="info-box-number">{% if cluster_settings.primary_enable_wireguard %}{% trans 'Enabled' %}{% else %}{% trans 'Disabled' %}{% endif %}</span>
+                {% if distributed %}
+                <span class="text-muted text-sm" title="{% trans 'WireGuard instances on the primary server' %}">
+                    {% for instance in primary_instances %}wg{{ instance.instance_id }}{% if not forloop.last %}, {% endif %}{% empty %}{% trans 'No WireGuard instances' %}{% endfor %}
+                </span>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -88,6 +101,15 @@
                                 {% if worker.ip_lock %}<i class="fas fa-lock text-warning" title="{% trans 'IP Lock Enabled' %}"></i>{% endif %}
                                 {% if worker.city or worker.country %} · {{ worker.city|default:'' }}{% if worker.city and worker.country %}, {% endif %}{{ worker.country|default:'' }}{% endif %}
                             </small>
+                            {% if distributed %}
+                            <br><small>
+                                {% for instance in worker.hosted_instances %}
+                                    <span class="badge badge-info" title="{% trans 'WireGuard instance' %}">wg{{ instance.instance_id }}{% if instance.name %} · {{ instance.name }}{% endif %}</span>
+                                {% empty %}
+                                    <span class="text-muted">{% trans 'No WireGuard instances' %}</span>
+                                {% endfor %}
+                            </small>
+                            {% endif %}
                         </td>
                         <td class="text-nowrap">
                             {% if not worker.enabled %}

@@ -6,7 +6,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from cluster.models import ClusterSettings, Worker
+from cluster.models import ClusterSettings
 from routing_templates.models import RoutingTemplate
 from scheduler.models import PeerScheduling
 from user_manager.models import UserAcl
@@ -15,7 +15,7 @@ from wgwadmlibrary.tools import check_sort_order_conflict, deduplicate_sort_orde
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from wireguard_peer.forms import PeerAllowedIPForm, PeerNameForm, PeerKeepaliveForm, PeerKeysForm, PeerSuspensionForm, \
     PeerScheduleProfileForm
-from wireguard_tools.functions import func_reload_wireguard_interface
+from wireguard_tools.functions import func_reload_wireguard_interface, get_config_servers
 from wireguard_tools.views import export_wireguard_configuration
 from .functions import func_create_new_peer
 
@@ -24,6 +24,12 @@ def _auto_apply(request, instance):
     if not settings.AUTO_APPLY:
         return False
     export_wireguard_configuration(instance)
+    hosting_worker = instance.hosting_worker
+    if hosting_worker:
+        messages.info(request, _('wg%(id)s runs on %(worker)s, which applies the change on its next synchronization.') % {
+            'id': instance.instance_id, 'worker': hosting_worker
+        })
+        return True
     success, message = func_reload_wireguard_interface(instance)
     if success:
         messages.info(request, _('wg%(id)s reloaded automatically.') % {'id': instance.instance_id})
@@ -88,13 +94,7 @@ def view_wireguard_peer_list(request):
         refresh_interval = settings.WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL
 
     cluster_settings = ClusterSettings.objects.filter(name='cluster_settings', enabled=True).first()
-    servers = []
-    if cluster_settings:
-        if cluster_settings.primary_enable_wireguard:
-            servers.append({'name': _('Primary Server'), 'uuid': ''})
-        
-        for worker in Worker.objects.filter(enabled=True):
-            servers.append({'name': worker.display_name, 'uuid': str(worker.uuid)})
+    servers = get_config_servers(current_instance)
 
     context = {
         'page_title': page_title, 'wireguard_instances': wireguard_instances,

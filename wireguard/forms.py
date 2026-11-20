@@ -8,6 +8,7 @@ from django.conf import settings
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
+from cluster.models import ClusterSettings, Worker
 from wgwadmlibrary.tools import is_valid_ip_or_hostname
 from .models import NETMASK_CHOICES, WireGuardInstance
 
@@ -34,7 +35,8 @@ class WireGuardInstanceForm(forms.ModelForm):
         model = WireGuardInstance
         fields = [
             'name', 'instance_id', 'private_key', 'public_key','hostname', 'listen_port', 'address', 
-            'netmask', 'peer_list_refresh_interval', 'dns_primary', 'dns_secondary', 'dns_search_domains', 'enforce_route_policy'
+            'netmask', 'peer_list_refresh_interval', 'dns_primary', 'dns_secondary', 'dns_search_domains', 'enforce_route_policy',
+            'worker'
             ]
         
     def __init__(self, *args, **kwargs):
@@ -49,6 +51,19 @@ class WireGuardInstanceForm(forms.ModelForm):
             self.fields['peer_list_refresh_interval'].initial = force_cache_refresh
             self.fields['peer_list_refresh_interval'].widget.attrs['readonly'] = True
         self.fields['private_key'].widget = forms.PasswordInput(attrs={'class': 'form-control'}, render_value=True)
+
+        # The server that runs the instance is only chosen in the distributed cluster mode
+        distributed = ClusterSettings.is_distributed()
+        if distributed:
+            self.fields['worker'].queryset = Worker.objects.order_by('name')
+            self.fields['worker'].label = _('Server')
+            self.fields['worker'].empty_label = _('Primary Server')
+            self.fields['worker'].help_text = _(
+                'The instance runs only on this server. Peer configurations of instances on a worker use the '
+                'hostname of the worker as endpoint.'
+            )
+        else:
+            del self.fields['worker']
 
         self.helper = FormHelper()
         self.helper.form_method = 'post'
@@ -100,6 +115,10 @@ class WireGuardInstanceForm(forms.ModelForm):
                         Column('enforce_route_policy', css_class='form-group col-md-12 mb-0'),
                         css_class='form-row'
                     ),
+                    Row(
+                        Column('worker', css_class='form-group col-md-12 mb-0'),
+                        css_class='form-row'
+                    ) if distributed else HTML(''),
                     css_class='col-lg-12'
                 ),
                 css_class='row'

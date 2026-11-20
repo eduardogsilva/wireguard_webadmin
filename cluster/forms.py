@@ -5,7 +5,8 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from .models import ClusterSettings, Worker
+from firewall.models import FirewallRule
+from .models import DISTRIBUTED_MODES, ClusterSettings, Worker
 
 
 class WorkerForm(forms.ModelForm):
@@ -131,5 +132,16 @@ class ClusterSettingsForm(forms.ModelForm):
 
         if cluster_enabled and not settings.WIREGUARD_STATUS_CACHE_ENABLED:
             raise ValidationError(_("Cluster mode requires WireGuard status cache to be enabled."))
+
+        if cluster_enabled and cleaned_data.get('cluster_mode') in DISTRIBUTED_MODES:
+            instance_rules = list(FirewallRule.with_instance_interface().order_by('firewall_chain', 'sort_order'))
+            if instance_rules:
+                rule_list = ', '.join(
+                    rule.description or f"{rule.get_firewall_chain_display()} #{rule.sort_order}" for rule in instance_rules
+                )
+                raise ValidationError(_(
+                    "The distributed cluster mode does not allow firewall rules bound to a specific WireGuard instance. "
+                    "Change them to wg+ or IP addresses first: %(rules)s"
+                ) % {'rules': rule_list})
 
         return cleaned_data

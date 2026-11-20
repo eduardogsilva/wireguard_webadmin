@@ -1,10 +1,14 @@
 import uuid
 
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from wireguard.models import NETMASK_CHOICES
 from wireguard.models import Peer, WireGuardInstance
+
+# Interface of a single WireGuard instance (wg0, wg1...). wg+ matches every instance.
+INSTANCE_INTERFACE_REGEX = r'^wg[0-9]+$'
 
 
 class RedirectRule(models.Model):
@@ -68,6 +72,13 @@ class FirewallRule(models.Model):
 
     def __str__(self):
         return str(self.uuid)
+
+    @classmethod
+    def with_instance_interface(cls):
+        """Rules bound to the interface of a specific instance, not allowed in the distributed cluster mode."""
+        return cls.objects.filter(
+            Q(in_interface__regex=INSTANCE_INTERFACE_REGEX) | Q(out_interface__regex=INSTANCE_INTERFACE_REGEX)
+        )
 
 
 class FirewallSettings(models.Model):

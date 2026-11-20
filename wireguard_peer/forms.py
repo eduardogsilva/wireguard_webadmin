@@ -13,6 +13,7 @@ from django.utils.translation import gettext_lazy as _
 
 from scheduler.models import PeerScheduling
 from wireguard.models import NETMASK_CHOICES, Peer, PeerAllowedIP
+from wireguard_peer.functions import find_network_in_other_instance
 
 
 class PeerModelForm(forms.ModelForm):
@@ -101,6 +102,13 @@ class PeerAllowedIPForm(forms.ModelForm):
             else:
                 if ipaddress.ip_address(allowed_ip) in wireguard_network:
                     raise forms.ValidationError(_("The IP address belongs to the Peer's WireGuard instance network range. Please check the IP address or change use priority 0 instead."))
+            other_network = find_network_in_other_instance(self.current_peer.wireguard_instance, allowed_ip, netmask)
+            if other_network:
+                raise forms.ValidationError(
+                    _("This network is already used by peer %(peer)s of wg%(instance)s. A network can be routed to only one WireGuard instance.") % {
+                        'peer': other_network.peer, 'instance': other_network.peer.wireguard_instance.instance_id
+                    }
+                )
         elif self.config_file == 'client':
             if self.current_peer.routing_template and not self.current_peer.routing_template.allow_peer_custom_routes:
                 raise forms.ValidationError(_("The peer's routing template does not allow custom routes."))

@@ -3,7 +3,8 @@ import re
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from firewall.models import FirewallRule, FirewallSettings, RedirectRule
+from cluster.models import ClusterSettings
+from firewall.models import INSTANCE_INTERFACE_REGEX, FirewallRule, FirewallSettings, RedirectRule
 from wgwadmlibrary.tools import list_network_interfaces
 from wireguard.models import Peer, WireGuardInstance
 
@@ -143,8 +144,17 @@ class FirewallRuleForm(forms.ModelForm):
         firewall_chain = cleaned_data.get('firewall_chain')
         rule_action = cleaned_data.get('rule_action')
         in_interface = cleaned_data.get('in_interface')
+        out_interface = cleaned_data.get('out_interface')
         destination_port = self.cleaned_data.get('destination_port')
         protocol = cleaned_data.get('protocol')
+
+        if ClusterSettings.is_distributed() and any(
+            interface and re.match(INSTANCE_INTERFACE_REGEX, interface) for interface in (in_interface, out_interface)
+        ):
+            raise forms.ValidationError(_(
+                "The distributed cluster mode does not allow rules bound to a specific WireGuard instance. "
+                "Use wg+ or IP addresses instead."
+            ))
 
         if firewall_chain == 'forward' and rule_action not in ['accept', 'drop', 'reject']:
             raise forms.ValidationError("Invalid rule action for firewall chain 'forward'. Allowed actions are 'accept', 'drop', and 'reject'.")

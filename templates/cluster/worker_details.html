@@ -48,6 +48,16 @@
                     <dd class="col-sm-7">{% if worker.status %}{{ worker.status.last_seen|date:"SHORT_DATETIME_FORMAT" }}{% else %}{% trans 'Never' %}{% endif %}</dd>
                     <dt class="col-sm-5">{% trans 'Version' %}</dt>
                     <dd class="col-sm-7">{% if worker.status %}v{{ worker.status.worker_version }}{% else %}-{% endif %} <small class="text-muted">({% trans 'current' %}: v{{ current_worker_version }})</small></dd>
+                    {% if distributed %}
+                    <dt class="col-sm-5">{% trans 'WireGuard instances' %}</dt>
+                    <dd class="col-sm-7">
+                        {% for instance in worker.hosted_instances %}
+                            <a href="/server/detail/?uuid={{ instance.uuid }}" class="badge badge-info">wg{{ instance.instance_id }}{% if instance.name %} · {{ instance.name }}{% endif %}</a>
+                        {% empty %}
+                            <span class="text-muted">-</span>
+                        {% endfor %}
+                    </dd>
+                    {% endif %}
                     <dt class="col-sm-5">{% trans 'App Gateway' %}</dt>
                     <dd class="col-sm-7">{% if worker.runs_gateway %}<span class="badge badge-success">{% trans 'Enabled' %}</span>{% else %}<span class="badge badge-secondary">{% trans 'Not installed' %}</span>{% endif %}</dd>
                 </dl>
