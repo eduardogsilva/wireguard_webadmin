@@ -1,5 +1,5 @@
-# App Gateway for cluster nodes. Use together with cluster_node.yml:
-#   docker compose -f cluster_node.yml -f cluster_node-gateway.yml up -d
+# App Gateway for cluster nodes. Use together with testing-cluster_node.yml:
+#   docker compose -f testing-cluster_node.yml -f testing-cluster_node-gateway.yml up -d
 services:
   cluster-node:
     volumes:

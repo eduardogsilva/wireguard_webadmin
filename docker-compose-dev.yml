@@ -27,7 +27,6 @@ services:
       - app_secrets:/app_secrets/
       - rrd_data:/rrd_data/
       - caddy_json_export:/caddy_json_export/
-      - caddy_cert_export:/caddy_cert_export/:ro
     ports:
       # Do not directly expose the Django port to the internet, use some kind of reverse proxy with SSL.
       - "8000:8000"
@@ -100,7 +99,6 @@ services:
     volumes:
       - static_volume:/static
       - caddy_json_export:/caddy_json_export
-      - caddy_cert_export:/caddy_cert_export
       - caddy_data:/data
       - caddy_config:/config
     network_mode: "service:wireguard-webadmin"
@@ -132,7 +130,6 @@ volumes:
   app_secrets:
   rrd_data:
   caddy_json_export:
-  caddy_cert_export:
   auth_gateway_data:
   caddy_data:
   caddy_config:
