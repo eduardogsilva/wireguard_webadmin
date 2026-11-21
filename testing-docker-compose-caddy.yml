@@ -3,7 +3,7 @@ services:
   wireguard-webadmin:
     container_name: wireguard-webadmin
     restart: unless-stopped
-    image: eduardosilva/wireguard_webadmin:latest
+    image: eduardosilva/wireguard_webadmin:testing
     environment:
       - SERVER_ADDRESS=${SERVER_ADDRESS}
       - DEBUG_MODE=${DEBUG_MODE}
@@ -47,7 +47,7 @@ services:
   wireguard-webadmin-cron:
     container_name: wireguard-webadmin-cron
     restart: unless-stopped
-    image: eduardosilva/wireguard_webadmin_cron:latest
+    image: eduardosilva/wireguard_webadmin_cron:testing
     environment:
       - TZ=${TIMEZONE}
       - WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL=${WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL}
@@ -59,7 +59,7 @@ services:
   wireguard-webadmin-rrdtool:
     container_name: wireguard-webadmin-rrdtool
     restart: unless-stopped
-    image: eduardosilva/wireguard_webadmin_rrdtool:latest
+    image: eduardosilva/wireguard_webadmin_rrdtool:testing
     volumes:
       - app_secrets:/app_secrets/
       - rrd_data:/rrd_data/
@@ -71,7 +71,7 @@ services:
   wireguard-webadmin-dns:
     container_name: wireguard-webadmin-dns
     restart: unless-stopped
-    image: eduardosilva/wireguard_webadmin_dns:latest
+    image: eduardosilva/wireguard_webadmin_dns:testing
     environment:
       - TZ=${TIMEZONE}
     volumes:
@@ -80,7 +80,7 @@ services:
   wireguard-webadmin-caddy:
     container_name: wireguard-webadmin-caddy
     restart: unless-stopped
-    image: eduardosilva/wireguard_webadmin_caddy:latest
+    image: eduardosilva/wireguard_webadmin_caddy:testing
     environment:
       - SERVER_ADDRESS=${SERVER_ADDRESS}
       - EXTRA_ALLOWED_HOSTS=${EXTRA_ALLOWED_HOSTS}
@@ -99,7 +99,7 @@ services:
   wireguard-webadmin-auth-gateway:
     container_name: wireguard-webadmin-auth-gateway
     restart: unless-stopped
-    image: eduardosilva/wireguard_webadmin_auth_gateway:latest
+    image: eduardosilva/wireguard_webadmin_auth_gateway:testing
     environment:
       - TZ=${TIMEZONE}
       - AUTH_GATEWAY_CONFIG_DIR=/caddy_json_export

@@ -2,7 +2,7 @@ services:
   cluster-node:
     container_name: cluster-node
     restart: unless-stopped
-    image: eduardosilva/wireguard-webadmin-cluster-node:latest
+    image: eduardosilva/wireguard-webadmin-cluster-node:testing
     environment:
       - MASTER_SERVER_ADDRESS=${MASTER_SERVER_ADDRESS}
       - COMPOSE_VERSION=c2a
@@ -24,7 +24,7 @@ services:
   cluster-node-dns:
     container_name: cluster-node-dns
     restart: unless-stopped
-    image: eduardosilva/wireguard_webadmin_dns:latest
+    image: eduardosilva/wireguard_webadmin_dns:testing
     # Shares the network of cluster-node, so DNS is answered directly on the WireGuard interfaces
     network_mode: "service:cluster-node"
     environment:

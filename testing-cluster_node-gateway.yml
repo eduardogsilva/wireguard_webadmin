@@ -13,7 +13,7 @@ services:
   cluster-node-caddy:
     container_name: cluster-node-caddy
     restart: unless-stopped
-    image: eduardosilva/wireguard_webadmin_caddy:latest
+    image: eduardosilva/wireguard_webadmin_caddy:testing
     network_mode: "service:cluster-node"
     environment:
       - TZ=${TIMEZONE}
@@ -31,7 +31,7 @@ services:
   cluster-node-auth-gateway:
     container_name: cluster-node-auth-gateway
     restart: unless-stopped
-    image: eduardosilva/wireguard_webadmin_auth_gateway:latest
+    image: eduardosilva/wireguard_webadmin_auth_gateway:testing
     environment:
       - TZ=${TIMEZONE}
       - AUTH_GATEWAY_CONFIG_DIR=/caddy_json_export
