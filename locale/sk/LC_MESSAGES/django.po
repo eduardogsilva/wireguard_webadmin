@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-20 20:42-0300\n"
+"POT-Creation-Date: 2026-11-21 16:43-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,12 +40,12 @@ msgstr "Späť"
 #: templates/app_gateway/application_details.html:172
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
-#: templates/gatekeeper/gatekeeper_list.html:95
-#: templates/gatekeeper/gatekeeper_list.html:138
-#: templates/gatekeeper/gatekeeper_list.html:183
-#: templates/gatekeeper/gatekeeper_list.html:231
-#: templates/gatekeeper/gatekeeper_list.html:248
-#: templates/gatekeeper/gatekeeper_list.html:300
+#: templates/gatekeeper/gatekeeper_list.html:118
+#: templates/gatekeeper/gatekeeper_list.html:161
+#: templates/gatekeeper/gatekeeper_list.html:206
+#: templates/gatekeeper/gatekeeper_list.html:254
+#: templates/gatekeeper/gatekeeper_list.html:271
+#: templates/gatekeeper/gatekeeper_list.html:323
 #: templates/scheduler/scheduleprofile_form.html:127
 #: templates/scheduler/scheduleprofile_list.html:39
 #: templates/wireguard/peer_list/peer_preview_modal.html:109
@@ -92,7 +92,7 @@ msgstr "Uložiť"
 #: templates/app_gateway/app_gateway_list.html:205
 #: templates/app_gateway/application_details.html:36
 #: templates/dns/static_host_list.html:68
-#: templates/gatekeeper/gatekeeper_list.html:167
+#: templates/gatekeeper/gatekeeper_list.html:190
 #: templates/routing_templates/list.html:8
 #: templates/scheduler/scheduleprofile_list.html:13
 #: templates/user_manager/peer_group_list.html:8
@@ -138,11 +138,11 @@ msgstr "Povolené"
 #: app_gateway/views.py:518 app_gateway/views.py:569 app_gateway/views.py:598
 #: app_gateway/views.py:623 app_gateway/views.py:654 app_gateway/views.py:682
 #: cluster/views.py:55 cluster/views.py:101 cluster/views.py:147
-#: cluster/views.py:214 gatekeeper/views.py:26 gatekeeper/views.py:54
-#: gatekeeper/views.py:105 gatekeeper/views.py:129 gatekeeper/views.py:160
-#: gatekeeper/views.py:184 gatekeeper/views.py:233 gatekeeper/views.py:305
-#: gatekeeper/views.py:336 gatekeeper/views.py:360 gatekeeper/views.py:391
-#: gatekeeper/views.py:415 gatekeeper/views.py:465
+#: cluster/views.py:214 gatekeeper/views.py:28 gatekeeper/views.py:58
+#: gatekeeper/views.py:73 gatekeeper/views.py:124 gatekeeper/views.py:148
+#: gatekeeper/views.py:179 gatekeeper/views.py:203 gatekeeper/views.py:252
+#: gatekeeper/views.py:324 gatekeeper/views.py:355 gatekeeper/views.py:379
+#: gatekeeper/views.py:410 gatekeeper/views.py:434 gatekeeper/views.py:484
 #: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Prístup zamietnutý"
@@ -372,7 +372,7 @@ msgstr "Typ politiky"
 msgid "Allowed Groups"
 msgstr "Povolené skupiny"
 
-#: app_gateway/forms.py:206 templates/gatekeeper/gatekeeper_list.html:14
+#: app_gateway/forms.py:206 templates/gatekeeper/gatekeeper_list.html:31
 msgid "Authentication Methods"
 msgstr "Metódy autentifikácie"
 
@@ -504,7 +504,7 @@ msgstr "Chránené"
 
 #: app_gateway/models.py:107 gatekeeper/models.py:142
 #: templates/app_gateway/access_policy_type_select.html:41
-#: templates/gatekeeper/gatekeeper_list.html:290
+#: templates/gatekeeper/gatekeeper_list.html:313
 msgid "Deny"
 msgstr "Odmietnuť"
 
@@ -561,7 +561,8 @@ msgstr "Nedostupné"
 msgid "No certificate is being served for this hostname."
 msgstr "Pre tento názov hostiteľa sa neposkytuje žiadny certifikát."
 
-#: app_gateway/views.py:156 templates/wireguard/peer_list/peer_data.html:44
+#: app_gateway/views.py:156 templates/gatekeeper/gatekeeper_list.html:366
+#: templates/wireguard/peer_list/peer_data.html:44
 #: templates/wireguard/peer_list/script_wireguard_status_update.html:146
 #: wireguard/forms.py:60 wireguard_tools/functions.py:31
 #: wireguard_tools/functions.py:35
@@ -999,7 +1000,8 @@ msgstr "IP zámok"
 #: templates/firewall/manage_redirect_rule.html:43
 #: templates/firewall/manage_redirect_rule.html:67
 #: templates/firewall/manage_redirect_rule.html:68
-#: templates/gatekeeper/gatekeeper_list.html:274
+#: templates/gatekeeper/gatekeeper_list.html:297
+#: templates/gatekeeper/gatekeeper_list.html:350
 #: templates/wireguard/wireguard_status.html:45
 msgid "IP Address"
 msgstr "IP adresa"
@@ -1689,15 +1691,15 @@ msgstr ""
 "overenie tajomstva."
 
 #: gatekeeper/forms.py:40 templates/accounts/login.html:14
-#: templates/gatekeeper/gatekeeper_list.html:63
+#: templates/gatekeeper/gatekeeper_list.html:86
 #: templates/user_manager/list.html:8 user_manager/forms.py:13
 #: vpn_invite/forms.py:281
 msgid "Username"
 msgstr "Používateľské meno"
 
 #: gatekeeper/forms.py:41 gatekeeper/forms.py:412
-#: templates/gatekeeper/gatekeeper_list.html:64
-#: templates/gatekeeper/gatekeeper_list.html:222
+#: templates/gatekeeper/gatekeeper_list.html:87
+#: templates/gatekeeper/gatekeeper_list.html:245
 #: templates/wireguard/peer_list/peer_preview_modal.html:103
 msgid "Email"
 msgstr "E-mail"
@@ -1746,11 +1748,11 @@ msgstr "Neplatný formát tajomstva TOTP. Musí to byť platný reťazec Base32.
 msgid "TOTP secret is too short. It must be at least 24 characters long."
 msgstr "Tajomstvo TOTP je príliš krátke. Musí mať aspoň 24 znakov."
 
-#: gatekeeper/forms.py:134 templates/gatekeeper/gatekeeper_list.html:122
+#: gatekeeper/forms.py:134 templates/gatekeeper/gatekeeper_list.html:145
 msgid "Group Name"
 msgstr "Názov skupiny"
 
-#: gatekeeper/forms.py:135 templates/gatekeeper/gatekeeper_list.html:123
+#: gatekeeper/forms.py:135 templates/gatekeeper/gatekeeper_list.html:146
 msgid "Members"
 msgstr "Členovia"
 
@@ -1833,13 +1835,13 @@ msgstr "Validačný PIN TOTP musí byť prázdny pre autentifikáciu OIDC."
 msgid "Authentication Method"
 msgstr "Metóda autentifikácie"
 
-#: gatekeeper/forms.py:321 templates/gatekeeper/gatekeeper_list.html:275
+#: gatekeeper/forms.py:321 templates/gatekeeper/gatekeeper_list.html:298
 msgid "Prefix Length"
 msgstr "Dĺžka prefixu"
 
 #: gatekeeper/forms.py:322 templates/firewall/firewall_rule_list.html:47
 #: templates/firewall/manage_firewall_rule.html:360
-#: templates/gatekeeper/gatekeeper_list.html:276
+#: templates/gatekeeper/gatekeeper_list.html:299
 msgid "Action"
 msgstr "Akcia"
 
@@ -1848,7 +1850,7 @@ msgstr "Akcia"
 msgid "Prefix length for IPv%(version)d must be between 0 and %(max)d."
 msgstr "Dĺžka prefixu pre IPv%(version)d musí byť medzi 0 a %(max)d."
 
-#: gatekeeper/forms.py:381 templates/gatekeeper/gatekeeper_list.html:239
+#: gatekeeper/forms.py:381 templates/gatekeeper/gatekeeper_list.html:262
 msgid "Domain"
 msgstr "Doména"
 
@@ -1884,23 +1886,33 @@ msgstr "Heslo pre miestnu autentifikáciu (ak nepoužívate, nechajte prázdne)"
 msgid "Per-user TOTP secret key"
 msgstr "Tajný kľúč TOTP pre jednotlivých používateľov"
 
-#: gatekeeper/models.py:142 templates/gatekeeper/gatekeeper_list.html:288
+#: gatekeeper/models.py:142 templates/gatekeeper/gatekeeper_list.html:311
 msgid "Allow"
 msgstr "Povoliť"
 
-#: gatekeeper/views.py:60
+#: gatekeeper/views.py:62
+#, python-format
+msgid ""
+"Session ended|The session of %(user)s ends on its server within a minute."
+msgstr ""
+
+#: gatekeeper/views.py:66
+msgid "Session not found|The session is no longer active."
+msgstr ""
+
+#: gatekeeper/views.py:79
 msgid "Edit Gatekeeper User"
 msgstr "Upraviť používateľa Gatekeeper"
 
-#: gatekeeper/views.py:63
+#: gatekeeper/views.py:82
 msgid "Create Gatekeeper User"
 msgstr "Vytvoriť používateľa Gatekeeper"
 
-#: gatekeeper/views.py:70
+#: gatekeeper/views.py:89
 msgid "Gatekeeper User saved successfully."
 msgstr "Používateľ Gatekeeper bol úspešne uložený."
 
-#: gatekeeper/views.py:76
+#: gatekeeper/views.py:95
 msgid ""
 "\n"
 "        <h4>Gatekeeper User</h4>\n"
@@ -1943,57 +1955,57 @@ msgstr ""
 "        6-miestneho kódu PIN.</p>\n"
 "        "
 
-#: gatekeeper/views.py:113
+#: gatekeeper/views.py:132
 msgid "Gatekeeper User deleted successfully."
 msgstr "Používateľ Gatekeeper bol úspešne odstránený."
 
-#: gatekeeper/views.py:119
+#: gatekeeper/views.py:138
 msgid "Delete Gatekeeper User"
 msgstr "Odstrániť používateľa Gatekeeper"
 
-#: gatekeeper/views.py:121
+#: gatekeeper/views.py:140
 #, python-format
 msgid "Are you sure you want to delete the user \"%(username)s\"?"
 msgstr "Naozaj chcete odstrániť používateľa \"%(username)s\"?"
 
-#: gatekeeper/views.py:135
+#: gatekeeper/views.py:154
 msgid "Edit Gatekeeper Group"
 msgstr "Upraviť skupinu Gatekeeper"
 
-#: gatekeeper/views.py:138
+#: gatekeeper/views.py:157
 msgid "Create Gatekeeper Group"
 msgstr "Vytvoriť skupinu Gatekeeper"
 
-#: gatekeeper/views.py:145
+#: gatekeeper/views.py:164
 msgid "Gatekeeper Group saved successfully."
 msgstr "Skupina Gatekeeper bola úspešne uložená."
 
-#: gatekeeper/views.py:168
+#: gatekeeper/views.py:187
 msgid "Gatekeeper Group deleted successfully."
 msgstr "Skupina Gatekeeper bola úspešne odstránená."
 
-#: gatekeeper/views.py:174
+#: gatekeeper/views.py:193
 msgid "Delete Gatekeeper Group"
 msgstr "Odstrániť skupinu Gatekeeper"
 
-#: gatekeeper/views.py:176
+#: gatekeeper/views.py:195
 #, python-format
 msgid "Are you sure you want to delete the group \"%(name)s\"?"
 msgstr "Naozaj chcete odstrániť skupinu \"%(name)s\"?"
 
-#: gatekeeper/views.py:190
+#: gatekeeper/views.py:209
 msgid "Edit Authentication Method"
 msgstr "Upraviť metódu autentifikácie"
 
-#: gatekeeper/views.py:193
+#: gatekeeper/views.py:212
 msgid "Create Authentication Method"
 msgstr "Vytvoriť metódu autentifikácie"
 
-#: gatekeeper/views.py:200
+#: gatekeeper/views.py:219
 msgid "Authentication Method saved successfully."
 msgstr "Metóda autentifikácie bola úspešne uložená."
 
-#: gatekeeper/views.py:206
+#: gatekeeper/views.py:225
 msgid ""
 "\n"
 "        <h4>Authentication Types</h4>\n"
@@ -2035,7 +2047,7 @@ msgstr ""
 "použije <strong>globálne tajomstvo TOTP</strong>. </p>\n"
 "        "
 
-#: gatekeeper/views.py:244
+#: gatekeeper/views.py:263
 #, python-format
 msgid ""
 "Cannot delete authentication method \"%(method)s\" because it is used by the "
@@ -2044,83 +2056,83 @@ msgstr ""
 "Nie je možné odstrániť metódu autentifikácie \"%(method)s\", pretože ju "
 "používajú nasledujúce politiky: %(policies)s."
 
-#: gatekeeper/views.py:250
+#: gatekeeper/views.py:269
 msgid "Authentication Method deleted successfully."
 msgstr "Metóda autentifikácie bola úspešne odstránená."
 
-#: gatekeeper/views.py:256
+#: gatekeeper/views.py:275
 msgid "Delete Authentication Method"
 msgstr "Odstrániť metódu autentifikácie"
 
-#: gatekeeper/views.py:258
+#: gatekeeper/views.py:277
 #, python-format
 msgid "Are you sure you want to delete the authentication method \"%(name)s\"?"
 msgstr "Naozaj chcete odstrániť metódu autentifikácie \"%(name)s\"?"
 
-#: gatekeeper/views.py:311
+#: gatekeeper/views.py:330
 msgid "Edit Allowed Domain"
 msgstr "Upraviť povolenú doménu"
 
-#: gatekeeper/views.py:314 templates/gatekeeper/gatekeeper_list.html:204
+#: gatekeeper/views.py:333 templates/gatekeeper/gatekeeper_list.html:227
 msgid "Add Allowed Domain"
 msgstr "Pridať povolenú doménu"
 
-#: gatekeeper/views.py:321
+#: gatekeeper/views.py:340
 msgid "Allowed Domain saved successfully."
 msgstr "Povolená doména bola úspešne uložená."
 
-#: gatekeeper/views.py:344
+#: gatekeeper/views.py:363
 msgid "Allowed Domain deleted successfully."
 msgstr "Povolená doména bola úspešne odstránená."
 
-#: gatekeeper/views.py:350
+#: gatekeeper/views.py:369
 msgid "Delete Allowed Domain"
 msgstr "Odstrániť povolenú doménu"
 
-#: gatekeeper/views.py:352
+#: gatekeeper/views.py:371
 #, python-format
 msgid "Are you sure you want to delete the allowed domain \"%(domain)s\"?"
 msgstr "Naozaj chcete odstrániť povolenú doménu \"%(domain)s\"?"
 
-#: gatekeeper/views.py:366
+#: gatekeeper/views.py:385
 msgid "Edit Allowed Email"
 msgstr "Upraviť povolený e-mail"
 
-#: gatekeeper/views.py:369 templates/gatekeeper/gatekeeper_list.html:201
+#: gatekeeper/views.py:388 templates/gatekeeper/gatekeeper_list.html:224
 msgid "Add Allowed Email"
 msgstr "Pridať povolený e-mail"
 
-#: gatekeeper/views.py:376
+#: gatekeeper/views.py:395
 msgid "Allowed Email saved successfully."
 msgstr "Povolený e-mail bol úspešne uložený."
 
-#: gatekeeper/views.py:399
+#: gatekeeper/views.py:418
 msgid "Allowed Email deleted successfully."
 msgstr "Povolený e-mail bol úspešne odstránený."
 
-#: gatekeeper/views.py:405
+#: gatekeeper/views.py:424
 msgid "Delete Allowed Email"
 msgstr "Odstrániť povolený e-mail"
 
-#: gatekeeper/views.py:407
+#: gatekeeper/views.py:426
 #, python-format
 msgid "Are you sure you want to delete the allowed email \"%(email)s\"?"
 msgstr "Naozaj chcete odstrániť povolený e-mail \"%(email)s\"?"
 
-#: gatekeeper/views.py:421
+#: gatekeeper/views.py:440
 msgid "Edit IP Address"
 msgstr "Upraviť IP adresu"
 
-#: gatekeeper/views.py:424 templates/gatekeeper/gatekeeper_list.html:265
+#: gatekeeper/views.py:443 templates/gatekeeper/gatekeeper_list.html:288
 #: templates/wireguard/wireguard_manage_peer.html:171
 msgid "Add IP Address"
 msgstr "Pridať IP adresu"
 
-#: gatekeeper/views.py:431
+#: gatekeeper/views.py:450
 msgid "IP Address saved successfully."
 msgstr "IP adresa bola úspešne uložená."
 
-#: gatekeeper/views.py:437
+#: gatekeeper/views.py:456
 msgid ""
 "\n"
 "        <h5>IP Address List</h5>\n"
@@ -2167,15 +2179,15 @@ msgstr ""
 "(napr. „Kancelárska sieť“, „Blokovaný útočník“).</p>\n"
 "        "
 
-#: gatekeeper/views.py:473
+#: gatekeeper/views.py:492
 msgid "IP Address deleted successfully."
 msgstr "IP adresa bola úspešne odstránená."
 
-#: gatekeeper/views.py:479
+#: gatekeeper/views.py:498
 msgid "Delete IP Address"
 msgstr "Odstrániť IP adresu"
 
-#: gatekeeper/views.py:481
+#: gatekeeper/views.py:500
 #, python-format
 msgid "Are you sure you want to delete the IP address \"%(address)s\"?"
 msgstr "Naozaj chcete odstrániť IP adresu \"%(address)s\"?"
@@ -2535,8 +2547,8 @@ msgid "In"
 msgstr "Vstup"
 
 #: templates/api_v2/api_documentation.html:49
-#: templates/gatekeeper/gatekeeper_list.html:168
-#: templates/gatekeeper/gatekeeper_list.html:213
+#: templates/gatekeeper/gatekeeper_list.html:191
+#: templates/gatekeeper/gatekeeper_list.html:236
 #: templates/wireguard/apply_route_template.html:27
 msgid "Type"
 msgstr "Typ"
@@ -2546,13 +2558,13 @@ msgid "Required"
 msgstr "Povinné"
 
 #: templates/api_v2/api_documentation.html:62
-#: templates/gatekeeper/gatekeeper_list.html:77
+#: templates/gatekeeper/gatekeeper_list.html:100
 #: templates/scheduler/scheduleprofile_form.html:175
 msgid "Yes"
 msgstr "Áno"
 
 #: templates/api_v2/api_documentation.html:64
-#: templates/gatekeeper/gatekeeper_list.html:79
+#: templates/gatekeeper/gatekeeper_list.html:102
 #: templates/scheduler/scheduleprofile_form.html:177
 msgid "No"
 msgstr "Nie"
@@ -2600,12 +2612,12 @@ msgstr "Zakázané"
 #: templates/app_gateway/application_details.html:117
 #: templates/app_gateway/application_details.html:168
 #: templates/cluster/workers_list.html:171
-#: templates/gatekeeper/gatekeeper_list.html:91
-#: templates/gatekeeper/gatekeeper_list.html:134
-#: templates/gatekeeper/gatekeeper_list.html:179
-#: templates/gatekeeper/gatekeeper_list.html:227
-#: templates/gatekeeper/gatekeeper_list.html:244
-#: templates/gatekeeper/gatekeeper_list.html:296
+#: templates/gatekeeper/gatekeeper_list.html:114
+#: templates/gatekeeper/gatekeeper_list.html:157
+#: templates/gatekeeper/gatekeeper_list.html:202
+#: templates/gatekeeper/gatekeeper_list.html:250
+#: templates/gatekeeper/gatekeeper_list.html:267
+#: templates/gatekeeper/gatekeeper_list.html:319
 #: templates/routing_templates/list.html:29
 #: templates/scheduler/scheduleprofile_form.html:123
 #: templates/scheduler/scheduleprofile_list.html:30
@@ -2696,8 +2708,8 @@ msgid "Add Access Policy"
 msgstr "Pridať politiku prístupu"
 
 #: templates/app_gateway/app_gateway_list.html:160
-#: templates/gatekeeper/gatekeeper_list.html:45
-#: templates/gatekeeper/gatekeeper_list.html:66
+#: templates/gatekeeper/gatekeeper_list.html:68
+#: templates/gatekeeper/gatekeeper_list.html:89
 msgid "Groups"
 msgstr "Skupiny"
 
@@ -2710,10 +2722,10 @@ msgstr "Metódy autentifikácie"
 #: templates/app_gateway/application_details.html:79
 #: templates/app_gateway/application_details.html:156
 #: templates/cluster/workers_list.html:91
-#: templates/gatekeeper/gatekeeper_list.html:67
-#: templates/gatekeeper/gatekeeper_list.html:124
-#: templates/gatekeeper/gatekeeper_list.html:169
-#: templates/gatekeeper/gatekeeper_list.html:216
+#: templates/gatekeeper/gatekeeper_list.html:90
+#: templates/gatekeeper/gatekeeper_list.html:147
+#: templates/gatekeeper/gatekeeper_list.html:192
+#: templates/gatekeeper/gatekeeper_list.html:239
 #: templates/scheduler/scheduleprofile_form.html:111
 #: templates/scheduler/scheduleprofile_list.html:15
 #: templates/wireguard/apply_route_template.html:28
@@ -2865,6 +2877,7 @@ msgstr "Odmietnutý"
 
 #: templates/cluster/worker_details.html:14
 #: templates/cluster/workers_list.html:120
+#: templates/gatekeeper/gatekeeper_list.html:372
 msgid "Online"
 msgstr "Online"
 
@@ -3533,72 +3546,188 @@ msgstr "Najprv zadajte TOTP tajomstvo, aby ste vygenerovali QR kód."
 msgid "Error generating QR code."
 msgstr "Chyba pri generovaní QR kódu."
 
-#: templates/gatekeeper/gatekeeper_list.html:20
+#: templates/gatekeeper/gatekeeper_list.html:37
 msgid "Gatekeeper Users"
 msgstr "Používatelia Gatekeeper"
 
-#: templates/gatekeeper/gatekeeper_list.html:26
+#: templates/gatekeeper/gatekeeper_list.html:43
 msgid "Allowed Emails & Domains"
 msgstr "Povolené e-maily a domény"
 
-#: templates/gatekeeper/gatekeeper_list.html:32
+#: templates/gatekeeper/gatekeeper_list.html:49
 msgid "IP Addresses"
 msgstr "IP adresy"
 
-#: templates/gatekeeper/gatekeeper_list.html:42
+#: templates/gatekeeper/gatekeeper_list.html:55
+#, fuzzy
+#| msgid "Permissions"
+msgid "Sessions"
+msgstr "Oprávnenia"
+
+#: templates/gatekeeper/gatekeeper_list.html:65
 #: templates/user_manager/peer_group_list.html:11
 msgid "Users"
 msgstr "Používatelia"
 
-#: templates/gatekeeper/gatekeeper_list.html:53
+#: templates/gatekeeper/gatekeeper_list.html:76
 #: templates/user_manager/list_buttons.html:2 user_manager/views.py:111
 msgid "Add User"
 msgstr "Pridať používateľa"
 
-#: templates/gatekeeper/gatekeeper_list.html:65
+#: templates/gatekeeper/gatekeeper_list.html:88
 msgid "TOTP"
 msgstr "TOTP"
 
-#: templates/gatekeeper/gatekeeper_list.html:106
+#: templates/gatekeeper/gatekeeper_list.html:129
 msgid "No Gatekeeper Users found."
 msgstr "Nenašli sa žiadni používatelia Gatekeeper."
 
-#: templates/gatekeeper/gatekeeper_list.html:113
+#: templates/gatekeeper/gatekeeper_list.html:136
 msgid "Add Group"
 msgstr "Pridať skupinu"
 
-#: templates/gatekeeper/gatekeeper_list.html:149
+#: templates/gatekeeper/gatekeeper_list.html:172
 msgid "No Gatekeeper Groups found."
 msgstr "Nenašli sa žiadne skupiny Gatekeeper."
 
-#: templates/gatekeeper/gatekeeper_list.html:158
+#: templates/gatekeeper/gatekeeper_list.html:181
 msgid "Add Auth Method"
 msgstr "Pridať metódu autentifikácie"
 
-#: templates/gatekeeper/gatekeeper_list.html:194
+#: templates/gatekeeper/gatekeeper_list.html:217
 msgid "No Authentication Methods found."
 msgstr "Nenašli sa žiadne metódy autentifikácie."
 
-#: templates/gatekeeper/gatekeeper_list.html:214
+#: templates/gatekeeper/gatekeeper_list.html:237
 msgid "Identity"
 msgstr "Identita"
 
-#: templates/gatekeeper/gatekeeper_list.html:215
-#: templates/gatekeeper/gatekeeper_list.html:277
+#: templates/gatekeeper/gatekeeper_list.html:238
+#: templates/gatekeeper/gatekeeper_list.html:300
 msgid "Auth Method"
 msgstr "Metóda autentifikácie"
 
-#: templates/gatekeeper/gatekeeper_list.html:259
+#: templates/gatekeeper/gatekeeper_list.html:282
 msgid "No Allowed Emails or Domains found."
 msgstr "Nenašli sa žiadne povolené e-maily ani domény."
 
-#: templates/gatekeeper/gatekeeper_list.html:278
+#: templates/gatekeeper/gatekeeper_list.html:301
+#: templates/gatekeeper/gatekeeper_list.html:355
 msgid "Manage"
 msgstr "Spravovať"
 
-#: templates/gatekeeper/gatekeeper_list.html:311
+#: templates/gatekeeper/gatekeeper_list.html:334
 msgid "No IP Addresses found."
 msgstr "Nenašli sa žiadne IP adresy."
+
+#: templates/gatekeeper/gatekeeper_list.html:340
+msgid ""
+"Sessions opened on the App Gateway login. A session is online when it was "
+"used in the last 10 minutes. Sessions of cluster workers are the last ones "
+"each worker reported."
+msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:346
+#, fuzzy
+#| msgid "Users"
+msgid "User"
+msgstr "Používatelia"
+
+#: templates/gatekeeper/gatekeeper_list.html:347
+#: templates/wireguard/peer_list/peer_preview_modal.html:145
+#: wireguard/forms.py:59
+msgid "Server"
+msgstr "Server"
+
+#: templates/gatekeeper/gatekeeper_list.html:348 vpn_invite/forms.py:283
+msgid "Host"
+msgstr "Hostiteľ"
+
+#: templates/gatekeeper/gatekeeper_list.html:349
+#, fuzzy
+#| msgid "Last update"
+msgid "Last access"
+msgstr "Posledná aktualizácia"
+
+#: templates/gatekeeper/gatekeeper_list.html:351
+msgid "Factors"
+msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:352
+#, fuzzy
+#| msgid "Start Time"
+msgid "Started"
+msgstr "Čas začiatku"
+
+#: templates/gatekeeper/gatekeeper_list.html:353
+#, fuzzy
+#| msgid "Expires on"
+msgid "Expires"
+msgstr "Platí do"
+
+#: templates/gatekeeper/gatekeeper_list.html:354
+msgid "Browser"
+msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:367
+#, fuzzy
+#| msgid "Last reported state"
+msgid "Last report"
+msgstr "Posledný nahlásený stav"
+
+#: templates/gatekeeper/gatekeeper_list.html:367
+#, fuzzy
+#| msgid "Workers online"
+msgid "Worker offline"
+msgstr "Workery online"
+
+#: templates/gatekeeper/gatekeeper_list.html:384
+#, fuzzy
+#| msgid "Pending"
+msgid "Ending"
+msgstr "Čaká"
+
+#: templates/gatekeeper/gatekeeper_list.html:389
+msgid "End session"
+msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:401
+#, fuzzy
+#| msgid "No active VPN invitations"
+msgid "No active sessions."
+msgstr "Žiadne aktívne VPN pozvánky"
+
+#: templates/gatekeeper/gatekeeper_list.html:440
+msgid "Columns"
+msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:443
+msgid "Search:"
+msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:444
+msgid "Showing _START_ to _END_ of _TOTAL_ sessions"
+msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:445
+msgid "No sessions to show"
+msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:446
+msgid "(filtered from _MAX_ sessions)"
+msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:447
+msgid "No matching sessions"
+msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:448
+msgid "Previous"
+msgstr ""
+
+#: templates/gatekeeper/gatekeeper_list.html:448
+msgid "Next"
+msgstr ""
 
 #: templates/generic_delete_confirmation.html:16
 msgid "Confirm Delete"
@@ -3904,11 +4033,6 @@ msgstr "Konfigurácia"
 #: templates/wireguard/peer_list/peer_preview_modal.html:129
 msgid "QR Code"
 msgstr "QR kód"
-
-#: templates/wireguard/peer_list/peer_preview_modal.html:145
-#: wireguard/forms.py:59
-msgid "Server"
-msgstr "Server"
 
 #: templates/wireguard/peer_list/script_peer_extras_toggle.html:7
 msgid "Hide extras"
@@ -4743,10 +4867,6 @@ msgstr ""
 #, python-brace-format
 msgid "The template must include the placeholder '{invite_url}'."
 msgstr "Šablóna musí obsahovať zástupný symbol '{invite_url}'."
-
-#: vpn_invite/forms.py:283
-msgid "Host"
-msgstr "Hostiteľ"
 
 #: vpn_invite/forms.py:285
 msgid "Encryption"
