@@ -213,10 +213,8 @@ msgid "API Documentation"
 msgstr "Dokumentácia API"
 
 #: app_gateway/caddy_config_export.py:322
-#, fuzzy
-#| msgid "DNS configuration reloaded automatically."
 msgid "Gateway configuration applied automatically."
-msgstr "Konfigurácia DNS bola automaticky znovu načítaná."
+msgstr "Konfigurácia brány bola aplikovaná automaticky."
 
 #: app_gateway/dns_providers.py:14
 msgid "API Token"
@@ -233,22 +231,22 @@ msgstr "Povoliť neplatný/samopodpísaný certifikát"
 
 #: app_gateway/forms.py:26
 msgid "Serve on the primary server"
-msgstr ""
+msgstr "Publikovať na primárnom serveri"
 
 #: app_gateway/forms.py:27
 msgid "Serve on all cluster workers"
-msgstr ""
+msgstr "Publikovať na všetkých workeroch clustra"
 
 #: app_gateway/forms.py:28
-#, fuzzy
-#| msgid "Cluster Mode"
 msgid "Cluster workers"
-msgstr "Režim clustra"
+msgstr "Workery clustra"
 
 #: app_gateway/forms.py:40
 msgid ""
 "Select specific workers, or leave empty when serving on all cluster workers."
 msgstr ""
+"Vyberte konkrétne workery alebo nechajte prázdne pri publikovaní na všetkých "
+"workeroch clustra."
 
 #: app_gateway/forms.py:42 cluster/views.py:69
 #: templates/template_parts/base_sidebar.html:135
@@ -257,7 +255,7 @@ msgstr "Cluster"
 
 #: app_gateway/forms.py:42
 msgid "Servers that publish this application."
-msgstr ""
+msgstr "Servery, ktoré publikujú túto aplikáciu."
 
 #: app_gateway/forms.py:69 app_gateway/forms.py:190 app_gateway/forms.py:235
 #: app_gateway/forms.py:253 app_gateway/forms.py:332 app_gateway/forms.py:374
@@ -298,10 +296,11 @@ msgstr "Táto možnosť je dostupná iba pre upstreamy https://."
 #: app_gateway/forms.py:101
 msgid "Leave this empty when the application is served on all cluster workers."
 msgstr ""
+"Nechajte prázdne, ak sa aplikácia publikuje na všetkých workeroch clustra."
 
 #: app_gateway/forms.py:103
 msgid "Select at least one server to publish this application."
-msgstr ""
+msgstr "Vyberte aspoň jeden server na publikovanie tejto aplikácie."
 
 #: app_gateway/forms.py:109
 #, python-format
@@ -309,6 +308,9 @@ msgid ""
 "Applications served by cluster workers require DNS validation or self-signed "
 "certificates. Change the certificate of these hosts first: %(hosts)s"
 msgstr ""
+"Aplikácie publikované workermi clustra vyžadujú overenie cez DNS alebo "
+"samopodpísané certifikáty. Najprv zmeňte certifikát týchto hostiteľov: "
+"%(hosts)s"
 
 #: app_gateway/forms.py:121 cluster/forms.py:25 dns/forms.py:65
 #: templates/app_gateway/app_gateway_list.html:116
@@ -347,6 +349,8 @@ msgid ""
 "This application is served by cluster workers. Use DNS validation or a self-"
 "signed certificate."
 msgstr ""
+"Túto aplikáciu publikujú workery clustra. Použite overenie cez DNS alebo "
+"samopodpísaný certifikát."
 
 #: app_gateway/forms.py:148
 msgid "IP addresses can only use a self-signed certificate."
@@ -538,15 +542,16 @@ msgstr "Neznáme"
 
 #: app_gateway/views.py:112
 msgid "No recent report from this server."
-msgstr ""
+msgstr "Žiadne nedávne hlásenie z tohto servera."
 
 #: app_gateway/views.py:114
 msgid "Pending export"
-msgstr ""
+msgstr "Čaká na export"
 
 #: app_gateway/views.py:114
 msgid "Export the configuration to publish this host on this server."
 msgstr ""
+"Exportujte konfiguráciu, aby sa tento hostiteľ publikoval na tomto serveri."
 
 #: app_gateway/views.py:115 templates/cluster/worker_details.html:117
 msgid "Unavailable"
@@ -645,31 +650,6 @@ msgid "Application Host saved successfully."
 msgstr "Hostiteľ aplikácie bol úspešne uložený."
 
 #: app_gateway/views.py:293
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    <h5>Certificate</h5>\n"
-#| "    <p>Defines how the TLS certificate for this hostname is issued.</p>\n"
-#| "    <ul>\n"
-#| "        <li><strong>Trusted certificate (HTTP validation)</strong>: "
-#| "Issued through ACME (e.g. Let's Encrypt) and validated over HTTP. The "
-#| "hostname must point to this server and ports 80/443 must be reachable "
-#| "from the internet.</li>\n"
-#| "        <li><strong>Trusted certificate (DNS validation)</strong>: Issued "
-#| "through ACME and validated with a DNS record created using the selected "
-#| "DNS credential. The server does not need to be reachable from the "
-#| "internet.</li>\n"
-#| "        <li><strong>Self-signed certificate</strong>: Issued by the "
-#| "internal Caddy CA. Browsers will show a security warning.</li>\n"
-#| "    </ul>\n"
-#| "    <p>When the fallback option is enabled and a trusted certificate "
-#| "cannot be issued, a self-signed certificate is used until the next "
-#| "successful attempt. Without the fallback, the connection fails until the "
-#| "certificate is issued.</p>\n"
-#| "    <p>Use <strong>Retry certificate</strong> in the host list to request "
-#| "a new attempt right away, for example after fixing the DNS or firewall.</"
-#| "p>\n"
-#| "    "
 msgid ""
 "\n"
 "    <h5>Certificate</h5>\n"
@@ -720,6 +700,11 @@ msgstr ""
 "    <p>Pomocou <strong>Znova vyžiadať certifikát</strong> v zozname "
 "hostiteľov môžete okamžite požiadať o nový pokus, napríklad po oprave DNS "
 "alebo firewallu.</p>\n"
+"    <p><strong>Dôležité:</strong> certifikát sa vyžiada hneď po aplikovaní "
+"konfigurácie. Pri overení cez HTTP už musí názov hostiteľa smerovať na tento "
+"server: neúspešné pokusy sa započítavajú do limitu Let's Encrypt (5 za "
+"hodinu na názov hostiteľa). Ak DNS ešte nie je pripravené, použite overenie "
+"cez DNS.</p>\n"
 "    "
 
 #: app_gateway/views.py:306
@@ -1062,6 +1047,9 @@ msgid ""
 "specific WireGuard instance. Change them to wg+ or IP addresses first: "
 "%(rules)s"
 msgstr ""
+"Distribuovaný režim clustra nepovoľuje pravidlá firewallu viazané na "
+"konkrétnu inštanciu WireGuard. Najprv ich zmeňte na wg+ alebo IP adresy: "
+"%(rules)s"
 
 #: cluster/models.py:53
 msgid ""
@@ -1094,6 +1082,8 @@ msgid ""
 "Worker not deleted|Move the WireGuard instances of this worker to another "
 "server first: "
 msgstr ""
+"Worker nebol vymazaný|Najprv presuňte inštancie WireGuard tohto workera na "
+"iný server: "
 
 #: cluster/views.py:166
 msgid "Worker not deleted|Invalid confirmation."
@@ -1140,6 +1130,30 @@ msgid ""
 "interfaces until enabled again.</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Worker</h5>\n"
+"        <p>Worker je uzol clustra, ktorý replikuje WireGuard, firewall a DNS "
+"z tohto primárneho servera a voliteľne publikuje aplikácie App Gateway.</p>\n"
+"\n"
+"        <h5>Názov a umiestnenie</h5>\n"
+"        <p>Slúžia na identifikáciu workera. <strong>Názov hostiteľa</strong> "
+"je adresa, ktorú klienti používajú na pripojenie k tomuto workeru: zapisuje "
+"sa ako endpoint do konfigurácií peerov stiahnutých pre tento server.</p>\n"
+"\n"
+"        <h5>Token</h5>\n"
+"        <p>Tajomstvo, ktorým sa worker overuje voči tomuto primárnemu "
+"serveru. Jeho zmena odpojí workera, kým sa neaktualizuje jeho konfigurácia.</"
+"p>\n"
+"\n"
+"        <h5>Zámok IP</h5>\n"
+"        <p>Ak je povolený, worker je prijatý iba z nižšie uvedenej IP "
+"adresy. Bez neho sa adresa aktualizuje automaticky podľa posledného "
+"pripojenia.</p>\n"
+"\n"
+"        <h5>Povolené</h5>\n"
+"        <p>Zakázané workery sú odmietnuté a vypnú svoje rozhrania WireGuard, "
+"kým nie sú znova povolené.</p>\n"
+"        "
 
 #: cluster/views.py:222
 msgid "Cluster settings updated successfully."
@@ -1173,6 +1187,31 @@ msgid ""
 "downloads and VPN invites).</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Cluster povolený</h5>\n"
+"        <p>Ak je zakázaný, workery sú odmietnuté a vypnú svoje rozhrania "
+"WireGuard a aplikácie App Gateway publikuje iba tento primárny server. "
+"Vyžaduje cache stavu WireGuard.</p>\n"
+"\n"
+"        <h5>Primárne povolenie WireGuard</h5>\n"
+"        <p>Ponúkne tento primárny server ako možnosť pri sťahovaní "
+"konfigurácií peerov a VPN pozvánok.</p>\n"
+"\n"
+"        <h5>Režim clustra</h5>\n"
+"        <p><strong>Mirror</strong>: každý worker dostane rovnaké inštancie "
+"WireGuard, peerov, firewall a konfiguráciu DNS. Peeri sa môžu pripojiť k "
+"ľubovoľnému serveru.</p>\n"
+"        <p><strong>Distributed</strong>: každá inštancia WireGuard beží iba "
+"na serveri vybranom v nastaveniach inštancie (predvolene na primárnom "
+"serveri). Peeri sa pripájajú k tomuto serveru. Pravidlá firewallu nemôžu byť "
+"viazané na rozhranie konkrétnej inštancie: použite wg+ alebo IP adresy. Po "
+"zmene režimu aplikujte konfiguráciu WireGuard, aby primárny server zastavil "
+"inštancie presunuté na workery.</p>\n"
+"\n"
+"        <h5>Zobrazenie workera</h5>\n"
+"        <p>Ako sa workery zobrazujú pri výbere servera (sťahovanie "
+"konfigurácií peerov a VPN pozvánky).</p>\n"
+"        "
 
 #: cluster/views.py:250 templates/cluster/workers_list.html:9
 #: templates/cluster/workers_list.html:77
@@ -1509,6 +1548,8 @@ msgid ""
 "The distributed cluster mode does not allow rules bound to a specific "
 "WireGuard instance. Use wg+ or IP addresses instead."
 msgstr ""
+"Distribuovaný režim clustra nepovoľuje pravidlá viazané na konkrétnu "
+"inštanciu WireGuard. Použite wg+ alebo IP adresy."
 
 #: firewall/forms.py:192
 msgid "Default Forward Policy"
@@ -2820,30 +2861,28 @@ msgstr "Exportovať teraz"
 #: templates/cluster/worker_details.html:12
 #: templates/cluster/workers_list.html:118
 msgid "Refused"
-msgstr ""
+msgstr "Odmietnutý"
 
 #: templates/cluster/worker_details.html:14
 #: templates/cluster/workers_list.html:120
-#, fuzzy
-#| msgid "Unlink"
 msgid "Online"
-msgstr "Zrušiť prepojenie"
+msgstr "Online"
 
 #: templates/cluster/worker_details.html:16
 #: templates/cluster/workers_list.html:122
 msgid "Offline"
-msgstr ""
+msgstr "Offline"
 
 #: templates/cluster/worker_details.html:21
-#, fuzzy
-#| msgid "Edit Worker: "
 msgid "Edit Worker"
-msgstr "Upraviť Worker: "
+msgstr "Upraviť Worker"
 
 #: templates/cluster/worker_details.html:29
 msgid ""
 "The worker is offline. The information below is the last state it reported."
 msgstr ""
+"Worker je offline. Nižšie uvedené informácie sú posledný stav, ktorý "
+"nahlásil."
 
 #: templates/cluster/worker_details.html:32
 #: templates/cluster/workers_list.html:162
@@ -2878,43 +2917,31 @@ msgid "Version"
 msgstr "Verzia"
 
 #: templates/cluster/worker_details.html:50
-#, fuzzy
-#| msgid "Current time"
 msgid "current"
-msgstr "Aktuálny čas"
+msgstr "aktuálna"
 
 #: templates/cluster/worker_details.html:52
-#, fuzzy
-#| msgid "WireGuard Instances"
 msgid "WireGuard instances"
-msgstr "WireGuard inštancie"
+msgstr "Inštancie WireGuard"
 
 #: templates/cluster/worker_details.html:61
 msgid "App Gateway"
-msgstr ""
+msgstr "App Gateway"
 
 #: templates/cluster/worker_details.html:62
-#, fuzzy
-#| msgid "Not State"
 msgid "Not installed"
-msgstr "Bez stavu"
+msgstr "Nenainštalované"
 
 #: templates/cluster/worker_details.html:72
 #: templates/cluster/workers_list.html:88
-#, fuzzy
-#| msgid "Traffic data synchronization"
 msgid "Synchronization"
-msgstr "Synchronizácia údajov o návštevnosti"
+msgstr "Synchronizácia"
 
 #: templates/cluster/worker_details.html:75
-#, fuzzy
-#| msgid "Action"
 msgid "Section"
-msgstr "Akcia"
+msgstr "Sekcia"
 
 #: templates/cluster/worker_details.html:75
-#, fuzzy
-#| msgid "Last Update"
 msgid "Last update"
 msgstr "Posledná aktualizácia"
 
@@ -2922,40 +2949,34 @@ msgstr "Posledná aktualizácia"
 #: templates/cluster/workers_list.html:42
 #: templates/cluster/workers_list.html:134
 msgid "Synchronized"
-msgstr ""
+msgstr "Synchronizované"
 
 #: templates/cluster/worker_details.html:82
 #: templates/cluster/workers_list.html:136
 msgid "Error"
-msgstr ""
+msgstr "Chyba"
 
 #: templates/cluster/worker_details.html:83
 #: templates/cluster/workers_list.html:139
 msgid "Pending"
-msgstr ""
+msgstr "Čaká"
 
 #: templates/cluster/worker_details.html:96
 #: templates/cluster/workers_list.html:89
-#, fuzzy
-#| msgid "Server"
 msgid "Services"
-msgstr "Primárny server"
+msgstr "Služby"
 
 #: templates/cluster/worker_details.html:101
 msgid "No report received yet."
-msgstr ""
+msgstr "Zatiaľ nebolo prijaté žiadne hlásenie."
 
 #: templates/cluster/worker_details.html:107
-#, fuzzy
-#| msgid "Certificate"
 msgid "Certificates served"
-msgstr "Certifikát"
+msgstr "Poskytované certifikáty"
 
 #: templates/cluster/worker_details.html:131
-#, fuzzy
-#| msgid "Invalid action."
 msgid "Installation"
-msgstr "Neplatná akcia."
+msgstr "Inštalácia"
 
 #: templates/cluster/worker_details.html:133
 msgid ""
@@ -2965,28 +2986,33 @@ msgid ""
 "rel=\"noopener noreferrer\">project repository</a> to the worker, and create "
 "a <code>.env</code> file next to them:"
 msgstr ""
+"Skopírujte <code>cluster_node.yml</code> (a <code>cluster_node-gateway.yml</"
+"code> na publikovanie aplikácií App Gateway) z <a href=\"https://github.com/"
+"eduardogsilva/wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">repozitára projektu</a> na workera a vedľa nich vytvorte súbor "
+"<code>.env</code>:"
 
 #: templates/cluster/worker_details.html:139
 #: templates/cluster/worker_details.html:147
 #: templates/cluster/worker_details.html:153
-#, fuzzy
-#| msgid "Copy Text"
 msgid "Copy"
-msgstr "Kopírovať text"
+msgstr "Kopírovať"
 
 #: templates/cluster/worker_details.html:145
 msgid "VPN only"
-msgstr ""
+msgstr "Iba VPN"
 
 #: templates/cluster/worker_details.html:151
 msgid "VPN and App Gateway"
-msgstr ""
+msgstr "VPN a App Gateway"
 
 #: templates/cluster/worker_details.html:158
 msgid ""
 "To update, run docker compose pull followed by the same up -d command, "
 "always with every compose file of the worker."
 msgstr ""
+"Na aktualizáciu spustite docker compose pull a potom rovnaký príkaz up -d, "
+"vždy so všetkými súbormi compose workera."
 
 #: templates/cluster/worker_details.html:159
 msgid ""
@@ -2994,95 +3020,91 @@ msgid ""
 "certificates: certificates are issued by this primary server and distributed "
 "to the workers."
 msgstr ""
+"Aplikácie publikované workermi musia používať overenie cez DNS alebo "
+"samopodpísané certifikáty: certifikáty vydáva tento primárny server a "
+"distribuuje ich workerom."
 
 #: templates/cluster/worker_details.html:160
 msgid ""
 "Publish the WireGuard ports (51820-51839/udp) and, with the App Gateway, "
 "ports 80 and 443 of the worker."
 msgstr ""
+"Sprístupnite porty WireGuard (51820-51839/udp) a s App Gateway aj porty 80 a "
+"443 workera."
 
 #: templates/cluster/workers_list.html:8
 msgid ""
 "The cluster is disabled. Workers are refused and App Gateway applications "
 "are only published by this primary server."
 msgstr ""
+"Cluster je zakázaný. Workery sú odmietnuté a aplikácie App Gateway publikuje "
+"iba tento primárny server."
 
 #: templates/cluster/workers_list.html:15
 msgid "These WireGuard instances are offline because their worker is disabled:"
 msgstr ""
+"Tieto inštancie WireGuard sú mimo prevádzky, pretože ich worker je zakázaný:"
 
 #: templates/cluster/workers_list.html:17
 msgid "Enable the worker or move the instances to another server."
-msgstr ""
+msgstr "Povoľte workera alebo presuňte inštancie na iný server."
 
 #: templates/cluster/workers_list.html:23
 msgid ""
 "The cluster requires the WireGuard status cache. Enable "
 "WIREGUARD_STATUS_CACHE_ENABLED in the .env file."
 msgstr ""
+"Cluster vyžaduje cache stavu WireGuard. Povoľte "
+"WIREGUARD_STATUS_CACHE_ENABLED v súbore .env."
 
 #: templates/cluster/workers_list.html:33
-#, fuzzy
-#| msgid "Worker is not enabled"
 msgid "Workers online"
-msgstr "Worker nie je povolený"
+msgstr "Workery online"
 
 #: templates/cluster/workers_list.html:51
 msgid "Need attention"
-msgstr ""
+msgstr "Vyžadujú pozornosť"
 
 #: templates/cluster/workers_list.html:60
 msgid "Primary WireGuard"
-msgstr "Povoliť primárny WireGuard"
+msgstr "Primárny WireGuard"
 
 #: templates/cluster/workers_list.html:63
-#, fuzzy
-#| msgid "No WireGuard instances found."
 msgid "WireGuard instances on the primary server"
-msgstr "Nenašli sa žiadne inštancie WireGuard."
+msgstr "Inštancie WireGuard na primárnom serveri"
 
 #: templates/cluster/workers_list.html:64
 #: templates/cluster/workers_list.html:109
-#, fuzzy
-#| msgid "WireGuard Instances"
 msgid "No WireGuard instances"
-msgstr "WireGuard inštancie"
+msgstr "Žiadne inštancie WireGuard"
 
 #: templates/cluster/workers_list.html:74
-#, fuzzy
-#| msgid "Add Worker"
 msgid "Workers"
-msgstr "Pridať Worker"
+msgstr "Workery"
 
 #: templates/cluster/workers_list.html:86
-#, fuzzy
-#| msgid "Add Worker"
 msgid "Worker"
-msgstr "Pridať Worker"
+msgstr "Worker"
 
 #: templates/cluster/workers_list.html:107
-#, fuzzy
-#| msgid "WireGuard Instance"
 msgid "WireGuard instance"
-msgstr "WireGuard Inštancia"
+msgstr "Inštancia WireGuard"
 
 #: templates/cluster/workers_list.html:132
 msgid "The worker is not receiving updates."
-msgstr ""
+msgstr "Worker nedostáva aktualizácie."
 
 #: templates/cluster/workers_list.html:148
-#, fuzzy
-#| msgid "Last Update"
 msgid "Last reported state"
-msgstr "Posledná aktualizácia"
+msgstr "Posledný nahlásený stav"
 
 #: templates/cluster/workers_list.html:155
 msgid "Certificates unavailable or expiring soon"
-msgstr ""
+msgstr "Certifikáty nedostupné alebo čoskoro vyprší ich platnosť"
 
 #: templates/cluster/workers_list.html:170
 msgid "Details"
-msgstr ""
+msgstr "Podrobnosti"
 
 #: templates/cluster/workers_list.html:180
 msgid "No workers configured"
@@ -3090,11 +3112,11 @@ msgstr "Nie sú nakonfigurovaní žiadni workery"
 
 #: templates/cluster/workers_list.html:190
 msgid "Diagnostics"
-msgstr ""
+msgstr "Diagnostika"
 
 #: templates/cluster/workers_list.html:201
 msgid "Current worker version"
-msgstr ""
+msgstr "Aktuálna verzia workera"
 
 #: templates/cluster/workers_list.html:203
 msgid "Stats Cache Refresh Interval"
@@ -3886,7 +3908,7 @@ msgstr "QR kód"
 #: templates/wireguard/peer_list/peer_preview_modal.html:145
 #: wireguard/forms.py:59
 msgid "Server"
-msgstr "Primárny server"
+msgstr "Server"
 
 #: templates/wireguard/peer_list/script_peer_extras_toggle.html:7
 msgid "Hide extras"
@@ -4844,6 +4866,8 @@ msgid ""
 "The instance runs only on this server. Peer configurations of instances on a "
 "worker use the hostname of the worker as endpoint."
 msgstr ""
+"Inštancia beží iba na tomto serveri. Konfigurácie peerov inštancií na "
+"workeri používajú ako endpoint názov hostiteľa workera."
 
 #: wireguard/forms.py:156
 #, python-format
@@ -4952,6 +4976,8 @@ msgid ""
 "This network is already used by peer %(peer)s of wg%(instance)s. A network "
 "can be routed to only one WireGuard instance."
 msgstr ""
+"Túto sieť už používa peer %(peer)s inštancie wg%(instance)s. Sieť môže byť "
+"smerovaná iba do jednej inštancie WireGuard."
 
 #: wireguard_peer/forms.py:114
 msgid "The peer's routing template does not allow custom routes."
@@ -5015,6 +5041,8 @@ msgid ""
 "wg%(id)s runs on %(worker)s, which applies the change on its next "
 "synchronization."
 msgstr ""
+"wg%(id)s beží na %(worker)s, ktorý zmenu aplikuje pri najbližšej "
+"synchronizácii."
 
 #: wireguard_peer/views.py:35
 #, python-format

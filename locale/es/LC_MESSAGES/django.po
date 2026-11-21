@@ -213,10 +213,8 @@ msgid "API Documentation"
 msgstr "Documentación de la API"
 
 #: app_gateway/caddy_config_export.py:322
-#, fuzzy
-#| msgid "DNS configuration reloaded automatically."
 msgid "Gateway configuration applied automatically."
-msgstr "Configuración de DNS recargada automáticamente."
+msgstr "Configuración del gateway aplicada automáticamente."
 
 #: app_gateway/dns_providers.py:14
 msgid "API Token"
@@ -233,22 +231,22 @@ msgstr "Permitir certificado no válido/autofirmado"
 
 #: app_gateway/forms.py:26
 msgid "Serve on the primary server"
-msgstr ""
+msgstr "Publicar en el servidor primario"
 
 #: app_gateway/forms.py:27
 msgid "Serve on all cluster workers"
-msgstr ""
+msgstr "Publicar en todos los workers del cluster"
 
 #: app_gateway/forms.py:28
-#, fuzzy
-#| msgid "Cluster Mode"
 msgid "Cluster workers"
-msgstr "Modo de cluster"
+msgstr "Workers del cluster"
 
 #: app_gateway/forms.py:40
 msgid ""
 "Select specific workers, or leave empty when serving on all cluster workers."
 msgstr ""
+"Seleccione workers específicos o deje vacío al publicar en todos los workers "
+"del cluster."
 
 #: app_gateway/forms.py:42 cluster/views.py:69
 #: templates/template_parts/base_sidebar.html:135
@@ -257,7 +255,7 @@ msgstr "Cluster"
 
 #: app_gateway/forms.py:42
 msgid "Servers that publish this application."
-msgstr ""
+msgstr "Servidores que publican esta aplicación."
 
 #: app_gateway/forms.py:69 app_gateway/forms.py:190 app_gateway/forms.py:235
 #: app_gateway/forms.py:253 app_gateway/forms.py:332 app_gateway/forms.py:374
@@ -298,10 +296,11 @@ msgstr "Esta opción solo está disponible para upstreams https://."
 #: app_gateway/forms.py:101
 msgid "Leave this empty when the application is served on all cluster workers."
 msgstr ""
+"Deje vacío cuando la aplicación se publique en todos los workers del cluster."
 
 #: app_gateway/forms.py:103
 msgid "Select at least one server to publish this application."
-msgstr ""
+msgstr "Seleccione al menos un servidor para publicar esta aplicación."
 
 #: app_gateway/forms.py:109
 #, python-format
@@ -309,6 +308,9 @@ msgid ""
 "Applications served by cluster workers require DNS validation or self-signed "
 "certificates. Change the certificate of these hosts first: %(hosts)s"
 msgstr ""
+"Las aplicaciones publicadas por workers del cluster requieren validación DNS "
+"o certificados autofirmados. Cambie primero el certificado de estos hosts: "
+"%(hosts)s"
 
 #: app_gateway/forms.py:121 cluster/forms.py:25 dns/forms.py:65
 #: templates/app_gateway/app_gateway_list.html:116
@@ -348,6 +350,8 @@ msgid ""
 "This application is served by cluster workers. Use DNS validation or a self-"
 "signed certificate."
 msgstr ""
+"Esta aplicación la publican workers del cluster. Use validación DNS o un "
+"certificado autofirmado."
 
 #: app_gateway/forms.py:148
 msgid "IP addresses can only use a self-signed certificate."
@@ -542,15 +546,15 @@ msgstr "Desconocido"
 
 #: app_gateway/views.py:112
 msgid "No recent report from this server."
-msgstr ""
+msgstr "No hay informes recientes de este servidor."
 
 #: app_gateway/views.py:114
 msgid "Pending export"
-msgstr ""
+msgstr "Exportación pendiente"
 
 #: app_gateway/views.py:114
 msgid "Export the configuration to publish this host on this server."
-msgstr ""
+msgstr "Exporte la configuración para publicar este host en este servidor."
 
 #: app_gateway/views.py:115 templates/cluster/worker_details.html:117
 msgid "Unavailable"
@@ -649,31 +653,6 @@ msgid "Application Host saved successfully."
 msgstr "Host de aplicación guardado correctamente."
 
 #: app_gateway/views.py:293
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    <h5>Certificate</h5>\n"
-#| "    <p>Defines how the TLS certificate for this hostname is issued.</p>\n"
-#| "    <ul>\n"
-#| "        <li><strong>Trusted certificate (HTTP validation)</strong>: "
-#| "Issued through ACME (e.g. Let's Encrypt) and validated over HTTP. The "
-#| "hostname must point to this server and ports 80/443 must be reachable "
-#| "from the internet.</li>\n"
-#| "        <li><strong>Trusted certificate (DNS validation)</strong>: Issued "
-#| "through ACME and validated with a DNS record created using the selected "
-#| "DNS credential. The server does not need to be reachable from the "
-#| "internet.</li>\n"
-#| "        <li><strong>Self-signed certificate</strong>: Issued by the "
-#| "internal Caddy CA. Browsers will show a security warning.</li>\n"
-#| "    </ul>\n"
-#| "    <p>When the fallback option is enabled and a trusted certificate "
-#| "cannot be issued, a self-signed certificate is used until the next "
-#| "successful attempt. Without the fallback, the connection fails until the "
-#| "certificate is issued.</p>\n"
-#| "    <p>Use <strong>Retry certificate</strong> in the host list to request "
-#| "a new attempt right away, for example after fixing the DNS or firewall.</"
-#| "p>\n"
-#| "    "
 msgid ""
 "\n"
 "    <h5>Certificate</h5>\n"
@@ -726,6 +705,11 @@ msgstr ""
 "    <p>Use <strong>Reintentar certificado</strong> en la lista de hosts para "
 "solicitar un nuevo intento de inmediato, por ejemplo después de corregir el "
 "DNS o el firewall.</p>\n"
+"    <p><strong>Importante:</strong> el certificado se solicita en cuanto se "
+"aplica la configuración. Con la validación HTTP, el nombre de host ya debe "
+"apuntar a este servidor: los intentos fallidos cuentan para el límite de "
+"Let's Encrypt (5 por hora por nombre de host). Si el DNS todavía no está "
+"listo, use la validación DNS.</p>\n"
 "    "
 
 #: app_gateway/views.py:306
@@ -1073,6 +1057,9 @@ msgid ""
 "specific WireGuard instance. Change them to wg+ or IP addresses first: "
 "%(rules)s"
 msgstr ""
+"El modo de cluster distribuido no permite reglas de firewall vinculadas a "
+"una instancia específica de WireGuard. Cámbielas primero a wg+ o direcciones "
+"IP: %(rules)s"
 
 #: cluster/models.py:53
 msgid ""
@@ -1107,6 +1094,8 @@ msgid ""
 "Worker not deleted|Move the WireGuard instances of this worker to another "
 "server first: "
 msgstr ""
+"Worker no eliminado|Mueva primero las instancias de WireGuard de este worker "
+"a otro servidor: "
 
 #: cluster/views.py:166
 msgid "Worker not deleted|Invalid confirmation."
@@ -1153,6 +1142,32 @@ msgid ""
 "interfaces until enabled again.</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Worker</h5>\n"
+"        <p>Un worker es un nodo del cluster que replica WireGuard, el "
+"firewall y el DNS de este servidor primario y, opcionalmente, publica "
+"aplicaciones del App Gateway.</p>\n"
+"\n"
+"        <h5>Nombre y ubicación</h5>\n"
+"        <p>Se usan para identificar el worker. El <strong>nombre de host</"
+"strong> es la dirección que usan los clientes para conectarse a este worker: "
+"se escribe como endpoint de las configuraciones de peer descargadas para "
+"este servidor.</p>\n"
+"\n"
+"        <h5>Token</h5>\n"
+"        <p>Secreto que usa el worker para autenticarse en este servidor "
+"primario. Cambiarlo desconecta el worker hasta que se actualice su "
+"configuración.</p>\n"
+"\n"
+"        <h5>Bloqueo de IP</h5>\n"
+"        <p>Cuando está habilitado, el worker solo se acepta desde la "
+"dirección IP indicada abajo. Sin él, la dirección se actualiza "
+"automáticamente a partir de la última conexión.</p>\n"
+"\n"
+"        <h5>Habilitado</h5>\n"
+"        <p>Los workers deshabilitados son rechazados y apagan sus interfaces "
+"WireGuard hasta que se habiliten de nuevo.</p>\n"
+"        "
 
 #: cluster/views.py:222
 msgid "Cluster settings updated successfully."
@@ -1186,6 +1201,33 @@ msgid ""
 "downloads and VPN invites).</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Cluster habilitado</h5>\n"
+"        <p>Cuando está deshabilitado, los workers son rechazados y apagan "
+"sus interfaces WireGuard, y las aplicaciones del App Gateway solo las "
+"publica este servidor primario. Requiere la caché de estado de WireGuard.</"
+"p>\n"
+"\n"
+"        <h5>Habilitar WireGuard primario</h5>\n"
+"        <p>Muestra este servidor primario como opción al descargar "
+"configuraciones de peer e invitaciones de VPN.</p>\n"
+"\n"
+"        <h5>Modo de cluster</h5>\n"
+"        <p><strong>Mirror</strong>: todos los workers reciben las mismas "
+"instancias de WireGuard, peers, firewall y configuración de DNS. Los peers "
+"pueden conectarse a cualquier servidor.</p>\n"
+"        <p><strong>Distributed</strong>: cada instancia de WireGuard se "
+"ejecuta solo en el servidor seleccionado en la configuración de la instancia "
+"(el servidor primario por defecto). Los peers se conectan a ese servidor. "
+"Las reglas de firewall no pueden vincularse a la interfaz de una instancia "
+"específica: use wg+ o direcciones IP. Después de cambiar el modo, aplique la "
+"configuración de WireGuard para que el servidor primario detenga las "
+"instancias que pasaron a los workers.</p>\n"
+"\n"
+"        <h5>Visualización del worker</h5>\n"
+"        <p>Cómo se nombran los workers en las selecciones de servidor "
+"(descargas de configuraciones de peer e invitaciones de VPN).</p>\n"
+"        "
 
 #: cluster/views.py:250 templates/cluster/workers_list.html:9
 #: templates/cluster/workers_list.html:77
@@ -1524,6 +1566,8 @@ msgid ""
 "The distributed cluster mode does not allow rules bound to a specific "
 "WireGuard instance. Use wg+ or IP addresses instead."
 msgstr ""
+"El modo de cluster distribuido no permite reglas vinculadas a una instancia "
+"específica de WireGuard. Use wg+ o direcciones IP."
 
 #: firewall/forms.py:192
 msgid "Default Forward Policy"
@@ -2860,30 +2904,28 @@ msgstr "Exportar ahora"
 #: templates/cluster/worker_details.html:12
 #: templates/cluster/workers_list.html:118
 msgid "Refused"
-msgstr ""
+msgstr "Rechazado"
 
 #: templates/cluster/worker_details.html:14
 #: templates/cluster/workers_list.html:120
-#, fuzzy
-#| msgid "Unlink"
 msgid "Online"
-msgstr "Desvincular"
+msgstr "En línea"
 
 #: templates/cluster/worker_details.html:16
 #: templates/cluster/workers_list.html:122
 msgid "Offline"
-msgstr ""
+msgstr "Sin conexión"
 
 #: templates/cluster/worker_details.html:21
-#, fuzzy
-#| msgid "Edit Worker: "
 msgid "Edit Worker"
-msgstr "Editar Worker: "
+msgstr "Editar Worker"
 
 #: templates/cluster/worker_details.html:29
 msgid ""
 "The worker is offline. The information below is the last state it reported."
 msgstr ""
+"El worker está sin conexión. La información de abajo es el último estado que "
+"informó."
 
 #: templates/cluster/worker_details.html:32
 #: templates/cluster/workers_list.html:162
@@ -2919,43 +2961,31 @@ msgid "Version"
 msgstr "Versión"
 
 #: templates/cluster/worker_details.html:50
-#, fuzzy
-#| msgid "Current time"
 msgid "current"
-msgstr "Hora actual"
+msgstr "actual"
 
 #: templates/cluster/worker_details.html:52
-#, fuzzy
-#| msgid "WireGuard Instances"
 msgid "WireGuard instances"
 msgstr "Instancias de WireGuard"
 
 #: templates/cluster/worker_details.html:61
 msgid "App Gateway"
-msgstr ""
+msgstr "App Gateway"
 
 #: templates/cluster/worker_details.html:62
-#, fuzzy
-#| msgid "Not State"
 msgid "Not installed"
-msgstr "No estado"
+msgstr "No instalado"
 
 #: templates/cluster/worker_details.html:72
 #: templates/cluster/workers_list.html:88
-#, fuzzy
-#| msgid "Traffic data synchronization"
 msgid "Synchronization"
-msgstr "Sincronización de datos de tráfico"
+msgstr "Sincronización"
 
 #: templates/cluster/worker_details.html:75
-#, fuzzy
-#| msgid "Action"
 msgid "Section"
-msgstr "Acción"
+msgstr "Sección"
 
 #: templates/cluster/worker_details.html:75
-#, fuzzy
-#| msgid "Last Update"
 msgid "Last update"
 msgstr "Última actualización"
 
@@ -2963,40 +2993,34 @@ msgstr "Última actualización"
 #: templates/cluster/workers_list.html:42
 #: templates/cluster/workers_list.html:134
 msgid "Synchronized"
-msgstr ""
+msgstr "Sincronizado"
 
 #: templates/cluster/worker_details.html:82
 #: templates/cluster/workers_list.html:136
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: templates/cluster/worker_details.html:83
 #: templates/cluster/workers_list.html:139
 msgid "Pending"
-msgstr ""
+msgstr "Pendiente"
 
 #: templates/cluster/worker_details.html:96
 #: templates/cluster/workers_list.html:89
-#, fuzzy
-#| msgid "Server"
 msgid "Services"
-msgstr "Servidor primario"
+msgstr "Servicios"
 
 #: templates/cluster/worker_details.html:101
 msgid "No report received yet."
-msgstr ""
+msgstr "Todavía no se recibió ningún informe."
 
 #: templates/cluster/worker_details.html:107
-#, fuzzy
-#| msgid "Certificate"
 msgid "Certificates served"
-msgstr "Certificado"
+msgstr "Certificados publicados"
 
 #: templates/cluster/worker_details.html:131
-#, fuzzy
-#| msgid "Invalid action."
 msgid "Installation"
-msgstr "Acción inválida."
+msgstr "Instalación"
 
 #: templates/cluster/worker_details.html:133
 msgid ""
@@ -3006,28 +3030,33 @@ msgid ""
 "rel=\"noopener noreferrer\">project repository</a> to the worker, and create "
 "a <code>.env</code> file next to them:"
 msgstr ""
+"Copie <code>cluster_node.yml</code> (y <code>cluster_node-gateway.yml</code> "
+"para publicar aplicaciones del App Gateway) del <a href=\"https://github.com/"
+"eduardogsilva/wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">repositorio del proyecto</a> al worker y cree un archivo "
+"<code>.env</code> junto a ellos:"
 
 #: templates/cluster/worker_details.html:139
 #: templates/cluster/worker_details.html:147
 #: templates/cluster/worker_details.html:153
-#, fuzzy
-#| msgid "Copy Text"
 msgid "Copy"
-msgstr "Copiar texto"
+msgstr "Copiar"
 
 #: templates/cluster/worker_details.html:145
 msgid "VPN only"
-msgstr ""
+msgstr "Solo VPN"
 
 #: templates/cluster/worker_details.html:151
 msgid "VPN and App Gateway"
-msgstr ""
+msgstr "VPN y App Gateway"
 
 #: templates/cluster/worker_details.html:158
 msgid ""
 "To update, run docker compose pull followed by the same up -d command, "
 "always with every compose file of the worker."
 msgstr ""
+"Para actualizar, ejecute docker compose pull seguido del mismo comando up "
+"-d, siempre con todos los archivos compose del worker."
 
 #: templates/cluster/worker_details.html:159
 msgid ""
@@ -3035,95 +3064,92 @@ msgid ""
 "certificates: certificates are issued by this primary server and distributed "
 "to the workers."
 msgstr ""
+"Las aplicaciones publicadas por workers deben usar validación DNS o "
+"certificados autofirmados: los certificados los emite este servidor primario "
+"y se distribuyen a los workers."
 
 #: templates/cluster/worker_details.html:160
 msgid ""
 "Publish the WireGuard ports (51820-51839/udp) and, with the App Gateway, "
 "ports 80 and 443 of the worker."
 msgstr ""
+"Publique los puertos de WireGuard (51820-51839/udp) y, con el App Gateway, "
+"los puertos 80 y 443 del worker."
 
 #: templates/cluster/workers_list.html:8
 msgid ""
 "The cluster is disabled. Workers are refused and App Gateway applications "
 "are only published by this primary server."
 msgstr ""
+"El cluster está deshabilitado. Los workers son rechazados y las aplicaciones "
+"del App Gateway solo las publica este servidor primario."
 
 #: templates/cluster/workers_list.html:15
 msgid "These WireGuard instances are offline because their worker is disabled:"
 msgstr ""
+"Estas instancias de WireGuard están fuera de servicio porque su worker está "
+"deshabilitado:"
 
 #: templates/cluster/workers_list.html:17
 msgid "Enable the worker or move the instances to another server."
-msgstr ""
+msgstr "Habilite el worker o mueva las instancias a otro servidor."
 
 #: templates/cluster/workers_list.html:23
 msgid ""
 "The cluster requires the WireGuard status cache. Enable "
 "WIREGUARD_STATUS_CACHE_ENABLED in the .env file."
 msgstr ""
+"El cluster requiere la caché de estado de WireGuard. Habilite "
+"WIREGUARD_STATUS_CACHE_ENABLED en el archivo .env."
 
 #: templates/cluster/workers_list.html:33
-#, fuzzy
-#| msgid "Worker is not enabled"
 msgid "Workers online"
-msgstr "Worker no está habilitado"
+msgstr "Workers en línea"
 
 #: templates/cluster/workers_list.html:51
 msgid "Need attention"
-msgstr ""
+msgstr "Requieren atención"
 
 #: templates/cluster/workers_list.html:60
 msgid "Primary WireGuard"
-msgstr "Habilitar WireGuard primario"
+msgstr "WireGuard primario"
 
 #: templates/cluster/workers_list.html:63
-#, fuzzy
-#| msgid "No WireGuard instances found."
 msgid "WireGuard instances on the primary server"
-msgstr "No se encontraron instancias de WireGuard."
+msgstr "Instancias de WireGuard en el servidor primario"
 
 #: templates/cluster/workers_list.html:64
 #: templates/cluster/workers_list.html:109
-#, fuzzy
-#| msgid "WireGuard Instances"
 msgid "No WireGuard instances"
-msgstr "Instancias de WireGuard"
+msgstr "Ninguna instancia de WireGuard"
 
 #: templates/cluster/workers_list.html:74
-#, fuzzy
-#| msgid "Add Worker"
 msgid "Workers"
-msgstr "Agregar Worker"
+msgstr "Workers"
 
 #: templates/cluster/workers_list.html:86
-#, fuzzy
-#| msgid "Add Worker"
 msgid "Worker"
-msgstr "Agregar Worker"
+msgstr "Worker"
 
 #: templates/cluster/workers_list.html:107
-#, fuzzy
-#| msgid "WireGuard Instance"
 msgid "WireGuard instance"
 msgstr "Instancia de WireGuard"
 
 #: templates/cluster/workers_list.html:132
 msgid "The worker is not receiving updates."
-msgstr ""
+msgstr "El worker no está recibiendo actualizaciones."
 
 #: templates/cluster/workers_list.html:148
-#, fuzzy
-#| msgid "Last Update"
 msgid "Last reported state"
-msgstr "Última actualización"
+msgstr "Último estado informado"
 
 #: templates/cluster/workers_list.html:155
 msgid "Certificates unavailable or expiring soon"
-msgstr ""
+msgstr "Certificados no disponibles o a punto de vencer"
 
 #: templates/cluster/workers_list.html:170
 msgid "Details"
-msgstr ""
+msgstr "Detalles"
 
 #: templates/cluster/workers_list.html:180
 msgid "No workers configured"
@@ -3131,11 +3157,11 @@ msgstr "No hay workers configurados"
 
 #: templates/cluster/workers_list.html:190
 msgid "Diagnostics"
-msgstr ""
+msgstr "Diagnóstico"
 
 #: templates/cluster/workers_list.html:201
 msgid "Current worker version"
-msgstr ""
+msgstr "Versión actual del worker"
 
 #: templates/cluster/workers_list.html:203
 msgid "Stats Cache Refresh Interval"
@@ -3922,7 +3948,7 @@ msgstr "Código QR"
 #: templates/wireguard/peer_list/peer_preview_modal.html:145
 #: wireguard/forms.py:59
 msgid "Server"
-msgstr "Servidor primario"
+msgstr "Servidor"
 
 #: templates/wireguard/peer_list/script_peer_extras_toggle.html:7
 msgid "Hide extras"
@@ -4878,6 +4904,8 @@ msgid ""
 "The instance runs only on this server. Peer configurations of instances on a "
 "worker use the hostname of the worker as endpoint."
 msgstr ""
+"La instancia se ejecuta solo en este servidor. Las configuraciones de peer "
+"de instancias en un worker usan el nombre de host del worker como endpoint."
 
 #: wireguard/forms.py:156
 #, python-format
@@ -4987,6 +5015,8 @@ msgid ""
 "This network is already used by peer %(peer)s of wg%(instance)s. A network "
 "can be routed to only one WireGuard instance."
 msgstr ""
+"Esta red ya la usa el peer %(peer)s de wg%(instance)s. Una red solo puede "
+"enrutarse a una instancia de WireGuard."
 
 #: wireguard_peer/forms.py:114
 msgid "The peer's routing template does not allow custom routes."
@@ -5052,6 +5082,8 @@ msgid ""
 "wg%(id)s runs on %(worker)s, which applies the change on its next "
 "synchronization."
 msgstr ""
+"wg%(id)s se ejecuta en %(worker)s, que aplica el cambio en su próxima "
+"sincronización."
 
 #: wireguard_peer/views.py:35
 #, python-format
