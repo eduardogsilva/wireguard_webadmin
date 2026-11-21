@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.views.decorators.http import require_POST
 
 from app_gateway.caddy_config_export import auto_apply_caddy_config, caddy_export_pending
 from app_gateway.setup_defaults import create_default_entries
@@ -16,6 +17,7 @@ from gatekeeper.forms import GatekeeperUserForm, GatekeeperGroupForm, AuthMethod
     AuthMethodAllowedEmailForm, GatekeeperIPAddressForm
 from gatekeeper.models import GatekeeperUser, GatekeeperGroup, AuthMethod, AuthMethodAllowedDomain, \
     AuthMethodAllowedEmail, GatekeeperIPAddress
+from gatekeeper.sessions import get_active_sessions, revoke_session
 from user_manager.models import UserAcl
 
 
@@ -44,8 +46,25 @@ def view_gatekeeper_list(request):
         'active_tab': active_tab,
         'caddy_enabled': settings.CADDY_ENABLED,
         'pending_export': caddy_export_pending(),
+        'gateway_sessions': get_active_sessions() if active_tab == 'sessions' else [],
     }
     return render(request, 'gatekeeper/gatekeeper_list.html', context)
+
+
+@login_required
+@require_POST
+def view_revoke_gatekeeper_session(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
+
+    session = revoke_session(request.POST.get('session', ''))
+    if session:
+        messages.success(request, _('Session ended|The session of %(user)s ends on its server within a minute.') % {
+            'user': session.get('username') or session.get('email') or '-'
+        })
+    else:
+        messages.warning(request, _('Session not found|The session is no longer active.'))
+    return redirect(reverse('gatekeeper_list') + '?tab=sessions')
 
 
 @login_required

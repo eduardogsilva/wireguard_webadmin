@@ -96,7 +96,14 @@ def load_runtime_config(config_dir: Path) -> RuntimeConfig:
         users=auth.users,
         groups=auth.groups,
         policies=auth.policies,
+        revoked_sessions=_load_revoked_sessions(config_dir),
     )
+
+
+def _load_revoked_sessions(config_dir: Path) -> set[str]:
+    payload = _load_json(config_dir / "revoked_sessions.json") or {}
+    sessions = payload.get("sessions", []) if isinstance(payload, dict) else []
+    return {value for value in sessions if isinstance(value, str)}
 
 
 class RuntimeConfigStore:
@@ -112,6 +119,7 @@ class RuntimeConfigStore:
             "applications.json",
             "routes.json",
             "auth_policies.json",
+            "revoked_sessions.json",
         ):
             path = self.config_dir / filename
             if path.exists():

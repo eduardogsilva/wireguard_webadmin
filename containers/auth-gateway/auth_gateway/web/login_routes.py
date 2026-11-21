@@ -22,6 +22,7 @@ from auth_gateway.web.dependencies import (
     get_session,
     get_session_factors,
     get_totp_method,
+    login_metadata,
     resolve_context_from_request,
     set_csrf_cookie,
     session_is_allowed,
@@ -54,6 +55,7 @@ def _render(request: Request, template_name: str, status_code: int = 200, **cont
 
 
 def _redirect_with_cookie(request: Request, destination: str, session) -> RedirectResponse:
+    request.app.state.session_snapshot.refresh()
     response = RedirectResponse(destination, status_code=303)
     response.set_cookie(
         key=request.app.state.settings.cookie_name,
@@ -75,7 +77,7 @@ def _create_authenticated_session(request: Request, *, username=None, email=None
         email=email,
         subject=subject,
         groups=groups,
-        metadata=metadata,
+        metadata={**login_metadata(request, username), **(metadata or {})},
         add_factors=factors,
         expires_in_minutes=expires_in_minutes,
     )
@@ -315,7 +317,8 @@ async def login_totp_submit(request: Request, next: str = Form("/"), token: str 
     refreshed_session = session_service.issue_session(
         existing_session=session,
         add_factors=["totp"],
-        metadata=factor_method_metadata(session, "totp", method_name),
+        # Without a password or OIDC step (TOTP only), the session starts here
+        metadata={**({} if session else login_metadata(request)), **factor_method_metadata(session, "totp", method_name)},
         expires_in_minutes=get_effective_expiration(request, effective_policy, ["totp"]),
     )
     logger.info("AUTH login ok for '%s' via password+totp (policy: %s)", refreshed_session.username, context.policy_name)
@@ -393,6 +396,7 @@ def _do_logout(request: Request, next_url: str = "/") -> RedirectResponse:
     session_cookie = request.cookies.get(request.app.state.settings.cookie_name)
     session = request.app.state.session_service.get_session(session_cookie)
     request.app.state.session_service.delete_session(session_cookie)
+    request.app.state.session_snapshot.refresh()
     if session:
         logger.info("AUTH logout for '%s'", session.username or session.email or "unknown")
     response = RedirectResponse(_safe_redirect_path(next_url), status_code=303)

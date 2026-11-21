@@ -22,6 +22,7 @@ from firewall.tools import generate_firewall_script
 from user_manager.models import UserAcl
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from wireguard_tools.functions import get_config_servers
+from wireguard_tools.tests import load_cluster_worker
 from wireguard_tools.views import export_wireguard_configuration, generate_peer_config
 
 FAKE_CERTIFICATE = '-----BEGIN CERTIFICATE-----\nfake\n-----END CERTIFICATE-----\n'
@@ -137,6 +138,25 @@ class ClusterApiTests(ClusterTestMixin, TestCase):
         self.assertEqual(worker_status.wireguard_status, {'wg0': {}})
         self.assertIsNotNone(worker_status.certificate_status_updated)
         self.assertIsNotNone(worker_status.wireguard_status_updated)
+
+    def test_report_stores_gateway_sessions(self):
+        sessions = [
+            {'id': 'a' * 64, 'username': 'alice', 'factors': ['password'], 'online': True, 'session_id': 'secret'},
+            {'id': 'invalid', 'username': 'mallory'},
+        ]
+        response = self.client.post(
+            '/api/cluster/v2/report/', data=json.dumps({'gateway_sessions': sessions}), content_type='application/json',
+            **self.headers
+        )
+        self.assertEqual(response.status_code, 200)
+        worker_status = WorkerStatus.objects.get(worker=self.worker)
+        self.assertEqual([session['id'] for session in worker_status.gateway_sessions], ['a' * 64])
+        self.assertNotIn('session_id', worker_status.gateway_sessions[0])
+        self.assertIsNotNone(worker_status.gateway_sessions_updated)
+
+        # A report without sessions (older worker or no change) keeps the last ones
+        self.client.post('/api/cluster/v2/report/', data=json.dumps({'services': {}}), content_type='application/json', **self.headers)
+        self.assertEqual(len(WorkerStatus.objects.get(worker=self.worker).gateway_sessions), 1)
 
 
 class ClusterSyncTests(ClusterTestMixin, TestCase):
@@ -435,3 +455,73 @@ class DistributedModeTests(ClusterTestMixin, TestCase):
 
         self.client.get(f'/cluster/worker/manage/?uuid={self.worker_b.uuid}&action=delete&confirmation=delete')
         self.assertFalse(Worker.objects.filter(pk=self.worker_b.pk).exists())
+
+
+class AgentGatewaySessionsTests(TestCase):
+    """Sessions of the node auth-gateway are reported when they change, and revocations reach its config."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.cluster_worker = load_cluster_worker()
+
+    def setUp(self):
+        temp_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(temp_dir.cleanup)
+        self.gateway_dir = temp_dir.name
+        self.sessions_file = os.path.join(self.gateway_dir, 'state', 'sessions.json')
+        os.makedirs(os.path.dirname(self.sessions_file))
+        for name, value in (
+            ('GATEWAY_DIR', self.gateway_dir),
+            ('GATEWAY_SESSIONS_FILE', self.sessions_file),
+            ('gateway_enabled', lambda: True),
+            ('wireguard_status', lambda: {}),
+        ):
+            patcher = patch.object(self.cluster_worker, name, value)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+        for name in ('services_status', 'certificates_status'):
+            patcher = patch.object(self.cluster_worker.ClusterNodeAgent, name, staticmethod(lambda: {}))
+            patcher.start()
+            self.addCleanup(patcher.stop)
+        self.agent = self.cluster_worker.ClusterNodeAgent()
+        self.reports = []
+        self.status_code = 200
+        self.agent.request = self.record_report
+
+    def record_report(self, method, path, json=None):
+        self.reports.append(json)
+        return type('Response', (), {'status_code': self.status_code})()
+
+    def publish(self, sessions):
+        with open(self.sessions_file, 'w', encoding='utf-8') as sessions_file:
+            sessions_file.write(json.dumps({'sessions': sessions}))
+
+    def test_sessions_are_only_reported_when_they_change(self):
+        self.publish([{'id': 'a' * 64}])
+        self.agent.send_stats()
+        self.agent.send_stats()
+        self.publish([])
+        self.agent.send_stats()
+        self.assertEqual([report.get('gateway_sessions') for report in self.reports], [[{'id': 'a' * 64}], None, []])
+
+    def test_sessions_are_reported_again_when_the_primary_did_not_accept_them(self):
+        self.publish([{'id': 'a' * 64}])
+        self.status_code = 500
+        self.agent.send_stats()
+        self.status_code = 200
+        self.agent.send_stats()
+        self.agent.send_stats()
+        self.assertEqual(['gateway_sessions' in report for report in self.reports], [True, True, False])
+
+    def test_no_sessions_file_reports_nothing(self):
+        self.agent.send_stats()
+        self.assertNotIn('gateway_sessions', self.reports[0])
+
+    def test_revoked_sessions_are_written_when_sent(self):
+        files = {name: '{}' for name in self.cluster_worker.GATEWAY_FILES}
+        self.agent.apply_gateway({'files': files})
+        self.assertFalse(os.path.exists(os.path.join(self.gateway_dir, 'revoked_sessions.json')))
+        self.agent.apply_gateway({'files': dict(files, **{'revoked_sessions.json': '{"sessions": []}'})})
+        with open(os.path.join(self.gateway_dir, 'revoked_sessions.json'), encoding='utf-8') as revoked_file:
+            self.assertEqual(revoked_file.read(), '{"sessions": []}')

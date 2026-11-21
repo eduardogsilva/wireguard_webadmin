@@ -92,6 +92,9 @@ class SQLiteStorage:
             ).fetchone()
         if not row:
             return None
+        return self._session_from_row(row)
+
+    def _session_from_row(self, row: sqlite3.Row) -> SessionRecord:
         return SessionRecord(
             session_id=row["session_id"],
             created_at=self._from_iso(row["created_at"]),
@@ -104,6 +107,17 @@ class SQLiteStorage:
             auth_factors=json.loads(row["auth_factors_json"]),
             metadata=json.loads(row["metadata_json"]),
         )
+
+    def list_sessions(self) -> list[SessionRecord]:
+        with self._lock, self._connect() as connection:
+            rows = connection.execute("SELECT * FROM sessions ORDER BY created_at").fetchall()
+        return [self._session_from_row(row) for row in rows]
+
+    def delete_expired(self, now: datetime) -> None:
+        with self._lock, self._connect() as connection:
+            connection.execute("DELETE FROM sessions WHERE expires_at <= ?", (self._to_iso(now),))
+            connection.execute("DELETE FROM oidc_states WHERE expires_at <= ?", (self._to_iso(now),))
+            connection.commit()
 
     def delete_session(self, session_id: str) -> None:
         with self._lock, self._connect() as connection:

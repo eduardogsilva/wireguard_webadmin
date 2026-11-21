@@ -62,6 +62,7 @@ async def auth_check(request: Request):
     response = PlainTextResponse("OK", status_code=200)
     response.headers["Cache-Control"] = "no-store"
     if session:
+        request.app.state.session_service.touch(session)
         if session.username:
             response.headers["X-Auth-User"] = _safe_header(session.username)
         if session.email:

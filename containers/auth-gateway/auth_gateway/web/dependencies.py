@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from secrets import token_urlsafe
 from urllib.parse import urlencode
 
@@ -5,11 +6,13 @@ from fastapi import HTTPException, Request
 from fastapi.responses import Response
 
 from auth_gateway.config_loader import RuntimeConfigStore
+from auth_gateway.limiter import get_real_client_ip
 from auth_gateway.models.auth import OIDCMethodModel, TotpMethodModel
 from auth_gateway.models.runtime import RuntimeConfig
 from auth_gateway.models.session import SessionRecord
 from auth_gateway.services.policy_engine import EffectivePolicy, build_effective_policy
 from auth_gateway.services.resolver import RequestContext, normalize_host, normalize_path, resolve_request_context
+from auth_gateway.services.session_service import credential_fingerprint, session_is_valid
 
 
 def get_runtime_config(request: Request) -> RuntimeConfig:
@@ -20,7 +23,25 @@ def get_runtime_config(request: Request) -> RuntimeConfig:
 def get_session(request: Request) -> SessionRecord | None:
     session_service = request.app.state.session_service
     cookie_name = request.app.state.settings.cookie_name
-    return session_service.get_session(request.cookies.get(cookie_name))
+    session = session_service.get_session(request.cookies.get(cookie_name))
+    if session and not session_is_valid(session, get_runtime_config(request)):
+        session_service.delete_session(session.session_id)
+        return None
+    return session
+
+
+def login_metadata(request: Request, username: str | None = None) -> dict:
+    """Where the session was opened and, for local users, the fingerprint of their credentials."""
+    metadata = {
+        "host": normalize_host(request.headers.get("host", "")),
+        "client_ip": get_real_client_ip(request),
+        "user_agent": request.headers.get("user-agent", "")[:200],
+        "last_seen": datetime.now(UTC).isoformat(),
+    }
+    user = get_runtime_config(request).users.get(username) if username else None
+    if user:
+        metadata["credential"] = credential_fingerprint(user)
+    return metadata
 
 
 def build_external_url(request: Request, path: str, **params: str) -> str:

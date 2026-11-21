@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import time
 from contextlib import asynccontextmanager
@@ -13,6 +14,7 @@ from auth_gateway.config_loader import RuntimeConfigStore
 from auth_gateway.limiter import get_real_client_ip, limiter
 from auth_gateway.services.oidc_service import OIDCService
 from auth_gateway.services.session_service import SessionService
+from auth_gateway.services.session_snapshot import SNAPSHOT_INTERVAL_SECONDS, SessionSnapshot
 from auth_gateway.settings import settings
 from auth_gateway.storage.sqlite import SQLiteStorage
 from auth_gateway.web.auth_routes import router as auth_router
@@ -31,7 +33,20 @@ async def lifespan(app: FastAPI):
     app.state.session_service = SessionService(storage, settings.session_default_minutes, settings.oidc_state_ttl_minutes)
     app.state.oidc_service = OIDCService()
     app.state.templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+    app.state.session_snapshot = SessionSnapshot(storage, app.state.config_store, settings.config_dir / "state" / "sessions.json")
+    snapshot_task = asyncio.create_task(_refresh_session_snapshot(app.state.session_snapshot))
     yield
+    snapshot_task.cancel()
+
+
+async def _refresh_session_snapshot(session_snapshot: SessionSnapshot):
+    # Sessions also end without a request (expiration, revocation, changed credentials) and go offline over time
+    while True:
+        try:
+            await asyncio.to_thread(session_snapshot.refresh)
+        except Exception as error:
+            _access_logger.warning("Session snapshot failed: %s", error)
+        await asyncio.sleep(SNAPSHOT_INTERVAL_SECONDS)
 
 
 app = FastAPI(

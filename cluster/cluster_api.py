@@ -10,6 +10,7 @@ from django.views.decorators.http import require_GET, require_POST
 
 from cluster.models import ClusterSettings, Worker, WorkerStatus
 from cluster.sync import SECTION_NAMES, build_manifest, build_section
+from gatekeeper.sessions import clean_gateway_sessions
 
 REPORT_STATUS_FIELDS = ('status', 'message')
 
@@ -159,6 +160,11 @@ def api_report(request):
         worker_status.certificate_status = payload['certificates']
         worker_status.certificate_status_updated = timezone.now()
         update_fields += ['certificate_status', 'certificate_status_updated']
+
+    if isinstance(payload.get('gateway_sessions'), list):
+        worker_status.gateway_sessions = clean_gateway_sessions(payload['gateway_sessions'])
+        worker_status.gateway_sessions_updated = timezone.now()
+        update_fields += ['gateway_sessions', 'gateway_sessions_updated']
 
     if isinstance(payload.get('wireguard_status'), dict):
         worker_status.wireguard_status = payload['wireguard_status']

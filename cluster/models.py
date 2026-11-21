@@ -120,6 +120,9 @@ class WorkerStatus(models.Model):
     # {hostname: {"status": ..., "issuer": ..., "not_after": ..., "generation": ...}}
     certificate_status = models.JSONField(default=dict, blank=True)
     certificate_status_updated = models.DateTimeField(blank=True, null=True)
+    # Active sessions of the auth-gateway of the worker, as published in its sessions snapshot
+    gateway_sessions = models.JSONField(default=list, blank=True)
+    gateway_sessions_updated = models.DateTimeField(blank=True, null=True)
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

@@ -1,8 +1,36 @@
+import hashlib
 from datetime import UTC, datetime, timedelta
 from secrets import token_urlsafe
 
+from auth_gateway.models.auth import UserModel
+from auth_gateway.models.runtime import RuntimeConfig
 from auth_gateway.models.session import OIDCStateRecord, SessionRecord
 from auth_gateway.storage.sqlite import SQLiteStorage
+
+# The last access is written at most this often, so requests do not write to the database
+LAST_SEEN_WRITE_INTERVAL = timedelta(minutes=5)
+
+
+def session_id_hash(session_id: str) -> str:
+    """Identifies a session outside the gateway (snapshot, revocation) without exposing the session ID."""
+    return hashlib.sha256(session_id.encode()).hexdigest()
+
+
+def credential_fingerprint(user: UserModel) -> str:
+    """Changes when the password or the TOTP secret of the user changes."""
+    value = f"{user.password_hash or ''}\0{user.totp_secret or ''}"
+    return hashlib.sha256(value.encode()).hexdigest()[:32]
+
+
+def session_is_valid(session: SessionRecord, runtime_config: RuntimeConfig) -> bool:
+    """A session ends when it is revoked or when the credentials of its user change or the user is removed."""
+    if session_id_hash(session.session_id) in runtime_config.revoked_sessions:
+        return False
+    if session.username:
+        user = runtime_config.users.get(session.username)
+        if not user or session.metadata.get("credential") != credential_fingerprint(user):
+            return False
+    return True
 
 
 class SessionService:
@@ -65,6 +93,15 @@ class SessionService:
         session.updated_at = now
         self.storage.save_session(session)
         return session
+
+    def touch(self, session: SessionRecord) -> None:
+        """Record the last access, at most once per LAST_SEEN_WRITE_INTERVAL."""
+        now = datetime.now(UTC)
+        last_seen = session.metadata.get("last_seen")
+        if last_seen and now - datetime.fromisoformat(last_seen) < LAST_SEEN_WRITE_INTERVAL:
+            return
+        session.metadata["last_seen"] = now.isoformat()
+        self.storage.save_session(session)
 
     def delete_session(self, session_id: str | None) -> None:
         if session_id:

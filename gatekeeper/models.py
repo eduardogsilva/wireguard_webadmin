@@ -155,3 +155,16 @@ class GatekeeperIPAddress(models.Model):
         unique_together = [('auth_method', 'address', 'prefix_length')]
         verbose_name = 'IP Address'
         verbose_name_plural = 'IP Addresses'
+
+
+class RevokedGatewaySession(models.Model):
+    """Session ended from the WireGuard WebAdmin. Kept until the session would have expired."""
+    session_hash = models.CharField(max_length=64, unique=True)
+    username = models.CharField(max_length=254, blank=True)
+    expires_at = models.DateTimeField()
+
+    created = models.DateTimeField(auto_now_add=True)
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+
+    def __str__(self):
+        return f'{self.username or "-"} ({self.session_hash[:12]})'

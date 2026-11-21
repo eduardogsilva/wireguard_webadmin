@@ -15,6 +15,7 @@ from cluster.models import ClusterSettings, WorkerStatus
 from dns.functions import generate_dnsmasq_config
 from dns.models import DNSFilterList
 from firewall.tools import generate_firewall_script
+from gatekeeper.sessions import REVOKED_SESSIONS_FILE, build_revoked_sessions_data
 from wireguard.models import WireGuardInstance
 from wireguard_tools.functions import CLUSTER_WIREGUARD_CONFIG_DIR, WIREGUARD_CONFIG_DIR
 
@@ -143,6 +144,8 @@ def build_gateway_section(worker):
     section = Section()
     for file_name, data in get_gateway_export(worker).items():
         section.add_file(file_name, json.dumps(data, indent=2) + '\n')
+    # Sessions ended from the WireGuard WebAdmin, the same for every server
+    section.add_file(REVOKED_SESSIONS_FILE, json.dumps(build_revoked_sessions_data(), indent=2) + '\n')
     return section
 
 

@@ -1,4 +1,5 @@
 import glob
+import hashlib
 import ipaddress
 import json
 import logging
@@ -18,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 MASTER_SERVER_ADDRESS = os.environ.get('MASTER_SERVER_ADDRESS', '')
 TOKEN = os.environ.get('TOKEN', '')
-WORKER_VERSION = 13
+WORKER_VERSION = 14
 REQUEST_TIMEOUT = 30
 MANIFEST_INTERVAL = 60
 DEFAULT_STATS_INTERVAL = 60
@@ -31,6 +32,10 @@ DNS_MAIN_CONFIG = 'wireguard_webadmin_dns.conf'
 GATEWAY_DIR = '/caddy_json_export'
 CERTIFICATES_DIR = '/caddy_certificates'
 GATEWAY_FILES = ('applications.json', 'auth_policies.json', 'routes.json', 'tls.json')
+# Sessions ended from the WireGuard WebAdmin, sent by primary servers that support it
+GATEWAY_OPTIONAL_FILES = ('revoked_sessions.json',)
+# Active sessions published by the auth-gateway
+GATEWAY_SESSIONS_FILE = os.path.join(GATEWAY_DIR, 'state', 'sessions.json')
 CERTIFICATE_FILE_PATTERN = re.compile(r'^[a-f0-9]{64}\.(crt|key)$')
 CADDY_ADMIN_URL = 'http://127.0.0.1:2019/config/'
 AUTH_GATEWAY_URL = 'http://cluster-node-auth-gateway:9091/'
@@ -238,6 +243,8 @@ class ClusterNodeAgent:
         self.applied_hashes = {}
         self.stats_interval = DEFAULT_STATS_INTERVAL
         self.wireguard_active = False
+        # Hash of the last gateway sessions accepted by the primary server: they are only sent when they change
+        self.sent_sessions_hash = None
 
     def request(self, method, path, **kwargs):
         try:
@@ -347,8 +354,9 @@ class ClusterNodeAgent:
         for filename in GATEWAY_FILES:
             if filename not in section['files']:
                 raise SectionError(f'{filename} missing from section')
-        for filename in GATEWAY_FILES:
-            write_file(os.path.join(GATEWAY_DIR, filename), section['files'][filename], mode=0o644)
+        for filename in GATEWAY_FILES + GATEWAY_OPTIONAL_FILES:
+            if filename in section['files']:
+                write_file(os.path.join(GATEWAY_DIR, filename), section['files'][filename], mode=0o644)
 
     SECTION_HANDLERS = {
         'firewall': apply_firewall,
@@ -432,14 +440,34 @@ class ClusterNodeAgent:
             return {}
         return {hostname: inspect_certificate(hostname) for hostname in sorted(hosts)}
 
+    @staticmethod
+    def gateway_sessions():
+        """Sessions published by the auth-gateway and their hash, or (None, None) when not available."""
+        content = read_file(GATEWAY_SESSIONS_FILE)
+        if content is None:
+            return None, None
+        try:
+            sessions = json.loads(content).get('sessions')
+        except (ValueError, AttributeError):
+            return None, None
+        if not isinstance(sessions, list):
+            return None, None
+        return sessions, hashlib.sha256(content.encode()).hexdigest()
+
     def send_stats(self):
         report = {
             'wireguard_status': wireguard_status(),
             'services': self.services_status(),
         }
+        sessions_hash = None
         if gateway_enabled():
             report['certificates'] = self.certificates_status()
-        self.request('POST', 'report/', json=report)
+            sessions, sessions_hash = self.gateway_sessions()
+            if sessions_hash and sessions_hash != self.sent_sessions_hash:
+                report['gateway_sessions'] = sessions
+        response = self.request('POST', 'report/', json=report)
+        if 'gateway_sessions' in report and response is not None and response.status_code == 200:
+            self.sent_sessions_hash = sessions_hash
 
     @staticmethod
     def publish_network_namespace():
