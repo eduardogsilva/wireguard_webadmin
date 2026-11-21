@@ -1,6 +1,7 @@
 import posixpath
+import re
 from dataclasses import dataclass
-from urllib.parse import unquote, urlsplit
+from urllib.parse import unquote
 
 from auth_gateway.models.applications import ApplicationModel
 from auth_gateway.models.routes import AppRoutesModel, RoutePolicyBindingModel
@@ -21,16 +22,22 @@ def normalize_host(raw_host: str) -> str:
 
 
 def normalize_path(raw_uri: str) -> str:
-    parsed = urlsplit(raw_uri or "/")
-    path = unquote(parsed.path or "/")
+    """
+    Path used to pick the policy, normalized the same way Caddy matches routes: repeated slashes are merged and
+    . and .. segments are resolved. The value is a request URI, never a full URL, so a leading // is part of the
+    path and not a network location.
+    """
+    path = re.split(r"[?#]", raw_uri or "/", maxsplit=1)[0]
+    path = unquote(path) or "/"
     path = path if path.startswith("/") else f"/{path}"
-    # Resolve any .. or . segments to prevent path traversal bypasses
+    path = re.sub(r"/{2,}", "/", path)
     return posixpath.normpath(path)
 
 
 def _path_matches(path: str, prefix: str) -> bool:
-    """Check path boundary correctly — prevents /admin matching /administrator."""
-    prefix = prefix.rstrip("/")
+    """Check path boundary correctly — prevents /admin matching /administrator. Case-insensitive, like Caddy."""
+    path = path.lower()
+    prefix = prefix.rstrip("/").lower()
     return path == prefix or path.startswith(prefix + "/")
 
 

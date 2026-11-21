@@ -5,6 +5,7 @@ from auth_gateway.models.auth import OIDCMethodModel
 logger = logging.getLogger("uvicorn.error")
 from auth_gateway.services.oidc_service import is_oidc_identity_allowed
 from auth_gateway.services.password_service import verify_user_password
+from auth_gateway.services.challenge_service import CHALLENGE_COOKIE_NAME, revoke_challenge_cookie
 from auth_gateway.services.policy_engine import evaluate_ip_access, extract_client_ip
 from auth_gateway.services.resolver import normalize_host
 from auth_gateway.services.totp_service import verify_totp
@@ -12,23 +13,31 @@ from auth_gateway.web.dependencies import (
     build_challenge_url,
     build_external_url,
     challenge_is_valid,
+    factor_method_metadata,
     get_effective_expiration,
     get_effective_policy,
     get_oidc_method,
     get_or_create_csrf_token,
     get_runtime_config,
     get_session,
+    get_session_factors,
     get_totp_method,
     resolve_context_from_request,
     set_csrf_cookie,
     session_is_allowed,
     validate_csrf,
 )
-from auth_gateway.limiter import AUTH_RATE_LIMIT, limiter
+from auth_gateway.limiter import AUTH_RATE_LIMIT, get_real_client_ip, limiter
 from fastapi import APIRouter, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 router = APIRouter()
+
+LOGIN_USERNAME_COOKIE_NAME = "auth_gateway_login_user"
+LOGIN_ERRORS = {
+    "invalid_password": "Invalid username or password.",
+    "invalid_totp": "Invalid verification code.",
+}
 
 
 def _render(request: Request, template_name: str, status_code: int = 200, **context):
@@ -72,6 +81,28 @@ def _create_authenticated_session(request: Request, *, username=None, email=None
     )
 
 
+def _failed_login_redirect(request: Request, login_route: str, next_path: str, error: str, username: str | None = None):
+    """
+    After a failed attempt the challenge must be solved again: the current challenge cookie is revoked and the
+    browser goes through the challenge back to the form, which shows the error.
+    """
+    revoke_challenge_cookie(request.cookies.get(CHALLENGE_COOKIE_NAME))
+    response = RedirectResponse(build_challenge_url(request, login_route, next_path, error=error), status_code=303)
+    response.delete_cookie(CHALLENGE_COOKIE_NAME, path="/")
+    if username:
+        # Kept out of the URL so the username does not end up in logs and browser history
+        response.set_cookie(
+            key=LOGIN_USERNAME_COOKIE_NAME,
+            value=username,
+            max_age=300,
+            httponly=True,
+            secure=request.app.state.settings.secure_cookies,
+            samesite="strict",
+            path="/",
+        )
+    return response
+
+
 def _csrf_error(request: Request, next_path: str, application_name: str | None = None):
     return _render(
         request,
@@ -108,9 +139,9 @@ async def login_page(request: Request, next: str = "/"):
         return RedirectResponse(context.path, status_code=303)
 
     if session and session_is_allowed(session, effective_policy):
-        current_factors = set(session.auth_factors)
+        current_factors = get_session_factors(session, effective_policy)
         if effective_policy.ip_method_names:
-            client_ip = extract_client_ip(request.headers.get("x-forwarded-for", ""))
+            client_ip = extract_client_ip(get_real_client_ip(request))
             if evaluate_ip_access(runtime_config, effective_policy, client_ip):
                 current_factors.add("ip")
         missing_factors = [factor for factor in effective_policy.required_factors if factor not in current_factors]
@@ -155,14 +186,17 @@ async def login_password_page(request: Request, next: str = "/"):
     effective_policy = get_effective_policy(runtime_config, context.policy_name)
     if not effective_policy.password_method_names:
         return _render(request, "error.html", status_code=400, title="Password login unavailable", message="The selected policy does not require a password step.")
-    return _render(
+    response = _render(
         request,
         "login_password.html",
         next=next,
         application_name=context.application.name,
-        error=None,
+        error=LOGIN_ERRORS.get(request.query_params.get("error", "")),
+        username=request.cookies.get(LOGIN_USERNAME_COOKIE_NAME, ""),
         csrf_token=get_or_create_csrf_token(request),
     )
+    response.delete_cookie(LOGIN_USERNAME_COOKIE_NAME, path="/")
+    return response
 
 
 @router.post("/login/password")
@@ -187,15 +221,7 @@ async def login_password_submit(
 
     if not user:
         logger.warning("AUTH password failed for '%s' (policy: %s)", username, context.policy_name)
-        return _render(
-            request,
-            "login_password.html",
-            status_code=401,
-            next=next,
-            application_name=context.application.name,
-            error="Invalid username or password.",
-            csrf_token=get_or_create_csrf_token(request),
-        )
+        return _failed_login_redirect(request, "/login/password", next, "invalid_password", username=username)
     if effective_policy.allowed_users and username not in effective_policy.allowed_users:
         logger.warning("AUTH password denied for '%s' — not in allowed_users (policy: %s)", username, context.policy_name)
         return _render(
@@ -247,7 +273,7 @@ async def login_totp_page(request: Request, next: str = "/"):
         "login_totp.html",
         next=next,
         application_name=context.application.name,
-        error=None,
+        error=LOGIN_ERRORS.get(request.query_params.get("error", "")),
         csrf_token=get_or_create_csrf_token(request),
     )
 
@@ -268,7 +294,7 @@ async def login_totp_submit(request: Request, next: str = Form("/"), token: str 
 
     if effective_policy.password_method_names and (not session or "password" not in session.auth_factors):
         return RedirectResponse(build_external_url(request, "/login/password", next=next), status_code=303)
-    if effective_policy.oidc_method_names and (not session or "oidc" not in session.auth_factors):
+    if effective_policy.oidc_method_names and "oidc" not in get_session_factors(session, effective_policy):
         return RedirectResponse(build_external_url(request, "/login/oidc/start", next=next), status_code=303)
 
     method_name, method = get_totp_method(runtime_config, effective_policy)
@@ -283,20 +309,13 @@ async def login_totp_submit(request: Request, next: str = Form("/"), token: str 
 
     if not verify_totp(secret, token):
         logger.warning("AUTH totp failed for '%s' (policy: %s)", session.username if session else "?", context.policy_name)
-        return _render(
-            request,
-            "login_totp.html",
-            status_code=401,
-            next=next,
-            application_name=context.application.name,
-            error="Invalid verification code.",
-            csrf_token=get_or_create_csrf_token(request),
-        )
+        return _failed_login_redirect(request, "/login/totp", next, "invalid_totp")
 
     session_service = request.app.state.session_service
     refreshed_session = session_service.issue_session(
         existing_session=session,
         add_factors=["totp"],
+        metadata=factor_method_metadata(session, "totp", method_name),
         expires_in_minutes=get_effective_expiration(request, effective_policy, ["totp"]),
     )
     logger.info("AUTH login ok for '%s' via password+totp (policy: %s)", refreshed_session.username, context.policy_name)
@@ -352,7 +371,7 @@ async def login_oidc_callback(request: Request, state: str):
         request,
         email=identity.email,
         subject=identity.subject,
-        metadata={"oidc_claims": identity.claims},
+        metadata={"oidc_claims": identity.claims, **factor_method_metadata(None, "oidc", oidc_state.method_name)},
         factors=["oidc"],
         expires_in_minutes=get_effective_expiration(request, effective_policy, ["oidc"]),
     )
@@ -382,8 +401,9 @@ def _do_logout(request: Request, next_url: str = "/") -> RedirectResponse:
 
 
 @router.get("/logout")
-async def logout_get(request: Request, next: str = "/"):
-    return _do_logout(request, next)
+async def logout_get(request: Request):
+    # A link must not be able to end the session: the session page asks for the confirmation (POST with CSRF)
+    return RedirectResponse(build_external_url(request, "/"), status_code=303)
 
 
 @router.post("/logout")

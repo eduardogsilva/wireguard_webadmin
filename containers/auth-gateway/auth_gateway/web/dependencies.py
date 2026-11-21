@@ -1,14 +1,15 @@
 from secrets import token_urlsafe
 from urllib.parse import urlencode
 
+from fastapi import HTTPException, Request
+from fastapi.responses import Response
+
 from auth_gateway.config_loader import RuntimeConfigStore
 from auth_gateway.models.auth import OIDCMethodModel, TotpMethodModel
 from auth_gateway.models.runtime import RuntimeConfig
 from auth_gateway.models.session import SessionRecord
 from auth_gateway.services.policy_engine import EffectivePolicy, build_effective_policy
 from auth_gateway.services.resolver import RequestContext, normalize_host, normalize_path, resolve_request_context
-from fastapi import HTTPException, Request
-from fastapi.responses import Response
 
 
 def get_runtime_config(request: Request) -> RuntimeConfig:
@@ -62,6 +63,31 @@ def session_is_allowed(session: SessionRecord | None, effective_policy: Effectiv
     if not session or not session.username:
         return False
     return session.username in effective_policy.allowed_users
+
+
+def get_session_factors(session: SessionRecord | None, effective_policy: EffectivePolicy) -> set[str]:
+    """
+    Factors of the session that count for the policy. OIDC and TOTP only count when they were completed with one
+    of the methods of the policy: each method has its own allowlists or secret.
+    """
+    if not session:
+        return set()
+    factors = set(session.auth_factors)
+    factor_methods = session.metadata.get("factor_methods", {})
+    for factor, method_names in (("oidc", effective_policy.oidc_method_names), ("totp", effective_policy.totp_method_names)):
+        if factor in factors and not set(factor_methods.get(factor, [])) & set(method_names):
+            factors.discard(factor)
+    return factors
+
+
+def factor_method_metadata(session: SessionRecord | None, factor: str, method_name: str) -> dict:
+    """Session metadata recording that the factor was completed with the given method."""
+    current = session.metadata.get("factor_methods", {}) if session else {}
+    factor_methods = {name: list(methods) for name, methods in current.items()}
+    method_names = factor_methods.setdefault(factor, [])
+    if method_name not in method_names:
+        method_names.append(method_name)
+    return {"factor_methods": factor_methods}
 
 
 def get_totp_method(runtime_config: RuntimeConfig, effective_policy: EffectivePolicy) -> tuple[str, TotpMethodModel] | tuple[None, None]:
@@ -120,9 +146,14 @@ def challenge_is_valid(request: Request) -> bool:
     return verify_challenge_cookie(cookie, request.app.state.settings.challenge_secret)
 
 
-def build_challenge_url(request: Request, login_route: str, next_url: str) -> str:
+def build_challenge_url(request: Request, login_route: str, next_url: str, error: str | None = None) -> str:
     external_path = request.app.state.settings.external_path.rstrip("/")
     login_path = f"{external_path}{login_route}"
+    params = {}
     if next_url and next_url != "/":
-        login_path = f"{login_path}?{urlencode({'next': next_url})}"
+        params["next"] = next_url
+    if error:
+        params["error"] = error
+    if params:
+        login_path = f"{login_path}?{urlencode(params)}"
     return build_external_url(request, "/challenge", next=login_path)

@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 
-from auth_gateway.models.auth import OIDCMethodModel
 from authlib.integrations.starlette_client import OAuth
+
+from auth_gateway.models.auth import OIDCMethodModel
 
 
 @dataclass
@@ -45,6 +46,9 @@ class OIDCService:
         if "userinfo" in token and isinstance(token["userinfo"], dict):
             claims.update(token["userinfo"])
         email = claims.get("email")
+        # An email the provider did not verify can be set by the user, so it must not pass the allowlists
+        if str(claims.get("email_verified", True)).lower() == "false":
+            email = None
         subject = claims.get("sub")
         return OIDCIdentity(subject=subject, email=email, claims=claims)
 

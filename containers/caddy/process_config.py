@@ -218,8 +218,10 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
         # Caddy's path matcher does not decode percent-encoding, so /%2fadmin would
         # NOT match path /admin and would fall through to the default (potentially
         # bypass) handler even though some upstreams decode it to /admin.
+        # Path parameters (;, also encoded as %3b) are rejected for the same reason: /admin;x does not match the
+        # /admin route, but Java upstreams (Tomcat, Spring) serve it as /admin.
         lines.append("  @encoded_slash {")
-        lines.append("    path_regexp (?i)%(?:25)*2f")
+        lines.append("    path_regexp (?i)%(?:25)*2f|;|%(?:25)*3b")
         lines.append("  }")
         lines.append("  handle @encoded_slash {")
         lines.append("    respond 400")
