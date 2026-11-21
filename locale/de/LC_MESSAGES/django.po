@@ -1944,10 +1944,12 @@ msgstr "Zulassen"
 msgid ""
 "Session ended|The session of %(user)s ends on its server within a minute."
 msgstr ""
+"Sitzung beendet|Die Sitzung von %(user)s wird innerhalb einer Minute auf "
+"ihrem Server beendet."
 
 #: gatekeeper/views.py:66
 msgid "Session not found|The session is no longer active."
-msgstr ""
+msgstr "Sitzung nicht gefunden|Die Sitzung ist nicht mehr aktiv."
 
 #: gatekeeper/views.py:79
 msgid "Edit Gatekeeper User"
@@ -3641,10 +3643,8 @@ msgid "IP Addresses"
 msgstr "IP-Adressen"
 
 #: templates/gatekeeper/gatekeeper_list.html:55
-#, fuzzy
-#| msgid "Permissions"
 msgid "Sessions"
-msgstr "Berechtigungen"
+msgstr "Sitzungen"
 
 #: templates/gatekeeper/gatekeeper_list.html:65
 #: templates/user_manager/peer_group_list.html:11
@@ -3708,10 +3708,11 @@ msgid ""
 "used in the last 10 minutes. Sessions of cluster workers are the last ones "
 "each worker reported."
 msgstr ""
+"Über die Anmeldung des App Gateway geöffnete Sitzungen. Eine Sitzung ist "
+"online, wenn sie in den letzten 10 Minuten verwendet wurde. Die Sitzungen "
+"der Cluster-Worker sind die zuletzt von jedem Worker gemeldeten."
 
 #: templates/gatekeeper/gatekeeper_list.html:346
-#, fuzzy
-#| msgid "Users"
 msgid "User"
 msgstr "Benutzer"
 
@@ -3726,90 +3727,76 @@ msgid "Host"
 msgstr "Host"
 
 #: templates/gatekeeper/gatekeeper_list.html:349
-#, fuzzy
-#| msgid "Last update"
 msgid "Last access"
-msgstr "Letzte Aktualisierung"
+msgstr "Letzter Zugriff"
 
 #: templates/gatekeeper/gatekeeper_list.html:351
 msgid "Factors"
-msgstr ""
+msgstr "Faktoren"
 
 #: templates/gatekeeper/gatekeeper_list.html:352
-#, fuzzy
-#| msgid "Start Time"
 msgid "Started"
-msgstr "Startzeit"
+msgstr "Beginn"
 
 #: templates/gatekeeper/gatekeeper_list.html:353
-#, fuzzy
-#| msgid "Expires on"
 msgid "Expires"
-msgstr "Läuft ab am"
+msgstr "Läuft ab"
 
 #: templates/gatekeeper/gatekeeper_list.html:354
 msgid "Browser"
-msgstr ""
+msgstr "Browser"
 
 #: templates/gatekeeper/gatekeeper_list.html:367
-#, fuzzy
-#| msgid "Last reported state"
 msgid "Last report"
-msgstr "Zuletzt gemeldeter Zustand"
+msgstr "Letzter Bericht"
 
 #: templates/gatekeeper/gatekeeper_list.html:367
-#, fuzzy
-#| msgid "Workers online"
 msgid "Worker offline"
-msgstr "Worker online"
+msgstr "Worker offline"
 
 #: templates/gatekeeper/gatekeeper_list.html:384
-#, fuzzy
-#| msgid "Pending"
 msgid "Ending"
-msgstr "Ausstehend"
+msgstr "Wird beendet"
 
 #: templates/gatekeeper/gatekeeper_list.html:389
 msgid "End session"
-msgstr ""
+msgstr "Sitzung beenden"
 
 #: templates/gatekeeper/gatekeeper_list.html:401
-#, fuzzy
-#| msgid "No active VPN invitations"
 msgid "No active sessions."
-msgstr "Keine aktiven VPN‑Einladungen"
+msgstr "Keine aktiven Sitzungen."
 
 #: templates/gatekeeper/gatekeeper_list.html:440
 msgid "Columns"
-msgstr ""
+msgstr "Spalten"
 
 #: templates/gatekeeper/gatekeeper_list.html:443
 msgid "Search:"
-msgstr ""
+msgstr "Suchen:"
 
 #: templates/gatekeeper/gatekeeper_list.html:444
 msgid "Showing _START_ to _END_ of _TOTAL_ sessions"
-msgstr ""
+msgstr "_START_ bis _END_ von _TOTAL_ Sitzungen"
 
 #: templates/gatekeeper/gatekeeper_list.html:445
 msgid "No sessions to show"
-msgstr ""
+msgstr "Keine Sitzungen anzuzeigen"
 
 #: templates/gatekeeper/gatekeeper_list.html:446
 msgid "(filtered from _MAX_ sessions)"
-msgstr ""
+msgstr "(gefiltert aus _MAX_ Sitzungen)"
 
 #: templates/gatekeeper/gatekeeper_list.html:447
 msgid "No matching sessions"
-msgstr ""
+msgstr "Keine passenden Sitzungen"
 
 #: templates/gatekeeper/gatekeeper_list.html:448
 msgid "Previous"
-msgstr ""
+msgstr "Zurück"
 
 #: templates/gatekeeper/gatekeeper_list.html:448
 msgid "Next"
-msgstr ""
+msgstr "Weiter"
 
 #: templates/generic_delete_confirmation.html:16
 msgid "Confirm Delete"

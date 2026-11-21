@@ -1895,10 +1895,12 @@ msgstr "Povoliť"
 msgid ""
 "Session ended|The session of %(user)s ends on its server within a minute."
 msgstr ""
+"Relácia ukončená|Relácia používateľa %(user)s sa na jej serveri ukončí do "
+"minúty."
 
 #: gatekeeper/views.py:66
 msgid "Session not found|The session is no longer active."
-msgstr ""
+msgstr "Relácia sa nenašla|Relácia už nie je aktívna."
 
 #: gatekeeper/views.py:79
 msgid "Edit Gatekeeper User"
@@ -3559,10 +3561,8 @@ msgid "IP Addresses"
 msgstr "IP adresy"
 
 #: templates/gatekeeper/gatekeeper_list.html:55
-#, fuzzy
-#| msgid "Permissions"
 msgid "Sessions"
-msgstr "Oprávnenia"
+msgstr "Relácie"
 
 #: templates/gatekeeper/gatekeeper_list.html:65
 #: templates/user_manager/peer_group_list.html:11
@@ -3626,12 +3626,13 @@ msgid ""
 "used in the last 10 minutes. Sessions of cluster workers are the last ones "
 "each worker reported."
 msgstr ""
+"Relácie otvorené prihlásením cez App Gateway. Relácia je online, ak bola "
+"použitá v posledných 10 minútach. Relácie workerov clustra sú posledné, "
+"ktoré každý worker nahlásil."
 
 #: templates/gatekeeper/gatekeeper_list.html:346
-#, fuzzy
-#| msgid "Users"
 msgid "User"
-msgstr "Používatelia"
+msgstr "Používateľ"
 
 #: templates/gatekeeper/gatekeeper_list.html:347
 #: templates/wireguard/peer_list/peer_preview_modal.html:145
@@ -3644,90 +3645,76 @@ msgid "Host"
 msgstr "Hostiteľ"
 
 #: templates/gatekeeper/gatekeeper_list.html:349
-#, fuzzy
-#| msgid "Last update"
 msgid "Last access"
-msgstr "Posledná aktualizácia"
+msgstr "Posledný prístup"
 
 #: templates/gatekeeper/gatekeeper_list.html:351
 msgid "Factors"
-msgstr ""
+msgstr "Faktory"
 
 #: templates/gatekeeper/gatekeeper_list.html:352
-#, fuzzy
-#| msgid "Start Time"
 msgid "Started"
-msgstr "Čas začiatku"
+msgstr "Začiatok"
 
 #: templates/gatekeeper/gatekeeper_list.html:353
-#, fuzzy
-#| msgid "Expires on"
 msgid "Expires"
-msgstr "Platí do"
+msgstr "Platnosť do"
 
 #: templates/gatekeeper/gatekeeper_list.html:354
 msgid "Browser"
-msgstr ""
+msgstr "Prehliadač"
 
 #: templates/gatekeeper/gatekeeper_list.html:367
-#, fuzzy
-#| msgid "Last reported state"
 msgid "Last report"
-msgstr "Posledný nahlásený stav"
+msgstr "Posledné hlásenie"
 
 #: templates/gatekeeper/gatekeeper_list.html:367
-#, fuzzy
-#| msgid "Workers online"
 msgid "Worker offline"
-msgstr "Workery online"
+msgstr "Worker offline"
 
 #: templates/gatekeeper/gatekeeper_list.html:384
-#, fuzzy
-#| msgid "Pending"
 msgid "Ending"
-msgstr "Čaká"
+msgstr "Ukončuje sa"
 
 #: templates/gatekeeper/gatekeeper_list.html:389
 msgid "End session"
-msgstr ""
+msgstr "Ukončiť reláciu"
 
 #: templates/gatekeeper/gatekeeper_list.html:401
-#, fuzzy
-#| msgid "No active VPN invitations"
 msgid "No active sessions."
-msgstr "Žiadne aktívne VPN pozvánky"
+msgstr "Žiadne aktívne relácie."
 
 #: templates/gatekeeper/gatekeeper_list.html:440
 msgid "Columns"
-msgstr ""
+msgstr "Stĺpce"
 
 #: templates/gatekeeper/gatekeeper_list.html:443
 msgid "Search:"
-msgstr ""
+msgstr "Hľadať:"
 
 #: templates/gatekeeper/gatekeeper_list.html:444
 msgid "Showing _START_ to _END_ of _TOTAL_ sessions"
-msgstr ""
+msgstr "Zobrazené _START_ až _END_ z _TOTAL_ relácií"
 
 #: templates/gatekeeper/gatekeeper_list.html:445
 msgid "No sessions to show"
-msgstr ""
+msgstr "Žiadne relácie na zobrazenie"
 
 #: templates/gatekeeper/gatekeeper_list.html:446
 msgid "(filtered from _MAX_ sessions)"
-msgstr ""
+msgstr "(filtrované z _MAX_ relácií)"
 
 #: templates/gatekeeper/gatekeeper_list.html:447
 msgid "No matching sessions"
-msgstr ""
+msgstr "Žiadne zodpovedajúce relácie"
 
 #: templates/gatekeeper/gatekeeper_list.html:448
 msgid "Previous"
-msgstr ""
+msgstr "Predchádzajúca"
 
 #: templates/gatekeeper/gatekeeper_list.html:448
 msgid "Next"
-msgstr ""
+msgstr "Ďalšia"
 
 #: templates/generic_delete_confirmation.html:16
 msgid "Confirm Delete"
