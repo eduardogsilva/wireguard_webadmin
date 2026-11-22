@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-21 16:43-0300\n"
+"POT-Creation-Date: 2026-11-22 12:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,7 @@ msgstr ""
 
 #: api_v2/forms.py:29 cluster/forms.py:28 cluster/forms.py:105 dns/forms.py:25
 #: dns/forms.py:68 dns/forms.py:128 routing_templates/forms.py:36
+#: templates/app_gateway/application_host_form.html:23
 #: templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
@@ -34,10 +35,10 @@ msgstr "Späť"
 
 #: api_v2/forms.py:30 cluster/forms.py:29 dns/forms.py:69 dns/forms.py:129
 #: routing_templates/forms.py:37
-#: templates/app_gateway/app_gateway_list.html:178
-#: templates/app_gateway/app_gateway_list.html:223
-#: templates/app_gateway/application_details.html:121
-#: templates/app_gateway/application_details.html:172
+#: templates/app_gateway/app_gateway_list.html:177
+#: templates/app_gateway/app_gateway_list.html:224
+#: templates/app_gateway/application_details.html:116
+#: templates/app_gateway/application_details.html:167
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
 #: templates/gatekeeper/gatekeeper_list.html:118
@@ -65,9 +66,9 @@ msgid ""
 msgstr ""
 "Naozaj chcete regenerovať token? Starý token okamžite prestane fungovať."
 
-#: api_v2/forms.py:63 app_gateway/forms.py:68 app_gateway/forms.py:189
-#: app_gateway/forms.py:234 app_gateway/forms.py:252 app_gateway/forms.py:331
-#: app_gateway/forms.py:373 app_gateway/forms.py:452 cluster/forms.py:70
+#: api_v2/forms.py:63 app_gateway/forms.py:71 app_gateway/forms.py:197
+#: app_gateway/forms.py:242 app_gateway/forms.py:260 app_gateway/forms.py:339
+#: app_gateway/forms.py:381 app_gateway/forms.py:471 cluster/forms.py:70
 #: cluster/forms.py:122 dns/forms.py:37 dns/forms.py:84 dns/forms.py:153
 #: gatekeeper/forms.py:72 gatekeeper/forms.py:155 gatekeeper/forms.py:242
 #: gatekeeper/forms.py:367 gatekeeper/forms.py:397 gatekeeper/forms.py:428
@@ -83,14 +84,15 @@ msgstr ""
 msgid "Save"
 msgstr "Uložiť"
 
-#: api_v2/models.py:10 app_gateway/forms.py:23 app_gateway/forms.py:203
-#: app_gateway/forms.py:409 cluster/forms.py:19 dns/forms.py:130
+#: api_v2/models.py:10 app_gateway/forms.py:26 app_gateway/forms.py:211
+#: app_gateway/forms.py:417 cluster/forms.py:19 dns/forms.py:130
 #: gatekeeper/forms.py:191 routing_templates/forms.py:28
 #: templates/api_v2/api_documentation.html:47 templates/api_v2/list.html:8
 #: templates/app_gateway/app_gateway_list.html:73
-#: templates/app_gateway/app_gateway_list.html:158
-#: templates/app_gateway/app_gateway_list.html:205
+#: templates/app_gateway/app_gateway_list.html:157
+#: templates/app_gateway/app_gateway_list.html:204
 #: templates/app_gateway/application_details.html:36
+#: templates/app_gateway/application_host_form.html:37
 #: templates/dns/static_host_list.html:68
 #: templates/gatekeeper/gatekeeper_list.html:190
 #: templates/routing_templates/list.html:8
@@ -133,10 +135,10 @@ msgstr "Povolené"
 #: api_v2/views.py:17 api_v2/views.py:27 api_v2/views.py:82 api_v2/views.py:106
 #: app_gateway/views.py:39 app_gateway/views.py:66 app_gateway/views.py:121
 #: app_gateway/views.py:181 app_gateway/views.py:232 app_gateway/views.py:260
-#: app_gateway/views.py:325 app_gateway/views.py:354 app_gateway/views.py:365
-#: app_gateway/views.py:428 app_gateway/views.py:455 app_gateway/views.py:491
-#: app_gateway/views.py:518 app_gateway/views.py:569 app_gateway/views.py:598
-#: app_gateway/views.py:623 app_gateway/views.py:654 app_gateway/views.py:682
+#: app_gateway/views.py:334 app_gateway/views.py:363 app_gateway/views.py:374
+#: app_gateway/views.py:437 app_gateway/views.py:464 app_gateway/views.py:500
+#: app_gateway/views.py:527 app_gateway/views.py:578 app_gateway/views.py:607
+#: app_gateway/views.py:630 app_gateway/views.py:667 app_gateway/views.py:695
 #: cluster/views.py:55 cluster/views.py:101 cluster/views.py:147
 #: cluster/views.py:214 gatekeeper/views.py:28 gatekeeper/views.py:58
 #: gatekeeper/views.py:73 gatekeeper/views.py:124 gatekeeper/views.py:148
@@ -212,7 +214,7 @@ msgstr "Ste si istí, že chcete odstrániť kľúč API \"%(name)s\"?"
 msgid "API Documentation"
 msgstr "Dokumentácia API"
 
-#: app_gateway/caddy_config_export.py:322
+#: app_gateway/caddy_config_export.py:328
 msgid "Gateway configuration applied automatically."
 msgstr "Konfigurácia brány bola aplikovaná automaticky."
 
@@ -220,46 +222,46 @@ msgstr "Konfigurácia brány bola aplikovaná automaticky."
 msgid "API Token"
 msgstr "API token"
 
-#: app_gateway/forms.py:24 templates/app_gateway/app_gateway_list.html:74
+#: app_gateway/forms.py:27 templates/app_gateway/app_gateway_list.html:74
 #: templates/app_gateway/application_details.html:37
 msgid "Upstream"
 msgstr "Upstream"
 
-#: app_gateway/forms.py:25
+#: app_gateway/forms.py:28
 msgid "Allow invalid/self-signed certificate"
 msgstr "Povoliť neplatný/samopodpísaný certifikát"
 
-#: app_gateway/forms.py:26
+#: app_gateway/forms.py:29
 msgid "Serve on the primary server"
 msgstr "Publikovať na primárnom serveri"
 
-#: app_gateway/forms.py:27
+#: app_gateway/forms.py:30
 msgid "Serve on all cluster workers"
 msgstr "Publikovať na všetkých workeroch clustra"
 
-#: app_gateway/forms.py:28
+#: app_gateway/forms.py:31
 msgid "Cluster workers"
 msgstr "Workery clustra"
 
-#: app_gateway/forms.py:40
+#: app_gateway/forms.py:43
 msgid ""
 "Select specific workers, or leave empty when serving on all cluster workers."
 msgstr ""
 "Vyberte konkrétne workery alebo nechajte prázdne pri publikovaní na všetkých "
 "workeroch clustra."
 
-#: app_gateway/forms.py:42 cluster/views.py:69
+#: app_gateway/forms.py:45 cluster/views.py:69
 #: templates/template_parts/base_sidebar.html:135
 msgid "Cluster"
 msgstr "Cluster"
 
-#: app_gateway/forms.py:42
+#: app_gateway/forms.py:45
 msgid "Servers that publish this application."
 msgstr "Servery, ktoré publikujú túto aplikáciu."
 
-#: app_gateway/forms.py:69 app_gateway/forms.py:190 app_gateway/forms.py:235
-#: app_gateway/forms.py:253 app_gateway/forms.py:332 app_gateway/forms.py:374
-#: app_gateway/forms.py:453 gatekeeper/forms.py:73 gatekeeper/forms.py:156
+#: app_gateway/forms.py:72 app_gateway/forms.py:198 app_gateway/forms.py:243
+#: app_gateway/forms.py:261 app_gateway/forms.py:340 app_gateway/forms.py:382
+#: app_gateway/forms.py:472 gatekeeper/forms.py:73 gatekeeper/forms.py:156
 #: gatekeeper/forms.py:243 gatekeeper/forms.py:368 gatekeeper/forms.py:398
 #: gatekeeper/forms.py:429 scheduler/forms.py:103
 #: templates/app_gateway/access_policy_type_select.html:50
@@ -268,20 +270,20 @@ msgstr "Servery, ktoré publikujú túto aplikáciu."
 msgid "Cancel"
 msgstr "Zrušiť"
 
-#: app_gateway/forms.py:82
+#: app_gateway/forms.py:85
 msgid "This upstream is reserved by the system."
 msgstr "Tento upstream je vyhradený systémom."
 
-#: app_gateway/forms.py:85
+#: app_gateway/forms.py:88
 msgid "Upstream URL cannot contain spaces."
 msgstr "URL adresa upstream nemôže obsahovať medzery."
 
-#: app_gateway/forms.py:91
+#: app_gateway/forms.py:94
 msgid "Enter a valid upstream URL starting with http:// or https://"
 msgstr ""
 "Zadajte platnú URL adresu upstream začínajúcu na http:// alebo https://"
 
-#: app_gateway/forms.py:93
+#: app_gateway/forms.py:96
 msgid ""
 "Upstream must be a bare host address with no path, query or fragment. Use "
 "http://host or http://host:port"
@@ -289,20 +291,20 @@ msgstr ""
 "Upstream musí byť jednoduchá adresa hostiteľa bez cesty, parametra alebo "
 "fragmentu. Použite http://host alebo http://host:port"
 
-#: app_gateway/forms.py:95
+#: app_gateway/forms.py:98
 msgid "This option is only available for https:// upstreams."
 msgstr "Táto možnosť je dostupná iba pre upstreamy https://."
 
-#: app_gateway/forms.py:101
+#: app_gateway/forms.py:104
 msgid "Leave this empty when the application is served on all cluster workers."
 msgstr ""
 "Nechajte prázdne, ak sa aplikácia publikuje na všetkých workeroch clustra."
 
-#: app_gateway/forms.py:103
+#: app_gateway/forms.py:106
 msgid "Select at least one server to publish this application."
 msgstr "Vyberte aspoň jeden server na publikovanie tejto aplikácie."
 
-#: app_gateway/forms.py:109
+#: app_gateway/forms.py:112
 #, python-format
 msgid ""
 "Applications served by cluster workers require DNS validation or self-signed "
@@ -312,7 +314,7 @@ msgstr ""
 "samopodpísané certifikáty. Najprv zmeňte certifikát týchto hostiteľov: "
 "%(hosts)s"
 
-#: app_gateway/forms.py:121 cluster/forms.py:25 dns/forms.py:65
+#: app_gateway/forms.py:124 cluster/forms.py:25 dns/forms.py:65
 #: templates/app_gateway/app_gateway_list.html:116
 #: templates/app_gateway/application_details.html:76
 #: templates/cluster/worker_details.html:37
@@ -321,30 +323,31 @@ msgstr ""
 msgid "Hostname"
 msgstr "Názov hostiteľa"
 
-#: app_gateway/forms.py:122 templates/app_gateway/app_gateway_list.html:118
+#: app_gateway/forms.py:125 templates/app_gateway/app_gateway_list.html:118
 #: templates/app_gateway/application_details.html:77
 msgid "Certificate"
 msgstr "Certifikát"
 
-#: app_gateway/forms.py:123 templates/app_gateway/dns_credential_form.html:24
+#: app_gateway/forms.py:126 templates/app_gateway/dns_credential_form.html:24
+#: templates/app_gateway/host_certificate.html:13
 msgid "DNS Credential"
 msgstr "Poverenie DNS"
 
-#: app_gateway/forms.py:124
+#: app_gateway/forms.py:127
 msgid ""
 "Use a self-signed certificate if the trusted certificate cannot be issued"
 msgstr ""
 "Použiť samopodpísaný certifikát, ak dôveryhodný certifikát nie je možné vydať"
 
-#: app_gateway/forms.py:135
+#: app_gateway/forms.py:138
 msgid "Hostname contains invalid characters."
 msgstr "Názov hostiteľa obsahuje neplatné znaky."
 
-#: app_gateway/forms.py:139
+#: app_gateway/forms.py:142
 msgid "This hostname is already used by WireGuard WebAdmin."
 msgstr "Tento hostname už používa WireGuard WebAdmin."
 
-#: app_gateway/forms.py:144
+#: app_gateway/forms.py:147
 msgid ""
 "This application is served by cluster workers. Use DNS validation or a self-"
 "signed certificate."
@@ -352,45 +355,51 @@ msgstr ""
 "Túto aplikáciu publikujú workery clustra. Použite overenie cez DNS alebo "
 "samopodpísaný certifikát."
 
-#: app_gateway/forms.py:148
+#: app_gateway/forms.py:151
 msgid "IP addresses can only use a self-signed certificate."
 msgstr "IP adresy môžu používať iba samopodpísaný certifikát."
 
-#: app_gateway/forms.py:152
+#: app_gateway/forms.py:155
 msgid "Select a DNS credential to use the DNS validation."
 msgstr "Vyberte poverenie DNS na použitie overenia cez DNS."
 
-#: app_gateway/forms.py:154
+#: app_gateway/forms.py:158
+msgid ""
+"The challenge record of this hostname in the delegation domain exceeds the "
+"DNS name limit."
+msgstr ""
+
+#: app_gateway/forms.py:161
 msgid "A DNS credential can only be used with the DNS validation."
 msgstr "Poverenie DNS je možné použiť iba s overením cez DNS."
 
-#: app_gateway/forms.py:204 templates/app_gateway/app_gateway_list.html:159
+#: app_gateway/forms.py:212 templates/app_gateway/app_gateway_list.html:158
 msgid "Policy Type"
 msgstr "Typ politiky"
 
-#: app_gateway/forms.py:205
+#: app_gateway/forms.py:213
 msgid "Allowed Groups"
 msgstr "Povolené skupiny"
 
-#: app_gateway/forms.py:206 templates/gatekeeper/gatekeeper_list.html:31
+#: app_gateway/forms.py:214 templates/gatekeeper/gatekeeper_list.html:31
 msgid "Authentication Methods"
 msgstr "Metódy autentifikácie"
 
-#: app_gateway/forms.py:286
+#: app_gateway/forms.py:294
 msgid "Cannot select more than one Local Password authentication method."
 msgstr "Nemožno vybrať viac ako jednu metódu autentifikácie lokálnym heslom."
 
-#: app_gateway/forms.py:290
+#: app_gateway/forms.py:298
 msgid ""
 "Cannot select more than one OpenID Connect (OIDC) authentication method."
 msgstr ""
 "Nemožno vybrať viac ako jednu metódu autentifikácie OpenID Connect (OIDC)."
 
-#: app_gateway/forms.py:294
+#: app_gateway/forms.py:302
 msgid "Cannot select more than one TOTP authentication method."
 msgstr "Nemožno vybrať viac ako jednu metódu autentifikácie TOTP."
 
-#: app_gateway/forms.py:298
+#: app_gateway/forms.py:306
 msgid ""
 "Cannot select both Local Password and OpenID Connect (OIDC) authentication "
 "methods."
@@ -398,7 +407,7 @@ msgstr ""
 "Nemožno vybrať súčasne metódy autentifikácie lokálnym heslom a OpenID "
 "Connect (OIDC)."
 
-#: app_gateway/forms.py:302
+#: app_gateway/forms.py:310
 msgid ""
 "At least one user group must be selected when using Local Password "
 "authentication."
@@ -406,69 +415,94 @@ msgstr ""
 "Pri použití autentifikácie lokálnym heslom musí byť vybraná aspoň jedna "
 "skupina používateľov."
 
-#: app_gateway/forms.py:306
+#: app_gateway/forms.py:314
 msgid "User groups can only be used with Local Password authentication."
 msgstr ""
 "Skupiny používateľov možno použiť len s autentifikáciou lokálnym heslom."
 
-#: app_gateway/forms.py:316 templates/app_gateway/app_gateway_list.html:77
+#: app_gateway/forms.py:324 templates/app_gateway/app_gateway_list.html:77
 #: templates/app_gateway/application_details.html:40
 #: templates/firewall/firewall_nav_tabs.html:15
 msgid "Default Policy"
 msgstr "Predvolená politika"
 
-#: app_gateway/forms.py:345 templates/app_gateway/application_details.html:152
+#: app_gateway/forms.py:353 templates/app_gateway/application_details.html:147
 msgid "Route Name"
 msgstr "Názov trasy"
 
-#: app_gateway/forms.py:346 templates/app_gateway/application_details.html:153
+#: app_gateway/forms.py:354 templates/app_gateway/application_details.html:148
 msgid "Path Prefix"
 msgstr "Prefix cesty"
 
-#: app_gateway/forms.py:347 templates/app_gateway/application_details.html:154
+#: app_gateway/forms.py:355 templates/app_gateway/application_details.html:149
 msgid "Policy"
 msgstr "Politika"
 
-#: app_gateway/forms.py:348 templates/app_gateway/application_details.html:155
+#: app_gateway/forms.py:356 templates/app_gateway/application_details.html:150
 msgid "Order"
 msgstr "Poradie"
 
-#: app_gateway/forms.py:389
+#: app_gateway/forms.py:397
 msgid "Path prefix must start with /."
 msgstr "Predpona cesty musí začínať znakom /."
 
-#: app_gateway/forms.py:391
+#: app_gateway/forms.py:399
 msgid "Path prefix cannot contain spaces."
 msgstr "Predpona cesty nemôže obsahovať medzery."
 
-#: app_gateway/forms.py:393
+#: app_gateway/forms.py:401
 msgid "Path prefix contains invalid characters."
 msgstr "Predpona cesty obsahuje neplatné znaky."
 
-#: app_gateway/forms.py:398
+#: app_gateway/forms.py:406
 msgid "This path prefix is reserved by the system."
 msgstr "Táto predpona cesty je vyhradená systémom."
 
-#: app_gateway/forms.py:410 templates/app_gateway/app_gateway_list.html:206
+#: app_gateway/forms.py:418 templates/app_gateway/app_gateway_list.html:205
 msgid "Provider"
 msgstr "Poskytovateľ"
 
-#: app_gateway/forms.py:428
+#: app_gateway/forms.py:419 templates/app_gateway/app_gateway_list.html:206
+#: templates/app_gateway/dns_credential_form.html:31
+#, fuzzy
+#| msgid "Delete Allowed Domain"
+msgid "Delegation domain"
+msgstr "Odstrániť povolenú doménu"
+
+#: app_gateway/forms.py:423
+msgid ""
+"Optional. Zone managed by this credential that receives the challenge "
+"records of other domains, e.g. acme.example.net. Each host then needs a "
+"CNAME record pointing to this zone."
+msgstr ""
+
+#: app_gateway/forms.py:443
 #, python-format
 msgid "Leave blank to keep the current value (ending in %(suffix)s)."
 msgstr ""
 "Ponechajte prázdne, ak chcete zachovať aktuálnu hodnotu (končí na "
 "%(suffix)s)."
 
-#: app_gateway/forms.py:481
+#: app_gateway/forms.py:486
+msgid "Enter a valid domain, e.g. acme.example.net"
+msgstr ""
+
+#: app_gateway/forms.py:494
+#, python-format
+msgid ""
+"The challenge record of these hosts would exceed the DNS name limit: "
+"%(hosts)s"
+msgstr ""
+
+#: app_gateway/forms.py:515
 msgid "This field is required."
 msgstr "Toto pole je povinné."
 
-#: app_gateway/forms.py:483
+#: app_gateway/forms.py:517
 msgid "This field contains invalid characters."
 msgstr "Toto pole obsahuje neplatné znaky."
 
-#: app_gateway/forms.py:485
+#: app_gateway/forms.py:519
 msgid "The value does not match the expected format for this provider."
 msgstr "Hodnota nezodpovedá očakávanému formátu pre tohto poskytovateľa."
 
@@ -484,25 +518,46 @@ msgstr "Dôveryhodný certifikát (overenie cez DNS)"
 msgid "Self-signed certificate"
 msgstr "Samopodpísaný certifikát"
 
-#: app_gateway/models.py:46
+#: app_gateway/models.py:68
 msgid "Upstream address, e.g.: http://10.188.18.27:3000"
 msgstr "Upstream adresa, napr.: http://10.188.18.27:3000"
 
-#: app_gateway/models.py:47
+#: app_gateway/models.py:69
 msgid "Allow invalid or self-signed TLS certificates from the upstream"
 msgstr "Povoliť neplatné alebo samopodpísané TLS certifikáty z upstreamu"
 
-#: app_gateway/models.py:107
+#: app_gateway/models.py:126 app_gateway/views.py:107
+#: templates/cluster/worker_details.html:116
+msgid "Self-signed"
+msgstr "Samopodpísaný"
+
+#: app_gateway/models.py:128
+#, fuzzy
+#| msgid "TOTP Validation PIN"
+msgid "HTTP validation"
+msgstr "Validačný PIN TOTP"
+
+#: app_gateway/models.py:130
+msgid "DNS validation (delegated)"
+msgstr ""
+
+#: app_gateway/models.py:131
+#, fuzzy
+#| msgid "Invalid action."
+msgid "DNS validation"
+msgstr "Neplatná akcia."
+
+#: app_gateway/models.py:150
 #: templates/app_gateway/access_policy_type_select.html:19
 msgid "Public"
 msgstr "Verejné"
 
-#: app_gateway/models.py:107
+#: app_gateway/models.py:150
 #: templates/app_gateway/access_policy_type_select.html:30
 msgid "Protected"
 msgstr "Chránené"
 
-#: app_gateway/models.py:107 gatekeeper/models.py:142
+#: app_gateway/models.py:150 gatekeeper/models.py:142
 #: templates/app_gateway/access_policy_type_select.html:41
 #: templates/gatekeeper/gatekeeper_list.html:313
 msgid "Deny"
@@ -520,10 +575,6 @@ msgstr "platnosť končí %(date)s"
 #: app_gateway/views.py:105 templates/cluster/worker_details.html:115
 msgid "Trusted"
 msgstr "Dôveryhodný"
-
-#: app_gateway/views.py:107 templates/cluster/worker_details.html:116
-msgid "Self-signed"
-msgstr "Samopodpísaný"
 
 #: app_gateway/views.py:109
 #, python-format
@@ -569,7 +620,7 @@ msgstr "Pre tento názov hostiteľa sa neposkytuje žiadny certifikát."
 msgid "Primary Server"
 msgstr "Primárny server"
 
-#: app_gateway/views.py:188 app_gateway/views.py:278 app_gateway/views.py:333
+#: app_gateway/views.py:188 app_gateway/views.py:278 app_gateway/views.py:342
 msgid "The WireGuard WebAdmin application cannot be modified."
 msgstr "Aplikáciu WireGuard WebAdmin nie je možné upraviť."
 
@@ -651,6 +702,36 @@ msgid "Application Host saved successfully."
 msgstr "Hostiteľ aplikácie bol úspešne uložený."
 
 #: app_gateway/views.py:293
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "    <h5>Certificate</h5>\n"
+#| "    <p>Defines how the TLS certificate for this hostname is issued.</p>\n"
+#| "    <ul>\n"
+#| "        <li><strong>Trusted certificate (HTTP validation)</strong>: "
+#| "Issued through ACME (e.g. Let's Encrypt) and validated over HTTP. The "
+#| "hostname must point to this server and ports 80/443 must be reachable "
+#| "from the internet.</li>\n"
+#| "        <li><strong>Trusted certificate (DNS validation)</strong>: Issued "
+#| "through ACME and validated with a DNS record created using the selected "
+#| "DNS credential. The server does not need to be reachable from the "
+#| "internet.</li>\n"
+#| "        <li><strong>Self-signed certificate</strong>: Issued by the "
+#| "internal Caddy CA. Browsers will show a security warning.</li>\n"
+#| "    </ul>\n"
+#| "    <p>When the fallback option is enabled and a trusted certificate "
+#| "cannot be issued, a self-signed certificate is used until the next "
+#| "successful attempt. Without the fallback, the connection fails until the "
+#| "certificate is issued.</p>\n"
+#| "    <p>Use <strong>Retry certificate</strong> in the host list to request "
+#| "a new attempt right away, for example after fixing the DNS or firewall.</"
+#| "p>\n"
+#| "    <p><strong>Important:</strong> the certificate is requested as soon "
+#| "as the configuration is applied. With HTTP validation, the hostname must "
+#| "already point to this server: failed attempts count towards the Let's "
+#| "Encrypt limit (5 per hour per hostname). If the DNS is not ready yet, use "
+#| "DNS validation.</p>\n"
+#| "    "
 msgid ""
 "\n"
 "    <h5>Certificate</h5>\n"
@@ -662,8 +743,9 @@ msgid ""
 "li>\n"
 "        <li><strong>Trusted certificate (DNS validation)</strong>: Issued "
 "through ACME and validated with a DNS record created using the selected DNS "
-"credential. The server does not need to be reachable from the internet.</"
-"li>\n"
+"credential. The server does not need to be reachable from the internet. When "
+"the credential uses a delegation domain, the hostname zone only needs a "
+"CNAME record pointing to it, shown when the credential is selected.</li>\n"
 "        <li><strong>Self-signed certificate</strong>: Issued by the internal "
 "Caddy CA. Browsers will show a security warning.</li>\n"
 "    </ul>\n"
@@ -728,37 +810,37 @@ msgstr ""
 "        </div>\n"
 "        "
 
-#: app_gateway/views.py:338
+#: app_gateway/views.py:347
 msgid "Application Host deleted successfully."
 msgstr "Hostiteľ aplikácie bol úspešne odstránený."
 
-#: app_gateway/views.py:344
+#: app_gateway/views.py:353
 msgid "Delete Application Host"
 msgstr "Odstrániť hostiteľa aplikácie"
 
-#: app_gateway/views.py:346
+#: app_gateway/views.py:355
 #, python-format
 msgid "Are you sure you want to delete the host \"%(hostname)s\"?"
 msgstr "Naozaj chcete odstrániť hostiteľa \"%(hostname)s\"?"
 
-#: app_gateway/views.py:357
+#: app_gateway/views.py:366
 #: templates/app_gateway/access_policy_type_select.html:9
 msgid "Select Access Policy Type"
 msgstr "Vyberte typ prístupovej politiky"
 
-#: app_gateway/views.py:372
+#: app_gateway/views.py:381
 msgid "Edit Access Policy"
 msgstr "Upraviť politiku prístupu"
 
-#: app_gateway/views.py:376
+#: app_gateway/views.py:385
 msgid "Create Access Policy"
 msgstr "Vytvoriť politiku prístupu"
 
-#: app_gateway/views.py:383
+#: app_gateway/views.py:392
 msgid "Access Policy saved successfully."
 msgstr "Politika prístupu bola úspešne uložená."
 
-#: app_gateway/views.py:390
+#: app_gateway/views.py:399
 msgid ""
 "\n"
 "            <h5>Public Policy</h5>\n"
@@ -772,7 +854,7 @@ msgstr ""
 "akéhokoľvek overenia.</p>\n"
 "            "
 
-#: app_gateway/views.py:398
+#: app_gateway/views.py:407
 msgid ""
 "\n"
 "            <h5>Deny Policy</h5>\n"
@@ -785,7 +867,7 @@ msgstr ""
 "trasám.</p>\n"
 "            "
 
-#: app_gateway/views.py:406
+#: app_gateway/views.py:415
 msgid ""
 "\n"
 "            <h5>Protected Policy</h5>\n"
@@ -815,11 +897,11 @@ msgstr ""
 "            </ul>\n"
 "            "
 
-#: app_gateway/views.py:437
+#: app_gateway/views.py:446
 msgid "Access Policy deleted successfully."
 msgstr "Politika prístupu bola úspešne odstránená."
 
-#: app_gateway/views.py:440
+#: app_gateway/views.py:449
 msgid ""
 "Cannot delete this Access Policy because it is currently in use by an "
 "Application Route or Application Default Policy."
@@ -827,53 +909,53 @@ msgstr ""
 "Túto prístupovú politiku nie je možné odstrániť, pretože sa momentálne "
 "používa v trase aplikácie alebo v predvolenej politike aplikácie."
 
-#: app_gateway/views.py:445
+#: app_gateway/views.py:454
 msgid "Delete Access Policy"
 msgstr "Odstrániť politiku prístupu"
 
-#: app_gateway/views.py:447
+#: app_gateway/views.py:456
 #, python-format
 msgid "Are you sure you want to delete the access policy \"%(name)s\"?"
 msgstr "Ste si istí, že chcete odstrániť politiku prístupu \"%(name)s\"?"
 
-#: app_gateway/views.py:463
+#: app_gateway/views.py:472
 msgid "Edit Application Default Policy"
 msgstr "Upraviť predvolenú politiku aplikácie"
 
-#: app_gateway/views.py:467
+#: app_gateway/views.py:476
 msgid "Set Application Default Policy"
 msgstr "Nastaviť predvolenú politiku aplikácie"
 
-#: app_gateway/views.py:476
+#: app_gateway/views.py:485
 msgid "Application Default Policy saved successfully."
 msgstr "Predvolená politika aplikácie bola úspešne uložená."
 
-#: app_gateway/views.py:500
+#: app_gateway/views.py:509
 msgid "Application Default Policy deleted successfully."
 msgstr "Predvolená politika aplikácie bola úspešne odstránená."
 
-#: app_gateway/views.py:506
+#: app_gateway/views.py:515
 msgid "Delete Application Default Policy"
 msgstr "Odstrániť predvolenú politiku aplikácie"
 
-#: app_gateway/views.py:508
+#: app_gateway/views.py:517
 #, python-format
 msgid "Are you sure you want to remove the default policy for \"%(name)s\"?"
 msgstr "Ste si istí, že chcete odstrániť predvolenú politiku pre \"%(name)s\"?"
 
-#: app_gateway/views.py:526
+#: app_gateway/views.py:535
 msgid "Edit Application Route"
 msgstr "Upraviť trasu aplikácie"
 
-#: app_gateway/views.py:530
+#: app_gateway/views.py:539
 msgid "Add Application Route"
 msgstr "Pridať trasu aplikácie"
 
-#: app_gateway/views.py:539
+#: app_gateway/views.py:548
 msgid "Application Route saved successfully."
 msgstr "Trasa aplikácie bola úspešne uložená."
 
-#: app_gateway/views.py:545
+#: app_gateway/views.py:554
 msgid ""
 "\n"
 "        <h5>Application Route</h5>\n"
@@ -913,28 +995,36 @@ msgstr ""
 "        </ul>\n"
 "        "
 
-#: app_gateway/views.py:578
+#: app_gateway/views.py:587
 msgid "Application Route deleted successfully."
 msgstr "Trasa aplikácie bola úspešne odstránená."
 
-#: app_gateway/views.py:584
+#: app_gateway/views.py:593
 msgid "Delete Application Route"
 msgstr "Odstrániť trasu aplikácie"
 
-#: app_gateway/views.py:586
+#: app_gateway/views.py:595
 #, python-format
 msgid "Are you sure you want to delete the route \"%(name)s\" (%(path)s)?"
 msgstr "Naozaj chcete odstrániť trasu \"%(name)s\" (%(path)s)?"
 
-#: app_gateway/views.py:604
-msgid "This host uses a self-signed certificate."
-msgstr "Tento hostiteľ používa samopodpísaný certifikát."
-
-#: app_gateway/views.py:608
+#: app_gateway/views.py:613
 msgid "This action is not available because Caddy is not enabled."
 msgstr "Táto akcia nie je dostupná, pretože Caddy nie je povolený."
 
-#: app_gateway/views.py:615
+#: app_gateway/views.py:620
+#, fuzzy, python-format
+#| msgid ""
+#| "A new certificate will be requested for %(hostname)s. The current "
+#| "configuration was exported."
+msgid ""
+"A new self-signed certificate will be issued for %(hostname)s. The current "
+"configuration was exported."
+msgstr ""
+"Pre %(hostname)s bude vyžiadaný nový certifikát. Aktuálna konfigurácia bola "
+"exportovaná."
+
+#: app_gateway/views.py:622
 #, python-format
 msgid ""
 "A new certificate will be requested for %(hostname)s. The current "
@@ -943,23 +1033,31 @@ msgstr ""
 "Pre %(hostname)s bude vyžiadaný nový certifikát. Aktuálna konfigurácia bola "
 "exportovaná."
 
-#: app_gateway/views.py:629
+#: app_gateway/views.py:636
 msgid "Edit DNS Credential"
 msgstr "Upraviť poverenie DNS"
 
-#: app_gateway/views.py:632 templates/app_gateway/app_gateway_list.html:196
+#: app_gateway/views.py:639 templates/app_gateway/app_gateway_list.html:195
 msgid "Add DNS Credential"
 msgstr "Pridať poverenie DNS"
 
-#: app_gateway/views.py:639
+#: app_gateway/views.py:646
 msgid "DNS Credential saved successfully."
 msgstr "Poverenie DNS bolo úspešne uložené."
 
-#: app_gateway/views.py:663
+#: app_gateway/views.py:650
+#, python-format
+msgid ""
+"Delegation domain changed|Update the challenge records of the %(count)s "
+"hosts using this credential. The required records are shown in the host list "
+"of each application."
+msgstr ""
+
+#: app_gateway/views.py:676
 msgid "DNS Credential deleted successfully."
 msgstr "Poverenie DNS bolo úspešne odstránené."
 
-#: app_gateway/views.py:666
+#: app_gateway/views.py:679
 msgid ""
 "Cannot delete this DNS Credential because it is currently in use by an "
 "Application Host."
@@ -967,16 +1065,16 @@ msgstr ""
 "Toto poverenie DNS nie je možné odstrániť, pretože ho používa hostiteľ "
 "aplikácie."
 
-#: app_gateway/views.py:671
+#: app_gateway/views.py:684
 msgid "Delete DNS Credential"
 msgstr "Odstrániť poverenie DNS"
 
-#: app_gateway/views.py:673
+#: app_gateway/views.py:686
 #, python-format
 msgid "Are you sure you want to delete the DNS credential \"%(name)s\"?"
 msgstr "Naozaj chcete odstrániť poverenie DNS \"%(name)s\"?"
 
-#: app_gateway/views.py:691
+#: app_gateway/views.py:704
 msgid ""
 "Configuration export is not available because Caddy is not enabled. To use "
 "App Gateway and Gatekeeper, start the application using docker-compose-"
@@ -986,7 +1084,7 @@ msgstr ""
 "chcete používať App Gateway a Gatekeeper, spustite aplikáciu pomocou docker-"
 "compose-caddy.yml."
 
-#: app_gateway/views.py:697
+#: app_gateway/views.py:710
 msgid "Configuration exported successfully."
 msgstr "Konfigurácia bola úspešne exportovaná."
 
@@ -2549,6 +2647,7 @@ msgid "In"
 msgstr "Vstup"
 
 #: templates/api_v2/api_documentation.html:49
+#: templates/app_gateway/application_host_form.html:36
 #: templates/gatekeeper/gatekeeper_list.html:191
 #: templates/gatekeeper/gatekeeper_list.html:236
 #: templates/wireguard/apply_route_template.html:27
@@ -2608,11 +2707,11 @@ msgid "Disabled"
 msgstr "Zakázané"
 
 #: templates/api_v2/list.html:68
-#: templates/app_gateway/app_gateway_list.html:174
-#: templates/app_gateway/app_gateway_list.html:219
-#: templates/app_gateway/application_details.html:109
-#: templates/app_gateway/application_details.html:117
-#: templates/app_gateway/application_details.html:168
+#: templates/app_gateway/app_gateway_list.html:173
+#: templates/app_gateway/app_gateway_list.html:220
+#: templates/app_gateway/application_details.html:104
+#: templates/app_gateway/application_details.html:112
+#: templates/app_gateway/application_details.html:163
 #: templates/cluster/workers_list.html:171
 #: templates/gatekeeper/gatekeeper_list.html:114
 #: templates/gatekeeper/gatekeeper_list.html:157
@@ -2701,28 +2800,28 @@ msgstr "Nenašli sa žiadne aplikácie."
 msgid "Application"
 msgstr "Aplikácia"
 
-#: templates/app_gateway/app_gateway_list.html:141
+#: templates/app_gateway/app_gateway_list.html:140
 msgid "No Hosts found."
 msgstr "Nenašli sa žiadni hostitelia."
 
-#: templates/app_gateway/app_gateway_list.html:149
+#: templates/app_gateway/app_gateway_list.html:148
 msgid "Add Access Policy"
 msgstr "Pridať politiku prístupu"
 
-#: templates/app_gateway/app_gateway_list.html:160
+#: templates/app_gateway/app_gateway_list.html:159
 #: templates/gatekeeper/gatekeeper_list.html:68
 #: templates/gatekeeper/gatekeeper_list.html:89
 msgid "Groups"
 msgstr "Skupiny"
 
-#: templates/app_gateway/app_gateway_list.html:161
+#: templates/app_gateway/app_gateway_list.html:160
 msgid "Auth Methods"
 msgstr "Metódy autentifikácie"
 
-#: templates/app_gateway/app_gateway_list.html:162
+#: templates/app_gateway/app_gateway_list.html:161
 #: templates/app_gateway/app_gateway_list.html:208
 #: templates/app_gateway/application_details.html:79
-#: templates/app_gateway/application_details.html:156
+#: templates/app_gateway/application_details.html:151
 #: templates/cluster/workers_list.html:91
 #: templates/gatekeeper/gatekeeper_list.html:90
 #: templates/gatekeeper/gatekeeper_list.html:147
@@ -2734,11 +2833,11 @@ msgstr "Metódy autentifikácie"
 msgid "Actions"
 msgstr "Akcie"
 
-#: templates/app_gateway/app_gateway_list.html:189
+#: templates/app_gateway/app_gateway_list.html:188
 msgid "No Access Policies found."
 msgstr "Nenašli sa žiadne politiky prístupu."
 
-#: templates/app_gateway/app_gateway_list.html:234
+#: templates/app_gateway/app_gateway_list.html:235
 msgid "No DNS Credentials found."
 msgstr "Nenašli sa žiadne poverenia DNS."
 
@@ -2750,7 +2849,7 @@ msgstr "Späť na zoznam"
 
 #: templates/app_gateway/application_details.html:16
 #: templates/app_gateway/application_details.html:60
-#: templates/app_gateway/application_details.html:112
+#: templates/app_gateway/application_details.html:107
 msgid "This application cannot be modified"
 msgstr "Túto aplikáciu nie je možné upraviť"
 
@@ -2781,29 +2880,63 @@ msgstr "Pridať hostiteľa"
 msgid "Status"
 msgstr "Stav"
 
-#: templates/app_gateway/application_details.html:90
-msgid "no fallback"
-msgstr "bez záložného certifikátu"
+#: templates/app_gateway/application_details.html:98
+#, fuzzy
+#| msgid "This host uses a self-signed certificate."
+msgid "Issue a new self-signed certificate"
+msgstr "Tento hostiteľ používa samopodpísaný certifikát."
 
-#: templates/app_gateway/application_details.html:102
+#: templates/app_gateway/application_details.html:98
 msgid "Retry certificate"
 msgstr "Znova vyžiadať certifikát"
 
-#: templates/app_gateway/application_details.html:133
+#: templates/app_gateway/application_details.html:128
 msgid "No Hosts configured for this application."
 msgstr "Pre túto aplikáciu nie sú konfigurovaní žiadni hostitelia."
 
-#: templates/app_gateway/application_details.html:139
+#: templates/app_gateway/application_details.html:134
 msgid "Application Routes"
 msgstr "Trasy aplikácie"
 
-#: templates/app_gateway/application_details.html:143
+#: templates/app_gateway/application_details.html:138
 msgid "Add Route"
 msgstr "Pridať trasu"
 
-#: templates/app_gateway/application_details.html:183
+#: templates/app_gateway/application_details.html:178
 msgid "No Routes configured for this application."
 msgstr "Pre túto aplikáciu nie sú konfigurované žiadne trasy."
+
+#: templates/app_gateway/application_host_form.html:10
+#: templates/app_gateway/dns_delegation_alert.html:3
+msgid "CNAME record required"
+msgstr ""
+
+#: templates/app_gateway/application_host_form.html:11
+#: templates/wireguard/peer_list/peer_preview_modal.html:121
+msgid "Close"
+msgstr "Zavrieť"
+
+#: templates/app_gateway/application_host_form.html:16
+msgid ""
+"Make sure this record exists in the DNS zone of the hostname. The "
+"certificate is requested as soon as the configuration is applied, and "
+"without the record it cannot be issued."
+msgstr ""
+
+#: templates/app_gateway/application_host_form.html:24
+msgid "I created the record, save"
+msgstr ""
+
+#: templates/app_gateway/application_host_form.html:38
+msgid "Target"
+msgstr ""
+
+#: templates/app_gateway/application_host_form.html:39
+#: templates/cluster/worker_details.html:139
+#: templates/cluster/worker_details.html:147
+#: templates/cluster/worker_details.html:153
+msgid "Copy"
+msgstr "Kopírovať"
 
 #: templates/app_gateway/caddy_disabled_alert.html:5
 msgid "Caddy is not enabled"
@@ -2863,6 +2996,62 @@ msgid ""
 msgstr ""
 "Tajné hodnoty sa po uložení nikdy nezobrazujú. Pri úprave ich ponechajte "
 "prázdne, ak chcete zachovať aktuálnu hodnotu."
+
+#: templates/app_gateway/dns_credential_form.html:32
+msgid ""
+"Use a delegation domain when the zone of the hostnames is not managed by "
+"this provider, or to keep the token restricted to a zone used only for "
+"certificate validation. The challenge record is created in the delegation "
+"domain, and each hostname needs a CNAME record pointing to it:"
+msgstr ""
+
+#: templates/app_gateway/dns_credential_form.html:39
+msgid ""
+"The token must be able to edit the DNS records of the delegation domain "
+"zone. The required record of each host is shown when the host is edited and "
+"in the host list."
+msgstr ""
+
+#: templates/app_gateway/dns_delegation_alert.html:4
+msgid ""
+"This DNS credential uses a delegation domain. Create this record in the DNS "
+"zone of the hostname before saving, otherwise the certificate cannot be "
+"issued:"
+msgstr ""
+
+#: templates/app_gateway/host_certificate.html:5
+#, fuzzy
+#| msgid "no fallback"
+msgid "fallback"
+msgstr "bez záložného certifikátu"
+
+#: templates/app_gateway/host_certificate.html:7
+msgid "no fallback"
+msgstr "bez záložného certifikátu"
+
+#: templates/app_gateway/host_certificate.html:14
+#, fuzzy
+#| msgid "Required"
+msgid "Required record"
+msgstr "Povinné"
+
+#: templates/app_gateway/host_certificate.html:15
+#, fuzzy
+#| msgid "no fallback"
+msgid "Fallback"
+msgstr "bez záložného certifikátu"
+
+#: templates/app_gateway/host_certificate.html:16
+#, fuzzy
+#| msgid ""
+#| "Use a self-signed certificate if the trusted certificate cannot be issued"
+msgid "self-signed certificate while the trusted certificate cannot be issued"
+msgstr ""
+"Použiť samopodpísaný certifikát, ak dôveryhodný certifikát nie je možné vydať"
+
+#: templates/app_gateway/host_certificate.html:16
+msgid "disabled, the connection fails until the certificate is issued"
+msgstr ""
 
 #: templates/app_gateway/pending_export_alert.html:6
 msgid "There are changes that have not been exported to Caddy yet."
@@ -3006,12 +3195,6 @@ msgstr ""
 "eduardogsilva/wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
 "noreferrer\">repozitára projektu</a> na workera a vedľa nich vytvorte súbor "
 "<code>.env</code>:"
-
-#: templates/cluster/worker_details.html:139
-#: templates/cluster/worker_details.html:147
-#: templates/cluster/worker_details.html:153
-msgid "Copy"
-msgstr "Kopírovať"
 
 #: templates/cluster/worker_details.html:145
 msgid "VPN only"
@@ -4008,10 +4191,6 @@ msgstr "Kopírovať text"
 #: templates/wireguard/peer_list/peer_preview_modal.html:106
 msgid "WhatsApp"
 msgstr "WhatsApp"
-
-#: templates/wireguard/peer_list/peer_preview_modal.html:121
-msgid "Close"
-msgstr "Zavrieť"
 
 #: templates/wireguard/peer_list/peer_preview_modal.html:125
 msgid "Config"
