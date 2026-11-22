@@ -369,6 +369,8 @@ msgid ""
 "The challenge record of this hostname in the delegation domain exceeds the "
 "DNS name limit."
 msgstr ""
+"El registro de desafío de este hostname en el dominio de delegación supera "
+"el límite de longitud de los nombres DNS."
 
 #: app_gateway/forms.py:161
 msgid "A DNS credential can only be used with the DNS validation."
@@ -469,10 +471,8 @@ msgstr "Proveedor"
 
 #: app_gateway/forms.py:419 templates/app_gateway/app_gateway_list.html:206
 #: templates/app_gateway/dns_credential_form.html:31
-#, fuzzy
-#| msgid "Delete Allowed Domain"
 msgid "Delegation domain"
-msgstr "Eliminar dominio permitido"
+msgstr "Dominio de delegación"
 
 #: app_gateway/forms.py:423
 msgid ""
@@ -480,6 +480,9 @@ msgid ""
 "records of other domains, e.g. acme.example.net. Each host then needs a "
 "CNAME record pointing to this zone."
 msgstr ""
+"Opcional. Zona administrada por esta credencial que recibe los registros de "
+"desafío de otros dominios, p. ej. acme.example.net. Cada host necesita "
+"entonces un registro CNAME que apunte a esta zona."
 
 #: app_gateway/forms.py:443
 #, python-format
@@ -489,7 +492,7 @@ msgstr ""
 
 #: app_gateway/forms.py:486
 msgid "Enter a valid domain, e.g. acme.example.net"
-msgstr ""
+msgstr "Introduzca un dominio válido, p. ej. acme.example.net"
 
 #: app_gateway/forms.py:494
 #, python-format
@@ -497,6 +500,8 @@ msgid ""
 "The challenge record of these hosts would exceed the DNS name limit: "
 "%(hosts)s"
 msgstr ""
+"El registro de desafío de estos hosts superaría el límite de longitud de los "
+"nombres DNS: %(hosts)s"
 
 #: app_gateway/forms.py:515
 msgid "This field is required."
@@ -536,20 +541,16 @@ msgid "Self-signed"
 msgstr "Autofirmado"
 
 #: app_gateway/models.py:128
-#, fuzzy
-#| msgid "TOTP Validation PIN"
 msgid "HTTP validation"
-msgstr "PIN de validación TOTP"
+msgstr "Validación HTTP"
 
 #: app_gateway/models.py:130
 msgid "DNS validation (delegated)"
-msgstr ""
+msgstr "Validación DNS (delegada)"
 
 #: app_gateway/models.py:131
-#, fuzzy
-#| msgid "Invalid action."
 msgid "DNS validation"
-msgstr "Acción inválida."
+msgstr "Validación DNS"
 
 #: app_gateway/models.py:150
 #: templates/app_gateway/access_policy_type_select.html:19
@@ -705,36 +706,6 @@ msgid "Application Host saved successfully."
 msgstr "Host de aplicación guardado correctamente."
 
 #: app_gateway/views.py:293
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "    <h5>Certificate</h5>\n"
-#| "    <p>Defines how the TLS certificate for this hostname is issued.</p>\n"
-#| "    <ul>\n"
-#| "        <li><strong>Trusted certificate (HTTP validation)</strong>: "
-#| "Issued through ACME (e.g. Let's Encrypt) and validated over HTTP. The "
-#| "hostname must point to this server and ports 80/443 must be reachable "
-#| "from the internet.</li>\n"
-#| "        <li><strong>Trusted certificate (DNS validation)</strong>: Issued "
-#| "through ACME and validated with a DNS record created using the selected "
-#| "DNS credential. The server does not need to be reachable from the "
-#| "internet.</li>\n"
-#| "        <li><strong>Self-signed certificate</strong>: Issued by the "
-#| "internal Caddy CA. Browsers will show a security warning.</li>\n"
-#| "    </ul>\n"
-#| "    <p>When the fallback option is enabled and a trusted certificate "
-#| "cannot be issued, a self-signed certificate is used until the next "
-#| "successful attempt. Without the fallback, the connection fails until the "
-#| "certificate is issued.</p>\n"
-#| "    <p>Use <strong>Retry certificate</strong> in the host list to request "
-#| "a new attempt right away, for example after fixing the DNS or firewall.</"
-#| "p>\n"
-#| "    <p><strong>Important:</strong> the certificate is requested as soon "
-#| "as the configuration is applied. With HTTP validation, the hostname must "
-#| "already point to this server: failed attempts count towards the Let's "
-#| "Encrypt limit (5 per hour per hostname). If the DNS is not ready yet, use "
-#| "DNS validation.</p>\n"
-#| "    "
 msgid ""
 "\n"
 "    <h5>Certificate</h5>\n"
@@ -776,7 +747,9 @@ msgstr ""
 "        <li><strong>Certificado de confianza (validación DNS)</strong>: "
 "emitido mediante ACME y validado con un registro DNS creado con la "
 "credencial DNS seleccionada. No es necesario que el servidor sea accesible "
-"desde internet.</li>\n"
+"desde internet. Cuando la credencial usa un dominio de delegación, la zona "
+"del hostname solo necesita un registro CNAME que apunte a él, que se muestra "
+"al seleccionar la credencial.</li>\n"
 "        <li><strong>Certificado autofirmado</strong>: emitido por la CA "
 "interna de Caddy. Los navegadores mostrarán una advertencia de seguridad.</"
 "li>\n"
@@ -1020,15 +993,12 @@ msgid "This action is not available because Caddy is not enabled."
 msgstr "Esta acción no está disponible porque Caddy no está habilitado."
 
 #: app_gateway/views.py:620
-#, fuzzy, python-format
-#| msgid ""
-#| "A new certificate will be requested for %(hostname)s. The current "
-#| "configuration was exported."
+#, python-format
 msgid ""
 "A new self-signed certificate will be issued for %(hostname)s. The current "
 "configuration was exported."
 msgstr ""
-"Se solicitará un nuevo certificado para %(hostname)s. Se exportó la "
+"Se emitirá un nuevo certificado autofirmado para %(hostname)s. Se exportó la "
 "configuración actual."
 
 #: app_gateway/views.py:622
@@ -1059,6 +1029,9 @@ msgid ""
 "hosts using this credential. The required records are shown in the host list "
 "of each application."
 msgstr ""
+"Dominio de delegación cambiado|Actualice los registros de desafío de los "
+"%(count)s hosts que usan esta credencial. Los registros necesarios se "
+"muestran en la lista de hosts de cada aplicación."
 
 #: app_gateway/views.py:676
 msgid "DNS Credential deleted successfully."
@@ -2922,10 +2895,8 @@ msgid "Status"
 msgstr "Estado"
 
 #: templates/app_gateway/application_details.html:98
-#, fuzzy
-#| msgid "This host uses a self-signed certificate."
 msgid "Issue a new self-signed certificate"
-msgstr "Este host usa un certificado autofirmado."
+msgstr "Emitir un nuevo certificado autofirmado"
 
 #: templates/app_gateway/application_details.html:98
 msgid "Retry certificate"
@@ -2950,7 +2921,7 @@ msgstr "No hay rutas configuradas para esta aplicación."
 #: templates/app_gateway/application_host_form.html:10
 #: templates/app_gateway/dns_delegation_alert.html:3
 msgid "CNAME record required"
-msgstr ""
+msgstr "Registro CNAME necesario"
 
 #: templates/app_gateway/application_host_form.html:11
 #: templates/wireguard/peer_list/peer_preview_modal.html:121
@@ -2963,14 +2934,17 @@ msgid ""
 "certificate is requested as soon as the configuration is applied, and "
 "without the record it cannot be issued."
 msgstr ""
+"Asegúrese de que este registro exista en la zona DNS del hostname. El "
+"certificado se solicita en cuanto se aplica la configuración y, sin el "
+"registro, no se puede emitir."
 
 #: templates/app_gateway/application_host_form.html:24
 msgid "I created the record, save"
-msgstr ""
+msgstr "Ya creé el registro, guardar"
 
 #: templates/app_gateway/application_host_form.html:38
 msgid "Target"
-msgstr ""
+msgstr "Destino"
 
 #: templates/app_gateway/application_host_form.html:39
 #: templates/cluster/worker_details.html:139
@@ -3047,6 +3021,11 @@ msgid ""
 "certificate validation. The challenge record is created in the delegation "
 "domain, and each hostname needs a CNAME record pointing to it:"
 msgstr ""
+"Use un dominio de delegación cuando la zona de los hostnames no esté "
+"administrada por este proveedor, o para mantener el token restringido a una "
+"zona usada solo para validar certificados. El registro de desafío se crea en "
+"el dominio de delegación, y cada hostname necesita un registro CNAME que "
+"apunte a él:"
 
 #: templates/app_gateway/dns_credential_form.html:39
 msgid ""
@@ -3054,6 +3033,9 @@ msgid ""
 "zone. The required record of each host is shown when the host is edited and "
 "in the host list."
 msgstr ""
+"El token debe poder editar los registros DNS de la zona del dominio de "
+"delegación. El registro necesario de cada host se muestra al editar el host "
+"y en la lista de hosts."
 
 #: templates/app_gateway/dns_delegation_alert.html:4
 msgid ""
@@ -3061,41 +3043,35 @@ msgid ""
 "zone of the hostname before saving, otherwise the certificate cannot be "
 "issued:"
 msgstr ""
+"Esta credencial DNS usa un dominio de delegación. Cree este registro en la "
+"zona DNS del hostname antes de guardar; de lo contrario, no se podrá emitir "
+"el certificado:"
 
 #: templates/app_gateway/host_certificate.html:5
-#, fuzzy
-#| msgid "no fallback"
 msgid "fallback"
-msgstr "sin respaldo"
+msgstr "respaldo"
 
 #: templates/app_gateway/host_certificate.html:7
 msgid "no fallback"
 msgstr "sin respaldo"
 
 #: templates/app_gateway/host_certificate.html:14
-#, fuzzy
-#| msgid "Required"
 msgid "Required record"
-msgstr "Obligatorio"
+msgstr "Registro necesario"
 
 #: templates/app_gateway/host_certificate.html:15
-#, fuzzy
-#| msgid "no fallback"
 msgid "Fallback"
-msgstr "sin respaldo"
+msgstr "Respaldo"
 
 #: templates/app_gateway/host_certificate.html:16
-#, fuzzy
-#| msgid ""
-#| "Use a self-signed certificate if the trusted certificate cannot be issued"
 msgid "self-signed certificate while the trusted certificate cannot be issued"
 msgstr ""
-"Usar un certificado autofirmado si no se puede emitir el certificado de "
+"certificado autofirmado mientras no se pueda emitir el certificado de "
 "confianza"
 
 #: templates/app_gateway/host_certificate.html:16
 msgid "disabled, the connection fails until the certificate is issued"
-msgstr ""
+msgstr "desactivado, la conexión falla hasta que se emita el certificado"
 
 #: templates/app_gateway/pending_export_alert.html:6
 msgid "There are changes that have not been exported to Caddy yet."
