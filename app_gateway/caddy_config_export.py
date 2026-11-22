@@ -190,6 +190,9 @@ def build_tls_data(worker=None):
 
         if worker is not None:
             if application.pk in served_application_ids:
+                # Workers issue their own self-signed certificates, so they also follow the renewal requests
+                if application_host.certificate_type == 'self_signed':
+                    host_entry['certificate_generation'] = application_host.certificate_generation
                 hosts[hostname] = host_entry
             continue
 

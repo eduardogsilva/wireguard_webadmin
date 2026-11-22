@@ -416,6 +416,14 @@ def has_acme_certificate(host):
     return False
 
 
+def is_self_signed_renewal(previous_host_state, host_state):
+    """A new self-signed certificate was requested for a host that keeps using the internal CA."""
+    return (
+        previous_host_state is not None and previous_host_state[0] == "self_signed" == host_state[0]
+        and previous_host_state[4] != host_state[4]
+    )
+
+
 def sync_tls_state():
     """
     Compare the certificate settings of the last generated Caddyfile with the ones currently applied.
@@ -441,6 +449,14 @@ def sync_tls_state():
             if previous_host_state is None and not os.path.isdir(
                 os.path.join(CERTIFICATES_DIR, INTERNAL_ISSUER_DIR_NAME, host)
             ):
+                continue
+            if is_self_signed_renewal(previous_host_state, host_state):
+                # The internal CA only issues a new certificate when the cached one is gone
+                internal_certificate_dir = os.path.join(CERTIFICATES_DIR, INTERNAL_ISSUER_DIR_NAME, host)
+                if os.path.isdir(internal_certificate_dir):
+                    shutil.rmtree(internal_certificate_dir)
+                    print(f"Removed self-signed certificate for {host}", file=sys.stderr)
+                restart_required = True
                 continue
             if CLUSTER_NODE:
                 # Certificates received from the primary server replace cached ones only after a restart

@@ -609,10 +609,6 @@ def view_retry_application_host_certificate(request):
     application_host = get_object_or_404(ApplicationHost, uuid=request.GET.get('uuid'))
     redirect_url = reverse('view_application') + f'?uuid={application_host.application.uuid}#hosts'
 
-    if application_host.certificate_type == 'self_signed':
-        messages.error(request, _('This host uses a self-signed certificate.'))
-        return redirect(redirect_url)
-
     if not settings.CADDY_ENABLED:
         messages.error(request, _('This action is not available because Caddy is not enabled.'))
         return redirect(redirect_url)
@@ -620,9 +616,11 @@ def view_retry_application_host_certificate(request):
     ApplicationHost.objects.filter(pk=application_host.pk).update(certificate_generation=F('certificate_generation') + 1)
     apply_caddy_config()
 
-    messages.success(request, _(
-        'A new certificate will be requested for %(hostname)s. The current configuration was exported.'
-    ) % {'hostname': application_host.hostname})
+    if application_host.certificate_type == 'self_signed':
+        message = _('A new self-signed certificate will be issued for %(hostname)s. The current configuration was exported.')
+    else:
+        message = _('A new certificate will be requested for %(hostname)s. The current configuration was exported.')
+    messages.success(request, message % {'hostname': application_host.hostname})
     return redirect(redirect_url)
 
 

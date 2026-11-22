@@ -332,6 +332,27 @@ class CaddyTlsStateTests(TestCase):
             self.assertFalse(os.path.isdir(fallback_dir))
             self.assertTrue(self.apply({'certificate_type': 'dns_challenge', 'certificate_file': 'b' * 64}))
 
+    def test_self_signed_renewal_issues_a_new_certificate(self):
+        self.apply({'certificate_type': 'self_signed'})
+        internal_dir = self.store_certificate('local', 'app.example.test')
+        self.assertFalse(self.apply({'certificate_type': 'self_signed'}))
+        self.assertTrue(os.path.isdir(internal_dir))
+        self.assertTrue(self.apply({'certificate_type': 'self_signed', 'certificate_generation': 1}))
+        self.assertFalse(os.path.isdir(internal_dir))
+
+    def test_switching_to_self_signed_keeps_the_internal_certificate(self):
+        self.apply({'certificate_type': 'http_challenge'})
+        internal_dir = self.store_certificate('local', 'app.example.test')
+        self.assertFalse(self.apply({'certificate_type': 'self_signed', 'certificate_generation': 1}))
+        self.assertTrue(os.path.isdir(internal_dir))
+
+    def test_cluster_node_renews_its_self_signed_certificate(self):
+        with patch.object(process_config, 'CLUSTER_NODE', True):
+            self.apply({'certificate_type': 'self_signed'})
+            internal_dir = self.store_certificate('local', 'app.example.test')
+            self.assertTrue(self.apply({'certificate_type': 'self_signed', 'certificate_generation': 1}))
+            self.assertFalse(os.path.isdir(internal_dir))
+
     def test_only_acme_certificates_are_exported(self):
         tls_data = {'hosts': {
             'exported.example.test': {'certificate_type': 'dns_challenge', 'export_certificate': True},
@@ -605,3 +626,45 @@ class DnsDelegationViewTests(DnsDelegationTestMixin, TestCase):
         warnings = [message.message for message in get_messages(response.wsgi_request) if message.level_tag == 'warning']
         self.assertEqual(len(warnings), 1)
         self.assertIn('1 hosts', warnings[0])
+
+
+@override_settings(ALLOWED_HOSTS=FIXTURE_ALLOWED_HOSTS + ['testserver'], CADDY_ENABLED=True, AUTO_APPLY=False)
+class SelfSignedRenewalTests(TestCase):
+    def setUp(self):
+        temp_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(temp_dir.cleanup)
+        patcher = patch('app_gateway.caddy_config_export.CADDY_EXPORT_DIR', temp_dir.name)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        ClusterSettings.objects.update_or_create(name='cluster_settings', defaults={'enabled': True})
+        self.worker = Worker.objects.create(name='node-a')
+        self.application = Application.objects.create(
+            display_name='Wiki', upstream='http://10.0.0.30:8080', all_workers=True
+        )
+        self.credential = DnsChallengeCredential.objects.create(
+            display_name='Cloudflare', provider='cloudflare', credentials={'api_token': CLOUDFLARE_TOKEN}
+        )
+        self.self_signed = ApplicationHost.objects.create(
+            application=self.application, hostname='internal.example.test', certificate_type='self_signed',
+            certificate_generation=3,
+        )
+        ApplicationHost.objects.create(
+            application=self.application, hostname='dns.example.test', certificate_type='dns_challenge',
+            dns_credential=self.credential, certificate_generation=5,
+        )
+        user = User.objects.create_user(username='gateway-admin', password='unused-test-password')
+        UserAcl.objects.create(user=user, user_level=50)
+        self.client.force_login(user)
+
+    def test_workers_follow_renewals_of_self_signed_certificates_only(self):
+        hosts = build_tls_data(self.worker)['hosts']
+        self.assertEqual(hosts['internal.example.test']['certificate_generation'], 3)
+        self.assertNotIn('certificate_generation', hosts['dns.example.test'])
+
+    def test_retry_requests_a_new_self_signed_certificate(self):
+        response = self.client.post(f'/app_gateway/host/retry_certificate/?uuid={self.self_signed.uuid}')
+        self.self_signed.refresh_from_db()
+        self.assertEqual(self.self_signed.certificate_generation, 4)
+        success = [message.message for message in get_messages(response.wsgi_request) if message.level_tag == 'success']
+        self.assertEqual(len(success), 1)
+        self.assertIn('self-signed', success[0])
