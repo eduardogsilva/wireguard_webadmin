@@ -76,7 +76,7 @@
                         <th>{% trans 'Hostname' %}</th>
                         <th>{% trans 'Certificate' %}</th>
                         {% if caddy_enabled %}<th>{% trans 'Status' %}</th>{% endif %}
-                        <th>{% trans 'Actions' %}</th>
+                        <th class="min-width">{% trans 'Actions' %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -91,15 +91,14 @@
                             <i class="fas fa-spinner fa-spin text-muted"></i>
                         </td>
                         {% endif %}
-                        <td style="width: 15%" class="text-nowrap">
-                            {% if host.certificate_type != 'self_signed' %}
+                        <td class="min-width">
                             <form method="post" action="{% url 'retry_application_host_certificate' %}?uuid={{ host.uuid }}" class="d-inline">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-outline-secondary" title="{% trans 'Retry certificate' %}">
+                                <button type="submit" class="btn btn-sm btn-outline-secondary"
+                                    title="{% if host.certificate_type == 'self_signed' %}{% trans 'Issue a new self-signed certificate' %}{% else %}{% trans 'Retry certificate' %}{% endif %}">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </form>
-                            {% endif %}
                             {% if is_reserved %}
                             <a href="{% url 'manage_application_host' %}?uuid={{ host.uuid }}"
                                 class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
@@ -149,7 +148,7 @@
                         <th>{% trans 'Path Prefix' %}</th>
                         <th>{% trans 'Policy' %}</th>
                         <th>{% trans 'Order' %}</th>
-                        <th>{% trans 'Actions' %}</th>
+                        <th class="min-width">{% trans 'Actions' %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -159,7 +158,7 @@
                         <td><code>{{ route.path_prefix }}</code></td>
                         <td>{{ route.policy }}</td>
                         <td>{{ route.order }}</td>
-                        <td style="width: 15%">
+                        <td class="min-width">
                             <a href="{% url 'manage_application_route' %}?uuid={{ route.uuid }}"
                                 class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
                                 <i class="fas fa-edit"></i>
@@ -206,15 +205,34 @@
                 var cell = $(this);
                 var serversStatus = data.hosts[cell.data('host-uuid')] || [];
                 cell.empty();
+                if (!serversStatus.length) {
+                    return;
+                }
+
+                function badge(cssClass, label, title) {
+                    return $('<span class="badge"></span>').addClass('badge-' + cssClass).attr('title', title).text(label);
+                }
+
+                function serverDetail(serverStatus) {
+                    return serverStatus.server ? serverStatus.server + ': ' + serverStatus.detail : serverStatus.detail;
+                }
+
+                // When every server is in the same state, a single badge summarizes them
+                var first = serversStatus[0];
+                var sameState = serversStatus.every(function (serverStatus) {
+                    return serverStatus.label === first.label && serverStatus.css_class === first.css_class;
+                });
+                if (sameState) {
+                    cell.append(badge(first.css_class, first.label, serversStatus.map(serverDetail).join('\n')));
+                    return;
+                }
                 $.each(serversStatus, function (index, serverStatus) {
-                    var title = serverStatus.server ? serverStatus.server + ': ' + serverStatus.detail : serverStatus.detail;
-                    var label = serverStatus.server ? serverStatus.server + ': ' + serverStatus.label : serverStatus.label;
-                    cell.append(
-                        $('<span class="badge mr-1"></span>')
-                            .addClass('badge-' + serverStatus.css_class)
-                            .attr('title', title)
-                            .text(label)
-                    );
+                    if (index) {
+                        cell.append('<br>');
+                    }
+                    cell.append(badge(
+                        serverStatus.css_class, serverStatus.server + ': ' + serverStatus.label, serverStatus.detail
+                    ));
                 });
             });
         }).fail(function () {

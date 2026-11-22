@@ -158,7 +158,7 @@
                                     <th>{% trans 'Policy Type' %}</th>
                                     <th>{% trans 'Groups' %}</th>
                                     <th>{% trans 'Auth Methods' %}</th>
-                                    <th>{% trans 'Actions' %}</th>
+                                    <th class="min-width">{% trans 'Actions' %}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -168,7 +168,7 @@
                                         <td>{{ policy.get_policy_type_display }}</td>
                                         <td>{{ policy.groups.count }}</td>
                                         <td>{{ policy.methods.count }}</td>
-                                        <td style="width: 15%">
+                                        <td class="min-width">
                                             <a href="{% url 'manage_access_policy' %}?uuid={{ policy.uuid }}"
                                                class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
                                                 <i class="fas fa-edit"></i>
@@ -205,7 +205,7 @@
                                     <th>{% trans 'Provider' %}</th>
                                     <th>{% trans 'Delegation domain' %}</th>
                                     <th>{% trans 'Hosts' %}</th>
-                                    <th>{% trans 'Actions' %}</th>
+                                    <th class="min-width">{% trans 'Actions' %}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -215,7 +215,7 @@
                                         <td>{{ dns_credential.get_provider_display }}</td>
                                         <td>{{ dns_credential.delegation_domain|default:'-' }}</td>
                                         <td>{{ dns_credential.hosts.count }}</td>
-                                        <td style="width: 15%">
+                                        <td class="min-width">
                                             <a href="{% url 'manage_dns_credential' %}?uuid={{ dns_credential.uuid }}"
                                                class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
                                                 <i class="fas fa-edit"></i>
