@@ -15,16 +15,38 @@ CERTIFICATE_TYPE_CHOICES = (
     ('self_signed', _('Self-signed certificate')),
 )
 
+ACME_CHALLENGE_LABEL = '_acme-challenge'
+
+
+def acme_challenge_base(hostname):
+    """Name validated by the DNS challenge: a wildcard certificate is validated on its parent domain."""
+    hostname = hostname.strip().lower().rstrip('.')
+    return hostname[2:] if hostname.startswith('*.') else hostname
+
 
 class DnsChallengeCredential(models.Model):
     name = models.SlugField(max_length=64, unique=True)
     display_name = models.CharField(max_length=128, blank=True)
     provider = models.CharField(max_length=32, choices=DNS_PROVIDER_CHOICES)
     credentials = models.JSONField(default=dict)
+    # Zone the credential manages. When set, the challenge record of each host is a CNAME pointing to this zone.
+    delegation_domain = models.CharField(max_length=253, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+
+    def delegation_target(self, hostname):
+        """
+        Name where the challenge record of the hostname is created, or None without delegation. Hostnames inside
+        the delegation domain are validated directly, since the credential already manages their zone.
+        """
+        if not self.delegation_domain:
+            return None
+        base = acme_challenge_base(hostname)
+        if base == self.delegation_domain or base.endswith(f'.{self.delegation_domain}'):
+            return None
+        return f'{base}.{self.delegation_domain}'
 
     def save(self, *args, **kwargs):
         if self.display_name:
@@ -96,6 +118,27 @@ class ApplicationHost(models.Model):
 
     def __str__(self):
         return self.hostname
+
+    @property
+    def certificate_label(self):
+        """Short description of how the certificate is issued, used in host lists."""
+        if self.certificate_type == 'self_signed':
+            return _('Self-signed')
+        if self.certificate_type == 'http_challenge':
+            return _('HTTP validation')
+        if self.dns_delegation_record:
+            return _('DNS validation (delegated)')
+        return _('DNS validation')
+
+    @property
+    def dns_delegation_record(self):
+        """(name, target) of the CNAME required by a delegated DNS challenge, or None."""
+        if self.certificate_type != 'dns_challenge' or not self.dns_credential:
+            return None
+        target = self.dns_credential.delegation_target(self.hostname)
+        if not target:
+            return None
+        return f'{ACME_CHALLENGE_LABEL}.{acme_challenge_base(self.hostname)}', target
 
     class Meta:
         ordering = ['hostname']

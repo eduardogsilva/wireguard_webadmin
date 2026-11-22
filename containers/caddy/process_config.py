@@ -40,6 +40,7 @@ DISABLE_DNS_CHALLENGE = os.environ.get("DISABLE_DNS_CHALLENGE", "") == "1"
 CLUSTER_NODE = os.environ.get("CLUSTER_NODE", "").lower() == "true"
 NODE_CERTIFICATES_DIR = os.environ.get("NODE_CERTIFICATES_DIR", "/caddy_certificates")
 CERTIFICATE_EXPORT_DIR = os.environ.get("CERTIFICATE_EXPORT_DIR", "/caddy_cert_export")
+DNS_NAME_PATTERN = re.compile(r"^(?=.{1,253}$)[a-z0-9_]([a-z0-9_-]{0,62})(\.[a-z0-9_]([a-z0-9_-]{0,62}))+$")
 AUTH_IDENTITY_HEADERS = (
     "X-Auth-User",
     "X-Auth-Email",
@@ -100,21 +101,23 @@ def get_node_host_tls(host_tls):
     """
     TLS settings of a host on a cluster node: the certificate exported by the primary server, the internal CA
     as fallback, or None when there is no certificate yet and the fallback is disabled.
+    The last item (DNS challenge override domain) is only used on the primary server.
     """
     certificate_type = host_tls.get("certificate_type", DEFAULT_CERTIFICATE_TYPE)
     certificate_fallback = host_tls.get("certificate_fallback", True) is not False
     certificate_file = re.sub(r"[^a-f0-9]", "", str(host_tls.get("certificate_file", "")))
     if certificate_type in ACME_CERTIFICATE_TYPES and certificate_file:
-        return "certificate_file", certificate_file, certificate_fallback
+        return "certificate_file", certificate_file, certificate_fallback, None
     if certificate_type == "self_signed" or certificate_fallback:
-        return "self_signed", None, True
+        return "self_signed", None, True, None
     return None
 
 
 def get_host_tls(host, tls_data):
     """
-    Return (certificate_type, dns_credential_name, certificate_fallback) for a host.
-    Hosts not listed use the HTTP challenge with fallback. On cluster nodes the second item is the
+    Return (certificate_type, dns_credential_name, certificate_fallback, override_domain) for a host.
+    Hosts not listed use the HTTP challenge with fallback. The override domain is where the DNS challenge record
+    is created when the challenge is delegated to another zone through a CNAME record. On cluster nodes the second item is the
     certificate file name, and None is returned for hosts that must not be served.
     """
     host_tls = tls_data.get("hosts", {}).get(host.lower(), {})
@@ -125,14 +128,19 @@ def get_host_tls(host, tls_data):
         certificate_type = DEFAULT_CERTIFICATE_TYPE
 
     dns_credential = None
+    override_domain = None
     if certificate_type == "dns_challenge":
         dns_credential = host_tls.get("dns_credential")
         if DISABLE_DNS_CHALLENGE or dns_credential not in tls_data.get("dns_credentials", {}):
             certificate_type = DEFAULT_CERTIFICATE_TYPE
             dns_credential = None
+        else:
+            override_domain = str(host_tls.get("dns_challenge_override_domain") or "").lower()
+            if not DNS_NAME_PATTERN.match(override_domain):
+                override_domain = None
 
     certificate_fallback = certificate_type == "self_signed" or host_tls.get("certificate_fallback", True) is not False
-    return certificate_type, dns_credential, certificate_fallback
+    return certificate_type, dns_credential, certificate_fallback, override_domain
 
 
 def group_hosts_by_tls(hosts, tls_data):
@@ -174,7 +182,7 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
         lines.append("  }")
         lines.append("")
 
-    def emit_tls(certificate_type, dns_credential, certificate_fallback):
+    def emit_tls(certificate_type, dns_credential, certificate_fallback, override_domain=None):
         if certificate_type == "self_signed":
             lines.append("  tls internal")
             lines.append("")
@@ -195,6 +203,9 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
             for field_name, field_value in dns_credential_data.get("credentials", {}).items():
                 lines.append(f"        {_safe_identifier(field_name)} {_quote_value(field_value)}")
             lines.append("      }")
+            if override_domain:
+                # The challenge record of the host is a CNAME pointing to this name, in a zone of the credential
+                lines.append(f"      dns_challenge_override_domain {override_domain}")
             lines.append(f"      propagation_delay {ACME_DNS_PROPAGATION_DELAY}")
             lines.append("      propagation_timeout -1")
             lines.append("    }")
@@ -268,7 +279,7 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
         lines.append("  }")
         lines.append("")
 
-    def emit_site_block(app, hosts, certificate_type, dns_credential, certificate_fallback):
+    def emit_site_block(app, hosts, host_tls):
         upstream = app.get("upstream", "")
         # tls_insecure_skip_verify is only valid for https upstreams
         allow_invalid_cert = app.get("allow_invalid_cert", False) and upstream.startswith("https://")
@@ -279,7 +290,7 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
 
         safe_hosts = [_safe_value(h) for h in hosts]
         lines.append(f"{', '.join(safe_hosts)} {{")
-        emit_tls(certificate_type, dns_credential, certificate_fallback)
+        emit_tls(*host_tls)
         lines.append("  # Security: overwrite client-supplied forwarding headers with verified values")
         lines.append("  request_header X-Forwarded-For {http.request.remote.host}")
         lines.append("  request_header -X-Forwarded-Host")
@@ -340,14 +351,14 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
         if not hosts or not app.get("upstream", ""):
             continue
 
-        for (certificate_type, dns_credential, certificate_fallback), group_hosts in group_hosts_by_tls(hosts, tls_data):
-            emit_site_block(app, group_hosts, certificate_type, dns_credential, certificate_fallback)
+        for host_tls, group_hosts in group_hosts_by_tls(hosts, tls_data):
+            emit_site_block(app, group_hosts, host_tls)
 
     certificate_only_hosts = get_certificate_only_hosts(apps, tls_data)
-    for (certificate_type, dns_credential, certificate_fallback), group_hosts in group_hosts_by_tls(certificate_only_hosts, tls_data):
+    for host_tls, group_hosts in group_hosts_by_tls(certificate_only_hosts, tls_data):
         # Keeps the certificate managed for cluster workers; the application is not published here
         lines.append(f"{', '.join(_safe_value(host) for host in group_hosts)} {{")
-        emit_tls(certificate_type, dns_credential, certificate_fallback)
+        emit_tls(*host_tls)
         lines.append("  respond 404")
         lines.append("}")
         lines.append("")
@@ -365,10 +376,14 @@ def build_tls_state(apps, tls_data):
         host_tls = get_host_tls(host, tls_data)
         if host_tls is None:
             continue
-        certificate_type, certificate_reference, certificate_fallback = host_tls
+        certificate_type, certificate_reference, certificate_fallback, override_domain = host_tls
         credential_hash = ""
         if certificate_type == "dns_challenge":
-            credential_data = json.dumps(tls_data["dns_credentials"][certificate_reference], sort_keys=True)
+            credential_data = tls_data["dns_credentials"][certificate_reference]
+            # Hosts without delegation keep the fingerprint they had before the override domain existed
+            if override_domain:
+                credential_data = {"credential": credential_data, "override_domain": override_domain}
+            credential_data = json.dumps(credential_data, sort_keys=True)
             credential_hash = hashlib.sha256(credential_data.encode()).hexdigest()
         certificate_generation = tls_data.get("hosts", {}).get(host.lower(), {}).get("certificate_generation", 0)
         tls_state[host.lower()] = [

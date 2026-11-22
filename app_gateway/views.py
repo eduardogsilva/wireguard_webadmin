@@ -40,7 +40,7 @@ def view_app_gateway_list(request):
 
     create_default_entries()
     applications = Application.objects.all().order_by('name')
-    hosts = ApplicationHost.objects.all().order_by('hostname')
+    hosts = ApplicationHost.objects.select_related('application', 'dns_credential').order_by('hostname')
     access_policies = AccessPolicy.objects.all().order_by('name')
     app_policies = ApplicationPolicy.objects.all().order_by('application__name')
     dns_credentials = DnsChallengeCredential.objects.all().order_by('name')
@@ -68,7 +68,7 @@ def view_application_details(request):
     application_uuid = request.GET.get('uuid')
     application = get_object_or_404(Application, uuid=application_uuid)
 
-    hosts = application.hosts.all().order_by('hostname')
+    hosts = application.hosts.select_related('dns_credential').order_by('hostname')
     routes = application.routes.all().order_by('order', 'path_prefix')
 
     is_reserved = application.name == RESERVED_APP_NAME
@@ -295,7 +295,7 @@ def view_manage_application_host(request):
     <p>Defines how the TLS certificate for this hostname is issued.</p>
     <ul>
         <li><strong>Trusted certificate (HTTP validation)</strong>: Issued through ACME (e.g. Let's Encrypt) and validated over HTTP. The hostname must point to this server and ports 80/443 must be reachable from the internet.</li>
-        <li><strong>Trusted certificate (DNS validation)</strong>: Issued through ACME and validated with a DNS record created using the selected DNS credential. The server does not need to be reachable from the internet.</li>
+        <li><strong>Trusted certificate (DNS validation)</strong>: Issued through ACME and validated with a DNS record created using the selected DNS credential. The server does not need to be reachable from the internet. When the credential uses a delegation domain, the hostname zone only needs a CNAME record pointing to it, shown when the credential is selected.</li>
         <li><strong>Self-signed certificate</strong>: Issued by the internal Caddy CA. Browsers will show a security warning.</li>
     </ul>
     <p>When the fallback option is enabled and a trusted certificate cannot be issued, a self-signed certificate is used until the next successful attempt. Without the fallback, the connection fails until the certificate is issued.</p>
@@ -310,13 +310,22 @@ def view_manage_application_host(request):
         </div>
         ''')
 
+    initial_delegation_record = ''
+    if application_host and application_host.dns_delegation_record:
+        initial_delegation_record = ' '.join(application_host.dns_delegation_record)
+
     context = {
         'form': form,
         'title': title,
         'page_title': title,
         'form_description': {'size': 'col-lg-6', 'content': form_description_content},
+        'delegation_domains': {
+            str(credential.pk): credential.delegation_domain
+            for credential in DnsChallengeCredential.objects.exclude(delegation_domain='')
+        },
+        'initial_delegation_record': initial_delegation_record,
     }
-    return render(request, 'generic_form.html', context)
+    return render(request, 'app_gateway/application_host_form.html', context)
 
 
 @login_required
@@ -635,8 +644,14 @@ def view_manage_dns_credential(request):
 
     form = DnsChallengeCredentialForm(request.POST or None, instance=dns_credential, cancel_url=cancel_url)
     if form.is_valid():
-        form.save()
+        dns_credential = form.save()
         messages.success(request, _('DNS Credential saved successfully.'))
+        host_count = dns_credential.hosts.filter(certificate_type='dns_challenge').count()
+        if 'delegation_domain' in form.changed_data and host_count:
+            messages.warning(request, _(
+                'Delegation domain changed|Update the challenge records of the %(count)s hosts using this '
+                'credential. The required records are shown in the host list of each application.'
+            ) % {'count': host_count})
         auto_apply_caddy_config(request)
         return redirect(cancel_url)
 

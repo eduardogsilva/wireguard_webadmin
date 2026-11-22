@@ -204,6 +204,9 @@ def build_tls_data(worker=None):
         dns_credential = application_host.dns_credential
         if application_host.certificate_type == 'dns_challenge' and dns_credential:
             host_entry['dns_credential'] = dns_credential.name
+            delegation_target = dns_credential.delegation_target(hostname)
+            if delegation_target:
+                host_entry['dns_challenge_override_domain'] = delegation_target
             dns_credentials[dns_credential.name] = {
                 'provider': dns_credential.provider,
                 'credentials': dns_credential.credentials,

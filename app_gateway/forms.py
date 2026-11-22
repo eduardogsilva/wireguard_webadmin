@@ -9,10 +9,13 @@ from django.utils.translation import gettext_lazy as _
 
 from app_gateway.dns_providers import DNS_PROVIDERS
 from app_gateway.models import (
-    Application, ApplicationHost, AccessPolicy, ApplicationPolicy, ApplicationRoute, DnsChallengeCredential
+    Application, ApplicationHost, AccessPolicy, ApplicationPolicy, ApplicationRoute, DnsChallengeCredential,
+    acme_challenge_base,
 )
 from app_gateway.setup_defaults import is_ip_address
 from cluster.models import ClusterSettings, Worker
+
+DOMAIN_PATTERN = re.compile(r'^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$')
 
 
 class ApplicationForm(forms.ModelForm):
@@ -150,6 +153,10 @@ class ApplicationHostForm(forms.ModelForm):
         if certificate_type == 'dns_challenge':
             if not dns_credential:
                 self.add_error('dns_credential', _('Select a DNS credential to use the DNS validation.'))
+            elif hostname and len(dns_credential.delegation_target(hostname) or '') > 253:
+                self.add_error('dns_credential', _(
+                    'The challenge record of this hostname in the delegation domain exceeds the DNS name limit.'
+                ))
         elif dns_credential:
             self.add_error('dns_credential', _('A DNS credential can only be used with the DNS validation.'))
 
@@ -178,6 +185,7 @@ class ApplicationHostForm(forms.ModelForm):
             Div(
                 Div('certificate_type', css_class='col-md-12'),
                 Div('dns_credential', css_class='col-md-12'),
+                Div(HTML('{% include "app_gateway/dns_delegation_alert.html" %}'), css_class='col-md-12'),
                 css_class='row'
             ),
             Div(
@@ -404,10 +412,17 @@ class ApplicationRouteForm(forms.ModelForm):
 class DnsChallengeCredentialForm(forms.ModelForm):
     class Meta:
         model = DnsChallengeCredential
-        fields = ['display_name', 'provider']
+        fields = ['display_name', 'provider', 'delegation_domain']
         labels = {
             'display_name': _('Name'),
             'provider': _('Provider'),
+            'delegation_domain': _('Delegation domain'),
+        }
+        help_texts = {
+            'delegation_domain': _(
+                'Optional. Zone managed by this credential that receives the challenge records of other domains, '
+                'e.g. acme.example.net. Each host then needs a CNAME record pointing to this zone.'
+            ),
         }
 
     def __init__(self, *args, **kwargs):
@@ -448,6 +463,10 @@ class DnsChallengeCredentialForm(forms.ModelForm):
             ),
             *provider_rows,
             Div(
+                Div('delegation_domain', css_class='col-md-12'),
+                css_class='row'
+            ),
+            Div(
                 Div(
                     Submit('submit', _('Save'), css_class='btn btn-primary'),
                     HTML(f'<a href="{cancel_url}" class="btn btn-secondary">{_("Cancel")}</a>'),
@@ -460,6 +479,21 @@ class DnsChallengeCredentialForm(forms.ModelForm):
     @staticmethod
     def credential_field_name(provider, field_name):
         return f'{provider}_{field_name}'
+
+    def clean_delegation_domain(self):
+        delegation_domain = (self.cleaned_data.get('delegation_domain') or '').strip().lower().rstrip('.')
+        if delegation_domain and not DOMAIN_PATTERN.match(delegation_domain):
+            raise forms.ValidationError(_('Enter a valid domain, e.g. acme.example.net'))
+        if delegation_domain and self.instance.pk:
+            too_long = [
+                host.hostname for host in self.instance.hosts.all()
+                if len(f'{acme_challenge_base(host.hostname)}.{delegation_domain}') > 253
+            ]
+            if too_long:
+                raise forms.ValidationError(_(
+                    'The challenge record of these hosts would exceed the DNS name limit: %(hosts)s'
+                ) % {'hosts': ', '.join(too_long)})
+        return delegation_domain
 
     def clean(self):
         cleaned_data = super().clean()

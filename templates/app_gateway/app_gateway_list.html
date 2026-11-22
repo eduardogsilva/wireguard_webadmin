@@ -128,8 +128,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                {{ host.get_certificate_type_display }}
-                                                {% if host.dns_credential %}<small class="text-muted">({{ host.dns_credential }})</small>{% endif %}
+                                                {% include 'app_gateway/host_certificate.html' %}
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -204,6 +203,7 @@
                                 <tr>
                                     <th>{% trans 'Name' %}</th>
                                     <th>{% trans 'Provider' %}</th>
+                                    <th>{% trans 'Delegation domain' %}</th>
                                     <th>{% trans 'Hosts' %}</th>
                                     <th>{% trans 'Actions' %}</th>
                                 </tr>
@@ -213,6 +213,7 @@
                                     <tr>
                                         <td>{{ dns_credential.display_name|default:dns_credential.name }}</td>
                                         <td>{{ dns_credential.get_provider_display }}</td>
+                                        <td>{{ dns_credential.delegation_domain|default:'-' }}</td>
                                         <td>{{ dns_credential.hosts.count }}</td>
                                         <td style="width: 15%">
                                             <a href="{% url 'manage_dns_credential' %}?uuid={{ dns_credential.uuid }}"
@@ -240,4 +241,20 @@
 
     </div>
 </div>
+{% endblock %}
+
+{% block page_custom_head %}
+<style>
+    .tooltip-inner.host-certificate-tooltip {
+        max-width: 420px;
+    }
+</style>
+{% endblock %}
+
+{% block custom_page_scripts %}
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 {% endblock %}

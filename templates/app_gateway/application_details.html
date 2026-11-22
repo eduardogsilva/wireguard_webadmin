@@ -84,11 +84,7 @@
                     <tr>
                         <td>{{ host.hostname }}</td>
                         <td>
-                            {{ host.get_certificate_type_display }}
-                            {% if host.dns_credential %}<small class="text-muted">({{ host.dns_credential }})</small>{% endif %}
-                            {% if host.certificate_type != 'self_signed' and not host.certificate_fallback %}
-                            <small class="text-muted">({% trans 'no fallback' %})</small>
-                            {% endif %}
+                            {% include 'app_gateway/host_certificate.html' %}
                         </td>
                         {% if caddy_enabled %}
                         <td class="certificate-status" data-host-uuid="{{ host.uuid }}">
@@ -188,7 +184,20 @@
 </div>
 {% endblock %}
 
+{% block page_custom_head %}
+<style>
+    .tooltip-inner.host-certificate-tooltip {
+        max-width: 420px;
+    }
+</style>
+{% endblock %}
+
 {% block custom_page_scripts %}
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 {% if caddy_enabled and hosts %}
 <script>
     $(document).ready(function () {

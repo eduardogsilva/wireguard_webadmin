@@ -1,4 +1,5 @@
 import contextlib
+import hashlib
 import importlib.util
 import io
 import json
@@ -9,10 +10,11 @@ from unittest.mock import patch
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.messages import get_messages
 from django.test import TestCase, override_settings
 
-from app_gateway.caddy_config_export import export_caddy_config
-from app_gateway.forms import ApplicationForm, ApplicationHostForm
+from app_gateway.caddy_config_export import build_tls_data, export_caddy_config
+from app_gateway.forms import ApplicationForm, ApplicationHostForm, DnsChallengeCredentialForm
 from app_gateway.models import (
     AccessPolicy, Application, ApplicationHost, ApplicationPolicy, ApplicationRoute, DnsChallengeCredential
 )
@@ -435,3 +437,171 @@ class GatewayAutoApplyTests(TestCase):
     def test_disabled_auto_apply_keeps_changes_pending(self):
         self.save_application()
         self.assertFalse(os.path.exists(os.path.join(self.temp_dir.name, 'applications.json')))
+
+
+DELEGATION_DOMAIN = 'acme.example.net'
+# Long enough for its challenge record in the delegation domain to exceed the 253 characters of a DNS name
+LONG_HOSTNAME = '.'.join(['a' * 63, 'b' * 63, 'c' * 63, 'd' * 45, 'test'])
+
+
+class DnsDelegationTestMixin:
+    def setUp(self):
+        super().setUp()
+        self.application = Application.objects.create(display_name='Wiki', upstream='http://10.0.0.30:8080')
+        self.credential = DnsChallengeCredential.objects.create(
+            display_name='Delegated', provider='cloudflare', credentials={'api_token': CLOUDFLARE_TOKEN},
+            delegation_domain=DELEGATION_DOMAIN,
+        )
+
+    def add_host(self, hostname, certificate_type='dns_challenge', credential=None):
+        return ApplicationHost.objects.create(
+            application=self.application, hostname=hostname, certificate_type=certificate_type,
+            dns_credential=(credential or self.credential) if certificate_type == 'dns_challenge' else None,
+        )
+
+
+class DnsDelegationModelTests(DnsDelegationTestMixin, TestCase):
+    def test_challenge_record_is_the_hostname_inside_the_delegation_domain(self):
+        self.assertEqual(self.credential.delegation_target('App.Example.com.'), 'app.example.com.acme.example.net')
+        self.assertEqual(self.credential.delegation_target('*.example.com'), 'example.com.acme.example.net')
+
+    def test_hostnames_inside_the_delegation_domain_are_validated_directly(self):
+        self.assertIsNone(self.credential.delegation_target('acme.example.net'))
+        self.assertIsNone(self.credential.delegation_target('app.acme.example.net'))
+        self.assertEqual(self.credential.delegation_target('app.example.net'), 'app.example.net.acme.example.net')
+
+    def test_credential_without_delegation_domain_is_not_delegated(self):
+        self.credential.delegation_domain = ''
+        self.assertIsNone(self.credential.delegation_target('app.example.com'))
+
+    def test_host_record_and_certificate_label(self):
+        delegated = self.add_host('app.example.com')
+        self.assertEqual(
+            delegated.dns_delegation_record, ('_acme-challenge.app.example.com', 'app.example.com.acme.example.net')
+        )
+        self.assertEqual(delegated.certificate_label, 'DNS validation (delegated)')
+
+        direct = self.add_host('app.acme.example.net')
+        self.assertIsNone(direct.dns_delegation_record)
+        self.assertEqual(direct.certificate_label, 'DNS validation')
+
+        http_host = self.add_host('http.example.com', certificate_type='http_challenge')
+        self.assertIsNone(http_host.dns_delegation_record)
+        self.assertEqual(http_host.certificate_label, 'HTTP validation')
+
+
+class DnsDelegationExportTests(DnsDelegationTestMixin, TestCase):
+    def test_only_delegated_hosts_export_the_override_domain(self):
+        self.add_host('app.example.com')
+        self.add_host('app.acme.example.net')
+        hosts = build_tls_data()['hosts']
+        self.assertEqual(hosts['app.example.com']['dns_challenge_override_domain'], 'app.example.com.acme.example.net')
+        self.assertNotIn('dns_challenge_override_domain', hosts['app.acme.example.net'])
+
+
+class DnsDelegationCaddyfileTests(TestCase):
+    credential = {'provider': 'cloudflare', 'credentials': {'api_token': CLOUDFLARE_TOKEN}}
+
+    def tls_data(self, overrides):
+        hosts = {}
+        for host, override_domain in overrides.items():
+            hosts[host] = {'certificate_type': 'dns_challenge', 'dns_credential': 'cloudflare'}
+            if override_domain is not None:
+                hosts[host]['dns_challenge_override_domain'] = override_domain
+        return {'hosts': hosts, 'dns_credentials': {'cloudflare': self.credential}}
+
+    def build(self, overrides):
+        apps = [caddy_app('app', list(overrides))]
+        return process_config.build_caddyfile(apps, None, None, self.tls_data(overrides))
+
+    def test_each_delegated_host_gets_its_own_override_domain(self):
+        caddyfile = self.build({
+            'a.example.com': 'a.example.com.acme.example.net',
+            'b.example.com': 'b.example.com.acme.example.net',
+            'c.example.com': None,
+            'd.example.com': None,
+        })
+        a_block = site_block(caddyfile, 'a.example.com')
+        self.assertEqual(a_block[0], 'a.example.com {')
+        self.assertIn('      dns_challenge_override_domain a.example.com.acme.example.net', a_block)
+        self.assertIn('      dns_challenge_override_domain b.example.com.acme.example.net', site_block(caddyfile, 'b.example.com'))
+
+        direct_block = site_block(caddyfile, 'c.example.com')
+        self.assertEqual(direct_block[0], 'c.example.com, d.example.com {')
+        self.assertNotIn('dns_challenge_override_domain', '\n'.join(direct_block))
+
+    def test_invalid_override_domain_is_not_written(self):
+        caddyfile = self.build({'a.example.com': 'bad"} name', 'b.example.com': None})
+        self.assertNotIn('dns_challenge_override_domain', caddyfile)
+        self.assertEqual(site_block(caddyfile, 'a.example.com')[0], 'a.example.com, b.example.com {')
+
+    def test_tls_state_of_hosts_without_delegation_is_unchanged(self):
+        apps = [caddy_app('app', ['a.example.com', 'b.example.com'])]
+        tls_state = process_config.build_tls_state(
+            apps, self.tls_data({'a.example.com': None, 'b.example.com': 'b.example.com.acme.example.net'})
+        )
+        credential_hash = hashlib.sha256(json.dumps(self.credential, sort_keys=True).encode()).hexdigest()
+        self.assertEqual(tls_state['a.example.com'][2], credential_hash)
+        self.assertNotEqual(tls_state['b.example.com'][2], credential_hash)
+
+
+class DnsDelegationFormTests(DnsDelegationTestMixin, TestCase):
+    def credential_form(self, delegation_domain, instance=None):
+        return DnsChallengeCredentialForm(data={
+            'display_name': 'Delegated', 'provider': 'cloudflare', 'delegation_domain': delegation_domain,
+        }, instance=instance or self.credential)
+
+    def test_delegation_domain_is_normalized(self):
+        form = self.credential_form('Acme.Example.NET.')
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(form.cleaned_data['delegation_domain'], 'acme.example.net')
+
+    def test_invalid_delegation_domain_is_rejected(self):
+        for value in ('bad domain', 'nodot', '-x.example.net', 'x.example.net/path'):
+            self.assertIn('delegation_domain', self.credential_form(value).errors, value)
+
+    def test_delegation_domain_too_long_for_existing_hosts_is_rejected(self):
+        self.credential.delegation_domain = ''
+        self.credential.save()
+        self.add_host(LONG_HOSTNAME)
+        self.assertIn(LONG_HOSTNAME, str(self.credential_form(DELEGATION_DOMAIN).errors['delegation_domain']))
+
+    def test_host_whose_challenge_record_is_too_long_is_rejected(self):
+        form = ApplicationHostForm(data={
+            'hostname': LONG_HOSTNAME, 'certificate_type': 'dns_challenge', 'dns_credential': self.credential.pk,
+            'certificate_fallback': 'on',
+        }, application=self.application)
+        self.assertIn('dns_credential', form.errors)
+
+
+@override_settings(ALLOWED_HOSTS=FIXTURE_ALLOWED_HOSTS + ['testserver'], CADDY_ENABLED=True, AUTO_APPLY=False)
+class DnsDelegationViewTests(DnsDelegationTestMixin, TestCase):
+    def setUp(self):
+        super().setUp()
+        user = User.objects.create_user(username='gateway-admin', password='unused-test-password')
+        UserAcl.objects.create(user=user, user_level=50)
+        self.client.force_login(user)
+
+    def test_host_form_knows_the_delegated_credentials_and_current_record(self):
+        DnsChallengeCredential.objects.create(
+            display_name='Direct', provider='cloudflare', credentials={'api_token': CLOUDFLARE_TOKEN}
+        )
+        host = self.add_host('app.example.com')
+        response = self.client.get(f'/app_gateway/host/manage/?uuid={host.uuid}')
+        self.assertEqual(response.context['delegation_domains'], {str(self.credential.pk): DELEGATION_DOMAIN})
+        self.assertEqual(
+            response.context['initial_delegation_record'],
+            '_acme-challenge.app.example.com app.example.com.acme.example.net',
+        )
+
+    def test_changing_the_delegation_domain_warns_about_existing_hosts(self):
+        self.add_host('app.example.com')
+        response = self.client.post(f'/app_gateway/dns_credential/manage/?uuid={self.credential.uuid}', {
+            'display_name': 'Delegated', 'provider': 'cloudflare', 'delegation_domain': 'other.example.net',
+        })
+        self.credential.refresh_from_db()
+        self.assertEqual(self.credential.delegation_domain, 'other.example.net')
+        self.assertEqual(self.credential.credentials, {'api_token': CLOUDFLARE_TOKEN})
+        warnings = [message.message for message in get_messages(response.wsgi_request) if message.level_tag == 'warning']
+        self.assertEqual(len(warnings), 1)
+        self.assertIn('1 hosts', warnings[0])
