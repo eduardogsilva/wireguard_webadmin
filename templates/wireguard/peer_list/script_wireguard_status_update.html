@@ -141,7 +141,7 @@
 
     const getPeerLocationLabel = (peerInfo) => {
         if (peerInfo && peerInfo.source_uuid && String(peerInfo.source_uuid).trim() !== '') {
-            return peerInfo.source_name || '';
+            return peerInfo.source_label || peerInfo.source_name || '';
         }
         return "{% trans 'Primary Server' %}";
     };

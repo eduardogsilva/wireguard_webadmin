@@ -358,7 +358,7 @@ def func_concatenate_cluster_wireguard_status_cache() -> None:
         .first()
     )
     if master_cache and isinstance(master_cache.data, dict):
-        cache_entries.append({"source_name": "master", "source_uuid": "", "data": master_cache.data,})
+        cache_entries.append({"source_name": "master", "source_label": "", "source_uuid": "", "data": master_cache.data,})
 
     worker_statuses = (WorkerStatus.objects.filter(
         worker__enabled=True, wireguard_status_updated__gt=timezone.now() - timedelta(minutes=10)
@@ -368,6 +368,7 @@ def func_concatenate_cluster_wireguard_status_cache() -> None:
         cache_entries.append(
             {
                 "source_name": f"worker_{ws.worker.name}",
+                "source_label": ws.worker.name,
                 "source_uuid": str(ws.worker.uuid),
                 "data": ws.wireguard_status or {},
             }
@@ -375,6 +376,7 @@ def func_concatenate_cluster_wireguard_status_cache() -> None:
 
     for entry in cache_entries:
         source_name = entry["source_name"]
+        source_label = entry["source_label"]
         source_uuid = entry["source_uuid"]
         data = entry.get("data") or {}
 
@@ -393,6 +395,7 @@ def func_concatenate_cluster_wireguard_status_cache() -> None:
 
                 peer_info_copy = dict(peer_info)
                 peer_info_copy["source_name"] = source_name
+                peer_info_copy["source_label"] = source_label
                 peer_info_copy["source_uuid"] = source_uuid
 
                 if peer_key not in combined_data[interface]:
