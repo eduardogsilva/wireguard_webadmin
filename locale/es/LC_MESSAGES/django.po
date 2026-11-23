@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-22 12:13-0300\n"
+"POT-Creation-Date: 2026-11-23 11:19-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2947,9 +2947,9 @@ msgid "Target"
 msgstr "Destino"
 
 #: templates/app_gateway/application_host_form.html:39
-#: templates/cluster/worker_details.html:139
-#: templates/cluster/worker_details.html:147
-#: templates/cluster/worker_details.html:153
+#: templates/cluster/worker_details.html:144
+#: templates/cluster/worker_details.html:152
+#: templates/cluster/worker_details.html:160
 msgid "Copy"
 msgstr "Copiar"
 
@@ -3203,13 +3203,26 @@ msgstr "Certificados publicados"
 msgid "Installation"
 msgstr "Instalación"
 
-#: templates/cluster/worker_details.html:133
+#: templates/cluster/worker_details.html:134
+msgid "VPN only"
+msgstr "Solo VPN"
+
+#: templates/cluster/worker_details.html:135
+msgid "VPN and App Gateway"
+msgstr "VPN y App Gateway"
+
+#: templates/cluster/worker_details.html:138
+#, fuzzy
+#| msgid ""
+#| "Copy <code>cluster_node.yml</code> (and <code>cluster_node-gateway.yml</"
+#| "code> to publish App Gateway applications) from the <a href=\"https://"
+#| "github.com/eduardogsilva/wireguard_webadmin\" target=\"_blank\" "
+#| "rel=\"noopener noreferrer\">project repository</a> to the worker, and "
+#| "create a <code>.env</code> file next to them:"
 msgid ""
-"Copy <code>cluster_node.yml</code> (and <code>cluster_node-gateway.yml</"
-"code> to publish App Gateway applications) from the <a href=\"https://"
-"github.com/eduardogsilva/wireguard_webadmin\" target=\"_blank\" "
-"rel=\"noopener noreferrer\">project repository</a> to the worker, and create "
-"a <code>.env</code> file next to them:"
+"Download the compose file from the <a href=\"https://github.com/"
+"eduardogsilva/wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">project repository</a> to an empty directory on the worker:"
 msgstr ""
 "Copie <code>cluster_node.yml</code> (y <code>cluster_node-gateway.yml</code> "
 "para publicar aplicaciones del App Gateway) del <a href=\"https://github.com/"
@@ -3217,23 +3230,32 @@ msgstr ""
 "noreferrer\">repositorio del proyecto</a> al worker y cree un archivo "
 "<code>.env</code> junto a ellos:"
 
-#: templates/cluster/worker_details.html:145
-msgid "VPN only"
-msgstr "Solo VPN"
-
-#: templates/cluster/worker_details.html:151
-msgid "VPN and App Gateway"
-msgstr "VPN y App Gateway"
+#: templates/cluster/worker_details.html:148
+msgid "Create a <code>.env</code> file in the same directory:"
+msgstr ""
 
 #: templates/cluster/worker_details.html:158
-msgid ""
-"To update, run docker compose pull followed by the same up -d command, "
-"always with every compose file of the worker."
+msgid "Start the worker:"
+msgstr ""
+
+#: templates/cluster/worker_details.html:165
+#, fuzzy
+#| msgid ""
+#| "To update, run docker compose pull followed by the same up -d command, "
+#| "always with every compose file of the worker."
+msgid "To update, run docker compose pull followed by the same up -d command."
 msgstr ""
 "Para actualizar, ejecute docker compose pull seguido del mismo comando up "
 "-d, siempre con todos los archivos compose del worker."
 
-#: templates/cluster/worker_details.html:159
+#: templates/cluster/worker_details.html:166
+msgid ""
+"To switch between VPN only and VPN and App Gateway, download the other "
+"compose file to the same directory and start it with up -d --remove-orphans. "
+"The worker data is kept."
+msgstr ""
+
+#: templates/cluster/worker_details.html:167
 msgid ""
 "Applications published by workers must use DNS validation or self-signed "
 "certificates: certificates are issued by this primary server and distributed "
@@ -3243,7 +3265,7 @@ msgstr ""
 "certificados autofirmados: los certificados los emite este servidor primario "
 "y se distribuyen a los workers."
 
-#: templates/cluster/worker_details.html:160
+#: templates/cluster/worker_details.html:168
 msgid ""
 "Publish the WireGuard ports (51820-51839/udp) and, with the App Gateway, "
 "ports 80 and 443 of the worker."
