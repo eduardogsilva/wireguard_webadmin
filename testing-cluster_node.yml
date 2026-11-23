@@ -1,3 +1,4 @@
+# Cluster node with WireGuard only. To also publish App Gateway applications, use cluster_node-gateway.yml instead.
 services:
   cluster-node:
     container_name: cluster-node

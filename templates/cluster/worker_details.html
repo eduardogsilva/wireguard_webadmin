@@ -130,10 +130,23 @@
 <div class="card card-outline card-secondary">
     <div class="card-header"><h3 class="card-title"><i class="fas fa-download"></i> {% trans 'Installation' %}</h3></div>
     <div class="card-body">
-        <p>{% blocktrans trimmed %}
-            Copy <code>cluster_node.yml</code> (and <code>cluster_node-gateway.yml</code> to publish App Gateway applications)
-            from the <a href="https://github.com/eduardogsilva/wireguard_webadmin" target="_blank" rel="noopener noreferrer">project repository</a>
-            to the worker, and create a <code>.env</code> file next to them:
+        <div class="btn-group btn-group-sm mb-3" role="group">
+            <button type="button" class="btn btn-primary worker-mode" data-compose-file="cluster_node.yml">{% trans 'VPN only' %}</button>
+            <button type="button" class="btn btn-outline-primary worker-mode" data-compose-file="cluster_node-gateway.yml">{% trans 'VPN and App Gateway' %}</button>
+        </div>
+
+        <p class="mb-1"><strong>1.</strong> {% blocktrans trimmed %}
+            Download the compose file from the
+            <a href="https://github.com/eduardogsilva/wireguard_webadmin" target="_blank" rel="noopener noreferrer">project repository</a>
+            to an empty directory on the worker:
+        {% endblocktrans %}</p>
+        <div class="position-relative">
+            <button type="button" class="btn btn-xs btn-outline-secondary position-absolute copy-button" style="top: 6px; right: 6px;" data-target="#worker-download" title="{% trans 'Copy' %}"><i class="far fa-copy"></i></button>
+<pre id="worker-download" class="p-2 pr-5" style="white-space: pre-wrap;">wget -O <span class="worker-compose-file">cluster_node.yml</span> https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/<span class="worker-compose-file">cluster_node.yml</span></pre>
+        </div>
+
+        <p class="mb-1"><strong>2.</strong> {% blocktrans trimmed %}
+            Create a <code>.env</code> file in the same directory:
         {% endblocktrans %}</p>
         <div class="position-relative">
             <button type="button" class="btn btn-xs btn-outline-secondary position-absolute copy-button" style="top: 6px; right: 6px;" data-target="#worker-env" title="{% trans 'Copy' %}"><i class="far fa-copy"></i></button>
@@ -142,20 +155,15 @@ TOKEN={{ worker.token }}
 TIMEZONE={{ time_zone }}</pre>
         </div>
 
-        <p class="mb-1"><strong>{% trans 'VPN only' %}</strong></p>
+        <p class="mb-1"><strong>3.</strong> {% trans 'Start the worker:' %}</p>
         <div class="position-relative">
-            <button type="button" class="btn btn-xs btn-outline-secondary position-absolute copy-button" style="top: 6px; right: 6px;" data-target="#worker-vpn" title="{% trans 'Copy' %}"><i class="far fa-copy"></i></button>
-<pre id="worker-vpn" class="p-2 pr-5">docker compose -f cluster_node.yml up -d</pre>
-        </div>
-
-        <p class="mb-1"><strong>{% trans 'VPN and App Gateway' %}</strong></p>
-        <div class="position-relative">
-            <button type="button" class="btn btn-xs btn-outline-secondary position-absolute copy-button" style="top: 6px; right: 6px;" data-target="#worker-gateway" title="{% trans 'Copy' %}"><i class="far fa-copy"></i></button>
-<pre id="worker-gateway" class="p-2 pr-5" style="white-space: pre-wrap;">docker compose -f cluster_node.yml -f cluster_node-gateway.yml up -d</pre>
+            <button type="button" class="btn btn-xs btn-outline-secondary position-absolute copy-button" style="top: 6px; right: 6px;" data-target="#worker-up" title="{% trans 'Copy' %}"><i class="far fa-copy"></i></button>
+<pre id="worker-up" class="p-2 pr-5">docker compose -f <span class="worker-compose-file">cluster_node.yml</span> up -d</pre>
         </div>
 
         <ul class="text-muted mb-0">
-            <li>{% trans 'To update, run docker compose pull followed by the same up -d command, always with every compose file of the worker.' %}</li>
+            <li>{% trans 'To update, run docker compose pull followed by the same up -d command.' %}</li>
+            <li>{% trans 'To switch between VPN only and VPN and App Gateway, download the other compose file to the same directory and start it with up -d --remove-orphans. The worker data is kept.' %}</li>
             <li>{% trans 'Applications published by workers must use DNS validation or self-signed certificates: certificates are issued by this primary server and distributed to the workers.' %}</li>
             <li>{% trans 'Publish the WireGuard ports (51820-51839/udp) and, with the App Gateway, ports 80 and 443 of the worker.' %}</li>
         </ul>
@@ -166,6 +174,12 @@ TIMEZONE={{ time_zone }}</pre>
 {% block custom_page_scripts %}
 <script>
     $(document).ready(function () {
+        $('.worker-mode').click(function () {
+            $('.worker-mode').removeClass('btn-primary').addClass('btn-outline-primary');
+            $(this).removeClass('btn-outline-primary').addClass('btn-primary');
+            $('.worker-compose-file').text($(this).data('compose-file'));
+        });
+
         $('.copy-button').click(function () {
             var button = $(this);
             navigator.clipboard.writeText($(button.data('target')).text()).then(function () {
