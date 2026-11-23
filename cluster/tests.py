@@ -5,6 +5,8 @@ import tempfile
 from unittest.mock import patch
 
 from django.contrib.auth.models import User
+from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.test import TestCase, override_settings
 from django.utils import timezone
 
@@ -12,7 +14,8 @@ from api.models import WireguardStatusCache
 from api.views import func_concatenate_cluster_wireguard_status_cache
 from app_gateway import caddy_config_export
 from app_gateway.caddy_config_export import certificate_file_name, export_caddy_config
-from app_gateway.models import Application, ApplicationHost, DnsChallengeCredential
+from app_gateway.forms import ApplicationForm
+from app_gateway.models import Application, ApplicationHost, DnsChallengeCredential, RESERVED_APP_NAME
 from cluster import sync
 from cluster.forms import ClusterSettingsForm
 from cluster.models import ClusterSettings, Worker, WorkerStatus
@@ -663,3 +666,126 @@ class AgentServiceCheckTests(TestCase):
         self.assertTrue(self.cluster_worker.tcp_service_is_running(address))
         listener.close()
         self.assertFalse(self.cluster_worker.tcp_service_is_running(address))
+
+
+class PrimaryDisabledTests(ClusterTestMixin, TestCase):
+    """In mirror mode the primary server can leave every client to the workers, except WireGuard WebAdmin."""
+
+    def setUp(self):
+        super().setUp()
+        credential = DnsChallengeCredential.objects.create(
+            display_name='Cloudflare', provider='cloudflare', credentials={'api_token': 'x' * 40}
+        )
+        self.webadmin = Application.objects.get(name=RESERVED_APP_NAME)
+        self.primary_app = Application.objects.create(display_name='Primary App', upstream='http://10.0.0.10:8080')
+        ApplicationHost.objects.create(application=self.primary_app, hostname='primary-app.example.test')
+        self.shared_app = Application.objects.create(
+            display_name='Shared App', upstream='http://10.0.0.20:8080', all_workers=True
+        )
+        ApplicationHost.objects.create(
+            application=self.shared_app, hostname='shared.example.test', certificate_type='dns_challenge',
+            dns_credential=credential,
+        )
+        self.instance = create_instance(0)
+
+    def set_primary(self, enabled, cluster_mode='mirror'):
+        ClusterSettings.objects.filter(name='cluster_settings').update(
+            primary_enable_wireguard=enabled, cluster_mode=cluster_mode
+        )
+
+    def login(self):
+        user = User.objects.create_user(username='cluster-admin', password='unused-test-password')
+        UserAcl.objects.create(user=user, user_level=50)
+        self.client.force_login(user)
+
+    def test_primary_can_only_be_disabled_in_mirror_mode(self):
+        cluster_settings = ClusterSettings.objects.get(name='cluster_settings')
+        data = {'enabled': True, 'primary_enable_wireguard': False, 'worker_display': 'name'}
+
+        form = ClusterSettingsForm(data=dict(data, cluster_mode='distributed'), instance=cluster_settings)
+        self.assertFalse(form.is_valid())
+        self.assertIn('primary_enable_wireguard', form.errors)
+
+        self.assertTrue(ClusterSettingsForm(data=dict(data, cluster_mode='mirror'), instance=cluster_settings).is_valid())
+
+    def test_primary_serves_clients_unless_disabled_in_an_enabled_mirror_cluster(self):
+        self.assertTrue(ClusterSettings.primary_serves_clients())
+        self.set_primary(False)
+        self.assertFalse(ClusterSettings.primary_serves_clients())
+        self.set_primary(False, cluster_mode='distributed')
+        self.assertTrue(ClusterSettings.primary_serves_clients())
+        self.set_primary(False)
+        ClusterSettings.objects.filter(name='cluster_settings').update(enabled=False)
+        self.assertTrue(ClusterSettings.primary_serves_clients())
+
+    def test_disabled_primary_only_publishes_webadmin_and_keeps_worker_certificates(self):
+        self.set_primary(False)
+        self.assertTrue(self.webadmin.is_served_by(None))
+        self.assertFalse(self.primary_app.is_served_by(None))
+        self.assertTrue(self.shared_app.is_served_by(self.worker))
+
+        export_caddy_config(self.export_dir)
+        with open(os.path.join(self.export_dir, 'applications.json'), encoding='utf-8') as applications_file:
+            self.assertEqual(json.load(applications_file)['entries'], [])
+        with open(os.path.join(self.export_dir, 'tls.json'), encoding='utf-8') as tls_file:
+            primary_hosts = json.load(tls_file)['hosts']
+        self.assertNotIn('primary-app.example.test', primary_hosts)
+        self.assertTrue(primary_hosts['shared.example.test']['certificate_only'])
+        self.assertTrue(primary_hosts['shared.example.test']['export_certificate'])
+
+        worker_applications = json.loads(sync.build_section('gateway', self.worker).files['applications.json'])
+        self.assertEqual([entry['id'] for entry in worker_applications['entries']], ['shared-app'])
+
+        self.set_primary(True)
+        self.assertTrue(self.primary_app.is_served_by(None))
+
+    def test_changing_the_primary_marks_instances_pending_and_exports_the_gateway(self):
+        self.login()
+        data = {'enabled': 'on', 'cluster_mode': 'mirror', 'worker_display': 'name'}
+        WireGuardInstance.objects.update(pending_changes=False)
+        with patch('cluster.views.auto_apply_caddy_config') as auto_apply:
+            self.client.post('/cluster/settings/', data)
+            self.instance.refresh_from_db()
+            self.assertTrue(self.instance.pending_changes)
+            self.assertEqual(auto_apply.call_count, 1)
+
+            WireGuardInstance.objects.update(pending_changes=False)
+            self.client.post('/cluster/settings/', dict(data, worker_display='location'))
+            self.instance.refresh_from_db()
+            self.assertFalse(self.instance.pending_changes)
+            self.assertEqual(auto_apply.call_count, 1)
+
+    def test_applying_the_configuration_stops_the_interfaces_of_a_disabled_primary(self):
+        self.set_primary(False)
+        self.login()
+        WireGuardInstance.objects.update(pending_changes=True)
+        commands = []
+
+        def run(command, **kwargs):
+            commands.append(command)
+            return type('Result', (), {'returncode': 0, 'stdout': 'wg0 wg1\n', 'stderr': ''})()
+
+        with patch('wireguard_tools.views.subprocess.run', run), \
+                patch('wireguard_tools.views.os.path.isfile', lambda path: path.endswith('/wg0.conf')):
+            self.client.get('/tools/restart_wireguard/?action=dismiss_warning')
+
+        self.assertIn(['wg-quick', 'down', 'wg0'], commands)
+        self.assertIn(['ip', 'link', 'delete', 'wg1'], commands)
+        self.assertFalse([command for command in commands if 'up' in command])
+        self.assertFalse(WireGuardInstance.objects.filter(pending_changes=True).exists())
+
+    def test_startup_command_reports_a_disabled_primary(self):
+        call_command('primary_wireguard_enabled')
+        self.set_primary(False)
+        with self.assertRaises(CommandError):
+            call_command('primary_wireguard_enabled')
+
+    def test_new_applications_are_served_everywhere_by_default(self):
+        form = ApplicationForm()
+        self.assertTrue(form['serve_on_primary'].value())
+        self.assertTrue(form['all_workers'].value())
+        self.assertFalse(ApplicationForm(instance=self.primary_app)['all_workers'].value())
+        self.assertEqual(form.fields['serve_on_primary'].help_text, '')
+
+        self.set_primary(False)
+        self.assertNotEqual(ApplicationForm().fields['serve_on_primary'].help_text, '')

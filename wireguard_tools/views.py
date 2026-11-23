@@ -337,6 +337,23 @@ def restart_wireguard_interfaces(request):
             else:
                 interface_count += 1
 
+    if not ClusterSettings.primary_serves_clients():
+        if not (user_acl.enable_reload if mode == 'reload' else user_acl.enable_restart):
+            return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+        # WireGuard is disabled on the primary server in mirror mode: only the cluster workers run the instances
+        for interface_name in running_interfaces:
+            if re.fullmatch(r'wg[0-9]+', interface_name) and os.path.isfile(os.path.join(config_dir, f'{interface_name}.conf')):
+                stop_result = subprocess.run(['wg-quick', 'down', interface_name], capture_output=True, text=True)
+                if stop_result.returncode != 0:
+                    messages.warning(request, _("Error stopping") + f" {interface_name}|{stop_result.stderr}")
+        messages.info(request, _(
+            "WireGuard disabled on the primary server|The interfaces of this server are stopped. Cluster workers "
+            "keep serving the peers."
+        ))
+        if request.GET.get('action') == 'dismiss_warning':
+            WireGuardInstance.objects.filter(pending_changes=True).update(pending_changes=False)
+        return redirect("/status/")
+
     for filename in os.listdir(config_dir):
         if filename.endswith(".conf"):
             interface_name = filename[:-5]

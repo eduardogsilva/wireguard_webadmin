@@ -130,6 +130,12 @@ class ClusterSettingsForm(forms.ModelForm):
         cleaned_data = super().clean()
         cluster_enabled = cleaned_data.get('enabled')
 
+        if not cleaned_data.get('primary_enable_wireguard') and cleaned_data.get('cluster_mode') in DISTRIBUTED_MODES:
+            self.add_error('primary_enable_wireguard', _(
+                'The primary server can only be disabled in mirror mode. In distributed mode, move its instances '
+                'to workers instead.'
+            ))
+
         if cluster_enabled and not settings.WIREGUARD_STATUS_CACHE_ENABLED:
             raise ValidationError(_("Cluster mode requires WireGuard status cache to be enabled."))
 

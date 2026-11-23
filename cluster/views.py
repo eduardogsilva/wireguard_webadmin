@@ -8,6 +8,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _
 
 from api.models import WireguardStatusCache
+from app_gateway.caddy_config_export import auto_apply_caddy_config
 from app_gateway.setup_defaults import get_webadmin_hostnames
 from user_manager.models import UserAcl
 from wireguard.models import WireGuardInstance
@@ -216,10 +217,15 @@ def cluster_settings(request):
     cluster_settings, cluster_settings_created = ClusterSettings.objects.get_or_create(name='cluster_settings')
 
     was_distributed = ClusterSettings.is_distributed()
+    primary_served_clients = ClusterSettings.primary_serves_clients()
     form = ClusterSettingsForm(request.POST or None, instance=cluster_settings)
     if form.is_valid():
         cluster_settings = form.save()
         messages.success(request, _('Cluster settings updated successfully.'))
+        if ClusterSettings.primary_serves_clients() != primary_served_clients:
+            # The primary server starts or stops its interfaces when the configuration is applied
+            WireGuardInstance.objects.update(pending_changes=True)
+            auto_apply_caddy_config(request)
         if ClusterSettings.is_distributed() != was_distributed:
             # Where each instance runs may have changed: workers synchronize the new files right away and the
             # primary server moves its interfaces when the configuration is applied
@@ -235,7 +241,7 @@ def cluster_settings(request):
         <p>When disabled, workers are refused and shut down their WireGuard interfaces, and App Gateway applications are only published by this primary server. Requires the WireGuard status cache.</p>
 
         <h5>Primary Enable WireGuard</h5>
-        <p>Lists this primary server as an option when downloading peer configurations and VPN invites.</p>
+        <p>Mirror mode only. When disabled, this primary server stops its WireGuard interfaces once the configuration is applied, is no longer offered when downloading peer configurations and VPN invites, and only publishes WireGuard WebAdmin in the App Gateway. Workers keep receiving the configuration, and the primary server keeps managing the certificates used by them. Make sure you can reach WireGuard WebAdmin without the VPN of this server before disabling it.</p>
 
         <h5>Cluster Mode</h5>
         <p><strong>Mirror</strong>: every worker receives the same WireGuard instances, peers, firewall and DNS configuration. Peers can connect to any server.</p>

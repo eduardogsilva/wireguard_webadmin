@@ -94,7 +94,8 @@ class Application(models.Model):
         if not ClusterSettings.cluster_enabled():
             return worker is None
         if worker is None:
-            return self.serve_on_primary
+            # Only WireGuard WebAdmin is published while the primary server does not serve clients
+            return self.serve_on_primary and (self.name == RESERVED_APP_NAME or ClusterSettings.primary_serves_clients())
         return self.all_workers or self.workers.filter(pk=worker.pk).exists()
 
     class Meta:

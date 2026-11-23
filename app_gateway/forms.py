@@ -41,6 +41,13 @@ class ApplicationForm(forms.ModelForm):
         if self.cluster_enabled:
             self.fields['workers'].queryset = Worker.objects.order_by('name')
             self.fields['workers'].help_text = _('Select specific workers, or leave empty when serving on all cluster workers.')
+            if not self.instance.pk:
+                self.initial.setdefault('all_workers', True)
+            if not ClusterSettings.primary_serves_clients():
+                self.fields['serve_on_primary'].help_text = _(
+                    'WireGuard is disabled on the primary server in the cluster settings, so it does not publish '
+                    'applications until it is enabled again.'
+                )
             cluster_rows = [
                 HTML(f'<hr><h5>{_("Cluster")}</h5><p class="text-muted">{_("Servers that publish this application.")}</p>'),
                 Div(

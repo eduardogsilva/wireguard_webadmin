@@ -32,6 +32,16 @@ class ClusterSettings(models.Model):
         return cls.objects.filter(name='cluster_settings', enabled=True).exists()
 
     @classmethod
+    def primary_serves_clients(cls):
+        """
+        False when the primary server neither runs WireGuard nor publishes App Gateway applications, which is only
+        possible in mirror mode: the workers serve every client.
+        """
+        return not cls.objects.filter(
+            name='cluster_settings', enabled=True, primary_enable_wireguard=False
+        ).exclude(cluster_mode__in=DISTRIBUTED_MODES).exists()
+
+    @classmethod
     def is_distributed(cls):
         """Each WireGuard instance runs on a single server. Only applies while the cluster is enabled."""
         return cls.objects.filter(name='cluster_settings', enabled=True, cluster_mode__in=DISTRIBUTED_MODES).exists()
