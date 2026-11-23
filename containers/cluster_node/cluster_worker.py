@@ -253,6 +253,30 @@ class ClusterNodeAgent:
             logger.error('Request to %s failed: %s', path, error)
             return None
 
+    @staticmethod
+    def response_json(response, path):
+        """Decoded JSON object of a response, or None when the primary server did not answer with one."""
+        try:
+            data = response.json()
+        except ValueError:
+            data = None
+        if isinstance(data, dict):
+            return data
+        content_type = response.headers.get('Content-Type', 'no content type')
+        if response.history:
+            logger.error(
+                'Request to %s was redirected to %s (HTTP %s, %s) instead of answering with JSON. If the App Gateway '
+                'protects the WireGuard WebAdmin of the primary server, add a route for /api/cluster/ with a public '
+                'policy to it.', path, response.url, response.status_code, content_type
+            )
+        else:
+            logger.error(
+                'Request to %s did not return JSON (HTTP %s, %s). Check MASTER_SERVER_ADDRESS and, if the App Gateway '
+                'protects the WireGuard WebAdmin of the primary server, add a route for /api/cluster/ with a public '
+                'policy to it.', path, response.status_code, content_type
+            )
+        return None
+
     # Section handlers
 
     def apply_firewall(self, section):
@@ -385,19 +409,23 @@ class ClusterNodeAgent:
         response = self.request('GET', 'manifest/')
         if response is None:
             return True
+        if response.status_code not in (200, 400, 403):
+            logger.error('Unexpected manifest response: HTTP %s', response.status_code)
+            return True
+        # Answers that do not come from the cluster API (a login page, a proxy error) never stop the worker
+        data = self.response_json(response, 'manifest/')
+        if data is None:
+            return True
         if response.status_code == 403:
             logger.error('Token rejected by the primary server. Stopping.')
             self.shutdown_wireguard()
             return False
         if response.status_code == 400:
-            logger.warning('Primary server refused this worker: %s', response.json().get('message', ''))
+            logger.warning('Primary server refused this worker: %s', data.get('message', ''))
             self.shutdown_wireguard()
             return True
-        if response.status_code != 200:
-            logger.error('Unexpected manifest response: HTTP %s', response.status_code)
-            return True
 
-        manifest = response.json().get('sections', {})
+        manifest = data.get('sections', {})
         reports = {}
         for section_name, section_hash in manifest.items():
             if section_name not in self.SECTION_HANDLERS or self.applied_hashes.get(section_name) == section_hash:
@@ -405,7 +433,9 @@ class ClusterNodeAgent:
             section_response = self.request('GET', f'section/{section_name}/')
             if section_response is None or section_response.status_code != 200:
                 continue
-            section = section_response.json()
+            section = self.response_json(section_response, f'section/{section_name}/')
+            if section is None:
+                continue
             try:
                 self.SECTION_HANDLERS[section_name](self, section)
                 self.applied_hashes[section_name] = section['hash']
