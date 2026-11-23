@@ -1,5 +1,7 @@
+import glob
 import ipaddress
 import os
+import re
 import subprocess
 from typing import Union
 
@@ -36,6 +38,40 @@ def get_config_servers(instance: WireGuardInstance) -> list:
     for worker in Worker.objects.filter(enabled=True):
         servers.append({'name': worker.display_name, 'uuid': str(worker.uuid)})
     return servers
+
+
+def running_wireguard_interfaces() -> list:
+    result = subprocess.run(['wg', 'show', 'interfaces'], capture_output=True, text=True)
+    return [interface for interface in result.stdout.split() if re.fullmatch(r'wg[0-9]+', interface)]
+
+
+def stop_primary_interfaces() -> list:
+    """Stop every WireGuard interface running on this server. Returns (interface, error) for each failure."""
+    errors = []
+    for interface_name in running_wireguard_interfaces():
+        if os.path.isfile(os.path.join(WIREGUARD_CONFIG_DIR, f'{interface_name}.conf')):
+            command = ['wg-quick', 'down', interface_name]
+        else:
+            # Instances moved to a worker no longer have a configuration on this server
+            command = ['ip', 'link', 'delete', interface_name]
+        result = subprocess.run(command, capture_output=True, text=True)
+        if result.returncode != 0:
+            errors.append((interface_name, result.stderr.strip()))
+    return errors
+
+
+def start_primary_interfaces() -> list:
+    """Start the configured WireGuard interfaces that are not running. Returns (interface, error) for each failure."""
+    errors = []
+    running_interfaces = running_wireguard_interfaces()
+    for config_path in sorted(glob.glob(os.path.join(WIREGUARD_CONFIG_DIR, 'wg[0-9]*.conf'))):
+        interface_name = os.path.basename(config_path)[:-len('.conf')]
+        if interface_name in running_interfaces:
+            continue
+        result = subprocess.run(['wg-quick', 'up', interface_name], capture_output=True, text=True)
+        if result.returncode != 0:
+            errors.append((interface_name, result.stderr.strip()))
+    return errors
 
 
 def sync_interface_routes(interface_name: str) -> list:

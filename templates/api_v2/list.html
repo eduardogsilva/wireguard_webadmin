@@ -12,6 +12,7 @@
             <th class="text-center"><i class="fas fa-power-off" title="{% trans 'Allow Restart' %}"></i></th>
             <th class="text-center"><i class="fas fa-sync" title="{% trans 'Allow Reload' %}"></i></th>
             <th class="text-center"><i class="fas fa-download" title="{% trans 'Allow Export' %}"></i></th>
+            <th class="text-center"><i class="fas fa-server" title="{% trans 'Manage Cluster' %}"></i></th>
             <th class="text-center"><i class="far fa-edit"></i></th>
         </tr>
     </thead>
@@ -59,6 +60,13 @@
             </td>
             <td class="text-center">
                 {% if key.allow_export %}
+                <i class="fas fa-check text-success"></i>
+                {% else %}
+                <i class="fas fa-times text-danger"></i>
+                {% endif %}
+            </td>
+            <td class="text-center">
+                {% if key.manage_cluster %}
                 <i class="fas fa-check text-success"></i>
                 {% else %}
                 <i class="fas fa-times text-danger"></i>

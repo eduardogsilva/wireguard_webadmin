@@ -4,17 +4,25 @@ import re
 from functools import wraps
 from typing import List, Optional, Tuple
 
+from django.conf import settings as django_settings
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from api.views import func_get_wireguard_status
+from app_gateway.caddy_config_export import apply_caddy_config
+from cluster.forms import ClusterSettingsForm
+from cluster.models import ClusterSettings, Worker, WorkerStatus
+from cluster.sync import get_worker_sync_state
 from dns.models import DNSSettings, StaticHost
 from dns.views import export_dns_configuration
 from routing_templates.models import RoutingTemplate
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from wireguard_peer.functions import find_network_in_other_instance, func_create_new_peer
-from wireguard_tools.functions import func_reload_wireguard_interface
+from wireguard_tools.functions import (
+    func_reload_wireguard_interface, running_wireguard_interfaces, start_primary_interfaces, stop_primary_interfaces,
+)
 from wireguard_tools.views import export_wireguard_configuration
 from .models import ApiKey
 
@@ -866,3 +874,248 @@ def api_v2_wireguard_status(request):
 
     data = func_get_wireguard_status()
     return JsonResponse(data)
+
+
+def _validate_cluster_api_key(request):
+    api_key, api_error = validate_api_key(request)
+    if not api_key:
+        return None, JsonResponse({"status": "error", "error_message": api_error}, status=403)
+    if not api_key.manage_cluster:
+        return None, JsonResponse(
+            {"status": "error", "error_message": "This API key is not allowed to manage the cluster."}, status=403
+        )
+    return api_key, None
+
+
+def _worker_status_data(worker):
+    worker_status = WorkerStatus.objects.filter(worker=worker).first()
+    operational = worker.enabled and not worker.error_status and worker.is_online
+    return {
+        "name": worker.name,
+        "enabled": worker.enabled,
+        "online": worker.is_online,
+        "last_seen": worker_status.last_seen.isoformat() if worker_status else None,
+        "worker_version": worker_status.worker_version if worker_status else None,
+        "error_status": worker.error_status,
+        # Reported data of disabled, refused or offline workers is only the last known state
+        "sync_state": get_worker_sync_state(worker)["state"] if operational else None,
+    }
+
+
+@csrf_exempt
+@api_doc(
+    summary="Cluster status: settings, WireGuard on the primary server and workers",
+    auth="Header token: <ApiKey.token> (the API key must have Manage Cluster enabled)",
+    methods=["GET", "POST"],
+    params=[],
+    returns=[
+        {"status": 200, "body": {
+            "status": "success",
+            "cluster": {"enabled": True, "mode": "mirror", "primary_wireguard": True,
+                        "primary_running_interfaces": ["wg0"]},
+            "workers": {"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx": {
+                "name": "node-a", "enabled": True, "online": True, "last_seen": "2026-01-01T12:00:00+00:00",
+                "worker_version": 15, "error_status": "", "sync_state": "synced"}},
+        }},
+        {"status": 403, "body": {"status": "error", "error_message": "This API key is not allowed to manage the cluster."}},
+        {"status": 405, "body": {"status": "error", "error_message": "Method not allowed."}},
+    ],
+    examples={
+        "get_cluster_status": {
+            "method": "GET",
+            "json": {}
+        }
+    }
+)
+def api_v2_manage_cluster_status(request):
+    if request.method not in ("GET", "POST"):
+        return JsonResponse({"status": "error", "error_message": "Method not allowed."}, status=405)
+
+    api_key, error_response = _validate_cluster_api_key(request)
+    if error_response:
+        return error_response
+
+    cluster_settings, cluster_settings_created = ClusterSettings.objects.get_or_create(name='cluster_settings')
+    return JsonResponse({
+        "status": "success",
+        "cluster": {
+            "enabled": cluster_settings.enabled,
+            "mode": cluster_settings.cluster_mode,
+            "primary_wireguard": cluster_settings.primary_enable_wireguard,
+            "primary_running_interfaces": running_wireguard_interfaces(),
+        },
+        "workers": {str(worker.uuid): _worker_status_data(worker) for worker in Worker.objects.order_by('name')},
+    })
+
+
+@csrf_exempt
+@api_doc(
+    summary="Enable / disable cluster workers and WireGuard on the primary server in a single request",
+    auth="Header token: <ApiKey.token> (the API key must have Manage Cluster enabled)",
+    methods=["PUT", "POST"],
+    params=[
+        {"name": "workers", "in": "json", "type": "object", "required": False,
+         "example": {"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx": False},
+         "description": "Map of worker UUID to the desired state (true = enabled). Workers apply the change on "
+                        "their next synchronization."},
+        {"name": "primary_wireguard", "in": "json", "type": "boolean", "required": False, "example": False,
+         "description": "Enables or disables WireGuard on the primary server. Disabling is only allowed in mirror "
+                        "mode: the primary server stops its interfaces and only publishes WireGuard WebAdmin in the "
+                        "App Gateway, while the workers serve the clients."},
+        {"name": "skip_reload", "in": "json", "type": "boolean", "required": False, "example": False,
+         "description": "If true, the WireGuard interfaces of the primary server are not started or stopped and "
+                        "the instances are marked with pending_changes=True."},
+    ],
+    returns=[
+        {"status": 200, "body": {
+            "status": "success", "message": "Cluster updated successfully.",
+            "workers": {"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx": {"name": "node-a", "enabled": False, "changed": True}},
+            "primary_wireguard": {"enabled": False, "changed": True},
+            "apply": {"success": True, "message": "..."},
+        }},
+        {"status": 400, "body": {"status": "error", "error_message": "The cluster is not enabled."}},
+        {"status": 403, "body": {"status": "error", "error_message": "This API key is not allowed to manage the cluster."}},
+        {"status": 405, "body": {"status": "error", "error_message": "Method not allowed."}},
+        {"status": 500, "body": {"status": "error", "error_message": "Cluster changes were saved but apply failed: ..."}},
+    ],
+    examples={
+        "disable_worker_and_primary": {
+            "method": "PUT",
+            "json": {
+                "workers": {"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx": False},
+                "primary_wireguard": False
+            }
+        },
+        "enable_workers": {
+            "method": "PUT",
+            "json": {
+                "workers": {
+                    "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx": True,
+                    "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy": True
+                }
+            }
+        }
+    }
+)
+def api_v2_manage_cluster_manage_status(request):
+    if request.method not in ("PUT", "POST"):
+        return JsonResponse({"status": "error", "error_message": "Method not allowed."}, status=405)
+
+    try:
+        payload = json.loads(request.body.decode("utf-8")) if request.body else {}
+    except Exception:
+        return JsonResponse({"status": "error", "error_message": "Invalid JSON body."}, status=400)
+    if not isinstance(payload, dict):
+        return JsonResponse({"status": "error", "error_message": "Invalid JSON body."}, status=400)
+
+    api_key, error_response = _validate_cluster_api_key(request)
+    if error_response:
+        return error_response
+
+    cluster_settings, cluster_settings_created = ClusterSettings.objects.get_or_create(name='cluster_settings')
+    if not cluster_settings.enabled:
+        return JsonResponse({"status": "error", "error_message": "The cluster is not enabled."}, status=400)
+
+    requested_workers = payload.get("workers")
+    primary_wireguard = payload.get("primary_wireguard")
+    skip_reload = bool(payload.get("skip_reload", False))
+    if requested_workers is None and primary_wireguard is None:
+        return JsonResponse(
+            {"status": "error", "error_message": "Invalid payload: inform workers and/or primary_wireguard."}, status=400
+        )
+
+    # Everything is validated before any change is saved
+    workers = {}
+    if requested_workers is not None:
+        if not isinstance(requested_workers, dict) or not requested_workers:
+            return JsonResponse(
+                {"status": "error", "error_message": "Invalid payload: workers must map worker UUIDs to true or false."},
+                status=400
+            )
+        for worker_uuid, enabled in requested_workers.items():
+            if not isinstance(enabled, bool):
+                return JsonResponse(
+                    {"status": "error", "error_message": f"Invalid payload: the state of worker {worker_uuid} must be true or false."},
+                    status=400
+                )
+            try:
+                worker = Worker.objects.get(uuid=worker_uuid)
+            except (Worker.DoesNotExist, ValidationError, ValueError):
+                return JsonResponse({"status": "error", "error_message": f"Worker not found: {worker_uuid}"}, status=400)
+            workers[worker] = enabled
+
+    settings_form = None
+    # Validating the form already copies the new value to cluster_settings
+    previous_primary_wireguard = cluster_settings.primary_enable_wireguard
+    if primary_wireguard is not None:
+        if not isinstance(primary_wireguard, bool):
+            return JsonResponse(
+                {"status": "error", "error_message": "Invalid payload: primary_wireguard must be true or false."}, status=400
+            )
+        # Same rules as the cluster settings form
+        settings_form = ClusterSettingsForm(data={
+            "enabled": cluster_settings.enabled,
+            "primary_enable_wireguard": primary_wireguard,
+            "cluster_mode": cluster_settings.cluster_mode,
+            "worker_display": cluster_settings.worker_display,
+        }, instance=cluster_settings)
+        if not settings_form.is_valid():
+            errors = [str(error) for field_errors in settings_form.errors.values() for error in field_errors]
+            return JsonResponse({"status": "error", "error_message": " ".join(errors)}, status=400)
+
+    primary_served_clients = ClusterSettings.primary_serves_clients()
+    worker_results = {}
+    with transaction.atomic():
+        for worker, enabled in workers.items():
+            changed = worker.enabled != enabled
+            if changed:
+                worker.enabled = enabled
+                worker.save(update_fields=["enabled", "updated"])
+            worker_results[str(worker.uuid)] = {"name": worker.name, "enabled": enabled, "changed": changed}
+
+        primary_result = None
+        primary_changed = False
+        if settings_form is not None:
+            primary_changed = previous_primary_wireguard != primary_wireguard
+            settings_form.save()
+            primary_result = {"enabled": primary_wireguard, "changed": primary_changed}
+        if ClusterSettings.primary_serves_clients() != primary_served_clients:
+            WireGuardInstance.objects.update(pending_changes=True)
+
+    apply_success = True
+    if not primary_changed:
+        apply_message = "Workers apply the changes on their next synchronization."
+    elif skip_reload:
+        apply_message = "Changes saved. Apply skipped (pending_changes set to True)."
+    else:
+        try:
+            if django_settings.CADDY_ENABLED:
+                apply_caddy_config()
+        except Exception as error:
+            return JsonResponse(
+                {"status": "error", "error_message": f"Cluster changes were saved but apply failed: {error}"}, status=500
+            )
+        if ClusterSettings.primary_serves_clients():
+            errors = start_primary_interfaces()
+            apply_message = "WireGuard interfaces of the primary server started."
+        else:
+            errors = stop_primary_interfaces()
+            apply_message = "WireGuard interfaces of the primary server stopped."
+        if errors:
+            details = "; ".join(f"{interface_name}: {error}" for interface_name, error in errors)
+            return JsonResponse(
+                {"status": "error", "error_message": f"Cluster changes were saved but apply failed: {details}"},
+                status=500
+            )
+        WireGuardInstance.objects.update(pending_changes=False)
+
+    response_data = {
+        "status": "success",
+        "message": "Cluster updated successfully.",
+        "apply": {"success": apply_success, "message": apply_message},
+    }
+    if worker_results:
+        response_data["workers"] = worker_results
+    if primary_result is not None:
+        response_data["primary_wireguard"] = primary_result
+    return JsonResponse(response_data)

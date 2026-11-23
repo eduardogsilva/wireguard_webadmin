@@ -13,6 +13,10 @@ class ApiKey(models.Model):
     allow_restart = models.BooleanField(default=True, verbose_name=_("Allow Restart"))
     allow_reload = models.BooleanField(default=True, verbose_name=_("Allow Reload"))
     allow_export = models.BooleanField(default=True, verbose_name=_("Allow Export"))
+    manage_cluster = models.BooleanField(
+        default=False, verbose_name=_("Manage Cluster"),
+        help_text=_("Allows enabling and disabling cluster workers and WireGuard on the primary server."),
+    )
     enabled = models.BooleanField(default=True, verbose_name=_("Enabled"))
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)

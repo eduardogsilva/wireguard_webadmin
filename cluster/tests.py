@@ -766,7 +766,9 @@ class PrimaryDisabledTests(ClusterTestMixin, TestCase):
             return type('Result', (), {'returncode': 0, 'stdout': 'wg0 wg1\n', 'stderr': ''})()
 
         with patch('wireguard_tools.views.subprocess.run', run), \
-                patch('wireguard_tools.views.os.path.isfile', lambda path: path.endswith('/wg0.conf')):
+                patch('wireguard_tools.functions.subprocess.run', run), \
+                patch('wireguard_tools.views.os.path.isfile', lambda path: path.endswith('/wg0.conf')), \
+                patch('wireguard_tools.functions.os.path.isfile', lambda path: path.endswith('/wg0.conf')):
             self.client.get('/tools/restart_wireguard/?action=dismiss_warning')
 
         self.assertIn(['wg-quick', 'down', 'wg0'], commands)

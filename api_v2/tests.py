@@ -1,10 +1,13 @@
 import json
 from unittest.mock import patch
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from api_v2.models import ApiKey
+from cluster.models import ClusterSettings, Worker
+from cluster.tests import create_instance
 from dns.models import DNSSettings, StaticHost
+from wireguard.models import WireGuardInstance
 
 
 class ApiV2ManageDnsRecordTests(TestCase):
@@ -138,3 +141,153 @@ class ApiV2ManageDnsRecordTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(StaticHost.objects.filter(hostname="del.example.com").exists())
         mock_export.assert_not_called()
+
+
+@override_settings(WIREGUARD_STATUS_CACHE_ENABLED=True, CADDY_ENABLED=True)
+class ApiV2ManageClusterTests(TestCase):
+    status_url = "/api/v2/manage_cluster/status/"
+    manage_url = "/api/v2/manage_cluster/manage_status/"
+
+    def setUp(self):
+        ClusterSettings.objects.update_or_create(name="cluster_settings", defaults={"enabled": True})
+        self.api_key = ApiKey.objects.create(name="cluster-key", manage_cluster=True)
+        self.node_a = Worker.objects.create(name="node-a")
+        self.node_b = Worker.objects.create(name="node-b", enabled=False)
+        self.instance = create_instance(0)
+        WireGuardInstance.objects.update(pending_changes=False)
+
+        self.calls = []
+        self.stop_errors = []
+        for name, value in (
+            ("running_wireguard_interfaces", lambda: ["wg0"]),
+            ("start_primary_interfaces", self.record("start")),
+            ("stop_primary_interfaces", self.record("stop")),
+            ("apply_caddy_config", self.record("export")),
+        ):
+            patcher = patch(f"api_v2.views_api.{name}", value)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+
+    def record(self, name):
+        def call():
+            self.calls.append(name)
+            return list(self.stop_errors) if name == "stop" else []
+        return call
+
+    def manage(self, payload, api_key=None, method="put"):
+        return getattr(self.client, method)(
+            self.manage_url, data=json.dumps(payload), content_type="application/json",
+            HTTP_TOKEN=str((api_key or self.api_key).token),
+        )
+
+    def assert_unchanged(self):
+        self.assertTrue(Worker.objects.get(pk=self.node_a.pk).enabled)
+        self.assertFalse(Worker.objects.get(pk=self.node_b.pk).enabled)
+        self.assertTrue(ClusterSettings.objects.get(name="cluster_settings").primary_enable_wireguard)
+        self.assertEqual(self.calls, [])
+
+    def test_api_key_needs_manage_cluster(self):
+        plain_key = ApiKey.objects.create(name="plain-key")
+        self.assertEqual(self.client.get(self.status_url).status_code, 403)
+        self.assertEqual(self.client.get(self.status_url, HTTP_TOKEN=str(plain_key.token)).status_code, 403)
+        response = self.manage({"workers": {str(self.node_a.uuid): False}}, api_key=plain_key)
+        self.assertEqual(response.status_code, 403)
+        self.assertIn("not allowed to manage the cluster", response.json()["error_message"])
+        self.assert_unchanged()
+
+    def test_status_lists_cluster_and_workers_by_uuid(self):
+        response = self.client.get(self.status_url, HTTP_TOKEN=str(self.api_key.token))
+        self.assertEqual(response.status_code, 200)
+        body = response.json()
+        self.assertEqual(body["cluster"], {
+            "enabled": True, "mode": "mirror", "primary_wireguard": True, "primary_running_interfaces": ["wg0"],
+        })
+        self.assertEqual(body["workers"][str(self.node_a.uuid)]["name"], "node-a")
+        self.assertFalse(body["workers"][str(self.node_b.uuid)]["enabled"])
+        self.assertIsNone(body["workers"][str(self.node_b.uuid)]["sync_state"])
+
+    def test_workers_and_primary_change_in_a_single_request(self):
+        response = self.manage({
+            "workers": {str(self.node_a.uuid): False, str(self.node_b.uuid): True}, "primary_wireguard": False,
+        })
+        self.assertEqual(response.status_code, 200)
+        body = response.json()
+        self.assertEqual(body["workers"][str(self.node_a.uuid)], {"name": "node-a", "enabled": False, "changed": True})
+        self.assertEqual(body["workers"][str(self.node_b.uuid)], {"name": "node-b", "enabled": True, "changed": True})
+        self.assertEqual(body["primary_wireguard"], {"enabled": False, "changed": True})
+        self.assertTrue(body["apply"]["success"])
+        self.assertFalse(Worker.objects.get(pk=self.node_a.pk).enabled)
+        self.assertTrue(Worker.objects.get(pk=self.node_b.pk).enabled)
+        self.assertFalse(ClusterSettings.primary_serves_clients())
+        self.assertEqual(self.calls, ["export", "stop"])
+        self.instance.refresh_from_db()
+        self.assertFalse(self.instance.pending_changes)
+
+        # The same request again changes nothing
+        self.calls.clear()
+        body = self.manage({"workers": {str(self.node_a.uuid): False}, "primary_wireguard": False}).json()
+        self.assertFalse(body["workers"][str(self.node_a.uuid)]["changed"])
+        self.assertFalse(body["primary_wireguard"]["changed"])
+        self.assertEqual(self.calls, [])
+
+    def test_enabling_the_primary_starts_its_interfaces(self):
+        ClusterSettings.objects.filter(name="cluster_settings").update(primary_enable_wireguard=False)
+        response = self.manage({"primary_wireguard": True}, method="post")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.calls, ["export", "start"])
+        self.assertTrue(ClusterSettings.primary_serves_clients())
+
+    def test_skip_reload_only_marks_the_instances_pending(self):
+        response = self.manage({"primary_wireguard": False, "skip_reload": True})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.calls, [])
+        self.instance.refresh_from_db()
+        self.assertTrue(self.instance.pending_changes)
+
+    def test_worker_changes_do_not_touch_the_primary_interfaces(self):
+        response = self.manage({"workers": {str(self.node_a.uuid): False}})
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn("primary_wireguard", response.json())
+        self.assertEqual(self.calls, [])
+
+    def test_invalid_requests_change_nothing(self):
+        for payload in (
+            {},
+            {"workers": {}},
+            {"workers": {"00000000-0000-0000-0000-000000000000": False}, "primary_wireguard": False},
+            {"workers": {"node-a": False}},
+            {"workers": {str(self.node_a.uuid): "no"}},
+            {"workers": {str(self.node_b.uuid): True}, "primary_wireguard": 0},
+        ):
+            response = self.manage(payload)
+            self.assertEqual(response.status_code, 400, payload)
+        self.assert_unchanged()
+
+    def test_primary_follows_the_cluster_settings_form_rules(self):
+        ClusterSettings.objects.filter(name="cluster_settings").update(cluster_mode="distributed")
+        response = self.manage({"workers": {str(self.node_a.uuid): False}, "primary_wireguard": False})
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("only be disabled in mirror mode", response.json()["error_message"])
+        self.assert_unchanged()
+
+    def test_changes_require_an_enabled_cluster(self):
+        ClusterSettings.objects.filter(name="cluster_settings").update(enabled=False)
+        response = self.manage({"workers": {str(self.node_a.uuid): False}})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error_message"], "The cluster is not enabled.")
+        self.assert_unchanged()
+
+    def test_apply_failure_keeps_the_saved_changes_pending(self):
+        self.stop_errors = [("wg0", "device busy")]
+        response = self.manage({"primary_wireguard": False})
+        self.assertEqual(response.status_code, 500)
+        self.assertIn("saved but apply failed: wg0: device busy", response.json()["error_message"])
+        self.assertFalse(ClusterSettings.objects.get(name="cluster_settings").primary_enable_wireguard)
+        self.instance.refresh_from_db()
+        self.assertTrue(self.instance.pending_changes)
+
+    def test_other_methods_are_not_allowed(self):
+        response = self.client.delete(self.manage_url, HTTP_TOKEN=str(self.api_key.token))
+        self.assertEqual(response.status_code, 405)
+        response = self.client.put(self.status_url, HTTP_TOKEN=str(self.api_key.token))
+        self.assertEqual(response.status_code, 405)
