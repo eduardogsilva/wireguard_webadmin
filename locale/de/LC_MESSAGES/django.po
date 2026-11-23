@@ -126,16 +126,16 @@ msgid "Allow Export"
 msgstr "Export erlauben"
 
 #: api_v2/models.py:17 templates/api_v2/list.html:15
-#, fuzzy
-#| msgid "Cluster"
 msgid "Manage Cluster"
-msgstr "Cluster"
+msgstr "Cluster verwalten"
 
 #: api_v2/models.py:18
 msgid ""
 "Allows enabling and disabling cluster workers and WireGuard on the primary "
 "server."
 msgstr ""
+"Erlaubt das Aktivieren und Deaktivieren der Cluster-Worker und von WireGuard "
+"auf dem primären Server."
 
 #: api_v2/models.py:20 cluster/forms.py:20 templates/api_v2/list.html:11
 #: templates/api_v2/list.html:42 templates/cluster/worker_details.html:62
@@ -268,6 +268,9 @@ msgid ""
 "WireGuard is disabled on the primary server in the cluster settings, so it "
 "does not publish applications until it is enabled again."
 msgstr ""
+"WireGuard ist in den Cluster-Einstellungen auf dem primären Server "
+"deaktiviert, daher veröffentlicht er keine Anwendungen, bis es wieder "
+"aktiviert wird."
 
 #: app_gateway/forms.py:52 cluster/views.py:70
 #: templates/template_parts/base_sidebar.html:135
@@ -1158,6 +1161,8 @@ msgid ""
 "The primary server can only be disabled in mirror mode. In distributed mode, "
 "move its instances to workers instead."
 msgstr ""
+"Der primäre Server kann nur im Spiegelmodus deaktiviert werden. Verschieben "
+"Sie im verteilten Modus stattdessen seine Instanzen auf Worker."
 
 #: cluster/forms.py:140
 msgid "Cluster mode requires WireGuard status cache to be enabled."
@@ -1288,33 +1293,6 @@ msgid "Cluster settings updated successfully."
 msgstr "Cluster-Einstellungen erfolgreich aktualisiert."
 
 #: cluster/views.py:239
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "        <h5>Cluster Enabled</h5>\n"
-#| "        <p>When disabled, workers are refused and shut down their "
-#| "WireGuard interfaces, and App Gateway applications are only published by "
-#| "this primary server. Requires the WireGuard status cache.</p>\n"
-#| "\n"
-#| "        <h5>Primary Enable WireGuard</h5>\n"
-#| "        <p>Lists this primary server as an option when downloading peer "
-#| "configurations and VPN invites.</p>\n"
-#| "\n"
-#| "        <h5>Cluster Mode</h5>\n"
-#| "        <p><strong>Mirror</strong>: every worker receives the same "
-#| "WireGuard instances, peers, firewall and DNS configuration. Peers can "
-#| "connect to any server.</p>\n"
-#| "        <p><strong>Distributed</strong>: each WireGuard instance runs "
-#| "only on the server selected in the instance settings (the primary server "
-#| "by default). Peers connect to that server. Firewall rules cannot be bound "
-#| "to a specific instance interface: use wg+ or IP addresses. After changing "
-#| "the mode, apply the WireGuard configuration so the primary server stops "
-#| "the instances that moved to workers.</p>\n"
-#| "\n"
-#| "        <h5>Worker Display</h5>\n"
-#| "        <p>How workers are named in server selections (peer configuration "
-#| "downloads and VPN invites).</p>\n"
-#| "        "
 msgid ""
 "\n"
 "        <h5>Cluster Enabled</h5>\n"
@@ -1355,8 +1333,14 @@ msgstr ""
 "Statuscache.</p>\n"
 "\n"
 "        <h5>WireGuard primär aktivieren</h5>\n"
-"        <p>Bietet diesen primären Server beim Herunterladen von Peer-"
-"Konfigurationen und VPN-Einladungen als Option an.</p>\n"
+"        <p>Nur im Spiegelmodus. Wenn deaktiviert, stoppt dieser primäre "
+"Server seine WireGuard-Schnittstellen, sobald die Konfiguration angewendet "
+"wird, wird beim Herunterladen von Peer-Konfigurationen und VPN-Einladungen "
+"nicht mehr angeboten und veröffentlicht im App Gateway nur noch WireGuard "
+"WebAdmin. Die Worker erhalten weiterhin die Konfiguration, und der primäre "
+"Server verwaltet weiterhin die von ihnen verwendeten Zertifikate. Stellen "
+"Sie vor dem Deaktivieren sicher, dass Sie WireGuard WebAdmin ohne das VPN "
+"dieses Servers erreichen.</p>\n"
 "\n"
 "        <h5>Cluster-Modus</h5>\n"
 "        <p><strong>Mirror</strong>: Jeder Worker erhält dieselben WireGuard-"
@@ -4534,17 +4518,13 @@ msgid "Persistent Keepalive"
 msgstr "Persistent Keepalive"
 
 #: templates/wireguard/wireguard_manage_peer.html:95 wireguard_peer/forms.py:97
-#, fuzzy
-#| msgid "Endpoints"
 msgid "Endpoint"
-msgstr "Endpoints"
+msgstr "Endpoint"
 
 #: templates/wireguard/wireguard_manage_peer.html:101
 #: wireguard_peer/forms.py:102
-#, fuzzy
-#| msgid "Certificates served"
 msgid "Connected server"
-msgstr "Bereitgestellte Zertifikate"
+msgstr "Verbundener Server"
 
 #: templates/wireguard/wireguard_manage_peer.html:104
 #: templates/wireguard/wireguard_manage_peer.html:133
@@ -5378,11 +5358,13 @@ msgstr "Neue WireGuard‑Instanz"
 
 #: wireguard_peer/forms.py:80 wireguard_peer/forms.py:91
 msgid "Enter the endpoint as host:port, e.g. vpn.example.com:51820"
-msgstr ""
+msgstr "Geben Sie den Endpoint als Host:Port ein, z. B. vpn.example.com:51820"
 
 #: wireguard_peer/forms.py:85
 msgid "Enter a valid IPv6 address between brackets, e.g. [2001:db8::1]:51820"
 msgstr ""
+"Geben Sie eine gültige IPv6-Adresse in eckigen Klammern ein, z. B. "
+"[2001:db8::1]:51820"
 
 #: wireguard_peer/forms.py:98
 msgid ""
@@ -5390,12 +5372,17 @@ msgid ""
 "it, instead of waiting for the peer to connect. Leave empty for a regular "
 "peer."
 msgstr ""
+"Adresse (Host:Port) eines entfernten WireGuard-Servers. Dieser Server "
+"verbindet sich mit ihm, statt auf die Verbindung des Peers zu warten. Für "
+"einen normalen Peer leer lassen."
 
 #: wireguard_peer/forms.py:104
 msgid ""
 "Cluster server that connects to the endpoint. The networks of this peer are "
 "reachable from the clients connected to that server."
 msgstr ""
+"Cluster-Server, der sich mit dem Endpoint verbindet. Die Netze dieses Peers "
+"sind von den Clients erreichbar, die mit diesem Server verbunden sind."
 
 #: wireguard_peer/forms.py:146
 msgid "Allowed IP or Network"
@@ -5518,16 +5505,12 @@ msgstr ""
 "Synchronisierung anwendet."
 
 #: wireguard_peer/views.py:35
-#, fuzzy
-#| msgid ""
-#| "wg%(id)s runs on %(worker)s, which applies the change on its next "
-#| "synchronization."
 msgid ""
 "WireGuard is disabled on the primary server. The cluster workers apply the "
 "change on their next synchronization."
 msgstr ""
-"wg%(id)s läuft auf %(worker)s, der die Änderung bei seiner nächsten "
-"Synchronisierung anwendet."
+"WireGuard ist auf dem primären Server deaktiviert. Die Cluster-Worker "
+"übernehmen die Änderung bei ihrer nächsten Synchronisierung."
 
 #: wireguard_peer/views.py:41
 #, python-format
@@ -5587,10 +5570,8 @@ msgid "Edit Keys"
 msgstr "Schlüssel bearbeiten"
 
 #: wireguard_peer/views.py:263
-#, fuzzy
-#| msgid "Endpoints"
 msgid "Edit Endpoint"
-msgstr "Endpoints"
+msgstr "Endpoint bearbeiten"
 
 #: wireguard_peer/views.py:272
 msgid ""
@@ -5611,15 +5592,26 @@ msgid ""
 "the instance. Add the remote networks as allowed IPs of this peer.</p>\n"
 "            "
 msgstr ""
+"\n"
+"            <h5>Endpoint</h5>\n"
+"            <p>Wenn ein Endpoint gesetzt ist, verbindet sich dieser Server "
+"mit einem entfernten WireGuard-Server, statt auf die Verbindung des Peers zu "
+"warten. Damit erreichen Sie die Netze hinter einem Router oder einem anderen "
+"Server. Beispiel: <code>vpn.example.com:51820</code>.</p>\n"
+"\n"
+"            <h5>Schlüssel</h5>\n"
+"            <p>Der öffentliche Schlüssel dieses Peers ist der öffentliche "
+"Schlüssel des entfernten Servers. Auf dem entfernten Server muss der "
+"öffentliche Schlüssel dieser Instanz eingetragen sein. Der Pre‑Shared Key "
+"ist optional.</p>\n"
+"\n"
+"            <h5>Adressen</h5>\n"
+"            <p>Die Hauptadresse dieses Peers darf außerhalb des Netzes der "
+"Instanz liegen. Fügen Sie die entfernten Netze als erlaubte IPs dieses Peers "
+"hinzu.</p>\n"
+"            "
 
 #: wireguard_peer/views.py:284
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "            <h5>Deny Policy</h5>\n"
-#| "            <p>A Deny policy blocks all access to the matched routes.</"
-#| "p>\n"
-#| "            "
 msgid ""
 "\n"
 "            <h5>Connected server</h5>\n"
@@ -5628,19 +5620,12 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"            <h5>Ablehnungsrichtlinie</h5>\n"
-"            <p>Eine Ablehnungsrichtlinie blockiert jeglichen Zugriff auf die "
-"übereinstimmenden Routen.</p>\n"
+"            <h5>Verbundener Server</h5>\n"
+"            <p>Nur ein Server des Clusters verbindet sich mit dem Endpoint. "
+"Wenn leer, verbindet sich der primäre Server.</p>\n"
 "            "
 
 #: wireguard_peer/views.py:288
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "            <h5>Deny Policy</h5>\n"
-#| "            <p>A Deny policy blocks all access to the matched routes.</"
-#| "p>\n"
-#| "            "
 msgid ""
 "\n"
 "            <h5>Client configuration</h5>\n"
@@ -5649,9 +5634,9 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"            <h5>Ablehnungsrichtlinie</h5>\n"
-"            <p>Eine Ablehnungsrichtlinie blockiert jeglichen Zugriff auf die "
-"übereinstimmenden Routen.</p>\n"
+"            <h5>Client-Konfiguration</h5>\n"
+"            <p>Peers mit Endpoint haben keine Konfiguration zum "
+"Herunterladen, keinen QR-Code und keine VPN-Einladung.</p>\n"
 "            "
 
 #: wireguard_peer/views.py:319
@@ -5775,6 +5760,8 @@ msgid ""
 "WireGuard disabled on the primary server|The interfaces of this server are "
 "stopped. Cluster workers keep serving the peers."
 msgstr ""
+"WireGuard auf dem primären Server deaktiviert|Die Schnittstellen dieses "
+"Servers sind gestoppt. Die Cluster-Worker bedienen die Peers weiterhin."
 
 #: wireguard_tools/views.py:367
 msgid "Error reloading"
