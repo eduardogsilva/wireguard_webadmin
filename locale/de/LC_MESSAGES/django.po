@@ -3248,41 +3248,29 @@ msgid "VPN and App Gateway"
 msgstr "VPN und App Gateway"
 
 #: templates/cluster/worker_details.html:138
-#, fuzzy
-#| msgid ""
-#| "Copy <code>cluster_node.yml</code> (and <code>cluster_node-gateway.yml</"
-#| "code> to publish App Gateway applications) from the <a href=\"https://"
-#| "github.com/eduardogsilva/wireguard_webadmin\" target=\"_blank\" "
-#| "rel=\"noopener noreferrer\">project repository</a> to the worker, and "
-#| "create a <code>.env</code> file next to them:"
 msgid ""
 "Download the compose file from the <a href=\"https://github.com/"
 "eduardogsilva/wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
 "noreferrer\">project repository</a> to an empty directory on the worker:"
 msgstr ""
-"Kopieren Sie <code>cluster_node.yml</code> (und <code>cluster_node-"
-"gateway.yml</code>, um App-Gateway-Anwendungen zu veröffentlichen) aus dem "
-"<a href=\"https://github.com/eduardogsilva/wireguard_webadmin\" "
-"target=\"_blank\" rel=\"noopener noreferrer\">Projekt-Repository</a> auf den "
-"Worker und legen Sie daneben eine Datei <code>.env</code> an:"
+"Laden Sie die Compose-Datei aus dem <a href=\"https://github.com/"
+"eduardogsilva/wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">Projekt-Repository</a> in ein leeres Verzeichnis auf dem Worker "
+"herunter:"
 
 #: templates/cluster/worker_details.html:148
 msgid "Create a <code>.env</code> file in the same directory:"
-msgstr ""
+msgstr "Legen Sie im selben Verzeichnis eine Datei <code>.env</code> an:"
 
 #: templates/cluster/worker_details.html:158
 msgid "Start the worker:"
-msgstr ""
+msgstr "Starten Sie den Worker:"
 
 #: templates/cluster/worker_details.html:165
-#, fuzzy
-#| msgid ""
-#| "To update, run docker compose pull followed by the same up -d command, "
-#| "always with every compose file of the worker."
 msgid "To update, run docker compose pull followed by the same up -d command."
 msgstr ""
-"Zum Aktualisieren führen Sie docker compose pull und danach denselben up -d-"
-"Befehl aus, immer mit allen Compose-Dateien des Workers."
+"Zum Aktualisieren führen Sie docker compose pull und anschließend denselben "
+"up -d-Befehl aus."
 
 #: templates/cluster/worker_details.html:166
 msgid ""
@@ -3290,6 +3278,9 @@ msgid ""
 "compose file to the same directory and start it with up -d --remove-orphans. "
 "The worker data is kept."
 msgstr ""
+"Um zwischen Nur VPN und VPN und App Gateway zu wechseln, laden Sie die "
+"andere Compose-Datei in dasselbe Verzeichnis herunter und starten Sie sie "
+"mit up -d --remove-orphans. Die Daten des Workers bleiben erhalten."
 
 #: templates/cluster/worker_details.html:167
 msgid ""

@@ -3195,41 +3195,27 @@ msgid "VPN and App Gateway"
 msgstr "VPN e App Gateway"
 
 #: templates/cluster/worker_details.html:138
-#, fuzzy
-#| msgid ""
-#| "Copy <code>cluster_node.yml</code> (and <code>cluster_node-gateway.yml</"
-#| "code> to publish App Gateway applications) from the <a href=\"https://"
-#| "github.com/eduardogsilva/wireguard_webadmin\" target=\"_blank\" "
-#| "rel=\"noopener noreferrer\">project repository</a> to the worker, and "
-#| "create a <code>.env</code> file next to them:"
 msgid ""
 "Download the compose file from the <a href=\"https://github.com/"
 "eduardogsilva/wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
 "noreferrer\">project repository</a> to an empty directory on the worker:"
 msgstr ""
-"Copie o <code>cluster_node.yml</code> (e o <code>cluster_node-gateway.yml</"
-"code> para publicar aplicações do App Gateway) do <a href=\"https://"
-"github.com/eduardogsilva/wireguard_webadmin\" target=\"_blank\" "
-"rel=\"noopener noreferrer\">repositório do projeto</a> para o worker e crie "
-"um arquivo <code>.env</code> ao lado deles:"
+"Baixe o arquivo compose do <a href=\"https://github.com/eduardogsilva/"
+"wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">repositório do projeto</a> para um diretório vazio no worker:"
 
 #: templates/cluster/worker_details.html:148
 msgid "Create a <code>.env</code> file in the same directory:"
-msgstr ""
+msgstr "Crie um arquivo <code>.env</code> no mesmo diretório:"
 
 #: templates/cluster/worker_details.html:158
 msgid "Start the worker:"
-msgstr ""
+msgstr "Inicie o worker:"
 
 #: templates/cluster/worker_details.html:165
-#, fuzzy
-#| msgid ""
-#| "To update, run docker compose pull followed by the same up -d command, "
-#| "always with every compose file of the worker."
 msgid "To update, run docker compose pull followed by the same up -d command."
 msgstr ""
-"Para atualizar, execute docker compose pull seguido do mesmo comando up -d, "
-"sempre com todos os arquivos compose do worker."
+"Para atualizar, execute docker compose pull seguido do mesmo comando up -d."
 
 #: templates/cluster/worker_details.html:166
 msgid ""
@@ -3237,6 +3223,9 @@ msgid ""
 "compose file to the same directory and start it with up -d --remove-orphans. "
 "The worker data is kept."
 msgstr ""
+"Para alternar entre Somente VPN e VPN e App Gateway, baixe o outro arquivo "
+"compose no mesmo diretório e inicie-o com up -d --remove-orphans. Os dados "
+"do worker são mantidos."
 
 #: templates/cluster/worker_details.html:167
 msgid ""

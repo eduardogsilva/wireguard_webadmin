@@ -3164,41 +3164,27 @@ msgid "VPN and App Gateway"
 msgstr "VPN a App Gateway"
 
 #: templates/cluster/worker_details.html:138
-#, fuzzy
-#| msgid ""
-#| "Copy <code>cluster_node.yml</code> (and <code>cluster_node-gateway.yml</"
-#| "code> to publish App Gateway applications) from the <a href=\"https://"
-#| "github.com/eduardogsilva/wireguard_webadmin\" target=\"_blank\" "
-#| "rel=\"noopener noreferrer\">project repository</a> to the worker, and "
-#| "create a <code>.env</code> file next to them:"
 msgid ""
 "Download the compose file from the <a href=\"https://github.com/"
 "eduardogsilva/wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
 "noreferrer\">project repository</a> to an empty directory on the worker:"
 msgstr ""
-"Skopírujte <code>cluster_node.yml</code> (a <code>cluster_node-gateway.yml</"
-"code> na publikovanie aplikácií App Gateway) z <a href=\"https://github.com/"
-"eduardogsilva/wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
-"noreferrer\">repozitára projektu</a> na workera a vedľa nich vytvorte súbor "
-"<code>.env</code>:"
+"Stiahnite súbor compose z <a href=\"https://github.com/eduardogsilva/"
+"wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">repozitára projektu</a> do prázdneho adresára na workeri:"
 
 #: templates/cluster/worker_details.html:148
 msgid "Create a <code>.env</code> file in the same directory:"
-msgstr ""
+msgstr "V tom istom adresári vytvorte súbor <code>.env</code>:"
 
 #: templates/cluster/worker_details.html:158
 msgid "Start the worker:"
-msgstr ""
+msgstr "Spustite workera:"
 
 #: templates/cluster/worker_details.html:165
-#, fuzzy
-#| msgid ""
-#| "To update, run docker compose pull followed by the same up -d command, "
-#| "always with every compose file of the worker."
 msgid "To update, run docker compose pull followed by the same up -d command."
 msgstr ""
-"Na aktualizáciu spustite docker compose pull a potom rovnaký príkaz up -d, "
-"vždy so všetkými súbormi compose workera."
+"Na aktualizáciu spustite docker compose pull a potom ten istý príkaz up -d."
 
 #: templates/cluster/worker_details.html:166
 msgid ""
@@ -3206,6 +3192,9 @@ msgid ""
 "compose file to the same directory and start it with up -d --remove-orphans. "
 "The worker data is kept."
 msgstr ""
+"Na prepnutie medzi Iba VPN a VPN a App Gateway stiahnite druhý súbor compose "
+"do toho istého adresára a spustite ho pomocou up -d --remove-orphans. Údaje "
+"workera sa zachovajú."
 
 #: templates/cluster/worker_details.html:167
 msgid ""
