@@ -23,8 +23,8 @@ from vpn_invite.models import PeerInvite
 from wgwadmlibrary.tools import user_has_access_to_peer
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from wireguard_tools.functions import (
-    CLUSTER_WIREGUARD_CONFIG_DIR, WIREGUARD_CONFIG_DIR, get_instance_config_dir, stop_primary_interfaces,
-    sync_interface_routes,
+    CLUSTER_WIREGUARD_CONFIG_DIR, WIREGUARD_CONFIG_DIR, get_instance_config_dir, peer_config_lines,
+    stop_primary_interfaces, sync_interface_routes,
 )
 
 
@@ -206,29 +206,10 @@ def export_wireguard_configuration(instance_only: WireGuardInstance = None):
         )
 
         for peer in peers:
-            allowed_ips = list(peer.peerallowedip_set.all())
-
-            if not allowed_ips:
-                prepend_line = "# "
-                peer_title = f"# WARNING: No Allowed IPs set for peer {peer}. "
-                allowed_ips_line = "# AllowedIPs = (missing)"
-            else:
-                prepend_line = ""
-                peer_title = f"# Peer: {peer}"
-                allowed_ips_line = prepend_line + "AllowedIPs = " + ", ".join(f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips)
-
-            peer_lines = [
-                peer_title,
-                f"{prepend_line}[Peer]",
-                f"{prepend_line}PublicKey = {peer.public_key}",
-            ]
-
-            if peer.pre_shared_key:
-                peer_lines.append(f"{prepend_line}PresharedKey = {peer.pre_shared_key}")
-            peer_lines.append(f"{prepend_line}PersistentKeepalive = {peer.persistent_keepalive}")
-            peer_lines.append(allowed_ips_line)
-            config_lines.extend(peer_lines)
-            config_lines.append("")
+            # Only one server connects to the remote endpoint of a peer
+            if peer.endpoint and peer.endpoint_worker != instance.hosting_worker:
+                continue
+            config_lines.extend(peer_config_lines(peer))
 
         config_content = "\n".join(config_lines)
         config_path = os.path.join(config_dirs[instance.uuid], f"wg{instance.instance_id}.conf")
@@ -277,6 +258,10 @@ def download_config_or_qrcode(request):
 
         if not user_has_access_to_peer(user_acl, peer):
             raise Http404
+
+    # A peer with an endpoint is a remote server that this server connects to: it has no client configuration
+    if peer.endpoint:
+        raise Http404
 
     format_type = request.GET.get('format', 'conf')
     worker_uuid = request.GET.get('worker')

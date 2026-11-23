@@ -4,6 +4,7 @@ import re
 from functools import wraps
 from typing import List, Optional, Tuple
 
+from django import forms
 from django.conf import settings as django_settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -19,6 +20,7 @@ from dns.models import DNSSettings, StaticHost
 from dns.views import export_dns_configuration
 from routing_templates.models import RoutingTemplate
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
+from wireguard_peer.forms import normalize_endpoint
 from wireguard_peer.functions import find_network_in_other_instance, func_create_new_peer
 from wireguard_tools.functions import (
     func_reload_wireguard_interface, running_wireguard_interfaces, start_primary_interfaces, stop_primary_interfaces,
@@ -243,6 +245,13 @@ def _validate_dns_hostname(hostname: str) -> Tuple[Optional[str], Optional[str]]
          "description": "Suspend/unsuspend a peer (update)."},
         {"name": "suspend_reason", "in": "json", "type": "string", "required": False,
          "description": "Suspend reason (update). Can be cleared by sending null/empty string."},
+        {"name": "endpoint", "in": "json", "type": "string", "required": False, "example": "vpn.example.com:51820",
+         "description": "Address (host:port) of a remote WireGuard server that this server connects to (create/update). "
+                        "Cleared by sending an empty string. A peer with an endpoint may use a main address outside "
+                        "the instance network."},
+        {"name": "active_worker_uuid", "in": "json", "type": "string", "required": False,
+         "description": "Cluster worker that connects to the endpoint in the mirror mode (create/update). Null or "
+                        "empty means the primary server."},
     ],
     returns=[
         {"status": 200, "body": {"status": "success", "message": "Peer updated successfully.", "peer_uuid": "...", "public_key": "...", "main_addresses": ["..."], "reload": {"success": True, "message": "..."}}},
@@ -329,6 +338,22 @@ def api_v2_manage_peer(request):
     if client_route_error:
         return JsonResponse({"status": "error", "error_message": client_route_error}, status=400)
 
+    new_endpoint = None
+    if "endpoint" in payload:
+        try:
+            new_endpoint = normalize_endpoint(str(payload.get("endpoint") or ""))
+        except forms.ValidationError as error:
+            return JsonResponse({"status": "error", "error_message": f"Invalid endpoint: {error.messages[0]}"}, status=400)
+
+    new_active_worker = None
+    if payload.get("active_worker_uuid"):
+        try:
+            new_active_worker = Worker.objects.filter(uuid=payload.get("active_worker_uuid")).first()
+        except (ValidationError, ValueError):
+            new_active_worker = None
+        if not new_active_worker:
+            return JsonResponse({"status": "error", "error_message": "Invalid active_worker_uuid."}, status=400)
+
     with transaction.atomic():
         # CREATE
         if request.method == "POST":
@@ -358,6 +383,9 @@ def api_v2_manage_peer(request):
                 create_overrides["persistent_keepalive"] = peer_persistent_keepalive
             if peer_allowed_ip:
                 create_overrides["allowed_ip"] = str(peer_allowed_ip).strip()
+            if new_endpoint:
+                create_overrides["endpoint"] = new_endpoint
+                create_overrides["active_worker"] = new_active_worker
 
             if routing_template is not None:
                 create_overrides["default_routing_template"] = routing_template
@@ -458,6 +486,13 @@ def api_v2_manage_peer(request):
 
             if "suspend_reason" in payload:
                 peer_for_action.suspend_reason = new_suspend_reason
+
+            if new_endpoint is not None:
+                peer_for_action.endpoint = new_endpoint
+            if "active_worker_uuid" in payload:
+                peer_for_action.active_worker = new_active_worker
+            if not peer_for_action.endpoint:
+                peer_for_action.active_worker = None
 
             peer_for_action.save()
 
@@ -737,6 +772,7 @@ def api_v2_peer_list(request):
             "suspend_reason": current_peer.suspend_reason or "",
             "disabled_by_schedule": bool(current_peer.disabled_by_schedule),
             "main_addresses": current_peer.main_addresses,
+            "endpoint": current_peer.endpoint,
         })
 
     return JsonResponse(
@@ -763,7 +799,7 @@ def api_v2_peer_list(request):
          "description": "Peer public key selector."},
     ],
     returns=[
-        {"status": 200, "body": {"status": "success", "peer": {"uuid": "...", "name": "...", "public_key": "...", "pre_shared_key": "...", "private_key": "...", "persistent_keepalive": 25, "routing_template_uuid": "...", "suspended": False, "suspend_reason": "...", "disabled_by_schedule": False, "enabled": True, "main_addresses": ["..."], "announced_networks": ["..."], "client_routes": ["..."], "instance": "...", "instance_uuid": "..."}}},
+        {"status": 200, "body": {"status": "success", "peer": {"uuid": "...", "name": "...", "public_key": "...", "pre_shared_key": "...", "private_key": "...", "persistent_keepalive": 25, "routing_template_uuid": "...", "suspended": False, "suspend_reason": "...", "disabled_by_schedule": False, "enabled": True, "main_addresses": ["..."], "announced_networks": ["..."], "client_routes": ["..."], "endpoint": "", "active_worker_uuid": "", "instance": "...", "instance_uuid": "..."}}},
         {"status": 400, "body": {"status": "error", "error_message": "Missing peer selector (peer_uuid or peer_public_key)."}},
         {"status": 404, "body": {"status": "error", "error_message": "Peer not found."}},
         {"status": 403, "body": {"status": "error", "error_message": "Invalid API key."}},
@@ -839,6 +875,8 @@ def api_v2_peer_detail(request):
         "main_addresses": current_peer.main_addresses,
         "announced_networks": current_peer.announced_networks,
         "client_routes": current_peer.client_routes,
+        "endpoint": current_peer.endpoint,
+        "active_worker_uuid": str(current_peer.active_worker.uuid) if current_peer.active_worker else "",
         "instance": f"wg{wireguard_instance.instance_id}",
         "instance_uuid": str(wireguard_instance.uuid),
     }

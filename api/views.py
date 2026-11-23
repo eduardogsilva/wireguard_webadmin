@@ -141,6 +141,7 @@ def peer_info(request):
         'public_key': str(peer.public_key),
         'uuid': str(peer.uuid),
         'private_key_exists': bool(peer.private_key),
+        'endpoint': peer.endpoint,
         'is_route_policy_restricted': peer.is_route_policy_restricted,
     }
     return JsonResponse(data)

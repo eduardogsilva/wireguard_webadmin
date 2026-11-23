@@ -5,6 +5,7 @@ import os
 from datetime import timedelta
 
 from django.conf import settings
+from django.db.models import Prefetch
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
@@ -16,8 +17,10 @@ from dns.functions import generate_dnsmasq_config
 from dns.models import DNSFilterList
 from firewall.tools import generate_firewall_script
 from gatekeeper.sessions import REVOKED_SESSIONS_FILE, build_revoked_sessions_data
-from wireguard.models import WireGuardInstance
-from wireguard_tools.functions import CLUSTER_WIREGUARD_CONFIG_DIR, WIREGUARD_CONFIG_DIR
+from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
+from wireguard_tools.functions import (
+    CLUSTER_WIREGUARD_CONFIG_DIR, ENDPOINT_PEER_TITLE, WIREGUARD_CONFIG_DIR, peer_config_lines, remove_endpoint_peers
+)
 
 DNSMASQ_CONFIG_DIR = '/etc/dnsmasq'
 DNSMASQ_MAIN_CONFIG = 'wireguard_webadmin_dns.conf'
@@ -81,8 +84,38 @@ def build_wireguard_section(worker):
         if not os.path.isfile(config_path):
             continue
         content, content_sha256 = _read_file(config_path)
+        if not ClusterSettings.is_distributed():
+            content, content_sha256 = _mirror_endpoint_peers(
+                content, content_sha256, os.path.basename(config_path), worker
+            )
         section.add_file(os.path.basename(config_path), content, content_sha256)
     return section
+
+
+def _mirror_endpoint_peers(content, content_sha256, filename, worker):
+    """
+    In the mirror mode only one server connects to the remote endpoint of a peer: the configuration of the primary
+    server is sent without its endpoint peers, plus the endpoint peers that run on this worker.
+    """
+    try:
+        instance_id = int(filename[len('wg'):-len('.conf')])
+    except ValueError:
+        return content, content_sha256
+    endpoint_peers = (
+        Peer.objects.filter(
+            wireguard_instance__instance_id=instance_id, active_worker=worker,
+            suspended=False, disabled_by_schedule=False,
+        )
+        .exclude(endpoint='')
+        .prefetch_related(Prefetch('peerallowedip_set', queryset=PeerAllowedIP.objects.filter(config_file='server')))
+    )
+    worker_lines = [line for peer in endpoint_peers for line in peer_config_lines(peer)]
+    if not worker_lines and ENDPOINT_PEER_TITLE not in content:
+        return content, content_sha256
+    content = remove_endpoint_peers(content)
+    if worker_lines:
+        content = content.rstrip("\n") + "\n\n" + "\n".join(worker_lines)
+    return content, None
 
 
 def build_firewall_section(worker):

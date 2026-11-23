@@ -108,6 +108,8 @@
                     if (data.name) {
                         $('#peerPreviewModalLabel').text(data.name);
                     }
+                    // A peer with an endpoint is a remote server: there is no client configuration to share
+                    $('#downloadConfigButton, #qrcodeButton, #inviteButton, #serverSelectRow').toggleClass('d-none', !!data.endpoint);
                     // Check if peer has private_key and enable/disable buttons accordingly
                     if (!data.private_key_exists) {
                         $('#qrcodeButton').addClass('disabled').attr('aria-disabled', 'true');

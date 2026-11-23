@@ -16,6 +16,49 @@ WIREGUARD_CONFIG_DIR = '/etc/wireguard'
 CLUSTER_WIREGUARD_CONFIG_DIR = '/etc/wireguard/cluster'
 
 
+# Title of the configuration block of a peer with an endpoint. Mirror workers remove these blocks from the configuration
+# of the primary server and receive only the endpoint peers they run.
+ENDPOINT_PEER_TITLE = '# Endpoint peer: '
+
+
+def peer_config_lines(peer) -> list:
+    """[Peer] block of a peer, using its prefetched server allowed IPs. Ends with an empty line."""
+    allowed_ips = [ip for ip in peer.peerallowedip_set.all() if ip.config_file == 'server']
+    allowed_ips.sort(key=lambda ip: ip.priority)
+    if not allowed_ips:
+        prepend_line = "# "
+        peer_title = f"# WARNING: No Allowed IPs set for peer {peer}. "
+        allowed_ips_line = "# AllowedIPs = (missing)"
+    else:
+        prepend_line = ""
+        peer_title = f"{ENDPOINT_PEER_TITLE if peer.endpoint else '# Peer: '}{peer}"
+        allowed_ips_line = "AllowedIPs = " + ", ".join(f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips)
+
+    lines = [peer_title, f"{prepend_line}[Peer]", f"{prepend_line}PublicKey = {peer.public_key}"]
+    if peer.pre_shared_key:
+        lines.append(f"{prepend_line}PresharedKey = {peer.pre_shared_key}")
+    if peer.endpoint:
+        lines.append(f"{prepend_line}Endpoint = {peer.endpoint}")
+    lines.append(f"{prepend_line}PersistentKeepalive = {peer.persistent_keepalive}")
+    lines.append(allowed_ips_line)
+    lines.append("")
+    return lines
+
+
+def remove_endpoint_peers(config_content: str) -> str:
+    """Remove the blocks of endpoint peers from a configuration written by export_wireguard_configuration."""
+    lines = []
+    skipping = False
+    for line in config_content.split("\n"):
+        if line.startswith(ENDPOINT_PEER_TITLE):
+            skipping = True
+        if not skipping:
+            lines.append(line)
+        if skipping and line == "":
+            skipping = False
+    return "\n".join(lines)
+
+
 def get_instance_config_dir(instance: WireGuardInstance) -> str:
     return CLUSTER_WIREGUARD_CONFIG_DIR if instance.hosting_worker else WIREGUARD_CONFIG_DIR
 
@@ -159,6 +202,9 @@ def reload_wireguard_interface(target: Union[str, WireGuardInstance], config_dir
         if target.hosting_worker:
             # The worker applies the new configuration on its next synchronization
             return True, f"wg{target.instance_id} runs on {target.hosting_worker} and is updated by the cluster"
+        if not ClusterSettings.primary_serves_clients():
+            # The interfaces of the primary server are stopped; the workers apply it on their next synchronization
+            return True, f"wg{target.instance_id} is updated by the cluster workers"
         interface_name = f"wg{target.instance_id}"
         conf_filename = f"{interface_name}.conf"
     else:

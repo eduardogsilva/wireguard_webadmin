@@ -211,6 +211,13 @@ class Peer(models.Model):
         'routing_templates.RoutingTemplate', on_delete=models.SET_NULL, blank=True, null=True, related_name='peers'
     )
 
+    # Remote address (host:port) for peers that this server connects to, instead of waiting for them to connect
+    endpoint = models.CharField(max_length=255, blank=True, default='')
+    # Cluster worker that keeps the connection of an endpoint peer in the mirror mode. Empty means the primary server.
+    active_worker = models.ForeignKey(
+        'cluster.Worker', on_delete=models.SET_NULL, blank=True, null=True, related_name='endpoint_peers'
+    )
+
     disabled_by_schedule = models.BooleanField(default=False)
     suspended = models.BooleanField(default=False)
     suspend_reason = models.TextField(blank=True, null=True)
@@ -224,6 +231,18 @@ class Peer(models.Model):
             return self.name
         else:
             return self.public_key[:16] + "..."
+
+    @property
+    def endpoint_worker(self):
+        """
+        Worker that runs an endpoint peer, or None when it runs on the primary server. Only one server connects to the
+        remote endpoint: in the mirror mode it is the active worker, in the distributed mode the server of the instance.
+        """
+        if not self.endpoint or not ClusterSettings.cluster_enabled():
+            return None
+        if ClusterSettings.is_distributed():
+            return self.wireguard_instance.hosting_worker
+        return self.active_worker
 
     @property
     def enabled(self) -> bool:
