@@ -1,5 +1,6 @@
 import json
 import os
+import socket
 import tempfile
 from unittest.mock import patch
 
@@ -525,3 +526,140 @@ class AgentGatewaySessionsTests(TestCase):
         self.agent.apply_gateway({'files': dict(files, **{'revoked_sessions.json': '{"sessions": []}'})})
         with open(os.path.join(self.gateway_dir, 'revoked_sessions.json'), encoding='utf-8') as revoked_file:
             self.assertEqual(revoked_file.read(), '{"sessions": []}')
+
+
+class FakeResponse:
+    def __init__(self, status_code, data=None, text='', redirected=False):
+        self.status_code = status_code
+        self.data = data
+        self.text = text
+        self.headers = {'Content-Type': 'application/json' if data is not None else 'text/html'}
+        self.history = ['redirect'] if redirected else []
+        self.url = 'https://primary.example.com/auth-gateway/login'
+
+    def json(self):
+        if self.data is None:
+            raise ValueError('not JSON')
+        return self.data
+
+
+class AgentPrimaryResponsesTests(TestCase):
+    """The agent follows the answers of the cluster API and ignores anything else, e.g. a login page."""
+
+    GATEWAY_FILES = {
+        'applications.json': json.dumps({'entries': [{'id': 'app', 'hosts': ['app.example.com']}]}),
+        'auth_policies.json': '{}',
+        'routes.json': json.dumps({'entries': {'app': {'routes': []}}}),
+        'tls.json': '{}',
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.cluster_worker = load_cluster_worker()
+
+    def setUp(self):
+        temp_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(temp_dir.cleanup)
+        self.gateway_dir = temp_dir.name
+        for name, value in (('GATEWAY_DIR', self.gateway_dir), ('gateway_enabled', lambda: True)):
+            patcher = patch.object(self.cluster_worker, name, value)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+        self.manifest_response = FakeResponse(200, {'sections': {'gateway': 'hash-1'}})
+        self.agent = self.new_agent()
+
+    def new_agent(self):
+        agent = self.cluster_worker.ClusterNodeAgent()
+        agent.request = self.answer
+        agent.wireguard_shutdowns = 0
+
+        def shutdown_wireguard():
+            agent.wireguard_shutdowns += 1
+
+        agent.shutdown_wireguard = shutdown_wireguard
+        return agent
+
+    def answer(self, method, path, **kwargs):
+        if path == 'manifest/':
+            return self.manifest_response
+        if path == 'section/gateway/':
+            return FakeResponse(200, {'hash': 'hash-1', 'files': self.GATEWAY_FILES})
+        return FakeResponse(200, {'status': 'success'})
+
+    def refuse(self):
+        self.manifest_response = FakeResponse(400, {'status': 'error', 'message': 'worker_disabled'})
+
+    def accept(self):
+        self.manifest_response = FakeResponse(200, {'sections': {'gateway': 'hash-1'}})
+
+    def published_applications(self):
+        with open(os.path.join(self.gateway_dir, 'applications.json'), encoding='utf-8') as applications_file:
+            return [application['id'] for application in json.load(applications_file)['entries']]
+
+    def test_refused_worker_stops_serving_applications_until_accepted_again(self):
+        self.assertTrue(self.agent.sync_configuration())
+        self.assertEqual(self.published_applications(), ['app'])
+
+        self.refuse()
+        self.assertTrue(self.agent.sync_configuration())
+        self.assertEqual(self.published_applications(), [])
+        with open(os.path.join(self.gateway_dir, 'routes.json'), encoding='utf-8') as routes_file:
+            self.assertEqual(json.load(routes_file), {'entries': {}})
+        self.assertEqual(self.agent.wireguard_shutdowns, 1)
+
+        # The same section hash is applied again once the worker is accepted
+        self.accept()
+        self.assertTrue(self.agent.sync_configuration())
+        self.assertEqual(self.published_applications(), ['app'])
+
+    def test_applications_are_removed_only_once_while_refused(self):
+        self.agent.sync_configuration()
+        self.refuse()
+        self.agent.sync_configuration()
+        with patch.object(self.cluster_worker, 'write_file') as write_file:
+            self.agent.sync_configuration()
+        write_file.assert_not_called()
+
+    def test_refusal_after_a_restart_removes_applications_of_the_previous_run(self):
+        self.agent.sync_configuration()
+        restarted_agent = self.new_agent()
+        self.refuse()
+        restarted_agent.sync_configuration()
+        self.assertEqual(self.published_applications(), [])
+
+    def test_answers_that_are_not_json_keep_the_worker_running(self):
+        self.agent.sync_configuration()
+        for response in (
+            FakeResponse(200, text='<html>login</html>', redirected=True),
+            FakeResponse(403, text='Forbidden'),
+            FakeResponse(400, text='Bad Request'),
+        ):
+            self.manifest_response = response
+            with self.assertLogs(level='ERROR'):
+                self.assertTrue(self.agent.sync_configuration())
+        self.assertEqual(self.agent.wireguard_shutdowns, 0)
+        self.assertEqual(self.published_applications(), ['app'])
+
+    def test_token_rejected_by_the_cluster_api_stops_the_worker(self):
+        self.agent.sync_configuration()
+        self.manifest_response = FakeResponse(403, {'status': 'error', 'message': 'Worker not found'})
+        self.assertFalse(self.agent.sync_configuration())
+        self.assertEqual(self.agent.wireguard_shutdowns, 1)
+        self.assertEqual(self.published_applications(), [])
+
+
+class AgentServiceCheckTests(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.cluster_worker = load_cluster_worker()
+
+    def test_service_is_running_while_its_port_accepts_connections(self):
+        listener = socket.socket()
+        listener.bind(('127.0.0.1', 0))
+        listener.listen()
+        address = listener.getsockname()
+        self.assertTrue(self.cluster_worker.tcp_service_is_running(address))
+        listener.close()
+        self.assertFalse(self.cluster_worker.tcp_service_is_running(address))

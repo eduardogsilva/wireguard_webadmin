@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 MASTER_SERVER_ADDRESS = os.environ.get('MASTER_SERVER_ADDRESS', '')
 TOKEN = os.environ.get('TOKEN', '')
-WORKER_VERSION = 14
+WORKER_VERSION = 15
 REQUEST_TIMEOUT = 30
 MANIFEST_INTERVAL = 60
 DEFAULT_STATS_INTERVAL = 60
@@ -37,8 +37,9 @@ GATEWAY_OPTIONAL_FILES = ('revoked_sessions.json',)
 # Active sessions published by the auth-gateway
 GATEWAY_SESSIONS_FILE = os.path.join(GATEWAY_DIR, 'state', 'sessions.json')
 CERTIFICATE_FILE_PATTERN = re.compile(r'^[a-f0-9]{64}\.(crt|key)$')
-CADDY_ADMIN_URL = 'http://127.0.0.1:2019/config/'
-AUTH_GATEWAY_URL = 'http://cluster-node-auth-gateway:9091/'
+# Services are checked by opening a TCP connection, which leaves no entry in their access logs
+CADDY_ADMIN_ADDRESS = ('127.0.0.1', 2019)
+AUTH_GATEWAY_ADDRESS = ('cluster-node-auth-gateway', 9091)
 INTERNAL_CA_NAME = 'Caddy Local Authority'
 FIREWALL_CHAINS = (
     ('nat', 'WGWADM_POSTROUTING'),
@@ -156,11 +157,11 @@ def gateway_enabled():
     return os.path.isdir(GATEWAY_DIR) and os.path.isdir(CERTIFICATES_DIR)
 
 
-def http_service_is_running(url):
+def tcp_service_is_running(address):
     try:
-        requests.get(url, timeout=3)
-        return True
-    except requests.RequestException:
+        with socket.create_connection(address, timeout=3):
+            return True
+    except OSError:
         return False
 
 
@@ -243,6 +244,8 @@ class ClusterNodeAgent:
         self.applied_hashes = {}
         self.stats_interval = DEFAULT_STATS_INTERVAL
         self.wireguard_active = False
+        # Applications left in the gateway directory by an earlier run are only removed when the worker is refused
+        self.gateway_active = True
         # Hash of the last gateway sessions accepted by the primary server: they are only sent when they change
         self.sent_sessions_hash = None
 
@@ -381,6 +384,7 @@ class ClusterNodeAgent:
         for filename in GATEWAY_FILES + GATEWAY_OPTIONAL_FILES:
             if filename in section['files']:
                 write_file(os.path.join(GATEWAY_DIR, filename), section['files'][filename], mode=0o644)
+        self.gateway_active = True
 
     SECTION_HANDLERS = {
         'firewall': apply_firewall,
@@ -405,6 +409,21 @@ class ClusterNodeAgent:
         self.applied_hashes.pop('firewall', None)
         self.wireguard_active = False
 
+    def shutdown_gateway(self):
+        """Stop publishing applications, so a refused worker does not keep serving a configuration it no longer
+        receives. The next gateway section restores them."""
+        if not self.gateway_active or not gateway_enabled():
+            return
+        logger.warning('Removing App Gateway applications')
+        write_file(os.path.join(GATEWAY_DIR, 'applications.json'), json.dumps({'entries': []}), mode=0o644)
+        write_file(os.path.join(GATEWAY_DIR, 'routes.json'), json.dumps({'entries': {}}), mode=0o644)
+        self.applied_hashes.pop('gateway', None)
+        self.gateway_active = False
+
+    def shutdown_services(self):
+        self.shutdown_wireguard()
+        self.shutdown_gateway()
+
     def sync_configuration(self):
         response = self.request('GET', 'manifest/')
         if response is None:
@@ -418,11 +437,11 @@ class ClusterNodeAgent:
             return True
         if response.status_code == 403:
             logger.error('Token rejected by the primary server. Stopping.')
-            self.shutdown_wireguard()
+            self.shutdown_services()
             return False
         if response.status_code == 400:
             logger.warning('Primary server refused this worker: %s', data.get('message', ''))
-            self.shutdown_wireguard()
+            self.shutdown_services()
             return True
 
         manifest = data.get('sections', {})
@@ -457,8 +476,8 @@ class ClusterNodeAgent:
     def services_status():
         services = {'dnsmasq': 'running' if dns_is_running() else 'stopped'}
         if gateway_enabled():
-            services['caddy'] = 'running' if http_service_is_running(CADDY_ADMIN_URL) else 'stopped'
-            services['auth_gateway'] = 'running' if http_service_is_running(AUTH_GATEWAY_URL) else 'stopped'
+            services['caddy'] = 'running' if tcp_service_is_running(CADDY_ADMIN_ADDRESS) else 'stopped'
+            services['auth_gateway'] = 'running' if tcp_service_is_running(AUTH_GATEWAY_ADDRESS) else 'stopped'
         return services
 
     @staticmethod

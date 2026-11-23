@@ -142,7 +142,7 @@
         {% endblocktrans %}</p>
         <div class="position-relative">
             <button type="button" class="btn btn-xs btn-outline-secondary position-absolute copy-button" style="top: 6px; right: 6px;" data-target="#worker-download" title="{% trans 'Copy' %}"><i class="far fa-copy"></i></button>
-<pre id="worker-download" class="p-2 pr-5" style="white-space: pre-wrap;">wget -O <span class="worker-compose-file">cluster_node.yml</span> https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/<span class="worker-compose-file">cluster_node.yml</span></pre>
+<pre id="worker-download" class="p-2 pr-5" style="white-space: pre-wrap;">wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/<span class="worker-compose-file">cluster_node.yml</span></pre>
         </div>
 
         <p class="mb-1"><strong>2.</strong> {% blocktrans trimmed %}
@@ -158,7 +158,7 @@ TIMEZONE={{ time_zone }}</pre>
         <p class="mb-1"><strong>3.</strong> {% trans 'Start the worker:' %}</p>
         <div class="position-relative">
             <button type="button" class="btn btn-xs btn-outline-secondary position-absolute copy-button" style="top: 6px; right: 6px;" data-target="#worker-up" title="{% trans 'Copy' %}"><i class="far fa-copy"></i></button>
-<pre id="worker-up" class="p-2 pr-5">docker compose -f <span class="worker-compose-file">cluster_node.yml</span> up -d</pre>
+<pre id="worker-up" class="p-2 pr-5">docker compose up -d</pre>
         </div>
 
         <ul class="text-muted mb-0">
