@@ -3050,16 +3050,15 @@ msgid "VPN and App Gateway"
 msgstr "VPN e App Gateway"
 
 #: templates/cluster/worker_details.html:138
+#, python-format
 msgid ""
-"Download the compose file from the <a "
-"href=\"https://github.com/eduardogsilva/wireguard_webadmin\" "
+"Download the compose file from the <a href=\"%(repository_url)s\" "
 "target=\"_blank\" rel=\"noopener noreferrer\">project repository</a> to an "
 "empty directory on the worker:"
 msgstr ""
-"Scarica il file compose dal <a "
-"href=\"https://github.com/eduardogsilva/wireguard_webadmin\" "
-"target=\"_blank\" rel=\"noopener noreferrer\">repository del progetto</a> in"
-" una directory vuota sul worker:"
+"Scarica il file compose dal <a href=\"%(repository_url)s\" target=\"_blank\""
+" rel=\"noopener noreferrer\">repository del progetto</a> in una directory "
+"vuota sul worker:"
 
 #: templates/cluster/worker_details.html:148
 msgid "Create a <code>.env</code> file in the same directory:"
@@ -3452,10 +3451,11 @@ msgid "Masquerade Source"
 msgstr "Masquerade dell'origine"
 
 #: templates/firewall/manage_redirect_rule.html:91
+#, python-format
 msgid ""
 "\n"
 "                        <h5>Default Ports</h5>\n"
-"                        <p>The default <code>docker-compose.yml</code> file specifies the <b>TCP</b> port range <b>8080-8089</b>. If you wish to change the port forwarding to a different range, you must manually edit the <code>docker-compose.yml</code> file and rerun the Docker Compose step outlined in the <a href=\"https://github.com/eduardogsilva/wireguard_webadmin?tab=readme-ov-file#deployment\">deployment instructions</a>.</p>\n"
+"                        <p>The default <code>docker-compose.yml</code> file specifies the <b>TCP</b> port range <b>8080-8089</b>. If you wish to change the port forwarding to a different range, you must manually edit the <code>docker-compose.yml</code> file and rerun the Docker Compose step outlined in the <a href=\"%(deployment_url)s\" target=\"_blank\" rel=\"noopener noreferrer\">deployment instructions</a>.</p>\n"
 "                        <h5>Destination Type: Peer</h5>\n"
 "                        <p>Port redirection will prioritize the first Peer IP address assigned a priority of Zero.</p>\n"
 "                        <h5>Destination Type: IP Address</h5>\n"
@@ -3468,7 +3468,7 @@ msgid ""
 msgstr ""
 "\n"
 "                        <h5>Porte predefinite</h5>\n"
-"<p>Il file <code>docker-compose.yml</code> predefinito specifica l'intervallo di porte <b>TCP</b> <b>8080-8089</b>. Se vuoi cambiare il port forwarding su un intervallo diverso, devi modificare manualmente il file <code>docker-compose.yml</code> e ripetere il passaggio Docker Compose descritto nelle <a href=\"https://github.com/eduardogsilva/wireguard_webadmin?tab=readme-ov-file#deployment\">istruzioni di distribuzione</a>.</p>\n"
+"<p>Il file <code>docker-compose.yml</code> predefinito specifica l'intervallo di porte <b>TCP</b> <b>8080-8089</b>. Se vuoi cambiare il port forwarding su un intervallo diverso, devi modificare manualmente il file <code>docker-compose.yml</code> e ripetere il passaggio Docker Compose descritto nelle <a href=\"%(deployment_url)s\" target=\"_blank\" rel=\"noopener noreferrer\">istruzioni di distribuzione</a>.</p>\n"
 "<h5>Tipo di destinazione: Peer</h5>\n"
 "<p>Il reindirizzamento delle porte darà la precedenza al primo indirizzo IP del peer con priorità zero.</p>\n"
 "<h5>Tipo di destinazione: Indirizzo IP</h5>\n"
@@ -4744,8 +4744,9 @@ msgid "Text Message Template"
 msgstr "Template del messaggio di testo"
 
 #: vpn_invite/forms.py:205
-msgid "Invite URL must start with 'https://'."
-msgstr "L'URL dell'invito deve iniziare con 'https://'."
+#, python-format
+msgid "Invite URL must start with %(prefix)s."
+msgstr "L'URL dell'invito deve iniziare con %(prefix)s."
 
 #: vpn_invite/forms.py:207
 msgid "Invite URL must end with '/invite/'."

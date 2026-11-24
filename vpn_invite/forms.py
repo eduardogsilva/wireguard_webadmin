@@ -202,7 +202,7 @@ class InviteSettingsForm(forms.ModelForm):
         invite_url = cleaned_data.get('invite_url')
         if invite_url:
             if not invite_url.startswith("https://"):
-                self.add_error('invite_url', _("Invite URL must start with 'https://'."))
+                self.add_error('invite_url', _("Invite URL must start with %(prefix)s.") % {'prefix': "'https://'"})
             if not invite_url.endswith("/invite/"):
                 self.add_error('invite_url', _("Invite URL must end with '/invite/'."))
 

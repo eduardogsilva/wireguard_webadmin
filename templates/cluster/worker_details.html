@@ -135,9 +135,9 @@
             <button type="button" class="btn btn-outline-primary worker-mode" data-compose-file="cluster_node-gateway.yml">{% trans 'VPN and App Gateway' %}</button>
         </div>
 
-        <p class="mb-1"><strong>1.</strong> {% blocktrans trimmed %}
+        <p class="mb-1"><strong>1.</strong> {% blocktrans trimmed with repository_url="https://github.com/eduardogsilva/wireguard_webadmin" %}
             Download the compose file from the
-            <a href="https://github.com/eduardogsilva/wireguard_webadmin" target="_blank" rel="noopener noreferrer">project repository</a>
+            <a href="{{ repository_url }}" target="_blank" rel="noopener noreferrer">project repository</a>
             to an empty directory on the worker:
         {% endblocktrans %}</p>
         <div class="position-relative">

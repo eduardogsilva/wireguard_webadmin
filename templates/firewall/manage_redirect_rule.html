@@ -87,9 +87,9 @@
                         </form>
                     </div>
                     <div class="col-md-8">
-                        {% blocktrans %}
+                        {% blocktrans with deployment_url="https://wireguard-webadmin.com/deployment/" %}
                         <h5>Default Ports</h5>
-                        <p>The default <code>docker-compose.yml</code> file specifies the <b>TCP</b> port range <b>8080-8089</b>. If you wish to change the port forwarding to a different range, you must manually edit the <code>docker-compose.yml</code> file and rerun the Docker Compose step outlined in the <a href="https://github.com/eduardogsilva/wireguard_webadmin?tab=readme-ov-file#deployment">deployment instructions</a>.</p>
+                        <p>The default <code>docker-compose.yml</code> file specifies the <b>TCP</b> port range <b>8080-8089</b>. If you wish to change the port forwarding to a different range, you must manually edit the <code>docker-compose.yml</code> file and rerun the Docker Compose step outlined in the <a href="{{ deployment_url }}" target="_blank" rel="noopener noreferrer">deployment instructions</a>.</p>
                         <h5>Destination Type: Peer</h5>
                         <p>Port redirection will prioritize the first Peer IP address assigned a priority of Zero.</p>
                         <h5>Destination Type: IP Address</h5>
