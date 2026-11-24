@@ -829,6 +829,11 @@ def api_peer_invite(request):
             data['status'] = 'error'
             data['message'] = 'Permission denied'
             return JsonResponse(data, status=403)
+        if peer.endpoint:
+            # A peer with an endpoint is a remote server: there is no client configuration to share
+            data['status'] = 'error'
+            data['message'] = 'Peers with an endpoint have no client configuration to share'
+            return JsonResponse(data, status=400)
         peer_invite = PeerInvite.objects.filter(peer=peer).first()
         if not peer_invite:
             peer_invite = create_peer_invite(peer, invite_settings)
