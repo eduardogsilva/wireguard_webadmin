@@ -9,6 +9,7 @@
 
   <title>Zero-Trust-Anwendungsgateway · wireguard_webadmin</title>
   <meta name="description" content="Erfahren Sie, wie wireguard_webadmin Zero-Trust-Zugriffskontrolle implementiert, um interne Apps wie Grafana, Proxmox und mehr sicher zu veröffentlichen.">
+  <link rel="canonical" href="https://wireguard-webadmin.com/de/zero-trust/">
 
   
   
@@ -29,25 +30,34 @@
   <meta property="og:url"         content="https://wireguard-webadmin.com/de/zero-trust/">
   <meta property="og:title"       content="Zero-Trust-Anwendungsgateway · wireguard_webadmin">
   <meta property="og:description" content="Erfahren Sie, wie wireguard_webadmin Zero-Trust-Zugriffskontrolle implementiert, um interne Apps wie Grafana, Proxmox und mehr sicher zu veröffentlichen.">
-  <meta property="og:image"       content="https://wireguard-webadmin.com/og-image.png">
-  <meta property="og:image:width"  content="1280">
-  <meta property="og:image:height" content="800">
+  <meta property="og:locale"      content="de_DE">
+  
+  <meta property="og:locale:alternate" content="en_US">
+  
+  <meta property="og:locale:alternate" content="pt_BR">
+  
+  <meta property="og:locale:alternate" content="es_ES">
+  
+  <meta property="og:locale:alternate" content="fr_FR">
+  
+  
+  <meta property="og:image"        content="https://wireguard-webadmin.com/images/peer_list_dark_hu_84f9807efbbcd67e.jpg">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
 
   
   <meta name="twitter:card"        content="summary_large_image">
   <meta name="twitter:title"       content="Zero-Trust-Anwendungsgateway · wireguard_webadmin">
   <meta name="twitter:description" content="Erfahren Sie, wie wireguard_webadmin Zero-Trust-Zugriffskontrolle implementiert, um interne Apps wie Grafana, Proxmox und mehr sicher zu veröffentlichen.">
-  <meta name="twitter:image"       content="https://wireguard-webadmin.com/og-image.png">
+  <meta name="twitter:image"       content="https://wireguard-webadmin.com/images/peer_list_dark_hu_84f9807efbbcd67e.jpg">
 
   
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
   
-  <link rel="stylesheet" href="/css/main.min.css">
+  <link rel="stylesheet" href="/css/main.min.09e588a4a25bba0c0a964ce43747e8b70b3bde1ddf6d8c884a5d0338d93f3447.css">
 </head>
 <body>
 
@@ -55,10 +65,10 @@
   <div class="container">
     <nav class="nav-inner">
       <a href="/de/" class="nav-logo">wireguard_<span>webadmin</span></a>
-      <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <button class="hamburger" aria-label="Toggle menu" aria-controls="site-nav" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
-      <ul class="nav-links">
+      <ul class="nav-links" id="site-nav">
         
         
         <li>
@@ -79,6 +89,17 @@
              >
             
             Zero Trust
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="/de/wireguard-cluster/"
+             
+             
+             >
+            
+            Cluster
           </a>
         </li>
         
@@ -119,11 +140,11 @@
         
         <li class="nav-lang-sep"></li>
         <li class="lang-dropdown">
-          <button class="lang-btn" aria-expanded="false">
+          <button class="lang-btn" aria-label="Language" aria-controls="lang-menu" aria-expanded="false">
             🇩🇪 DE
             <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
           </button>
-          <ul class="lang-menu">
+          <ul class="lang-menu" id="lang-menu">
             
               
               
@@ -300,6 +321,29 @@ Jede Anfrage muss sich authentifizieren, bevor sie die Anwendung erreicht. Der D
   </div>
 </div>
 <hr>
+<h2 id="zugriffsrichtlinien">Zugriffsrichtlinien</h2>
+<p>Jede Anwendung hat eine Standardrichtlinie, die Routen per Pfadpräfix überschreiben können. Zum Beispiel: <code>/</code> geschützt lassen, <code>/api/health</code> öffentlich machen und <code>/admin</code> vollständig sperren.</p>
+<div class="auth-list">
+  <div class="auth-row">
+    <div class="auth-row-name">Öffentlich</div>
+    <div class="auth-row-desc">Keine Authentifizierung. Nützlich für Health Checks, Webhooks und statische Dateien.</div>
+  </div>
+  <div class="auth-row">
+    <div class="auth-row-name">Geschützt</div>
+    <div class="auth-row-desc">Erfordert eine der ausgewählten Authentifizierungsmethoden, optional beschränkt auf bestimmte Benutzergruppen.</div>
+  </div>
+  <div class="auth-row">
+    <div class="auth-row-name">Sperren</div>
+    <div class="auth-row-desc">Sperrt die Route für alle.</div>
+  </div>
+</div>
+<hr>
+<h2 id="benutzer-gruppen-und-sitzungen">Benutzer, Gruppen und Sitzungen</h2>
+<p>Gateway-Benutzer sind von den Administratoren von WireGuard WebAdmin getrennt und lassen sich in Gruppen organisieren, sodass eine Richtlinie einem Team statt einer Liste von Personen Zugriff gewährt. Sitzungen laufen je nach Authentifizierungsmethode ab, und aktive Sitzungen können widerrufen werden.</p>
+<hr>
+<h2 id="zertifikate">Zertifikate</h2>
+<p>Jeder veröffentlichte Host erhält automatisch ein vertrauenswürdiges Zertifikat. Die HTTP-Validierung eignet sich für öffentliche Hosts. Die DNS-Validierung, optional mit CNAME-Delegation, deckt auch interne Hostnamen und Wildcard-Zertifikate ab, ohne Port 80 freizugeben. Selbstsignierte Zertifikate sind ebenfalls verfügbar.</p>
+<hr>
 <h2 id="schutz-vor-brute-force-altcha-proof-of-work">Schutz vor Brute Force: Altcha Proof-of-Work</h2>
 <p>Bevor überhaupt ein Login-Formular angezeigt wird, muss der Browser eine leichte rechnerische Aufgabe lösen
 (<a href="https://altcha.org/" target="_blank" rel="noopener">Altcha</a>).</p>
@@ -334,10 +378,11 @@ macht automatisierte Credential-Stuffing-Angriffe im großen Maßstab aber rechn
       <div class="footer-logo">wireguard_<span>webadmin</span></div>
       <ul class="footer-links">
         <li><a href="https://github.com/eduardogsilva/wireguard_webadmin" target="_blank" rel="noopener">GitHub</a></li>
-        <li><a href="https://github.com/eduardogsilva/wireguard_webadmin/discussions" target="_blank" rel="noopener">Discussions</a></li>
+        <li><a href="https://github.com/eduardogsilva/wireguard_webadmin/discussions" target="_blank" rel="noopener">Diskussionen</a></li>
         <li><a href="/de/zero-trust/">Zero Trust</a></li>
-        <li><a href="/de/deployment/">Deployment</a></li>
-        <li><a href="/de/get-involved/">Get Involved</a></li>
+        <li><a href="/de/wireguard-cluster/">Cluster</a></li>
+        <li><a href="/de/deployment/">Installation</a></li>
+        <li><a href="/de/get-involved/">Mitmachen</a></li>
       </ul>
       <div class="footer-built">
         entwickelt von <a href="https://github.com/eduardogsilva" target="_blank" rel="noopener">@eduardogsilva</a>
@@ -394,12 +439,17 @@ if (langBtn) {
   });
   
   langDropdown.querySelectorAll('.lang-menu a').forEach(a => {
-    a.addEventListener('click', () => localStorage.setItem('lang-manual', '1'));
+    a.addEventListener('click', () => {
+      try { localStorage.setItem('lang-manual', '1'); } catch (err) {   }
+    });
   });
 }
 
 
-if (location.pathname === '/' && !localStorage.getItem('lang-manual')) {
+let langManual = false;
+
+try { langManual = !!localStorage.getItem('lang-manual'); } catch (err) { langManual = true; }
+if (location.pathname === '/' && !langManual) {
   const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
   const map = [
     { prefix: 'pt', url: '/pt-br/' },

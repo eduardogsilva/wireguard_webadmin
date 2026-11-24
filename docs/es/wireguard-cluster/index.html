@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  
+
+  <title>Clúster WireGuard · wireguard_webadmin</title>
+  <meta name="description" content="Crea un clúster WireGuard con wireguard_webadmin: nodos workers en modo espejo o distribuido, sincronización automática de peers, firewall y DNS, y el App Gateway en cada nodo.">
+  <link rel="canonical" href="https://wireguard-webadmin.com/es/wireguard-cluster/">
+
+  
+  
+  <link rel="alternate" hreflang="en-us" href="https://wireguard-webadmin.com/wireguard-cluster/">
+  
+  <link rel="alternate" hreflang="pt-BR" href="https://wireguard-webadmin.com/pt-br/wireguard-cluster/">
+  
+  <link rel="alternate" hreflang="es" href="https://wireguard-webadmin.com/es/wireguard-cluster/">
+  
+  <link rel="alternate" hreflang="fr" href="https://wireguard-webadmin.com/fr/wireguard-cluster/">
+  
+  <link rel="alternate" hreflang="de" href="https://wireguard-webadmin.com/de/wireguard-cluster/">
+  
+  <link rel="alternate" hreflang="x-default" href="https://wireguard-webadmin.com/">
+
+  
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://wireguard-webadmin.com/es/wireguard-cluster/">
+  <meta property="og:title"       content="Clúster WireGuard · wireguard_webadmin">
+  <meta property="og:description" content="Crea un clúster WireGuard con wireguard_webadmin: nodos workers en modo espejo o distribuido, sincronización automática de peers, firewall y DNS, y el App Gateway en cada nodo.">
+  <meta property="og:locale"      content="es_ES">
+  
+  <meta property="og:locale:alternate" content="en_US">
+  
+  <meta property="og:locale:alternate" content="pt_BR">
+  
+  <meta property="og:locale:alternate" content="fr_FR">
+  
+  <meta property="og:locale:alternate" content="de_DE">
+  
+  
+  <meta property="og:image"        content="https://wireguard-webadmin.com/images/peer_list_dark_hu_84f9807efbbcd67e.jpg">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
+
+  
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Clúster WireGuard · wireguard_webadmin">
+  <meta name="twitter:description" content="Crea un clúster WireGuard con wireguard_webadmin: nodos workers en modo espejo o distribuido, sincronización automática de peers, firewall y DNS, y el App Gateway en cada nodo.">
+  <meta name="twitter:image"       content="https://wireguard-webadmin.com/images/peer_list_dark_hu_84f9807efbbcd67e.jpg">
+
+  
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+
+  
+  <link rel="stylesheet" href="/css/main.min.09e588a4a25bba0c0a964ce43747e8b70b3bde1ddf6d8c884a5d0338d93f3447.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="nav-inner">
+      <a href="/es/" class="nav-logo">wireguard_<span>webadmin</span></a>
+      <button class="hamburger" aria-label="Toggle menu" aria-controls="site-nav" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="site-nav">
+        
+        
+        <li>
+          <a href="/es/"
+             
+             
+             >
+            
+            Inicio
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="/es/zero-trust/"
+             
+             
+             >
+            
+            Zero Trust
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="/es/wireguard-cluster/"
+             
+             aria-current="page"
+             >
+            
+            Clúster
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="/es/deployment/"
+             
+             
+             >
+            
+            Instalación
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="/es/get-involved/"
+             
+             
+             >
+            
+            Contribuir
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="https://github.com/eduardogsilva/wireguard_webadmin"
+             target="_blank" rel="noopener"
+             
+             class="nav-github">
+            
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            
+            GitHub
+          </a>
+        </li>
+        
+        <li class="nav-lang-sep"></li>
+        <li class="lang-dropdown">
+          <button class="lang-btn" aria-label="Language" aria-controls="lang-menu" aria-expanded="false">
+            🇪🇸 ES
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          </button>
+          <ul class="lang-menu" id="lang-menu">
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/wireguard-cluster/"
+                   hreflang="en"
+                   class="">
+                  <span class="lang-flag">🇬🇧</span>
+                  <span>English</span>
+                </a>
+              </li>
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/pt-br/wireguard-cluster/"
+                   hreflang="pt-br"
+                   class="">
+                  <span class="lang-flag">🇧🇷</span>
+                  <span>Português</span>
+                </a>
+              </li>
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/es/wireguard-cluster/"
+                   hreflang="es"
+                   class="lang-active">
+                  <span class="lang-flag">🇪🇸</span>
+                  <span>Español</span>
+                </a>
+              </li>
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/fr/wireguard-cluster/"
+                   hreflang="fr"
+                   class="">
+                  <span class="lang-flag">🇫🇷</span>
+                  <span>Français</span>
+                </a>
+              </li>
+            
+              
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              <li>
+                <a href="/de/wireguard-cluster/"
+                   hreflang="de"
+                   class="">
+                  <span class="lang-flag">🇩🇪</span>
+                  <span>Deutsch</span>
+                </a>
+              </li>
+            
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  
+<section class="page-hero">
+  <div class="container">
+    <div class="section-label">Clúster</div>
+    <h1>Clúster WireGuard</h1>
+    <p class="section-sub" style="margin-top:1rem">Ejecuta WireGuard en varios servidores y gestiónalos todos desde un único panel.</p>
+  </div>
+</section>
+
+<div class="page-content">
+  <div class="container">
+    <h2 id="cómo-funciona">Cómo funciona</h2>
+<p>El <strong>servidor principal</strong> es donde gestionas todo: instancias, peers, firewall, DNS y aplicaciones del App Gateway.
+Los <strong>nodos workers</strong> ejecutan un agente ligero que se conecta al servidor principal, recibe la configuración y la aplica localmente.
+Los workers no tienen panel ni base de datos propios: un nodo nuevo está listo en pocos minutos.</p>
+<div class="flow-cards">
+  <div class="flow-card">
+    <div class="flow-card-header"><span class="flow-card-num">1</span> <strong>El worker se conecta</strong></div>
+    <p>El agente se autentica con su token y llama al servidor principal por HTTPS. Los workers solo hacen conexiones salientes.</p>
+  </div>
+  <div class="flow-card">
+    <div class="flow-card-header"><span class="flow-card-num">2</span> <strong>Sincronización</strong></div>
+    <p>La configuración de WireGuard, firewall, DNS y App Gateway se envía en secciones separadas. Solo se vuelve a aplicar lo que cambió.</p>
+  </div>
+  <div class="flow-card">
+    <div class="flow-card-header"><span class="flow-card-num">3</span> <strong>Estado</strong></div>
+    <p>Cada worker envía al servidor principal el estado de WireGuard, el tráfico de los peers, los servicios y los certificados.</p>
+  </div>
+  <div class="flow-card">
+    <div class="flow-card-header"><span class="flow-card-num">4</span> <strong>Una sola vista</strong></div>
+    <p>La lista de peers muestra en qué servidor está conectado cada peer, en todo el clúster.</p>
+  </div>
+</div>
+<figure class="page-screenshot">
+  <img src="/images/cluster_workers_hu_b91882328faf01c1.webp"
+       srcset="/images/cluster_workers_hu_ed8fa2f029766527.webp 640w, /images/cluster_workers_hu_848145d5c3dee701.webp 1052w, /images/cluster_workers_hu_d6a3ce35efaf8802.webp 1600w, /images/cluster_workers_hu_b91882328faf01c1.webp 2104w"
+       sizes="(max-width: 1100px) 100vw, 1052px"
+       width="2104" height="1367"
+       alt="Lista de workers del clúster WireGuard"
+       loading="lazy" decoding="async">
+</figure>
+<hr>
+<h2 id="modos-del-clúster">Modos del clúster</h2>
+<div class="auth-list">
+  <div class="auth-row">
+    <div class="auth-row-name">Espejo</div>
+    <div class="auth-row-desc">Todos los nodos ejecutan todas las instancias WireGuard con los mismos peers. El usuario elige el servidor al descargar la configuración o abrir una invitación VPN, así que el mismo peer puede conectarse por cualquier nodo. Útil para redundancia y para servidores en distintas regiones.</div>
+  </div>
+  <div class="auth-row">
+    <div class="auth-row-name">Distribuido</div>
+    <div class="auth-row-desc">Cada instancia WireGuard se ejecuta en un único servidor, elegido en la configuración de la instancia (por defecto, el servidor principal). Útil para repartir instancias entre sedes o mantener cada red en su propia ubicación.</div>
+  </div>
+</div>
+<hr>
+<h2 id="el-servidor-principal-solo-como-gestor">El servidor principal solo como gestor</h2>
+<p>En modo espejo, WireGuard se puede deshabilitar en el servidor principal. Este detiene sus interfaces WireGuard, deja de ofrecerse como servidor para los peers y solo publica el panel de WireGuard WebAdmin, mientras los workers siguen atendiendo a todos los peers.</p>
+<div class="callout">
+  <p><strong>Antes de deshabilitarlo,</strong> asegúrate de poder acceder al panel sin la VPN del servidor principal.</p>
+</div>
+<hr>
+<h2 id="app-gateway-en-los-workers">App Gateway en los workers</h2>
+<p>Los workers instalados con el App Gateway también publican tus <a href="/es/zero-trust/">aplicaciones Zero Trust</a>. Cada aplicación elige dónde se sirve: en el servidor principal, en todos los workers o en workers seleccionados.</p>
+<p>Los certificados los emite el servidor principal y se distribuyen a los workers, por lo que las aplicaciones publicadas por workers deben usar validación DNS o certificados autofirmados.</p>
+<hr>
+<h2 id="agregar-un-worker">Agregar un worker</h2>
+<div class="deploy-steps">
+  <div class="deploy-step-card">
+    <div class="deploy-step-num">01</div>
+    <div class="deploy-step-body">
+      <div class="deploy-step-label">Habilitar el clúster</div>
+      <p>En la configuración del clúster del servidor principal, habilita el clúster y elige el modo. El clúster usa la caché de estado de WireGuard, habilitada por defecto.</p>
+    </div>
+  </div>
+  <div class="deploy-step-card">
+    <div class="deploy-step-num">02</div>
+    <div class="deploy-step-body">
+      <div class="deploy-step-label">Crear el worker</div>
+      <p>Agrega un worker con un nombre y el hostname que usan los clientes para alcanzarlo: será el endpoint de las configuraciones de peer descargadas para ese servidor. La página del worker muestra su token y los comandos de instalación.</p>
+    </div>
+  </div>
+  <div class="deploy-step-card">
+    <div class="deploy-step-num">03</div>
+    <div class="deploy-step-body">
+      <div class="deploy-step-label">Descargar el archivo compose en el servidor del worker</div>
+<div class="tab-group">
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="node-vpn">Solo VPN</button>
+    <button class="tab-btn" data-tab="node-gateway">VPN y App Gateway</button>
+  </div>
+  <div class="tab-wrap">
+    <div class="tab-panel active" id="node-vpn">
+<pre><code>mkdir wireguard_webadmin_node && cd wireguard_webadmin_node
+wget -O docker-compose.yml \
+  https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/cluster_node.yml</code></pre>
+    </div>
+    <div class="tab-panel" id="node-gateway">
+<pre><code>mkdir wireguard_webadmin_node && cd wireguard_webadmin_node
+wget -O docker-compose.yml \
+  https://raw.githubusercontent.com/eduardogsilva/wireguard_webadmin/main/cluster_node-gateway.yml</code></pre>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+  <div class="deploy-step-card">
+    <div class="deploy-step-num">04</div>
+    <div class="deploy-step-body">
+      <div class="deploy-step-label">Crear el archivo .env</div>
+      <pre><code>MASTER_SERVER_ADDRESS=https://vpn.example.com
+TOKEN=token-mostrado-en-la-pagina-del-worker
+TIMEZONE=America/Sao_Paulo</code></pre>
+    </div>
+  </div>
+  <div class="deploy-step-card">
+    <div class="deploy-step-num">05</div>
+    <div class="deploy-step-body">
+      <div class="deploy-step-label">Iniciar el worker</div>
+      <pre><code>docker compose up -d</code></pre>
+    </div>
+  </div>
+</div>
+<h3 id="requisitos-de-red">Requisitos de red</h3>
+<ul>
+<li>Los workers deben alcanzar el servidor principal por HTTPS. Si el App Gateway protege el panel del servidor principal, agrega una ruta para <code>/api/cluster/</code> con una política pública.</li>
+<li>Publica los puertos de WireGuard (<code>51820-51839/udp</code>) en cada worker y, con el App Gateway, los puertos <code>80</code> y <code>443</code>.</li>
+</ul>
+<h3 id="actualizar-un-worker">Actualizar un worker</h3>
+<p>Ejecuta <code>docker compose pull</code> y luego <code>docker compose up -d</code>. Para cambiar entre Solo VPN y VPN y App Gateway, descarga el otro archivo compose en el mismo directorio y ejecuta <code>docker compose up -d --remove-orphans</code>. Los datos del worker se conservan.</p>
+<hr>
+<h2 id="monitoreo-y-automatización">Monitoreo y automatización</h2>
+<p>La página del worker muestra cuándo se vio por última vez, la versión del agente, el estado de sincronización de cada sección, los servicios y los certificados.</p>
+<figure class="page-screenshot">
+  <img src="/images/cluster_worker_details_hu_b188f86bc7711d48.webp"
+       srcset="/images/cluster_worker_details_hu_8d3a25f40205fa4e.webp 640w, /images/cluster_worker_details_hu_84c2bf14991fbd9c.webp 1052w, /images/cluster_worker_details_hu_12fa86f1f2390c11.webp 1600w, /images/cluster_worker_details_hu_b188f86bc7711d48.webp 2104w"
+       sizes="(max-width: 1100px) 100vw, 1052px"
+       width="2104" height="1367"
+       alt="Página de detalles del worker"
+       loading="lazy" decoding="async">
+</figure>
+<ul>
+<li><strong>Deshabilita un worker</strong> y este apaga sus interfaces WireGuard hasta que se habilite de nuevo.</li>
+<li><strong>El bloqueo por IP</strong> solo acepta el worker desde una dirección IP fija.</li>
+<li><strong>La API v2</strong> permite que herramientas externas habiliten y deshabiliten workers y el WireGuard del servidor principal. La clave de API necesita el permiso de gestión del clúster.</li>
+</ul>
+<div class="callout green">
+  <p><strong>Sigue siendo un solo stack.</strong> El clúster es opcional: un servidor solo sigue funcionando exactamente igual, y los workers se pueden agregar en cualquier momento.</p>
+</div>
+
+  </div>
+</div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">wireguard_<span>webadmin</span></div>
+      <ul class="footer-links">
+        <li><a href="https://github.com/eduardogsilva/wireguard_webadmin" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/eduardogsilva/wireguard_webadmin/discussions" target="_blank" rel="noopener">Discusiones</a></li>
+        <li><a href="/es/zero-trust/">Zero Trust</a></li>
+        <li><a href="/es/wireguard-cluster/">Clúster</a></li>
+        <li><a href="/es/deployment/">Instalación</a></li>
+        <li><a href="/es/get-involved/">Contribuir</a></li>
+      </ul>
+      <div class="footer-built">
+        desarrollado por <a href="https://github.com/eduardogsilva" target="_blank" rel="noopener">@eduardogsilva</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const group = btn.closest('.tab-group');
+    group.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    group.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    group.querySelector('#' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+
+const hamburger = document.querySelector('.hamburger');
+const navLinks  = document.querySelector('.nav-links');
+if (hamburger) {
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = navLinks.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', (e) => {
+    if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+      navLinks.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', false);
+    }
+  });
+}
+
+
+const langBtn = document.querySelector('.lang-btn');
+const langDropdown = document.querySelector('.lang-dropdown');
+if (langBtn) {
+  langBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = langDropdown.classList.toggle('open');
+    langBtn.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', (e) => {
+    if (!langDropdown.contains(e.target)) {
+      langDropdown.classList.remove('open');
+      langBtn.setAttribute('aria-expanded', false);
+    }
+  });
+  
+  langDropdown.querySelectorAll('.lang-menu a').forEach(a => {
+    a.addEventListener('click', () => {
+      try { localStorage.setItem('lang-manual', '1'); } catch (err) {   }
+    });
+  });
+}
+
+
+let langManual = false;
+
+try { langManual = !!localStorage.getItem('lang-manual'); } catch (err) { langManual = true; }
+if (location.pathname === '/' && !langManual) {
+  const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+  const map = [
+    { prefix: 'pt', url: '/pt-br/' },
+    { prefix: 'es', url: '/es/' },
+    { prefix: 'fr', url: '/fr/' },
+    { prefix: 'de', url: '/de/' },
+  ];
+  const match = map.find(m => lang.startsWith(m.prefix));
+  if (match) location.replace(match.url);
+}
+</script>
+
+</body>
+</html>

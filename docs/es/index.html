@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<meta name="generator" content="Hugo 0.158.0">
+	<meta name="generator" content="Hugo 0.164.0">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
   
 
-  <title>wireguard_webadmin — Self-hosted VPN management and Zero Trust access control.</title>
-  <meta name="description" content="Self-hosted VPN management and Zero Trust access control.">
+  <title>wireguard_webadmin — Gestión de VPN WireGuard autoalojada y control de acceso Zero Trust.</title>
+  <meta name="description" content="Gestión de VPN WireGuard autoalojada y control de acceso Zero Trust.">
+  <link rel="canonical" href="https://wireguard-webadmin.com/es/">
 
   
   
@@ -28,27 +29,36 @@
   
   <meta property="og:type"        content="website">
   <meta property="og:url"         content="https://wireguard-webadmin.com/es/">
-  <meta property="og:title"       content="wireguard_webadmin — Self-hosted VPN management and Zero Trust access control.">
-  <meta property="og:description" content="Self-hosted VPN management and Zero Trust access control.">
-  <meta property="og:image"       content="https://wireguard-webadmin.com/og-image.png">
-  <meta property="og:image:width"  content="1280">
-  <meta property="og:image:height" content="800">
+  <meta property="og:title"       content="wireguard_webadmin — Gestión de VPN WireGuard autoalojada y control de acceso Zero Trust.">
+  <meta property="og:description" content="Gestión de VPN WireGuard autoalojada y control de acceso Zero Trust.">
+  <meta property="og:locale"      content="es_ES">
+  
+  <meta property="og:locale:alternate" content="en_US">
+  
+  <meta property="og:locale:alternate" content="pt_BR">
+  
+  <meta property="og:locale:alternate" content="fr_FR">
+  
+  <meta property="og:locale:alternate" content="de_DE">
+  
+  
+  <meta property="og:image"        content="https://wireguard-webadmin.com/images/peer_list_dark_hu_84f9807efbbcd67e.jpg">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
 
   
   <meta name="twitter:card"        content="summary_large_image">
-  <meta name="twitter:title"       content="wireguard_webadmin — Self-hosted VPN management and Zero Trust access control.">
-  <meta name="twitter:description" content="Self-hosted VPN management and Zero Trust access control.">
-  <meta name="twitter:image"       content="https://wireguard-webadmin.com/og-image.png">
+  <meta name="twitter:title"       content="wireguard_webadmin — Gestión de VPN WireGuard autoalojada y control de acceso Zero Trust.">
+  <meta name="twitter:description" content="Gestión de VPN WireGuard autoalojada y control de acceso Zero Trust.">
+  <meta name="twitter:image"       content="https://wireguard-webadmin.com/images/peer_list_dark_hu_84f9807efbbcd67e.jpg">
 
   
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 
   
-  <link rel="stylesheet" href="/css/main.min.css">
+  <link rel="stylesheet" href="/css/main.min.09e588a4a25bba0c0a964ce43747e8b70b3bde1ddf6d8c884a5d0338d93f3447.css">
 </head>
 <body>
 
@@ -56,10 +66,10 @@
   <div class="container">
     <nav class="nav-inner">
       <a href="/es/" class="nav-logo">wireguard_<span>webadmin</span></a>
-      <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <button class="hamburger" aria-label="Toggle menu" aria-controls="site-nav" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
-      <ul class="nav-links">
+      <ul class="nav-links" id="site-nav">
         
         
         <li>
@@ -80,6 +90,17 @@
              >
             
             Zero Trust
+          </a>
+        </li>
+        
+        
+        <li>
+          <a href="/es/wireguard-cluster/"
+             
+             
+             >
+            
+            Clúster
           </a>
         </li>
         
@@ -120,11 +141,11 @@
         
         <li class="nav-lang-sep"></li>
         <li class="lang-dropdown">
-          <button class="lang-btn" aria-expanded="false">
+          <button class="lang-btn" aria-label="Language" aria-controls="lang-menu" aria-expanded="false">
             🇪🇸 ES
             <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
           </button>
-          <ul class="lang-menu">
+          <ul class="lang-menu" id="lang-menu">
             
               
               
@@ -263,12 +284,22 @@
     </div>
 
     
-    
-    
     <div class="hero-screenshot">
       <div class="theme-crossfade">
-        <img class="crossfade-light" src="/images/peer_list_light.png" alt="wireguard_webadmin — light mode" loading="eager">
-        <img class="crossfade-dark"  src="/images/peer_list_dark.png"  alt="wireguard_webadmin — dark mode"  loading="eager">
+        
+        
+        <img src="/images/peer_list_light_hu_41b4e37913d7198d.webp"
+       srcset="/images/peer_list_light_hu_ae642b854957e1f.webp 640w, /images/peer_list_light_hu_ff0eed683df6254f.webp 1052w, /images/peer_list_light_hu_2f8d3c386c08a62f.webp 1600w, /images/peer_list_light_hu_41b4e37913d7198d.webp 2104w"
+       sizes="(max-width: 1100px) 100vw, 1052px"
+       width="2104" height="1374"
+       alt="wireguard_webadmin — light mode"
+       loading="eager" decoding="async" class="crossfade-light" fetchpriority="low">
+        <img src="/images/peer_list_dark_hu_4bf4afa038dc5062.webp"
+       srcset="/images/peer_list_dark_hu_7da119c0ec44d949.webp 640w, /images/peer_list_dark_hu_22e4f57b9e418f74.webp 1052w, /images/peer_list_dark_hu_8a85261e6a2236cc.webp 1600w, /images/peer_list_dark_hu_4bf4afa038dc5062.webp 2104w"
+       sizes="(max-width: 1100px) 100vw, 1052px"
+       width="2104" height="1378"
+       alt="wireguard_webadmin — dark mode"
+       loading="eager" decoding="async" class="crossfade-dark" fetchpriority="high">
       </div>
     </div>
     
@@ -287,14 +318,14 @@
         <div class="pillar-icon">⚙️</div>
         <h3>Gestionar</h3>
         <ul class="pillar-list">
-          <li>Múltiples instancias de WireGuard</li><li>Gestión de peers con gráficos de tráfico</li><li>Reglas de firewall y redirección de puertos</li><li>Resolvedor DNS con listas de bloqueo</li><li>Enlaces de invitación VPN con código QR</li>
+          <li>Múltiples instancias de WireGuard</li><li>Gestión de peers con gráficos de tráfico</li><li>Reglas de firewall y redirección de puertos</li><li>Resolvedor DNS con listas de bloqueo</li><li>Enlaces de invitación VPN con código QR</li><li>Clúster WireGuard con varios nodos</li>
         </ul>
       </div>
       <div class="pillar-card">
         <div class="pillar-icon">🔒</div>
         <h3>Proteger</h3>
         <ul class="pillar-list">
-          <li>Pasarela de aplicaciones Zero Trust</li><li>Autenticación de dos factores con TOTP</li><li>Altcha proof-of-work contra fuerza bruta</li><li>ACL por IP para cada aplicación</li><li>OIDC próximamente</li>
+          <li>Pasarela de aplicaciones Zero Trust</li><li>Autenticación de dos factores con TOTP</li><li>Altcha proof-of-work contra fuerza bruta</li><li>ACL por IP para cada aplicación</li><li>Políticas de acceso por aplicación y ruta</li><li>OIDC próximamente</li>
         </ul>
       </div>
       <div class="pillar-card">
@@ -324,10 +355,12 @@
         <a href="/es/zero-trust/" class="btn btn-outline">Más información →</a>
       </div>
       <div class="spotlight-image">
-        
-        
-        <img src="/images/zero_trust_app.png" alt="Zero Trust application gateway" loading="lazy">
-        
+        <img src="/images/zero_trust_app_hu_ad51322c18eb0c18.webp"
+       srcset="/images/zero_trust_app_hu_8b27ff07d0921ecd.webp 480w, /images/zero_trust_app_hu_9cf0f8719f62e82c.webp 800w, /images/zero_trust_app_hu_7fe66f5dc15faa3d.webp 1200w, /images/zero_trust_app_hu_ad51322c18eb0c18.webp 1600w"
+       sizes="(max-width: 860px) 100vw, 520px"
+       width="1600" height="1039"
+       alt="Zero Trust application gateway"
+       loading="lazy" decoding="async">
       </div>
     </div>
   </div>
@@ -338,19 +371,23 @@
   <div class="container">
     <div class="spotlight reverse">
       <div class="spotlight-content">
-        <div class="section-label">Visibilidad</div>
-        <h2>Visibilidad completa de cada peer.</h2>
-        <p>Cada peer tiene una vista de detalle dedicada: estado de conexión en tiempo real, tráfico acumulado, gráficos de ancho de banda en series temporales, último handshake y código QR para reprovisionarlo al instante.</p>
-        <p>El historial de tráfico se almacena por peer para que puedas auditar el uso a lo largo del tiempo, no solo desde el último reinicio.</p>
+        <div class="section-label">Clúster</div>
+        <h2>Escala con un clúster WireGuard.</h2>
+        <p>Agrega nodos workers y gestiónalos todos desde un único panel. El servidor principal guarda la configuración, y cada nodo recibe WireGuard, firewall y DNS mediante sincronización automática.</p>
+        <p>Ejecuta todas las instancias en todos los nodos (modo espejo) para que los peers usen cualquier servidor, o fija cada instancia a un nodo (modo distribuido). Los nodos también pueden publicar las aplicaciones del App Gateway.</p>
         <div class="tag-list">
-          <span class="tag blue">Gráficos de tráfico</span><span class="tag green">Último handshake</span><span class="tag ">Código QR</span><span class="tag ">Historial por peer</span>
+          <span class="tag blue">Espejo</span><span class="tag green">Distribuido</span><span class="tag purple">Sincronización automática</span><span class="tag ">Comprobaciones de salud</span>
         </div>
+        <br>
+        <a href="/es/wireguard-cluster/" class="btn btn-outline">Más información →</a>
       </div>
       <div class="spotlight-image">
-        
-        
-        <img src="/images/peer_details.png" alt="Peer details — traffic graph and metrics" loading="lazy">
-        
+        <img src="/images/cluster_workers_hu_d6a3ce35efaf8802.webp"
+       srcset="/images/cluster_workers_hu_364e5f78ba96e8ab.webp 480w, /images/cluster_workers_hu_e4c333eb232b7f27.webp 800w, /images/cluster_workers_hu_4bb8d2a1ddb8a4df.webp 1200w, /images/cluster_workers_hu_d6a3ce35efaf8802.webp 1600w"
+       sizes="(max-width: 860px) 100vw, 520px"
+       width="1600" height="1039"
+       alt="WireGuard cluster workers"
+       loading="lazy" decoding="async">
       </div>
     </div>
   </div>
@@ -361,6 +398,31 @@
   <div class="container">
     <div class="spotlight">
       <div class="spotlight-content">
+        <div class="section-label">Visibilidad</div>
+        <h2>Visibilidad completa de cada peer.</h2>
+        <p>Cada peer tiene una vista de detalle dedicada: estado de conexión en tiempo real, tráfico acumulado, gráficos de ancho de banda en series temporales, último handshake y código QR para reprovisionarlo al instante.</p>
+        <p>El historial de tráfico se almacena por peer para que puedas auditar el uso a lo largo del tiempo, no solo desde el último reinicio.</p>
+        <div class="tag-list">
+          <span class="tag blue">Gráficos de tráfico</span><span class="tag green">Último handshake</span><span class="tag ">Código QR</span><span class="tag ">Historial por peer</span>
+        </div>
+      </div>
+      <div class="spotlight-image">
+        <img src="/images/peer_details_hu_dcbb18e37de632a0.webp"
+       srcset="/images/peer_details_hu_53a5c60f4a73a070.webp 480w, /images/peer_details_hu_68f94fe6a280c19d.webp 800w, /images/peer_details_hu_40bdd3adae4ecbe7.webp 1200w, /images/peer_details_hu_dcbb18e37de632a0.webp 1600w"
+       sizes="(max-width: 860px) 100vw, 520px"
+       width="1600" height="1039"
+       alt="Peer details — traffic graph and metrics"
+       loading="lazy" decoding="async">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="container">
+    <div class="spotlight reverse">
+      <div class="spotlight-content">
         <div class="section-label">Automatización</div>
         <h2>Control de acceso a peers según horario.</h2>
         <p>Define horarios para cada peer de VPN. El acceso se activa y desactiva automáticamente según la franja horaria que configures, sin necesidad de intervención manual.</p>
@@ -370,10 +432,12 @@
         </div>
       </div>
       <div class="spotlight-image">
-        
-        
-        <img src="/images/scheduler.png" alt="Peer scheduling interface" loading="lazy">
-        
+        <img src="/images/scheduler_hu_3f85c44e097e161f.webp"
+       srcset="/images/scheduler_hu_32ff737a391a47a0.webp 480w, /images/scheduler_hu_c3e2ff2e49ecfb8b.webp 800w, /images/scheduler_hu_f85d6fe4d5f99b7c.webp 1200w, /images/scheduler_hu_3f85c44e097e161f.webp 1600w"
+       sizes="(max-width: 860px) 100vw, 520px"
+       width="1600" height="1039"
+       alt="Peer scheduling interface"
+       loading="lazy" decoding="async">
       </div>
     </div>
   </div>
@@ -393,8 +457,12 @@
       
       
       <div class="screenshot-item">
-        
-        <img src="/images/firewall.png" alt="Firewall rule management" loading="lazy">
+        <img src="/images/firewall_hu_af56a3ac9de09e7e.webp"
+       srcset="/images/firewall_hu_281f1f3d8679e98.webp 480w, /images/firewall_hu_d5048325867c082.webp 800w, /images/firewall_hu_af56a3ac9de09e7e.webp 1100w"
+       sizes="(max-width: 600px) 100vw, 540px"
+       width="1100" height="714"
+       alt="Firewall rule management"
+       loading="lazy" decoding="async">
         <div class="screenshot-caption">
           <span class="screenshot-label">Firewall</span>
           <p>Reglas de iptables por instancia, redirección de puertos y ACL salientes, todo gestionado desde la interfaz.</p>
@@ -404,8 +472,12 @@
       
       
       <div class="screenshot-item">
-        
-        <img src="/images/dns.png" alt="DNS management with blacklists" loading="lazy">
+        <img src="/images/dns_hu_8b3a35d7c52232f8.webp"
+       srcset="/images/dns_hu_27d1181205bcc614.webp 480w, /images/dns_hu_d10e4ea23c8ad871.webp 800w, /images/dns_hu_8b3a35d7c52232f8.webp 1100w"
+       sizes="(max-width: 600px) 100vw, 540px"
+       width="1100" height="714"
+       alt="DNS management with blacklists"
+       loading="lazy" decoding="async">
         <div class="screenshot-caption">
           <span class="screenshot-label">DNS</span>
           <p>Resolvedor integrado con listas de bloqueo por categorías: anuncios, malware, rastreo y contenido para adultos.</p>
@@ -415,8 +487,12 @@
       
       
       <div class="screenshot-item">
-        
-        <img src="/images/vpn_invite.png" alt="VPN invite link with QR code" loading="lazy">
+        <img src="/images/vpn_invite_hu_421d6efc027117e7.webp"
+       srcset="/images/vpn_invite_hu_c90822e919430eac.webp 480w, /images/vpn_invite_hu_f33223666de50dcd.webp 800w, /images/vpn_invite_hu_421d6efc027117e7.webp 1100w"
+       sizes="(max-width: 600px) 100vw, 540px"
+       width="1100" height="1469"
+       alt="VPN invite link with QR code"
+       loading="lazy" decoding="async">
         <div class="screenshot-caption">
           <span class="screenshot-label">Enlaces de invitación</span>
           <p>Genera un enlace compartible con código QR y archivo de configuración. La persona lo escanea o lo importa directamente en su cliente WireGuard.</p>
@@ -426,8 +502,12 @@
       
       
       <div class="screenshot-item">
-        
-        <img src="/images/routing_template.png" alt="Routing templates" loading="lazy">
+        <img src="/images/routing_template_hu_de4bfedc96db4d16.webp"
+       srcset="/images/routing_template_hu_591432f85529b059.webp 480w, /images/routing_template_hu_3a7d74fd2c21fc3b.webp 800w, /images/routing_template_hu_de4bfedc96db4d16.webp 1100w"
+       sizes="(max-width: 600px) 100vw, 540px"
+       width="1100" height="714"
+       alt="Routing templates"
+       loading="lazy" decoding="async">
         <div class="screenshot-caption">
           <span class="screenshot-label">Plantillas de enrutamiento</span>
           <p>Define las IP permitidas y las políticas de enrutamiento una sola vez y reutilízalas en decenas de peers.</p>
@@ -556,6 +636,22 @@
         </div>
       </div>
       
+      <div class="feature-item">
+        <div class="feature-icon">🌐</div>
+        <div>
+          <h4>Clúster</h4>
+          <p>Nodos en espejo o distribuidos, un solo panel</p>
+        </div>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">🔀</div>
+        <div>
+          <h4>Peers site-to-site</h4>
+          <p>Conexión a servidores WireGuard remotos</p>
+        </div>
+      </div>
+      
     </div>
   </div>
 </section>
@@ -573,14 +669,6 @@
         <div>
           <h4>Autenticación OIDC</h4>
           <p>Inicia sesión con tu proveedor de identidad actual: Keycloak, Authentik, Google Workspace o cualquier IdP compatible con OIDC.</p>
-        </div>
-      </div>
-      
-      <div class="roadmap-item">
-        <div class="roadmap-badge wip">En progreso</div>
-        <div>
-          <h4>App Gateway / Gatekeeper v2</h4>
-          <p>Una puerta de enlace de aplicaciones más potente, con políticas granulares por ruta, gestión de sesiones y un registro de auditoría mejorado.</p>
         </div>
       </div>
       
@@ -605,10 +693,11 @@
       <div class="footer-logo">wireguard_<span>webadmin</span></div>
       <ul class="footer-links">
         <li><a href="https://github.com/eduardogsilva/wireguard_webadmin" target="_blank" rel="noopener">GitHub</a></li>
-        <li><a href="https://github.com/eduardogsilva/wireguard_webadmin/discussions" target="_blank" rel="noopener">Discussions</a></li>
+        <li><a href="https://github.com/eduardogsilva/wireguard_webadmin/discussions" target="_blank" rel="noopener">Discusiones</a></li>
         <li><a href="/es/zero-trust/">Zero Trust</a></li>
-        <li><a href="/es/deployment/">Deployment</a></li>
-        <li><a href="/es/get-involved/">Get Involved</a></li>
+        <li><a href="/es/wireguard-cluster/">Clúster</a></li>
+        <li><a href="/es/deployment/">Instalación</a></li>
+        <li><a href="/es/get-involved/">Contribuir</a></li>
       </ul>
       <div class="footer-built">
         desarrollado por <a href="https://github.com/eduardogsilva" target="_blank" rel="noopener">@eduardogsilva</a>
@@ -665,12 +754,17 @@ if (langBtn) {
   });
   
   langDropdown.querySelectorAll('.lang-menu a').forEach(a => {
-    a.addEventListener('click', () => localStorage.setItem('lang-manual', '1'));
+    a.addEventListener('click', () => {
+      try { localStorage.setItem('lang-manual', '1'); } catch (err) {   }
+    });
   });
 }
 
 
-if (location.pathname === '/' && !localStorage.getItem('lang-manual')) {
+let langManual = false;
+
+try { langManual = !!localStorage.getItem('lang-manual'); } catch (err) { langManual = true; }
+if (location.pathname === '/' && !langManual) {
   const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
   const map = [
     { prefix: 'pt', url: '/pt-br/' },

@@ -5,6 +5,11 @@
     <loc>https://wireguard-webadmin.com/</loc>
     <xhtml:link
                 rel="alternate"
+                hreflang="en-us"
+                href="https://wireguard-webadmin.com/"
+                />
+    <xhtml:link
+                rel="alternate"
                 hreflang="pt-BR"
                 href="https://wireguard-webadmin.com/pt-br/"
                 />
@@ -23,40 +28,13 @@
                 hreflang="de"
                 href="https://wireguard-webadmin.com/de/"
                 />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://wireguard-webadmin.com/"
-                />
-  </url><url>
-    <loc>https://wireguard-webadmin.com/categories/</loc>
-    <xhtml:link
-                rel="alternate"
-                hreflang="pt-BR"
-                href="https://wireguard-webadmin.com/pt-br/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="es"
-                href="https://wireguard-webadmin.com/es/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://wireguard-webadmin.com/fr/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="de"
-                href="https://wireguard-webadmin.com/de/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://wireguard-webadmin.com/categories/"
-                />
   </url><url>
     <loc>https://wireguard-webadmin.com/deployment/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://wireguard-webadmin.com/deployment/"
+                />
     <xhtml:link
                 rel="alternate"
                 hreflang="pt-BR"
@@ -77,13 +55,13 @@
                 hreflang="de"
                 href="https://wireguard-webadmin.com/de/deployment/"
                 />
+  </url><url>
+    <loc>https://wireguard-webadmin.com/get-involved/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="https://wireguard-webadmin.com/deployment/"
+                href="https://wireguard-webadmin.com/get-involved/"
                 />
-  </url><url>
-    <loc>https://wireguard-webadmin.com/get-involved/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="pt-BR"
@@ -104,40 +82,40 @@
                 hreflang="de"
                 href="https://wireguard-webadmin.com/de/get-involved/"
                 />
+  </url><url>
+    <loc>https://wireguard-webadmin.com/wireguard-cluster/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="https://wireguard-webadmin.com/get-involved/"
+                href="https://wireguard-webadmin.com/wireguard-cluster/"
                 />
-  </url><url>
-    <loc>https://wireguard-webadmin.com/tags/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="pt-BR"
-                href="https://wireguard-webadmin.com/pt-br/tags/"
+                href="https://wireguard-webadmin.com/pt-br/wireguard-cluster/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="es"
-                href="https://wireguard-webadmin.com/es/tags/"
+                href="https://wireguard-webadmin.com/es/wireguard-cluster/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="fr"
-                href="https://wireguard-webadmin.com/fr/tags/"
+                href="https://wireguard-webadmin.com/fr/wireguard-cluster/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="de"
-                href="https://wireguard-webadmin.com/de/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://wireguard-webadmin.com/tags/"
+                href="https://wireguard-webadmin.com/de/wireguard-cluster/"
                 />
   </url><url>
     <loc>https://wireguard-webadmin.com/zero-trust/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://wireguard-webadmin.com/zero-trust/"
+                />
     <xhtml:link
                 rel="alternate"
                 hreflang="pt-BR"
@@ -157,11 +135,6 @@
                 rel="alternate"
                 hreflang="de"
                 href="https://wireguard-webadmin.com/de/zero-trust/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://wireguard-webadmin.com/zero-trust/"
                 />
   </url>
 </urlset>
