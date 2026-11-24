@@ -1,6 +1,7 @@
 import ipaddress
 import json
 import re
+from datetime import timedelta
 from functools import wraps
 from typing import List, Optional, Tuple
 
@@ -9,6 +10,7 @@ from django.conf import settings as django_settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.http import JsonResponse
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from api.views import func_get_wireguard_status
@@ -25,6 +27,8 @@ from wireguard_peer.functions import find_network_in_other_instance, func_create
 from wireguard_tools.functions import (
     func_reload_wireguard_interface, running_wireguard_interfaces, start_primary_interfaces, stop_primary_interfaces,
 )
+from vpn_invite.models import InviteSettings, PeerInvite
+from wgwadmlibrary.tools import create_peer_invite, get_peer_invite_data, send_email
 from wireguard_tools.views import export_wireguard_configuration
 from .models import ApiKey
 
@@ -882,6 +886,126 @@ def api_v2_peer_detail(request):
     }
 
     return JsonResponse({"status": "success", "peer": peer_data}, status=200)
+
+
+@csrf_exempt
+@api_doc(
+    summary="Create a VPN invite for a peer and optionally send it by email",
+    auth="Header token: <ApiKey.token>",
+    methods=["POST"],
+    params=[
+        {"name": "instance", "in": "json", "type": "string", "required": True, "example": "wg0",
+         "description": "Required. Target instance name in the format wg{instance_id} (e.g. wg0, wg1)."},
+        {"name": "peer_uuid", "in": "json", "type": "string", "required": False,
+         "description": "Peer UUID selector."},
+        {"name": "peer_public_key", "in": "json", "type": "string", "required": False,
+         "description": "Peer public key selector."},
+        {"name": "email", "in": "json", "type": "string", "required": False,
+         "description": "Optional. Sends the invite to this address. Requires email invites to be enabled in the VPN invite settings."},
+    ],
+    returns=[
+        {"status": 200, "body": {"status": "success", "message": "Invite created.", "invite_data": {"url": "...", "password": "...", "expiration": "...", "email_subject": "...", "email_body": "...", "whatsapp_body": "...", "text_body": "...", "uuid": "..."}}},
+        {"status": 400, "body": {"status": "error", "error_message": "Peers with an endpoint have no client configuration to share."}},
+        {"status": 403, "body": {"status": "error", "error_message": "Invalid API key."}},
+        {"status": 404, "body": {"status": "error", "error_message": "Peer not found."}},
+        {"status": 500, "body": {"status": "error", "error_message": "Invite created, but the email could not be sent: ...", "invite_data": {"url": "..."}}},
+    ],
+    examples={
+        "create_invite": {"method": "POST", "json": {"instance": "wg0", "peer_uuid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"}},
+        "create_and_send_invite": {"method": "POST", "json": {"instance": "wg0", "peer_uuid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", "email": "user@example.com"}},
+    }
+)
+def api_v2_peer_invite(request):
+    if request.method != "POST":
+        return JsonResponse({"status": "error", "error_message": "Method not allowed."}, status=405)
+
+    try:
+        payload = json.loads(request.body.decode("utf-8")) if request.body else {}
+    except Exception:
+        return JsonResponse({"status": "error", "error_message": "Invalid JSON body."}, status=400)
+    if not isinstance(payload, dict):
+        return JsonResponse({"status": "error", "error_message": "Invalid JSON body."}, status=400)
+
+    try:
+        wireguard_instance = WireGuardInstance.objects.get(
+            instance_id=int(str(payload.get("instance")).replace("wg", ""))
+        )
+    except Exception:
+        wireguard_instance = None
+
+    if not wireguard_instance:
+        return JsonResponse({"status": "error", "error_message": "Invalid or missing WireGuard instance."}, status=400)
+
+    api_key, api_error = validate_api_key(request, wireguard_instance=wireguard_instance)
+    if not api_key:
+        return JsonResponse({"status": "error", "error_message": api_error}, status=403)
+
+    selector_peer_uuid = payload.get("peer_uuid")
+    selector_peer_public_key = payload.get("peer_public_key")
+    if not selector_peer_uuid and not selector_peer_public_key:
+        return JsonResponse(
+            {"status": "error", "error_message": "Missing peer selector (peer_uuid or peer_public_key)."},
+            status=400,
+        )
+
+    peers = Peer.objects.filter(wireguard_instance=wireguard_instance)
+    try:
+        if selector_peer_uuid:
+            peer = peers.filter(uuid=selector_peer_uuid).first()
+        else:
+            peer = peers.filter(public_key=selector_peer_public_key).first()
+    except ValidationError:
+        peer = None
+    if not peer:
+        return JsonResponse({"status": "error", "error_message": "Peer not found."}, status=404)
+
+    if peer.endpoint:
+        return JsonResponse(
+            {"status": "error", "error_message": "Peers with an endpoint have no client configuration to share."},
+            status=400,
+        )
+
+    invite_settings = InviteSettings.objects.filter(name='default_settings').first()
+    if not invite_settings:
+        return JsonResponse({"status": "error", "error_message": "VPN invite is not configured."}, status=400)
+
+    email = payload.get("email")
+    if email:
+        if not isinstance(email, str):
+            return JsonResponse({"status": "error", "error_message": "Invalid email address."}, status=400)
+        if not invite_settings.invite_email_enabled:
+            return JsonResponse(
+                {"status": "error", "error_message": "Email invites are disabled in the VPN invite settings."},
+                status=400,
+            )
+
+    PeerInvite.objects.filter(invite_expiration__lt=timezone.now()).delete()
+    peer_invite = PeerInvite.objects.filter(peer=peer).first()
+    if peer_invite:
+        # An existing invite is renewed, so the returned link is valid for the whole expiration period
+        peer_invite.invite_expiration = timezone.now() + timedelta(minutes=invite_settings.invite_expiration)
+        peer_invite.save()
+        message = "Existing invite renewed."
+    else:
+        peer_invite = create_peer_invite(peer, invite_settings)
+        message = "Invite created."
+
+    invite_data = get_peer_invite_data(peer_invite, invite_settings)
+
+    if email:
+        email_status, email_message = send_email(email, invite_data['email_subject'], invite_data['email_body'])
+        if email_status != 'success':
+            return JsonResponse(
+                {
+                    "status": "error",
+                    "error_message": f"Invite created, but the email could not be sent: {email_message}",
+                    "invite_data": invite_data,
+                },
+                status=500,
+            )
+        message = f"{message} Email sent to {email}."
+
+    return JsonResponse({"status": "success", "message": message, "invite_data": invite_data}, status=200)
 
 
 @csrf_exempt

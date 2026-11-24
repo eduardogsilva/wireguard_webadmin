@@ -1,13 +1,16 @@
 import json
+from datetime import timedelta
 from unittest.mock import patch
 
 from django.test import TestCase, override_settings
+from django.utils import timezone
 
 from api_v2.models import ApiKey
+from vpn_invite.models import InviteSettings, PeerInvite
 from cluster.models import ClusterSettings, Worker
 from cluster.tests import create_instance
 from dns.models import DNSSettings, StaticHost
-from wireguard.models import WireGuardInstance
+from wireguard.models import Peer, WireGuardInstance
 
 
 class ApiV2ManageDnsRecordTests(TestCase):
@@ -290,4 +293,122 @@ class ApiV2ManageClusterTests(TestCase):
         response = self.client.delete(self.manage_url, HTTP_TOKEN=str(self.api_key.token))
         self.assertEqual(response.status_code, 405)
         response = self.client.put(self.status_url, HTTP_TOKEN=str(self.api_key.token))
+        self.assertEqual(response.status_code, 405)
+
+
+class ApiV2PeerInviteTests(TestCase):
+    url = "/api/v2/peer_invite/"
+
+    def setUp(self):
+        self.instance = create_instance(0)
+        self.other_instance = create_instance(1)
+        self.api_key = ApiKey.objects.create(name="invite-test-key", enabled=True)
+        self.api_key.allowed_instances.add(self.instance)
+        self.peer = Peer.objects.create(
+            wireguard_instance=self.instance, name="Test Peer", public_key="peer-public", private_key="peer-private",
+        )
+        self.invite_settings = InviteSettings.objects.create(
+            name="default_settings", invite_url="https://vpn.example.com/invite/", invite_expiration=30,
+        )
+
+    def request(self, payload, api_key=None):
+        return self.client.post(
+            self.url, data=json.dumps(payload), content_type="application/json",
+            HTTP_TOKEN=str((api_key or self.api_key).token),
+        )
+
+    def test_creates_invite(self):
+        response = self.request({"instance": "wg0", "peer_uuid": str(self.peer.uuid)})
+        self.assertEqual(response.status_code, 200)
+        body = response.json()
+        self.assertEqual(body["message"], "Invite created.")
+        invite = PeerInvite.objects.get(peer=self.peer)
+        self.assertEqual(body["invite_data"]["uuid"], str(invite.uuid))
+        self.assertEqual(body["invite_data"]["url"], f"https://vpn.example.com/invite/?token={invite.uuid}&")
+        self.assertEqual(body["invite_data"]["password"], invite.invite_password)
+
+    def test_selects_peer_by_public_key(self):
+        response = self.request({"instance": "wg0", "peer_public_key": "peer-public"})
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(PeerInvite.objects.filter(peer=self.peer).exists())
+
+    def test_existing_invite_is_renewed(self):
+        self.request({"instance": "wg0", "peer_uuid": str(self.peer.uuid)})
+        invite = PeerInvite.objects.get(peer=self.peer)
+        PeerInvite.objects.filter(pk=invite.pk).update(
+            invite_expiration=invite.invite_expiration - timedelta(minutes=20)
+        )
+        response = self.request({"instance": "wg0", "peer_uuid": str(self.peer.uuid)})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["message"], "Existing invite renewed.")
+        renewed = PeerInvite.objects.get(peer=self.peer)
+        self.assertEqual(renewed.uuid, invite.uuid)
+        self.assertGreater(renewed.invite_expiration, timezone.now() + timedelta(minutes=25))
+
+    def test_missing_peer_selector(self):
+        response = self.request({"instance": "wg0"})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error_message"], "Missing peer selector (peer_uuid or peer_public_key).")
+
+    def test_unknown_peer(self):
+        for peer_uuid in ("00000000-0000-0000-0000-000000000000", "not-a-uuid"):
+            response = self.request({"instance": "wg0", "peer_uuid": peer_uuid})
+            self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.json()["error_message"], "Peer not found.")
+
+    def test_invalid_instance(self):
+        response = self.request({"instance": "wg999", "peer_uuid": str(self.peer.uuid)})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error_message"], "Invalid or missing WireGuard instance.")
+
+    def test_peer_of_another_instance_is_not_found(self):
+        unrestricted_key = ApiKey.objects.create(name="unrestricted-key", enabled=True)
+        response = self.request({"instance": "wg1", "peer_uuid": str(self.peer.uuid)}, api_key=unrestricted_key)
+        self.assertEqual(response.status_code, 404)
+        self.assertFalse(PeerInvite.objects.exists())
+
+    def test_api_key_without_access_to_the_instance(self):
+        other_peer = Peer.objects.create(
+            wireguard_instance=self.other_instance, name="Other Peer", public_key="other-public", private_key="other-private",
+        )
+        response = self.request({"instance": "wg1", "peer_uuid": str(other_peer.uuid)})
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(PeerInvite.objects.exists())
+
+    def test_peer_with_endpoint_is_refused(self):
+        Peer.objects.filter(pk=self.peer.pk).update(endpoint="remote.example.com:51820")
+        response = self.request({"instance": "wg0", "peer_uuid": str(self.peer.uuid)})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error_message"], "Peers with an endpoint have no client configuration to share.")
+        self.assertFalse(PeerInvite.objects.exists())
+
+    @patch("api_v2.views_api.send_email")
+    def test_email_disabled_in_invite_settings(self, mock_send_email):
+        InviteSettings.objects.filter(pk=self.invite_settings.pk).update(invite_email_enabled=False)
+        response = self.request({"instance": "wg0", "peer_uuid": str(self.peer.uuid), "email": "user@example.com"})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error_message"], "Email invites are disabled in the VPN invite settings.")
+        self.assertFalse(PeerInvite.objects.exists())
+        mock_send_email.assert_not_called()
+
+    @patch("api_v2.views_api.send_email")
+    def test_sends_invite_by_email(self, mock_send_email):
+        mock_send_email.return_value = ("success", "Email sent successfully.")
+        response = self.request({"instance": "wg0", "peer_uuid": str(self.peer.uuid), "email": "user@example.com"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["message"], "Invite created. Email sent to user@example.com.")
+        invite_data = response.json()["invite_data"]
+        mock_send_email.assert_called_once_with("user@example.com", invite_data["email_subject"], invite_data["email_body"])
+
+    @patch("api_v2.views_api.send_email")
+    def test_email_failure_keeps_the_invite(self, mock_send_email):
+        mock_send_email.return_value = ("error", "SMTP server not available")
+        response = self.request({"instance": "wg0", "peer_uuid": str(self.peer.uuid), "email": "user@example.com"})
+        self.assertEqual(response.status_code, 500)
+        body = response.json()
+        self.assertEqual(body["error_message"], "Invite created, but the email could not be sent: SMTP server not available")
+        self.assertEqual(body["invite_data"]["uuid"], str(PeerInvite.objects.get(peer=self.peer).uuid))
+
+    def test_other_methods_are_not_allowed(self):
+        response = self.client.get(self.url, HTTP_TOKEN=str(self.api_key.token))
         self.assertEqual(response.status_code, 405)
