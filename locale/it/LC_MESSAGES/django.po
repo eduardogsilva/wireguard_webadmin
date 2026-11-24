@@ -5736,3 +5736,13 @@ msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Nessuna interfaccia trovata|Non sono state trovate interfacce WireGuard da "
 "elaborare."
+
+#: wireguard/forms.py:24
+msgid ""
+"By default, Docker only publishes UDP ports 51820-51839. If you use a "
+"different port, add it to the ports section of your docker-compose.yml "
+"and restart the containers."
+msgstr ""
+"Per impostazione predefinita, Docker pubblica solo le porte UDP "
+"51820-51839. Se usi una porta diversa, aggiungila alla sezione ports del "
+"tuo docker-compose.yml e riavvia i container."

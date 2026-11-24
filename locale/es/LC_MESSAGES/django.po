@@ -5877,3 +5877,13 @@ msgstr ""
 
 #~ msgid "DNS challenge"
 #~ msgstr "Desafío DNS"
+
+#: wireguard/forms.py:24
+msgid ""
+"By default, Docker only publishes UDP ports 51820-51839. If you use a "
+"different port, add it to the ports section of your docker-compose.yml "
+"and restart the containers."
+msgstr ""
+"De forma predeterminada, Docker solo publica los puertos UDP "
+"51820-51839. Si usa un puerto diferente, agréguelo en la sección ports "
+"de su docker-compose.yml y reinicie los contenedores."

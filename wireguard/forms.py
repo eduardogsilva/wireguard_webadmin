@@ -19,7 +19,13 @@ class WireGuardInstanceForm(forms.ModelForm):
     private_key = forms.CharField(label=_('Private Key'))
     public_key = forms.CharField(label=_('Public Key'))
     hostname = forms.CharField(label=_('Public Address'))
-    listen_port = forms.IntegerField(label=_('Listen Port'))
+    listen_port = forms.IntegerField(
+        label=_('Listen Port'),
+        help_text=_(
+            'By default, Docker only publishes UDP ports 51820-51839. If you use a different port, '
+            'add it to the ports section of your docker-compose.yml and restart the containers.'
+        )
+    )
     address = forms.GenericIPAddressField(label=_('Internal IP Address'))
     netmask = forms.ChoiceField(choices=NETMASK_CHOICES, label=_('Netmask'))
     peer_list_refresh_interval = forms.IntegerField(label=_('Web Refresh Interval'), initial=10)

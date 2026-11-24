@@ -31,6 +31,8 @@ wget -O docker-compose.yml https://raw.githubusercontent.com/eduardogsilva/wireg
 docker compose up -d
 ```
 
+> **WireGuard ports:** the compose file only publishes UDP ports `51820-51839` for WireGuard instances (and TCP `8080-8089` for port forwarding rules). If an instance uses a different Listen Port, add it to the `ports` section of `docker-compose.yml` and run `docker compose up -d` again, otherwise clients will never complete the handshake. Expose only the ports you need, since Docker handles large port ranges poorly.
+
 > For detailed instructions, upgrade guide, and configuration tips visit **[wireguard-webadmin.com](https://wireguard-webadmin.com/)**.
 
 ---
