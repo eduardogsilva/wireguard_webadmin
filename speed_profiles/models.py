@@ -13,14 +13,14 @@ def megabytes_to_bytes(value):
 
 
 class SpeedProfile(models.Model):
-    """Bandwidth limit applied to each peer that uses the profile. Empty limits mean no limit in that direction."""
+    """Bandwidth limit applied to each peer that uses the profile. Zero disables a limit or a burst."""
     name = models.CharField(max_length=64, unique=True)
     # Mbit/s. Download is the traffic that reaches the peer, upload the traffic the peer sends.
-    download_limit = models.DecimalField(max_digits=9, decimal_places=3, blank=True, null=True)
-    upload_limit = models.DecimalField(max_digits=9, decimal_places=3, blank=True, null=True)
-    # MB that may pass at full speed before the limit applies. Empty means the automatic minimum.
-    download_burst = models.DecimalField(max_digits=9, decimal_places=3, blank=True, null=True)
-    upload_burst = models.DecimalField(max_digits=9, decimal_places=3, blank=True, null=True)
+    download_limit = models.DecimalField(max_digits=9, decimal_places=3, default=Decimal('0'))
+    upload_limit = models.DecimalField(max_digits=9, decimal_places=3, default=Decimal('0'))
+    # MB that may pass at full speed before the limit applies. Zero means the automatic minimum.
+    download_burst = models.DecimalField(max_digits=9, decimal_places=3, default=Decimal('0'))
+    upload_burst = models.DecimalField(max_digits=9, decimal_places=3, default=Decimal('0'))
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

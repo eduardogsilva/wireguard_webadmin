@@ -56,19 +56,18 @@ def view_manage_speed_profile(request):
     form_description = {
         'size': 'col-lg-6',
         'content': _('''
-        <h5>Speed profile</h5>
-        <p>Each peer that uses this profile gets its own limit: a profile of 10 Mbit/s does not share 10 Mbit/s among
-        its peers. Peers without a profile have no limit.</p>
-
         <h5>Download and upload</h5>
         <p><strong>Download</strong> is the traffic that reaches the peer and <strong>upload</strong> the traffic that
-        it sends. Each limit is optional, so a profile may limit only one direction. The limit covers all the
-        addresses and networks of the peer.</p>
+        it sends. The limit covers all the addresses and networks of the peer. Use 0 to leave a direction without
+        limit. Peers without a profile have no limit.</p>
 
         <h5>Burst</h5>
-        <p>The amount of data that may pass at full speed before the limit applies, refilled while the peer uses less
-        than its limit. A burst of a few MB keeps browsing fast without allowing large downloads at full speed. For
-        reference, 10 Mbit/s is about 1.25 MB per second. Leave it empty for the automatic minimum.</p>
+        <p>The amount of data that may pass at full speed before the limit applies. It refills while the peer uses
+        less than its limit.</p>
+        <p>Web pages and most apps transfer a few MB at a time, so, depending on the case, a burst of 5 or 10 MB may
+        improve browsing considerably: pages load at full speed, while long downloads and streams still run at the
+        configured limit. For reference, 10 Mbit/s is about 1.25 MB per second.</p>
+        <p>Use 0 to disable the burst.</p>
         '''),
     }
     return render(request, 'generic_form.html', {

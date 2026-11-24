@@ -1,13 +1,9 @@
-from decimal import Decimal
-
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Button, Div, Layout, Submit
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from speed_profiles.models import SpeedProfile
-
-MIN_LIMIT = Decimal('0.001')
 
 
 class SpeedProfileForm(forms.ModelForm):
@@ -22,16 +18,16 @@ class SpeedProfileForm(forms.ModelForm):
             'upload_burst': _('Upload burst (MB)'),
         }
         help_texts = {
-            'download_limit': _('Traffic that reaches the peer. Leave empty for no download limit.'),
-            'upload_limit': _('Traffic that the peer sends. Leave empty for no upload limit.'),
-            'download_burst': _('Optional. Data that may pass at full speed before the limit applies.'),
-            'upload_burst': _('Optional. Data that may pass at full speed before the limit applies.'),
+            'download_limit': _('Traffic that reaches the peer. 0 disables the download limit.'),
+            'upload_limit': _('Traffic that the peer sends. 0 disables the upload limit.'),
+            'download_burst': _('Data that may pass at full speed before the limit applies. 0 disables the burst.'),
+            'upload_burst': _('Data that may pass at full speed before the limit applies. 0 disables the burst.'),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name in ('download_limit', 'download_burst', 'upload_limit', 'upload_burst'):
-            self.fields[field_name].widget.attrs.update({'min': str(MIN_LIMIT), 'step': 'any'})
+            self.fields[field_name].widget.attrs.update({'min': '0', 'step': 'any'})
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.layout = Layout(
@@ -57,13 +53,15 @@ class SpeedProfileForm(forms.ModelForm):
         cleaned_data = super().clean()
         for field_name in ('download_limit', 'download_burst', 'upload_limit', 'upload_burst'):
             value = cleaned_data.get(field_name)
-            if value is not None and value < MIN_LIMIT:
-                self.add_error(field_name, _('Enter a value greater than zero.'))
+            if value is not None and value < 0:
+                self.add_error(field_name, _('Enter a value greater than or equal to zero.'))
+        if self.errors:
+            return cleaned_data
 
-        if cleaned_data.get('download_limit') is None and cleaned_data.get('upload_limit') is None:
+        if not cleaned_data.get('download_limit') and not cleaned_data.get('upload_limit'):
             raise forms.ValidationError(_('Set at least a download or an upload limit.'))
-        if cleaned_data.get('download_burst') and cleaned_data.get('download_limit') is None:
+        if cleaned_data.get('download_burst') and not cleaned_data.get('download_limit'):
             self.add_error('download_burst', _('The burst requires a download limit.'))
-        if cleaned_data.get('upload_burst') and cleaned_data.get('upload_limit') is None:
+        if cleaned_data.get('upload_burst') and not cleaned_data.get('upload_limit'):
             self.add_error('upload_burst', _('The burst requires an upload limit.'))
         return cleaned_data

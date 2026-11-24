@@ -20,7 +20,7 @@ from user_manager.models import UserAcl
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from wireguard_peer.functions import func_create_new_peer
 from wireguard_tools import functions
-from wireguard_tools.speed_limits import apply_speed_limits, build_tc_commands, parse_speed_limits
+from wireguard_tools.speed_limits import apply_speed_limits, build_tc_commands, parse_peers, parse_speed_limits
 from wireguard_tools.tests import FakeNetwork, load_cluster_worker
 from wireguard_tools.views import export_wireguard_configuration
 
@@ -43,22 +43,24 @@ def create_peer(instance, number, speed_profile=None, networks=(), endpoint=''):
 
 class SpeedProfileFormTests(TestCase):
     def form(self, **data):
-        return SpeedProfileForm(data={'name': 'Basic', **data})
+        values = {'download_limit': '0', 'download_burst': '0', 'upload_limit': '0', 'upload_burst': '0'}
+        return SpeedProfileForm(data={'name': 'Basic', **values, **data})
 
-    def test_accepts_optional_and_decimal_limits(self):
+    def test_accepts_decimal_limits_and_zero_disables_a_limit_or_burst(self):
         self.assertTrue(self.form(download_limit='0.5').is_valid())
         self.assertTrue(self.form(upload_limit='10').is_valid())
         form = self.form(download_limit='10', download_burst='5', upload_limit='2.5', upload_burst='0.25')
         self.assertTrue(form.is_valid(), form.errors)
+        profile = self.form(download_limit='10').save()
+        self.assertEqual(profile.config_comment(), 'download_kbit=10000')
+        self.assertEqual(profile.summary, '↓ 10 Mbit/s')
 
-    def test_refuses_zero_and_negative_values(self):
-        for field_name in ('download_limit', 'upload_limit'):
-            for value in ('0', '-1'):
-                form = self.form(**{field_name: value})
+    def test_refuses_empty_and_negative_values(self):
+        for field_name in ('download_limit', 'download_burst', 'upload_limit', 'upload_burst'):
+            for value in ('', '-1'):
+                form = self.form(**{'download_limit': '10', 'upload_limit': '5', field_name: value})
                 self.assertFalse(form.is_valid())
                 self.assertIn(field_name, form.errors)
-        form = self.form(download_limit='10', download_burst='0')
-        self.assertIn('download_burst', form.errors)
 
     def test_refuses_repeated_name(self):
         SpeedProfile.objects.create(name='Basic', download_limit=10)
@@ -127,7 +129,8 @@ class SpeedProfileDeleteTests(SpeedProfileViewMixin, TestCase):
 class SpeedProfileEditTests(SpeedProfileViewMixin, TestCase):
     def edit(self):
         return self.client.post(
-            f'/speed_profiles/manage/?uuid={self.profile.uuid}', {'name': 'Basic', 'download_limit': '20', 'upload_limit': '5'}
+            f'/speed_profiles/manage/?uuid={self.profile.uuid}',
+            {'name': 'Basic', 'download_limit': '20', 'download_burst': '0', 'upload_limit': '5', 'upload_burst': '0'},
         )
 
     @patch('speed_profiles.views._auto_apply', return_value=True)
@@ -209,6 +212,11 @@ class ExportedConfigMixin:
         with open(os.path.join(self.wireguard_dir, f'wg{instance_id}.conf')) as config_file:
             return parse_speed_limits(config_file.read())
 
+    def exported_peers(self, instance_id=0):
+        export_wireguard_configuration()
+        with open(os.path.join(self.wireguard_dir, f'wg{instance_id}.conf')) as config_file:
+            return parse_peers(config_file.read())
+
 
 class SpeedLimitRuleTests(ExportedConfigMixin, TestCase):
     def setUp(self):
@@ -261,6 +269,36 @@ class SpeedLimitRuleTests(ExportedConfigMixin, TestCase):
         # Without a burst, htb uses its automatic value
         self.assertNotIn('burst', download_classes[1])
         self.assertNotIn('burst', upload_classes[1])
+
+    def test_peers_inside_the_network_of_a_limited_peer_are_not_limited_with_it(self):
+        create_peer(self.instance, 10, SpeedProfile.objects.create(name='Full', download_limit=10, upload_limit=5),
+                    networks=['0.0.0.0/0'], endpoint='remote.example.test:51820')
+        create_peer(self.instance, 11)
+        create_peer(self.instance, 12, SpeedProfile.objects.create(name='Down', download_limit=20))
+        commands = build_tc_commands('wg0', self.exported_peers())
+
+        download_pass = [command for command in commands if command.endswith('flowid 1:')]
+        upload_pass = [command for command in commands if command.endswith('action ok')]
+        # Peer 11 has no limit in both directions; peer 12 has its own download class and no upload limit
+        self.assertEqual([command.split('ip dst ')[1].split()[0] for command in download_pass], ['10.188.0.11/32'])
+        self.assertEqual(
+            sorted(command.split('ip src ')[1].split()[0] for command in upload_pass),
+            ['10.188.0.11/32', '10.188.0.12/32'],
+        )
+        # The pass filters are checked before the filters of the broader network
+        broad_priority = int(next(
+            command for command in commands if 'match ip dst 0.0.0.0/0' in command
+        ).split(' prio ')[1].split()[0])
+        self.assertTrue(all(int(command.split(' prio ')[1].split()[0]) < broad_priority for command in download_pass))
+        self.assertEqual(len([command for command in commands if command.startswith('class add dev wg0 ')]), 2)
+
+    def test_peers_outside_the_networks_of_limited_peers_get_no_extra_filters(self):
+        create_peer(self.instance, 10, SpeedProfile.objects.create(name='Basic', download_limit=10, upload_limit=5),
+                    networks=['192.168.50.0/24'])
+        create_peer(self.instance, 11, networks=['192.168.60.0/24'])
+        commands = build_tc_commands('wg0', self.exported_peers())
+        self.assertEqual(commands, build_tc_commands('wg0', self.exported_limits()))
+        self.assertTrue(all('10.188.0.11' not in command and '192.168.60.0' not in command for command in commands))
 
     def test_peer_with_endpoint_gets_the_same_rules(self):
         profile = SpeedProfile.objects.create(name='Basic', download_limit=10, upload_limit=5)

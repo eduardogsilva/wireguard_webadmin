@@ -28,8 +28,12 @@ def ifb_name(interface):
     return f'ifb{interface}'[:15]
 
 
-def parse_speed_limits(config_content):
-    """Return a list of {'networks': [...], 'download_kbit': int, ...} for each limited peer of the configuration."""
+def parse_peers(config_content):
+    """Return a list of {'networks': [...], 'download_kbit': int, ...} for each peer of the configuration.
+
+    Peers without limits are included (with no limit keys): their networks may be inside the networks of a limited
+    peer and must not be shaped with it.
+    """
     peers = []
     current = None
     for raw_line in config_content.splitlines():
@@ -57,13 +61,14 @@ def parse_speed_limits(config_content):
     if current is not None:
         peers.append(current)
 
-    limited_peers = []
-    for peer in peers:
-        limits = peer['limits']
-        if not peer['networks'] or not (limits.get('download_kbit') or limits.get('upload_kbit')):
-            continue
-        limited_peers.append({'networks': peer['networks'], **limits})
-    return limited_peers
+    return [{'networks': peer['networks'], **peer['limits']} for peer in peers if peer['networks']]
+
+
+def parse_speed_limits(config_content):
+    """Return the peers of the configuration that have at least one limit."""
+    return [
+        peer for peer in parse_peers(config_content) if peer.get('download_kbit') or peer.get('upload_kbit')
+    ]
 
 
 def _filter_priority(network):
@@ -90,17 +95,52 @@ def _htb_commands(device, peers, direction, match):
     return commands
 
 
-def build_tc_commands(interface, limited_peers, upload=True):
-    """tc batch commands that install the limits on a clean interface (and on a clean ifb for the upload)."""
+def _unlimited_networks(peers, limited_peers):
+    """Networks of the other peers that are inside a network of a limited peer.
+
+    WireGuard sends their traffic to the peer with the most specific network, but a tc filter of the broader network
+    would also match it. These networks get their own filter, checked first, that lets the traffic pass.
+    """
+    limited_networks = [network for peer in limited_peers for network in peer['networks']]
+    networks = []
+    for peer in peers:
+        if any(peer is limited_peer for limited_peer in limited_peers):
+            continue
+        for network in peer['networks']:
+            if any(
+                network != limited_network and network.subnet_of(limited_network)
+                for limited_network in limited_networks
+            ):
+                networks.append(network)
+    return networks
+
+
+def build_tc_commands(interface, peers, upload=True):
+    """tc batch commands that install the limits on a clean interface (and on a clean ifb for the upload).
+
+    peers may include the peers without limits, so their traffic is not shaped with a limited peer whose networks
+    contain theirs.
+    """
     commands = []
-    download_peers = [peer for peer in limited_peers if peer.get('download_kbit')]
-    upload_peers = [peer for peer in limited_peers if peer.get('upload_kbit')] if upload else []
+    download_peers = [peer for peer in peers if peer.get('download_kbit')]
+    upload_peers = [peer for peer in peers if peer.get('upload_kbit')] if upload else []
 
     if download_peers:
         commands += _htb_commands(interface, download_peers, 'download', 'dst')
+        for network in _unlimited_networks(peers, download_peers):
+            # flowid 1: is the htb itself: the packet is sent without a class, like unclassified traffic
+            commands.append(
+                f'filter add dev {interface} parent 1: protocol ip prio {_filter_priority(network)} '
+                f'u32 match ip dst {network} flowid 1:'
+            )
     if upload_peers:
         ifb = ifb_name(interface)
         commands.append(f'qdisc add dev {interface} handle ffff: ingress')
+        for network in _unlimited_networks(peers, upload_peers):
+            commands.append(
+                f'filter add dev {interface} parent ffff: protocol ip prio {_filter_priority(network)} '
+                f'u32 match ip src {network} action ok'
+            )
         # Only the traffic of limited peers goes through the ifb; the rest is not touched
         for peer in upload_peers:
             for network in peer['networks']:
@@ -139,7 +179,7 @@ def apply_speed_limits(interface, config_path, run=None):
     run = run or subprocess.run
     try:
         with open(config_path) as config_file:
-            limited_peers = parse_speed_limits(config_file.read())
+            peers = parse_peers(config_file.read())
     except OSError as error:
         return [f'{config_path}: {error}']
 
@@ -147,7 +187,7 @@ def apply_speed_limits(interface, config_path, run=None):
     for parent in ('root', 'ingress'):
         run(['tc', 'qdisc', 'del', 'dev', interface, parent], capture_output=True, text=True)
 
-    upload = any(peer.get('upload_kbit') for peer in limited_peers)
+    upload = any(peer.get('upload_kbit') for peer in peers)
     if upload:
         ifb_error = _prepare_ifb(interface, run)
         if ifb_error:
@@ -157,7 +197,7 @@ def apply_speed_limits(interface, config_path, run=None):
     else:
         run(['ip', 'link', 'delete', ifb_name(interface)], capture_output=True, text=True)
 
-    commands = build_tc_commands(interface, limited_peers, upload=upload)
+    commands = build_tc_commands(interface, peers, upload=upload)
     if not commands:
         return errors
     result = run(['tc', '-batch', '-'], input='\n'.join(commands) + '\n', capture_output=True, text=True)
