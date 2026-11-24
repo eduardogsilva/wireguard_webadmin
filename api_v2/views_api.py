@@ -21,14 +21,14 @@ from cluster.sync import get_worker_sync_state
 from dns.models import DNSSettings, StaticHost
 from dns.views import export_dns_configuration
 from routing_templates.models import RoutingTemplate
+from vpn_invite.models import InviteSettings, PeerInvite
+from wgwadmlibrary.tools import create_peer_invite, get_peer_invite_data, send_email
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from wireguard_peer.forms import normalize_endpoint
 from wireguard_peer.functions import find_network_in_other_instance, func_create_new_peer
 from wireguard_tools.functions import (
     func_reload_wireguard_interface, running_wireguard_interfaces, start_primary_interfaces, stop_primary_interfaces,
 )
-from vpn_invite.models import InviteSettings, PeerInvite
-from wgwadmlibrary.tools import create_peer_invite, get_peer_invite_data, send_email
 from wireguard_tools.views import export_wireguard_configuration
 from .models import ApiKey
 
@@ -890,28 +890,41 @@ def api_v2_peer_detail(request):
 
 @csrf_exempt
 @api_doc(
-    summary="Create a VPN invite for a peer and optionally send it by email",
+    summary="Create (or renew) the VPN invite of a peer and optionally send it by email",
     auth="Header token: <ApiKey.token>",
     methods=["POST"],
     params=[
         {"name": "instance", "in": "json", "type": "string", "required": True, "example": "wg0",
          "description": "Required. Target instance name in the format wg{instance_id} (e.g. wg0, wg1)."},
         {"name": "peer_uuid", "in": "json", "type": "string", "required": False,
-         "description": "Peer UUID selector."},
+         "description": "Peer UUID selector. Inform peer_uuid or peer_public_key."},
         {"name": "peer_public_key", "in": "json", "type": "string", "required": False,
-         "description": "Peer public key selector."},
-        {"name": "email", "in": "json", "type": "string", "required": False,
-         "description": "Optional. Sends the invite to this address. Requires email invites to be enabled in the VPN invite settings."},
+         "description": "Peer public key selector. Used when peer_uuid is not informed."},
+        {"name": "email", "in": "json", "type": "string", "required": False, "example": "user@example.com",
+         "description": "Sends the invite to this address. Requires email invites to be enabled in the VPN invite "
+                        "settings."},
     ],
     returns=[
-        {"status": 200, "body": {"status": "success", "message": "Invite created.", "invite_data": {"url": "...", "password": "...", "expiration": "...", "email_subject": "...", "email_body": "...", "whatsapp_body": "...", "text_body": "...", "uuid": "..."}}},
+        {"status": 200, "body": {
+            "status": "success", "message": "Invite created.",
+            "invite_data": {"url": "...", "password": "...", "expiration": "...", "email_subject": "...",
+                            "email_body": "...", "whatsapp_body": "...", "text_body": "...", "uuid": "..."},
+        }},
+        {"status": 200, "body": {
+            "status": "success", "message": "Existing invite renewed. Email sent to user@example.com.",
+            "invite_data": {"url": "...", "uuid": "..."},
+        }},
+        {"status": 400, "body": {"status": "error", "error_message": "Missing peer selector (peer_uuid or peer_public_key)."}},
         {"status": 400, "body": {"status": "error", "error_message": "Peers with an endpoint have no client configuration to share."}},
-        {"status": 403, "body": {"status": "error", "error_message": "Invalid API key."}},
+        {"status": 400, "body": {"status": "error", "error_message": "Email invites are disabled in the VPN invite settings."}},
+        {"status": 403, "body": {"status": "error", "error_message": "This API key is not allowed to access the requested instance."}},
         {"status": 404, "body": {"status": "error", "error_message": "Peer not found."}},
+        {"status": 405, "body": {"status": "error", "error_message": "Method not allowed."}},
         {"status": 500, "body": {"status": "error", "error_message": "Invite created, but the email could not be sent: ...", "invite_data": {"url": "..."}}},
     ],
     examples={
         "create_invite": {"method": "POST", "json": {"instance": "wg0", "peer_uuid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"}},
+        "create_invite_by_public_key": {"method": "POST", "json": {"instance": "wg0", "peer_public_key": "BASE64PUBLICKEY..."}},
         "create_and_send_invite": {"method": "POST", "json": {"instance": "wg0", "peer_uuid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", "email": "user@example.com"}},
     }
 )
