@@ -73,6 +73,10 @@ class WireGuardInstance(models.Model):
     worker = models.ForeignKey(
         'cluster.Worker', on_delete=models.PROTECT, blank=True, null=True, related_name='wireguard_instances'
     )
+    # Speed profile given to the peers created in this instance
+    default_speed_profile = models.ForeignKey(
+        'speed_profiles.SpeedProfile', on_delete=models.PROTECT, blank=True, null=True, related_name='default_for_instances'
+    )
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -209,6 +213,9 @@ class Peer(models.Model):
     sort_order = models.IntegerField(default=0)
     routing_template = models.ForeignKey(
         'routing_templates.RoutingTemplate', on_delete=models.SET_NULL, blank=True, null=True, related_name='peers'
+    )
+    speed_profile = models.ForeignKey(
+        'speed_profiles.SpeedProfile', on_delete=models.PROTECT, blank=True, null=True, related_name='peers'
     )
 
     # Remote address (host:port) for peers that this server connects to, instead of waiting for them to connect

@@ -14,12 +14,14 @@ from datetime import datetime, timezone
 
 import requests
 
+from speed_limits import apply_speed_limits, remove_speed_limits
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 MASTER_SERVER_ADDRESS = os.environ.get('MASTER_SERVER_ADDRESS', '')
 TOKEN = os.environ.get('TOKEN', '')
-WORKER_VERSION = 15
+WORKER_VERSION = 16
 REQUEST_TIMEOUT = 30
 MANIFEST_INTERVAL = 60
 DEFAULT_STATS_INTERVAL = 60
@@ -242,6 +244,8 @@ class ClusterNodeAgent:
         })
         # Nothing is persisted: after a restart interfaces and firewall rules are gone, so every section is applied again
         self.applied_hashes = {}
+        # Problems that did not stop a section, reported with it
+        self.section_warnings = {}
         self.stats_interval = DEFAULT_STATS_INTERVAL
         self.wireguard_active = False
         # Applications left in the gateway directory by an earlier run are only removed when the worker is refused
@@ -303,9 +307,11 @@ class ClusterNodeAgent:
             interface = filename[:-len('.conf')]
             if interface_is_up(interface):
                 run_command(['wg-quick', 'down', interface], check=False)
+            remove_speed_limits(interface)
             os.remove(config_path)
             logger.info('Removed WireGuard interface %s', interface)
 
+        speed_limit_warnings = []
         for filename, content in sorted(desired_files.items()):
             interface = filename[:-len('.conf')]
             config_path = os.path.join(WIREGUARD_DIR, filename)
@@ -322,6 +328,12 @@ class ClusterNodeAgent:
                 elif previous_content != content:
                     self.sync_peers(interface, config_path)
                     logger.info('Synchronized peers of WireGuard interface %s', interface)
+                else:
+                    continue
+                # A failure in the speed limits never keeps the interface down: it is reported as a warning
+                for speed_limit_error in apply_speed_limits(interface, config_path):
+                    logger.warning('%s: speed limits not fully applied: %s', interface, speed_limit_error)
+                    speed_limit_warnings.append(f'{interface}: speed limits not fully applied: {speed_limit_error}')
             except SectionError as error:
                 errors.append(str(error))
                 # Back to the content actually applied, so the next attempt sees the change again
@@ -329,6 +341,7 @@ class ClusterNodeAgent:
                     write_file(config_path, previous_content)
 
         self.wireguard_active = True
+        self.section_warnings['wireguard'] = '; '.join(speed_limit_warnings)
         if errors:
             raise SectionError('; '.join(errors))
 
@@ -402,7 +415,9 @@ class ClusterNodeAgent:
             return
         logger.warning('Shutting down WireGuard interfaces and firewall rules')
         for config_path in glob.glob(os.path.join(WIREGUARD_DIR, 'wg[0-9]*.conf')):
-            run_command(['wg-quick', 'down', os.path.basename(config_path)[:-len('.conf')]], check=False)
+            interface = os.path.basename(config_path)[:-len('.conf')]
+            run_command(['wg-quick', 'down', interface], check=False)
+            remove_speed_limits(interface)
         for table, chain in FIREWALL_CHAINS:
             run_command(['iptables', '-t', table, '-F', chain], check=False)
         self.applied_hashes.pop('wireguard', None)
@@ -459,6 +474,9 @@ class ClusterNodeAgent:
                 self.SECTION_HANDLERS[section_name](self, section)
                 self.applied_hashes[section_name] = section['hash']
                 reports[section_name] = {'hash': section['hash'], 'status': 'ok'}
+                warning = self.section_warnings.pop(section_name, '')
+                if warning:
+                    reports[section_name]['warning'] = warning
                 logger.info('Section %s applied', section_name)
             except (SectionError, OSError, ValueError) as error:
                 # Forget the last applied content: the next version must be applied and reported even if it

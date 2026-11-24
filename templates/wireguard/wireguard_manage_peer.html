@@ -111,6 +111,25 @@
                         </div>
                     </div>
 
+                    <!-- Speed limit -->
+                    <div class="form-group">
+                        <label>{% trans 'Speed Limit' %}</label>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>
+                                {% if current_peer.speed_profile %}
+                                    {{ current_peer.speed_profile.name }}
+                                    <br><small class="text-muted">{{ current_peer.speed_profile.summary }}</small>
+                                {% else %}
+                                    <span class="text-muted">{% trans 'No limit' %}</span>
+                                {% endif %}
+                            </span>
+                            <a href="{% url 'wireguard_peer_edit_field' %}?peer={{ current_peer.uuid }}&group=speed"
+                               class="btn btn-tool">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                        </div>
+                    </div>
+
                     <!-- Keys Section -->
                     <div class="form-group">
                         <div class="d-flex justify-content-between align-items-center mb-2">

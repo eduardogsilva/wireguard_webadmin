@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from cluster.models import ClusterSettings, Worker
+from speed_profiles.models import SpeedProfile
 from wgwadmlibrary.tools import is_valid_ip_or_hostname
 from .models import NETMASK_CHOICES, WireGuardInstance
 
@@ -30,13 +31,17 @@ class WireGuardInstanceForm(forms.ModelForm):
         help_text=_('Optional. One or more domains separated by commas (e.g. vpn, example.com).')
     )
     enforce_route_policy = forms.BooleanField(label=_('Enforce Route Policy'), required=False)
+    default_speed_profile = forms.ModelChoiceField(
+        queryset=SpeedProfile.objects.order_by('name'), label=_('Default Speed Profile'), required=False,
+        empty_label=_('No limit'), help_text=_('Speed profile given to the peers created in this instance.'),
+    )
 
     class Meta:
         model = WireGuardInstance
         fields = [
             'name', 'instance_id', 'private_key', 'public_key','hostname', 'listen_port', 'address', 
             'netmask', 'peer_list_refresh_interval', 'dns_primary', 'dns_secondary', 'dns_search_domains', 'enforce_route_policy',
-            'worker'
+            'default_speed_profile', 'worker'
             ]
         
     def __init__(self, *args, **kwargs):
@@ -113,6 +118,10 @@ class WireGuardInstanceForm(forms.ModelForm):
                     ),
                     Row(
                         Column('enforce_route_policy', css_class='form-group col-md-12 mb-0'),
+                        css_class='form-row'
+                    ),
+                    Row(
+                        Column('default_speed_profile', css_class='form-group col-md-12 mb-0'),
                         css_class='form-row'
                     ),
                     Row(

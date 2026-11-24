@@ -14,8 +14,8 @@ from wgwadmlibrary.tools import check_sort_order_conflict, deduplicate_sort_orde
     user_allowed_instances, user_allowed_peers, user_has_access_to_instance, user_has_access_to_peer
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from wireguard_peer.forms import PeerAllowedIPForm, PeerEndpointForm, PeerNameForm, PeerKeepaliveForm, PeerKeysForm, \
-    PeerSuspensionForm, PeerScheduleProfileForm
-from wireguard_tools.functions import func_reload_wireguard_interface, get_config_servers
+    PeerSpeedProfileForm, PeerSuspensionForm, PeerScheduleProfileForm
+from wireguard_tools.functions import SPEED_LIMIT_WARNING, func_reload_wireguard_interface, get_config_servers
 from wireguard_tools.views import export_wireguard_configuration
 from .functions import func_create_new_peer
 
@@ -37,7 +37,11 @@ def _auto_apply(request, instance):
         ))
         return True
     success, message = func_reload_wireguard_interface(instance)
-    if success:
+    if success and SPEED_LIMIT_WARNING in message:
+        messages.warning(request, _('wg%(id)s reloaded automatically, but the speed limits were not fully applied: ') % {
+            'id': instance.instance_id
+        } + message.split(f'{SPEED_LIMIT_WARNING}: ', 1)[-1])
+    elif success:
         messages.info(request, _('wg%(id)s reloaded automatically.') % {'id': instance.instance_id})
     else:
         messages.warning(request, _('Auto-apply failed for wg%(id)s: ') % {'id': instance.instance_id} + message)
@@ -236,6 +240,7 @@ def view_wireguard_peer_edit_field(request):
         'keepalive': PeerKeepaliveForm,
         'keys': PeerKeysForm,
         'endpoint': PeerEndpointForm,
+        'speed': PeerSpeedProfileForm,
     }
     
     if group not in form_classes:
@@ -261,6 +266,8 @@ def view_wireguard_peer_edit_field(request):
         page_title = _('Edit Keys')
     elif group == 'endpoint':
         page_title = _('Edit Endpoint')
+    elif group == 'speed':
+        page_title = _('Edit Speed Limit')
 
     context = {
         'page_title': page_title,

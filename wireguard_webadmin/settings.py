@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'api',
     'routing_templates',
     'scheduler.apps.SchedulerConfig',
+    'speed_profiles',
     'api_v2',
     'gatekeeper',
     'app_gateway',
@@ -178,7 +179,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 WIREGUARD_WEBADMIN_VERSION = 9982
 
-CLUSTER_WORKER_CURRENT_VERSION = 15
+CLUSTER_WORKER_CURRENT_VERSION = 16
 CLUSTER_WORKER_MINIMUM_VERSION = 12
 
 CADDY_ENABLED = os.getenv("CADDY_ENABLED", "false").lower() == "true"

@@ -107,6 +107,7 @@ def _mirror_endpoint_peers(content, content_sha256, filename, worker):
             suspended=False, disabled_by_schedule=False,
         )
         .exclude(endpoint='')
+        .select_related('speed_profile')
         .prefetch_related(Prefetch('peerallowedip_set', queryset=PeerAllowedIP.objects.filter(config_file='server')))
     )
     worker_lines = [line for peer in endpoint_peers for line in peer_config_lines(peer)]
@@ -203,12 +204,15 @@ def build_manifest(worker):
 CERTIFICATE_EXPIRATION_WARNING_DAYS = 14
 
 
-def get_worker_warnings(worker):
-    """Stopped services and certificates that are not trusted or expire soon, as reported by the worker."""
+def get_worker_warnings(worker, sync_state=None):
+    """
+    Stopped services, certificates that are not trusted or expire soon and sections applied with warnings, as
+    reported by the worker. sync_state avoids building the manifest again when it is already known.
+    """
     try:
         worker_status = worker.workerstatus
     except WorkerStatus.DoesNotExist:
-        return {'stopped_services': [], 'certificate_issues': []}
+        return {'stopped_services': [], 'certificate_issues': [], 'section_warnings': []}
 
     stopped_services = sorted(
         service for service, state in (worker_status.services_status or {}).items() if state != 'running'
@@ -221,7 +225,15 @@ def get_worker_warnings(worker):
             certificate_issues.append(hostname)
         elif certificate.get('status') == 'trusted' and not_after and not_after < expiration_limit:
             certificate_issues.append(hostname)
-    return {'stopped_services': stopped_services, 'certificate_issues': certificate_issues}
+    # Only warnings of the content currently applied: a newer version replaces them once it is reported
+    sync_state = sync_state or get_worker_sync_state(worker)
+    section_warnings = sorted(
+        section_name for section_name, section in sync_state['sections'].items() if section.get('warning')
+    )
+    return {
+        'stopped_services': stopped_services, 'certificate_issues': certificate_issues,
+        'section_warnings': section_warnings,
+    }
 
 
 def get_worker_sync_state(worker, manifest=None):
@@ -244,7 +256,7 @@ def get_worker_sync_state(worker, manifest=None):
         elif reported.get('status') == 'error':
             sections[section_name] = {'state': 'error', 'message': reported.get('message', '')}
         else:
-            sections[section_name] = {'state': 'synced', 'message': ''}
+            sections[section_name] = {'state': 'synced', 'message': '', 'warning': reported.get('warning', '')}
 
     states = {section['state'] for section in sections.values()}
     if 'error' in states:

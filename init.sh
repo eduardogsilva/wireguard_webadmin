@@ -23,7 +23,10 @@ config_files=(/etc/wireguard/*.conf)
 if [ ${#config_files[@]} -gt 0 ]; then
     if python manage.py primary_wireguard_enabled; then
         for f in "${config_files[@]}"; do
-            wg-quick up "$(basename "${f}" .conf)"
+            interface_name="$(basename "${f}" .conf)"
+            # A failure in the speed limits only prints a warning and never keeps the interface down
+            wg-quick up "${interface_name}"
+            python wireguard_tools/speed_limits.py "${interface_name}" "${f}" || true
         done
     else
         echo "WireGuard is disabled on the primary server, interfaces not started."

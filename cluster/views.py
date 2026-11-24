@@ -35,7 +35,7 @@ def describe_worker(worker):
         f"{section_name}: {section['message']}" for section_name, section in worker.sync_state['sections'].items()
         if section['state'] == 'error' and section['message']
     ]
-    worker.warnings = get_worker_warnings(worker)
+    worker.warnings = get_worker_warnings(worker, worker.sync_state)
     # Reported data of disabled, refused or offline workers is only the last known state
     worker.operational = worker.enabled and not worker.error_status and worker.is_online
     worker_status = get_worker_status(worker)
@@ -84,7 +84,7 @@ def cluster_main(request):
             'attention': sum(
                 1 for worker in enabled_workers
                 if worker.sync_state['state'] == 'error' or worker.error_status or worker.warnings['stopped_services']
-                or worker.warnings['certificate_issues'] or not worker.is_online
+                or worker.warnings['certificate_issues'] or worker.warnings['section_warnings'] or not worker.is_online
             ),
         },
         'cache_refresh_interval': settings.WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL,
@@ -112,6 +112,7 @@ def worker_details(request):
             'name': section_name,
             'state': section_state.get('state', 'pending'),
             'message': section_state.get('message', ''),
+            'warning': section_state.get('warning', ''),
             'updated': parse_datetime(reported.get('updated', '')) if reported.get('updated') else None,
         })
 

@@ -25,6 +25,7 @@ urlpatterns = [
     path('gatekeeper/', include('gatekeeper.urls')),
     path('app_gateway/', include('app_gateway.urls')),
     path('scheduler/', include('scheduler.urls')),
+    path('speed_profiles/', include('speed_profiles.urls')),
     path('server/', include('wireguard.urls')),
     path('tools/', include('wireguard_tools.urls')),
     path('vpn_invite/', include('vpn_invite.urls')),

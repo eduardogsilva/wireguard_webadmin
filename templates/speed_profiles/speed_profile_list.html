@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">{% trans 'Speed Profiles' %}</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>{% trans 'Name' %}</th>
+                    <th>{% trans 'Download' %}</th>
+                    <th>{% trans 'Upload' %}</th>
+                    <th>{% trans 'Peers' %}</th>
+                    <th style="width: 100px;">{% trans 'Actions' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in profiles %}
+                <tr>
+                    <td>{{ profile.name }}</td>
+                    <td>
+                        {% if profile.download_limit %}
+                            {{ profile.download_display }} Mbit/s
+                            {% if profile.download_burst %}<small class="text-muted">({% trans 'burst' %} {{ profile.download_burst_display }} MB)</small>{% endif %}
+                        {% else %}
+                            <span class="text-muted">{% trans 'No limit' %}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if profile.upload_limit %}
+                            {{ profile.upload_display }} Mbit/s
+                            {% if profile.upload_burst %}<small class="text-muted">({% trans 'burst' %} {{ profile.upload_burst_display }} MB)</small>{% endif %}
+                        {% else %}
+                            <span class="text-muted">{% trans 'No limit' %}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ profile.peer_count }}</td>
+                    <td class="text-nowrap">
+                        <a
+                            {% if user_acl.user_level >= 30 %}
+                                href="{% url 'manage_speed_profile' %}?uuid={{ profile.uuid }}" class="btn btn-sm btn-info"
+                            {% else %}
+                                href="#" class="btn btn-sm btn-info disabled"
+                            {% endif %}
+                            title="{% trans 'Edit' %}">
+                            <i class="far fa-edit"></i>
+                        </a>
+                        <a
+                            {% if user_acl.user_level >= 30 %}
+                                href="{% url 'delete_speed_profile' %}?uuid={{ profile.uuid }}" class="btn btn-sm btn-danger"
+                            {% else %}
+                                href="#" class="btn btn-sm btn-danger disabled"
+                            {% endif %}
+                            title="{% trans 'Delete' %}">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">{% trans 'No speed profiles found.' %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <a
+            {% if user_acl.user_level >= 30 %}
+                href="{% url 'manage_speed_profile' %}" class="btn btn-primary"
+            {% else %}
+                href="#" class="btn btn-primary disabled"
+            {% endif %}
+        >
+            <i class="fas fa-plus"></i> {% trans 'Add Profile' %}
+        </a>
+        <a href="{% url 'wireguard_peer_list' %}" class="btn btn-outline-secondary">{% trans 'Back to Peers' %}</a>
+    </div>
+</div>
+{% endblock %}

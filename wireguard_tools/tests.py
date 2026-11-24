@@ -2,6 +2,7 @@ import importlib.util
 import ipaddress
 import os
 import subprocess
+import sys
 import tempfile
 from unittest.mock import patch
 
@@ -16,10 +17,15 @@ from wireguard_tools import functions
 
 
 def load_cluster_worker():
-    module_path = os.path.join(settings.BASE_DIR, 'containers', 'cluster_node', 'cluster_worker.py')
-    spec = importlib.util.spec_from_file_location('cluster_worker_under_test', module_path)
+    agent_dir = os.path.join(settings.BASE_DIR, 'containers', 'cluster_node')
+    spec = importlib.util.spec_from_file_location('cluster_worker_under_test', os.path.join(agent_dir, 'cluster_worker.py'))
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    # The agent imports speed_limits from its own directory, as in the cluster node image
+    sys.path.insert(0, agent_dir)
+    try:
+        spec.loader.exec_module(module)
+    finally:
+        sys.path.remove(agent_dir)
     return module
 
 
@@ -45,6 +51,9 @@ class FakeNetwork:
     def run(self, command, *args, **kwargs):
         self.commands.append(command)
         stdout = ''
+        if command[:2] == ['ip', 'link'] or command[0] == 'tc':
+            # Devices and qdiscs of the speed limits are not part of the routes
+            return subprocess.CompletedProcess(command, 0, '', '')
         if command[:2] == ['wg', 'show']:
             stdout = ''.join(f'peer{index}\t{value}\n' for index, value in enumerate(self.allowed_ips))
         elif command[0] == 'ip':
@@ -228,7 +237,12 @@ class AgentInterfaceFailureTests(TestCase):
         self.config_path = os.path.join(temp_dir.name, 'wg0.conf')
         with open(self.config_path, 'w', encoding='utf-8') as config_file:
             config_file.write(self.OLD_CONFIG)
-        for name, value in (('WIREGUARD_DIR', temp_dir.name), ('interface_is_up', lambda interface: True)):
+        for name, value in (
+            ('WIREGUARD_DIR', temp_dir.name), ('interface_is_up', lambda interface: True),
+            # Never touch the qdiscs of the interfaces of the machine that runs the tests
+            ('apply_speed_limits', lambda interface, config_path: []),
+            ('remove_speed_limits', lambda interface: None),
+        ):
             patcher = patch.object(self.cluster_worker, name, value)
             patcher.start()
             self.addCleanup(patcher.stop)

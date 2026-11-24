@@ -150,6 +150,11 @@
                             {% empty %}
                                 <span class="text-muted">-</span>
                             {% endfor %}
+                            {% if worker.operational and worker.warnings.section_warnings %}
+                                <br><small class="text-warning" title="{{ worker.warnings.section_warnings|join:', ' }}">
+                                    <i class="fas fa-exclamation-triangle"></i> {% trans 'Synchronized with warnings' %}
+                                </small>
+                            {% endif %}
                             {% if worker.operational and worker.warnings.certificate_issues %}
                                 <br><small class="text-warning" title="{{ worker.warnings.certificate_issues|join:', ' }}">
                                     <i class="fas fa-certificate"></i> {% trans 'Certificates unavailable or expiring soon' %}

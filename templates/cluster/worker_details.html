@@ -78,7 +78,9 @@
                         <tr>
                             <td><code>{{ section.name }}</code></td>
                             <td>
-                                {% if section.state == 'synced' %}<span class="badge badge-success">{% trans 'Synchronized' %}</span>
+                                {% if section.state == 'synced' and section.warning %}<span class="badge badge-warning">{% trans 'Synchronized with warnings' %}</span>
+                                <br><small class="text-warning text-break">{{ section.warning|truncatechars:300 }}</small>
+                                {% elif section.state == 'synced' %}<span class="badge badge-success">{% trans 'Synchronized' %}</span>
                                 {% elif section.state == 'error' %}<span class="badge badge-danger">{% trans 'Error' %}</span>
                                 {% else %}<span class="badge badge-secondary">{% trans 'Pending' %}</span>{% endif %}
                                 {% if section.message %}<br><small class="text-muted text-break">{{ section.message|truncatechars:300 }}</small>{% endif %}

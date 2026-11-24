@@ -125,6 +125,8 @@ def _clean_section_report(sections):
             'hash': str(report.get('hash', ''))[:64],
             'status': status,
             'message': str(report.get('message', ''))[:1000],
+            # Problems that did not stop the section, such as speed limits that could not be applied
+            'warning': str(report.get('warning', ''))[:1000] if status == 'ok' else '',
             'updated': timezone.now().isoformat(),
         }
     return cleaned_sections

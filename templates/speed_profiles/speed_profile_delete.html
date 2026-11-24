@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="card card-danger card-outline">
+    <div class="card-header">
+        <h3 class="card-title">{% trans 'Delete Speed Profile' %}</h3>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="card-body">
+            {% if peers or default_for_instances %}
+                <p>{% blocktrans with name=profile.name %}The profile "{{ name }}" is in use.{% endblocktrans %}</p>
+                {% if peers %}
+                    <p class="mb-1"><strong>{% trans 'Peers using this profile' %}</strong></p>
+                    <ul>
+                        {% for peer in peers %}
+                            <li><a href="/peer/manage/?peer={{ peer.uuid }}">{{ peer }}</a> <small class="text-muted">(wg{{ peer.wireguard_instance.instance_id }})</small></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if default_for_instances %}
+                    <p class="mb-1"><strong>{% trans 'Default profile of the instances' %}</strong></p>
+                    <ul>
+                        {% for instance in default_for_instances %}
+                            <li>wg{{ instance.instance_id }}{% if instance.name %} ({{ instance.name }}){% endif %}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="alert alert-warning mb-0">
+                    {% trans 'Unlinking removes the profile from these peers and instances. The peers will have no speed limit.' %}
+                </div>
+            {% else %}
+                <p>{% blocktrans with name=profile.name %}Are you sure you want to delete the profile "{{ name }}"?{% endblocktrans %}</p>
+            {% endif %}
+        </div>
+        <div class="card-footer">
+            {% if peers or default_for_instances %}
+                <button type="submit" name="action" value="unlink_and_delete" class="btn btn-danger">
+                    <i class="fas fa-unlink"></i> {% trans 'Unlink and Delete' %}
+                </button>
+            {% else %}
+                <button type="submit" name="action" value="delete" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> {% trans 'Confirm Delete' %}
+                </button>
+            {% endif %}
+            <a href="{% url 'speed_profile_list' %}" class="btn btn-secondary">{% trans 'Cancel' %}</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

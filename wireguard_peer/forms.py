@@ -14,6 +14,7 @@ from django.utils.translation import gettext_lazy as _
 
 from cluster.models import ClusterSettings, Worker
 from scheduler.models import PeerScheduling
+from speed_profiles.models import SpeedProfile
 from wireguard.models import NETMASK_CHOICES, Peer, PeerAllowedIP
 from wireguard_peer.functions import find_network_in_other_instance
 
@@ -90,6 +91,18 @@ def normalize_endpoint(value):
         if not HOSTNAME_PATTERN.match(host):
             raise forms.ValidationError(_('Enter the endpoint as host:port, e.g. vpn.example.com:51820'))
     return f'{host.lower()}:{int(port)}'
+
+
+class PeerSpeedProfileForm(PeerModelForm):
+    speed_profile = forms.ModelChoiceField(
+        queryset=SpeedProfile.objects.order_by('name'), label=_('Speed profile'), required=False,
+        empty_label=_('No limit'),
+        help_text=_('Download and upload limits of this peer. Speed profiles are managed from the peer list.'),
+    )
+
+    class Meta:
+        model = Peer
+        fields = ['speed_profile']
 
 
 class PeerEndpointForm(PeerModelForm):

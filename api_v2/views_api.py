@@ -21,6 +21,7 @@ from cluster.sync import get_worker_sync_state
 from dns.models import DNSSettings, StaticHost
 from dns.views import export_dns_configuration
 from routing_templates.models import RoutingTemplate
+from speed_profiles.models import SpeedProfile
 from vpn_invite.models import InviteSettings, PeerInvite
 from wgwadmlibrary.tools import create_peer_invite, get_peer_invite_data, send_email
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
@@ -256,6 +257,9 @@ def _validate_dns_hostname(hostname: str) -> Tuple[Optional[str], Optional[str]]
         {"name": "active_worker_uuid", "in": "json", "type": "string", "required": False,
          "description": "Cluster worker that connects to the endpoint in the mirror mode (create/update). Null or "
                         "empty means the primary server."},
+        {"name": "speed_profile_uuid", "in": "json", "type": "string", "required": False,
+         "description": "Speed profile of the peer (create/update). Null or empty removes the limit. When omitted on "
+                        "create, the default speed profile of the instance is used."},
     ],
     returns=[
         {"status": 200, "body": {"status": "success", "message": "Peer updated successfully.", "peer_uuid": "...", "public_key": "...", "main_addresses": ["..."], "reload": {"success": True, "message": "..."}}},
@@ -358,6 +362,15 @@ def api_v2_manage_peer(request):
         if not new_active_worker:
             return JsonResponse({"status": "error", "error_message": "Invalid active_worker_uuid."}, status=400)
 
+    new_speed_profile = None
+    if payload.get("speed_profile_uuid"):
+        try:
+            new_speed_profile = SpeedProfile.objects.filter(uuid=payload.get("speed_profile_uuid")).first()
+        except (ValidationError, ValueError):
+            new_speed_profile = None
+        if not new_speed_profile:
+            return JsonResponse({"status": "error", "error_message": "Invalid speed_profile_uuid."}, status=400)
+
     with transaction.atomic():
         # CREATE
         if request.method == "POST":
@@ -393,6 +406,8 @@ def api_v2_manage_peer(request):
 
             if routing_template is not None:
                 create_overrides["default_routing_template"] = routing_template
+            if "speed_profile_uuid" in payload:
+                create_overrides["speed_profile"] = new_speed_profile
 
             created_peer, create_message = func_create_new_peer(wireguard_instance=wireguard_instance, overrides=create_overrides)
             if not created_peer:
@@ -495,6 +510,8 @@ def api_v2_manage_peer(request):
                 peer_for_action.endpoint = new_endpoint
             if "active_worker_uuid" in payload:
                 peer_for_action.active_worker = new_active_worker
+            if "speed_profile_uuid" in payload:
+                peer_for_action.speed_profile = new_speed_profile
             if not peer_for_action.endpoint:
                 peer_for_action.active_worker = None
 
@@ -724,7 +741,7 @@ def api_v2_manage_dns_record(request):
          "description": "Required. Target instance name in the format wg{instance_id} (e.g. wg0, wg1)."},
     ],
     returns=[
-        {"status": 200, "body": {"status": "success", "instance": "wg2", "peers": [{"uuid": "...", "name": "...", "public_key": "...", "suspended": False, "suspend_reason": "...", "disabled_by_schedule": False, "main_addresses": ["..."]}]}},
+        {"status": 200, "body": {"status": "success", "instance": "wg2", "peers": [{"uuid": "...", "name": "...", "public_key": "...", "suspended": False, "suspend_reason": "...", "disabled_by_schedule": False, "main_addresses": ["..."], "endpoint": "", "speed_profile_uuid": ""}]}},
         {"status": 400, "body": {"status": "error", "error_message": "Invalid or missing WireGuard instance."}},
         {"status": 403, "body": {"status": "error", "error_message": "Invalid API key."}},
     ],
@@ -762,6 +779,7 @@ def api_v2_peer_list(request):
     peer_qs = (
         Peer.objects
         .filter(wireguard_instance=wireguard_instance)
+        .select_related("speed_profile")
         .prefetch_related("peerallowedip_set")
         .order_by("sort_order", "name", "public_key")
     )
@@ -777,6 +795,7 @@ def api_v2_peer_list(request):
             "disabled_by_schedule": bool(current_peer.disabled_by_schedule),
             "main_addresses": current_peer.main_addresses,
             "endpoint": current_peer.endpoint,
+            "speed_profile_uuid": str(current_peer.speed_profile.uuid) if current_peer.speed_profile else "",
         })
 
     return JsonResponse(
@@ -803,7 +822,7 @@ def api_v2_peer_list(request):
          "description": "Peer public key selector."},
     ],
     returns=[
-        {"status": 200, "body": {"status": "success", "peer": {"uuid": "...", "name": "...", "public_key": "...", "pre_shared_key": "...", "private_key": "...", "persistent_keepalive": 25, "routing_template_uuid": "...", "suspended": False, "suspend_reason": "...", "disabled_by_schedule": False, "enabled": True, "main_addresses": ["..."], "announced_networks": ["..."], "client_routes": ["..."], "endpoint": "", "active_worker_uuid": "", "instance": "...", "instance_uuid": "..."}}},
+        {"status": 200, "body": {"status": "success", "peer": {"uuid": "...", "name": "...", "public_key": "...", "pre_shared_key": "...", "private_key": "...", "persistent_keepalive": 25, "routing_template_uuid": "...", "suspended": False, "suspend_reason": "...", "disabled_by_schedule": False, "enabled": True, "main_addresses": ["..."], "announced_networks": ["..."], "client_routes": ["..."], "endpoint": "", "active_worker_uuid": "", "speed_profile_uuid": "", "instance": "...", "instance_uuid": "..."}}},
         {"status": 400, "body": {"status": "error", "error_message": "Missing peer selector (peer_uuid or peer_public_key)."}},
         {"status": 404, "body": {"status": "error", "error_message": "Peer not found."}},
         {"status": 403, "body": {"status": "error", "error_message": "Invalid API key."}},
@@ -881,6 +900,7 @@ def api_v2_peer_detail(request):
         "client_routes": current_peer.client_routes,
         "endpoint": current_peer.endpoint,
         "active_worker_uuid": str(current_peer.active_worker.uuid) if current_peer.active_worker else "",
+        "speed_profile_uuid": str(current_peer.speed_profile.uuid) if current_peer.speed_profile else "",
         "instance": f"wg{wireguard_instance.instance_id}",
         "instance_uuid": str(wireguard_instance.uuid),
     }

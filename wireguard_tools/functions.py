@@ -1,5 +1,6 @@
 import glob
 import ipaddress
+import logging
 import os
 import re
 import subprocess
@@ -9,8 +10,10 @@ from django.utils.translation import gettext_lazy as _
 
 from cluster.models import ClusterSettings, Worker
 from wireguard.models import WireGuardInstance
+from wireguard_tools.speed_limits import apply_speed_limits, format_speed_limit_comment, remove_speed_limits
 
 WIREGUARD_CONFIG_DIR = '/etc/wireguard'
+SPEED_LIMIT_WARNING = 'speed limits not fully applied'
 # Configurations of instances that run on workers (distributed cluster mode). Kept out of WIREGUARD_CONFIG_DIR
 # so the primary server does not bring them up.
 CLUSTER_WIREGUARD_CONFIG_DIR = '/etc/wireguard/cluster'
@@ -35,6 +38,9 @@ def peer_config_lines(peer) -> list:
         allowed_ips_line = "AllowedIPs = " + ", ".join(f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips)
 
     lines = [peer_title, f"{prepend_line}[Peer]", f"{prepend_line}PublicKey = {peer.public_key}"]
+    speed_profile = peer.speed_profile
+    if allowed_ips and speed_profile and speed_profile.config_comment():
+        lines.append(format_speed_limit_comment(speed_profile.config_comment()))
     if peer.pre_shared_key:
         lines.append(f"{prepend_line}PresharedKey = {peer.pre_shared_key}")
     if peer.endpoint:
@@ -100,6 +106,8 @@ def stop_primary_interfaces() -> list:
         result = subprocess.run(command, capture_output=True, text=True)
         if result.returncode != 0:
             errors.append((interface_name, result.stderr.strip()))
+        # The ifb used by the upload limits is not removed with the interface
+        remove_speed_limits(interface_name)
     return errors
 
 
@@ -114,6 +122,10 @@ def start_primary_interfaces() -> list:
         result = subprocess.run(['wg-quick', 'up', interface_name], capture_output=True, text=True)
         if result.returncode != 0:
             errors.append((interface_name, result.stderr.strip()))
+            continue
+        # A failure in the speed limits never keeps the interface down
+        for speed_limit_error in apply_speed_limits(interface_name, config_path):
+            logging.warning("%s: %s: %s", interface_name, SPEED_LIMIT_WARNING, speed_limit_error)
     return errors
 
 
@@ -246,6 +258,11 @@ def reload_wireguard_interface(target: Union[str, WireGuardInstance], config_dir
         route_errors = sync_interface_routes(interface_name)
         if route_errors:
             return False, f"{interface_name} reloaded with route errors: {'; '.join(route_errors)}"
+
+        # A failure in the speed limits does not undo the reload: it is only reported
+        speed_limit_errors = apply_speed_limits(interface_name, conf_path)
+        if speed_limit_errors:
+            return True, f"{interface_name} reloaded, but {SPEED_LIMIT_WARNING}: {'; '.join(speed_limit_errors)}"
 
         return True, f"{interface_name} reloaded successfully"
 

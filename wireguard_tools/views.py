@@ -23,9 +23,10 @@ from vpn_invite.models import PeerInvite
 from wgwadmlibrary.tools import user_has_access_to_peer
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from wireguard_tools.functions import (
-    CLUSTER_WIREGUARD_CONFIG_DIR, WIREGUARD_CONFIG_DIR, get_instance_config_dir, peer_config_lines,
-    stop_primary_interfaces, sync_interface_routes,
+    CLUSTER_WIREGUARD_CONFIG_DIR, WIREGUARD_CONFIG_DIR, get_instance_config_dir,
+    peer_config_lines, stop_primary_interfaces, sync_interface_routes,
 )
+from wireguard_tools.speed_limits import apply_speed_limits
 
 
 def clean_command_field(command_field):
@@ -98,6 +99,15 @@ def set_instance_to_include_firewall():
         firewall_settings.instance_to_execute_firewall = instance_to_execute_firewall
         firewall_settings.save()
     return instance_to_execute_firewall, True
+
+
+def _apply_speed_limits_with_warning(request, interface_name, config_path):
+    """Apply the speed limits of a running interface. A failure is shown as a warning and never stops the interface."""
+    speed_limit_errors = apply_speed_limits(interface_name, config_path)
+    if speed_limit_errors:
+        messages.warning(
+            request, _('Speed limits not fully applied') + f" {interface_name}|{'; '.join(speed_limit_errors)}"
+        )
 
 
 def export_wireguard_configuration(instance_only: WireGuardInstance = None):
@@ -197,6 +207,7 @@ def export_wireguard_configuration(instance_only: WireGuardInstance = None):
         peers = (
             Peer.objects
             .filter(wireguard_instance=instance, suspended=False, disabled_by_schedule=False)
+            .select_related("speed_profile")
             .prefetch_related(
                 Prefetch(
                     "peerallowedip_set",
@@ -368,6 +379,7 @@ def restart_wireguard_interfaces(request):
                     error_count += 1
                 else:
                     interface_count += 1
+                    _apply_speed_limits_with_warning(request, interface_name, config_path)
 
             else:
                 if not user_acl.enable_restart:
@@ -387,6 +399,7 @@ def restart_wireguard_interfaces(request):
                     error_count += 1
                 else:
                     interface_count += 1
+                    _apply_speed_limits_with_warning(request, interface_name, os.path.join(config_dir, filename))
 
     if interface_count > 0 and error_count == 0:
         if mode == 'reload':

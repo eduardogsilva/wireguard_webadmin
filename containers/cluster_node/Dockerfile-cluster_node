@@ -22,7 +22,7 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code
-COPY cluster_worker.py entrypoint.sh /app/
+COPY cluster_worker.py speed_limits.py entrypoint.sh /app/
 
 # Set execution permissions on scripts
 RUN chmod +x /app/entrypoint.sh

@@ -66,6 +66,7 @@ def func_create_new_peer(
       - allowed_ip_netmask (defaults to 32)
       - endpoint
       - active_worker
+      - speed_profile (when absent, the default speed profile of the instance; None for no profile)
     """
     new_peer_data = generate_peer_default(wireguard_instance)
 
@@ -105,6 +106,10 @@ def func_create_new_peer(
             routing_template=new_peer_data.get('default_routing_template'),
             endpoint=new_peer_data.get('endpoint') or '',
             active_worker=new_peer_data.get('active_worker') if new_peer_data.get('endpoint') else None,
+            speed_profile=(
+                new_peer_data['speed_profile'] if 'speed_profile' in new_peer_data
+                else wireguard_instance.default_speed_profile
+            ),
         )
 
         PeerAllowedIP.objects.create(
