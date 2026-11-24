@@ -9,12 +9,15 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.views.decorators.http import require_POST
 
+from app_gateway.caddy_config_export import auto_apply_caddy_config, caddy_export_pending
 from app_gateway.setup_defaults import create_default_entries
 from gatekeeper.forms import GatekeeperUserForm, GatekeeperGroupForm, AuthMethodForm, AuthMethodAllowedDomainForm, \
     AuthMethodAllowedEmailForm, GatekeeperIPAddressForm
 from gatekeeper.models import GatekeeperUser, GatekeeperGroup, AuthMethod, AuthMethodAllowedDomain, \
     AuthMethodAllowedEmail, GatekeeperIPAddress
+from gatekeeper.sessions import get_active_sessions, revoke_session
 from user_manager.models import UserAcl
 
 
@@ -42,8 +45,26 @@ def view_gatekeeper_list(request):
         'auth_ips': auth_ips,
         'active_tab': active_tab,
         'caddy_enabled': settings.CADDY_ENABLED,
+        'pending_export': caddy_export_pending(),
+        'gateway_sessions': get_active_sessions() if active_tab == 'sessions' else [],
     }
     return render(request, 'gatekeeper/gatekeeper_list.html', context)
+
+
+@login_required
+@require_POST
+def view_revoke_gatekeeper_session(request):
+    if not UserAcl.objects.filter(user=request.user).filter(user_level__gte=50).exists():
+        return render(request, 'access_denied.html', {'page_title': _('Access Denied')})
+
+    session = revoke_session(request.POST.get('session', ''))
+    if session:
+        messages.success(request, _('Session ended|The session of %(user)s ends on its server within a minute.') % {
+            'user': session.get('username') or session.get('email') or '-'
+        })
+    else:
+        messages.warning(request, _('Session not found|The session is no longer active.'))
+    return redirect(reverse('gatekeeper_list') + '?tab=sessions')
 
 
 @login_required
@@ -66,6 +87,7 @@ def view_manage_gatekeeper_user(request):
     if form.is_valid():
         form.save()
         messages.success(request, _('Gatekeeper User saved successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     form_description = {
@@ -108,6 +130,7 @@ def view_delete_gatekeeper_user(request):
     if request.method == 'POST':
         gatekeeper_user.delete()
         messages.success(request, _('Gatekeeper User deleted successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -139,6 +162,7 @@ def view_manage_gatekeeper_group(request):
     if form.is_valid():
         form.save()
         messages.success(request, _('Gatekeeper Group saved successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -161,6 +185,7 @@ def view_delete_gatekeeper_group(request):
     if request.method == 'POST':
         gatekeeper_group.delete()
         messages.success(request, _('Gatekeeper Group deleted successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -192,6 +217,7 @@ def view_manage_auth_method(request):
     if form.is_valid():
         form.save()
         messages.success(request, _('Authentication Method saved successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     form_description = {
@@ -241,6 +267,7 @@ def view_delete_auth_method(request):
     if request.method == 'POST':
         auth_method.delete()
         messages.success(request, _('Authentication Method deleted successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -311,6 +338,7 @@ def view_manage_auth_domain(request):
     if form.is_valid():
         form.save()
         messages.success(request, _('Allowed Domain saved successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -333,6 +361,7 @@ def view_delete_auth_domain(request):
     if request.method == 'POST':
         auth_domain.delete()
         messages.success(request, _('Allowed Domain deleted successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -364,6 +393,7 @@ def view_manage_auth_email(request):
     if form.is_valid():
         form.save()
         messages.success(request, _('Allowed Email saved successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -386,6 +416,7 @@ def view_delete_auth_email(request):
     if request.method == 'POST':
         auth_email.delete()
         messages.success(request, _('Allowed Email deleted successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {
@@ -417,6 +448,7 @@ def view_manage_gatekeeper_ip(request):
     if form.is_valid():
         form.save()
         messages.success(request, _('IP Address saved successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     form_description = {
@@ -458,6 +490,7 @@ def view_delete_gatekeeper_ip(request):
     if request.method == 'POST':
         gatekeeper_ip.delete()
         messages.success(request, _('IP Address deleted successfully.'))
+        auto_apply_caddy_config(request)
         return redirect(cancel_url)
 
     context = {

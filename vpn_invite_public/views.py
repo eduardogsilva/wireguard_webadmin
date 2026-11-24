@@ -2,8 +2,9 @@ from django.http import Http404
 from django.shortcuts import render
 from django.utils import timezone
 
-from cluster.models import ClusterSettings, Worker
+from cluster.models import ClusterSettings
 from vpn_invite.models import PeerInvite, InviteSettings
+from wireguard_tools.functions import get_config_servers
 
 
 def view_public_vpn_invite(request):
@@ -15,13 +16,7 @@ def view_public_vpn_invite(request):
         raise Http404
 
     cluster_settings = ClusterSettings.objects.filter(name='cluster_settings', enabled=True).first()
-    servers = []
-    if cluster_settings:
-        if cluster_settings.primary_enable_wireguard:
-            servers.append({'name': 'Primary Server', 'uuid': ''})
-        
-        for worker in Worker.objects.filter(enabled=True):
-            servers.append({'name': worker.display_name, 'uuid': str(worker.uuid)})
+    servers = get_config_servers(peer_invite.peer.wireguard_instance)
 
     context = {
         'peer_invite': peer_invite,

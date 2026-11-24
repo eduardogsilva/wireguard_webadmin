@@ -1,14 +1,20 @@
+# Compiled natively for the target platform to avoid slow emulated Go builds.
+# DNS provider modules must match app_gateway/dns_providers.py
+FROM --platform=$BUILDPLATFORM caddy:2-builder AS builder
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT
+RUN GOOS=$TARGETOS GOARCH=$TARGETARCH GOARM=${TARGETVARIANT#v} xcaddy build \
+    --with github.com/caddy-dns/cloudflare
+
 FROM caddy:2
+
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy
 
 RUN apk add --no-cache \
     python3 \
-    py3-pip \
-    py3-yaml \
     inotify-tools \
     bash
-
-RUN python3 -m venv /usr/local/bin/.venv && \
-    /usr/local/bin/.venv/bin/pip install --no-cache-dir pyyaml
 
 COPY export_wireguard_webadmin_config.py /usr/local/bin/export_wireguard_webadmin_config.py
 COPY process_config.py /usr/local/bin/process_config.py

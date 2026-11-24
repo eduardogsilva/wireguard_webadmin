@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block content %}
+{% include 'app_gateway/pending_export_alert.html' %}
 <div class="card card-primary card-outline">
     <div class="card-header">
         <h3 class="card-title">
@@ -67,28 +68,40 @@
             {% endif %}
         </div>
 
-        {% if hosts or django_hostnames %}
+        {% if hosts %}
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>{% trans 'Hostname' %}</th>
-                        <th>{% trans 'Actions' %}</th>
+                        <th>{% trans 'Certificate' %}</th>
+                        {% if caddy_enabled %}<th>{% trans 'Status' %}</th>{% endif %}
+                        <th class="min-width">{% trans 'Actions' %}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for hostname in django_hostnames %}
-                    <tr class="text-muted">
-                        <td>{{ hostname }}</td>
-                        <td style="width: 15%"></td>
-                    </tr>
-                    {% endfor %}
                     {% for host in hosts %}
                     <tr>
                         <td>{{ host.hostname }}</td>
-                        <td style="width: 15%">
+                        <td>
+                            {% include 'app_gateway/host_certificate.html' %}
+                        </td>
+                        {% if caddy_enabled %}
+                        <td class="certificate-status" data-host-uuid="{{ host.uuid }}">
+                            <i class="fas fa-spinner fa-spin text-muted"></i>
+                        </td>
+                        {% endif %}
+                        <td class="min-width">
+                            <form method="post" action="{% url 'retry_application_host_certificate' %}?uuid={{ host.uuid }}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-secondary"
+                                    title="{% if host.certificate_type == 'self_signed' %}{% trans 'Issue a new self-signed certificate' %}{% else %}{% trans 'Retry certificate' %}{% endif %}">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </form>
                             {% if is_reserved %}
-                            <a class="btn btn-sm btn-secondary disabled" aria-disabled="true" tabindex="-1" title="{% trans 'This application cannot be modified' %}">
+                            <a href="{% url 'manage_application_host' %}?uuid={{ host.uuid }}"
+                                class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <a class="btn btn-sm btn-secondary disabled" aria-disabled="true" tabindex="-1" title="{% trans 'This application cannot be modified' %}">
@@ -135,7 +148,7 @@
                         <th>{% trans 'Path Prefix' %}</th>
                         <th>{% trans 'Policy' %}</th>
                         <th>{% trans 'Order' %}</th>
-                        <th>{% trans 'Actions' %}</th>
+                        <th class="min-width">{% trans 'Actions' %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -145,7 +158,7 @@
                         <td><code>{{ route.path_prefix }}</code></td>
                         <td>{{ route.policy }}</td>
                         <td>{{ route.order }}</td>
-                        <td style="width: 15%">
+                        <td class="min-width">
                             <a href="{% url 'manage_application_route' %}?uuid={{ route.uuid }}"
                                 class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
                                 <i class="fas fa-edit"></i>
@@ -168,4 +181,64 @@
 
     </div>
 </div>
+{% endblock %}
+
+{% block page_custom_head %}
+<style>
+    .tooltip-inner.host-certificate-tooltip {
+        max-width: 420px;
+    }
+</style>
+{% endblock %}
+
+{% block custom_page_scripts %}
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+{% if caddy_enabled and hosts %}
+<script>
+    $(document).ready(function () {
+        $.getJSON("{% url 'application_certificate_status' %}?uuid={{ application.uuid }}", function (data) {
+            $('.certificate-status').each(function () {
+                var cell = $(this);
+                var serversStatus = data.hosts[cell.data('host-uuid')] || [];
+                cell.empty();
+                if (!serversStatus.length) {
+                    return;
+                }
+
+                function badge(cssClass, label, title) {
+                    return $('<span class="badge"></span>').addClass('badge-' + cssClass).attr('title', title).text(label);
+                }
+
+                function serverDetail(serverStatus) {
+                    return serverStatus.server ? serverStatus.server + ': ' + serverStatus.detail : serverStatus.detail;
+                }
+
+                // When every server is in the same state, a single badge summarizes them
+                var first = serversStatus[0];
+                var sameState = serversStatus.every(function (serverStatus) {
+                    return serverStatus.label === first.label && serverStatus.css_class === first.css_class;
+                });
+                if (sameState) {
+                    cell.append(badge(first.css_class, first.label, serversStatus.map(serverDetail).join('\n')));
+                    return;
+                }
+                $.each(serversStatus, function (index, serverStatus) {
+                    if (index) {
+                        cell.append('<br>');
+                    }
+                    cell.append(badge(
+                        serverStatus.css_class, serverStatus.server + ': ' + serverStatus.label, serverStatus.detail
+                    ));
+                });
+            });
+        }).fail(function () {
+            $('.certificate-status').html('<span class="text-muted">-</span>');
+        });
+    });
+</script>
+{% endif %}
 {% endblock %}

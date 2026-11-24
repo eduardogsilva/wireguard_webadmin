@@ -10,19 +10,22 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
-from django.http import HttpResponse
-from django.shortcuts import Http404, get_object_or_404, redirect, render
+from django.http import Http404, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from cluster.models import ClusterSettings, Worker
 from firewall.models import RedirectRule, FirewallSettings
-from firewall.tools import export_user_firewall, generate_firewall_footer, generate_firewall_header, \
-    generate_port_forward_firewall, generate_redirect_dns_rules, generate_route_policy_rules
+from firewall.tools import generate_firewall_script
 from user_manager.models import UserAcl
 from vpn_invite.models import PeerInvite
 from wgwadmlibrary.tools import user_has_access_to_peer
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
+from wireguard_tools.functions import (
+    CLUSTER_WIREGUARD_CONFIG_DIR, WIREGUARD_CONFIG_DIR, get_instance_config_dir, peer_config_lines,
+    stop_primary_interfaces, sync_interface_routes,
+)
 
 
 def clean_command_field(command_field):
@@ -43,8 +46,14 @@ def generate_peer_config(peer_uuid, server_address=None):
 
     dns_entries = [wg_instance.dns_primary, wg_instance.dns_secondary]
     dns_line = ", ".join(filter(None, dns_entries))
+    if dns_line and wg_instance.dns_search_domains:
+        dns_line += f", {wg_instance.dns_search_domains}"
 
-    if server_address:
+    hosting_worker = wg_instance.hosting_worker
+    if hosting_worker and hosting_worker.server_address:
+        # Distributed cluster mode: the instance only runs on this worker
+        endpoint = f"{hosting_worker.server_address}:{wg_instance.listen_port}"
+    elif server_address:
         endpoint = server_address
     else:
         endpoint = f"{wg_instance.hostname}:{wg_instance.listen_port}"
@@ -66,12 +75,7 @@ def generate_peer_config(peer_uuid, server_address=None):
 
 
 def export_firewall_configuration():
-    firewall_content = generate_firewall_header()
-    firewall_content += generate_redirect_dns_rules()
-    firewall_content += generate_port_forward_firewall()
-    firewall_content += generate_route_policy_rules()
-    firewall_content += export_user_firewall()
-    firewall_content += generate_firewall_footer()
+    firewall_content = generate_firewall_script()
     firewall_path = "/etc/wireguard/wg-firewall.sh"
     with open(firewall_path, "w") as firewall_file:
         firewall_file.write(firewall_content)
@@ -81,25 +85,22 @@ def export_firewall_configuration():
 
 def set_instance_to_include_firewall():
     firewall_settings, firewall_settings_created = FirewallSettings.objects.get_or_create(name='global')
-    if firewall_settings.instance_to_execute_firewall:
-        force_export_all_instances = False
-        instance_to_execute_firewall = firewall_settings.instance_to_execute_firewall
-    else:
-        force_export_all_instances = True
-        instance_to_execute_firewall = WireGuardInstance.objects.order_by('instance_id').first()
-        if instance_to_execute_firewall:
-            firewall_settings.instance_to_execute_firewall = instance_to_execute_firewall
-            firewall_settings.save()
-    return instance_to_execute_firewall, force_export_all_instances
+    instance_to_execute_firewall = firewall_settings.instance_to_execute_firewall
+    # The firewall script runs from the PostUp of an instance that runs on the primary server
+    if instance_to_execute_firewall and not instance_to_execute_firewall.hosting_worker:
+        return instance_to_execute_firewall, False
+
+    primary_instances = [
+        instance for instance in WireGuardInstance.objects.order_by('instance_id') if not instance.hosting_worker
+    ]
+    instance_to_execute_firewall = primary_instances[0] if primary_instances else None
+    if firewall_settings.instance_to_execute_firewall != instance_to_execute_firewall:
+        firewall_settings.instance_to_execute_firewall = instance_to_execute_firewall
+        firewall_settings.save()
+    return instance_to_execute_firewall, True
 
 
 def export_wireguard_configuration(instance_only: WireGuardInstance = None):
-    cluster_settings = ClusterSettings.objects.filter(name='cluster_settings', enabled=True).first()
-    if cluster_settings:
-        if WireGuardInstance.objects.filter(pending_changes=True).exists():
-            cluster_settings.config_version += 1
-            cluster_settings.save()
-
     cleanup_orphaned = True
     instance_to_execute_firewall, force_export_all_instances = set_instance_to_include_firewall()
 
@@ -109,24 +110,31 @@ def export_wireguard_configuration(instance_only: WireGuardInstance = None):
     else:
         instances = WireGuardInstance.objects.all()
 
-    base_dir = "/etc/wireguard"
-    os.makedirs(base_dir, exist_ok=True)
+    os.makedirs(WIREGUARD_CONFIG_DIR, exist_ok=True)
+    os.makedirs(CLUSTER_WIREGUARD_CONFIG_DIR, exist_ok=True)
+    config_dirs = {instance.uuid: get_instance_config_dir(instance) for instance in instances}
 
     firewall_inserted = False
 
-    if cleanup_orphaned:
-        active_instance_conf_set = {f"wg{instance.instance_id}.conf" for instance in instances}
-        for old_conf_file in glob.glob(os.path.join(base_dir, "wg[0-9]*.conf")):
+    for config_dir in (WIREGUARD_CONFIG_DIR, CLUSTER_WIREGUARD_CONFIG_DIR):
+        expected_conf_set = {
+            f"wg{instance.instance_id}.conf" for instance in instances if config_dirs[instance.uuid] == config_dir
+        }
+        if cleanup_orphaned:
+            orphaned_files = glob.glob(os.path.join(config_dir, "wg[0-9]*.conf"))
+        else:
+            # An exported instance may have moved between the primary server and a worker
+            orphaned_files = [
+                os.path.join(config_dir, f"wg{instance.instance_id}.conf")
+                for instance in instances if config_dirs[instance.uuid] != config_dir
+            ]
+        for old_conf_file in orphaned_files:
             filename = os.path.basename(old_conf_file)
-            if filename not in active_instance_conf_set:
-                logging.info("Removing abandoned WireGuard config: %s", filename)
+            if filename not in expected_conf_set and os.path.isfile(old_conf_file):
+                logging.info("Removing abandoned WireGuard config: %s", old_conf_file)
                 try:
                     os.remove(old_conf_file)
-                except FileNotFoundError:
-                    pass
-                except IsADirectoryError:
-                    continue
-                except PermissionError:
+                except (FileNotFoundError, PermissionError):
                     continue
 
     for instance in instances:
@@ -198,32 +206,13 @@ def export_wireguard_configuration(instance_only: WireGuardInstance = None):
         )
 
         for peer in peers:
-            allowed_ips = list(peer.peerallowedip_set.all())
-
-            if not allowed_ips:
-                prepend_line = "# "
-                peer_title = f"# WARNING: No Allowed IPs set for peer {peer}. "
-                allowed_ips_line = "# AllowedIPs = (missing)"
-            else:
-                prepend_line = ""
-                peer_title = f"# Peer: {peer}"
-                allowed_ips_line = prepend_line + "AllowedIPs = " + ", ".join(f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips)
-
-            peer_lines = [
-                peer_title,
-                f"{prepend_line}[Peer]",
-                f"{prepend_line}PublicKey = {peer.public_key}",
-            ]
-
-            if peer.pre_shared_key:
-                peer_lines.append(f"{prepend_line}PresharedKey = {peer.pre_shared_key}")
-            peer_lines.append(f"{prepend_line}PersistentKeepalive = {peer.persistent_keepalive}")
-            peer_lines.append(allowed_ips_line)
-            config_lines.extend(peer_lines)
-            config_lines.append("")
+            # Only one server connects to the remote endpoint of a peer
+            if peer.endpoint and peer.endpoint_worker != instance.hosting_worker:
+                continue
+            config_lines.extend(peer_config_lines(peer))
 
         config_content = "\n".join(config_lines)
-        config_path = os.path.join(base_dir, f"wg{instance.instance_id}.conf")
+        config_path = os.path.join(config_dirs[instance.uuid], f"wg{instance.instance_id}.conf")
 
         with open(config_path, "w") as config_file:
             config_file.write(config_content)
@@ -270,11 +259,16 @@ def download_config_or_qrcode(request):
         if not user_has_access_to_peer(user_acl, peer):
             raise Http404
 
+    # A peer with an endpoint is a remote server that this server connects to: it has no client configuration
+    if peer.endpoint:
+        raise Http404
+
     format_type = request.GET.get('format', 'conf')
     worker_uuid = request.GET.get('worker')
     server_address = None
 
-    if worker_uuid:
+    # In the distributed cluster mode the endpoint is always the server that runs the instance
+    if worker_uuid and not ClusterSettings.is_distributed():
         try:
             worker = Worker.objects.get(uuid=worker_uuid)
             server_address = f"{worker.server_address}:{peer.wireguard_instance.listen_port}"
@@ -317,6 +311,32 @@ def restart_wireguard_interfaces(request):
     config_dir = "/etc/wireguard"
     interface_count = 0
     error_count = 0
+
+    # Interfaces without a configuration on this server, such as instances moved to a worker
+    running_interfaces = subprocess.run(['wg', 'show', 'interfaces'], capture_output=True, text=True).stdout.split()
+    for interface_name in running_interfaces:
+        if re.fullmatch(r'wg[0-9]+', interface_name) and not os.path.isfile(os.path.join(config_dir, f'{interface_name}.conf')):
+            stop_result = subprocess.run(['ip', 'link', 'delete', interface_name], capture_output=True, text=True)
+            if stop_result.returncode != 0:
+                messages.warning(request, _("Error stopping") + f" {interface_name}|{stop_result.stderr}")
+                error_count += 1
+            else:
+                interface_count += 1
+
+    if not ClusterSettings.primary_serves_clients():
+        if not (user_acl.enable_reload if mode == 'reload' else user_acl.enable_restart):
+            return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
+        # WireGuard is disabled on the primary server in mirror mode: only the cluster workers run the instances
+        for interface_name, error in stop_primary_interfaces():
+            messages.warning(request, _("Error stopping") + f" {interface_name}|{error}")
+        messages.info(request, _(
+            "WireGuard disabled on the primary server|The interfaces of this server are stopped. Cluster workers "
+            "keep serving the peers."
+        ))
+        if request.GET.get('action') == 'dismiss_warning':
+            WireGuardInstance.objects.filter(pending_changes=True).update(pending_changes=False)
+        return redirect("/status/")
+
     for filename in os.listdir(config_dir):
         if filename.endswith(".conf"):
             interface_name = filename[:-5]
@@ -342,8 +362,9 @@ def restart_wireguard_interfaces(request):
                 result = subprocess.run(reload_command, shell=True, capture_output=True, text=True)
                 os.remove(temp_config_path)
 
-                if result.returncode != 0:
-                    messages.warning(request, _('Error reloading') + f" {interface_name}|{result.stderr}")
+                reload_error = result.stderr if result.returncode != 0 else '; '.join(sync_interface_routes(interface_name))
+                if reload_error:
+                    messages.warning(request, _('Error reloading') + f" {interface_name}|{reload_error}")
                     error_count += 1
                 else:
                     interface_count += 1
@@ -352,11 +373,13 @@ def restart_wireguard_interfaces(request):
                 if not user_acl.enable_restart:
                     return render(request, 'access_denied.html', {'page_title': 'Access Denied'})
 
-                stop_command = f"wg-quick down {interface_name}"
-                stop_result = subprocess.run(stop_command, shell=True, capture_output=True, text=True)
-                if stop_result.returncode != 0:
-                    messages.warning(request, _("Error stopping") + f" {interface_name}|{stop_result.stderr}")
-                    error_count += 1
+                # New instances and instances moved back from a worker are not running yet
+                if interface_name in running_interfaces:
+                    stop_command = f"wg-quick down {interface_name}"
+                    stop_result = subprocess.run(stop_command, shell=True, capture_output=True, text=True)
+                    if stop_result.returncode != 0:
+                        messages.warning(request, _("Error stopping") + f" {interface_name}|{stop_result.stderr}")
+                        error_count += 1
                 start_command = f"wg-quick up {interface_name}"
                 start_result = subprocess.run(start_command, shell=True, capture_output=True, text=True)
                 if start_result.returncode != 0:

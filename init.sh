@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# Containers sharing this network namespace (Caddy) restart themselves when it changes
+if [ -d /caddy_json_export ]; then
+    readlink /proc/self/ns/net > /caddy_json_export/.netns_owner
+fi
+
 # Lets wait for the DNS container to start
 sleep 5
 
@@ -11,13 +16,18 @@ python manage.py collectstatic --noinput
 # Export WireGuard, firewall and Caddy configs before bringing up interfaces
 python manage.py export_configs
 
-# Starts each WireGuard configuration file found in /etc/wireguard
+# Starts each WireGuard configuration file found in /etc/wireguard, unless the cluster settings disable WireGuard
+# on the primary server
 shopt -s nullglob
 config_files=(/etc/wireguard/*.conf)
 if [ ${#config_files[@]} -gt 0 ]; then
-    for f in "${config_files[@]}"; do
-        wg-quick up "$(basename "${f}" .conf)"
-    done
+    if python manage.py primary_wireguard_enabled; then
+        for f in "${config_files[@]}"; do
+            wg-quick up "$(basename "${f}" .conf)"
+        done
+    else
+        echo "WireGuard is disabled on the primary server, interfaces not started."
+    fi
 fi
 if [[ "${DEV_MODE,,}" == "true" ]]; then
     echo ""

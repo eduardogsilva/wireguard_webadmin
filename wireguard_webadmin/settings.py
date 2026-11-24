@@ -150,7 +150,9 @@ LANGUAGES = [
     ('es',    'Español'),
     ('fr',    'Français'),
     ('de',    'Deutsch'),
+    ('it',    'Italiano'),
     ('sk',    'Slovak'),
+    ('nl',    'Nederlands'),
 ]
 
 LOCALE_PATHS = [
@@ -174,10 +176,10 @@ WIREGUARD_STATUS_CACHE_WEB_LOAD_PREVIOUS_COUNT = 9
 DNS_CONFIG_FILE = '/etc/dnsmasq/wireguard_webadmin_dns.conf'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-WIREGUARD_WEBADMIN_VERSION = 9979
+WIREGUARD_WEBADMIN_VERSION = 9982
 
-CLUSTER_WORKER_CURRENT_VERSION = 11
-CLUSTER_WORKER_MINIMUM_VERSION = 11
+CLUSTER_WORKER_CURRENT_VERSION = 15
+CLUSTER_WORKER_MINIMUM_VERSION = 12
 
 CADDY_ENABLED = os.getenv("CADDY_ENABLED", "false").lower() == "true"
 

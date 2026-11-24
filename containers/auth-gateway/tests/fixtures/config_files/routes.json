@@ -1,0 +1,42 @@
+{
+  "entries": {
+    "cafe": {
+      "routes": []
+    },
+    "dashboard": {
+      "routes": [
+        {
+          "id": "admin",
+          "path_prefix": "/admin",
+          "policy": "password-totp"
+        },
+        {
+          "id": "api",
+          "path_prefix": "/api",
+          "policy": "trusted-ips"
+        }
+      ],
+      "default_policy": "staff-password"
+    },
+    "files": {
+      "routes": [],
+      "default_policy": "totp-only"
+    },
+    "hypervisor": {
+      "routes": [],
+      "default_policy": "trusted-ips"
+    },
+    "media": {
+      "routes": [],
+      "default_policy": "public"
+    },
+    "sso": {
+      "routes": [],
+      "default_policy": "oidc-company"
+    },
+    "wireguard_webadmin": {
+      "routes": [],
+      "default_policy": "public"
+    }
+  }
+}

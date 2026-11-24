@@ -1,5 +1,9 @@
 import re
 
+from fastapi import APIRouter, Request, Response
+from fastapi.responses import PlainTextResponse, RedirectResponse
+
+from auth_gateway.limiter import get_real_client_ip
 from auth_gateway.services.policy_engine import evaluate_ip_access, extract_client_ip
 from auth_gateway.services.resolver import resolve_request_context
 from auth_gateway.web.dependencies import (
@@ -7,10 +11,9 @@ from auth_gateway.web.dependencies import (
     get_effective_policy,
     get_runtime_config,
     get_session,
+    get_session_factors,
     session_is_allowed,
 )
-from fastapi import APIRouter, Request, Response
-from fastapi.responses import PlainTextResponse, RedirectResponse
 
 router = APIRouter()
 
@@ -32,7 +35,7 @@ async def auth_check(request: Request):
     if effective_policy.mode == "bypass":
         return PlainTextResponse("OK", status_code=200)
 
-    client_ip = extract_client_ip(request.headers.get("x-forwarded-for", ""))
+    client_ip = extract_client_ip(get_real_client_ip(request))
     ip_allowed = evaluate_ip_access(runtime_config, effective_policy, client_ip)
     if effective_policy.ip_method_names and not ip_allowed:
         return PlainTextResponse("Access denied for this IP address.", status_code=403)
@@ -44,7 +47,7 @@ async def auth_check(request: Request):
         login_url = build_external_url(request, "/login", next=context.path)
         return RedirectResponse(login_url, status_code=302)
 
-    current_factors = set(session.auth_factors if session else [])
+    current_factors = get_session_factors(session, effective_policy)
     if ip_allowed:
         current_factors.add("ip")
 
@@ -59,6 +62,7 @@ async def auth_check(request: Request):
     response = PlainTextResponse("OK", status_code=200)
     response.headers["Cache-Control"] = "no-store"
     if session:
+        request.app.state.session_service.touch(session)
         if session.username:
             response.headers["X-Auth-User"] = _safe_header(session.username)
         if session.email:

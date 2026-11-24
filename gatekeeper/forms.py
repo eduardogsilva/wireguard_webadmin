@@ -1,3 +1,4 @@
+import binascii
 import ipaddress
 import re
 
@@ -107,8 +108,10 @@ class GatekeeperUserForm(forms.ModelForm):
                     totp = pyotp.TOTP(totp_secret)
                     if not totp.verify(totp_pin):
                         self.add_error('totp_pin', _('Invalid TOTP PIN.'))
-                except Exception:
+                except binascii.Error:
                     self.add_error('totp_secret', _('Invalid TOTP secret format. Must be a valid Base32 string.'))
+                except ValueError:
+                    self.add_error('totp_secret', _('TOTP secret is too short. It must be at least 24 characters long.'))
 
         return cleaned_data
 
@@ -279,8 +282,10 @@ class AuthMethodForm(forms.ModelForm):
                         totp = pyotp.TOTP(totp_secret)
                         if not totp.verify(totp_pin):
                             self.add_error('totp_pin', _('Invalid TOTP PIN.'))
-                    except Exception:
+                    except binascii.Error:
                         self.add_error('totp_secret', _('Invalid TOTP secret format. Must be a valid Base32 string.'))
+                    except ValueError:
+                        self.add_error('totp_secret', _('TOTP secret is too short. It must be at least 24 characters long.'))
         elif auth_type == 'oidc':
             self.add_error('auth_type', _('OIDC authentication is temporarily unavailable and will be available soon.'))
             if totp_secret:

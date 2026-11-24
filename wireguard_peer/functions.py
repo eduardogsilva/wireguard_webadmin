@@ -1,3 +1,4 @@
+import ipaddress
 import subprocess
 from typing import Any, Dict, Optional, Tuple
 
@@ -6,6 +7,27 @@ from django.utils.translation import gettext_lazy as _
 from routing_templates.models import RoutingTemplate
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 
+
+def find_network_in_other_instance(wireguard_instance, allowed_ip, netmask):
+    """
+    Server side network of a peer of another instance that is the same as the given one. Each instance routes its
+    peer networks to its own interface, so the same network on two instances cannot be routed: the second interface
+    fails to start.
+    """
+    try:
+        network = ipaddress.ip_network(f'{allowed_ip}/{netmask}', strict=False)
+    except ValueError:
+        return None
+    other_networks = PeerAllowedIP.objects.filter(config_file='server').exclude(
+        peer__wireguard_instance=wireguard_instance
+    ).select_related('peer__wireguard_instance')
+    for other_network in other_networks:
+        try:
+            if ipaddress.ip_network(f'{other_network.allowed_ip}/{other_network.netmask}', strict=False) == network:
+                return other_network
+        except ValueError:
+            continue
+    return None
 
 def generate_peer_default(wireguard_instance):
     private_key = subprocess.check_output('wg genkey', shell=True).decode('utf-8').strip()
@@ -42,6 +64,8 @@ def func_create_new_peer(
       - allowed_ip
       - default_routing_template
       - allowed_ip_netmask (defaults to 32)
+      - endpoint
+      - active_worker
     """
     new_peer_data = generate_peer_default(wireguard_instance)
 
@@ -54,7 +78,15 @@ def func_create_new_peer(
             raise ValueError(f'Override not allowed: {k}')
 
     if overrides.get('allowed_ip'):
-        if not wireguard_instance.check_available_ip_address(overrides.get('allowed_ip')):
+        if overrides.get('endpoint'):
+            # A remote WireGuard server may use a tunnel address outside the network of this instance
+            try:
+                ipaddress.IPv4Address(str(overrides['allowed_ip']).strip())
+            except ValueError:
+                return None, str(_('Error creating peer|The specified IP address is not available.'))
+            if PeerAllowedIP.objects.filter(config_file='server', priority=0, allowed_ip=overrides['allowed_ip']).exists():
+                return None, str(_('Error creating peer|The specified IP address is not available.'))
+        elif not wireguard_instance.check_available_ip_address(overrides.get('allowed_ip')):
             return None, str(_('Error creating peer|The specified IP address is not available.'))
 
     # apply overrides last
@@ -71,6 +103,8 @@ def func_create_new_peer(
             private_key=new_peer_data.get('private_key'),
             wireguard_instance=wireguard_instance,
             routing_template=new_peer_data.get('default_routing_template'),
+            endpoint=new_peer_data.get('endpoint') or '',
+            active_worker=new_peer_data.get('active_worker') if new_peer_data.get('endpoint') else None,
         )
 
         PeerAllowedIP.objects.create(

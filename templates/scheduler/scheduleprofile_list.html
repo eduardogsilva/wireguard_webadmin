@@ -21,12 +21,22 @@
                     <td>{{ profile.name }}</td>
                     <td>{{ profile.peerscheduling_set.count }}</td>
                     <td class="text-nowrap">
-                        <a href="{% url 'manage_scheduler_profile' %}?uuid={{ profile.uuid }}"
-                            class="btn btn-sm btn-info" title="{% trans 'Edit' %}">
+                        <a
+                            {% if user_acl.user_level >= 30 %}
+                                href="{% url 'manage_scheduler_profile' %}?uuid={{ profile.uuid }}" class="btn btn-sm btn-info"
+                            {% else %}
+                                href="#" class="btn btn-sm btn-info disabled"
+                            {% endif %}
+                            title="{% trans 'Edit' %}">
                             <i class="far fa-edit"></i>
                         </a>
-                        <a href="{% url 'delete_scheduler_profile' %}?uuid={{ profile.uuid }}"
-                            class="btn btn-sm btn-danger" title="{% trans 'Delete' %}">
+                        <a
+                            {% if user_acl.user_level >= 30 %}
+                                href="{% url 'delete_scheduler_profile' %}?uuid={{ profile.uuid }}" class="btn btn-sm btn-danger"
+                            {% else %}
+                                href="#" class="btn btn-sm btn-danger disabled"
+                            {% endif %}
+                            title="{% trans 'Delete' %}">
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>
@@ -40,7 +50,13 @@
         </table>
     </div>
     <div class="card-footer">
-        <a href="{% url 'manage_scheduler_profile' %}" class="btn btn-primary">
+        <a
+            {% if user_acl.user_level >= 30 %}
+                href="{% url 'manage_scheduler_profile' %}" class="btn btn-primary"
+            {% else %}
+                href="#" class="btn btn-primary disabled"
+            {% endif %}
+        >
             <i class="fas fa-plus"></i> {% trans 'Add Profile' %}
         </a>
     </div>

@@ -1,8 +1,26 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n static %}
+
+{% block page_custom_head %}
+{% if active_tab == 'sessions' and gateway_sessions %}
+    <link rel="stylesheet" href="{% static 'AdminLTE-3.2.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'AdminLTE-3.2.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+    <style>
+        /* The column menu of DataTables Buttons has no dark mode of its own */
+        .dark-mode div.dt-button-collection {
+            background-color: #343a40;
+            border-color: #6c757d;
+        }
+        .dark-mode div.dt-button-collection .dropdown-item:not(.active):hover {
+            background-color: #495057;
+        }
+    </style>
+{% endif %}
+{% endblock %}
 
 {% block content %}
 {% include 'app_gateway/caddy_disabled_alert.html' %}
+{% include 'app_gateway/pending_export_alert.html' %}
 <div class="card card-primary card-outline">
     <div class="card-body">
         
@@ -29,6 +47,12 @@
                 <a class="nav-link {% if active_tab == 'ip_addresses' %}active{% endif %}"
                    href="{% url 'gatekeeper_list' %}?tab=ip_addresses" role="tab">
                     {% trans 'IP Addresses' %}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if active_tab == 'sessions' %}active{% endif %}"
+                   href="{% url 'gatekeeper_list' %}?tab=sessions" role="tab">
+                    {% trans 'Sessions' %}
                 </a>
             </li>
         </ul>
@@ -310,10 +334,121 @@
                         {% trans 'No IP Addresses found.' %}
                     </div>
                 {% endif %}
-            
+
+            {% elif active_tab == 'sessions' %}
+                <p class="text-muted">
+                    {% trans 'Sessions opened on the App Gateway login. A session is online when it was used in the last 10 minutes. Sessions of cluster workers are the last ones each worker reported.' %}
+                </p>
+                {% if gateway_sessions %}
+                    <table id="gateway-sessions-table" class="table table-striped table-hover w-100">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'User' %}</th>
+                                <th>{% trans 'Server' %}</th>
+                                <th>{% trans 'Host' %}</th>
+                                <th>{% trans 'Last access' %}</th>
+                                <th>{% trans 'IP Address' %}</th>
+                                <th>{% trans 'Factors' %}</th>
+                                <th>{% trans 'Started' %}</th>
+                                <th>{% trans 'Expires' %}</th>
+                                <th>{% trans 'Browser' %}</th>
+                                <th class="no-colvis">{% trans 'Manage' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for session in gateway_sessions %}
+                                <tr>
+                                    <td data-order="{{ session.username|default:session.email|lower }}">
+                                        {{ session.username|default:session.email|default:'-' }}
+                                        {% if session.username and session.email %}<br><small class="text-muted">{{ session.email }}</small>{% endif %}
+                                    </td>
+                                    <td data-order="{{ session.server_name|default:'' }}">
+                                        {{ session.server_name|default:_('Primary Server') }}
+                                        {% if session.stale %}<br><span class="badge badge-secondary" title="{% trans 'Last report' %}: {{ session.reported_at|date:'SHORT_DATETIME_FORMAT' }}">{% trans 'Worker offline' %}</span>{% endif %}
+                                    </td>
+                                    <td>{{ session.host|default:'-' }}</td>
+                                    <td data-order="{% if session.online %}9999-12-31{% else %}{{ session.last_seen|default:'' }}{% endif %}">
+                                        {% if session.online %}
+                                            <span class="badge badge-success">{% trans 'Online' %}</span>
+                                        {% else %}
+                                            {{ session.last_seen_at|date:'SHORT_DATETIME_FORMAT'|default:'-' }}
+                                        {% endif %}
+                                    </td>
+                                    <td data-order="{{ session.client_ip_order }}">{{ session.client_ip|default:'-' }}</td>
+                                    <td>{{ session.factors|join:', '|default:'-' }}</td>
+                                    <td data-order="{{ session.created_at|default:'' }}">{{ session.created|date:'SHORT_DATETIME_FORMAT' }}</td>
+                                    <td data-order="{{ session.expires_at|default:'' }}">{{ session.expires|date:'SHORT_DATETIME_FORMAT' }}</td>
+                                    <td><small title="{{ session.user_agent }}">{{ session.user_agent|truncatechars:60|default:'-' }}</small></td>
+                                    <td class="text-nowrap">
+                                        {% if session.revoking %}
+                                            <span class="badge badge-warning">{% trans 'Ending' %}</span>
+                                        {% else %}
+                                            <form method="post" action="{% url 'revoke_gatekeeper_session' %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="session" value="{{ session.id }}">
+                                                <button type="submit" class="btn btn-sm btn-danger" title="{% trans 'End session' %}">
+                                                    <i class="fas fa-sign-out-alt"></i>
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-info">
+                        {% trans 'No active sessions.' %}
+                    </div>
+                {% endif %}
+
             {% endif %}
         </div>
 
     </div>
 </div>
+{% endblock %}
+
+{% block custom_page_scripts %}
+{% if active_tab == 'sessions' and gateway_sessions %}
+    <script src="{% static 'AdminLTE-3.2.0/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'AdminLTE-3.2.0/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'AdminLTE-3.2.0/plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+    <script>
+        $(function () {
+            $('#gateway-sessions-table').DataTable({
+                // Visible columns and sorting chosen by the user are kept in this browser
+                stateSave: true,
+                stateDuration: 0,
+                stateSaveParams: function (settings, data) {
+                    data.search.search = '';
+                    data.start = 0;
+                },
+                order: [[3, 'desc'], [0, 'asc']],
+                pageLength: 25,
+                autoWidth: false,
+                columnDefs: [
+                    {targets: [4, 5, 6, 7, 8], visible: false},
+                    {targets: 9, orderable: false, searchable: false},
+                ],
+                dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                     "<'row'<'col-sm-12 table-responsive'tr>>" +
+                     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                buttons: [
+                    {extend: 'colvis', text: '<i class="fas fa-columns"></i> {% trans "Columns"|escapejs %}', columns: ':not(.no-colvis)'},
+                ],
+                language: {
+                    search: '{% trans "Search:"|escapejs %}',
+                    info: '{% trans "Showing _START_ to _END_ of _TOTAL_ sessions"|escapejs %}',
+                    infoEmpty: '{% trans "No sessions to show"|escapejs %}',
+                    infoFiltered: '{% trans "(filtered from _MAX_ sessions)"|escapejs %}',
+                    zeroRecords: '{% trans "No matching sessions"|escapejs %}',
+                    paginate: {previous: '{% trans "Previous"|escapejs %}', next: '{% trans "Next"|escapejs %}'},
+                },
+            });
+        });
+    </script>
+{% endif %}
 {% endblock %}

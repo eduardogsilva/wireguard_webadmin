@@ -13,6 +13,7 @@ class ApiKeyForm(forms.ModelForm):
         fields = [
             'name',
             'allowed_instances',
+            'manage_cluster',
             #'allow_restart',
             #'allow_reload',
             #'allow_export',
@@ -54,6 +55,10 @@ class ApiKeyForm(forms.ModelForm):
             #    Column('allow_export', css_class='form-group col-md-4 mb-0'),
             #    css_class='form-row'
             #),
+            Row(
+                Column('manage_cluster', css_class='form-group col-md-12 mb-0'),
+                css_class='form-row'
+            ),
              Row(
                 Column('enabled', css_class='form-group col-md-12 mb-0'),
                 css_class='form-row'

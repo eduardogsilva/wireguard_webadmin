@@ -1,6 +1,6 @@
-FROM ubuntu:latest
+FROM debian:trixie-slim
 
-RUN apt-get update && apt-get install -y cron curl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends cron curl ca-certificates procps && rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.sh /entrypoint.sh
 COPY cron_runner.sh /cron_runner.sh

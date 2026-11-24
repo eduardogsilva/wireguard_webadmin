@@ -1,0 +1,137 @@
+{
+  "auth_methods": {
+    "ip-allowlist": {
+      "type": "ip_address",
+      "rules": [
+        {
+          "address": "10.10.0.1",
+          "prefix_length": null,
+          "action": "allow",
+          "description": ""
+        },
+        {
+          "address": "10.20.0.0",
+          "prefix_length": 24,
+          "action": "allow",
+          "description": ""
+        },
+        {
+          "address": "10.20.0.12",
+          "prefix_length": null,
+          "action": "deny",
+          "description": ""
+        },
+        {
+          "address": "10.30.0.15",
+          "prefix_length": null,
+          "action": "allow",
+          "description": ""
+        }
+      ]
+    },
+    "ip-empty": {
+      "type": "ip_address",
+      "rules": []
+    },
+    "local-password": {
+      "type": "local_password",
+      "session_expiration_minutes": 720
+    },
+    "oidc-company": {
+      "type": "oidc",
+      "session_expiration_minutes": 2880,
+      "provider": "https://idp.example.test",
+      "client_id": "fixture-client",
+      "client_secret": "fixture-client-secret",
+      "allowed_domains": [
+        "example.test"
+      ],
+      "allowed_emails": [
+        "contractor@partner.example.test"
+      ]
+    },
+    "totp-global": {
+      "type": "totp",
+      "totp_secret": "JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP"
+    }
+  },
+  "groups": {
+    "staff": {
+      "users": [
+        "alice",
+        "bob"
+      ]
+    }
+  },
+  "users": {
+    "alice": {
+      "email": "alice@example.test",
+      "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$bEzFGMfGGK4rdHKhmwwMqw$1J+Ss48IEK1Q4Vpy0RaS+FHIZOjhjhE4MK5C5pzDzHg",
+      "totp_secret": ""
+    },
+    "bob": {
+      "email": "",
+      "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$bEzFGMfGGK4rdHKhmwwMqw$1J+Ss48IEK1Q4Vpy0RaS+FHIZOjhjhE4MK5C5pzDzHg",
+      "totp_secret": "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ"
+    }
+  },
+  "policies": {
+    "deny": {
+      "policy_type": "deny",
+      "groups": [],
+      "methods": []
+    },
+    "empty-ip-list": {
+      "policy_type": "protected",
+      "groups": [],
+      "methods": [
+        "ip-empty"
+      ]
+    },
+    "oidc-company": {
+      "policy_type": "protected",
+      "groups": [],
+      "methods": [
+        "oidc-company"
+      ]
+    },
+    "password-totp": {
+      "policy_type": "protected",
+      "groups": [
+        "staff"
+      ],
+      "methods": [
+        "local-password",
+        "totp-global"
+      ]
+    },
+    "public": {
+      "policy_type": "bypass",
+      "groups": [],
+      "methods": []
+    },
+    "staff-password": {
+      "policy_type": "protected",
+      "groups": [
+        "staff"
+      ],
+      "methods": [
+        "local-password"
+      ]
+    },
+    "totp-only": {
+      "policy_type": "protected",
+      "groups": [],
+      "methods": [
+        "totp-global"
+      ]
+    },
+    "trusted-ips": {
+      "policy_type": "protected",
+      "groups": [],
+      "methods": [
+        "ip-allowlist"
+      ]
+    }
+  }
+}

@@ -6,16 +6,16 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from cluster.models import ClusterSettings, Worker
+from cluster.models import ClusterSettings
 from routing_templates.models import RoutingTemplate
 from scheduler.models import PeerScheduling
 from user_manager.models import UserAcl
 from wgwadmlibrary.tools import check_sort_order_conflict, deduplicate_sort_order, default_sort_peers, \
     user_allowed_instances, user_allowed_peers, user_has_access_to_instance, user_has_access_to_peer
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
-from wireguard_peer.forms import PeerAllowedIPForm, PeerNameForm, PeerKeepaliveForm, PeerKeysForm, PeerSuspensionForm, \
-    PeerScheduleProfileForm
-from wireguard_tools.functions import func_reload_wireguard_interface
+from wireguard_peer.forms import PeerAllowedIPForm, PeerEndpointForm, PeerNameForm, PeerKeepaliveForm, PeerKeysForm, \
+    PeerSuspensionForm, PeerScheduleProfileForm
+from wireguard_tools.functions import func_reload_wireguard_interface, get_config_servers
 from wireguard_tools.views import export_wireguard_configuration
 from .functions import func_create_new_peer
 
@@ -24,6 +24,18 @@ def _auto_apply(request, instance):
     if not settings.AUTO_APPLY:
         return False
     export_wireguard_configuration(instance)
+    hosting_worker = instance.hosting_worker
+    if hosting_worker:
+        messages.info(request, _('wg%(id)s runs on %(worker)s, which applies the change on its next synchronization.') % {
+            'id': instance.instance_id, 'worker': hosting_worker
+        })
+        return True
+    if not ClusterSettings.primary_serves_clients():
+        messages.info(request, _(
+            'WireGuard is disabled on the primary server. The cluster workers apply the change on their next '
+            'synchronization.'
+        ))
+        return True
     success, message = func_reload_wireguard_interface(instance)
     if success:
         messages.info(request, _('wg%(id)s reloaded automatically.') % {'id': instance.instance_id})
@@ -88,13 +100,7 @@ def view_wireguard_peer_list(request):
         refresh_interval = settings.WIREGUARD_STATUS_CACHE_REFRESH_INTERVAL
 
     cluster_settings = ClusterSettings.objects.filter(name='cluster_settings', enabled=True).first()
-    servers = []
-    if cluster_settings:
-        if cluster_settings.primary_enable_wireguard:
-            servers.append({'name': _('Primary Server'), 'uuid': ''})
-        
-        for worker in Worker.objects.filter(enabled=True):
-            servers.append({'name': worker.display_name, 'uuid': str(worker.uuid)})
+    servers = get_config_servers(current_instance)
 
     context = {
         'page_title': page_title, 'wireguard_instances': wireguard_instances,
@@ -208,7 +214,8 @@ def view_wireguard_peer_manage(request):
     context = {
         'page_title': page_title, 'current_instance': current_instance, 'current_peer': current_peer,
         'peer_ip_list': peer_ip_list, 'peer_client_ip_list': peer_client_ip_list,
-        'peer_scheduling': peer_scheduling
+        'peer_scheduling': peer_scheduling,
+        'show_active_worker': ClusterSettings.cluster_enabled() and not ClusterSettings.is_distributed(),
         }
     return render(request, 'wireguard/wireguard_manage_peer.html', context)
 
@@ -227,7 +234,8 @@ def view_wireguard_peer_edit_field(request):
     form_classes = {
         'name': PeerNameForm,
         'keepalive': PeerKeepaliveForm,
-        'keys': PeerKeysForm
+        'keys': PeerKeysForm,
+        'endpoint': PeerEndpointForm,
     }
     
     if group not in form_classes:
@@ -251,11 +259,36 @@ def view_wireguard_peer_edit_field(request):
         page_title = _('Edit Keepalive')
     elif group == 'keys':
         page_title = _('Edit Keys')
+    elif group == 'endpoint':
+        page_title = _('Edit Endpoint')
 
     context = {
         'page_title': page_title,
         'form': form,
     }
+    if group == 'endpoint':
+        context['form_description'] = {
+            'size': 'col-lg-6',
+            'content': _('''
+            <h5>Endpoint</h5>
+            <p>When an endpoint is set, this server connects to a remote WireGuard server instead of waiting for the peer to connect. Use it to reach the networks behind a router or another server. Example: <code>vpn.example.com:51820</code>.</p>
+
+            <h5>Keys</h5>
+            <p>The public key of this peer is the public key of the remote server. The remote server must have the public key of this instance configured. The pre-shared key is optional.</p>
+
+            <h5>Addresses</h5>
+            <p>The main address of this peer may be outside the network of the instance. Add the remote networks as allowed IPs of this peer.</p>
+            ''')
+        }
+        if 'active_worker' in form.fields:
+            context['form_description']['content'] += _('''
+            <h5>Connected server</h5>
+            <p>Only one cluster server connects to the endpoint. When empty, the primary server connects to it.</p>
+            ''')
+        context['form_description']['content'] += _('''
+            <h5>Client configuration</h5>
+            <p>Peers with an endpoint have no configuration to download, QR code or VPN invite.</p>
+            ''')
     return render(request, 'generic_form.html', context)
 
 

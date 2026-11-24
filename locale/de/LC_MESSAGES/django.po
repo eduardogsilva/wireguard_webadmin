@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-24 16:01-0300\n"
+"POT-Creation-Date: 2026-11-23 20:32-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: api_v2/forms.py:29 cluster/forms.py:27 cluster/forms.py:103 dns/forms.py:25
+#: api_v2/forms.py:30 cluster/forms.py:28 cluster/forms.py:105 dns/forms.py:25
 #: dns/forms.py:68 dns/forms.py:128 routing_templates/forms.py:36
+#: templates/app_gateway/application_host_form.html:23
 #: templates/firewall/manage_firewall_rule.html:380
 #: templates/firewall/manage_firewall_settings.html:60
 #: templates/firewall/manage_redirect_rule.html:85
@@ -26,37 +27,38 @@ msgstr ""
 #: templates/wireguard/peer_list/peer_preview_modal.html:79
 #: templates/wireguard/wireguard_manage_ip.html:42 user_manager/forms.py:49
 #: user_manager/forms.py:180 vpn_invite/forms.py:192 vpn_invite/forms.py:326
-#: wireguard/forms.py:51 wireguard_peer/forms.py:27 wireguard_peer/forms.py:156
-#: wireguard_peer/forms.py:210
+#: wireguard/forms.py:71 wireguard_peer/forms.py:30 wireguard_peer/forms.py:124
+#: wireguard_peer/forms.py:241 wireguard_peer/forms.py:295
 msgid "Back"
 msgstr "Zurück"
 
-#: api_v2/forms.py:30 cluster/forms.py:28 dns/forms.py:69 dns/forms.py:129
+#: api_v2/forms.py:31 cluster/forms.py:29 dns/forms.py:69 dns/forms.py:129
 #: routing_templates/forms.py:37
-#: templates/app_gateway/app_gateway_list.html:166
-#: templates/app_gateway/application_details.html:103
-#: templates/app_gateway/application_details.html:154
+#: templates/app_gateway/app_gateway_list.html:177
+#: templates/app_gateway/app_gateway_list.html:224
+#: templates/app_gateway/application_details.html:116
+#: templates/app_gateway/application_details.html:167
 #: templates/firewall/manage_firewall_rule.html:382
 #: templates/firewall/manage_redirect_rule.html:86
-#: templates/gatekeeper/gatekeeper_list.html:94
-#: templates/gatekeeper/gatekeeper_list.html:137
-#: templates/gatekeeper/gatekeeper_list.html:182
-#: templates/gatekeeper/gatekeeper_list.html:230
-#: templates/gatekeeper/gatekeeper_list.html:247
-#: templates/gatekeeper/gatekeeper_list.html:299
+#: templates/gatekeeper/gatekeeper_list.html:118
+#: templates/gatekeeper/gatekeeper_list.html:161
+#: templates/gatekeeper/gatekeeper_list.html:206
+#: templates/gatekeeper/gatekeeper_list.html:254
+#: templates/gatekeeper/gatekeeper_list.html:271
+#: templates/gatekeeper/gatekeeper_list.html:323
 #: templates/scheduler/scheduleprofile_form.html:127
-#: templates/scheduler/scheduleprofile_list.html:29
+#: templates/scheduler/scheduleprofile_list.html:39
 #: templates/wireguard/peer_list/peer_preview_modal.html:109
 #: templates/wireguard/wireguard_manage_ip.html:43 user_manager/forms.py:48
-#: user_manager/forms.py:181 wireguard/forms.py:52
+#: user_manager/forms.py:181 wireguard/forms.py:72
 msgid "Delete"
 msgstr "Löschen"
 
-#: api_v2/forms.py:31
+#: api_v2/forms.py:32
 msgid "Regenerate Token"
 msgstr "Token regenerieren"
 
-#: api_v2/forms.py:37
+#: api_v2/forms.py:38
 msgid ""
 "Are you sure you want to regenerate the token? The old token will stop "
 "working immediately."
@@ -64,12 +66,12 @@ msgstr ""
 "Sind Sie sicher, dass Sie das Token neu generieren möchten? Das alte Token "
 "wird sofort ungültig."
 
-#: api_v2/forms.py:63 app_gateway/forms.py:41 app_gateway/forms.py:99
-#: app_gateway/forms.py:144 app_gateway/forms.py:162 app_gateway/forms.py:241
-#: app_gateway/forms.py:283 cluster/forms.py:67 cluster/forms.py:124
-#: dns/forms.py:37 dns/forms.py:84 dns/forms.py:153 gatekeeper/forms.py:71
-#: gatekeeper/forms.py:152 gatekeeper/forms.py:239 gatekeeper/forms.py:362
-#: gatekeeper/forms.py:392 gatekeeper/forms.py:423
+#: api_v2/forms.py:68 app_gateway/forms.py:78 app_gateway/forms.py:204
+#: app_gateway/forms.py:249 app_gateway/forms.py:267 app_gateway/forms.py:346
+#: app_gateway/forms.py:388 app_gateway/forms.py:478 cluster/forms.py:70
+#: cluster/forms.py:122 dns/forms.py:37 dns/forms.py:84 dns/forms.py:153
+#: gatekeeper/forms.py:72 gatekeeper/forms.py:155 gatekeeper/forms.py:242
+#: gatekeeper/forms.py:367 gatekeeper/forms.py:397 gatekeeper/forms.py:428
 #: routing_templates/forms.py:71 scheduler/forms.py:102
 #: templates/firewall/manage_firewall_rule.html:379
 #: templates/firewall/manage_firewall_settings.html:59
@@ -77,30 +79,33 @@ msgstr ""
 #: templates/scheduler/scheduleprofile_form.html:200
 #: templates/wireguard/wireguard_manage_ip.html:41 user_manager/forms.py:98
 #: user_manager/forms.py:205 vpn_invite/forms.py:191 vpn_invite/forms.py:325
-#: wireguard/forms.py:100 wireguard_peer/forms.py:26
-#: wireguard_peer/forms.py:205
+#: wireguard/forms.py:128 wireguard_peer/forms.py:29
+#: wireguard_peer/forms.py:123 wireguard_peer/forms.py:290
 msgid "Save"
 msgstr "Speichern"
 
-#: api_v2/models.py:10 app_gateway/forms.py:18 app_gateway/forms.py:113
-#: cluster/forms.py:18 dns/forms.py:130 gatekeeper/forms.py:188
-#: routing_templates/forms.py:28 templates/api_v2/api_documentation.html:47
-#: templates/api_v2/list.html:8 templates/app_gateway/app_gateway_list.html:66
-#: templates/app_gateway/app_gateway_list.html:146
-#: templates/app_gateway/application_details.html:35
-#: templates/cluster/workers_list.html:8 templates/dns/static_host_list.html:68
-#: templates/gatekeeper/gatekeeper_list.html:166
+#: api_v2/models.py:10 app_gateway/forms.py:26 app_gateway/forms.py:218
+#: app_gateway/forms.py:424 cluster/forms.py:19 dns/forms.py:130
+#: gatekeeper/forms.py:191 routing_templates/forms.py:28
+#: templates/api_v2/api_documentation.html:47 templates/api_v2/list.html:8
+#: templates/app_gateway/app_gateway_list.html:73
+#: templates/app_gateway/app_gateway_list.html:157
+#: templates/app_gateway/app_gateway_list.html:204
+#: templates/app_gateway/application_details.html:36
+#: templates/app_gateway/application_host_form.html:37
+#: templates/dns/static_host_list.html:68
+#: templates/gatekeeper/gatekeeper_list.html:190
 #: templates/routing_templates/list.html:8
 #: templates/scheduler/scheduleprofile_list.html:13
 #: templates/user_manager/peer_group_list.html:8
 #: templates/wireguard/server_detail.html:12
 #: templates/wireguard/server_list.html:19
 #: templates/wireguard/wireguard_manage_peer.html:15 user_manager/forms.py:177
-#: wireguard_peer/forms.py:32
+#: wireguard_peer/forms.py:35
 msgid "Name"
 msgstr "Name"
 
-#: api_v2/models.py:11 cluster/forms.py:25 templates/api_v2/list.html:9
+#: api_v2/models.py:11 cluster/forms.py:26 templates/api_v2/list.html:9
 msgid "Token"
 msgstr "Token"
 
@@ -120,23 +125,38 @@ msgstr "Neuladen erlauben"
 msgid "Allow Export"
 msgstr "Export erlauben"
 
-#: api_v2/models.py:16 cluster/forms.py:19 templates/api_v2/list.html:11
-#: templates/api_v2/list.html:41 templates/cluster/workers_list.html:96
-#: vpn_invite/forms.py:49 vpn_invite/forms.py:294
+#: api_v2/models.py:17 templates/api_v2/list.html:15
+msgid "Manage Cluster"
+msgstr "Cluster verwalten"
+
+#: api_v2/models.py:18
+msgid ""
+"Allows enabling and disabling cluster workers and WireGuard on the primary "
+"server."
+msgstr ""
+"Erlaubt das Aktivieren und Deaktivieren der Cluster-Worker und von WireGuard "
+"auf dem primären Server."
+
+#: api_v2/models.py:20 cluster/forms.py:20 templates/api_v2/list.html:11
+#: templates/api_v2/list.html:42 templates/cluster/worker_details.html:62
+#: templates/cluster/workers_list.html:61 vpn_invite/forms.py:49
+#: vpn_invite/forms.py:294
 msgid "Enabled"
 msgstr "Aktiviert"
 
 #: api_v2/views.py:17 api_v2/views.py:27 api_v2/views.py:82 api_v2/views.py:106
-#: app_gateway/views.py:28 app_gateway/views.py:52 app_gateway/views.py:83
-#: app_gateway/views.py:130 app_gateway/views.py:157 app_gateway/views.py:196
-#: app_gateway/views.py:224 app_gateway/views.py:235 app_gateway/views.py:297
-#: app_gateway/views.py:323 app_gateway/views.py:358 app_gateway/views.py:384
-#: app_gateway/views.py:434 app_gateway/views.py:462 cluster/views.py:18
-#: cluster/views.py:45 cluster/views.py:114 gatekeeper/views.py:25
-#: gatekeeper/views.py:52 gatekeeper/views.py:102 gatekeeper/views.py:125
-#: gatekeeper/views.py:155 gatekeeper/views.py:178 gatekeeper/views.py:226
-#: gatekeeper/views.py:297 gatekeeper/views.py:327 gatekeeper/views.py:350
-#: gatekeeper/views.py:380 gatekeeper/views.py:403 gatekeeper/views.py:452
+#: app_gateway/views.py:39 app_gateway/views.py:66 app_gateway/views.py:121
+#: app_gateway/views.py:181 app_gateway/views.py:232 app_gateway/views.py:260
+#: app_gateway/views.py:334 app_gateway/views.py:363 app_gateway/views.py:374
+#: app_gateway/views.py:437 app_gateway/views.py:464 app_gateway/views.py:500
+#: app_gateway/views.py:527 app_gateway/views.py:578 app_gateway/views.py:607
+#: app_gateway/views.py:630 app_gateway/views.py:667 app_gateway/views.py:695
+#: cluster/views.py:56 cluster/views.py:102 cluster/views.py:148
+#: cluster/views.py:215 gatekeeper/views.py:28 gatekeeper/views.py:58
+#: gatekeeper/views.py:73 gatekeeper/views.py:124 gatekeeper/views.py:148
+#: gatekeeper/views.py:179 gatekeeper/views.py:203 gatekeeper/views.py:252
+#: gatekeeper/views.py:324 gatekeeper/views.py:355 gatekeeper/views.py:379
+#: gatekeeper/views.py:410 gatekeeper/views.py:434 gatekeeper/views.py:484
 #: templates/access_denied.html:9
 msgid "Access Denied"
 msgstr "Zugriff verweigert"
@@ -149,7 +169,7 @@ msgstr "API-Schlüssel"
 msgid "Edit API Key: "
 msgstr "API-Schlüssel bearbeiten: "
 
-#: api_v2/views.py:35 templates/api_v2/list.html:80
+#: api_v2/views.py:35 templates/api_v2/list.html:88
 msgid "Add API Key"
 msgstr "API-Schlüssel hinzufügen"
 
@@ -203,45 +223,90 @@ msgid "Are you sure you want to delete the API Key \"%(name)s\"?"
 msgstr ""
 "Sind Sie sicher, dass Sie den API-Schlüssel \"%(name)s\" löschen möchten?"
 
-#: api_v2/views.py:140 templates/api_v2/list.html:83
+#: api_v2/views.py:140 templates/api_v2/list.html:91
 msgid "API Documentation"
 msgstr "API-Dokumentation"
 
-#: app_gateway/forms.py:19 templates/app_gateway/app_gateway_list.html:67
-#: templates/app_gateway/application_details.html:36
+#: app_gateway/caddy_config_export.py:328
+msgid "Gateway configuration applied automatically."
+msgstr "Gateway-Konfiguration automatisch angewendet."
+
+#: app_gateway/dns_providers.py:14
+msgid "API Token"
+msgstr "API-Token"
+
+#: app_gateway/forms.py:27 templates/app_gateway/app_gateway_list.html:74
+#: templates/app_gateway/application_details.html:37
 msgid "Upstream"
 msgstr "Upstream"
 
-#: app_gateway/forms.py:20
+#: app_gateway/forms.py:28
 msgid "Allow invalid/self-signed certificate"
 msgstr "Ungültiges/selbstsigniertes Zertifikat zulassen"
 
-#: app_gateway/forms.py:42 app_gateway/forms.py:100 app_gateway/forms.py:145
-#: app_gateway/forms.py:163 app_gateway/forms.py:242 app_gateway/forms.py:284
-#: gatekeeper/forms.py:72 gatekeeper/forms.py:153 gatekeeper/forms.py:240
-#: gatekeeper/forms.py:363 gatekeeper/forms.py:393 gatekeeper/forms.py:424
-#: scheduler/forms.py:103
+#: app_gateway/forms.py:29
+msgid "Serve on the primary server"
+msgstr "Auf dem primären Server veröffentlichen"
+
+#: app_gateway/forms.py:30
+msgid "Serve on all cluster workers"
+msgstr "Auf allen Workern des Clusters veröffentlichen"
+
+#: app_gateway/forms.py:31
+msgid "Cluster workers"
+msgstr "Cluster-Worker"
+
+#: app_gateway/forms.py:43
+msgid ""
+"Select specific workers, or leave empty when serving on all cluster workers."
+msgstr ""
+"Wählen Sie bestimmte Worker aus oder lassen Sie das Feld leer, wenn auf "
+"allen Workern des Clusters veröffentlicht wird."
+
+#: app_gateway/forms.py:48
+msgid ""
+"WireGuard is disabled on the primary server in the cluster settings, so it "
+"does not publish applications until it is enabled again."
+msgstr ""
+"WireGuard ist in den Cluster-Einstellungen auf dem primären Server "
+"deaktiviert, daher veröffentlicht er keine Anwendungen, bis es wieder "
+"aktiviert wird."
+
+#: app_gateway/forms.py:52 cluster/views.py:70
+#: templates/template_parts/base_sidebar.html:135
+msgid "Cluster"
+msgstr "Cluster"
+
+#: app_gateway/forms.py:52
+msgid "Servers that publish this application."
+msgstr "Server, die diese Anwendung veröffentlichen."
+
+#: app_gateway/forms.py:79 app_gateway/forms.py:205 app_gateway/forms.py:250
+#: app_gateway/forms.py:268 app_gateway/forms.py:347 app_gateway/forms.py:389
+#: app_gateway/forms.py:479 gatekeeper/forms.py:73 gatekeeper/forms.py:156
+#: gatekeeper/forms.py:243 gatekeeper/forms.py:368 gatekeeper/forms.py:398
+#: gatekeeper/forms.py:429 scheduler/forms.py:103
 #: templates/app_gateway/access_policy_type_select.html:50
 #: templates/generic_delete_confirmation.html:19
 #: templates/scheduler/scheduleprofile_form.html:203
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: app_gateway/forms.py:55
+#: app_gateway/forms.py:92
 msgid "This upstream is reserved by the system."
 msgstr "Dieser Upstream ist vom System reserviert."
 
-#: app_gateway/forms.py:58
+#: app_gateway/forms.py:95
 msgid "Upstream URL cannot contain spaces."
 msgstr "Upstream-URL darf keine Leerzeichen enthalten."
 
-#: app_gateway/forms.py:64
+#: app_gateway/forms.py:101
 msgid "Enter a valid upstream URL starting with http:// or https://"
 msgstr ""
 "Geben Sie eine gültige Upstream-URL ein, die mit http:// oder https:// "
 "beginnt."
 
-#: app_gateway/forms.py:66
+#: app_gateway/forms.py:103
 msgid ""
 "Upstream must be a bare host address with no path, query or fragment. Use "
 "http://host or http://host:port"
@@ -249,49 +314,125 @@ msgstr ""
 "Der Upstream muss eine reine Hostadresse ohne Pfad, Query oder Fragment "
 "sein. Verwenden Sie http://host oder http://host:port"
 
-#: app_gateway/forms.py:76 cluster/forms.py:24 dns/forms.py:65
-#: templates/app_gateway/app_gateway_list.html:109
-#: templates/app_gateway/application_details.html:75
+#: app_gateway/forms.py:105
+msgid "This option is only available for https:// upstreams."
+msgstr "Diese Option ist nur für https://-Upstreams verfügbar."
+
+#: app_gateway/forms.py:111
+msgid "Leave this empty when the application is served on all cluster workers."
+msgstr ""
+"Leer lassen, wenn die Anwendung auf allen Workern des Clusters "
+"veröffentlicht wird."
+
+#: app_gateway/forms.py:113
+msgid "Select at least one server to publish this application."
+msgstr ""
+"Wählen Sie mindestens einen Server aus, um diese Anwendung zu "
+"veröffentlichen."
+
+#: app_gateway/forms.py:119
+#, python-format
+msgid ""
+"Applications served by cluster workers require DNS validation or self-signed "
+"certificates. Change the certificate of these hosts first: %(hosts)s"
+msgstr ""
+"Von Cluster-Workern veröffentlichte Anwendungen erfordern DNS-Validierung "
+"oder selbstsignierte Zertifikate. Ändern Sie zuerst das Zertifikat dieser "
+"Hosts: %(hosts)s"
+
+#: app_gateway/forms.py:131 cluster/forms.py:25 dns/forms.py:65
+#: templates/app_gateway/app_gateway_list.html:116
+#: templates/app_gateway/application_details.html:76
+#: templates/cluster/worker_details.html:37
 #: templates/dns/static_host_list.html:17
 #: templates/wireguard/server_detail.html:39
 msgid "Hostname"
 msgstr "Hostname"
 
-#: app_gateway/forms.py:84
+#: app_gateway/forms.py:132 templates/app_gateway/app_gateway_list.html:118
+#: templates/app_gateway/application_details.html:77
+msgid "Certificate"
+msgstr "Zertifikat"
+
+#: app_gateway/forms.py:133 templates/app_gateway/dns_credential_form.html:24
+#: templates/app_gateway/host_certificate.html:13
+msgid "DNS Credential"
+msgstr "DNS-Zugangsdaten"
+
+#: app_gateway/forms.py:134
+msgid ""
+"Use a self-signed certificate if the trusted certificate cannot be issued"
+msgstr ""
+"Ein selbstsigniertes Zertifikat verwenden, wenn das vertrauenswürdige "
+"Zertifikat nicht ausgestellt werden kann"
+
+#: app_gateway/forms.py:145
 msgid "Hostname contains invalid characters."
 msgstr "Hostname enthält ungültige Zeichen."
 
-#: app_gateway/forms.py:114 templates/app_gateway/app_gateway_list.html:147
+#: app_gateway/forms.py:149
+msgid "This hostname is already used by WireGuard WebAdmin."
+msgstr "Dieser Hostname wird bereits von WireGuard WebAdmin verwendet."
+
+#: app_gateway/forms.py:154
+msgid ""
+"This application is served by cluster workers. Use DNS validation or a self-"
+"signed certificate."
+msgstr ""
+"Diese Anwendung wird von Cluster-Workern veröffentlicht. Verwenden Sie DNS-"
+"Validierung oder ein selbstsigniertes Zertifikat."
+
+#: app_gateway/forms.py:158
+msgid "IP addresses can only use a self-signed certificate."
+msgstr "IP-Adressen können nur ein selbstsigniertes Zertifikat verwenden."
+
+#: app_gateway/forms.py:162
+msgid "Select a DNS credential to use the DNS validation."
+msgstr "Wählen Sie DNS-Zugangsdaten aus, um die DNS-Validierung zu verwenden."
+
+#: app_gateway/forms.py:165
+msgid ""
+"The challenge record of this hostname in the delegation domain exceeds the "
+"DNS name limit."
+msgstr ""
+"Der Challenge-Eintrag dieses Hostnamens in der Delegationsdomäne "
+"überschreitet die maximale Länge eines DNS-Namens."
+
+#: app_gateway/forms.py:168
+msgid "A DNS credential can only be used with the DNS validation."
+msgstr "DNS-Zugangsdaten können nur mit der DNS-Validierung verwendet werden."
+
+#: app_gateway/forms.py:219 templates/app_gateway/app_gateway_list.html:158
 msgid "Policy Type"
 msgstr "Richtlinientyp"
 
-#: app_gateway/forms.py:115
+#: app_gateway/forms.py:220
 msgid "Allowed Groups"
 msgstr "Erlaubte Gruppen"
 
-#: app_gateway/forms.py:116 templates/gatekeeper/gatekeeper_list.html:13
+#: app_gateway/forms.py:221 templates/gatekeeper/gatekeeper_list.html:31
 msgid "Authentication Methods"
 msgstr "Authentifizierungsmethoden"
 
-#: app_gateway/forms.py:196
+#: app_gateway/forms.py:301
 msgid "Cannot select more than one Local Password authentication method."
 msgstr ""
 "Es kann nicht mehr als eine lokale Passwort-Authentifizierungsmethode "
 "ausgewählt werden."
 
-#: app_gateway/forms.py:200
+#: app_gateway/forms.py:305
 msgid ""
 "Cannot select more than one OpenID Connect (OIDC) authentication method."
 msgstr ""
 "Es kann nicht mehr als eine OpenID Connect (OIDC)-Authentifizierungsmethode "
 "ausgewählt werden."
 
-#: app_gateway/forms.py:204
+#: app_gateway/forms.py:309
 msgid "Cannot select more than one TOTP authentication method."
 msgstr ""
 "Es kann nicht mehr als eine TOTP-Authentifizierungsmethode ausgewählt werden."
 
-#: app_gateway/forms.py:208
+#: app_gateway/forms.py:313
 msgid ""
 "Cannot select both Local Password and OpenID Connect (OIDC) authentication "
 "methods."
@@ -299,7 +440,7 @@ msgstr ""
 "Die Authentifizierungsmethoden \"Lokales Passwort\" und OpenID Connect "
 "(OIDC) können nicht gleichzeitig ausgewählt werden."
 
-#: app_gateway/forms.py:212
+#: app_gateway/forms.py:317
 msgid ""
 "At least one user group must be selected when using Local Password "
 "authentication."
@@ -307,96 +448,232 @@ msgstr ""
 "Bei Verwendung der lokalen Passwort-Authentifizierung muss mindestens eine "
 "Benutzergruppe ausgewählt werden."
 
-#: app_gateway/forms.py:216
+#: app_gateway/forms.py:321
 msgid "User groups can only be used with Local Password authentication."
 msgstr ""
 "Benutzergruppen können nur mit der lokalen Passwort-Authentifizierung "
 "verwendet werden."
 
-#: app_gateway/forms.py:226 templates/app_gateway/app_gateway_list.html:70
-#: templates/app_gateway/application_details.html:39
+#: app_gateway/forms.py:331 templates/app_gateway/app_gateway_list.html:77
+#: templates/app_gateway/application_details.html:40
 #: templates/firewall/firewall_nav_tabs.html:15
 msgid "Default Policy"
 msgstr "Standard‑Richtlinie"
 
-#: app_gateway/forms.py:255 templates/app_gateway/application_details.html:134
+#: app_gateway/forms.py:360 templates/app_gateway/application_details.html:147
 msgid "Route Name"
 msgstr "Routenname"
 
-#: app_gateway/forms.py:256 templates/app_gateway/application_details.html:135
+#: app_gateway/forms.py:361 templates/app_gateway/application_details.html:148
 msgid "Path Prefix"
 msgstr "Pfadpräfix"
 
-#: app_gateway/forms.py:257 templates/app_gateway/application_details.html:136
+#: app_gateway/forms.py:362 templates/app_gateway/application_details.html:149
 msgid "Policy"
 msgstr "Richtlinie"
 
-#: app_gateway/forms.py:258 templates/app_gateway/application_details.html:137
+#: app_gateway/forms.py:363 templates/app_gateway/application_details.html:150
 msgid "Order"
 msgstr "Reihenfolge"
 
-#: app_gateway/forms.py:299
+#: app_gateway/forms.py:404
 msgid "Path prefix must start with /."
 msgstr "Das Pfadpräfix muss mit / beginnen."
 
-#: app_gateway/forms.py:301
+#: app_gateway/forms.py:406
 msgid "Path prefix cannot contain spaces."
 msgstr "Das Pfadpräfix darf keine Leerzeichen enthalten."
 
-#: app_gateway/forms.py:303
+#: app_gateway/forms.py:408
 msgid "Path prefix contains invalid characters."
 msgstr "Das Pfadpräfix enthält ungültige Zeichen."
 
-#: app_gateway/forms.py:308
+#: app_gateway/forms.py:413
 msgid "This path prefix is reserved by the system."
 msgstr "Dieses Pfadpräfix ist vom System reserviert."
 
+#: app_gateway/forms.py:425 templates/app_gateway/app_gateway_list.html:205
+msgid "Provider"
+msgstr "Anbieter"
+
+#: app_gateway/forms.py:426 templates/app_gateway/app_gateway_list.html:206
+#: templates/app_gateway/dns_credential_form.html:31
+msgid "Delegation domain"
+msgstr "Delegationsdomäne"
+
+#: app_gateway/forms.py:430
+msgid ""
+"Optional. Zone managed by this credential that receives the challenge "
+"records of other domains, e.g. acme.example.net. Each host then needs a "
+"CNAME record pointing to this zone."
+msgstr ""
+"Optional. Von diesen Zugangsdaten verwaltete Zone, die die Challenge-"
+"Einträge anderer Domänen aufnimmt, z. B. acme.example.net. Jeder Host "
+"benötigt dann einen CNAME-Eintrag, der auf diese Zone zeigt."
+
+#: app_gateway/forms.py:450
+#, python-format
+msgid "Leave blank to keep the current value (ending in %(suffix)s)."
+msgstr ""
+"Leer lassen, um den aktuellen Wert beizubehalten (endet auf %(suffix)s)."
+
+#: app_gateway/forms.py:493
+msgid "Enter a valid domain, e.g. acme.example.net"
+msgstr "Geben Sie eine gültige Domäne ein, z. B. acme.example.net"
+
+#: app_gateway/forms.py:501
+#, python-format
+msgid ""
+"The challenge record of these hosts would exceed the DNS name limit: "
+"%(hosts)s"
+msgstr ""
+"Der Challenge-Eintrag dieser Hosts würde die maximale Länge eines DNS-Namens "
+"überschreiten: %(hosts)s"
+
+#: app_gateway/forms.py:522
+msgid "This field is required."
+msgstr "Dieses Feld ist erforderlich."
+
+#: app_gateway/forms.py:524
+msgid "This field contains invalid characters."
+msgstr "Dieses Feld enthält ungültige Zeichen."
+
+#: app_gateway/forms.py:526
+msgid "The value does not match the expected format for this provider."
+msgstr "Der Wert entspricht nicht dem erwarteten Format für diesen Anbieter."
+
+#: app_gateway/models.py:13
+msgid "Trusted certificate (HTTP validation)"
+msgstr "Vertrauenswürdiges Zertifikat (HTTP-Validierung)"
+
 #: app_gateway/models.py:14
+msgid "Trusted certificate (DNS validation)"
+msgstr "Vertrauenswürdiges Zertifikat (DNS-Validierung)"
+
+#: app_gateway/models.py:15
+msgid "Self-signed certificate"
+msgstr "Selbstsigniertes Zertifikat"
+
+#: app_gateway/models.py:68
 msgid "Upstream address, e.g.: http://10.188.18.27:3000"
 msgstr "Upstream-Adresse, z. B.: http://10.188.18.27:3000"
 
-#: app_gateway/models.py:15
+#: app_gateway/models.py:69
 msgid "Allow invalid or self-signed TLS certificates from the upstream"
 msgstr "Ungültige oder selbstsignierte TLS-Zertifikate vom Upstream zulassen"
 
-#: app_gateway/models.py:53
+#: app_gateway/models.py:127 app_gateway/views.py:107
+#: templates/cluster/worker_details.html:116
+msgid "Self-signed"
+msgstr "Selbstsigniert"
+
+#: app_gateway/models.py:129
+msgid "HTTP validation"
+msgstr "HTTP-Validierung"
+
+#: app_gateway/models.py:131
+msgid "DNS validation (delegated)"
+msgstr "DNS-Validierung (delegiert)"
+
+#: app_gateway/models.py:132
+msgid "DNS validation"
+msgstr "DNS-Validierung"
+
+#: app_gateway/models.py:151
 #: templates/app_gateway/access_policy_type_select.html:19
 msgid "Public"
 msgstr "Öffentlich"
 
-#: app_gateway/models.py:53
+#: app_gateway/models.py:151
 #: templates/app_gateway/access_policy_type_select.html:30
 msgid "Protected"
 msgstr "Geschützt"
 
-#: app_gateway/models.py:53 gatekeeper/models.py:142
+#: app_gateway/models.py:151 gatekeeper/models.py:142
 #: templates/app_gateway/access_policy_type_select.html:41
-#: templates/gatekeeper/gatekeeper_list.html:289
+#: templates/gatekeeper/gatekeeper_list.html:313
 msgid "Deny"
 msgstr "Verweigern"
 
-#: app_gateway/views.py:75
+#: app_gateway/views.py:83
 msgid "Application Details"
 msgstr "Anwendungsdetails"
 
-#: app_gateway/views.py:90 app_gateway/views.py:174 app_gateway/views.py:204
+#: app_gateway/views.py:102
+#, python-format
+msgid "expires %(date)s"
+msgstr "läuft ab am %(date)s"
+
+#: app_gateway/views.py:105 templates/cluster/worker_details.html:115
+msgid "Trusted"
+msgstr "Vertrauenswürdig"
+
+#: app_gateway/views.py:109
+#, python-format
+msgid "The trusted certificate could not be issued yet, %(expiration)s"
+msgstr ""
+"Das vertrauenswürdige Zertifikat konnte noch nicht ausgestellt werden, "
+"%(expiration)s"
+
+#: app_gateway/views.py:110
+msgid "Using fallback"
+msgstr "Fallback aktiv"
+
+#: app_gateway/views.py:112 dns/models.py:32
+#: templates/cluster/workers_list.html:132
+#: templates/dns/static_host_list.html:91
+msgid "Unknown"
+msgstr "Unbekannt"
+
+#: app_gateway/views.py:112
+msgid "No recent report from this server."
+msgstr "Kein aktueller Bericht von diesem Server."
+
+#: app_gateway/views.py:114
+msgid "Pending export"
+msgstr "Export ausstehend"
+
+#: app_gateway/views.py:114
+msgid "Export the configuration to publish this host on this server."
+msgstr ""
+"Exportieren Sie die Konfiguration, um diesen Host auf diesem Server zu "
+"veröffentlichen."
+
+#: app_gateway/views.py:115 templates/cluster/worker_details.html:117
+msgid "Unavailable"
+msgstr "Nicht verfügbar"
+
+#: app_gateway/views.py:115
+msgid "No certificate is being served for this hostname."
+msgstr "Für diesen Hostnamen wird kein Zertifikat bereitgestellt."
+
+#: app_gateway/views.py:156 templates/gatekeeper/gatekeeper_list.html:366
+#: templates/wireguard/peer_list/peer_data.html:44
+#: templates/wireguard/peer_list/script_wireguard_status_update.html:146
+#: templates/wireguard/wireguard_manage_peer.html:101 wireguard/forms.py:60
+#: wireguard_peer/forms.py:103 wireguard_tools/functions.py:76
+#: wireguard_tools/functions.py:80
+msgid "Primary Server"
+msgstr "Primärer Server"
+
+#: app_gateway/views.py:188 app_gateway/views.py:278 app_gateway/views.py:342
 msgid "The WireGuard WebAdmin application cannot be modified."
 msgstr "Die WireGuard WebAdmin-Anwendung kann nicht geändert werden."
 
-#: app_gateway/views.py:92 templates/app_gateway/application_details.html:16
-#: templates/app_gateway/application_details.html:23
+#: app_gateway/views.py:190 templates/app_gateway/application_details.html:17
+#: templates/app_gateway/application_details.html:24
 msgid "Edit Application"
 msgstr "Anwendung bearbeiten"
 
-#: app_gateway/views.py:95
+#: app_gateway/views.py:193
 msgid "Create Application"
 msgstr "Anwendung erstellen"
 
-#: app_gateway/views.py:102
+#: app_gateway/views.py:203
 msgid "Application saved successfully."
 msgstr "Anwendung erfolgreich gespeichert."
 
-#: app_gateway/views.py:107
+#: app_gateway/views.py:209
 msgid ""
 "\n"
 "        <h5>Application</h5>\n"
@@ -430,67 +707,153 @@ msgstr ""
 "        </ul>\n"
 "        "
 
-#: app_gateway/views.py:137
+#: app_gateway/views.py:239
 msgid "The WireGuard WebAdmin application cannot be deleted."
 msgstr "Die WireGuard WebAdmin-Anwendung kann nicht gelöscht werden."
 
-#: app_gateway/views.py:142
+#: app_gateway/views.py:244
 msgid "Application deleted successfully."
 msgstr "Anwendung erfolgreich gelöscht."
 
-#: app_gateway/views.py:147 templates/app_gateway/application_details.html:19
-#: templates/app_gateway/application_details.html:26
+#: app_gateway/views.py:250 templates/app_gateway/application_details.html:20
+#: templates/app_gateway/application_details.html:27
 msgid "Delete Application"
 msgstr "Anwendung löschen"
 
-#: app_gateway/views.py:149
+#: app_gateway/views.py:252
 #, python-format
 msgid "Are you sure you want to delete the application \"%(name)s\"?"
 msgstr "Sind Sie sicher, dass Sie die Anwendung \"%(name)s\" löschen möchten?"
 
-#: app_gateway/views.py:165
+#: app_gateway/views.py:268
 msgid "Edit Application Host"
 msgstr "Anwendungshost bearbeiten"
 
-#: app_gateway/views.py:169
+#: app_gateway/views.py:272
 msgid "Add Application Host"
 msgstr "Anwendungshost hinzufügen"
 
-#: app_gateway/views.py:182
+#: app_gateway/views.py:289
 msgid "Application Host saved successfully."
 msgstr "Anwendungshost erfolgreich gespeichert."
 
-#: app_gateway/views.py:209
+#: app_gateway/views.py:293
+msgid ""
+"\n"
+"    <h5>Certificate</h5>\n"
+"    <p>Defines how the TLS certificate for this hostname is issued.</p>\n"
+"    <ul>\n"
+"        <li><strong>Trusted certificate (HTTP validation)</strong>: Issued "
+"through ACME (e.g. Let's Encrypt) and validated over HTTP. The hostname must "
+"point to this server and ports 80/443 must be reachable from the internet.</"
+"li>\n"
+"        <li><strong>Trusted certificate (DNS validation)</strong>: Issued "
+"through ACME and validated with a DNS record created using the selected DNS "
+"credential. The server does not need to be reachable from the internet. When "
+"the credential uses a delegation domain, the hostname zone only needs a "
+"CNAME record pointing to it, shown when the credential is selected.</li>\n"
+"        <li><strong>Self-signed certificate</strong>: Issued by the internal "
+"Caddy CA. Browsers will show a security warning.</li>\n"
+"    </ul>\n"
+"    <p>When the fallback option is enabled and a trusted certificate cannot "
+"be issued, a self-signed certificate is used until the next successful "
+"attempt. Without the fallback, the connection fails until the certificate is "
+"issued.</p>\n"
+"    <p>Use <strong>Retry certificate</strong> in the host list to request a "
+"new attempt right away, for example after fixing the DNS or firewall.</p>\n"
+"    <p><strong>Important:</strong> the certificate is requested as soon as "
+"the configuration is applied. With HTTP validation, the hostname must "
+"already point to this server: failed attempts count towards the Let's "
+"Encrypt limit (5 per hour per hostname). If the DNS is not ready yet, use "
+"DNS validation.</p>\n"
+"    "
+msgstr ""
+"\n"
+"    <h5>Zertifikat</h5>\n"
+"    <p>Legt fest, wie das TLS-Zertifikat für diesen Hostnamen ausgestellt "
+"wird.</p>\n"
+"    <ul>\n"
+"        <li><strong>Vertrauenswürdiges Zertifikat (HTTP-Validierung)</"
+"strong>: Wird über ACME (z. B. Let's Encrypt) ausgestellt und über HTTP "
+"validiert. Der Hostname muss auf diesen Server zeigen und die Ports 80/443 "
+"müssen aus dem Internet erreichbar sein.</li>\n"
+"        <li><strong>Vertrauenswürdiges Zertifikat (DNS-Validierung)</"
+"strong>: Wird über ACME ausgestellt und mit einem DNS-Eintrag validiert, der "
+"mit den ausgewählten DNS-Zugangsdaten erstellt wird. Der Server muss nicht "
+"aus dem Internet erreichbar sein. Wenn die Zugangsdaten eine "
+"Delegationsdomäne verwenden, benötigt die Zone des Hostnamens nur einen "
+"CNAME-Eintrag, der auf sie zeigt; er wird bei der Auswahl der Zugangsdaten "
+"angezeigt.</li>\n"
+"        <li><strong>Selbstsigniertes Zertifikat</strong>: Wird von der "
+"internen Caddy-CA ausgestellt. Browser zeigen eine Sicherheitswarnung an.</"
+"li>\n"
+"    </ul>\n"
+"    <p>Wenn die Fallback-Option aktiviert ist und das vertrauenswürdige "
+"Zertifikat nicht ausgestellt werden kann, wird bis zum nächsten "
+"erfolgreichen Versuch ein selbstsigniertes Zertifikat verwendet. Ohne "
+"Fallback schlägt die Verbindung fehl, bis das Zertifikat ausgestellt ist.</"
+"p>\n"
+"    <p>Verwenden Sie <strong>Zertifikat erneut anfordern</strong> in der "
+"Hostliste, um sofort einen neuen Versuch anzufordern, z. B. nachdem DNS oder "
+"Firewall korrigiert wurden.</p>\n"
+"    <p><strong>Wichtig:</strong> Das Zertifikat wird angefordert, sobald die "
+"Konfiguration angewendet wird. Bei HTTP-Validierung muss der Hostname "
+"bereits auf diesen Server zeigen: Fehlgeschlagene Versuche zählen zum Limit "
+"von Let's Encrypt (5 pro Stunde und Hostname). Wenn das DNS noch nicht "
+"bereit ist, verwenden Sie die DNS-Validierung.</p>\n"
+"    "
+
+#: app_gateway/views.py:306
+msgid ""
+"\n"
+"        <div class=\"alert alert-warning\">\n"
+"            This hostname is used to access WireGuard WebAdmin. If the "
+"certificate cannot be issued,\n"
+"            your browser will show a security warning until the problem is "
+"fixed.\n"
+"        </div>\n"
+"        "
+msgstr ""
+"\n"
+"        <div class=\"alert alert-warning\">\n"
+"            Dieser Hostname wird für den Zugriff auf WireGuard WebAdmin "
+"verwendet. Wenn das Zertifikat nicht ausgestellt werden kann,\n"
+"            zeigt Ihr Browser eine Sicherheitswarnung an, bis das Problem "
+"behoben ist.\n"
+"        </div>\n"
+"        "
+
+#: app_gateway/views.py:347
 msgid "Application Host deleted successfully."
 msgstr "Anwendungshost erfolgreich gelöscht."
 
-#: app_gateway/views.py:214
+#: app_gateway/views.py:353
 msgid "Delete Application Host"
 msgstr "Anwendungshost löschen"
 
-#: app_gateway/views.py:216
+#: app_gateway/views.py:355
 #, python-format
 msgid "Are you sure you want to delete the host \"%(hostname)s\"?"
 msgstr "Sind Sie sicher, dass Sie den Host \"%(hostname)s\" löschen möchten?"
 
-#: app_gateway/views.py:227
+#: app_gateway/views.py:366
 #: templates/app_gateway/access_policy_type_select.html:9
 msgid "Select Access Policy Type"
 msgstr "Zugriffsrichtlinientyp auswählen"
 
-#: app_gateway/views.py:242
+#: app_gateway/views.py:381
 msgid "Edit Access Policy"
 msgstr "Zugriffsrichtlinie bearbeiten"
 
-#: app_gateway/views.py:246
+#: app_gateway/views.py:385
 msgid "Create Access Policy"
 msgstr "Zugriffsrichtlinie erstellen"
 
-#: app_gateway/views.py:253
+#: app_gateway/views.py:392
 msgid "Access Policy saved successfully."
 msgstr "Zugriffsrichtlinie erfolgreich gespeichert."
 
-#: app_gateway/views.py:259
+#: app_gateway/views.py:399
 msgid ""
 "\n"
 "            <h5>Public Policy</h5>\n"
@@ -504,7 +867,7 @@ msgstr ""
 "Anwendung, ohne eine Authentifizierung zu erfordern.</p>\n"
 "            "
 
-#: app_gateway/views.py:267
+#: app_gateway/views.py:407
 msgid ""
 "\n"
 "            <h5>Deny Policy</h5>\n"
@@ -517,7 +880,7 @@ msgstr ""
 "übereinstimmenden Routen.</p>\n"
 "            "
 
-#: app_gateway/views.py:275
+#: app_gateway/views.py:415
 msgid ""
 "\n"
 "            <h5>Protected Policy</h5>\n"
@@ -548,11 +911,11 @@ msgstr ""
 "            </ul>\n"
 "            "
 
-#: app_gateway/views.py:306
+#: app_gateway/views.py:446
 msgid "Access Policy deleted successfully."
 msgstr "Zugriffsrichtlinie erfolgreich gelöscht."
 
-#: app_gateway/views.py:308
+#: app_gateway/views.py:449
 msgid ""
 "Cannot delete this Access Policy because it is currently in use by an "
 "Application Route or Application Default Policy."
@@ -560,57 +923,57 @@ msgstr ""
 "Diese Zugriffsrichtlinie kann nicht gelöscht werden, da sie derzeit von "
 "einer Anwendungsroute oder einer Standardanwendungsrichtlinie verwendet wird."
 
-#: app_gateway/views.py:313
+#: app_gateway/views.py:454
 msgid "Delete Access Policy"
 msgstr "Zugriffsrichtlinie löschen"
 
-#: app_gateway/views.py:315
+#: app_gateway/views.py:456
 #, python-format
 msgid "Are you sure you want to delete the access policy \"%(name)s\"?"
 msgstr ""
 "Sind Sie sicher, dass Sie die Zugriffsrichtlinie \"%(name)s\" löschen "
 "möchten?"
 
-#: app_gateway/views.py:331
+#: app_gateway/views.py:472
 msgid "Edit Application Default Policy"
 msgstr "Standardrichtlinie der Anwendung bearbeiten"
 
-#: app_gateway/views.py:335
+#: app_gateway/views.py:476
 msgid "Set Application Default Policy"
 msgstr "Standardrichtlinie der Anwendung festlegen"
 
-#: app_gateway/views.py:344
+#: app_gateway/views.py:485
 msgid "Application Default Policy saved successfully."
 msgstr "Standardrichtlinie der Anwendung erfolgreich gespeichert."
 
-#: app_gateway/views.py:367
+#: app_gateway/views.py:509
 msgid "Application Default Policy deleted successfully."
 msgstr "Standardrichtlinie der Anwendung erfolgreich gelöscht."
 
-#: app_gateway/views.py:372
+#: app_gateway/views.py:515
 msgid "Delete Application Default Policy"
 msgstr "Standardrichtlinie der Anwendung löschen"
 
-#: app_gateway/views.py:374
+#: app_gateway/views.py:517
 #, python-format
 msgid "Are you sure you want to remove the default policy for \"%(name)s\"?"
 msgstr ""
 "Sind Sie sicher, dass Sie die Standardrichtlinie für \"%(name)s\" entfernen "
 "möchten?"
 
-#: app_gateway/views.py:392
+#: app_gateway/views.py:535
 msgid "Edit Application Route"
 msgstr "Anwendungsroute bearbeiten"
 
-#: app_gateway/views.py:396
+#: app_gateway/views.py:539
 msgid "Add Application Route"
 msgstr "Anwendungsroute hinzufügen"
 
-#: app_gateway/views.py:405
+#: app_gateway/views.py:548
 msgid "Application Route saved successfully."
 msgstr "Anwendungsroute erfolgreich gespeichert."
 
-#: app_gateway/views.py:410
+#: app_gateway/views.py:554
 msgid ""
 "\n"
 "        <h5>Application Route</h5>\n"
@@ -651,21 +1014,87 @@ msgstr ""
 "        </ul>\n"
 "        "
 
-#: app_gateway/views.py:443
+#: app_gateway/views.py:587
 msgid "Application Route deleted successfully."
 msgstr "Anwendungsroute erfolgreich gelöscht."
 
-#: app_gateway/views.py:448
+#: app_gateway/views.py:593
 msgid "Delete Application Route"
 msgstr "Anwendungsroute löschen"
 
-#: app_gateway/views.py:450
+#: app_gateway/views.py:595
 #, python-format
 msgid "Are you sure you want to delete the route \"%(name)s\" (%(path)s)?"
 msgstr ""
 "Sind Sie sicher, dass Sie die Route \"%(name)s\" (%(path)s) löschen möchten?"
 
-#: app_gateway/views.py:468
+#: app_gateway/views.py:613
+msgid "This action is not available because Caddy is not enabled."
+msgstr "Diese Aktion ist nicht verfügbar, da Caddy nicht aktiviert ist."
+
+#: app_gateway/views.py:620
+#, python-format
+msgid ""
+"A new self-signed certificate will be issued for %(hostname)s. The current "
+"configuration was exported."
+msgstr ""
+"Für %(hostname)s wird ein neues selbstsigniertes Zertifikat ausgestellt. Die "
+"aktuelle Konfiguration wurde exportiert."
+
+#: app_gateway/views.py:622
+#, python-format
+msgid ""
+"A new certificate will be requested for %(hostname)s. The current "
+"configuration was exported."
+msgstr ""
+"Für %(hostname)s wird ein neues Zertifikat angefordert. Die aktuelle "
+"Konfiguration wurde exportiert."
+
+#: app_gateway/views.py:636
+msgid "Edit DNS Credential"
+msgstr "DNS-Zugangsdaten bearbeiten"
+
+#: app_gateway/views.py:639 templates/app_gateway/app_gateway_list.html:195
+msgid "Add DNS Credential"
+msgstr "DNS-Zugangsdaten hinzufügen"
+
+#: app_gateway/views.py:646
+msgid "DNS Credential saved successfully."
+msgstr "DNS-Zugangsdaten erfolgreich gespeichert."
+
+#: app_gateway/views.py:650
+#, python-format
+msgid ""
+"Delegation domain changed|Update the challenge records of the %(count)s "
+"hosts using this credential. The required records are shown in the host list "
+"of each application."
+msgstr ""
+"Delegationsdomäne geändert|Aktualisieren Sie die Challenge-Einträge der "
+"%(count)s Hosts, die diese Zugangsdaten verwenden. Die erforderlichen "
+"Einträge werden in der Hostliste jeder Anwendung angezeigt."
+
+#: app_gateway/views.py:676
+msgid "DNS Credential deleted successfully."
+msgstr "DNS-Zugangsdaten erfolgreich gelöscht."
+
+#: app_gateway/views.py:679
+msgid ""
+"Cannot delete this DNS Credential because it is currently in use by an "
+"Application Host."
+msgstr ""
+"Diese DNS-Zugangsdaten können nicht gelöscht werden, da sie von einem "
+"Anwendungshost verwendet werden."
+
+#: app_gateway/views.py:684
+msgid "Delete DNS Credential"
+msgstr "DNS-Zugangsdaten löschen"
+
+#: app_gateway/views.py:686
+#, python-format
+msgid "Are you sure you want to delete the DNS credential \"%(name)s\"?"
+msgstr "Möchten Sie die DNS-Zugangsdaten \"%(name)s\" wirklich löschen?"
+
+#: app_gateway/views.py:704
 msgid ""
 "Configuration export is not available because Caddy is not enabled. To use "
 "App Gateway and Gatekeeper, start the application using docker-compose-"
@@ -675,67 +1104,83 @@ msgstr ""
 "ist. Um App Gateway und Gatekeeper zu verwenden, starten Sie die Anwendung "
 "mit docker-compose-caddy.yml."
 
-#: app_gateway/views.py:478
+#: app_gateway/views.py:710
 msgid "Configuration exported successfully."
 msgstr "Konfiguration erfolgreich exportiert."
 
-#: cluster/forms.py:20
+#: cluster/forms.py:21
 msgid "IP Lock"
 msgstr "IP-Sperre"
 
-#: cluster/forms.py:21 dns/forms.py:67 gatekeeper/forms.py:315
-#: templates/cluster/workers_list.html:10
+#: cluster/forms.py:22 dns/forms.py:67 gatekeeper/forms.py:320
+#: templates/cluster/worker_details.html:39
 #: templates/dns/static_host_list.html:18
 #: templates/firewall/manage_redirect_rule.html:43
 #: templates/firewall/manage_redirect_rule.html:67
 #: templates/firewall/manage_redirect_rule.html:68
-#: templates/gatekeeper/gatekeeper_list.html:273
+#: templates/gatekeeper/gatekeeper_list.html:297
+#: templates/gatekeeper/gatekeeper_list.html:350
 #: templates/wireguard/wireguard_status.html:45
 msgid "IP Address"
 msgstr "IP‑Adresse"
 
-#: cluster/forms.py:22
+#: cluster/forms.py:23
 msgid "Country"
 msgstr "Land"
 
-#: cluster/forms.py:23
+#: cluster/forms.py:24
 msgid "City"
 msgstr "Stadt"
 
-#: cluster/forms.py:82
+#: cluster/forms.py:85
 msgid "A worker with that name already exists."
 msgstr "Ein Worker mit diesem Namen existiert bereits."
 
-#: cluster/forms.py:85
+#: cluster/forms.py:88
 msgid "IP Address is required when IP Lock is enabled."
 msgstr "Die IP-Adresse ist erforderlich, wenn die IP-Sperre aktiviert ist."
 
-#: cluster/forms.py:97
+#: cluster/forms.py:100
 msgid "Cluster Enabled"
 msgstr "Cluster aktiviert"
 
-#: cluster/forms.py:98
+#: cluster/forms.py:101
 msgid "Primary Enable WireGuard"
 msgstr "WireGuard primär aktivieren"
 
-#: cluster/forms.py:99 templates/cluster/workers_list.html:106
+#: cluster/forms.py:102 templates/cluster/workers_list.html:197
 msgid "Cluster Mode"
 msgstr "Cluster-Modus"
 
-#: cluster/forms.py:100 templates/cluster/workers_list.html:145
-msgid "Restart Mode"
-msgstr "Neustart-Modus"
-
-#: cluster/forms.py:101 templates/cluster/workers_list.html:149
+#: cluster/forms.py:103 templates/cluster/workers_list.html:199
 msgid "Worker Display"
 msgstr "Worker-Anzeige"
 
-#: cluster/forms.py:136
+#: cluster/forms.py:135
+msgid ""
+"The primary server can only be disabled in mirror mode. In distributed mode, "
+"move its instances to workers instead."
+msgstr ""
+"Der primäre Server kann nur im Spiegelmodus deaktiviert werden. Verschieben "
+"Sie im verteilten Modus stattdessen seine Instanzen auf Worker."
+
+#: cluster/forms.py:140
 msgid "Cluster mode requires WireGuard status cache to be enabled."
 msgstr ""
 "Der Cluster-Modus erfordert die Aktivierung des WireGuard-Status-Caches."
 
-#: cluster/models.py:46
+#: cluster/forms.py:149
+#, python-format
+msgid ""
+"The distributed cluster mode does not allow firewall rules bound to a "
+"specific WireGuard instance. Change them to wg+ or IP addresses first: "
+"%(rules)s"
+msgstr ""
+"Der verteilte Cluster-Modus erlaubt keine Firewall-Regeln, die an eine "
+"bestimmte WireGuard-Instanz gebunden sind. Ändern Sie sie zuerst auf wg+ "
+"oder IP-Adressen: %(rules)s"
+
+#: cluster/models.py:63
 msgid ""
 "IP lock is enabled, but the worker is attempting to access from a different "
 "IP address."
@@ -743,146 +1188,181 @@ msgstr ""
 "Die IP-Sperre ist aktiviert, aber der Worker versucht von einer anderen IP-"
 "Adresse zuzugreifen."
 
-#: cluster/models.py:47
+#: cluster/models.py:64
 msgid "Worker is not enabled"
 msgstr "Worker ist nicht aktiviert"
 
-#: cluster/models.py:48
+#: cluster/models.py:65
 msgid "Cluster is not enabled"
 msgstr "Cluster ist nicht aktiviert"
 
-#: cluster/models.py:49
-msgid ""
-"Please report worker_config_version, worker_dns_version and worker_version "
-"in the API request."
-msgstr ""
-"Bitte geben Sie worker_config_version, worker_dns_version und worker_version "
-"in der API-Anfrage an."
-
-#: cluster/models.py:50
+#: cluster/models.py:66
 msgid "Worker update is required."
 msgstr "Ein Worker-Update ist erforderlich."
 
-#: cluster/views.py:21 templates/template_parts/base_sidebar.html:135
-msgid "Cluster"
-msgstr "Cluster"
-
-#: cluster/views.py:51
+#: cluster/views.py:153
 msgid "Edit Worker: "
 msgstr "Worker bearbeiten: "
 
-#: cluster/views.py:57
+#: cluster/views.py:160
 msgid "Worker deleted|Worker deleted: "
 msgstr "Worker gelöscht|Worker gelöscht: "
 
-#: cluster/views.py:60
+#: cluster/views.py:163
+msgid ""
+"Worker not deleted|Move the WireGuard instances of this worker to another "
+"server first: "
+msgstr ""
+"Worker nicht gelöscht|Verschieben Sie zuerst die WireGuard-Instanzen dieses "
+"Workers auf einen anderen Server: "
+
+#: cluster/views.py:167
 msgid "Worker not deleted|Invalid confirmation."
 msgstr "Worker nicht gelöscht|Ungültige Bestätigung."
 
-#: cluster/views.py:64 templates/cluster/workers_list.html:87
+#: cluster/views.py:170 templates/cluster/workers_list.html:76
+#: templates/cluster/workers_list.html:181
 msgid "Add Worker"
 msgstr "Worker hinzufügen"
 
-#: cluster/views.py:75
-msgid "Worker updated|Worker updated: "
-msgstr "Worker aktualisiert|Worker aktualisiert: "
-
-#: cluster/views.py:77
+#: cluster/views.py:177
 msgid "Worker created|Worker created: "
 msgstr "Worker erstellt|Worker erstellt: "
 
-#: cluster/views.py:82
+#: cluster/views.py:179
+msgid "Worker updated|Worker updated: "
+msgstr "Worker aktualisiert|Worker aktualisiert: "
+
+#: cluster/views.py:184
 msgid ""
 "\n"
-"        <h5>Worker Configuration</h5>\n"
-"        <p>Configure a cluster worker node that will synchronize with this "
-"primary instance.</p>\n"
-"        \n"
-"        <h5>Name</h5>\n"
-"        <p>A unique name to identify this worker.</p>\n"
-"        \n"
-"        <h5>IP Address</h5>\n"
-"        <p>The IP address of the worker node. Leave empty if IP lock is "
-"disabled.</p>\n"
-"        \n"
-"        <h5>IP Lock</h5>\n"
-"        <p>When enabled, the worker can only connect from the specified IP "
-"address.</p>\n"
-"        \n"
-"        <h5>Location Information</h5>\n"
-"        <p>Optional location details for this worker (country, city, "
-"hostname).</p>\n"
+"        <h5>Worker</h5>\n"
+"        <p>A worker is a cluster node that replicates WireGuard, firewall "
+"and DNS from this primary server and, optionally, publishes App Gateway "
+"applications.</p>\n"
+"\n"
+"        <h5>Name and location</h5>\n"
+"        <p>Used to identify the worker. The <strong>hostname</strong> is the "
+"address clients use to connect to this worker: it is written as the endpoint "
+"of the peer configurations downloaded for this server.</p>\n"
+"\n"
+"        <h5>Token</h5>\n"
+"        <p>Secret used by the worker to authenticate with this primary "
+"server. Changing it disconnects the worker until its configuration is "
+"updated.</p>\n"
+"\n"
+"        <h5>IP lock</h5>\n"
+"        <p>When enabled, the worker is only accepted from the IP address "
+"below. Without it, the address is updated automatically from the last "
+"connection.</p>\n"
+"\n"
+"        <h5>Enabled</h5>\n"
+"        <p>Disabled workers are refused and shut down their WireGuard "
+"interfaces until enabled again.</p>\n"
 "        "
 msgstr ""
 "\n"
-"        <h5>Worker-Konfiguration</h5>\n"
-"        <p>Konfigurieren Sie einen Cluster-Worker-Knoten, der mit dieser "
-"primären Instanz synchronisiert wird.</p>\n"
-"        \n"
-"        <h5>Name</h5>\n"
-"        <p>Ein eindeutiger Name zur Identifizierung dieses Workers.</p>\n"
-"        \n"
-"        <h5>IP-Adresse</h5>\n"
-"        <p>Die IP-Adresse des Worker-Knotens. Leer lassen, wenn die IP-"
-"Sperre deaktiviert ist.</p>\n"
-"        \n"
+"        <h5>Worker</h5>\n"
+"        <p>Ein Worker ist ein Cluster-Knoten, der WireGuard, Firewall und "
+"DNS von diesem primären Server repliziert und optional App-Gateway-"
+"Anwendungen veröffentlicht.</p>\n"
+"\n"
+"        <h5>Name und Standort</h5>\n"
+"        <p>Dienen zur Identifizierung des Workers. Der <strong>Hostname</"
+"strong> ist die Adresse, über die sich Clients mit diesem Worker verbinden: "
+"Er wird als Endpoint in die für diesen Server heruntergeladenen Peer-"
+"Konfigurationen geschrieben.</p>\n"
+"\n"
+"        <h5>Token</h5>\n"
+"        <p>Geheimnis, mit dem sich der Worker bei diesem primären Server "
+"authentifiziert. Eine Änderung trennt den Worker, bis seine Konfiguration "
+"aktualisiert ist.</p>\n"
+"\n"
 "        <h5>IP-Sperre</h5>\n"
-"        <p>Wenn aktiviert, kann sich der Worker nur von der angegebenen IP-"
-"Adresse verbinden.</p>\n"
-"        \n"
-"        <h5>Standortinformationen</h5>\n"
-"        <p>Optionale Standortdetails für diesen Worker (Land, Stadt, "
-"Hostname).</p>\n"
+"        <p>Wenn aktiviert, wird der Worker nur von der unten angegebenen IP-"
+"Adresse akzeptiert. Ohne sie wird die Adresse automatisch aus der letzten "
+"Verbindung übernommen.</p>\n"
+"\n"
+"        <h5>Aktiviert</h5>\n"
+"        <p>Deaktivierte Worker werden abgewiesen und fahren ihre WireGuard-"
+"Schnittstellen herunter, bis sie wieder aktiviert werden.</p>\n"
 "        "
 
-#: cluster/views.py:117 templates/cluster/workers_list.html:88
-msgid "Cluster Settings"
-msgstr "Cluster-Einstellungen"
-
-#: cluster/views.py:123
+#: cluster/views.py:224
 msgid "Cluster settings updated successfully."
 msgstr "Cluster-Einstellungen erfolgreich aktualisiert."
 
-#: cluster/views.py:135
+#: cluster/views.py:239
 msgid ""
 "\n"
+"        <h5>Cluster Enabled</h5>\n"
+"        <p>When disabled, workers are refused and shut down their WireGuard "
+"interfaces, and App Gateway applications are only published by this primary "
+"server. Requires the WireGuard status cache.</p>\n"
+"\n"
+"        <h5>Primary Enable WireGuard</h5>\n"
+"        <p>Mirror mode only. When disabled, this primary server stops its "
+"WireGuard interfaces once the configuration is applied, is no longer offered "
+"when downloading peer configurations and VPN invites, and only publishes "
+"WireGuard WebAdmin in the App Gateway. Workers keep receiving the "
+"configuration, and the primary server keeps managing the certificates used "
+"by them. Make sure you can reach WireGuard WebAdmin without the VPN of this "
+"server before disabling it.</p>\n"
+"\n"
 "        <h5>Cluster Mode</h5>\n"
-"        <p>Configure how the cluster operates and synchronizes "
-"configurations between nodes.</p>\n"
-"        \n"
-"        <h5>Sync Intervals</h5>\n"
-"        <p>Configure how frequently statistics and cache data are "
-"synchronized between cluster nodes.</p>\n"
-"        \n"
-"        <h5>Restart Mode</h5>\n"
-"        <p>Choose whether WireGuard services should be automatically "
-"restarted when configurations change, or if manual intervention is required."
-"</p>\n"
-"        \n"
+"        <p><strong>Mirror</strong>: every worker receives the same WireGuard "
+"instances, peers, firewall and DNS configuration. Peers can connect to any "
+"server.</p>\n"
+"        <p><strong>Distributed</strong>: each WireGuard instance runs only "
+"on the server selected in the instance settings (the primary server by "
+"default). Peers connect to that server. Firewall rules cannot be bound to a "
+"specific instance interface: use wg+ or IP addresses. After changing the "
+"mode, apply the WireGuard configuration so the primary server stops the "
+"instances that moved to workers.</p>\n"
+"\n"
 "        <h5>Worker Display</h5>\n"
-"        <p>Select how workers should be identified in the interface - by "
-"name, server address, location, or a combination.</p>\n"
+"        <p>How workers are named in server selections (peer configuration "
+"downloads and VPN invites).</p>\n"
 "        "
 msgstr ""
 "\n"
+"        <h5>Cluster aktiviert</h5>\n"
+"        <p>Wenn deaktiviert, werden Worker abgewiesen und fahren ihre "
+"WireGuard-Schnittstellen herunter, und App-Gateway-Anwendungen werden nur "
+"von diesem primären Server veröffentlicht. Erfordert den WireGuard-"
+"Statuscache.</p>\n"
+"\n"
+"        <h5>WireGuard primär aktivieren</h5>\n"
+"        <p>Nur im Spiegelmodus. Wenn deaktiviert, stoppt dieser primäre "
+"Server seine WireGuard-Schnittstellen, sobald die Konfiguration angewendet "
+"wird, wird beim Herunterladen von Peer-Konfigurationen und VPN-Einladungen "
+"nicht mehr angeboten und veröffentlicht im App Gateway nur noch WireGuard "
+"WebAdmin. Die Worker erhalten weiterhin die Konfiguration, und der primäre "
+"Server verwaltet weiterhin die von ihnen verwendeten Zertifikate. Stellen "
+"Sie vor dem Deaktivieren sicher, dass Sie WireGuard WebAdmin ohne das VPN "
+"dieses Servers erreichen.</p>\n"
+"\n"
 "        <h5>Cluster-Modus</h5>\n"
-"        <p>Konfigurieren Sie, wie der Cluster arbeitet und Konfigurationen "
-"zwischen den Knoten synchronisiert.</p>\n"
-"        \n"
-"        <h5>Synchronisationsintervalle</h5>\n"
-"        <p>Konfigurieren Sie, wie oft Statistiken und Cache-Daten zwischen "
-"den Cluster-Knoten synchronisiert werden.</p>\n"
-"        \n"
-"        <h5>Neustart-Modus</h5>\n"
-"        <p>Wählen Sie, ob WireGuard-Dienste automatisch neu gestartet werden "
-"sollen, wenn sich Konfigurationen ändern, oder ob ein manuelles Eingreifen "
-"erforderlich ist.</p>\n"
-"        \n"
+"        <p><strong>Mirror</strong>: Jeder Worker erhält dieselben WireGuard-"
+"Instanzen, Peers, Firewall- und DNS-Konfiguration. Peers können sich mit "
+"jedem Server verbinden.</p>\n"
+"        <p><strong>Distributed</strong>: Jede WireGuard-Instanz läuft nur "
+"auf dem in den Instanzeinstellungen gewählten Server (standardmäßig der "
+"primäre Server). Peers verbinden sich mit diesem Server. Firewall-Regeln "
+"können nicht an die Schnittstelle einer bestimmten Instanz gebunden werden: "
+"Verwenden Sie wg+ oder IP-Adressen. Wenden Sie nach dem Wechsel des Modus "
+"die WireGuard-Konfiguration an, damit der primäre Server die auf Worker "
+"verschobenen Instanzen stoppt.</p>\n"
+"\n"
 "        <h5>Worker-Anzeige</h5>\n"
-"        <p>Wählen Sie aus, wie Worker in der Benutzeroberfläche "
-"identifiziert werden sollen – nach Name, Serveradresse, Standort oder einer "
-"Kombination.</p>\n"
+"        <p>Wie Worker in Serverauswahlen benannt werden (Download von Peer-"
+"Konfigurationen und VPN-Einladungen).</p>\n"
 "        "
+
+#: cluster/views.py:256 templates/cluster/workers_list.html:9
+#: templates/cluster/workers_list.html:77
+msgid "Cluster Settings"
+msgstr "Cluster-Einstellungen"
 
 #: console/views.py:27 console/views.py:67 user_manager/forms.py:16
 msgid "Console"
@@ -937,11 +1417,11 @@ msgstr "WireGuard-Status-Cache-Einträge geleert: "
 msgid "Invalid target"
 msgstr "Ungültiges Ziel"
 
-#: dns/forms.py:22 wireguard/forms.py:24
+#: dns/forms.py:22 wireguard/forms.py:26
 msgid "Primary DNS"
 msgstr "Primärer DNS"
 
-#: dns/forms.py:23 wireguard/forms.py:25
+#: dns/forms.py:23 wireguard/forms.py:27
 msgid "Secondary DNS"
 msgstr "Sekundärer DNS"
 
@@ -966,7 +1446,7 @@ msgstr "Statischer DNS"
 msgid "Invalid hostname."
 msgstr "Ungültiger Hostname."
 
-#: dns/forms.py:131 firewall/forms.py:111 gatekeeper/forms.py:318
+#: dns/forms.py:131 firewall/forms.py:112 gatekeeper/forms.py:323
 #: templates/api_v2/api_documentation.html:51
 #: templates/dns/static_host_list.html:69
 #: templates/firewall/manage_redirect_rule.html:18
@@ -982,32 +1462,32 @@ msgstr "Listen‑URL"
 msgid "DNS Filter List Details"
 msgstr "Details der DNS‑Filterliste"
 
-#: dns/models.py:32 templates/dns/static_host_list.html:91
-msgid "Unknown"
-msgstr "Unbekannt"
-
 #: dns/models.py:35 templates/dns/static_host_list.html:89
 msgid "Unsupported"
 msgstr "Nicht unterstützt"
 
-#: dns/views.py:49
+#: dns/views.py:25 dns/views.py:317 dns/views.py:325
+msgid "DNS configuration reloaded automatically."
+msgstr "DNS-Konfiguration automatisch neu geladen."
+
+#: dns/views.py:56
 msgid "DNS settings applied successfully"
 msgstr "DNS‑Einstellungen erfolgreich angewendet"
 
-#: dns/views.py:84
+#: dns/views.py:91
 msgid "Default DNS Filter List created successfully"
 msgstr "Standard‑DNS‑Filterliste erfolgreich erstellt"
 
-#: dns/views.py:87
+#: dns/views.py:94
 msgid ""
 "Pending Changes|There are pending DNS changes that have not been applied"
 msgstr "Ausstehende Änderungen|Es liegen nicht angewendete DNS‑Änderungen vor"
 
-#: dns/views.py:106
+#: dns/views.py:113
 msgid "DNS Forwarders"
 msgstr "DNS‑Forwarder"
 
-#: dns/views.py:107
+#: dns/views.py:114
 msgid ""
 "All DNS queries will be forwarded to the primary resolver. If the primary "
 "resolver is not available, the secondary resolver will be used."
@@ -1015,253 +1495,263 @@ msgstr ""
 "Alle DNS‑Anfragen werden an den primären Resolver weitergeleitet. Ist dieser "
 "nicht verfügbar, wird der sekundäre Resolver verwendet."
 
-#: dns/views.py:134
+#: dns/views.py:139
 msgid "Static DNS deleted successfully"
 msgstr "Statischer DNS erfolgreich gelöscht"
 
-#: dns/views.py:137
+#: dns/views.py:145
 msgid "Static DNS not deleted|Invalid confirmation"
 msgstr "Statischer DNS nicht gelöscht|Ungültige Bestätigung"
 
-#: dns/views.py:147
+#: dns/views.py:153
 msgid "Static DNS saved successfully"
 msgstr "Statischer DNS erfolgreich gespeichert"
 
-#: dns/views.py:170
+#: dns/views.py:179
 msgid "DNS Filter List not deleted | Filter List is enabled"
 msgstr "DNS‑Filterliste nicht gelöscht | Filterliste ist aktiviert"
 
-#: dns/views.py:177
+#: dns/views.py:186
 msgid "Error removing config file: "
 msgstr "Fehler beim Entfernen der Konfigurationsdatei: "
 
-#: dns/views.py:180
+#: dns/views.py:189
 msgid "DNS Filter List deleted successfully"
 msgstr "DNS‑Filterliste erfolgreich gelöscht"
 
-#: dns/views.py:183
+#: dns/views.py:192
 msgid "DNS Filter List not deleted | Invalid confirmation"
 msgstr "DNS‑Filterliste nicht gelöscht | Ungültige Bestätigung"
 
-#: dns/views.py:195
+#: dns/views.py:204
 msgid "DNS Filter List saved successfully"
 msgstr "DNS‑Filterliste erfolgreich gespeichert"
 
-#: dns/views.py:222
+#: dns/views.py:231
 msgid "Failed to read existing config file: "
 msgstr "Fehler beim Lesen der vorhandenen Konfigurationsdatei: "
 
-#: dns/views.py:240
+#: dns/views.py:249
 msgid "Failed to fetch the host list: "
 msgstr "Fehler beim Abrufen der Hostliste: "
 
-#: dns/views.py:250
+#: dns/views.py:259
 msgid "Failed to write config file: "
 msgstr "Fehler beim Schreiben der Konfigurationsdatei: "
 
-#: dns/views.py:273
+#: dns/views.py:282
 msgid "DNS Filter List disabled | Unsupported format detected"
 msgstr "DNS-Filterliste deaktiviert | Nicht unterstütztes Format erkannt"
 
-#: dns/views.py:286
+#: dns/views.py:295
 msgid "DNS Filter List updated successfully"
 msgstr "DNS‑Filterliste erfolgreich aktualisiert"
 
-#: dns/views.py:300
+#: dns/views.py:309
 msgid "DNS Filter List not enabled | Unsupported format"
 msgstr "DNS-Filterliste nicht aktiviert | Nicht unterstütztes Format"
 
-#: dns/views.py:302
+#: dns/views.py:311
 msgid "DNS Filter List not enabled | List has not been downloaded yet"
-msgstr "DNS-Filterliste nicht aktiviert | Liste wurde noch nicht heruntergeladen"
+msgstr ""
+"DNS-Filterliste nicht aktiviert | Liste wurde noch nicht heruntergeladen"
 
-#: dns/views.py:307
+#: dns/views.py:316
 msgid "DNS Filter List enabled successfully"
 msgstr "DNS‑Filterliste erfolgreich aktiviert"
 
-#: dns/views.py:309
+#: dns/views.py:319
 msgid "DNS Filter List not enabled | No valid hosts found"
 msgstr "DNS‑Filterliste nicht aktiviert | Keine gültigen Hosts gefunden"
 
-#: dns/views.py:314
+#: dns/views.py:324
 msgid "DNS Filter List disabled successfully"
 msgstr "DNS‑Filterliste erfolgreich deaktiviert"
 
-#: firewall/forms.py:41
+#: firewall/forms.py:42
 msgid "Port is required."
 msgstr "Port ist erforderlich."
 
-#: firewall/forms.py:44
+#: firewall/forms.py:45
 msgid "Port 8000 (tcp) is reserved for wireguard-webadmin."
 msgstr "Port 8000 (TCP) ist für wireguard‑webadmin reserviert."
 
-#: firewall/forms.py:48
+#: firewall/forms.py:49
 #, python-format
 msgid "Port %s is already in use by another WireGuard instance."
 msgstr "Port %s wird bereits von einer anderen WireGuard‑Instanz verwendet."
 
-#: firewall/forms.py:51
+#: firewall/forms.py:52
 msgid "Invalid Destination. Either Peer or IP Address must be informed."
 msgstr ""
 "Ungültiges Ziel. Es muss entweder ein Peer oder eine IP‑Adresse angegeben "
 "werden."
 
-#: firewall/forms.py:54
+#: firewall/forms.py:55
 msgid "Peer and IP Address cannot be selected at the same time."
 msgstr "Peer und IP‑Adresse können nicht gleichzeitig ausgewählt werden."
 
-#: firewall/forms.py:57
+#: firewall/forms.py:58
 msgid "IP Address cannot be used without selecting a WireGuard instance."
 msgstr ""
 "Eine IP‑Adresse kann nicht verwendet werden, ohne eine WireGuard‑Instanz "
 "auszuwählen."
 
-#: firewall/forms.py:81
+#: firewall/forms.py:82
 msgid "wg+ (Any WireGuard Interface)"
 msgstr "wg+ (beliebige WireGuard‑Schnittstelle)"
 
-#: firewall/forms.py:112
+#: firewall/forms.py:113
 msgid "Firewall Chain"
 msgstr "Firewall‑Kette"
 
-#: firewall/forms.py:113
+#: firewall/forms.py:114
 msgid "In Interface"
 msgstr "Eingangs‑Interface"
 
-#: firewall/forms.py:114
+#: firewall/forms.py:115
 msgid "Out Interface"
 msgstr "Ausgangs‑Interface"
 
-#: firewall/forms.py:115
+#: firewall/forms.py:116
 msgid "Source IP"
 msgstr "Quell‑IP"
 
-#: firewall/forms.py:116 firewall/forms.py:121 wireguard/forms.py:22
-#: wireguard_peer/forms.py:70
+#: firewall/forms.py:117 firewall/forms.py:122 wireguard/forms.py:24
+#: wireguard_peer/forms.py:147
 msgid "Netmask"
 msgstr "Netzmaske"
 
-#: firewall/forms.py:117
+#: firewall/forms.py:118
 msgid "Source Peer"
 msgstr "Quell‑Peer"
 
-#: firewall/forms.py:118
+#: firewall/forms.py:119
 msgid "Source Peer Include Networks"
 msgstr "Quell‑Peer‑Netze einbeziehen"
 
-#: firewall/forms.py:119
+#: firewall/forms.py:120
 msgid "Not Source"
 msgstr "Nicht Quelle"
 
-#: firewall/forms.py:120
+#: firewall/forms.py:121
 msgid "Destination IP"
 msgstr "Ziel‑IP"
 
-#: firewall/forms.py:122
+#: firewall/forms.py:123
 msgid "Destination Peer"
 msgstr "Ziel‑Peer"
 
-#: firewall/forms.py:123
+#: firewall/forms.py:124
 msgid "Destination Peer Include Networks"
 msgstr "Ziel‑Peer‑Netze einbeziehen"
 
-#: firewall/forms.py:124
+#: firewall/forms.py:125
 msgid "Not Destination"
 msgstr "Nicht Ziel"
 
-#: firewall/forms.py:125 templates/firewall/firewall_rule_list.html:44
+#: firewall/forms.py:126 templates/firewall/firewall_rule_list.html:44
 #: templates/firewall/manage_firewall_rule.html:263
 #: templates/firewall/manage_redirect_rule.html:22
 #: templates/firewall/redirect_rule_list.html:13
 msgid "Protocol"
 msgstr "Protokoll"
 
-#: firewall/forms.py:126 templates/firewall/manage_redirect_rule.html:35
+#: firewall/forms.py:127 templates/firewall/manage_redirect_rule.html:35
 msgid "Destination Port"
 msgstr "Ziel‑Port"
 
-#: firewall/forms.py:127 templates/firewall/firewall_rule_list.html:155
+#: firewall/forms.py:128 templates/firewall/firewall_rule_list.html:155
 msgid "New"
 msgstr "Neu"
 
-#: firewall/forms.py:128 templates/firewall/firewall_rule_list.html:60
+#: firewall/forms.py:129 templates/firewall/firewall_rule_list.html:60
 #: templates/firewall/firewall_rule_list.html:156
 msgid "Related"
 msgstr "Verwandt"
 
-#: firewall/forms.py:129 templates/firewall/firewall_rule_list.html:61
+#: firewall/forms.py:130 templates/firewall/firewall_rule_list.html:61
 #: templates/firewall/firewall_rule_list.html:157
 msgid "Established"
 msgstr "Established"
 
-#: firewall/forms.py:130 templates/firewall/firewall_rule_list.html:158
+#: firewall/forms.py:131 templates/firewall/firewall_rule_list.html:158
 msgid "Invalid"
 msgstr "Ungültig"
 
-#: firewall/forms.py:131 templates/firewall/firewall_rule_list.html:159
+#: firewall/forms.py:132 templates/firewall/firewall_rule_list.html:159
 msgid "Untracked"
 msgstr "Nicht verfolgt"
 
-#: firewall/forms.py:132
+#: firewall/forms.py:133
 msgid "Not State"
 msgstr "Nicht‑Zustand"
 
-#: firewall/forms.py:133
+#: firewall/forms.py:134
 msgid "Rule Action"
 msgstr "Regel‑Aktion"
 
-#: firewall/forms.py:134
+#: firewall/forms.py:135
 msgid "Sort Order"
 msgstr "Sortierreihenfolge"
 
-#: firewall/forms.py:182
+#: firewall/forms.py:155
+msgid ""
+"The distributed cluster mode does not allow rules bound to a specific "
+"WireGuard instance. Use wg+ or IP addresses instead."
+msgstr ""
+"Der verteilte Cluster-Modus erlaubt keine Regeln, die an eine bestimmte "
+"WireGuard-Instanz gebunden sind. Verwenden Sie stattdessen wg+ oder IP-"
+"Adressen."
+
+#: firewall/forms.py:192
 msgid "Default Forward Policy"
 msgstr "Standard‑Forward‑Richtlinie"
 
-#: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
-#: firewall/models.py:76 templates/firewall/firewall_rule_list.html:63
+#: firewall/forms.py:192 firewall/models.py:66 firewall/models.py:86
+#: firewall/models.py:87 templates/firewall/firewall_rule_list.html:63
 #: templates/firewall/firewall_rule_list.html:105
 #: templates/firewall/firewall_rule_list.html:182
 #: templates/firewall/firewall_rule_list.html:201
 msgid "ACCEPT"
 msgstr "Annehmen"
 
-#: firewall/forms.py:182 firewall/models.py:62
+#: firewall/forms.py:192 firewall/models.py:66
 #: templates/firewall/firewall_rule_list.html:184
 #: templates/firewall/firewall_rule_list.html:201
 msgid "REJECT"
 msgstr "Zurückweisen"
 
-#: firewall/forms.py:182 firewall/models.py:62 firewall/models.py:75
-#: firewall/models.py:76
+#: firewall/forms.py:192 firewall/models.py:66 firewall/models.py:86
+#: firewall/models.py:87
 msgid "DROP"
 msgstr "Verwerfen"
 
-#: firewall/forms.py:183
+#: firewall/forms.py:193
 msgid "Allow Peer to Peer"
 msgstr "Peer‑zu‑Peer zulassen"
 
-#: firewall/forms.py:184
+#: firewall/forms.py:194
 msgid "Allow Instance to Instance"
 msgstr "Instanz‑zu‑Instanz zulassen"
 
-#: firewall/forms.py:185
+#: firewall/forms.py:195
 msgid "WAN Interface"
 msgstr "WAN‑Interface"
 
-#: firewall/models.py:62
+#: firewall/models.py:66
 msgid "MASQUERADE"
 msgstr "MASQUERADE"
 
-#: firewall/tools.py:46
+#: firewall/tools.py:50
 msgid "Masquerade traffic from VPN to WAN"
 msgstr "VPN‑Verkehr zum WAN maskieren"
 
-#: firewall/tools.py:56 firewall/tools.py:60 firewall/tools.py:64
+#: firewall/tools.py:60 firewall/tools.py:64 firewall/tools.py:68
 msgid "Reject traffic to private networks exiting on WAN interface"
 msgstr "Verkehr zu privaten Netzen über das WAN‑Interface zurückweisen"
 
-#: firewall/tools.py:68
+#: firewall/tools.py:72
 msgid "Allow traffic from VPN to WAN"
 msgstr "Verkehr von VPN zum WAN zulassen"
 
@@ -1321,13 +1811,13 @@ msgstr "Firewall‑Einstellungen verwalten"
 msgid "Firewall settings saved successfully"
 msgstr "Firewall‑Einstellungen erfolgreich gespeichert"
 
-#: gatekeeper/forms.py:18 templates/accounts/login.html:23
+#: gatekeeper/forms.py:19 templates/accounts/login.html:23
 #: templates/vpn_invite/invite_settings.html:19 user_manager/forms.py:14
 #: vpn_invite/forms.py:282
 msgid "Password"
 msgstr "Passwort"
 
-#: gatekeeper/forms.py:21
+#: gatekeeper/forms.py:22
 msgid ""
 "Minimum 8 characters, with at least one uppercase letter, one lowercase "
 "letter, and one number."
@@ -1335,15 +1825,15 @@ msgstr ""
 "Mindestens 8 Zeichen, mit mindestens einem Großbuchstaben, einem "
 "Kleinbuchstaben und einer Zahl."
 
-#: gatekeeper/forms.py:24
+#: gatekeeper/forms.py:25
 msgid "Confirm Password"
 msgstr "Passwort bestätigen"
 
-#: gatekeeper/forms.py:29 gatekeeper/forms.py:163
+#: gatekeeper/forms.py:30 gatekeeper/forms.py:166
 msgid "TOTP Validation PIN"
 msgstr "TOTP-Validierungs-PIN"
 
-#: gatekeeper/forms.py:32 gatekeeper/forms.py:166
+#: gatekeeper/forms.py:33 gatekeeper/forms.py:169
 msgid ""
 "Enter a 6-digit PIN generated by your authenticator app to validate the "
 "secret."
@@ -1351,172 +1841,177 @@ msgstr ""
 "Geben Sie eine 6-stellige PIN ein, die von Ihrer Authenticator-App generiert "
 "wurde, um das Geheimnis zu validieren."
 
-#: gatekeeper/forms.py:39 templates/accounts/login.html:14
-#: templates/gatekeeper/gatekeeper_list.html:62
+#: gatekeeper/forms.py:40 templates/accounts/login.html:14
+#: templates/gatekeeper/gatekeeper_list.html:86
 #: templates/user_manager/list.html:8 user_manager/forms.py:13
 #: vpn_invite/forms.py:281
 msgid "Username"
 msgstr "Benutzername"
 
-#: gatekeeper/forms.py:40 gatekeeper/forms.py:407
-#: templates/gatekeeper/gatekeeper_list.html:63
-#: templates/gatekeeper/gatekeeper_list.html:221
+#: gatekeeper/forms.py:41 gatekeeper/forms.py:412
+#: templates/gatekeeper/gatekeeper_list.html:87
+#: templates/gatekeeper/gatekeeper_list.html:245
 #: templates/wireguard/peer_list/peer_preview_modal.html:103
 msgid "Email"
 msgstr "E‑Mail"
 
-#: gatekeeper/forms.py:41
+#: gatekeeper/forms.py:42
 msgid "TOTP Secret"
 msgstr "TOTP-Geheimnis"
 
-#: gatekeeper/forms.py:88
+#: gatekeeper/forms.py:89
 msgid "Password is required."
 msgstr "Passwort ist erforderlich."
 
-#: gatekeeper/forms.py:91 user_manager/forms.py:127
+#: gatekeeper/forms.py:92 user_manager/forms.py:127
 msgid "Password must be at least 8 characters long."
 msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
 
-#: gatekeeper/forms.py:93
+#: gatekeeper/forms.py:94
 msgid "Password must contain at least one lowercase letter."
 msgstr "Das Passwort muss mindestens einen Kleinbuchstaben enthalten."
 
-#: gatekeeper/forms.py:95
+#: gatekeeper/forms.py:96
 msgid "Password must contain at least one uppercase letter."
 msgstr "Das Passwort muss mindestens einen Großbuchstaben enthalten."
 
-#: gatekeeper/forms.py:97
+#: gatekeeper/forms.py:98
 msgid "Password must contain at least one number."
 msgstr "Das Passwort muss mindestens eine Zahl enthalten."
 
-#: gatekeeper/forms.py:99
+#: gatekeeper/forms.py:100
 msgid "Passwords do not match."
 msgstr "Passwörter stimmen nicht überein."
 
-#: gatekeeper/forms.py:104 gatekeeper/forms.py:276
+#: gatekeeper/forms.py:105 gatekeeper/forms.py:279
 msgid "Please provide a PIN to validate the TOTP secret."
 msgstr "Bitte geben Sie eine PIN an, um das TOTP-Geheimnis zu validieren."
 
-#: gatekeeper/forms.py:109 gatekeeper/forms.py:281
+#: gatekeeper/forms.py:110 gatekeeper/forms.py:284
 msgid "Invalid TOTP PIN."
 msgstr "Ungültige TOTP-PIN."
 
-#: gatekeeper/forms.py:111 gatekeeper/forms.py:283
+#: gatekeeper/forms.py:112 gatekeeper/forms.py:286
 msgid "Invalid TOTP secret format. Must be a valid Base32 string."
 msgstr ""
 "Ungültiges TOTP-Geheimnisformat. Muss eine gültige Base32-Zeichenfolge sein."
 
-#: gatekeeper/forms.py:131 templates/gatekeeper/gatekeeper_list.html:121
+#: gatekeeper/forms.py:114 gatekeeper/forms.py:288
+msgid "TOTP secret is too short. It must be at least 24 characters long."
+msgstr ""
+"Das TOTP-Geheimnis ist zu kurz. Es muss mindestens 24 Zeichen lang sein."
+
+#: gatekeeper/forms.py:134 templates/gatekeeper/gatekeeper_list.html:145
 msgid "Group Name"
 msgstr "Gruppenname"
 
-#: gatekeeper/forms.py:132 templates/gatekeeper/gatekeeper_list.html:122
+#: gatekeeper/forms.py:135 templates/gatekeeper/gatekeeper_list.html:146
 msgid "Members"
 msgstr "Mitglieder"
 
-#: gatekeeper/forms.py:169
+#: gatekeeper/forms.py:172
 msgid "Session Expiration"
 msgstr "Sitzungsablauf"
 
-#: gatekeeper/forms.py:175
+#: gatekeeper/forms.py:178
 msgid "Unit"
 msgstr "Einheit"
 
-#: gatekeeper/forms.py:176
+#: gatekeeper/forms.py:179
 msgid "Hour(s)"
 msgstr "Stunde(n)"
 
-#: gatekeeper/forms.py:176
+#: gatekeeper/forms.py:179
 msgid "Day(s)"
 msgstr "Tag(e)"
 
-#: gatekeeper/forms.py:189
+#: gatekeeper/forms.py:192
 msgid "Authentication Type"
 msgstr "Authentifizierungstyp"
 
-#: gatekeeper/forms.py:190
+#: gatekeeper/forms.py:193
 msgid "Global TOTP Secret"
 msgstr "Globales TOTP-Geheimnis"
 
-#: gatekeeper/forms.py:191
+#: gatekeeper/forms.py:194
 msgid "OIDC Provider URL"
 msgstr "OIDC-Anbieter-URL"
 
-#: gatekeeper/forms.py:192
+#: gatekeeper/forms.py:195
 msgid "OIDC Client ID"
 msgstr "OIDC-Client-ID"
 
-#: gatekeeper/forms.py:193
+#: gatekeeper/forms.py:196
 msgid "OIDC Client Secret"
 msgstr "OIDC-Client-Geheimnis"
 
-#: gatekeeper/forms.py:257
+#: gatekeeper/forms.py:260
 msgid "TOTP secret must be empty for Local Password authentication."
 msgstr ""
 "Das TOTP-Geheimnis muss für die Authentifizierung mit lokalem Passwort leer "
 "sein."
 
-#: gatekeeper/forms.py:259
+#: gatekeeper/forms.py:262
 msgid "TOTP validation PIN must be empty for Local Password authentication."
 msgstr ""
 "Die TOTP-Validierungs-PIN muss für die Authentifizierung mit lokalem "
 "Passwort leer sein."
 
-#: gatekeeper/forms.py:261
+#: gatekeeper/forms.py:264
 msgid "OIDC fields must be empty for Local Password authentication."
 msgstr ""
 "OIDC-Felder müssen für die Authentifizierung mit lokalem Passwort leer sein."
 
-#: gatekeeper/forms.py:267
+#: gatekeeper/forms.py:270
 msgid "Only one Local Password authentication method can be configured."
 msgstr ""
 "Es kann nur eine Authentifizierungsmethode mit lokalem Passwort konfiguriert "
 "werden."
 
-#: gatekeeper/forms.py:270
+#: gatekeeper/forms.py:273
 msgid "OIDC fields must be empty for TOTP authentication."
 msgstr "OIDC-Felder müssen für die TOTP-Authentifizierung leer sein."
 
-#: gatekeeper/forms.py:272
+#: gatekeeper/forms.py:275
 msgid "TOTP secret is required for TOTP authentication."
 msgstr "Das TOTP-Geheimnis ist für die TOTP-Authentifizierung erforderlich."
 
-#: gatekeeper/forms.py:285
+#: gatekeeper/forms.py:290
 msgid ""
 "OIDC authentication is temporarily unavailable and will be available soon."
 msgstr ""
 "Die OIDC-Authentifizierung ist vorübergehend nicht verfügbar und wird bald "
 "verfügbar sein."
 
-#: gatekeeper/forms.py:287
+#: gatekeeper/forms.py:292
 msgid "TOTP secret must be empty for OIDC authentication."
 msgstr "Das TOTP-Geheimnis muss für die OIDC-Authentifizierung leer sein."
 
-#: gatekeeper/forms.py:289
+#: gatekeeper/forms.py:294
 msgid "TOTP validation PIN must be empty for OIDC authentication."
 msgstr ""
 "Die TOTP-Validierungs-PIN muss für die OIDC-Authentifizierung leer sein."
 
-#: gatekeeper/forms.py:314 gatekeeper/forms.py:375 gatekeeper/forms.py:406
+#: gatekeeper/forms.py:319 gatekeeper/forms.py:380 gatekeeper/forms.py:411
 msgid "Authentication Method"
 msgstr "Authentifizierungsmethode"
 
-#: gatekeeper/forms.py:316 templates/gatekeeper/gatekeeper_list.html:274
+#: gatekeeper/forms.py:321 templates/gatekeeper/gatekeeper_list.html:298
 msgid "Prefix Length"
 msgstr "Präfixlänge"
 
-#: gatekeeper/forms.py:317 templates/firewall/firewall_rule_list.html:47
+#: gatekeeper/forms.py:322 templates/firewall/firewall_rule_list.html:47
 #: templates/firewall/manage_firewall_rule.html:360
-#: templates/gatekeeper/gatekeeper_list.html:275
+#: templates/gatekeeper/gatekeeper_list.html:299
 msgid "Action"
 msgstr "Aktion"
 
-#: gatekeeper/forms.py:332
+#: gatekeeper/forms.py:337
 #, python-format
 msgid "Prefix length for IPv%(version)d must be between 0 and %(max)d."
 msgstr "Die Präfixlänge für IPv%(version)d muss zwischen 0 und %(max)d liegen."
 
-#: gatekeeper/forms.py:376 templates/gatekeeper/gatekeeper_list.html:238
+#: gatekeeper/forms.py:381 templates/gatekeeper/gatekeeper_list.html:262
 msgid "Domain"
 msgstr "Domäne"
 
@@ -1553,23 +2048,35 @@ msgstr ""
 msgid "Per-user TOTP secret key"
 msgstr "Benutzerspezifischer TOTP-Geheimschlüssel"
 
-#: gatekeeper/models.py:142 templates/gatekeeper/gatekeeper_list.html:287
+#: gatekeeper/models.py:142 templates/gatekeeper/gatekeeper_list.html:311
 msgid "Allow"
 msgstr "Zulassen"
 
-#: gatekeeper/views.py:58
+#: gatekeeper/views.py:62
+#, python-format
+msgid ""
+"Session ended|The session of %(user)s ends on its server within a minute."
+msgstr ""
+"Sitzung beendet|Die Sitzung von %(user)s wird innerhalb einer Minute auf "
+"ihrem Server beendet."
+
+#: gatekeeper/views.py:66
+msgid "Session not found|The session is no longer active."
+msgstr "Sitzung nicht gefunden|Die Sitzung ist nicht mehr aktiv."
+
+#: gatekeeper/views.py:79
 msgid "Edit Gatekeeper User"
 msgstr "Gatekeeper-Benutzer bearbeiten"
 
-#: gatekeeper/views.py:61
+#: gatekeeper/views.py:82
 msgid "Create Gatekeeper User"
 msgstr "Gatekeeper-Benutzer erstellen"
 
-#: gatekeeper/views.py:68
+#: gatekeeper/views.py:89
 msgid "Gatekeeper User saved successfully."
 msgstr "Gatekeeper-Benutzer erfolgreich gespeichert."
 
-#: gatekeeper/views.py:73
+#: gatekeeper/views.py:95
 msgid ""
 "\n"
 "        <h4>Gatekeeper User</h4>\n"
@@ -1616,58 +2123,58 @@ msgstr ""
 "        6-stelligen PIN vor dem Speichern.</p>\n"
 "        "
 
-#: gatekeeper/views.py:110
+#: gatekeeper/views.py:132
 msgid "Gatekeeper User deleted successfully."
 msgstr "Gatekeeper-Benutzer erfolgreich gelöscht."
 
-#: gatekeeper/views.py:115
+#: gatekeeper/views.py:138
 msgid "Delete Gatekeeper User"
 msgstr "Gatekeeper-Benutzer löschen"
 
-#: gatekeeper/views.py:117
+#: gatekeeper/views.py:140
 #, python-format
 msgid "Are you sure you want to delete the user \"%(username)s\"?"
 msgstr ""
 "Sind Sie sicher, dass Sie den Benutzer \"%(username)s\" löschen möchten?"
 
-#: gatekeeper/views.py:131
+#: gatekeeper/views.py:154
 msgid "Edit Gatekeeper Group"
 msgstr "Gatekeeper-Gruppe bearbeiten"
 
-#: gatekeeper/views.py:134
+#: gatekeeper/views.py:157
 msgid "Create Gatekeeper Group"
 msgstr "Gatekeeper-Gruppe erstellen"
 
-#: gatekeeper/views.py:141
+#: gatekeeper/views.py:164
 msgid "Gatekeeper Group saved successfully."
 msgstr "Gatekeeper-Gruppe erfolgreich gespeichert."
 
-#: gatekeeper/views.py:163
+#: gatekeeper/views.py:187
 msgid "Gatekeeper Group deleted successfully."
 msgstr "Gatekeeper-Gruppe erfolgreich gelöscht."
 
-#: gatekeeper/views.py:168
+#: gatekeeper/views.py:193
 msgid "Delete Gatekeeper Group"
 msgstr "Gatekeeper-Gruppe löschen"
 
-#: gatekeeper/views.py:170
+#: gatekeeper/views.py:195
 #, python-format
 msgid "Are you sure you want to delete the group \"%(name)s\"?"
 msgstr "Sind Sie sicher, dass Sie die Gruppe \"%(name)s\" löschen möchten?"
 
-#: gatekeeper/views.py:184
+#: gatekeeper/views.py:209
 msgid "Edit Authentication Method"
 msgstr "Authentifizierungsmethode bearbeiten"
 
-#: gatekeeper/views.py:187
+#: gatekeeper/views.py:212
 msgid "Create Authentication Method"
 msgstr "Authentifizierungsmethode erstellen"
 
-#: gatekeeper/views.py:194
+#: gatekeeper/views.py:219
 msgid "Authentication Method saved successfully."
 msgstr "Authentifizierungsmethode erfolgreich gespeichert."
 
-#: gatekeeper/views.py:199
+#: gatekeeper/views.py:225
 msgid ""
 "\n"
 "        <h4>Authentication Types</h4>\n"
@@ -1710,7 +2217,7 @@ msgstr ""
 "strong> verwendet.</p>\n"
 "        "
 
-#: gatekeeper/views.py:237
+#: gatekeeper/views.py:263
 #, python-format
 msgid ""
 "Cannot delete authentication method \"%(method)s\" because it is used by the "
@@ -1719,88 +2226,88 @@ msgstr ""
 "Die Authentifizierungsmethode \"%(method)s\" kann nicht gelöscht werden, "
 "weil sie von den folgenden Richtlinien verwendet wird: %(policies)s."
 
-#: gatekeeper/views.py:243
+#: gatekeeper/views.py:269
 msgid "Authentication Method deleted successfully."
 msgstr "Authentifizierungsmethode erfolgreich gelöscht."
 
-#: gatekeeper/views.py:248
+#: gatekeeper/views.py:275
 msgid "Delete Authentication Method"
 msgstr "Authentifizierungsmethode löschen"
 
-#: gatekeeper/views.py:250
+#: gatekeeper/views.py:277
 #, python-format
 msgid "Are you sure you want to delete the authentication method \"%(name)s\"?"
 msgstr ""
 "Sind Sie sicher, dass Sie die Authentifizierungsmethode \"%(name)s\" löschen "
 "möchten?"
 
-#: gatekeeper/views.py:303
+#: gatekeeper/views.py:330
 msgid "Edit Allowed Domain"
 msgstr "Zulässige Domäne bearbeiten"
 
-#: gatekeeper/views.py:306 templates/gatekeeper/gatekeeper_list.html:203
+#: gatekeeper/views.py:333 templates/gatekeeper/gatekeeper_list.html:227
 msgid "Add Allowed Domain"
 msgstr "Zulässige Domäne hinzufügen"
 
-#: gatekeeper/views.py:313
+#: gatekeeper/views.py:340
 msgid "Allowed Domain saved successfully."
 msgstr "Zulässige Domäne erfolgreich gespeichert."
 
-#: gatekeeper/views.py:335
+#: gatekeeper/views.py:363
 msgid "Allowed Domain deleted successfully."
 msgstr "Zulässige Domäne erfolgreich gelöscht."
 
-#: gatekeeper/views.py:340
+#: gatekeeper/views.py:369
 msgid "Delete Allowed Domain"
 msgstr "Zulässige Domäne löschen"
 
-#: gatekeeper/views.py:342
+#: gatekeeper/views.py:371
 #, python-format
 msgid "Are you sure you want to delete the allowed domain \"%(domain)s\"?"
 msgstr ""
 "Sind Sie sicher, dass Sie die zulässige Domäne \"%(domain)s\" löschen "
 "möchten?"
 
-#: gatekeeper/views.py:356
+#: gatekeeper/views.py:385
 msgid "Edit Allowed Email"
 msgstr "Zulässige E-Mail bearbeiten"
 
-#: gatekeeper/views.py:359 templates/gatekeeper/gatekeeper_list.html:200
+#: gatekeeper/views.py:388 templates/gatekeeper/gatekeeper_list.html:224
 msgid "Add Allowed Email"
 msgstr "Zulässige E-Mail hinzufügen"
 
-#: gatekeeper/views.py:366
+#: gatekeeper/views.py:395
 msgid "Allowed Email saved successfully."
 msgstr "Zulässige E-Mail erfolgreich gespeichert."
 
-#: gatekeeper/views.py:388
+#: gatekeeper/views.py:418
 msgid "Allowed Email deleted successfully."
 msgstr "Zulässige E-Mail erfolgreich gelöscht."
 
-#: gatekeeper/views.py:393
+#: gatekeeper/views.py:424
 msgid "Delete Allowed Email"
 msgstr "Zulässige E-Mail löschen"
 
-#: gatekeeper/views.py:395
+#: gatekeeper/views.py:426
 #, python-format
 msgid "Are you sure you want to delete the allowed email \"%(email)s\"?"
 msgstr ""
 "Sind Sie sicher, dass Sie die zulässige E-Mail \"%(email)s\" löschen möchten?"
 
-#: gatekeeper/views.py:409
+#: gatekeeper/views.py:440
 msgid "Edit IP Address"
 msgstr "IP-Adresse bearbeiten"
 
-#: gatekeeper/views.py:412 templates/gatekeeper/gatekeeper_list.html:264
-#: templates/wireguard/wireguard_manage_peer.html:171
+#: gatekeeper/views.py:443 templates/gatekeeper/gatekeeper_list.html:288
+#: templates/wireguard/wireguard_manage_peer.html:192
 msgid "Add IP Address"
 msgstr "IP‑Adresse hinzufügen"
 
-#: gatekeeper/views.py:419
+#: gatekeeper/views.py:450
 msgid "IP Address saved successfully."
 msgstr "IP-Adresse erfolgreich gespeichert."
 
-#: gatekeeper/views.py:424
+#: gatekeeper/views.py:456
 msgid ""
 "\n"
 "        <h5>IP Address List</h5>\n"
@@ -1847,15 +2354,15 @@ msgstr ""
 "„Büronetzwerk“, „Blockierter Angreifer“).</p>\n"
 "        "
 
-#: gatekeeper/views.py:460
+#: gatekeeper/views.py:492
 msgid "IP Address deleted successfully."
 msgstr "IP-Adresse erfolgreich gelöscht."
 
-#: gatekeeper/views.py:465
+#: gatekeeper/views.py:498
 msgid "Delete IP Address"
 msgstr "IP-Adresse löschen"
 
-#: gatekeeper/views.py:467
+#: gatekeeper/views.py:500
 #, python-format
 msgid "Are you sure you want to delete the IP address \"%(address)s\"?"
 msgstr ""
@@ -1901,7 +2408,7 @@ msgid "Allow Peer Custom Routes"
 msgstr "Benutzerdefinierte Routen für Peers erlauben"
 
 #: routing_templates/forms.py:34
-#: templates/wireguard/wireguard_manage_server.html:69 wireguard/forms.py:26
+#: templates/wireguard/wireguard_manage_server.html:69 wireguard/forms.py:32
 msgid "Enforce Route Policy"
 msgstr "Routenrichtlinie erzwingen"
 
@@ -2139,52 +2646,52 @@ msgstr "Samstag"
 msgid "Sunday"
 msgstr "Sonntag"
 
-#: scheduler/views.py:27
+#: scheduler/views.py:31
 msgid "Edit Schedule Profile"
 msgstr "Zeitplanprofil bearbeiten"
 
-#: scheduler/views.py:31
+#: scheduler/views.py:35
 msgid "Create Schedule Profile"
 msgstr "Zeitplanprofil erstellen"
 
-#: scheduler/views.py:44
+#: scheduler/views.py:48
 msgid "Schedule Profile saved successfully."
 msgstr "Zeitplanprofil erfolgreich gespeichert."
 
-#: scheduler/views.py:68
+#: scheduler/views.py:75
 msgid "Schedule Profile deleted successfully."
 msgstr "Zeitplanprofil erfolgreich gelöscht."
 
-#: scheduler/views.py:73
+#: scheduler/views.py:80
 msgid "Delete Schedule Profile"
 msgstr "Zeitplanprofil löschen"
 
-#: scheduler/views.py:75
+#: scheduler/views.py:82
 #, python-format
 msgid "Are you sure you want to delete the profile \"%(name)s\"?"
 msgstr "Sind Sie sicher, dass Sie das Profil \"%(name)s\" löschen möchten?"
 
-#: scheduler/views.py:88
+#: scheduler/views.py:98
 msgid "Edit Time Interval"
 msgstr "Zeitintervall bearbeiten"
 
-#: scheduler/views.py:92
+#: scheduler/views.py:102
 msgid "Add Time Interval"
 msgstr "Zeitintervall hinzufügen"
 
-#: scheduler/views.py:102
+#: scheduler/views.py:112
 msgid "Time Interval saved successfully."
 msgstr "Zeitintervall erfolgreich gespeichert."
 
-#: scheduler/views.py:125
+#: scheduler/views.py:138
 msgid "Time Interval deleted successfully."
 msgstr "Zeitintervall erfolgreich gelöscht."
 
-#: scheduler/views.py:130
+#: scheduler/views.py:143
 msgid "Delete Time Interval"
 msgstr "Zeitintervall löschen"
 
-#: scheduler/views.py:132
+#: scheduler/views.py:145
 msgid "Are you sure you want to delete this time interval?"
 msgstr "Sind Sie sicher, dass Sie dieses Zeitintervall löschen möchten?"
 
@@ -2229,8 +2736,9 @@ msgid "In"
 msgstr "Eingehend"
 
 #: templates/api_v2/api_documentation.html:49
-#: templates/gatekeeper/gatekeeper_list.html:167
-#: templates/gatekeeper/gatekeeper_list.html:212
+#: templates/app_gateway/application_host_form.html:36
+#: templates/gatekeeper/gatekeeper_list.html:191
+#: templates/gatekeeper/gatekeeper_list.html:236
 #: templates/wireguard/apply_route_template.html:27
 msgid "Type"
 msgstr "Typ"
@@ -2240,13 +2748,13 @@ msgid "Required"
 msgstr "Erforderlich"
 
 #: templates/api_v2/api_documentation.html:62
-#: templates/gatekeeper/gatekeeper_list.html:76
+#: templates/gatekeeper/gatekeeper_list.html:100
 #: templates/scheduler/scheduleprofile_form.html:175
 msgid "Yes"
 msgstr "Ja"
 
 #: templates/api_v2/api_documentation.html:64
-#: templates/gatekeeper/gatekeeper_list.html:78
+#: templates/gatekeeper/gatekeeper_list.html:102
 #: templates/scheduler/scheduleprofile_form.html:177
 msgid "No"
 msgstr "Nein"
@@ -2276,28 +2784,32 @@ msgstr "Fehlt eine Methode oder ein Feature?"
 msgid "Open an issue on GitHub"
 msgstr "Öffnen Sie ein Issue auf GitHub"
 
-#: templates/api_v2/list.html:36 templates/user_manager/list.html:26
+#: templates/api_v2/list.html:37 templates/user_manager/list.html:26
 msgid "All"
 msgstr "Alle"
 
-#: templates/api_v2/list.html:43 vpn_invite/forms.py:49
+#: templates/api_v2/list.html:44 templates/cluster/worker_details.html:10
+#: templates/cluster/workers_list.html:61
+#: templates/cluster/workers_list.html:116 vpn_invite/forms.py:49
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: templates/api_v2/list.html:68
-#: templates/app_gateway/app_gateway_list.html:162
-#: templates/app_gateway/application_details.html:99
-#: templates/app_gateway/application_details.html:150
-#: templates/cluster/workers_list.html:77
-#: templates/gatekeeper/gatekeeper_list.html:90
-#: templates/gatekeeper/gatekeeper_list.html:133
-#: templates/gatekeeper/gatekeeper_list.html:178
-#: templates/gatekeeper/gatekeeper_list.html:226
-#: templates/gatekeeper/gatekeeper_list.html:243
-#: templates/gatekeeper/gatekeeper_list.html:295
+#: templates/api_v2/list.html:76
+#: templates/app_gateway/app_gateway_list.html:173
+#: templates/app_gateway/app_gateway_list.html:220
+#: templates/app_gateway/application_details.html:104
+#: templates/app_gateway/application_details.html:112
+#: templates/app_gateway/application_details.html:163
+#: templates/cluster/workers_list.html:171
+#: templates/gatekeeper/gatekeeper_list.html:114
+#: templates/gatekeeper/gatekeeper_list.html:157
+#: templates/gatekeeper/gatekeeper_list.html:202
+#: templates/gatekeeper/gatekeeper_list.html:250
+#: templates/gatekeeper/gatekeeper_list.html:267
+#: templates/gatekeeper/gatekeeper_list.html:319
 #: templates/routing_templates/list.html:29
 #: templates/scheduler/scheduleprofile_form.html:123
-#: templates/scheduler/scheduleprofile_list.html:25
+#: templates/scheduler/scheduleprofile_list.html:30
 #: templates/user_manager/list.html:53
 #: templates/user_manager/peer_group_list.html:35
 #: templates/wireguard/peer_list/peer_preview_modal.html:137
@@ -2327,130 +2839,194 @@ msgstr "Authentifizierung mit bestimmten Methoden oder Gruppen anfordern."
 msgid "Deny all access."
 msgstr "Gesamten Zugriff verweigern."
 
-#: templates/app_gateway/app_gateway_list.html:13
-#: templates/app_gateway/app_gateway_list.html:31
+#: templates/app_gateway/app_gateway_list.html:14
+#: templates/app_gateway/app_gateway_list.html:38
 msgid "Applications"
 msgstr "Anwendungen"
 
-#: templates/app_gateway/app_gateway_list.html:19
+#: templates/app_gateway/app_gateway_list.html:20
 msgid "Access Policies"
 msgstr "Zugriffsrichtlinien"
 
-#: templates/app_gateway/app_gateway_list.html:35
-#: templates/app_gateway/app_gateway_list.html:68
+#: templates/app_gateway/app_gateway_list.html:26
+msgid "DNS Credentials"
+msgstr "DNS-Zugangsdaten"
+
+#: templates/app_gateway/app_gateway_list.html:42
+#: templates/app_gateway/app_gateway_list.html:75
+#: templates/app_gateway/app_gateway_list.html:207
 #: templates/dns/static_host_list.html:71
 msgid "Hosts"
 msgstr "Hosts"
 
-#: templates/app_gateway/app_gateway_list.html:44
-#: templates/app_gateway/app_gateway_list.html:50
+#: templates/app_gateway/app_gateway_list.html:51
+#: templates/app_gateway/app_gateway_list.html:57
 msgid "Export Configuration"
 msgstr "Konfiguration exportieren"
 
-#: templates/app_gateway/app_gateway_list.html:49
+#: templates/app_gateway/app_gateway_list.html:56
 msgid "Export is not available because Caddy is not enabled."
 msgstr "Export ist nicht verfügbar, weil Caddy nicht aktiviert ist."
 
-#: templates/app_gateway/app_gateway_list.html:54
+#: templates/app_gateway/app_gateway_list.html:61
 msgid "Add Application"
 msgstr "Anwendung hinzufügen"
 
-#: templates/app_gateway/app_gateway_list.html:69
+#: templates/app_gateway/app_gateway_list.html:76
 msgid "Routes"
 msgstr "Routen"
 
-#: templates/app_gateway/app_gateway_list.html:88
-#: templates/app_gateway/application_details.html:47
+#: templates/app_gateway/app_gateway_list.html:95
+#: templates/app_gateway/application_details.html:48
 msgid "Default (Deny)"
 msgstr "Standard (Verweigern)"
 
-#: templates/app_gateway/app_gateway_list.html:98
+#: templates/app_gateway/app_gateway_list.html:105
 msgid "No Applications found."
 msgstr "Keine Anwendungen gefunden."
 
-#: templates/app_gateway/app_gateway_list.html:110
+#: templates/app_gateway/app_gateway_list.html:117
 msgid "Application"
 msgstr "Anwendung"
 
-#: templates/app_gateway/app_gateway_list.html:129
+#: templates/app_gateway/app_gateway_list.html:140
 msgid "No Hosts found."
 msgstr "Keine Hosts gefunden."
 
-#: templates/app_gateway/app_gateway_list.html:137
+#: templates/app_gateway/app_gateway_list.html:148
 msgid "Add Access Policy"
 msgstr "Zugriffsrichtlinie hinzufügen"
 
-#: templates/app_gateway/app_gateway_list.html:148
-#: templates/gatekeeper/gatekeeper_list.html:44
-#: templates/gatekeeper/gatekeeper_list.html:65
+#: templates/app_gateway/app_gateway_list.html:159
+#: templates/gatekeeper/gatekeeper_list.html:68
+#: templates/gatekeeper/gatekeeper_list.html:89
 msgid "Groups"
 msgstr "Gruppen"
 
-#: templates/app_gateway/app_gateway_list.html:149
+#: templates/app_gateway/app_gateway_list.html:160
 msgid "Auth Methods"
 msgstr "Authentifizierungsmethoden"
 
-#: templates/app_gateway/app_gateway_list.html:150
-#: templates/app_gateway/application_details.html:76
-#: templates/app_gateway/application_details.html:138
-#: templates/gatekeeper/gatekeeper_list.html:66
-#: templates/gatekeeper/gatekeeper_list.html:123
-#: templates/gatekeeper/gatekeeper_list.html:168
-#: templates/gatekeeper/gatekeeper_list.html:215
+#: templates/app_gateway/app_gateway_list.html:161
+#: templates/app_gateway/app_gateway_list.html:208
+#: templates/app_gateway/application_details.html:79
+#: templates/app_gateway/application_details.html:151
+#: templates/cluster/workers_list.html:91
+#: templates/gatekeeper/gatekeeper_list.html:90
+#: templates/gatekeeper/gatekeeper_list.html:147
+#: templates/gatekeeper/gatekeeper_list.html:192
+#: templates/gatekeeper/gatekeeper_list.html:239
 #: templates/scheduler/scheduleprofile_form.html:111
 #: templates/scheduler/scheduleprofile_list.html:15
 #: templates/wireguard/apply_route_template.html:28
 msgid "Actions"
 msgstr "Aktionen"
 
-#: templates/app_gateway/app_gateway_list.html:177
+#: templates/app_gateway/app_gateway_list.html:188
 msgid "No Access Policies found."
 msgstr "Keine Zugriffsrichtlinien gefunden."
 
-#: templates/app_gateway/application_details.html:12
+#: templates/app_gateway/app_gateway_list.html:235
+msgid "No DNS Credentials found."
+msgstr "Keine DNS-Zugangsdaten gefunden."
+
+#: templates/app_gateway/application_details.html:13
+#: templates/cluster/worker_details.html:20
 #: templates/wireguard/server_detail.html:53
 msgid "Back to List"
 msgstr "Zurück zur Liste"
 
-#: templates/app_gateway/application_details.html:15
-#: templates/app_gateway/application_details.html:59
-#: templates/app_gateway/application_details.html:91
-#: templates/app_gateway/application_details.html:94
+#: templates/app_gateway/application_details.html:16
+#: templates/app_gateway/application_details.html:60
+#: templates/app_gateway/application_details.html:107
 msgid "This application cannot be modified"
 msgstr "Diese Anwendung kann nicht geändert werden"
 
-#: templates/app_gateway/application_details.html:18
+#: templates/app_gateway/application_details.html:19
 msgid "This application cannot be deleted"
 msgstr "Diese Anwendung kann nicht gelöscht werden"
 
-#: templates/app_gateway/application_details.html:49
+#: templates/app_gateway/application_details.html:50
 msgid "Set Policy"
 msgstr "Richtlinie festlegen"
 
-#: templates/app_gateway/application_details.html:56
+#: templates/app_gateway/application_details.html:57
 msgid "Application Hosts"
 msgstr "Anwendungshosts"
 
-#: templates/app_gateway/application_details.html:60
-#: templates/app_gateway/application_details.html:65
+#: templates/app_gateway/application_details.html:61
+#: templates/app_gateway/application_details.html:66
 msgid "Add Host"
 msgstr "Host hinzufügen"
 
-#: templates/app_gateway/application_details.html:115
+#: templates/app_gateway/application_details.html:78
+#: templates/cluster/worker_details.html:75
+#: templates/cluster/workers_list.html:87
+#: templates/scheduler/scheduleprofile_form.html:82
+#: templates/template_parts/base_sidebar.html:13 vpn_invite/forms.py:78
+#: vpn_invite/forms.py:79 vpn_invite/forms.py:80 vpn_invite/forms.py:81
+#: vpn_invite/forms.py:82
+msgid "Status"
+msgstr "Status"
+
+#: templates/app_gateway/application_details.html:98
+msgid "Issue a new self-signed certificate"
+msgstr "Neues selbstsigniertes Zertifikat ausstellen"
+
+#: templates/app_gateway/application_details.html:98
+msgid "Retry certificate"
+msgstr "Zertifikat erneut anfordern"
+
+#: templates/app_gateway/application_details.html:128
 msgid "No Hosts configured for this application."
 msgstr "Keine Hosts für diese Anwendung konfiguriert."
 
-#: templates/app_gateway/application_details.html:121
+#: templates/app_gateway/application_details.html:134
 msgid "Application Routes"
 msgstr "Anwendungsrouten"
 
-#: templates/app_gateway/application_details.html:125
+#: templates/app_gateway/application_details.html:138
 msgid "Add Route"
 msgstr "Route hinzufügen"
 
-#: templates/app_gateway/application_details.html:165
+#: templates/app_gateway/application_details.html:178
 msgid "No Routes configured for this application."
 msgstr "Keine Routen für diese Anwendung konfiguriert."
+
+#: templates/app_gateway/application_host_form.html:10
+#: templates/app_gateway/dns_delegation_alert.html:3
+msgid "CNAME record required"
+msgstr "CNAME-Eintrag erforderlich"
+
+#: templates/app_gateway/application_host_form.html:11
+#: templates/wireguard/peer_list/peer_preview_modal.html:121
+msgid "Close"
+msgstr "Schließen"
+
+#: templates/app_gateway/application_host_form.html:16
+msgid ""
+"Make sure this record exists in the DNS zone of the hostname. The "
+"certificate is requested as soon as the configuration is applied, and "
+"without the record it cannot be issued."
+msgstr ""
+"Stellen Sie sicher, dass dieser Eintrag in der DNS-Zone des Hostnamens "
+"existiert. Das Zertifikat wird angefordert, sobald die Konfiguration "
+"angewendet wird, und kann ohne den Eintrag nicht ausgestellt werden."
+
+#: templates/app_gateway/application_host_form.html:24
+msgid "I created the record, save"
+msgstr "Eintrag erstellt, speichern"
+
+#: templates/app_gateway/application_host_form.html:38
+msgid "Target"
+msgstr "Ziel"
+
+#: templates/app_gateway/application_host_form.html:39
+#: templates/cluster/worker_details.html:144
+#: templates/cluster/worker_details.html:152
+#: templates/cluster/worker_details.html:160
+msgid "Copy"
+msgstr "Kopieren"
 
 #: templates/app_gateway/caddy_disabled_alert.html:5
 msgid "Caddy is not enabled"
@@ -2487,136 +3063,388 @@ msgstr ""
 msgid "For more information, see the discussion:"
 msgstr "Weitere Informationen finden Sie in der Diskussion:"
 
-#: templates/cluster/workers_list.html:9
-#: templates/scheduler/scheduleprofile_form.html:82
-#: templates/template_parts/base_sidebar.html:13 vpn_invite/forms.py:78
-#: vpn_invite/forms.py:79 vpn_invite/forms.py:80 vpn_invite/forms.py:81
-#: vpn_invite/forms.py:82
-msgid "Status"
-msgstr "Status"
+#: templates/app_gateway/dns_credential_form.html:25
+msgid ""
+"Credentials used to create the DNS records required by the ACME DNS "
+"challenge."
+msgstr ""
+"Zugangsdaten zum Erstellen der DNS-Einträge, die für die ACME-DNS-Challenge "
+"benötigt werden."
 
-#: templates/cluster/workers_list.html:11
+#: templates/app_gateway/dns_credential_form.html:26
+msgid ""
+"Use a token restricted to editing DNS records of the zones you need. For "
+"Cloudflare, create an API Token with the <strong>Zone / Zone / Read</strong> "
+"and <strong>Zone / DNS / Edit</strong> permissions."
+msgstr ""
+"Verwenden Sie ein Token, das auf die Bearbeitung der DNS-Einträge der "
+"benötigten Zonen beschränkt ist. Erstellen Sie bei Cloudflare ein API-Token "
+"mit den Berechtigungen <strong>Zone / Zone / Read</strong> und "
+"<strong>Zone / DNS / Edit</strong>."
+
+#: templates/app_gateway/dns_credential_form.html:30
+msgid ""
+"Secret values are never displayed after saving. Leave them blank when "
+"editing to keep the current value."
+msgstr ""
+"Geheime Werte werden nach dem Speichern nie angezeigt. Lassen Sie sie beim "
+"Bearbeiten leer, um den aktuellen Wert beizubehalten."
+
+#: templates/app_gateway/dns_credential_form.html:32
+msgid ""
+"Use a delegation domain when the zone of the hostnames is not managed by "
+"this provider, or to keep the token restricted to a zone used only for "
+"certificate validation. The challenge record is created in the delegation "
+"domain, and each hostname needs a CNAME record pointing to it:"
+msgstr ""
+"Verwenden Sie eine Delegationsdomäne, wenn die Zone der Hostnamen nicht von "
+"diesem Anbieter verwaltet wird, oder um das Token auf eine Zone zu "
+"beschränken, die nur zur Zertifikatsvalidierung dient. Der Challenge-Eintrag "
+"wird in der Delegationsdomäne erstellt, und jeder Hostname benötigt einen "
+"CNAME-Eintrag, der auf sie zeigt:"
+
+#: templates/app_gateway/dns_credential_form.html:39
+msgid ""
+"The token must be able to edit the DNS records of the delegation domain "
+"zone. The required record of each host is shown when the host is edited and "
+"in the host list."
+msgstr ""
+"Das Token muss die DNS-Einträge der Zone der Delegationsdomäne bearbeiten "
+"können. Der erforderliche Eintrag jedes Hosts wird beim Bearbeiten des Hosts "
+"und in der Hostliste angezeigt."
+
+#: templates/app_gateway/dns_delegation_alert.html:4
+msgid ""
+"This DNS credential uses a delegation domain. Create this record in the DNS "
+"zone of the hostname before saving, otherwise the certificate cannot be "
+"issued:"
+msgstr ""
+"Diese DNS-Zugangsdaten verwenden eine Delegationsdomäne. Erstellen Sie "
+"diesen Eintrag vor dem Speichern in der DNS-Zone des Hostnamens, sonst kann "
+"das Zertifikat nicht ausgestellt werden:"
+
+#: templates/app_gateway/host_certificate.html:5
+msgid "fallback"
+msgstr "Fallback"
+
+#: templates/app_gateway/host_certificate.html:7
+msgid "no fallback"
+msgstr "kein Fallback"
+
+#: templates/app_gateway/host_certificate.html:14
+msgid "Required record"
+msgstr "Erforderlicher Eintrag"
+
+#: templates/app_gateway/host_certificate.html:15
+msgid "Fallback"
+msgstr "Fallback"
+
+#: templates/app_gateway/host_certificate.html:16
+msgid "self-signed certificate while the trusted certificate cannot be issued"
+msgstr ""
+"selbstsigniertes Zertifikat, solange das vertrauenswürdige Zertifikat nicht "
+"ausgestellt werden kann"
+
+#: templates/app_gateway/host_certificate.html:16
+msgid "disabled, the connection fails until the certificate is issued"
+msgstr ""
+"deaktiviert, die Verbindung schlägt fehl, bis das Zertifikat ausgestellt ist"
+
+#: templates/app_gateway/pending_export_alert.html:6
+msgid "There are changes that have not been exported to Caddy yet."
+msgstr "Es gibt Änderungen, die noch nicht nach Caddy exportiert wurden."
+
+#: templates/app_gateway/pending_export_alert.html:12
+msgid "Export now"
+msgstr "Jetzt exportieren"
+
+#: templates/cluster/worker_details.html:12
+#: templates/cluster/workers_list.html:118
+msgid "Refused"
+msgstr "Abgewiesen"
+
+#: templates/cluster/worker_details.html:14
+#: templates/cluster/workers_list.html:120
+#: templates/gatekeeper/gatekeeper_list.html:372
+msgid "Online"
+msgstr "Online"
+
+#: templates/cluster/worker_details.html:16
+#: templates/cluster/workers_list.html:122
+msgid "Offline"
+msgstr "Offline"
+
+#: templates/cluster/worker_details.html:21
+msgid "Edit Worker"
+msgstr "Worker bearbeiten"
+
+#: templates/cluster/worker_details.html:29
+msgid ""
+"The worker is offline. The information below is the last state it reported."
+msgstr ""
+"Der Worker ist offline. Die folgenden Informationen sind der zuletzt "
+"gemeldete Zustand."
+
+#: templates/cluster/worker_details.html:32
+#: templates/cluster/workers_list.html:162
+msgid "The worker is outdated. Please update it to the latest version."
+msgstr ""
+"Der Worker ist veraltet. Bitte aktualisieren Sie ihn auf die neueste Version."
+
+#: templates/cluster/worker_details.html:40
+#: templates/cluster/workers_list.html:101
+msgid "IP Lock Enabled"
+msgstr "IP-Sperre aktiviert"
+
+#: templates/cluster/worker_details.html:41
 #: templates/wireguard/peer_list/peer_data.html:43
 #: templates/wireguard/peer_list/peer_preview_modal.html:28
 msgid "Location"
 msgstr "Standort"
 
-#: templates/cluster/workers_list.html:12
+#: templates/cluster/worker_details.html:47
+#: templates/cluster/workers_list.html:124
 msgid "Last Seen"
 msgstr "Zuletzt gesehen"
 
-#: templates/cluster/workers_list.html:13
-#: templates/cluster/workers_list.html:110
-msgid "Config Version"
-msgstr "Konfigurationsversion"
-
-#: templates/cluster/workers_list.html:28
-msgid "Configuration sync in progress"
-msgstr "Konfigurationssynchronisierung läuft"
-
-#: templates/cluster/workers_list.html:37
-msgid "The worker is outdated. Please update it to the latest version."
-msgstr ""
-"Der Worker ist veraltet. Bitte aktualisieren Sie ihn auf die neueste Version."
-
-#: templates/cluster/workers_list.html:44
-msgid "IP Lock Enabled"
-msgstr "IP-Sperre aktiviert"
-
-#: templates/cluster/workers_list.html:47
-#: templates/cluster/workers_list.html:54
-#: templates/wireguard/wireguard_manage_peer.html:112
-#: templates/wireguard/wireguard_manage_peer.html:121
-msgid "Not set"
-msgstr "Nicht gesetzt"
-
-#: templates/cluster/workers_list.html:61
+#: templates/cluster/worker_details.html:48
+#: templates/cluster/workers_list.html:125
 msgid "Never"
 msgstr "Niemals"
 
-#: templates/cluster/workers_list.html:64
-msgid "Last seen more than 10 minutes ago or never seen."
-msgstr "Zuletzt vor mehr als 10 Minuten gesehen oder noch nie gesehen."
+#: templates/cluster/worker_details.html:49
+#: templates/cluster/workers_list.html:90
+#: templates/template_parts/base_footer.html:7
+msgid "Version"
+msgstr "Version"
 
-#: templates/cluster/workers_list.html:82
+#: templates/cluster/worker_details.html:50
+msgid "current"
+msgstr "aktuell"
+
+#: templates/cluster/worker_details.html:52
+msgid "WireGuard instances"
+msgstr "WireGuard-Instanzen"
+
+#: templates/cluster/worker_details.html:61
+msgid "App Gateway"
+msgstr "App Gateway"
+
+#: templates/cluster/worker_details.html:62
+msgid "Not installed"
+msgstr "Nicht installiert"
+
+#: templates/cluster/worker_details.html:72
+#: templates/cluster/workers_list.html:88
+msgid "Synchronization"
+msgstr "Synchronisierung"
+
+#: templates/cluster/worker_details.html:75
+msgid "Section"
+msgstr "Bereich"
+
+#: templates/cluster/worker_details.html:75
+msgid "Last update"
+msgstr "Letzte Aktualisierung"
+
+#: templates/cluster/worker_details.html:81
+#: templates/cluster/workers_list.html:42
+#: templates/cluster/workers_list.html:134
+msgid "Synchronized"
+msgstr "Synchronisiert"
+
+#: templates/cluster/worker_details.html:82
+#: templates/cluster/workers_list.html:136
+msgid "Error"
+msgstr "Fehler"
+
+#: templates/cluster/worker_details.html:83
+#: templates/cluster/workers_list.html:139
+msgid "Pending"
+msgstr "Ausstehend"
+
+#: templates/cluster/worker_details.html:96
+#: templates/cluster/workers_list.html:89
+msgid "Services"
+msgstr "Dienste"
+
+#: templates/cluster/worker_details.html:101
+msgid "No report received yet."
+msgstr "Noch kein Bericht empfangen."
+
+#: templates/cluster/worker_details.html:107
+msgid "Certificates served"
+msgstr "Bereitgestellte Zertifikate"
+
+#: templates/cluster/worker_details.html:131
+msgid "Installation"
+msgstr "Installation"
+
+#: templates/cluster/worker_details.html:134
+msgid "VPN only"
+msgstr "Nur VPN"
+
+#: templates/cluster/worker_details.html:135
+msgid "VPN and App Gateway"
+msgstr "VPN und App Gateway"
+
+#: templates/cluster/worker_details.html:138
+msgid ""
+"Download the compose file from the <a href=\"https://github.com/"
+"eduardogsilva/wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">project repository</a> to an empty directory on the worker:"
+msgstr ""
+"Laden Sie die Compose-Datei aus dem <a href=\"https://github.com/"
+"eduardogsilva/wireguard_webadmin\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">Projekt-Repository</a> in ein leeres Verzeichnis auf dem Worker "
+"herunter:"
+
+#: templates/cluster/worker_details.html:148
+msgid "Create a <code>.env</code> file in the same directory:"
+msgstr "Legen Sie im selben Verzeichnis eine Datei <code>.env</code> an:"
+
+#: templates/cluster/worker_details.html:158
+msgid "Start the worker:"
+msgstr "Starten Sie den Worker:"
+
+#: templates/cluster/worker_details.html:165
+msgid "To update, run docker compose pull followed by the same up -d command."
+msgstr ""
+"Zum Aktualisieren führen Sie docker compose pull und anschließend denselben "
+"up -d-Befehl aus."
+
+#: templates/cluster/worker_details.html:166
+msgid ""
+"To switch between VPN only and VPN and App Gateway, download the other "
+"compose file to the same directory and start it with up -d --remove-orphans. "
+"The worker data is kept."
+msgstr ""
+"Um zwischen Nur VPN und VPN und App Gateway zu wechseln, laden Sie die "
+"andere Compose-Datei in dasselbe Verzeichnis herunter und starten Sie sie "
+"mit up -d --remove-orphans. Die Daten des Workers bleiben erhalten."
+
+#: templates/cluster/worker_details.html:167
+msgid ""
+"Applications published by workers must use DNS validation or self-signed "
+"certificates: certificates are issued by this primary server and distributed "
+"to the workers."
+msgstr ""
+"Von Workern veröffentlichte Anwendungen müssen DNS-Validierung oder "
+"selbstsignierte Zertifikate verwenden: Die Zertifikate werden von diesem "
+"primären Server ausgestellt und an die Worker verteilt."
+
+#: templates/cluster/worker_details.html:168
+msgid ""
+"Publish the WireGuard ports (51820-51839/udp) and, with the App Gateway, "
+"ports 80 and 443 of the worker."
+msgstr ""
+"Geben Sie die WireGuard-Ports (51820-51839/udp) und mit dem App Gateway die "
+"Ports 80 und 443 des Workers frei."
+
+#: templates/cluster/workers_list.html:8
+msgid ""
+"The cluster is disabled. Workers are refused and App Gateway applications "
+"are only published by this primary server."
+msgstr ""
+"Der Cluster ist deaktiviert. Worker werden abgewiesen und App-Gateway-"
+"Anwendungen werden nur von diesem primären Server veröffentlicht."
+
+#: templates/cluster/workers_list.html:15
+msgid "These WireGuard instances are offline because their worker is disabled:"
+msgstr ""
+"Diese WireGuard-Instanzen sind außer Betrieb, weil ihr Worker deaktiviert "
+"ist:"
+
+#: templates/cluster/workers_list.html:17
+msgid "Enable the worker or move the instances to another server."
+msgstr ""
+"Aktivieren Sie den Worker oder verschieben Sie die Instanzen auf einen "
+"anderen Server."
+
+#: templates/cluster/workers_list.html:23
+msgid ""
+"The cluster requires the WireGuard status cache. Enable "
+"WIREGUARD_STATUS_CACHE_ENABLED in the .env file."
+msgstr ""
+"Der Cluster erfordert den WireGuard-Statuscache. Aktivieren Sie "
+"WIREGUARD_STATUS_CACHE_ENABLED in der Datei .env."
+
+#: templates/cluster/workers_list.html:33
+msgid "Workers online"
+msgstr "Worker online"
+
+#: templates/cluster/workers_list.html:51
+msgid "Need attention"
+msgstr "Benötigen Aufmerksamkeit"
+
+#: templates/cluster/workers_list.html:60
+msgid "Primary WireGuard"
+msgstr "Primäres WireGuard"
+
+#: templates/cluster/workers_list.html:63
+msgid "WireGuard instances on the primary server"
+msgstr "WireGuard-Instanzen auf dem primären Server"
+
+#: templates/cluster/workers_list.html:64
+#: templates/cluster/workers_list.html:109
+msgid "No WireGuard instances"
+msgstr "Keine WireGuard-Instanzen"
+
+#: templates/cluster/workers_list.html:74
+msgid "Workers"
+msgstr "Worker"
+
+#: templates/cluster/workers_list.html:86
+msgid "Worker"
+msgstr "Worker"
+
+#: templates/cluster/workers_list.html:107
+msgid "WireGuard instance"
+msgstr "WireGuard-Instanz"
+
+#: templates/cluster/workers_list.html:132
+msgid "The worker is not receiving updates."
+msgstr "Der Worker erhält keine Aktualisierungen."
+
+#: templates/cluster/workers_list.html:148
+msgid "Last reported state"
+msgstr "Zuletzt gemeldeter Zustand"
+
+#: templates/cluster/workers_list.html:155
+msgid "Certificates unavailable or expiring soon"
+msgstr "Zertifikate nicht verfügbar oder bald ablaufend"
+
+#: templates/cluster/workers_list.html:170
+msgid "Details"
+msgstr "Details"
+
+#: templates/cluster/workers_list.html:180
 msgid "No workers configured"
 msgstr "Keine Worker konfiguriert"
 
-#: templates/cluster/workers_list.html:89
-#: templates/cluster/workers_list.html:92
-msgid "Cluster Information"
-msgstr "Cluster-Informationen"
+#: templates/cluster/workers_list.html:190
+msgid "Diagnostics"
+msgstr "Diagnose"
 
-#: templates/cluster/workers_list.html:114
-msgid "DNS Version"
-msgstr "DNS-Version"
+#: templates/cluster/workers_list.html:201
+msgid "Current worker version"
+msgstr "Aktuelle Worker-Version"
 
-#: templates/cluster/workers_list.html:119
+#: templates/cluster/workers_list.html:203
 msgid "Stats Cache Refresh Interval"
 msgstr "Aktualisierungsintervall für Statistik-Cache"
 
-#: templates/cluster/workers_list.html:123
-msgid "Cache Enabled"
-msgstr "Cache aktiviert"
-
-#: templates/cluster/workers_list.html:133
+#: templates/cluster/workers_list.html:205
 msgid "Cache Web Load Previous Count"
 msgstr "Anzahl vorheriger Web-Cache-Ladungen"
 
-#: templates/cluster/workers_list.html:137
+#: templates/cluster/workers_list.html:207
 msgid "Master Cache Processing Time"
 msgstr "Verarbeitungszeit des Master-Caches"
 
-#: templates/cluster/workers_list.html:141
+#: templates/cluster/workers_list.html:209
 msgid "Cluster Cache Processing Time"
 msgstr "Verarbeitungszeit des Cluster-Caches"
-
-#: templates/cluster/workers_list.html:153
-msgid "Primary WireGuard"
-msgstr "Primäres WireGuard aktivieren"
-
-#: templates/cluster/workers_list.html:171
-msgid "Cluster Feature – Testing Phase"
-msgstr "Cluster-Funktion – Testphase"
-
-#: templates/cluster/workers_list.html:178
-msgid "The cluster functionality is currently released as experimental."
-msgstr "Die Cluster-Funktionalität ist derzeit als experimentell freigegeben."
-
-#: templates/cluster/workers_list.html:179
-msgid "At this stage, only core features are implemented:"
-msgstr "In diesem Stadium sind nur Kernfunktionen implementiert:"
-
-#: templates/cluster/workers_list.html:181
-msgid "Configuration synchronization service"
-msgstr "Konfigurations-Synchronisationsdienst"
-
-#: templates/cluster/workers_list.html:182
-msgid "Primary node mirroring (WireGuard and firewall rules)"
-msgstr "Primärknoten-Spiegelung (WireGuard und Firewall-Regeln)"
-
-#: templates/cluster/workers_list.html:183
-msgid "DNS rules mirroring"
-msgstr "DNS-Regel-Spiegelung"
-
-#: templates/cluster/workers_list.html:184
-msgid "Traffic data synchronization"
-msgstr "Synchronisierung der Verkehrsdaten"
-
-#: templates/cluster/workers_list.html:185
-msgid ""
-"Server selection dropdown before downloading peer configs or VPN invites"
-msgstr ""
-"Server-Auswahlliste vor dem Herunterladen von Peer-Konfigurationen oder VPN-"
-"Einladungen"
-
-#: templates/cluster/workers_list.html:191
-msgid "For more information, please visit:"
-msgstr "Für weitere Informationen besuchen Sie bitte:"
-
-#: templates/cluster/workers_list.html:195
-msgid "I Understand"
-msgstr "Ich verstehe"
 
 #: templates/console/console.html:12
 msgid "Clear"
@@ -3018,72 +3846,173 @@ msgstr ""
 msgid "Error generating QR code."
 msgstr "Fehler beim Generieren des QR-Codes."
 
-#: templates/gatekeeper/gatekeeper_list.html:19
+#: templates/gatekeeper/gatekeeper_list.html:37
 msgid "Gatekeeper Users"
 msgstr "Gatekeeper-Benutzer"
 
-#: templates/gatekeeper/gatekeeper_list.html:25
+#: templates/gatekeeper/gatekeeper_list.html:43
 msgid "Allowed Emails & Domains"
 msgstr "Zulässige E-Mails und Domänen"
 
-#: templates/gatekeeper/gatekeeper_list.html:31
+#: templates/gatekeeper/gatekeeper_list.html:49
 msgid "IP Addresses"
 msgstr "IP-Adressen"
 
-#: templates/gatekeeper/gatekeeper_list.html:41
+#: templates/gatekeeper/gatekeeper_list.html:55
+msgid "Sessions"
+msgstr "Sitzungen"
+
+#: templates/gatekeeper/gatekeeper_list.html:65
 #: templates/user_manager/peer_group_list.html:11
 msgid "Users"
 msgstr "Benutzer"
 
-#: templates/gatekeeper/gatekeeper_list.html:52
+#: templates/gatekeeper/gatekeeper_list.html:76
 #: templates/user_manager/list_buttons.html:2 user_manager/views.py:111
 msgid "Add User"
 msgstr "Benutzer hinzufügen"
 
-#: templates/gatekeeper/gatekeeper_list.html:64
+#: templates/gatekeeper/gatekeeper_list.html:88
 msgid "TOTP"
 msgstr "TOTP"
 
-#: templates/gatekeeper/gatekeeper_list.html:105
+#: templates/gatekeeper/gatekeeper_list.html:129
 msgid "No Gatekeeper Users found."
 msgstr "Keine Gatekeeper-Benutzer gefunden."
 
-#: templates/gatekeeper/gatekeeper_list.html:112
+#: templates/gatekeeper/gatekeeper_list.html:136
 msgid "Add Group"
 msgstr "Gruppe hinzufügen"
 
-#: templates/gatekeeper/gatekeeper_list.html:148
+#: templates/gatekeeper/gatekeeper_list.html:172
 msgid "No Gatekeeper Groups found."
 msgstr "Keine Gatekeeper-Gruppen gefunden."
 
-#: templates/gatekeeper/gatekeeper_list.html:157
+#: templates/gatekeeper/gatekeeper_list.html:181
 msgid "Add Auth Method"
 msgstr "Authentifizierungsmethode hinzufügen"
 
-#: templates/gatekeeper/gatekeeper_list.html:193
+#: templates/gatekeeper/gatekeeper_list.html:217
 msgid "No Authentication Methods found."
 msgstr "Keine Authentifizierungsmethoden gefunden."
 
-#: templates/gatekeeper/gatekeeper_list.html:213
+#: templates/gatekeeper/gatekeeper_list.html:237
 msgid "Identity"
 msgstr "Identität"
 
-#: templates/gatekeeper/gatekeeper_list.html:214
-#: templates/gatekeeper/gatekeeper_list.html:276
+#: templates/gatekeeper/gatekeeper_list.html:238
+#: templates/gatekeeper/gatekeeper_list.html:300
 msgid "Auth Method"
 msgstr "Authentifizierungsmethode"
 
-#: templates/gatekeeper/gatekeeper_list.html:258
+#: templates/gatekeeper/gatekeeper_list.html:282
 msgid "No Allowed Emails or Domains found."
 msgstr "Keine zulässigen E-Mails oder Domänen gefunden."
 
-#: templates/gatekeeper/gatekeeper_list.html:277
+#: templates/gatekeeper/gatekeeper_list.html:301
+#: templates/gatekeeper/gatekeeper_list.html:355
 msgid "Manage"
 msgstr "Verwalten"
 
-#: templates/gatekeeper/gatekeeper_list.html:310
+#: templates/gatekeeper/gatekeeper_list.html:334
 msgid "No IP Addresses found."
 msgstr "Keine IP-Adressen gefunden."
+
+#: templates/gatekeeper/gatekeeper_list.html:340
+msgid ""
+"Sessions opened on the App Gateway login. A session is online when it was "
+"used in the last 10 minutes. Sessions of cluster workers are the last ones "
+"each worker reported."
+msgstr ""
+"Über die Anmeldung des App Gateway geöffnete Sitzungen. Eine Sitzung ist "
+"online, wenn sie in den letzten 10 Minuten verwendet wurde. Die Sitzungen "
+"der Cluster-Worker sind die zuletzt von jedem Worker gemeldeten."
+
+#: templates/gatekeeper/gatekeeper_list.html:346
+msgid "User"
+msgstr "Benutzer"
+
+#: templates/gatekeeper/gatekeeper_list.html:347
+#: templates/wireguard/peer_list/peer_preview_modal.html:146
+#: wireguard/forms.py:59
+msgid "Server"
+msgstr "Server"
+
+#: templates/gatekeeper/gatekeeper_list.html:348 vpn_invite/forms.py:283
+msgid "Host"
+msgstr "Host"
+
+#: templates/gatekeeper/gatekeeper_list.html:349
+msgid "Last access"
+msgstr "Letzter Zugriff"
+
+#: templates/gatekeeper/gatekeeper_list.html:351
+msgid "Factors"
+msgstr "Faktoren"
+
+#: templates/gatekeeper/gatekeeper_list.html:352
+msgid "Started"
+msgstr "Beginn"
+
+#: templates/gatekeeper/gatekeeper_list.html:353
+msgid "Expires"
+msgstr "Läuft ab"
+
+#: templates/gatekeeper/gatekeeper_list.html:354
+msgid "Browser"
+msgstr "Browser"
+
+#: templates/gatekeeper/gatekeeper_list.html:367
+msgid "Last report"
+msgstr "Letzter Bericht"
+
+#: templates/gatekeeper/gatekeeper_list.html:367
+msgid "Worker offline"
+msgstr "Worker offline"
+
+#: templates/gatekeeper/gatekeeper_list.html:384
+msgid "Ending"
+msgstr "Wird beendet"
+
+#: templates/gatekeeper/gatekeeper_list.html:389
+msgid "End session"
+msgstr "Sitzung beenden"
+
+#: templates/gatekeeper/gatekeeper_list.html:401
+msgid "No active sessions."
+msgstr "Keine aktiven Sitzungen."
+
+#: templates/gatekeeper/gatekeeper_list.html:440
+msgid "Columns"
+msgstr "Spalten"
+
+#: templates/gatekeeper/gatekeeper_list.html:443
+msgid "Search:"
+msgstr "Suchen:"
+
+#: templates/gatekeeper/gatekeeper_list.html:444
+msgid "Showing _START_ to _END_ of _TOTAL_ sessions"
+msgstr "_START_ bis _END_ von _TOTAL_ Sitzungen"
+
+#: templates/gatekeeper/gatekeeper_list.html:445
+msgid "No sessions to show"
+msgstr "Keine Sitzungen anzuzeigen"
+
+#: templates/gatekeeper/gatekeeper_list.html:446
+msgid "(filtered from _MAX_ sessions)"
+msgstr "(gefiltert aus _MAX_ Sitzungen)"
+
+#: templates/gatekeeper/gatekeeper_list.html:447
+msgid "No matching sessions"
+msgstr "Keine passenden Sitzungen"
+
+#: templates/gatekeeper/gatekeeper_list.html:448
+msgid "Previous"
+msgstr "Zurück"
+
+#: templates/gatekeeper/gatekeeper_list.html:448
+msgid "Next"
+msgstr "Weiter"
 
 #: templates/generic_delete_confirmation.html:16
 msgid "Confirm Delete"
@@ -3172,21 +4101,17 @@ msgstr "Zeitplanprofile"
 msgid "Peers"
 msgstr "Peers"
 
-#: templates/scheduler/scheduleprofile_list.html:36
+#: templates/scheduler/scheduleprofile_list.html:46
 msgid "No schedule profiles found."
 msgstr "Keine Zeitplanprofile gefunden."
 
-#: templates/scheduler/scheduleprofile_list.html:44
+#: templates/scheduler/scheduleprofile_list.html:60
 msgid "Add Profile"
 msgstr "Profil hinzufügen"
 
 #: templates/template_parts/base_footer.html:4
 msgid "Update Available"
 msgstr "Aktualisierung verfügbar"
-
-#: templates/template_parts/base_footer.html:7
-msgid "Version"
-msgstr "Version"
 
 #: templates/template_parts/base_pending_changes_warning.html:4
 msgid "Update Required"
@@ -3287,7 +4212,7 @@ msgstr "E‑Mail‑Einstellungen"
 msgid "Invite Settings"
 msgstr "Einladungs‑Einstellungen"
 
-#: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:350
+#: templates/wireguard/apply_route_template.html:8 wireguard_peer/views.py:401
 msgid "Apply Route Template"
 msgstr "Routen-Vorlage anwenden"
 
@@ -3326,12 +4251,6 @@ msgstr "Durchsatz"
 msgid "Transfer"
 msgstr "Übertragen"
 
-#: templates/wireguard/peer_list/peer_data.html:44
-#: templates/wireguard/peer_list/script_wireguard_status_update.html:146
-#: wireguard_peer/views.py:82
-msgid "Primary Server"
-msgstr "Primärer Server"
-
 #: templates/wireguard/peer_list/peer_data.html:47
 #: templates/wireguard/peer_list/peer_preview_modal.html:24
 msgid "Latest Handshake"
@@ -3348,12 +4267,12 @@ msgid "Allowed IPs"
 msgstr "Erlaubte IPs"
 
 #: templates/wireguard/peer_list/peer_preview_modal.html:45
-#: templates/wireguard/wireguard_manage_peer.html:135
+#: templates/wireguard/wireguard_manage_peer.html:156
 msgid "Peer Traffic"
 msgstr "Peer‑Traffic"
 
 #: templates/wireguard/peer_list/peer_preview_modal.html:61
-#: templates/wireguard/wireguard_manage_peer.html:152
+#: templates/wireguard/wireguard_manage_peer.html:173
 msgid "No traffic history, please wait a few minutes"
 msgstr "Keine Verkehrsdaten vorhanden, bitte einige Minuten warten"
 
@@ -3389,10 +4308,6 @@ msgstr "Text kopieren"
 msgid "WhatsApp"
 msgstr "WhatsApp"
 
-#: templates/wireguard/peer_list/peer_preview_modal.html:121
-msgid "Close"
-msgstr "Schließen"
-
 #: templates/wireguard/peer_list/peer_preview_modal.html:125
 msgid "Config"
 msgstr "Konfig"
@@ -3400,10 +4315,6 @@ msgstr "Konfig"
 #: templates/wireguard/peer_list/peer_preview_modal.html:129
 msgid "QR Code"
 msgstr "QR‑Code"
-
-#: templates/wireguard/peer_list/peer_preview_modal.html:145
-msgid "Server"
-msgstr "Primärer Server"
 
 #: templates/wireguard/peer_list/script_peer_extras_toggle.html:7
 msgid "Hide extras"
@@ -3508,13 +4419,13 @@ msgstr ""
 "Konfiguration ist veraltet."
 
 #: templates/wireguard/server_detail.html:17
-#: templates/wireguard/wireguard_manage_peer.html:104 wireguard/forms.py:18
-#: wireguard_peer/forms.py:52
+#: templates/wireguard/wireguard_manage_peer.html:125 wireguard/forms.py:20
+#: wireguard_peer/forms.py:55
 msgid "Public Key"
 msgstr "Public Key"
 
 #: templates/wireguard/server_detail.html:31
-#: templates/wireguard/server_list.html:20 wireguard/forms.py:20
+#: templates/wireguard/server_list.html:20 wireguard/forms.py:22
 msgid "Listen Port"
 msgstr "Listen‑Port"
 
@@ -3531,7 +4442,7 @@ msgstr "Instanz bearbeiten"
 msgid "Traffic Graph"
 msgstr "Verkehrsgrafik"
 
-#: templates/wireguard/server_list.html:7 wireguard/views.py:224
+#: templates/wireguard/server_list.html:7 wireguard/views.py:225
 msgid "WireGuard Instances"
 msgstr "WireGuard-Instanzen"
 
@@ -3548,9 +4459,9 @@ msgid "Enter Allowed IP"
 msgstr "Erlaubte IP eingeben"
 
 #: templates/wireguard/wireguard_manage_ip.html:34
-#: templates/wireguard/wireguard_manage_peer.html:187
-#: templates/wireguard/wireguard_manage_peer.html:276
-#: wireguard_peer/forms.py:71
+#: templates/wireguard/wireguard_manage_peer.html:208
+#: templates/wireguard/wireguard_manage_peer.html:297
+#: wireguard_peer/forms.py:148
 msgid "Priority"
 msgstr "Priorität"
 
@@ -3602,62 +4513,77 @@ msgstr "Nächste Deaktivierung"
 msgid "No profile associated"
 msgstr "Kein Profil zugeordnet"
 
-#: templates/wireguard/wireguard_manage_peer.html:83 wireguard_peer/forms.py:41
+#: templates/wireguard/wireguard_manage_peer.html:83 wireguard_peer/forms.py:44
 msgid "Persistent Keepalive"
 msgstr "Persistent Keepalive"
 
-#: templates/wireguard/wireguard_manage_peer.html:96
+#: templates/wireguard/wireguard_manage_peer.html:95 wireguard_peer/forms.py:97
+msgid "Endpoint"
+msgstr "Endpoint"
+
+#: templates/wireguard/wireguard_manage_peer.html:101
+#: wireguard_peer/forms.py:102
+msgid "Connected server"
+msgstr "Verbundener Server"
+
+#: templates/wireguard/wireguard_manage_peer.html:104
+#: templates/wireguard/wireguard_manage_peer.html:133
+#: templates/wireguard/wireguard_manage_peer.html:142
+msgid "Not set"
+msgstr "Nicht gesetzt"
+
+#: templates/wireguard/wireguard_manage_peer.html:117
 msgid "Keys"
 msgstr "Schlüssel"
 
-#: templates/wireguard/wireguard_manage_peer.html:107 wireguard/forms.py:17
-#: wireguard_peer/forms.py:53
+#: templates/wireguard/wireguard_manage_peer.html:128 wireguard/forms.py:19
+#: wireguard_peer/forms.py:56
 msgid "Private Key"
 msgstr "Private Key"
 
-#: templates/wireguard/wireguard_manage_peer.html:116
-#: wireguard_peer/forms.py:54
+#: templates/wireguard/wireguard_manage_peer.html:137
+#: wireguard_peer/forms.py:57
 msgid "Pre-Shared Key"
 msgstr "Pre‑Shared Key"
 
-#: templates/wireguard/wireguard_manage_peer.html:166
+#: templates/wireguard/wireguard_manage_peer.html:187
 msgid "AllowedIPs at Peer section of wg"
 msgstr "AllowedIPs in der Peer‑Sektion von wg"
 
-#: templates/wireguard/wireguard_manage_peer.html:167
+#: templates/wireguard/wireguard_manage_peer.html:188
 msgid "Peer IP Addresses and networks"
 msgstr "Peer‑IP‑Adressen und Netze"
 
-#: templates/wireguard/wireguard_manage_peer.html:185
-#: templates/wireguard/wireguard_manage_peer.html:274
+#: templates/wireguard/wireguard_manage_peer.html:206
+#: templates/wireguard/wireguard_manage_peer.html:295
 msgid "Main ip address"
 msgstr "Haupt‑IP‑Adresse"
 
-#: templates/wireguard/wireguard_manage_peer.html:200
+#: templates/wireguard/wireguard_manage_peer.html:221
 msgid "AllowedIPs at client configuration file"
 msgstr "AllowedIPs in der Client-Konfigurationsdatei"
 
-#: templates/wireguard/wireguard_manage_peer.html:201
+#: templates/wireguard/wireguard_manage_peer.html:222
 msgid "Client Routing"
 msgstr "Client-Routing"
 
-#: templates/wireguard/wireguard_manage_peer.html:206
+#: templates/wireguard/wireguard_manage_peer.html:227
 msgid "Apply template"
 msgstr "Vorlage anwenden"
 
-#: templates/wireguard/wireguard_manage_peer.html:210
+#: templates/wireguard/wireguard_manage_peer.html:231
 msgid "Add Client route"
 msgstr "Client‑Route hinzufügen"
 
-#: templates/wireguard/wireguard_manage_peer.html:223
+#: templates/wireguard/wireguard_manage_peer.html:244
 msgid "Routing Template"
 msgstr "Routenvorlage"
 
-#: templates/wireguard/wireguard_manage_peer.html:236
+#: templates/wireguard/wireguard_manage_peer.html:257
 msgid "Template Route"
 msgstr "Vorlagenroute"
 
-#: templates/wireguard/wireguard_manage_peer.html:247
+#: templates/wireguard/wireguard_manage_peer.html:268
 msgid ""
 "The client is not configured to use the VPN as the default gateway."
 "\\n\\nOnly the specific networks listed below are routed through the VPN."
@@ -3670,7 +4596,7 @@ msgstr ""
 "geroutet.\\n\\nHinweis: Diese Routen werden nicht automatisch zum Client "
 "übertragen; Sie müssen die Client‑Konfigurationsdatei manuell anpassen."
 
-#: templates/wireguard/wireguard_manage_peer.html:250
+#: templates/wireguard/wireguard_manage_peer.html:271
 msgid ""
 "The client is configured to use the VPN as the default gateway. \\n\\nThis "
 "setting routes all client internet traffic through the VPN, enhancing "
@@ -3680,31 +4606,31 @@ msgstr ""
 "gesamte Internet‑Verkehr des Clients durch das VPN geleitet, was "
 "Privatsphäre und Sicherheit erhöht."
 
-#: templates/wireguard/wireguard_manage_peer.html:258
+#: templates/wireguard/wireguard_manage_peer.html:279
 msgid "default route"
 msgstr "Standard‑Route"
 
-#: templates/wireguard/wireguard_manage_peer.html:292
+#: templates/wireguard/wireguard_manage_peer.html:313
 msgid "Peer List"
 msgstr "Peer-Liste"
 
-#: templates/wireguard/wireguard_manage_peer.html:296
+#: templates/wireguard/wireguard_manage_peer.html:317
 msgid "Reactivate"
 msgstr "Reaktivieren"
 
-#: templates/wireguard/wireguard_manage_peer.html:298
+#: templates/wireguard/wireguard_manage_peer.html:319
 msgid "Suspend"
 msgstr "Sperren"
 
-#: templates/wireguard/wireguard_manage_peer.html:302
+#: templates/wireguard/wireguard_manage_peer.html:323
 msgid "Delete Peer"
 msgstr "Peer löschen"
 
-#: templates/wireguard/wireguard_manage_peer.html:312
+#: templates/wireguard/wireguard_manage_peer.html:333
 msgid "Please type \\\"delete\\\" to remove peer configuration."
 msgstr "Geben Sie \\\"delete\\\" ein, um die Peer‑Konfiguration zu entfernen."
 
-#: templates/wireguard/wireguard_manage_server.html:25 wireguard/forms.py:15
+#: templates/wireguard/wireguard_manage_server.html:25 wireguard/forms.py:17
 msgid "Display Name"
 msgstr "Anzeigename"
 
@@ -3720,7 +4646,7 @@ msgstr ""
 "Weboberfläche verwendet wird.\n"
 "                            "
 
-#: templates/wireguard/wireguard_manage_server.html:31 wireguard/forms.py:23
+#: templates/wireguard/wireguard_manage_server.html:31 wireguard/forms.py:25
 msgid "Web Refresh Interval"
 msgstr "Web‑Aktualisierungsintervall"
 
@@ -3737,7 +4663,7 @@ msgstr ""
 "                            "
 
 #: templates/wireguard/wireguard_manage_server.html:37
-#: templates/wireguard/wireguard_status.html:46 wireguard/forms.py:19
+#: templates/wireguard/wireguard_status.html:46 wireguard/forms.py:21
 msgid "Public Address"
 msgstr "Öffentliche Adresse"
 
@@ -4244,10 +5170,6 @@ msgstr ""
 msgid "The template must include the placeholder '{invite_url}'."
 msgstr "Die Vorlage muss den Platzhalter '{invite_url}' enthalten."
 
-#: vpn_invite/forms.py:283
-msgid "Host"
-msgstr "Host"
-
 #: vpn_invite/forms.py:285
 msgid "Encryption"
 msgstr "Verschlüsselung"
@@ -4341,46 +5263,74 @@ msgstr "VPN‑Einladungs‑Einstellungen"
 msgid "Email Settings|Settings saved successfully."
 msgstr "E‑Mail‑Einstellungen|Einstellungen erfolgreich gespeichert."
 
-#: wireguard/forms.py:16
+#: wireguard/forms.py:18
 msgid "Instance ID"
 msgstr "Instanz‑ID"
 
-#: wireguard/forms.py:21
+#: wireguard/forms.py:23
 msgid "Internal IP Address"
 msgstr "Interne IP‑Adresse"
 
-#: wireguard/forms.py:117
+#: wireguard/forms.py:29
+msgid "DNS Search Domains"
+msgstr "DNS-Suchdomänen"
+
+#: wireguard/forms.py:30
+msgid ""
+"Optional. One or more domains separated by commas (e.g. vpn, example.com)."
+msgstr ""
+"Optional. Eine oder mehrere durch Kommas getrennte Domänen (z. B. vpn, "
+"example.com)."
+
+#: wireguard/forms.py:62
+msgid ""
+"The instance runs only on this server. Peer configurations of instances on a "
+"worker use the hostname of the worker as endpoint."
+msgstr ""
+"Die Instanz läuft nur auf diesem Server. Peer-Konfigurationen von Instanzen "
+"auf einem Worker verwenden den Hostnamen des Workers als Endpoint."
+
+#: wireguard/forms.py:156
+#, python-format
+msgid "Invalid search domain: %(domain)s"
+msgstr "Ungültige Suchdomäne: %(domain)s"
+
+#: wireguard/forms.py:173
+msgid "DNS Search Domains requires at least one DNS server."
+msgstr "DNS-Suchdomänen erfordern mindestens einen DNS-Server."
+
+#: wireguard/forms.py:177
 msgid "Peer List Refresh Interval must be at least 5 seconds"
 msgstr ""
 "Das Aktualisierungsintervall der Peer-Liste muss mindestens 5 Sekunden "
 "betragenAktualisierungsintervall der Peer‑Liste muss mindestens 5 Sekunden "
 "betragen"
 
-#: wireguard/forms.py:120
+#: wireguard/forms.py:180
 msgid "Invalid hostname or IP Address"
 msgstr "Ungültiger Hostname oder ungültige IP‑Adresse"
 
-#: wireguard/forms.py:130
+#: wireguard/forms.py:190
 msgid "The selected network range overlaps with another instance."
 msgstr "Der gewählte Netzbereich überschneidet sich mit einer anderen Instanz."
 
-#: wireguard/views.py:98
+#: wireguard/views.py:99
 msgid "WireGuard Status"
 msgstr "WireGuard‑Status"
 
-#: wireguard/views.py:131
+#: wireguard/views.py:132
 msgid "Update WireGuard Instance"
 msgstr "WireGuard‑Instanz aktualisieren"
 
-#: wireguard/views.py:135
+#: wireguard/views.py:136
 msgid "Delete WireGuard Instance"
 msgstr "WireGuard‑Instanz löschen"
 
-#: wireguard/views.py:138
+#: wireguard/views.py:139
 msgid "Error removing instance: wg"
 msgstr "Fehler beim Entfernen der Instanz: wg"
 
-#: wireguard/views.py:138
+#: wireguard/views.py:139
 msgid ""
 "|Cannot delete the requested WireGuard instance. There are still peers "
 "associated with this instance."
@@ -4388,41 +5338,69 @@ msgstr ""
 "|Die gewünschte WireGuard‑Instanz kann nicht gelöscht werden. Es sind noch "
 "Peers mit dieser Instanz verknüpft."
 
-#: wireguard/views.py:141
+#: wireguard/views.py:142
 msgid "|WireGuard instance deleted: wg"
 msgstr "|WireGuard‑Instanz gelöscht: wg"
 
-#: wireguard/views.py:144
+#: wireguard/views.py:145
 msgid "Invalid confirmation|Please confirm deletion of WireGuard instance: wg"
 msgstr ""
 "Ungültige Bestätigung|Bitte bestätigen Sie das Löschen der "
 "WireGuard‑Instanz: wg"
 
-#: wireguard/views.py:148
+#: wireguard/views.py:149
 msgid "Create a new WireGuard Instance"
 msgstr "Neue WireGuard‑Instanz erstellen"
 
-#: wireguard/views.py:149
+#: wireguard/views.py:150
 msgid "New WireGuard Instance"
 msgstr "Neue WireGuard‑Instanz"
 
-#: wireguard_peer/forms.py:69
+#: wireguard_peer/forms.py:80 wireguard_peer/forms.py:91
+msgid "Enter the endpoint as host:port, e.g. vpn.example.com:51820"
+msgstr "Geben Sie den Endpoint als Host:Port ein, z. B. vpn.example.com:51820"
+
+#: wireguard_peer/forms.py:85
+msgid "Enter a valid IPv6 address between brackets, e.g. [2001:db8::1]:51820"
+msgstr ""
+"Geben Sie eine gültige IPv6-Adresse in eckigen Klammern ein, z. B. "
+"[2001:db8::1]:51820"
+
+#: wireguard_peer/forms.py:98
+msgid ""
+"Address (host:port) of a remote WireGuard server. This server connects to "
+"it, instead of waiting for the peer to connect. Leave empty for a regular "
+"peer."
+msgstr ""
+"Adresse (Host:Port) eines entfernten WireGuard-Servers. Dieser Server "
+"verbindet sich mit ihm, statt auf die Verbindung des Peers zu warten. Für "
+"einen normalen Peer leer lassen."
+
+#: wireguard_peer/forms.py:104
+msgid ""
+"Cluster server that connects to the endpoint. The networks of this peer are "
+"reachable from the clients connected to that server."
+msgstr ""
+"Cluster-Server, der sich mit dem Endpoint verbindet. Die Netze dieses Peers "
+"sind von den Clients erreichbar, die mit diesem Server verbunden sind."
+
+#: wireguard_peer/forms.py:146
 msgid "Allowed IP or Network"
 msgstr "Erlaubte IP oder Netzwerk"
 
-#: wireguard_peer/forms.py:79
+#: wireguard_peer/forms.py:156
 msgid "Please provide a valid IP address."
 msgstr "Bitte geben Sie eine gültige IP‑Adresse ein."
 
-#: wireguard_peer/forms.py:88
+#: wireguard_peer/forms.py:165
 msgid "A peer can have only one IP with priority zero."
 msgstr "Ein Peer kann nur eine IP mit Priorität 0 haben."
 
-#: wireguard_peer/forms.py:94
+#: wireguard_peer/forms.py:171
 msgid "This IP is already in use by another peer."
 msgstr "Diese IP wird bereits von einem anderen Peer verwendet."
 
-#: wireguard_peer/forms.py:96
+#: wireguard_peer/forms.py:174
 msgid ""
 "The IP address does not belong to the Peer's WireGuard instance network "
 "range. Please check the IP address or change the priority."
@@ -4430,16 +5408,16 @@ msgstr ""
 "Die IP‑Adresse liegt nicht im Netzbereich der WireGuard‑Instanz des Peers. "
 "Bitte prüfen Sie die IP oder ändern Sie die Priorität."
 
-#: wireguard_peer/forms.py:98
+#: wireguard_peer/forms.py:176
 msgid "The netmask for priority 0 IP must be 32."
 msgstr "Die Netzmaske für eine IP mit Priorität 0 muss 32 sein."
 
-#: wireguard_peer/forms.py:100
+#: wireguard_peer/forms.py:178
 msgid "The IP address is the same as the Peer's WireGuard instance address."
 msgstr ""
 "Die IP‑Adresse ist identisch mit der Adresse der WireGuard‑Instanz des Peers."
 
-#: wireguard_peer/forms.py:103
+#: wireguard_peer/forms.py:181
 msgid ""
 "The IP address belongs to the Peer's WireGuard instance network range. "
 "Please check the IP address or change use priority 0 instead."
@@ -4447,35 +5425,44 @@ msgstr ""
 "Die IP‑Adresse gehört zum Netzbereich der WireGuard‑Instanz des Peers. Bitte "
 "prüfen Sie die IP oder verwenden Sie stattdessen Priorität 0."
 
-#: wireguard_peer/forms.py:106
+#: wireguard_peer/forms.py:185
+#, python-format
+msgid ""
+"This network is already used by peer %(peer)s of wg%(instance)s. A network "
+"can be routed to only one WireGuard instance."
+msgstr ""
+"Dieses Netzwerk wird bereits von Peer %(peer)s von wg%(instance)s verwendet. "
+"Ein Netzwerk kann nur an eine WireGuard-Instanz geroutet werden."
+
+#: wireguard_peer/forms.py:191
 msgid "The peer's routing template does not allow custom routes."
 msgstr "Die Routenvorlage des Peers lässt keine benutzerdefinierten Routes zu."
 
-#: wireguard_peer/forms.py:108
+#: wireguard_peer/forms.py:193
 msgid "Priority must be greater than or equal to 1"
 msgstr "Die Priorität muss größer oder gleich 1 sein"
 
-#: wireguard_peer/forms.py:110
+#: wireguard_peer/forms.py:195
 msgid "Invalid config file"
 msgstr "Ungültige Konfigurationsdatei"
 
-#: wireguard_peer/forms.py:125
+#: wireguard_peer/forms.py:210
 msgid "Reactivate now"
 msgstr "Jetzt reaktivieren"
 
-#: wireguard_peer/forms.py:128
+#: wireguard_peer/forms.py:213
 msgid "Suspend now"
 msgstr "Jetzt sperren"
 
-#: wireguard_peer/forms.py:139
+#: wireguard_peer/forms.py:224
 msgid "Schedule"
 msgstr "Planen"
 
-#: wireguard_peer/forms.py:143
+#: wireguard_peer/forms.py:228
 msgid "Clear Schedule"
 msgstr "Zeitplan löschen"
 
-#: wireguard_peer/forms.py:181
+#: wireguard_peer/forms.py:266
 msgid ""
 "The difference between suspend and unsuspend times must be at least 5 "
 "minutes."
@@ -4483,82 +5470,180 @@ msgstr ""
 "Die Differenz zwischen Sperr- und Reaktivierungszeit muss mindestens 5 "
 "Minuten betragen."
 
-#: wireguard_peer/forms.py:185
+#: wireguard_peer/forms.py:270
 msgid "Scheduled suspension time must be at least 10 minutes in the future."
 msgstr ""
 "Die geplante Sperrzeit muss mindestens 10 Minuten in der Zukunft liegen."
 
-#: wireguard_peer/forms.py:188
+#: wireguard_peer/forms.py:273
 msgid "Scheduled unsuspension time must be at least 10 minutes in the future."
 msgstr ""
 "Die geplante Reaktivierungszeit muss mindestens 10 Minuten in der Zukunft "
 "liegen."
 
-#: wireguard_peer/functions.py:58
+#: wireguard_peer/functions.py:86 wireguard_peer/functions.py:88
+#: wireguard_peer/functions.py:90
 msgid "Error creating peer|The specified IP address is not available."
 msgstr ""
 "Fehler beim Erstellen des Peers|Die angegebene IP-Adresse ist não verfügbar."
 
-#: wireguard_peer/functions.py:84 wireguard_peer/views.py:150
+#: wireguard_peer/functions.py:118 wireguard_peer/views.py:168
 msgid "Peer created|Peer created successfully."
 msgstr "Peer erstellt|Peer erfolgreich erstellt."
 
-#: wireguard_peer/functions.py:87
+#: wireguard_peer/functions.py:121
 msgid "Error creating peer|No available IP address found for peer creation."
 msgstr "Fehler beim Erstellen des Peers|Keine freie IP‑Adresse verfügbar."
 
-#: wireguard_peer/views.py:28
+#: wireguard_peer/views.py:29
+#, python-format
+msgid ""
+"wg%(id)s runs on %(worker)s, which applies the change on its next "
+"synchronization."
+msgstr ""
+"wg%(id)s läuft auf %(worker)s, der die Änderung bei seiner nächsten "
+"Synchronisierung anwendet."
+
+#: wireguard_peer/views.py:35
+msgid ""
+"WireGuard is disabled on the primary server. The cluster workers apply the "
+"change on their next synchronization."
+msgstr ""
+"WireGuard ist auf dem primären Server deaktiviert. Die Cluster-Worker "
+"übernehmen die Änderung bei ihrer nächsten Synchronisierung."
+
+#: wireguard_peer/views.py:41
+#, python-format
+msgid "wg%(id)s reloaded automatically."
+msgstr "wg%(id)s automatisch neu geladen."
+
+#: wireguard_peer/views.py:43
+#, python-format
+msgid "Auto-apply failed for wg%(id)s: "
+msgstr "Automatisches Anwenden für wg%(id)s fehlgeschlagen: "
+
+#: wireguard_peer/views.py:52
 msgid "Disabled WireGuard Peer List"
 msgstr "Liste deaktivierter WireGuard-Peers"
 
-#: wireguard_peer/views.py:31
+#: wireguard_peer/views.py:55
 msgid "WireGuard Peer List"
 msgstr "WireGuard‑Peer‑Liste"
 
-#: wireguard_peer/views.py:158
+#: wireguard_peer/views.py:177
 msgid "Peer not created|Missing instance parameter."
 msgstr "Peer nicht erstellt|Fehlender Instanzparameter."
 
-#: wireguard_peer/views.py:179
+#: wireguard_peer/views.py:196
 msgid "Peer deleted|Peer deleted successfully."
 msgstr "Peer gelöscht|Peer erfolgreich gelöscht."
 
-#: wireguard_peer/views.py:182
+#: wireguard_peer/views.py:202
 msgid ""
 "Error deleting peer|Invalid confirmation message. Type \"delete\" to confirm."
 msgstr ""
 "Fehler beim Löschen des Peers|Ungültige Bestätigung. Geben Sie \"delete\" "
 "ein, um zu bestätigen."
 
-#: wireguard_peer/views.py:184
+#: wireguard_peer/views.py:204
 msgid "Peer Configuration: "
 msgstr "Peerkonfiguration: "
 
-#: wireguard_peer/views.py:229
+#: wireguard_peer/views.py:252
 msgid "Peer updated|Peer updated successfully."
 msgstr "Peer aktualisiert|Peer erfolgreich aktualisiert."
 
-#: wireguard_peer/views.py:232
+#: wireguard_peer/views.py:255
 msgid "Edit Peer"
 msgstr "Peer bearbeiten"
 
-#: wireguard_peer/views.py:234
+#: wireguard_peer/views.py:257
 msgid "Edit Peer Name"
 msgstr "Peernamen bearbeiten"
 
-#: wireguard_peer/views.py:236
+#: wireguard_peer/views.py:259
 msgid "Edit Keepalive"
 msgstr "Keepalive bearbeiten"
 
-#: wireguard_peer/views.py:238
+#: wireguard_peer/views.py:261
 msgid "Edit Keys"
 msgstr "Schlüssel bearbeiten"
 
-#: wireguard_peer/views.py:270
+#: wireguard_peer/views.py:263
+msgid "Edit Endpoint"
+msgstr "Endpoint bearbeiten"
+
+#: wireguard_peer/views.py:272
+msgid ""
+"\n"
+"            <h5>Endpoint</h5>\n"
+"            <p>When an endpoint is set, this server connects to a remote "
+"WireGuard server instead of waiting for the peer to connect. Use it to reach "
+"the networks behind a router or another server. Example: "
+"<code>vpn.example.com:51820</code>.</p>\n"
+"\n"
+"            <h5>Keys</h5>\n"
+"            <p>The public key of this peer is the public key of the remote "
+"server. The remote server must have the public key of this instance "
+"configured. The pre-shared key is optional.</p>\n"
+"\n"
+"            <h5>Addresses</h5>\n"
+"            <p>The main address of this peer may be outside the network of "
+"the instance. Add the remote networks as allowed IPs of this peer.</p>\n"
+"            "
+msgstr ""
+"\n"
+"            <h5>Endpoint</h5>\n"
+"            <p>Wenn ein Endpoint gesetzt ist, verbindet sich dieser Server "
+"mit einem entfernten WireGuard-Server, statt auf die Verbindung des Peers zu "
+"warten. Damit erreichen Sie die Netze hinter einem Router oder einem anderen "
+"Server. Beispiel: <code>vpn.example.com:51820</code>.</p>\n"
+"\n"
+"            <h5>Schlüssel</h5>\n"
+"            <p>Der öffentliche Schlüssel dieses Peers ist der öffentliche "
+"Schlüssel des entfernten Servers. Auf dem entfernten Server muss der "
+"öffentliche Schlüssel dieser Instanz eingetragen sein. Der Pre‑Shared Key "
+"ist optional.</p>\n"
+"\n"
+"            <h5>Adressen</h5>\n"
+"            <p>Die Hauptadresse dieses Peers darf außerhalb des Netzes der "
+"Instanz liegen. Fügen Sie die entfernten Netze als erlaubte IPs dieses Peers "
+"hinzu.</p>\n"
+"            "
+
+#: wireguard_peer/views.py:284
+msgid ""
+"\n"
+"            <h5>Connected server</h5>\n"
+"            <p>Only one cluster server connects to the endpoint. When empty, "
+"the primary server connects to it.</p>\n"
+"            "
+msgstr ""
+"\n"
+"            <h5>Verbundener Server</h5>\n"
+"            <p>Nur ein Server des Clusters verbindet sich mit dem Endpoint. "
+"Wenn leer, verbindet sich der primäre Server.</p>\n"
+"            "
+
+#: wireguard_peer/views.py:288
+msgid ""
+"\n"
+"            <h5>Client configuration</h5>\n"
+"            <p>Peers with an endpoint have no configuration to download, QR "
+"code or VPN invite.</p>\n"
+"            "
+msgstr ""
+"\n"
+"            <h5>Client-Konfiguration</h5>\n"
+"            <p>Peers mit Endpoint haben keine Konfiguration zum "
+"Herunterladen, keinen QR-Code und keine VPN-Einladung.</p>\n"
+"            "
+
+#: wireguard_peer/views.py:319
 msgid "IP address deleted|IP address deleted successfully."
 msgstr "IP‑Adresse gelöscht|IP‑Adresse erfolgreich gelöscht."
 
-#: wireguard_peer/views.py:275
+#: wireguard_peer/views.py:325
 msgid ""
 "Error deleting IP address|Invalid confirmation message. Type \"delete\" to "
 "confirm."
@@ -4566,27 +5651,27 @@ msgstr ""
 "Fehler beim Löschen der IP‑Adresse|Ungültige Bestätigung. Geben Sie "
 "\"delete\" ein, um zu bestätigen."
 
-#: wireguard_peer/views.py:280
+#: wireguard_peer/views.py:330
 msgid "Manage client route"
 msgstr "Client‑Route verwalten"
 
-#: wireguard_peer/views.py:282
+#: wireguard_peer/views.py:332
 msgid "Manage IP address or Network"
 msgstr "IP‑Adresse oder Netzwerk verwalten"
 
-#: wireguard_peer/views.py:295
+#: wireguard_peer/views.py:346
 msgid "IP address updated|IP address updated successfully."
 msgstr "IP‑Adresse aktualisiert|IP‑Adresse erfolgreich aktualisiert."
 
-#: wireguard_peer/views.py:297
+#: wireguard_peer/views.py:348
 msgid "IP address added|IP address added successfully."
 msgstr "IP‑Adresse hinzugefügt|IP‑Adresse erfolgreich hinzugefügt."
 
-#: wireguard_peer/views.py:329
+#: wireguard_peer/views.py:380
 msgid "Route template unlinked successfully."
 msgstr "Routen-Vorlage erfolgreich getrennt."
 
-#: wireguard_peer/views.py:339
+#: wireguard_peer/views.py:390
 msgid ""
 "Cannot apply template: This template does not allow custom routes, but the "
 "peer has custom client routes defined."
@@ -4595,15 +5680,15 @@ msgstr ""
 "benutzerdefinierten Routen, aber der Peer hat benutzerdefinierte Client-"
 "Routen definiert."
 
-#: wireguard_peer/views.py:346
+#: wireguard_peer/views.py:397
 msgid "Route template applied successfully."
 msgstr "Routen-Vorlage erfolgreich angewendet."
 
-#: wireguard_peer/views.py:379
+#: wireguard_peer/views.py:430
 msgid "Peer suspension/unsuspension scheduled successfully."
 msgstr "Peer-Sperrung/Reaktivierung erfolgreich geplant."
 
-#: wireguard_peer/views.py:381
+#: wireguard_peer/views.py:432
 msgid ""
 "Error scheduling peer suspension/unsuspension. Please correct the errors "
 "below."
@@ -4611,45 +5696,45 @@ msgstr ""
 "Fehler bei der Planung der Peer-Sperrung/Reaktivierung. Bitte korrigieren "
 "Sie die Fehler unten."
 
-#: wireguard_peer/views.py:388
+#: wireguard_peer/views.py:439
 msgid "Schedule cleared successfully."
 msgstr "Zeitplan erfolgreich gelöscht."
 
-#: wireguard_peer/views.py:402
+#: wireguard_peer/views.py:453
 msgid "Peer suspended successfully."
 msgstr "Peer erfolgreich gesperrt."
 
-#: wireguard_peer/views.py:404
+#: wireguard_peer/views.py:455
 msgid "Peer suspended, but failed to reload WireGuard interface: "
 msgstr ""
 "Peer gesperrt, aber das Neuladen der WireGuard-Schnittstelle schlug fehl: "
 
-#: wireguard_peer/views.py:414
+#: wireguard_peer/views.py:465
 msgid "Peer reactivated successfully."
 msgstr "Peer erfolgreich reaktiviert."
 
-#: wireguard_peer/views.py:416
+#: wireguard_peer/views.py:467
 msgid "Peer reactivated, but failed to reload WireGuard interface: "
 msgstr ""
 "Peer reaktiviert, aber das Neuladen der WireGuard-Schnittstelle schlug fehl: "
 
-#: wireguard_peer/views.py:419
+#: wireguard_peer/views.py:470
 msgid "Invalid action."
 msgstr "Ungültige Aktion."
 
-#: wireguard_peer/views.py:424
+#: wireguard_peer/views.py:475
 msgid "Suspend / Reactivate Peer"
 msgstr "Peer sperren / reaktivieren"
 
-#: wireguard_peer/views.py:447
+#: wireguard_peer/views.py:498
 msgid "Peer scheduling profile updated successfully."
 msgstr "Zeitplanprofil des Peers erfolgreich aktualisiert."
 
-#: wireguard_peer/views.py:460
+#: wireguard_peer/views.py:511
 msgid "Manage Peer Schedule Profile"
 msgstr "Zeitplanprofil des Peers verwalten"
 
-#: wireguard_tools/views.py:242
+#: wireguard_tools/views.py:231
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/."
@@ -4657,7 +5742,7 @@ msgstr ""
 "Export erfolgreich!|WireGuard‑Konfigurationsdateien wurden nach /etc/"
 "wireguard/ exportiert."
 
-#: wireguard_tools/views.py:244
+#: wireguard_tools/views.py:233
 msgid ""
 "Export successful!|WireGuard configuration files have been exported to /etc/"
 "wireguard/. Don't forget to restart the interfaces."
@@ -4665,19 +5750,28 @@ msgstr ""
 "Export erfolgreich!|WireGuard‑Konfigurationsdateien wurden nach /etc/"
 "wireguard/ exportiert. Vergessen Sie nicht, die Interfaces neu zu starten."
 
-#: wireguard_tools/views.py:346
-msgid "Error reloading"
-msgstr "Fehler beim Neu laden"
-
-#: wireguard_tools/views.py:358
+#: wireguard_tools/views.py:321 wireguard_tools/views.py:331
+#: wireguard_tools/views.py:381
 msgid "Error stopping"
 msgstr "Fehler beim Stoppen"
 
-#: wireguard_tools/views.py:363
+#: wireguard_tools/views.py:333
+msgid ""
+"WireGuard disabled on the primary server|The interfaces of this server are "
+"stopped. Cluster workers keep serving the peers."
+msgstr ""
+"WireGuard auf dem primären Server deaktiviert|Die Schnittstellen dieses "
+"Servers sind gestoppt. Die Cluster-Worker bedienen die Peers weiterhin."
+
+#: wireguard_tools/views.py:367
+msgid "Error reloading"
+msgstr "Fehler beim Neu laden"
+
+#: wireguard_tools/views.py:386
 msgid "Error starting"
 msgstr "Fehler beim Starten"
 
-#: wireguard_tools/views.py:370
+#: wireguard_tools/views.py:393
 msgid ""
 "WARNING|Please note that the interface was reloaded, not restarted. Double-"
 "check if the the peers are working as expected. If you find any issues, "
@@ -4687,22 +5781,170 @@ msgstr ""
 "Sie, ob alle Peers wie erwartet funktionieren. Melden Sie eventuelle "
 "Probleme."
 
-#: wireguard_tools/views.py:371
+#: wireguard_tools/views.py:394
 msgid "WireGuard reloaded|The WireGuard service has been reloaded."
 msgstr "WireGuard neu geladen|Der WireGuard‑Dienst wurde neu geladen."
 
-#: wireguard_tools/views.py:373
+#: wireguard_tools/views.py:396
 msgid "WireGuard restarted|The WireGuard service has been restarted."
 msgstr "WireGuard neu gestartet|Der WireGuard‑Dienst wurde neu gestartet."
 
-#: wireguard_tools/views.py:376
+#: wireguard_tools/views.py:399
 msgid "Errors encountered|Error processing one or more interfaces."
 msgstr ""
 "Fehler festgestellt|Beim Verarbeiten einer oder mehrerer Schnittstellen ist "
 "ein Fehler aufgetreten."
 
-#: wireguard_tools/views.py:379
+#: wireguard_tools/views.py:402
 msgid "No interfaces found|No WireGuard interfaces were found to process."
 msgstr ""
 "Keine Schnittstellen gefunden|Es wurden keine WireGuard‑Schnittstellen "
 "gefunden."
+
+#~ msgid "Restart Mode"
+#~ msgstr "Neustart-Modus"
+
+#~ msgid ""
+#~ "Please report worker_config_version, worker_dns_version and "
+#~ "worker_version in the API request."
+#~ msgstr ""
+#~ "Bitte geben Sie worker_config_version, worker_dns_version und "
+#~ "worker_version in der API-Anfrage an."
+
+#~ msgid ""
+#~ "\n"
+#~ "        <h5>Worker Configuration</h5>\n"
+#~ "        <p>Configure a cluster worker node that will synchronize with "
+#~ "this primary instance.</p>\n"
+#~ "        \n"
+#~ "        <h5>Name</h5>\n"
+#~ "        <p>A unique name to identify this worker.</p>\n"
+#~ "        \n"
+#~ "        <h5>IP Address</h5>\n"
+#~ "        <p>The IP address of the worker node. Leave empty if IP lock is "
+#~ "disabled.</p>\n"
+#~ "        \n"
+#~ "        <h5>IP Lock</h5>\n"
+#~ "        <p>When enabled, the worker can only connect from the specified "
+#~ "IP address.</p>\n"
+#~ "        \n"
+#~ "        <h5>Location Information</h5>\n"
+#~ "        <p>Optional location details for this worker (country, city, "
+#~ "hostname).</p>\n"
+#~ "        "
+#~ msgstr ""
+#~ "\n"
+#~ "        <h5>Worker-Konfiguration</h5>\n"
+#~ "        <p>Konfigurieren Sie einen Cluster-Worker-Knoten, der mit dieser "
+#~ "primären Instanz synchronisiert wird.</p>\n"
+#~ "        \n"
+#~ "        <h5>Name</h5>\n"
+#~ "        <p>Ein eindeutiger Name zur Identifizierung dieses Workers.</p>\n"
+#~ "        \n"
+#~ "        <h5>IP-Adresse</h5>\n"
+#~ "        <p>Die IP-Adresse des Worker-Knotens. Leer lassen, wenn die IP-"
+#~ "Sperre deaktiviert ist.</p>\n"
+#~ "        \n"
+#~ "        <h5>IP-Sperre</h5>\n"
+#~ "        <p>Wenn aktiviert, kann sich der Worker nur von der angegebenen "
+#~ "IP-Adresse verbinden.</p>\n"
+#~ "        \n"
+#~ "        <h5>Standortinformationen</h5>\n"
+#~ "        <p>Optionale Standortdetails für diesen Worker (Land, Stadt, "
+#~ "Hostname).</p>\n"
+#~ "        "
+
+#~ msgid ""
+#~ "\n"
+#~ "        <h5>Cluster Mode</h5>\n"
+#~ "        <p>Configure how the cluster operates and synchronizes "
+#~ "configurations between nodes.</p>\n"
+#~ "        \n"
+#~ "        <h5>Sync Intervals</h5>\n"
+#~ "        <p>Configure how frequently statistics and cache data are "
+#~ "synchronized between cluster nodes.</p>\n"
+#~ "        \n"
+#~ "        <h5>Restart Mode</h5>\n"
+#~ "        <p>Choose whether WireGuard services should be automatically "
+#~ "restarted when configurations change, or if manual intervention is "
+#~ "required.</p>\n"
+#~ "        \n"
+#~ "        <h5>Worker Display</h5>\n"
+#~ "        <p>Select how workers should be identified in the interface - by "
+#~ "name, server address, location, or a combination.</p>\n"
+#~ "        "
+#~ msgstr ""
+#~ "\n"
+#~ "        <h5>Cluster-Modus</h5>\n"
+#~ "        <p>Konfigurieren Sie, wie der Cluster arbeitet und "
+#~ "Konfigurationen zwischen den Knoten synchronisiert.</p>\n"
+#~ "        \n"
+#~ "        <h5>Synchronisationsintervalle</h5>\n"
+#~ "        <p>Konfigurieren Sie, wie oft Statistiken und Cache-Daten "
+#~ "zwischen den Cluster-Knoten synchronisiert werden.</p>\n"
+#~ "        \n"
+#~ "        <h5>Neustart-Modus</h5>\n"
+#~ "        <p>Wählen Sie, ob WireGuard-Dienste automatisch neu gestartet "
+#~ "werden sollen, wenn sich Konfigurationen ändern, oder ob ein manuelles "
+#~ "Eingreifen erforderlich ist.</p>\n"
+#~ "        \n"
+#~ "        <h5>Worker-Anzeige</h5>\n"
+#~ "        <p>Wählen Sie aus, wie Worker in der Benutzeroberfläche "
+#~ "identifiziert werden sollen – nach Name, Serveradresse, Standort oder "
+#~ "einer Kombination.</p>\n"
+#~ "        "
+
+#~ msgid "Config Version"
+#~ msgstr "Konfigurationsversion"
+
+#~ msgid "Configuration sync in progress"
+#~ msgstr "Konfigurationssynchronisierung läuft"
+
+#~ msgid "Last seen more than 10 minutes ago or never seen."
+#~ msgstr "Zuletzt vor mehr als 10 Minuten gesehen oder noch nie gesehen."
+
+#~ msgid "Cluster Information"
+#~ msgstr "Cluster-Informationen"
+
+#~ msgid "DNS Version"
+#~ msgstr "DNS-Version"
+
+#~ msgid "Cache Enabled"
+#~ msgstr "Cache aktiviert"
+
+#~ msgid "Cluster Feature – Testing Phase"
+#~ msgstr "Cluster-Funktion – Testphase"
+
+#~ msgid "The cluster functionality is currently released as experimental."
+#~ msgstr ""
+#~ "Die Cluster-Funktionalität ist derzeit als experimentell freigegeben."
+
+#~ msgid "At this stage, only core features are implemented:"
+#~ msgstr "In diesem Stadium sind nur Kernfunktionen implementiert:"
+
+#~ msgid "Configuration synchronization service"
+#~ msgstr "Konfigurations-Synchronisationsdienst"
+
+#~ msgid "Primary node mirroring (WireGuard and firewall rules)"
+#~ msgstr "Primärknoten-Spiegelung (WireGuard und Firewall-Regeln)"
+
+#~ msgid "DNS rules mirroring"
+#~ msgstr "DNS-Regel-Spiegelung"
+
+#~ msgid ""
+#~ "Server selection dropdown before downloading peer configs or VPN invites"
+#~ msgstr ""
+#~ "Server-Auswahlliste vor dem Herunterladen von Peer-Konfigurationen oder "
+#~ "VPN-Einladungen"
+
+#~ msgid "For more information, please visit:"
+#~ msgstr "Für weitere Informationen besuchen Sie bitte:"
+
+#~ msgid "I Understand"
+#~ msgstr "Ich verstehe"
+
+#~ msgid "HTTP challenge"
+#~ msgstr "HTTP-Challenge"
+
+#~ msgid "DNS challenge"
+#~ msgstr "DNS-Challenge"

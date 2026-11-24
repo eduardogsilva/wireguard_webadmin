@@ -5,6 +5,7 @@ import smtplib
 import subprocess
 from datetime import timedelta
 from email.mime.text import MIMEText
+from email.utils import formatdate, make_msgid
 
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
@@ -190,6 +191,8 @@ def send_email(destination, subject, body):
         msg['Subject'] = subject
         msg['From'] = email_settings.smtp_from_address
         msg['To'] = destination
+        msg['Date'] = formatdate(localtime=True)
+        msg['Message-ID'] = make_msgid(domain=email_settings.smtp_from_address.split('@')[-1])
 
         if email_settings.smtp_encryption.lower() == 'ssl':
             server = smtplib.SMTP_SSL(email_settings.smtp_host, email_settings.smtp_port)

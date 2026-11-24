@@ -1,4 +1,5 @@
 import ipaddress
+import re
 from datetime import timedelta
 
 from crispy_forms.bootstrap import FormActions
@@ -11,8 +12,10 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from cluster.models import ClusterSettings, Worker
 from scheduler.models import PeerScheduling
 from wireguard.models import NETMASK_CHOICES, Peer, PeerAllowedIP
+from wireguard_peer.functions import find_network_in_other_instance
 
 
 class PeerModelForm(forms.ModelForm):
@@ -56,7 +59,81 @@ class PeerKeysForm(PeerModelForm):
     class Meta:
         model = Peer
         fields = ['public_key', 'private_key', 'pre_shared_key']
-        
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # A remote WireGuard server may not use a pre-shared key
+        if self.instance.endpoint:
+            self.fields['pre_shared_key'].required = False
+
+
+HOSTNAME_PATTERN = re.compile(r'^(?=.{1,253}$)([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)*[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$')
+
+
+def normalize_endpoint(value):
+    """Validate a WireGuard endpoint (host:port, with IPv6 addresses in brackets) and return it normalized."""
+    value = (value or '').strip()
+    if not value:
+        return ''
+    host, separator, port = value.rpartition(':')
+    if not separator or not port.isdigit() or not 1 <= int(port) <= 65535:
+        raise forms.ValidationError(_('Enter the endpoint as host:port, e.g. vpn.example.com:51820'))
+    if host.startswith('[') and host.endswith(']'):
+        try:
+            ipaddress.IPv6Address(host[1:-1])
+        except ValueError:
+            raise forms.ValidationError(_('Enter a valid IPv6 address between brackets, e.g. [2001:db8::1]:51820'))
+        return f'{host.lower()}:{int(port)}'
+    try:
+        ipaddress.IPv4Address(host)
+    except ValueError:
+        if not HOSTNAME_PATTERN.match(host):
+            raise forms.ValidationError(_('Enter the endpoint as host:port, e.g. vpn.example.com:51820'))
+    return f'{host.lower()}:{int(port)}'
+
+
+class PeerEndpointForm(PeerModelForm):
+    endpoint = forms.CharField(
+        label=_('Endpoint'), required=False,
+        help_text=_('Address (host:port) of a remote WireGuard server. This server connects to it, instead of waiting '
+                    'for the peer to connect. Leave empty for a regular peer.'),
+    )
+    active_worker = forms.ModelChoiceField(
+        queryset=Worker.objects.none(), label=_('Connected server'), required=False,
+        empty_label=_('Primary Server'),
+        help_text=_('Cluster server that connects to the endpoint. The networks of this peer are reachable from the '
+                    'clients connected to that server.'),
+    )
+
+    class Meta:
+        model = Peer
+        fields = ['endpoint', 'active_worker']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # The node of an endpoint peer is only chosen in the mirror mode; in the distributed mode it is the node of
+        # the instance
+        if ClusterSettings.cluster_enabled() and not ClusterSettings.is_distributed():
+            self.fields['active_worker'].queryset = Worker.objects.order_by('name')
+        else:
+            del self.fields['active_worker']
+            self.helper.layout = Layout(
+                'endpoint',
+                FormActions(
+                    Submit('save', _('Save'), css_class='btn-primary'),
+                    Button('cancel', _('Back'), css_class='btn-outline-secondary', onclick='window.history.back()')
+                )
+            )
+
+    def clean_endpoint(self):
+        return normalize_endpoint(self.cleaned_data.get('endpoint'))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if 'active_worker' in self.fields and not cleaned_data.get('endpoint'):
+            cleaned_data['active_worker'] = None
+        return cleaned_data
+
 
 class PeerAllowedIPForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -92,7 +169,8 @@ class PeerAllowedIPForm(forms.ModelForm):
                     duplicated_ip = duplicated_ip.exclude(uuid=self.instance.uuid)
                 if duplicated_ip.exists():
                     raise forms.ValidationError(_("This IP is already in use by another peer."))
-                if ipaddress.ip_address(allowed_ip) not in wireguard_network:
+                # A peer with an endpoint is a remote server, whose tunnel address may belong to its own network
+                if ipaddress.ip_address(allowed_ip) not in wireguard_network and not self.current_peer.endpoint:
                     raise forms.ValidationError(_("The IP address does not belong to the Peer's WireGuard instance network range. Please check the IP address or change the priority."))
                 if str(netmask) != str(32):
                     raise forms.ValidationError(_("The netmask for priority 0 IP must be 32."))
@@ -101,6 +179,13 @@ class PeerAllowedIPForm(forms.ModelForm):
             else:
                 if ipaddress.ip_address(allowed_ip) in wireguard_network:
                     raise forms.ValidationError(_("The IP address belongs to the Peer's WireGuard instance network range. Please check the IP address or change use priority 0 instead."))
+            other_network = find_network_in_other_instance(self.current_peer.wireguard_instance, allowed_ip, netmask)
+            if other_network:
+                raise forms.ValidationError(
+                    _("This network is already used by peer %(peer)s of wg%(instance)s. A network can be routed to only one WireGuard instance.") % {
+                        'peer': other_network.peer, 'instance': other_network.peer.wireguard_instance.instance_id
+                    }
+                )
         elif self.config_file == 'client':
             if self.current_peer.routing_template and not self.current_peer.routing_template.allow_peer_custom_routes:
                 raise forms.ValidationError(_("The peer's routing template does not allow custom routes."))

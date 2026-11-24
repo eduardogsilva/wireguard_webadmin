@@ -1,10 +1,10 @@
 # Single stage build for Cluster Node
-FROM python:3.12-slim
+FROM python:3.14-slim
 WORKDIR /app
 
 # Install necessary runtime packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    wireguard \
+    wireguard-tools \
     iptables \
     iproute2 \
     net-tools \
@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     inetutils-traceroute \
     procps \
     curl \
+    openssl \
     nano \
     && rm -rf /var/lib/apt/lists/*
 
@@ -21,13 +22,11 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code
-COPY . /app/
+COPY cluster_worker.py entrypoint.sh /app/
 
 # Set execution permissions on scripts
 RUN chmod +x /app/entrypoint.sh
 
-ARG SERVER_ADDRESS
-ARG DEBUG_MODE
 
 ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["python", "-u", "/app/cluster_worker.py"]

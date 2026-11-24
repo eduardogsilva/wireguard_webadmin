@@ -1,22 +1,25 @@
+import asyncio
 import logging
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from auth_gateway.config_loader import RuntimeConfigStore
-from auth_gateway.limiter import get_real_client_ip, limiter
-from auth_gateway.services.oidc_service import OIDCService
-from auth_gateway.services.session_service import SessionService
-from auth_gateway.settings import settings
-from auth_gateway.storage.sqlite import SQLiteStorage
-from auth_gateway.web.auth_routes import router as auth_router
-from auth_gateway.web.challenge_routes import router as challenge_router
-from auth_gateway.web.login_routes import router as login_router
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from slowapi.errors import RateLimitExceeded
+
+from auth_gateway.config_loader import RuntimeConfigStore
+from auth_gateway.limiter import get_real_client_ip, limiter
+from auth_gateway.services.oidc_service import OIDCService
+from auth_gateway.services.session_service import SessionService
+from auth_gateway.services.session_snapshot import SNAPSHOT_INTERVAL_SECONDS, SessionSnapshot
+from auth_gateway.settings import settings
+from auth_gateway.storage.sqlite import SQLiteStorage
+from auth_gateway.web.auth_routes import router as auth_router
+from auth_gateway.web.challenge_routes import router as challenge_router
+from auth_gateway.web.login_routes import router as login_router
 
 BASE_DIR = Path(__file__).resolve().parent
 _access_logger = logging.getLogger("uvicorn.error")
@@ -30,7 +33,20 @@ async def lifespan(app: FastAPI):
     app.state.session_service = SessionService(storage, settings.session_default_minutes, settings.oidc_state_ttl_minutes)
     app.state.oidc_service = OIDCService()
     app.state.templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+    app.state.session_snapshot = SessionSnapshot(storage, app.state.config_store, settings.config_dir / "state" / "sessions.json")
+    snapshot_task = asyncio.create_task(_refresh_session_snapshot(app.state.session_snapshot))
     yield
+    snapshot_task.cancel()
+
+
+async def _refresh_session_snapshot(session_snapshot: SessionSnapshot):
+    # Sessions also end without a request (expiration, revocation, changed credentials) and go offline over time
+    while True:
+        try:
+            await asyncio.to_thread(session_snapshot.refresh)
+        except Exception as error:
+            _access_logger.warning("Session snapshot failed: %s", error)
+        await asyncio.sleep(SNAPSHOT_INTERVAL_SECONDS)
 
 
 app = FastAPI(
@@ -59,8 +75,9 @@ async def _rate_limit_handler(request: Request, exc: RateLimitExceeded) -> HTMLR
     templates = request.app.state.templates
     external_path = request.app.state.settings.external_path
     return templates.TemplateResponse(
+        request,
         "ratelimit.html",
-        {"request": request, "external_path": external_path, "back_url": str(request.url.path)},
+        {"external_path": external_path, "back_url": str(request.url.path)},
         status_code=429,
     )
 

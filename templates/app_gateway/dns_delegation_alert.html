@@ -1,0 +1,9 @@
+{% load i18n %}
+<div id="dns-delegation-alert" class="alert alert-warning d-none">
+    <h5><i class="icon fas fa-exclamation-triangle"></i> {% trans 'CNAME record required' %}</h5>
+    <p class="mb-2">{% blocktrans trimmed %}
+        This DNS credential uses a delegation domain. Create this record in the DNS zone of the hostname
+        before saving, otherwise the certificate cannot be issued:
+    {% endblocktrans %}</p>
+    <div class="dns-delegation-record"></div>
+</div>

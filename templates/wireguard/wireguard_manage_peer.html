@@ -90,6 +90,27 @@
                         </div>
                     </div>
 
+                    <!-- Endpoint -->
+                    <div class="form-group border-bottom pb-3">
+                        <label>{% trans 'Endpoint' %}</label>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>
+                                {% if current_peer.endpoint %}
+                                    <code>{{ current_peer.endpoint }}</code>
+                                    {% if show_active_worker %}
+                                        <br><small class="text-muted">{% trans 'Connected server' %}: {{ current_peer.active_worker.name|default:_('Primary Server') }}</small>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">{% trans 'Not set' %}</span>
+                                {% endif %}
+                            </span>
+                            <a href="{% url 'wireguard_peer_edit_field' %}?peer={{ current_peer.uuid }}&group=endpoint"
+                               class="btn btn-tool">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                        </div>
+                    </div>
+
                     <!-- Keys Section -->
                     <div class="form-group">
                         <div class="d-flex justify-content-between align-items-center mb-2">

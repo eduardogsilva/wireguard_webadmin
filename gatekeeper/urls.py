@@ -30,4 +30,7 @@ urlpatterns = [
     # Gatekeeper IP Addresses
     path('ip/manage/', views.view_manage_gatekeeper_ip, name='manage_gatekeeper_ip'),
     path('ip/delete/', views.view_delete_gatekeeper_ip, name='delete_gatekeeper_ip'),
+
+    # Gateway sessions
+    path('session/revoke/', views.view_revoke_gatekeeper_session, name='revoke_gatekeeper_session'),
 ]

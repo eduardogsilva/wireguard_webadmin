@@ -1,0 +1,128 @@
+{% extends 'generic_form.html' %}
+{% load i18n %}
+
+{% block custom_page_scripts %}
+{{ block.super }}
+<div class="modal fade" id="dnsDelegationModal" tabindex="-1" aria-labelledby="dnsDelegationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dnsDelegationModalLabel">{% trans 'CNAME record required' %}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>{% blocktrans trimmed %}
+                    Make sure this record exists in the DNS zone of the hostname. The certificate is requested as
+                    soon as the configuration is applied, and without the record it cannot be issued.
+                {% endblocktrans %}</p>
+                <div class="dns-delegation-record"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans 'Back' %}</button>
+                <button type="button" class="btn btn-primary" id="dnsDelegationConfirm">{% trans 'I created the record, save' %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ delegation_domains|json_script:'dns-delegation-domains' }}
+<script>
+    $(document).ready(function () {
+        var delegationDomains = JSON.parse(document.getElementById('dns-delegation-domains').textContent);
+        var initialRecord = "{{ initial_delegation_record|escapejs }}";
+        var labels = {
+            type: "{% trans 'Type'|escapejs %}",
+            name: "{% trans 'Name'|escapejs %}",
+            target: "{% trans 'Target'|escapejs %}",
+            copy: "{% trans 'Copy'|escapejs %}"
+        };
+        var $form = $('#id_hostname').closest('form');
+        var confirmed = false;
+
+        function challengeBase(hostname) {
+            hostname = hostname.trim().toLowerCase().replace(/\.+$/, '');
+            return hostname.indexOf('*.') === 0 ? hostname.substring(2) : hostname;
+        }
+
+        function currentRecord() {
+            var hostname = challengeBase($('#id_hostname').val() || '');
+            var delegationDomain = delegationDomains[$('#id_dns_credential').val()];
+            if ($('#id_certificate_type').val() !== 'dns_challenge' || !delegationDomain || !hostname) {
+                return null;
+            }
+            // Hostnames inside the delegation domain are validated directly
+            if (hostname === delegationDomain || hostname.endsWith('.' + delegationDomain)) {
+                return null;
+            }
+            return {name: '_acme-challenge.' + hostname, target: hostname + '.' + delegationDomain};
+        }
+
+        function recordField(label, value) {
+            var $group = $('<div class="input-group input-group-sm mb-2"></div>');
+            $group.append($('<div class="input-group-prepend"></div>').append(
+                $('<span class="input-group-text" style="min-width: 5em"></span>').text(label)
+            ));
+            var $input = $('<input type="text" class="form-control text-monospace" readonly>').val(value);
+            $group.append($input);
+            var $button = $('<button type="button" class="btn btn-outline-secondary"></button>')
+                .attr('title', labels.copy).html('<i class="far fa-copy"></i>');
+            $button.on('click', function () {
+                $input.trigger('select');
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(value);
+                } else {
+                    document.execCommand('copy');
+                }
+            });
+            $group.append($('<div class="input-group-append"></div>').append($button));
+            return $group;
+        }
+
+        function renderRecord(record) {
+            $('.dns-delegation-record').each(function () {
+                $(this).empty()
+                    .append(recordField(labels.type, 'CNAME'))
+                    .append(recordField(labels.name, record.name))
+                    .append(recordField(labels.target, record.target));
+            });
+        }
+
+        function updateAlert() {
+            var record = currentRecord();
+            $('#dns-delegation-alert').toggleClass('d-none', !record);
+            if (record) {
+                renderRecord(record);
+            }
+        }
+
+        $('#id_hostname').on('input', updateAlert);
+        $('#id_certificate_type, #id_dns_credential').on('change', updateAlert);
+        updateAlert();
+
+        // Ask for confirmation only when the required record is new or changed
+        $form.on('submit', function (event) {
+            var record = currentRecord();
+            if (confirmed || !record || record.name + ' ' + record.target === initialRecord) {
+                return;
+            }
+            event.preventDefault();
+            renderRecord(record);
+            $('#dnsDelegationModal').modal('show');
+        });
+
+        $('#dnsDelegationConfirm').on('click', function () {
+            confirmed = true;
+            $('#dnsDelegationModal').modal('hide');
+            // The submit button is named "submit", which hides the form.submit() method
+            var form = $form[0];
+            if (form.requestSubmit) {
+                form.requestSubmit();
+            } else {
+                HTMLFormElement.prototype.submit.call(form);
+            }
+        });
+    });
+</script>
+{% endblock %}

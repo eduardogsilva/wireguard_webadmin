@@ -4,6 +4,7 @@ from typing import Optional
 
 from django.db import models
 
+from cluster.models import ClusterSettings
 from wireguard_tools.networks import normalize_cidr_list, normalize_cidr_pairs, safe_network_cidr
 
 NETMASK_CHOICES = (
@@ -64,9 +65,14 @@ class WireGuardInstance(models.Model):
     peer_list_refresh_interval = models.IntegerField(default=10)
     dns_primary = models.GenericIPAddressField(unique=False, protocol='IPv4', default='1.1.1.1', blank=True, null=True)
     dns_secondary = models.GenericIPAddressField(unique=False, protocol='IPv4', default='1.0.0.1', blank=True, null=True)
+    dns_search_domains = models.CharField(max_length=255, blank=True, null=True)
     pending_changes = models.BooleanField(default=True)
     legacy_firewall = models.BooleanField(default=False)
     enforce_route_policy = models.BooleanField(default=False)
+    # Server that runs the instance in the distributed cluster mode. Empty means the primary server.
+    worker = models.ForeignKey(
+        'cluster.Worker', on_delete=models.PROTECT, blank=True, null=True, related_name='wireguard_instances'
+    )
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -77,6 +83,13 @@ class WireGuardInstance(models.Model):
             return self.name    
         else:
             return 'wg' + str(self.instance_id)
+
+    @property
+    def hosting_worker(self):
+        """Worker that runs this instance, or None when it runs on the primary server."""
+        if self.worker_id and ClusterSettings.is_distributed():
+            return self.worker
+        return None
 
     @property
     def network_cidr(self):
@@ -198,6 +211,13 @@ class Peer(models.Model):
         'routing_templates.RoutingTemplate', on_delete=models.SET_NULL, blank=True, null=True, related_name='peers'
     )
 
+    # Remote address (host:port) for peers that this server connects to, instead of waiting for them to connect
+    endpoint = models.CharField(max_length=255, blank=True, default='')
+    # Cluster worker that keeps the connection of an endpoint peer in the mirror mode. Empty means the primary server.
+    active_worker = models.ForeignKey(
+        'cluster.Worker', on_delete=models.SET_NULL, blank=True, null=True, related_name='endpoint_peers'
+    )
+
     disabled_by_schedule = models.BooleanField(default=False)
     suspended = models.BooleanField(default=False)
     suspend_reason = models.TextField(blank=True, null=True)
@@ -211,6 +231,18 @@ class Peer(models.Model):
             return self.name
         else:
             return self.public_key[:16] + "..."
+
+    @property
+    def endpoint_worker(self):
+        """
+        Worker that runs an endpoint peer, or None when it runs on the primary server. Only one server connects to the
+        remote endpoint: in the mirror mode it is the active worker, in the distributed mode the server of the instance.
+        """
+        if not self.endpoint or not ClusterSettings.cluster_enabled():
+            return None
+        if ClusterSettings.is_distributed():
+            return self.wireguard_instance.hosting_worker
+        return self.active_worker
 
     @property
     def enabled(self) -> bool:

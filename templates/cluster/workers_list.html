@@ -2,222 +2,231 @@
 {% load i18n %}
 
 {% block content %}
-<table class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>{% trans 'Name' %}</th>
-            <th>{% trans 'Status' %}</th>
-            <th>{% trans 'IP Address' %}</th>
-            <th><i class="fas fa-map-marker-alt" title="{% trans 'Location' %}"></i></th>
-            <th><i class="far fa-clock" title="{% trans 'Last Seen' %}"></i></th>
-            <th><i class="fas fa-cogs" title="{% trans 'Config Version' %}"></i></th>
-
-            <th><i class="far fa-edit"></i></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for worker in workers %}
-        <tr>
-            <td>{{ worker }}</td>
-            <td style="width: 1%; white-space: nowrap;">
-                {% if worker.error_status %}
-                    <i class="fas fa-exclamation-triangle text-danger blink" title="{{ worker.get_error_status_display }}"></i>
-                {% else %}
-                    {% if worker.enabled %}
-                        {% if cluster_settings.config_version != worker.workerstatus.config_version or cluster_settings.dns_version != worker.workerstatus.dns_version %}
-                            <i class="fas fa-sync text-primary blink" {% trans 'Configuration sync in progress' %}></i>
-                        {% else %}
-                            <i class="fas fa-check text-green"></i>
-                        {% endif %}
-                    {% else %}
-                        <i class="fas fa-times text-gray"></i>
-                    {% endif %}
-                {% endif %}
-                {% if current_worker_version != worker.workerstatus.worker_version %}
-                    <i class="fas fa-cloud-download-alt text-primary blink" title="{% trans 'The worker is outdated. Please update it to the latest version.' %}"></i>
-                {% endif %}
-            </td>
-            <td>
-                {% if worker.ip_address %}
-                    {{ worker.ip_address }}
-                    {% if worker.ip_lock %}
-                        <i class="fas fa-lock text-warning" title="{% trans 'IP Lock Enabled' %}"></i>
-                    {% endif %}
-                {% else %}
-                    <span class="text-muted">{% trans 'Not set' %}</span>
-                {% endif %}
-            </td>
-            <td>
-                {% if worker.country or worker.city %}
-                    {% if worker.city %}{{ worker.city }}{% endif %}{% if worker.city and worker.country %}, {% endif %}{% if worker.country %}{{ worker.country }}{% endif %}
-                {% else %}
-                    <span class="text-muted">{% trans 'Not set' %}</span>
-                {% endif %}
-            </td>
-            <td style="width: 1%; white-space: nowrap;" class="{% if not worker.is_online %}text-danger blink{% endif %}">
-                {% if worker.workerstatus %}
-                    {{ worker.workerstatus.last_seen|date:"M d, H:i" }}
-                {% else %}
-                    <span class="{% if not worker.is_online %}text-danger blink{% endif %}">{% trans 'Never' %}</span>
-                {% endif %}
-                {% if not worker.is_online %}
-                    <i class="fas fa-exclamation-triangle text-danger blink" title="{% trans 'Last seen more than 10 minutes ago or never seen.' %}"></i>
-                {% endif %}
-            </td>
-            <td style="width: 1%; white-space: nowrap;">
-                {% if worker.workerstatus %}
-                    {{ worker.workerstatus.config_version }}/{{ worker.workerstatus.dns_version }}
-                {% else %}
-
-                {% endif %}
-            </td>
-
-
-            <td style="width: 1%; white-space: nowrap;">
-                <a href="/cluster/worker/manage/?uuid={{ worker.uuid }}" title="{% trans 'Edit' %}"><i class="far fa-edit"></i></a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="8" class="text-center text-muted">{% trans 'No workers configured' %}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<a href="/cluster/worker/manage/" class="btn btn-primary">{% trans 'Add Worker' %}</a>
-<a href="/cluster/settings/" class="btn btn-secondary">{% trans 'Cluster Settings' %}</a>
-<button id="btn-cluster-info" class="btn btn-outline-info float-right">{% trans 'Cluster Information' %}</button>
-
-<div id="cluster-info-table" style="display: none; margin-top: 20px;">
-    <h4>{% trans 'Cluster Information' %}</h4>
-    <table class="table table-bordered" style="width: 50%;">
-        <tbody>
-            <tr>
-                <th>{% trans 'Enabled' %}</th>
-                <td>
-                    {% if cluster_settings.enabled %}
-                    <i class="fas fa-check text-green"></i>
-                    {% else %}
-                    <i class="fas fa-times text-gray"></i>
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>{% trans 'Cluster Mode' %}</th>
-                <td>{{ cluster_settings.get_cluster_mode_display }}</td>
-            </tr>
-            <tr>
-                <th>{% trans 'Config Version' %}</th>
-                <td>{{ cluster_settings.config_version }}</td>
-            </tr>
-            <tr>
-                <th>{% trans 'DNS Version' %}</th>
-                <td>{{ cluster_settings.dns_version }}</td>
-            </tr>
-
-            <tr>
-                <th>{% trans 'Stats Cache Refresh Interval' %}</th>
-                <td>{{ cache_refresh_interval }}s</td>
-            </tr>
-            <tr>
-                <th>{% trans 'Cache Enabled' %}</th>
-                <td>
-                    {% if cache_enabled %}
-                    <i class="fas fa-check text-green"></i>
-                    {% else %}
-                    <i class="fas fa-times text-gray"></i>
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>{% trans 'Cache Web Load Previous Count' %}</th>
-                <td>{{ cache_web_load_previous_count }}</td>
-            </tr>
-            <tr>
-                <th>{% trans 'Master Cache Processing Time' %}</th>
-                <td>{{ master_cache_times }}</td>
-            </tr>
-            <tr>
-                <th>{% trans 'Cluster Cache Processing Time' %}</th>
-                <td>{{ cluster_cache_times }}</td>
-            </tr>
-            <tr>
-                <th>{% trans 'Restart Mode' %}</th>
-                <td>{{ cluster_settings.get_restart_mode_display }}</td>
-            </tr>
-            <tr>
-                <th>{% trans 'Worker Display' %}</th>
-                <td>{{ cluster_settings.get_worker_display_display }}</td>
-            </tr>
-            <tr>
-                <th>{% trans 'Primary WireGuard' %}</th>
-                <td>
-                    {% if cluster_settings.primary_enable_wireguard %}
-                        <i class="fas fa-check text-green"></i>
-                    {% else %}
-                        <i class="fas fa-times text-gray"></i>
-                    {% endif %}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+{% if not cluster_settings.enabled %}
+<div class="alert alert-warning">
+    <i class="icon fas fa-exclamation-triangle"></i>
+    {% trans 'The cluster is disabled. Workers are refused and App Gateway applications are only published by this primary server.' %}
+    <a href="{% url 'cluster_settings' %}" class="alert-link">{% trans 'Cluster Settings' %}</a>
 </div>
+{% endif %}
+{% if stopped_instances %}
+<div class="alert alert-danger">
+    <i class="icon fas fa-exclamation-circle"></i>
+    {% trans 'These WireGuard instances are offline because their worker is disabled:' %}
+    {% for instance in stopped_instances %}<strong>wg{{ instance.instance_id }}</strong> ({{ instance.worker }}){% if not forloop.last %}, {% endif %}{% endfor %}.
+    {% trans 'Enable the worker or move the instances to another server.' %}
+</div>
+{% endif %}
+{% if not cache_enabled %}
+<div class="alert alert-danger">
+    <i class="icon fas fa-exclamation-circle"></i>
+    {% trans 'The cluster requires the WireGuard status cache. Enable WIREGUARD_STATUS_CACHE_ENABLED in the .env file.' %}
+</div>
+{% endif %}
 
-<div class="modal fade" id="clusterFeatureModal" tabindex="-1" role="dialog" aria-labelledby="clusterFeatureModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="clusterFeatureModalLabel">⚠️ {% trans "Cluster Feature – Testing Phase" %}
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+<div id="cluster-live">
+<div class="row">
+    <div class="col-md-3 col-sm-6">
+        <div class="info-box">
+            <span class="info-box-icon {% if summary.online == summary.enabled %}bg-success{% else %}bg-danger{% endif %}"><i class="fas fa-server"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">{% trans 'Workers online' %}</span>
+                <span class="info-box-number">{{ summary.online }} / {{ summary.enabled }}</span>
             </div>
-            <div class="modal-body">
-                <p>{% trans "The cluster functionality is currently released as experimental." %}<br>
-                    {% trans "At this stage, only core features are implemented:" %}</p>
-                <ul>
-                    <li>{% trans "Configuration synchronization service" %}</li>
-                    <li>{% trans "Primary node mirroring (WireGuard and firewall rules)" %}</li>
-                    <li>{% trans "DNS rules mirroring" %}</li>
-                    <li>{% trans "Traffic data synchronization" %}</li>
-                    <li>{% trans "Server selection dropdown before downloading peer configs or VPN invites" %}</li>
-                </ul>
-                <hr>
-
-                <br>
-                <p>
-                    {% trans "For more information, please visit:" %}
-                    <a href="https://github.com/eduardogsilva/wireguard_webadmin/discussions/128" target="_blank">https://github.com/eduardogsilva/wireguard_webadmin/discussions/128</a></p>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="info-box">
+            <span class="info-box-icon {% if summary.synced == summary.enabled %}bg-success{% else %}bg-info{% endif %}"><i class="fas fa-sync"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">{% trans 'Synchronized' %}</span>
+                <span class="info-box-number">{{ summary.synced }} / {{ summary.enabled }}</span>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btn-dismiss-cluster-modal">{% trans "I Understand" %}</button>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="info-box">
+            <span class="info-box-icon {% if summary.attention %}bg-warning{% else %}bg-success{% endif %}"><i class="fas fa-exclamation-triangle"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">{% trans 'Need attention' %}</span>
+                <span class="info-box-number">{{ summary.attention }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="info-box">
+            <span class="info-box-icon {% if cluster_settings.primary_enable_wireguard %}bg-success{% else %}bg-secondary{% endif %}"><i class="fas fa-network-wired"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">{% trans 'Primary WireGuard' %}</span>
+                <span class="info-box-number">{% if cluster_settings.primary_enable_wireguard %}{% trans 'Enabled' %}{% else %}{% trans 'Disabled' %}{% endif %}</span>
+                {% if distributed %}
+                <span class="text-muted text-sm" title="{% trans 'WireGuard instances on the primary server' %}">
+                    {% for instance in primary_instances %}wg{{ instance.instance_id }}{% if not forloop.last %}, {% endif %}{% empty %}{% trans 'No WireGuard instances' %}{% endfor %}
+                </span>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-server"></i> {% trans 'Workers' %}</h3>
+        <div class="card-tools">
+            <a href="{% url 'worker_manage' %}" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> {% trans 'Add Worker' %}</a>
+            <a href="{% url 'cluster_settings' %}" class="btn btn-sm btn-secondary"><i class="fas fa-cog"></i> {% trans 'Cluster Settings' %}</a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        {% if workers %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Worker' %}</th>
+                        <th>{% trans 'Status' %}</th>
+                        <th>{% trans 'Synchronization' %}</th>
+                        <th>{% trans 'Services' %}</th>
+                        <th>{% trans 'Version' %}</th>
+                        <th class="text-right">{% trans 'Actions' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for worker in workers %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'worker_details' %}?uuid={{ worker.uuid }}"><strong>{{ worker.name }}</strong></a>
+                            <br><small class="text-muted">
+                                {{ worker.hostname|default:worker.ip_address|default:'-' }}
+                                {% if worker.ip_lock %}<i class="fas fa-lock text-warning" title="{% trans 'IP Lock Enabled' %}"></i>{% endif %}
+                                {% if worker.city or worker.country %} · {{ worker.city|default:'' }}{% if worker.city and worker.country %}, {% endif %}{{ worker.country|default:'' }}{% endif %}
+                            </small>
+                            {% if distributed %}
+                            <br><small>
+                                {% for instance in worker.hosted_instances %}
+                                    <span class="badge badge-info" title="{% trans 'WireGuard instance' %}">wg{{ instance.instance_id }}{% if instance.name %} · {{ instance.name }}{% endif %}</span>
+                                {% empty %}
+                                    <span class="text-muted">{% trans 'No WireGuard instances' %}</span>
+                                {% endfor %}
+                            </small>
+                            {% endif %}
+                        </td>
+                        <td class="text-nowrap">
+                            {% if not worker.enabled %}
+                                <span class="badge badge-secondary">{% trans 'Disabled' %}</span>
+                            {% elif worker.error_status %}
+                                <span class="badge badge-danger" title="{{ worker.get_error_status_display }}">{% trans 'Refused' %}</span>
+                            {% elif worker.is_online %}
+                                <span class="badge badge-success">{% trans 'Online' %}</span>
+                            {% else %}
+                                <span class="badge badge-danger">{% trans 'Offline' %}</span>
+                            {% endif %}
+                            <br><small class="text-muted" title="{% trans 'Last Seen' %}">
+                                {% if worker.status %}{{ worker.status.last_seen|date:"SHORT_DATETIME_FORMAT" }}{% else %}{% trans 'Never' %}{% endif %}
+                            </small>
+                        </td>
+                        <td>
+                            {% if not worker.enabled %}
+                                <span class="text-muted">-</span>
+                            {% elif not worker.operational %}
+                                <span class="badge badge-secondary" title="{% trans 'The worker is not receiving updates.' %}">{% trans 'Unknown' %}</span>
+                            {% elif worker.sync_state.state == 'synced' %}
+                                <span class="badge badge-success">{% trans 'Synchronized' %}</span>
+                            {% elif worker.sync_state.state == 'error' %}
+                                <span class="badge badge-danger" title="{{ worker.error_messages|join:' / ' }}">{% trans 'Error' %}</span>
+                                <br><small class="text-muted">{{ worker.unsynced_sections|join:', ' }}</small>
+                            {% else %}
+                                <span class="badge badge-secondary">{% trans 'Pending' %}</span>
+                                <br><small class="text-muted">{{ worker.unsynced_sections|join:', ' }}</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% for service, state in worker.services %}
+                                {% if worker.operational %}
+                                <span class="badge {% if state == 'running' %}badge-success{% else %}badge-danger{% endif %}">{{ service }}</span>
+                                {% else %}
+                                <span class="badge badge-secondary" title="{% trans 'Last reported state' %}: {{ state }}">{{ service }}</span>
+                                {% endif %}
+                            {% empty %}
+                                <span class="text-muted">-</span>
+                            {% endfor %}
+                            {% if worker.operational and worker.warnings.certificate_issues %}
+                                <br><small class="text-warning" title="{{ worker.warnings.certificate_issues|join:', ' }}">
+                                    <i class="fas fa-certificate"></i> {% trans 'Certificates unavailable or expiring soon' %}
+                                </small>
+                            {% endif %}
+                        </td>
+                        <td class="text-nowrap">
+                            {% if worker.status %}
+                                <span class="badge {% if worker.outdated %}badge-warning{% else %}badge-light{% endif %}"
+                                      {% if worker.outdated %}title="{% trans 'The worker is outdated. Please update it to the latest version.' %}"{% endif %}>
+                                    v{{ worker.status.worker_version }}
+                                </span>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-right text-nowrap">
+                            <a href="{% url 'worker_details' %}?uuid={{ worker.uuid }}" class="btn btn-sm btn-outline-info" title="{% trans 'Details' %}"><i class="fas fa-eye"></i></a>
+                            <a href="{% url 'worker_manage' %}?uuid={{ worker.uuid }}" class="btn btn-sm btn-outline-secondary" title="{% trans 'Edit' %}"><i class="fas fa-edit"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="p-4 text-center text-muted">
+            <p>{% trans 'No workers configured' %}</p>
+            <a href="{% url 'worker_manage' %}" class="btn btn-primary"><i class="fas fa-plus"></i> {% trans 'Add Worker' %}</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+</div>
+
+<div class="card card-secondary card-outline collapsed-card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-stethoscope"></i> {% trans 'Diagnostics' %}</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+        </div>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-4">{% trans 'Cluster Mode' %}</dt>
+            <dd class="col-sm-8">{{ cluster_settings.get_cluster_mode_display }}</dd>
+            <dt class="col-sm-4">{% trans 'Worker Display' %}</dt>
+            <dd class="col-sm-8">{{ cluster_settings.get_worker_display_display }}</dd>
+            <dt class="col-sm-4">{% trans 'Current worker version' %}</dt>
+            <dd class="col-sm-8">v{{ current_worker_version }}</dd>
+            <dt class="col-sm-4">{% trans 'Stats Cache Refresh Interval' %}</dt>
+            <dd class="col-sm-8">{{ cache_refresh_interval }}s</dd>
+            <dt class="col-sm-4">{% trans 'Cache Web Load Previous Count' %}</dt>
+            <dd class="col-sm-8">{{ cache_web_load_previous_count }}</dd>
+            <dt class="col-sm-4">{% trans 'Master Cache Processing Time' %}</dt>
+            <dd class="col-sm-8"><small>{{ master_cache_times|default:'-' }}</small></dd>
+            <dt class="col-sm-4">{% trans 'Cluster Cache Processing Time' %}</dt>
+            <dd class="col-sm-8"><small>{{ cluster_cache_times|default:'-' }}</small></dd>
+        </dl>
+    </div>
+</div>
 {% endblock %}
 
 {% block custom_page_scripts %}
 <script>
     $(document).ready(function () {
-        // Cluster Info Button Logic
-        $('#btn-cluster-info').click(function () {
-            $('#cluster-info-table').slideToggle();
-        });
-
-        // Cluster Feature Modal Logic
-        if (!sessionStorage.getItem('cluster_modal_dismissed')) {
-            $('#clusterFeatureModal').modal('show');
-        }
-
-        // "I Understand" button persists dismissal
-        $('#btn-dismiss-cluster-modal').click(function () {
-            $('#clusterFeatureModal').modal('hide');
-            sessionStorage.setItem('cluster_modal_dismissed', 'true');
-        });
+        // Refresh the summary and the worker list every 30 seconds while the page is visible
+        setInterval(function () {
+            if (document.visibilityState === 'visible') {
+                $.get(window.location.href, function (data) {
+                    var content = $('<div>').append($.parseHTML(data)).find('#cluster-live');
+                    if (content.length) {
+                        $('#cluster-live').html(content.html());
+                    }
+                });
+            }
+        }, 30000);
     });
 </script>
 {% endblock %}

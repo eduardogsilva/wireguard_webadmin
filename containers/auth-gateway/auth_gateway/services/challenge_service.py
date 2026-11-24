@@ -8,6 +8,8 @@ import time
 ALTCHA_MAX_NUMBER = 1_000_000
 CHALLENGE_TTL_SECONDS = 300  # 5 minutes
 CHALLENGE_COOKIE_NAME = "auth_gateway_challenge"
+# Nonces of challenge cookies revoked after a failed login: a script keeping the old cookie must solve a new challenge
+_revoked_nonces: dict[str, float] = {}
 
 
 def generate_altcha_challenge(hmac_key: str) -> dict:
@@ -63,7 +65,20 @@ def verify_challenge_cookie(cookie_value: str, secret: str) -> bool:
         expected_sig = hmac.new(secret.encode(), message.encode(), hashlib.sha256).hexdigest()
         if not hmac.compare_digest(expected_sig, sig):
             return False
-        timestamp = int(message.split(".")[0])
-        return (time.time() - timestamp) < CHALLENGE_TTL_SECONDS
+        timestamp, nonce = message.split(".")
+        if nonce in _revoked_nonces:
+            return False
+        return (time.time() - int(timestamp)) < CHALLENGE_TTL_SECONDS
     except Exception:
         return False
+
+
+def revoke_challenge_cookie(cookie_value: str | None) -> None:
+    """Make a challenge cookie invalid before it expires."""
+    now = time.time()
+    for nonce, revoked_at in list(_revoked_nonces.items()):
+        if now - revoked_at > CHALLENGE_TTL_SECONDS:
+            del _revoked_nonces[nonce]
+    parts = (cookie_value or "").split(".")
+    if len(parts) == 3 and parts[1]:
+        _revoked_nonces[parts[1]] = now

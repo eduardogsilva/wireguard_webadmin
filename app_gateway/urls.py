@@ -10,10 +10,12 @@ urlpatterns = [
     path('application/manage/', views.view_manage_application, name='manage_application'),
     path('application/delete/', views.view_delete_application, name='delete_application'),
     path('application/view/', views.view_application_details, name='view_application'),
+    path('application/certificate_status/', views.view_application_certificate_status, name='application_certificate_status'),
 
     # Application Hosts
     path('host/manage/', views.view_manage_application_host, name='manage_application_host'),
     path('host/delete/', views.view_delete_application_host, name='delete_application_host'),
+    path('host/retry_certificate/', views.view_retry_application_host_certificate, name='retry_application_host_certificate'),
 
     # Access Policies
     path('policy/select-type/', views.view_select_policy_type, name='select_policy_type'),
@@ -27,6 +29,10 @@ urlpatterns = [
     # Application Routes
     path('route/manage/', views.view_manage_application_route, name='manage_application_route'),
     path('route/delete/', views.view_delete_application_route, name='delete_application_route'),
+
+    # DNS Challenge Credentials
+    path('dns_credential/manage/', views.view_manage_dns_credential, name='manage_dns_credential'),
+    path('dns_credential/delete/', views.view_delete_dns_credential, name='delete_dns_credential'),
 
     # Config Export
     path('export/caddy/', views.view_export_caddy_config, name='export_caddy_config'),

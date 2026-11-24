@@ -34,7 +34,24 @@ handle_sigint() {
     exit 0
 }
 
+# Written by cluster nodes, where this container shares the network namespace of the node. When the node
+# container is restarted it gets a new namespace, so this container must restart to join it again.
+NETNS_OWNER_FILE="/etc/dnsmasq/.netns_owner"
+
+watch_network_namespace() {
+    while sleep 30; do
+        if [ -f "$NETNS_OWNER_FILE" ] && [ "$(cat "$NETNS_OWNER_FILE")" != "$(readlink /proc/self/ns/net)" ]; then
+            echo "Network namespace of the cluster node changed, restarting..."
+            kill -TERM 1
+            pkill inotifywait
+            return
+        fi
+    done
+}
+
 trap handle_sigint SIGINT
+trap 'pkill dnsmasq; exit 1' SIGTERM
 
 create_default_config
+watch_network_namespace &
 start_dnsmasq

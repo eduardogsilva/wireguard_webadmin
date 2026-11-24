@@ -114,6 +114,14 @@ fi
 
 # ── .dockerignore ──
 cat .gitignore > .dockerignore
+cat >> .dockerignore <<'EOF'
+
+# Not needed inside the main image
+.git
+containers
+docs
+screenshots
+EOF
 
 # ── Build and push ──
 DEFAULT_PLATFORMS="linux/amd64,linux/arm64"

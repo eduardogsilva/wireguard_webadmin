@@ -5,7 +5,8 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from .models import ClusterSettings, Worker
+from firewall.models import FirewallRule
+from .models import DISTRIBUTED_MODES, ClusterSettings, Worker
 
 
 class WorkerForm(forms.ModelForm):
@@ -31,8 +32,10 @@ class WorkerForm(forms.ModelForm):
         
         if self.instance.pk:
             delete_html = f"<a href='javascript:void(0)' class='btn btn-outline-danger' data-command='delete' onclick='openCommandDialog(this)'>{delete_label}</a>"
+            back_url = f"/cluster/worker/view/?uuid={self.instance.uuid}"
         else:
             delete_html = ''
+            back_url = '/cluster/'
             
         self.helper.layout = Layout(
             Row(
@@ -65,7 +68,7 @@ class WorkerForm(forms.ModelForm):
             Row(
                 Column(
                     Submit('submit', _('Save'), css_class='btn btn-success'),
-                    HTML(f' <a class="btn btn-secondary" href="/cluster/">{back_label}</a> '),
+                    HTML(f' <a class="btn btn-secondary" href="{back_url}">{back_label}</a> '),
                     HTML(delete_html),
                     css_class='col-md-12'),
                 css_class='form-row'
@@ -90,14 +93,13 @@ class WorkerForm(forms.ModelForm):
 class ClusterSettingsForm(forms.ModelForm):
     class Meta:
         model = ClusterSettings
-        fields = ['enabled', 'primary_enable_wireguard', 'cluster_mode', 'restart_mode', 'worker_display']
+        fields = ['enabled', 'primary_enable_wireguard', 'cluster_mode', 'worker_display']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['enabled'].label = _("Cluster Enabled")
         self.fields['primary_enable_wireguard'].label = _("Primary Enable WireGuard")
         self.fields['cluster_mode'].label = _("Cluster Mode")
-        self.fields['restart_mode'].label = _("Restart Mode")
         self.fields['worker_display'].label = _("Worker Display")
 
         back_label = _("Back")
@@ -112,11 +114,7 @@ class ClusterSettingsForm(forms.ModelForm):
             ),
             Row(
                 Column('cluster_mode', css_class='form-group col-md-6 mb-0'),
-                Column('restart_mode', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('worker_display', css_class='form-group col-md-12 mb-0'),
+                Column('worker_display', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -132,7 +130,24 @@ class ClusterSettingsForm(forms.ModelForm):
         cleaned_data = super().clean()
         cluster_enabled = cleaned_data.get('enabled')
 
+        if not cleaned_data.get('primary_enable_wireguard') and cleaned_data.get('cluster_mode') in DISTRIBUTED_MODES:
+            self.add_error('primary_enable_wireguard', _(
+                'The primary server can only be disabled in mirror mode. In distributed mode, move its instances '
+                'to workers instead.'
+            ))
+
         if cluster_enabled and not settings.WIREGUARD_STATUS_CACHE_ENABLED:
             raise ValidationError(_("Cluster mode requires WireGuard status cache to be enabled."))
+
+        if cluster_enabled and cleaned_data.get('cluster_mode') in DISTRIBUTED_MODES:
+            instance_rules = list(FirewallRule.with_instance_interface().order_by('firewall_chain', 'sort_order'))
+            if instance_rules:
+                rule_list = ', '.join(
+                    rule.description or f"{rule.get_firewall_chain_display()} #{rule.sort_order}" for rule in instance_rules
+                )
+                raise ValidationError(_(
+                    "The distributed cluster mode does not allow firewall rules bound to a specific WireGuard instance. "
+                    "Change them to wg+ or IP addresses first: %(rules)s"
+                ) % {'rules': rule_list})
 
         return cleaned_data

@@ -1,11 +1,189 @@
+import glob
+import ipaddress
 import os
+import re
 import subprocess
 from typing import Union
 
+from django.utils.translation import gettext_lazy as _
+
+from cluster.models import ClusterSettings, Worker
 from wireguard.models import WireGuardInstance
+
+WIREGUARD_CONFIG_DIR = '/etc/wireguard'
+# Configurations of instances that run on workers (distributed cluster mode). Kept out of WIREGUARD_CONFIG_DIR
+# so the primary server does not bring them up.
+CLUSTER_WIREGUARD_CONFIG_DIR = '/etc/wireguard/cluster'
+
+
+# Title of the configuration block of a peer with an endpoint. Mirror workers remove these blocks from the configuration
+# of the primary server and receive only the endpoint peers they run.
+ENDPOINT_PEER_TITLE = '# Endpoint peer: '
+
+
+def peer_config_lines(peer) -> list:
+    """[Peer] block of a peer, using its prefetched server allowed IPs. Ends with an empty line."""
+    allowed_ips = [ip for ip in peer.peerallowedip_set.all() if ip.config_file == 'server']
+    allowed_ips.sort(key=lambda ip: ip.priority)
+    if not allowed_ips:
+        prepend_line = "# "
+        peer_title = f"# WARNING: No Allowed IPs set for peer {peer}. "
+        allowed_ips_line = "# AllowedIPs = (missing)"
+    else:
+        prepend_line = ""
+        peer_title = f"{ENDPOINT_PEER_TITLE if peer.endpoint else '# Peer: '}{peer}"
+        allowed_ips_line = "AllowedIPs = " + ", ".join(f"{ip.allowed_ip}/{ip.netmask}" for ip in allowed_ips)
+
+    lines = [peer_title, f"{prepend_line}[Peer]", f"{prepend_line}PublicKey = {peer.public_key}"]
+    if peer.pre_shared_key:
+        lines.append(f"{prepend_line}PresharedKey = {peer.pre_shared_key}")
+    if peer.endpoint:
+        lines.append(f"{prepend_line}Endpoint = {peer.endpoint}")
+    lines.append(f"{prepend_line}PersistentKeepalive = {peer.persistent_keepalive}")
+    lines.append(allowed_ips_line)
+    lines.append("")
+    return lines
+
+
+def remove_endpoint_peers(config_content: str) -> str:
+    """Remove the blocks of endpoint peers from a configuration written by export_wireguard_configuration."""
+    lines = []
+    skipping = False
+    for line in config_content.split("\n"):
+        if line.startswith(ENDPOINT_PEER_TITLE):
+            skipping = True
+        if not skipping:
+            lines.append(line)
+        if skipping and line == "":
+            skipping = False
+    return "\n".join(lines)
+
+
+def get_instance_config_dir(instance: WireGuardInstance) -> str:
+    return CLUSTER_WIREGUARD_CONFIG_DIR if instance.hosting_worker else WIREGUARD_CONFIG_DIR
+
+
+def get_config_servers(instance: WireGuardInstance) -> list:
+    """Servers offered when downloading a peer configuration of the instance. Empty without the cluster."""
+    cluster_settings = ClusterSettings.objects.filter(name='cluster_settings', enabled=True).first()
+    if not cluster_settings:
+        return []
+
+    if ClusterSettings.is_distributed():
+        hosting_worker = instance.hosting_worker if instance else None
+        if hosting_worker:
+            return [{'name': hosting_worker.display_name, 'uuid': str(hosting_worker.uuid)}]
+        return [{'name': _('Primary Server'), 'uuid': ''}]
+
+    servers = []
+    if cluster_settings.primary_enable_wireguard:
+        servers.append({'name': _('Primary Server'), 'uuid': ''})
+    for worker in Worker.objects.filter(enabled=True):
+        servers.append({'name': worker.display_name, 'uuid': str(worker.uuid)})
+    return servers
+
+
+def running_wireguard_interfaces() -> list:
+    result = subprocess.run(['wg', 'show', 'interfaces'], capture_output=True, text=True)
+    return [interface for interface in result.stdout.split() if re.fullmatch(r'wg[0-9]+', interface)]
+
+
+def stop_primary_interfaces() -> list:
+    """Stop every WireGuard interface running on this server. Returns (interface, error) for each failure."""
+    errors = []
+    for interface_name in running_wireguard_interfaces():
+        if os.path.isfile(os.path.join(WIREGUARD_CONFIG_DIR, f'{interface_name}.conf')):
+            command = ['wg-quick', 'down', interface_name]
+        else:
+            # Instances moved to a worker no longer have a configuration on this server
+            command = ['ip', 'link', 'delete', interface_name]
+        result = subprocess.run(command, capture_output=True, text=True)
+        if result.returncode != 0:
+            errors.append((interface_name, result.stderr.strip()))
+    return errors
+
+
+def start_primary_interfaces() -> list:
+    """Start the configured WireGuard interfaces that are not running. Returns (interface, error) for each failure."""
+    errors = []
+    running_interfaces = running_wireguard_interfaces()
+    for config_path in sorted(glob.glob(os.path.join(WIREGUARD_CONFIG_DIR, 'wg[0-9]*.conf'))):
+        interface_name = os.path.basename(config_path)[:-len('.conf')]
+        if interface_name in running_interfaces:
+            continue
+        result = subprocess.run(['wg-quick', 'up', interface_name], capture_output=True, text=True)
+        if result.returncode != 0:
+            errors.append((interface_name, result.stderr.strip()))
+    return errors
+
+
+def sync_interface_routes(interface_name: str) -> list:
+    """
+    Bring the IPv4 routes of a running interface in line with its allowed IPs, as wg-quick does on start.
+    wg syncconf only updates the peers, so networks added to or removed from a peer would otherwise only
+    get their routes on the next restart. Default routes (/0) are left to wg-quick. Returns the errors found.
+    """
+    errors = []
+    allowed_ips_result = subprocess.run(['wg', 'show', interface_name, 'allowed-ips'], capture_output=True, text=True)
+    if allowed_ips_result.returncode != 0:
+        return [allowed_ips_result.stderr.strip()]
+
+    allowed_networks = set()
+    for line in allowed_ips_result.stdout.splitlines():
+        for value in line.split()[1:]:
+            try:
+                network = ipaddress.IPv4Network(value, strict=False)
+            except ValueError:
+                continue
+            if network.prefixlen:
+                allowed_networks.add(network)
+    allowed_networks = sorted(allowed_networks, key=lambda network: network.prefixlen)
+
+    for network in allowed_networks:
+        covering_routes = subprocess.run(
+            ['ip', '-4', 'route', 'show', 'dev', interface_name, 'match', str(network)], capture_output=True, text=True,
+        ).stdout.strip()
+        if covering_routes:
+            continue
+        # replace instead of add: the network may still be routed to another instance it was moved from
+        add_result = subprocess.run(
+            ['ip', '-4', 'route', 'replace', str(network), 'dev', interface_name], capture_output=True, text=True
+        )
+        if add_result.returncode != 0:
+            errors.append(f"{network}: {add_result.stderr.strip()}")
+
+    routes_result = subprocess.run(
+        ['ip', '-o', '-4', 'route', 'show', 'dev', interface_name], capture_output=True, text=True
+    )
+    for route in routes_result.stdout.splitlines():
+        fields = route.split()
+        if not fields or 'kernel' in fields:
+            continue
+        try:
+            route_network = ipaddress.IPv4Network(fields[0], strict=False)
+        except ValueError:
+            continue
+        # Only routes that no allowed IP covers are removed: the interface drops their traffic anyway
+        if any(route_network.subnet_of(network) for network in allowed_networks):
+            continue
+        delete_result = subprocess.run(
+            ['ip', '-4', 'route', 'delete', str(route_network), 'dev', interface_name], capture_output=True, text=True,
+        )
+        if delete_result.returncode != 0:
+            errors.append(f"{route_network}: {delete_result.stderr.strip()}")
+    return errors
 
 
 def func_reload_wireguard_interface(target: Union[str, WireGuardInstance], config_dir: str = "/etc/wireguard") -> tuple[bool, str]:
+    success, message = reload_wireguard_interface(target, config_dir)
+    if not success and isinstance(target, WireGuardInstance):
+        # Keep the apply banner so the configuration is applied again with a restart
+        target.pending_changes = True
+        WireGuardInstance.objects.filter(pk=target.pk).update(pending_changes=True)
+    return success, message
+
+
+def reload_wireguard_interface(target: Union[str, WireGuardInstance], config_dir: str) -> tuple[bool, str]:
     """
     Reload a WireGuard interface safely using:
         wg syncconf <iface> <(wg-quick strip <conf>)
@@ -21,6 +199,12 @@ def func_reload_wireguard_interface(target: Union[str, WireGuardInstance], confi
 
     # Resolve interface name and config path
     if isinstance(target, WireGuardInstance):
+        if target.hosting_worker:
+            # The worker applies the new configuration on its next synchronization
+            return True, f"wg{target.instance_id} runs on {target.hosting_worker} and is updated by the cluster"
+        if not ClusterSettings.primary_serves_clients():
+            # The interfaces of the primary server are stopped; the workers apply it on their next synchronization
+            return True, f"wg{target.instance_id} is updated by the cluster workers"
         interface_name = f"wg{target.instance_id}"
         conf_filename = f"{interface_name}.conf"
     else:
@@ -58,6 +242,10 @@ def func_reload_wireguard_interface(target: Union[str, WireGuardInstance], confi
 
         if sync_proc.returncode != 0:
             return False, sync_proc.stderr.strip()
+
+        route_errors = sync_interface_routes(interface_name)
+        if route_errors:
+            return False, f"{interface_name} reloaded with route errors: {'; '.join(route_errors)}"
 
         return True, f"{interface_name} reloaded successfully"
 

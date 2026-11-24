@@ -1,56 +1,6 @@
 import os
-import tarfile
 
-from cluster.models import ClusterSettings
 from .models import DNSSettings, StaticHost, DNSFilterList
-
-
-def compress_dnsmasq_config():
-    output_file = "/etc/dnsmasq/dnsmasq_config.tar.gz"
-    base_dir = "/etc/dnsmasq"
-    cluster_settings = ClusterSettings.objects.filter(enabled=True, name='cluster_settings').first()
-    if not cluster_settings:
-        if os.path.exists(output_file):
-            os.remove(output_file)
-        return None
-
-    if not os.path.isdir(base_dir):
-        if os.path.exists(output_file):
-            os.remove(output_file)
-        return None
-
-    conf_files = [
-        fn for fn in os.listdir(base_dir)
-        if fn.endswith(".conf") and os.path.isfile(os.path.join(base_dir, fn))
-    ]
-
-    # If tar exists and is newer (or equal) than all .conf, do not recompile
-    if os.path.exists(output_file):
-        tar_mtime = os.path.getmtime(output_file)
-        newest_conf_mtime = max(
-            os.path.getmtime(os.path.join(base_dir, fn)) for fn in conf_files
-        )
-        if newest_conf_mtime <= tar_mtime:
-            return output_file
-
-    # If we reach here, we need to increment DNS version and recompile the tar.gz
-    cluster_settings.dns_version += 1
-    cluster_settings.save()
-    dns_version_file = os.path.join(base_dir, "config_version.conf")
-    with open(dns_version_file, "w", encoding="utf-8") as f:
-        f.write(f"DNS_VERSION={cluster_settings.dns_version}\n")
-    if "config_version.conf" not in conf_files:
-        conf_files.append("config_version.conf")
-
-    # Create tar.gz
-    tmp_output = output_file + ".tmp"
-    with tarfile.open(tmp_output, "w:gz") as tar:
-        for fn in conf_files:
-            fullpath = os.path.join(base_dir, fn)
-            tar.add(fullpath, arcname=fn)
-
-    os.replace(tmp_output, output_file)
-    return output_file
 
 
 def generate_unbound_config():
@@ -106,11 +56,21 @@ def generate_dnsdist_config():
     return dnsdist_config
 
 
-def generate_dnsmasq_config():
+def generate_dnsmasq_config(cluster_node=False):
     dns_settings = DNSSettings.objects.get(name='dns_settings')
     static_hosts = StaticHost.objects.all()
     dns_lists = DNSFilterList.objects.filter(enabled=True)
-    dnsmasq_config = f'''
+    if cluster_node:
+        # On cluster nodes dnsmasq shares the network namespace of the node and must also answer on
+        # WireGuard interfaces created after it starts
+        dnsmasq_config = '''
+no-dhcp-interface=
+interface=wg*
+bind-dynamic
+
+'''
+    else:
+        dnsmasq_config = '''
 no-dhcp-interface=
 listen-address=0.0.0.0
 bind-interfaces

@@ -141,6 +141,7 @@ def peer_info(request):
         'public_key': str(peer.public_key),
         'uuid': str(peer.uuid),
         'private_key_exists': bool(peer.private_key),
+        'endpoint': peer.endpoint,
         'is_route_policy_restricted': peer.is_route_policy_restricted,
     }
     return JsonResponse(data)
@@ -358,7 +359,7 @@ def func_concatenate_cluster_wireguard_status_cache() -> None:
         .first()
     )
     if master_cache and isinstance(master_cache.data, dict):
-        cache_entries.append({"source_name": "master", "source_uuid": "", "data": master_cache.data,})
+        cache_entries.append({"source_name": "master", "source_label": "", "source_uuid": "", "data": master_cache.data,})
 
     worker_statuses = (WorkerStatus.objects.filter(
         worker__enabled=True, wireguard_status_updated__gt=timezone.now() - timedelta(minutes=10)
@@ -368,6 +369,7 @@ def func_concatenate_cluster_wireguard_status_cache() -> None:
         cache_entries.append(
             {
                 "source_name": f"worker_{ws.worker.name}",
+                "source_label": ws.worker.name,
                 "source_uuid": str(ws.worker.uuid),
                 "data": ws.wireguard_status or {},
             }
@@ -375,6 +377,7 @@ def func_concatenate_cluster_wireguard_status_cache() -> None:
 
     for entry in cache_entries:
         source_name = entry["source_name"]
+        source_label = entry["source_label"]
         source_uuid = entry["source_uuid"]
         data = entry.get("data") or {}
 
@@ -393,6 +396,7 @@ def func_concatenate_cluster_wireguard_status_cache() -> None:
 
                 peer_info_copy = dict(peer_info)
                 peer_info_copy["source_name"] = source_name
+                peer_info_copy["source_label"] = source_label
                 peer_info_copy["source_uuid"] = source_uuid
 
                 if peer_key not in combined_data[interface]:
@@ -401,11 +405,21 @@ def func_concatenate_cluster_wireguard_status_cache() -> None:
 
                 existing_peer = combined_data[interface][peer_key]
 
+                # Each server keeps its own counters, so the peer traffic is the sum of all sources
+                existing_transfer = existing_peer.get("transfer") or {}
+                new_transfer = peer_info_copy.get("transfer") or {}
+                combined_transfer = {
+                    "tx": int(existing_transfer.get("tx", 0) or 0) + int(new_transfer.get("tx", 0) or 0),
+                    "rx": int(existing_transfer.get("rx", 0) or 0) + int(new_transfer.get("rx", 0) or 0),
+                }
+
                 new_hs = _latest_handshake_as_int(peer_info_copy)
                 old_hs = _latest_handshake_as_int(existing_peer)
 
+                # Handshake, endpoint and source come from the server where the peer connected last
                 if new_hs > old_hs:
                     combined_data[interface][peer_key] = peer_info_copy
+                combined_data[interface][peer_key]["transfer"] = combined_transfer
 
     processing_time_ms = int((time.monotonic() - start_time) * 1000)
     WireguardStatusCache.objects.create(data=combined_data, processing_time_ms=processing_time_ms, cache_type="cluster")

@@ -1,0 +1,20 @@
+{% load i18n %}{% with record=host.dns_delegation_record %}
+{{ host.certificate_label }}
+{% if host.certificate_type != 'self_signed' %}
+    {% if host.certificate_fallback %}
+        <span class="badge badge-secondary">{% trans 'fallback' %}</span>
+    {% else %}
+        <span class="badge badge-warning">{% trans 'no fallback' %}</span>
+    {% endif %}
+    <i class="fas fa-info-circle text-muted ml-1" data-toggle="tooltip" data-html="true"
+       data-template='<div class="tooltip" role="tooltip"><div class="arrow"></div><div class="tooltip-inner host-certificate-tooltip"></div></div>'
+       title="{% filter force_escape %}
+        <div class='text-left'>
+        {% if host.dns_credential %}<strong>{% trans 'DNS Credential' %}:</strong> {{ host.dns_credential }}<br>{% endif %}
+        {% if record %}<strong>{% trans 'Required record' %}:</strong><br><code>{{ record.0 }}</code><br>CNAME <code>{{ record.1 }}</code><br>{% endif %}
+        <strong>{% trans 'Fallback' %}:</strong>
+        {% if host.certificate_fallback %}{% trans 'self-signed certificate while the trusted certificate cannot be issued' %}{% else %}{% trans 'disabled, the connection fails until the certificate is issued' %}{% endif %}
+        </div>
+    {% endfilter %}"></i>
+{% endif %}
+{% endwith %}

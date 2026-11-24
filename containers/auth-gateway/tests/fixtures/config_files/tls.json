@@ -1,0 +1,40 @@
+{
+  "hosts": {
+    "dashboard.example.test": {
+      "certificate_type": "http_challenge",
+      "certificate_fallback": true,
+      "certificate_generation": 0
+    },
+    "hypervisor.example.test": {
+      "certificate_type": "http_challenge",
+      "certificate_fallback": true,
+      "certificate_generation": 0
+    },
+    "media.example.test": {
+      "certificate_type": "http_challenge",
+      "certificate_fallback": true,
+      "certificate_generation": 0
+    },
+    "media2.example.test": {
+      "certificate_type": "http_challenge",
+      "certificate_fallback": true,
+      "certificate_generation": 0
+    },
+    "sso.example.test": {
+      "certificate_type": "http_challenge",
+      "certificate_fallback": true,
+      "certificate_generation": 0
+    },
+    "webadmin.example.test": {
+      "certificate_type": "http_challenge",
+      "certificate_fallback": true,
+      "certificate_generation": 0
+    },
+    "webadmin2.example.test": {
+      "certificate_type": "http_challenge",
+      "certificate_fallback": true,
+      "certificate_generation": 0
+    }
+  },
+  "dns_credentials": {}
+}

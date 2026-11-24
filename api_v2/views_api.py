@@ -1,25 +1,35 @@
 import ipaddress
 import json
 import re
+from datetime import timedelta
 from functools import wraps
 from typing import List, Optional, Tuple
 
+from django import forms
+from django.conf import settings as django_settings
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from api.views import func_get_wireguard_status
+from app_gateway.caddy_config_export import apply_caddy_config
+from cluster.forms import ClusterSettingsForm
+from cluster.models import ClusterSettings, Worker, WorkerStatus
+from cluster.sync import get_worker_sync_state
 from dns.models import DNSSettings, StaticHost
 from dns.views import export_dns_configuration
 from routing_templates.models import RoutingTemplate
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
-from wireguard_peer.functions import func_create_new_peer
-from wireguard_tools.functions import func_reload_wireguard_interface
-from wireguard_tools.views import export_wireguard_configuration
+from wireguard_peer.forms import normalize_endpoint
+from wireguard_peer.functions import find_network_in_other_instance, func_create_new_peer
+from wireguard_tools.functions import (
+    func_reload_wireguard_interface, running_wireguard_interfaces, start_primary_interfaces, stop_primary_interfaces,
+)
 from vpn_invite.models import InviteSettings, PeerInvite
-from wgwadmlibrary.tools import create_peer_invite, get_peer_invite_data, send_email, user_has_access_to_peer
-
+from wgwadmlibrary.tools import create_peer_invite, get_peer_invite_data, send_email
+from wireguard_tools.views import export_wireguard_configuration
 from .models import ApiKey
 
 
@@ -225,6 +235,8 @@ def _validate_dns_hostname(hostname: str) -> Tuple[Optional[str], Optional[str]]
          "example": ["192.168.1.0/24"],
          "description": "Client routes (priority>=1). Will be synced. Not allowed when allow_peer_custom_routes=True."},
 
+        {"name": "name", "in": "json", "type": "string", "required": False, "example": "John",
+         "description": "Peer name (create/update). Can be cleared by sending null/empty string."},
         {"name": "public_key", "in": "json", "type": "string", "required": False,
          "description": "Peer public key (create/update)."},
         {"name": "pre_shared_key", "in": "json", "type": "string", "required": False,
@@ -237,6 +249,13 @@ def _validate_dns_hostname(hostname: str) -> Tuple[Optional[str], Optional[str]]
          "description": "Suspend/unsuspend a peer (update)."},
         {"name": "suspend_reason", "in": "json", "type": "string", "required": False,
          "description": "Suspend reason (update). Can be cleared by sending null/empty string."},
+        {"name": "endpoint", "in": "json", "type": "string", "required": False, "example": "vpn.example.com:51820",
+         "description": "Address (host:port) of a remote WireGuard server that this server connects to (create/update). "
+                        "Cleared by sending an empty string. A peer with an endpoint may use a main address outside "
+                        "the instance network."},
+        {"name": "active_worker_uuid", "in": "json", "type": "string", "required": False,
+         "description": "Cluster worker that connects to the endpoint in the mirror mode (create/update). Null or "
+                        "empty means the primary server."},
     ],
     returns=[
         {"status": 200, "body": {"status": "success", "message": "Peer updated successfully.", "peer_uuid": "...", "public_key": "...", "main_addresses": ["..."], "reload": {"success": True, "message": "..."}}},
@@ -261,6 +280,7 @@ def _validate_dns_hostname(hostname: str) -> Tuple[Optional[str], Optional[str]]
             "json": {
                 "instance": "wg0",
                 "peer_uuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+                "name": "John Notebook",
                 "suspended": True,
                 "suspend_reason": "Maintenance window",
                 "skip_reload": False
@@ -308,10 +328,35 @@ def api_v2_manage_peer(request):
     announced_pairs, announced_error = _parse_ipv4_cidrs(payload.get("announced_networks"))
     if announced_error:
         return JsonResponse({"status": "error", "error_message": announced_error}, status=400)
+    for allowed_ip, netmask in announced_pairs or []:
+        other_network = find_network_in_other_instance(wireguard_instance, allowed_ip, netmask)
+        if other_network:
+            return JsonResponse({
+                "status": "error",
+                "error_message": f"Network {allowed_ip}/{netmask} is already used by a peer of "
+                                 f"wg{other_network.peer.wireguard_instance.instance_id}. A network can be routed to "
+                                 f"only one WireGuard instance.",
+            }, status=400)
 
     client_route_pairs, client_route_error = _parse_ipv4_cidrs(payload.get("client_routes"))
     if client_route_error:
         return JsonResponse({"status": "error", "error_message": client_route_error}, status=400)
+
+    new_endpoint = None
+    if "endpoint" in payload:
+        try:
+            new_endpoint = normalize_endpoint(str(payload.get("endpoint") or ""))
+        except forms.ValidationError as error:
+            return JsonResponse({"status": "error", "error_message": f"Invalid endpoint: {error.messages[0]}"}, status=400)
+
+    new_active_worker = None
+    if payload.get("active_worker_uuid"):
+        try:
+            new_active_worker = Worker.objects.filter(uuid=payload.get("active_worker_uuid")).first()
+        except (ValidationError, ValueError):
+            new_active_worker = None
+        if not new_active_worker:
+            return JsonResponse({"status": "error", "error_message": "Invalid active_worker_uuid."}, status=400)
 
     with transaction.atomic():
         # CREATE
@@ -342,6 +387,9 @@ def api_v2_manage_peer(request):
                 create_overrides["persistent_keepalive"] = peer_persistent_keepalive
             if peer_allowed_ip:
                 create_overrides["allowed_ip"] = str(peer_allowed_ip).strip()
+            if new_endpoint:
+                create_overrides["endpoint"] = new_endpoint
+                create_overrides["active_worker"] = new_active_worker
 
             if routing_template is not None:
                 create_overrides["default_routing_template"] = routing_template
@@ -413,6 +461,12 @@ def api_v2_manage_peer(request):
             new_suspended = payload.get("suspended")
             new_suspend_reason = payload.get("suspend_reason") if "suspend_reason" in payload else None
 
+            if "name" in payload:
+                new_name = str(payload.get("name") or "").strip()
+                if len(new_name) > 100:
+                    return JsonResponse({"status": "error", "error_message": "Invalid name. Maximum length is 100 characters."}, status=400)
+                peer_for_action.name = new_name
+
             if new_public_key:
                 peer_for_action.public_key = new_public_key
 
@@ -436,6 +490,13 @@ def api_v2_manage_peer(request):
 
             if "suspend_reason" in payload:
                 peer_for_action.suspend_reason = new_suspend_reason
+
+            if new_endpoint is not None:
+                peer_for_action.endpoint = new_endpoint
+            if "active_worker_uuid" in payload:
+                peer_for_action.active_worker = new_active_worker
+            if not peer_for_action.endpoint:
+                peer_for_action.active_worker = None
 
             peer_for_action.save()
 
@@ -715,6 +776,7 @@ def api_v2_peer_list(request):
             "suspend_reason": current_peer.suspend_reason or "",
             "disabled_by_schedule": bool(current_peer.disabled_by_schedule),
             "main_addresses": current_peer.main_addresses,
+            "endpoint": current_peer.endpoint,
         })
 
     return JsonResponse(
@@ -741,7 +803,7 @@ def api_v2_peer_list(request):
          "description": "Peer public key selector."},
     ],
     returns=[
-        {"status": 200, "body": {"status": "success", "peer": {"uuid": "...", "name": "...", "public_key": "...", "pre_shared_key": "...", "private_key": "...", "persistent_keepalive": 25, "routing_template_uuid": "...", "suspended": False, "suspend_reason": "...", "disabled_by_schedule": False, "enabled": True, "main_addresses": ["..."], "announced_networks": ["..."], "client_routes": ["..."], "instance": "...", "instance_uuid": "..."}}},
+        {"status": 200, "body": {"status": "success", "peer": {"uuid": "...", "name": "...", "public_key": "...", "pre_shared_key": "...", "private_key": "...", "persistent_keepalive": 25, "routing_template_uuid": "...", "suspended": False, "suspend_reason": "...", "disabled_by_schedule": False, "enabled": True, "main_addresses": ["..."], "announced_networks": ["..."], "client_routes": ["..."], "endpoint": "", "active_worker_uuid": "", "instance": "...", "instance_uuid": "..."}}},
         {"status": 400, "body": {"status": "error", "error_message": "Missing peer selector (peer_uuid or peer_public_key)."}},
         {"status": 404, "body": {"status": "error", "error_message": "Peer not found."}},
         {"status": 403, "body": {"status": "error", "error_message": "Invalid API key."}},
@@ -817,11 +879,133 @@ def api_v2_peer_detail(request):
         "main_addresses": current_peer.main_addresses,
         "announced_networks": current_peer.announced_networks,
         "client_routes": current_peer.client_routes,
+        "endpoint": current_peer.endpoint,
+        "active_worker_uuid": str(current_peer.active_worker.uuid) if current_peer.active_worker else "",
         "instance": f"wg{wireguard_instance.instance_id}",
         "instance_uuid": str(wireguard_instance.uuid),
     }
 
     return JsonResponse({"status": "success", "peer": peer_data}, status=200)
+
+
+@csrf_exempt
+@api_doc(
+    summary="Create a VPN invite for a peer and optionally send it by email",
+    auth="Header token: <ApiKey.token>",
+    methods=["POST"],
+    params=[
+        {"name": "instance", "in": "json", "type": "string", "required": True, "example": "wg0",
+         "description": "Required. Target instance name in the format wg{instance_id} (e.g. wg0, wg1)."},
+        {"name": "peer_uuid", "in": "json", "type": "string", "required": False,
+         "description": "Peer UUID selector."},
+        {"name": "peer_public_key", "in": "json", "type": "string", "required": False,
+         "description": "Peer public key selector."},
+        {"name": "email", "in": "json", "type": "string", "required": False,
+         "description": "Optional. Sends the invite to this address. Requires email invites to be enabled in the VPN invite settings."},
+    ],
+    returns=[
+        {"status": 200, "body": {"status": "success", "message": "Invite created.", "invite_data": {"url": "...", "password": "...", "expiration": "...", "email_subject": "...", "email_body": "...", "whatsapp_body": "...", "text_body": "...", "uuid": "..."}}},
+        {"status": 400, "body": {"status": "error", "error_message": "Peers with an endpoint have no client configuration to share."}},
+        {"status": 403, "body": {"status": "error", "error_message": "Invalid API key."}},
+        {"status": 404, "body": {"status": "error", "error_message": "Peer not found."}},
+        {"status": 500, "body": {"status": "error", "error_message": "Invite created, but the email could not be sent: ...", "invite_data": {"url": "..."}}},
+    ],
+    examples={
+        "create_invite": {"method": "POST", "json": {"instance": "wg0", "peer_uuid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"}},
+        "create_and_send_invite": {"method": "POST", "json": {"instance": "wg0", "peer_uuid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", "email": "user@example.com"}},
+    }
+)
+def api_v2_peer_invite(request):
+    if request.method != "POST":
+        return JsonResponse({"status": "error", "error_message": "Method not allowed."}, status=405)
+
+    try:
+        payload = json.loads(request.body.decode("utf-8")) if request.body else {}
+    except Exception:
+        return JsonResponse({"status": "error", "error_message": "Invalid JSON body."}, status=400)
+    if not isinstance(payload, dict):
+        return JsonResponse({"status": "error", "error_message": "Invalid JSON body."}, status=400)
+
+    try:
+        wireguard_instance = WireGuardInstance.objects.get(
+            instance_id=int(str(payload.get("instance")).replace("wg", ""))
+        )
+    except Exception:
+        wireguard_instance = None
+
+    if not wireguard_instance:
+        return JsonResponse({"status": "error", "error_message": "Invalid or missing WireGuard instance."}, status=400)
+
+    api_key, api_error = validate_api_key(request, wireguard_instance=wireguard_instance)
+    if not api_key:
+        return JsonResponse({"status": "error", "error_message": api_error}, status=403)
+
+    selector_peer_uuid = payload.get("peer_uuid")
+    selector_peer_public_key = payload.get("peer_public_key")
+    if not selector_peer_uuid and not selector_peer_public_key:
+        return JsonResponse(
+            {"status": "error", "error_message": "Missing peer selector (peer_uuid or peer_public_key)."},
+            status=400,
+        )
+
+    peers = Peer.objects.filter(wireguard_instance=wireguard_instance)
+    try:
+        if selector_peer_uuid:
+            peer = peers.filter(uuid=selector_peer_uuid).first()
+        else:
+            peer = peers.filter(public_key=selector_peer_public_key).first()
+    except ValidationError:
+        peer = None
+    if not peer:
+        return JsonResponse({"status": "error", "error_message": "Peer not found."}, status=404)
+
+    if peer.endpoint:
+        return JsonResponse(
+            {"status": "error", "error_message": "Peers with an endpoint have no client configuration to share."},
+            status=400,
+        )
+
+    invite_settings = InviteSettings.objects.filter(name='default_settings').first()
+    if not invite_settings:
+        return JsonResponse({"status": "error", "error_message": "VPN invite is not configured."}, status=400)
+
+    email = payload.get("email")
+    if email:
+        if not isinstance(email, str):
+            return JsonResponse({"status": "error", "error_message": "Invalid email address."}, status=400)
+        if not invite_settings.invite_email_enabled:
+            return JsonResponse(
+                {"status": "error", "error_message": "Email invites are disabled in the VPN invite settings."},
+                status=400,
+            )
+
+    PeerInvite.objects.filter(invite_expiration__lt=timezone.now()).delete()
+    peer_invite = PeerInvite.objects.filter(peer=peer).first()
+    if peer_invite:
+        # An existing invite is renewed, so the returned link is valid for the whole expiration period
+        peer_invite.invite_expiration = timezone.now() + timedelta(minutes=invite_settings.invite_expiration)
+        peer_invite.save()
+        message = "Existing invite renewed."
+    else:
+        peer_invite = create_peer_invite(peer, invite_settings)
+        message = "Invite created."
+
+    invite_data = get_peer_invite_data(peer_invite, invite_settings)
+
+    if email:
+        email_status, email_message = send_email(email, invite_data['email_subject'], invite_data['email_body'])
+        if email_status != 'success':
+            return JsonResponse(
+                {
+                    "status": "error",
+                    "error_message": f"Invite created, but the email could not be sent: {email_message}",
+                    "invite_data": invite_data,
+                },
+                status=500,
+            )
+        message = f"{message} Email sent to {email}."
+
+    return JsonResponse({"status": "success", "message": message, "invite_data": invite_data}, status=200)
 
 
 @csrf_exempt
@@ -853,116 +1037,247 @@ def api_v2_wireguard_status(request):
     data = func_get_wireguard_status()
     return JsonResponse(data)
 
+
+def _validate_cluster_api_key(request):
+    api_key, api_error = validate_api_key(request)
+    if not api_key:
+        return None, JsonResponse({"status": "error", "error_message": api_error}, status=403)
+    if not api_key.manage_cluster:
+        return None, JsonResponse(
+            {"status": "error", "error_message": "This API key is not allowed to manage the cluster."}, status=403
+        )
+    return api_key, None
+
+
+def _worker_status_data(worker):
+    worker_status = WorkerStatus.objects.filter(worker=worker).first()
+    operational = worker.enabled and not worker.error_status and worker.is_online
+    return {
+        "name": worker.name,
+        "enabled": worker.enabled,
+        "online": worker.is_online,
+        "last_seen": worker_status.last_seen.isoformat() if worker_status else None,
+        "worker_version": worker_status.worker_version if worker_status else None,
+        "error_status": worker.error_status,
+        # Reported data of disabled, refused or offline workers is only the last known state
+        "sync_state": get_worker_sync_state(worker)["state"] if operational else None,
+    }
+
+
 @csrf_exempt
 @api_doc(
-    summary="Create and send VPN peer invitations",
-    auth="Header token: <ApiKey.token>",
-    methods=["POST"],
-    params=[
-        {"name": "instance", "in": "json", "type": "string", "required": True, "example": "wg0",
-         "description": "Target instance name in the format wg{instance_id} (e.g. wg0, wg1)."},
-        {"name": "peer_uuid", "in": "json", "type": "string", "required": True,
-         "description": "Peer UUID to create invitation for."},
-        {"name": "email", "in": "json", "type": "string", "required": False,
-         "description": "Email address to send the invitation to. If provided, the invitation will be sent automatically."},
-    ],
+    summary="Cluster status: settings, WireGuard on the primary server and workers",
+    auth="Header token: <ApiKey.token> (the API key must have Manage Cluster enabled)",
+    methods=["GET", "POST"],
+    params=[],
     returns=[
-        {"status": 200, "body": {"status": "success", "message": "Invitation created successfully.", "invite_data": {"url": "...", "password": "...", "expiration": "...", "email_subject": "...", "email_body": "...", "whatsapp_body": "...", "text_body": "...", "uuid": "..."}}},
-        {"status": 400, "body": {"status": "error", "error_message": "Invalid payload: ..."}},
-        {"status": 403, "body": {"status": "error", "error_message": "Invalid API key or permission denied."}},
-        {"status": 404, "body": {"status": "error", "error_message": "Peer not found."}},
+        {"status": 200, "body": {
+            "status": "success",
+            "cluster": {"enabled": True, "mode": "mirror", "primary_wireguard": True,
+                        "primary_running_interfaces": ["wg0"]},
+            "workers": {"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx": {
+                "name": "node-a", "enabled": True, "online": True, "last_seen": "2026-01-01T12:00:00+00:00",
+                "worker_version": 15, "error_status": "", "sync_state": "synced"}},
+        }},
+        {"status": 403, "body": {"status": "error", "error_message": "This API key is not allowed to manage the cluster."}},
+        {"status": 405, "body": {"status": "error", "error_message": "Method not allowed."}},
     ],
     examples={
-        "create_invite": {
-            "method": "POST",
+        "get_cluster_status": {
+            "method": "GET",
+            "json": {}
+        }
+    }
+)
+def api_v2_manage_cluster_status(request):
+    if request.method not in ("GET", "POST"):
+        return JsonResponse({"status": "error", "error_message": "Method not allowed."}, status=405)
+
+    api_key, error_response = _validate_cluster_api_key(request)
+    if error_response:
+        return error_response
+
+    cluster_settings, cluster_settings_created = ClusterSettings.objects.get_or_create(name='cluster_settings')
+    return JsonResponse({
+        "status": "success",
+        "cluster": {
+            "enabled": cluster_settings.enabled,
+            "mode": cluster_settings.cluster_mode,
+            "primary_wireguard": cluster_settings.primary_enable_wireguard,
+            "primary_running_interfaces": running_wireguard_interfaces(),
+        },
+        "workers": {str(worker.uuid): _worker_status_data(worker) for worker in Worker.objects.order_by('name')},
+    })
+
+
+@csrf_exempt
+@api_doc(
+    summary="Enable / disable cluster workers and WireGuard on the primary server in a single request",
+    auth="Header token: <ApiKey.token> (the API key must have Manage Cluster enabled)",
+    methods=["PUT", "POST"],
+    params=[
+        {"name": "workers", "in": "json", "type": "object", "required": False,
+         "example": {"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx": False},
+         "description": "Map of worker UUID to the desired state (true = enabled). Workers apply the change on "
+                        "their next synchronization."},
+        {"name": "primary_wireguard", "in": "json", "type": "boolean", "required": False, "example": False,
+         "description": "Enables or disables WireGuard on the primary server. Disabling is only allowed in mirror "
+                        "mode: the primary server stops its interfaces and only publishes WireGuard WebAdmin in the "
+                        "App Gateway, while the workers serve the clients."},
+        {"name": "skip_reload", "in": "json", "type": "boolean", "required": False, "example": False,
+         "description": "If true, the WireGuard interfaces of the primary server are not started or stopped and "
+                        "the instances are marked with pending_changes=True."},
+    ],
+    returns=[
+        {"status": 200, "body": {
+            "status": "success", "message": "Cluster updated successfully.",
+            "workers": {"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx": {"name": "node-a", "enabled": False, "changed": True}},
+            "primary_wireguard": {"enabled": False, "changed": True},
+            "apply": {"success": True, "message": "..."},
+        }},
+        {"status": 400, "body": {"status": "error", "error_message": "The cluster is not enabled."}},
+        {"status": 403, "body": {"status": "error", "error_message": "This API key is not allowed to manage the cluster."}},
+        {"status": 405, "body": {"status": "error", "error_message": "Method not allowed."}},
+        {"status": 500, "body": {"status": "error", "error_message": "Cluster changes were saved but apply failed: ..."}},
+    ],
+    examples={
+        "disable_worker_and_primary": {
+            "method": "PUT",
             "json": {
-                "instance": "wg0",
-                "peer_uuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                "workers": {"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx": False},
+                "primary_wireguard": False
             }
         },
-        "create_and_send_invite": {
-            "method": "POST",
+        "enable_workers": {
+            "method": "PUT",
             "json": {
-                "instance": "wg0",
-                "peer_uuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-                "email": "user@example.com"
+                "workers": {
+                    "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx": True,
+                    "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy": True
+                }
             }
         }
     }
 )
-def api_v2_peer_invite(request):
-    if request.method != "POST":
+def api_v2_manage_cluster_manage_status(request):
+    if request.method not in ("PUT", "POST"):
         return JsonResponse({"status": "error", "error_message": "Method not allowed."}, status=405)
 
     try:
         payload = json.loads(request.body.decode("utf-8")) if request.body else {}
     except Exception:
         return JsonResponse({"status": "error", "error_message": "Invalid JSON body."}, status=400)
+    if not isinstance(payload, dict):
+        return JsonResponse({"status": "error", "error_message": "Invalid JSON body."}, status=400)
 
-    # Validate API key
-    api_key, api_error = validate_api_key(request)
-    if not api_key:
-        return JsonResponse({"status": "error", "error_message": api_error}, status=403)
+    api_key, error_response = _validate_cluster_api_key(request)
+    if error_response:
+        return error_response
 
-    # Get and validate instance
-    try:
-        wireguard_instance = WireGuardInstance.objects.get(instance_id=int(payload.get("instance", "").replace("wg", "")))
-    except Exception:
-        wireguard_instance = None
+    cluster_settings, cluster_settings_created = ClusterSettings.objects.get_or_create(name='cluster_settings')
+    if not cluster_settings.enabled:
+        return JsonResponse({"status": "error", "error_message": "The cluster is not enabled."}, status=400)
 
-    if not wireguard_instance:
-        return JsonResponse({"status": "error", "error_message": "Invalid or missing WireGuard instance."}, status=400)
+    requested_workers = payload.get("workers")
+    primary_wireguard = payload.get("primary_wireguard")
+    skip_reload = bool(payload.get("skip_reload", False))
+    if requested_workers is None and primary_wireguard is None:
+        return JsonResponse(
+            {"status": "error", "error_message": "Invalid payload: inform workers and/or primary_wireguard."}, status=400
+        )
 
-    # Validate API key has access to this instance
-    if api_key.allowed_instances.exists():
-        if not api_key.allowed_instances.filter(uuid=wireguard_instance.uuid).exists():
-            return JsonResponse({"status": "error", "error_message": "This API key is not allowed to access the requested instance."}, status=403)
+    # Everything is validated before any change is saved
+    workers = {}
+    if requested_workers is not None:
+        if not isinstance(requested_workers, dict) or not requested_workers:
+            return JsonResponse(
+                {"status": "error", "error_message": "Invalid payload: workers must map worker UUIDs to true or false."},
+                status=400
+            )
+        for worker_uuid, enabled in requested_workers.items():
+            if not isinstance(enabled, bool):
+                return JsonResponse(
+                    {"status": "error", "error_message": f"Invalid payload: the state of worker {worker_uuid} must be true or false."},
+                    status=400
+                )
+            try:
+                worker = Worker.objects.get(uuid=worker_uuid)
+            except (Worker.DoesNotExist, ValidationError, ValueError):
+                return JsonResponse({"status": "error", "error_message": f"Worker not found: {worker_uuid}"}, status=400)
+            workers[worker] = enabled
 
-    # Get peer
-    peer_uuid = payload.get("peer_uuid")
-    if not peer_uuid:
-        return JsonResponse({"status": "error", "error_message": "peer_uuid is required."}, status=400)
+    settings_form = None
+    # Validating the form already copies the new value to cluster_settings
+    previous_primary_wireguard = cluster_settings.primary_enable_wireguard
+    if primary_wireguard is not None:
+        if not isinstance(primary_wireguard, bool):
+            return JsonResponse(
+                {"status": "error", "error_message": "Invalid payload: primary_wireguard must be true or false."}, status=400
+            )
+        # Same rules as the cluster settings form
+        settings_form = ClusterSettingsForm(data={
+            "enabled": cluster_settings.enabled,
+            "primary_enable_wireguard": primary_wireguard,
+            "cluster_mode": cluster_settings.cluster_mode,
+            "worker_display": cluster_settings.worker_display,
+        }, instance=cluster_settings)
+        if not settings_form.is_valid():
+            errors = [str(error) for field_errors in settings_form.errors.values() for error in field_errors]
+            return JsonResponse({"status": "error", "error_message": " ".join(errors)}, status=400)
 
-    peer = Peer.objects.filter(uuid=peer_uuid, wireguard_instance=wireguard_instance).first()
-    if not peer:
-        return JsonResponse({"status": "error", "error_message": "Peer not found."}, status=404)
+    primary_served_clients = ClusterSettings.primary_serves_clients()
+    worker_results = {}
+    with transaction.atomic():
+        for worker, enabled in workers.items():
+            changed = worker.enabled != enabled
+            if changed:
+                worker.enabled = enabled
+                worker.save(update_fields=["enabled", "updated"])
+            worker_results[str(worker.uuid)] = {"name": worker.name, "enabled": enabled, "changed": changed}
 
-    # Check if API key has access to this peer - API keys have access to all peers in allowed instances
+        primary_result = None
+        primary_changed = False
+        if settings_form is not None:
+            primary_changed = previous_primary_wireguard != primary_wireguard
+            settings_form.save()
+            primary_result = {"enabled": primary_wireguard, "changed": primary_changed}
+        if ClusterSettings.primary_serves_clients() != primary_served_clients:
+            WireGuardInstance.objects.update(pending_changes=True)
 
-    # Clean up expired invites
-    PeerInvite.objects.filter(invite_expiration__lt=timezone.now()).delete()
+    apply_success = True
+    if not primary_changed:
+        apply_message = "Workers apply the changes on their next synchronization."
+    elif skip_reload:
+        apply_message = "Changes saved. Apply skipped (pending_changes set to True)."
+    else:
+        try:
+            if django_settings.CADDY_ENABLED:
+                apply_caddy_config()
+        except Exception as error:
+            return JsonResponse(
+                {"status": "error", "error_message": f"Cluster changes were saved but apply failed: {error}"}, status=500
+            )
+        if ClusterSettings.primary_serves_clients():
+            errors = start_primary_interfaces()
+            apply_message = "WireGuard interfaces of the primary server started."
+        else:
+            errors = stop_primary_interfaces()
+            apply_message = "WireGuard interfaces of the primary server stopped."
+        if errors:
+            details = "; ".join(f"{interface_name}: {error}" for interface_name, error in errors)
+            return JsonResponse(
+                {"status": "error", "error_message": f"Cluster changes were saved but apply failed: {details}"},
+                status=500
+            )
+        WireGuardInstance.objects.update(pending_changes=False)
 
-    # Get invite settings
-    invite_settings = InviteSettings.objects.filter(name='default_settings').first()
-    if not invite_settings:
-        return JsonResponse({"status": "error", "error_message": "VPN Invite not configured."}, status=400)
-
-    # Check user level - API keys are considered as admin level (50)
-    if invite_settings.required_user_level > 50:
-        return JsonResponse({"status": "error", "error_message": "Permission denied."}, status=403)
-
-    # Get or create peer invite
-    peer_invite = PeerInvite.objects.filter(peer=peer).first()
-    if not peer_invite:
-        peer_invite = create_peer_invite(peer, invite_settings)
-
-    # Prepare response data
-    data = {
-        'status': 'success',
-        'message': 'Invitation created successfully.',
-        'invite_data': get_peer_invite_data(peer_invite, invite_settings)
+    response_data = {
+        "status": "success",
+        "message": "Cluster updated successfully.",
+        "apply": {"success": apply_success, "message": apply_message},
     }
-
-    # Send email if requested
-    email = payload.get("email")
-    if email:
-        status, message = send_email(email, data['invite_data']['email_subject'], data['invite_data']['email_body'])
-        if status != 'success':
-            return JsonResponse({
-                "status": "error",
-                "error_message": f"Invitation created but email failed: {message}",
-                "invite_data": data['invite_data']
-            }, status=400)
-        data['message'] = 'Invitation created and email sent successfully.'
-
-    return JsonResponse(data, status=200)
+    if worker_results:
+        response_data["workers"] = worker_results
+    if primary_result is not None:
+        response_data["primary_wireguard"] = primary_result
+    return JsonResponse(response_data)
