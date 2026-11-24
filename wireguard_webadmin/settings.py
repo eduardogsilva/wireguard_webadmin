@@ -150,6 +150,7 @@ LANGUAGES = [
     ('es',    'Español'),
     ('fr',    'Français'),
     ('de',    'Deutsch'),
+    ('it',    'Italiano'),
     ('sk',    'Slovak'),
 ]
 
