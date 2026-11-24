@@ -2663,70 +2663,62 @@ msgid "Are you sure you want to delete this time interval?"
 msgstr "Weet je zeker dat je dit tijdsinterval wilt verwijderen?"
 
 #: speed_profiles/forms.py:15
-#, fuzzy
-#| msgid "Download Buttons"
 msgid "Download (Mbit/s)"
-msgstr "Downloadknoppen"
+msgstr "Download (Mbit/s)"
 
 #: speed_profiles/forms.py:16
-#, fuzzy
-#| msgid "Download Buttons"
 msgid "Download burst (MB)"
-msgstr "Downloadknoppen"
+msgstr "Download-burst (MB)"
 
 #: speed_profiles/forms.py:17
 msgid "Upload (Mbit/s)"
-msgstr ""
+msgstr "Upload (Mbit/s)"
 
 #: speed_profiles/forms.py:18
 msgid "Upload burst (MB)"
-msgstr ""
+msgstr "Upload-burst (MB)"
 
 #: speed_profiles/forms.py:21
 msgid "Traffic that reaches the peer. 0 disables the download limit."
-msgstr ""
+msgstr "Verkeer dat de peer bereikt. 0 schakelt de downloadlimiet uit."
 
 #: speed_profiles/forms.py:22
 msgid "Traffic that the peer sends. 0 disables the upload limit."
-msgstr ""
+msgstr "Verkeer dat de peer verstuurt. 0 schakelt de uploadlimiet uit."
 
 #: speed_profiles/forms.py:23 speed_profiles/forms.py:24
 msgid ""
 "Data that may pass at full speed before the limit applies. 0 disables the "
 "burst."
 msgstr ""
+"Data die op volle snelheid mag passeren voordat de limiet ingaat. 0 schakelt "
+"de burst uit."
 
 #: speed_profiles/forms.py:57
-#, fuzzy
-#| msgid "Priority must be greater than or equal to 1"
 msgid "Enter a value greater than or equal to zero."
-msgstr "De prioriteit moet groter dan of gelijk aan 1 zijn"
+msgstr "Voer een waarde groter dan of gelijk aan nul in."
 
 #: speed_profiles/forms.py:62
 msgid "Set at least a download or an upload limit."
-msgstr ""
+msgstr "Stel minstens een download- of uploadlimiet in."
 
 #: speed_profiles/forms.py:64
 msgid "The burst requires a download limit."
-msgstr ""
+msgstr "De burst vereist een downloadlimiet."
 
 #: speed_profiles/forms.py:66
 msgid "The burst requires an upload limit."
-msgstr ""
+msgstr "De burst vereist een uploadlimiet."
 
 #: speed_profiles/views.py:34
 #: templates/speed_profiles/speed_profile_list.html:7
 #: templates/wireguard/wireguard_peer_list.html:52
-#, fuzzy
-#| msgid "Schedule Profiles"
 msgid "Speed Profiles"
-msgstr "Planningsprofielen"
+msgstr "Snelheidsprofielen"
 
 #: speed_profiles/views.py:51
-#, fuzzy
-#| msgid "Schedule Profile saved successfully."
 msgid "Speed profile saved|Speed profile saved successfully."
-msgstr "Planningsprofiel succesvol opgeslagen."
+msgstr "Snelheidsprofiel opgeslagen|Snelheidsprofiel succesvol opgeslagen."
 
 #: speed_profiles/views.py:58
 msgid ""
@@ -2751,31 +2743,41 @@ msgid ""
 "        <p>Use 0 to disable the burst.</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Download en upload</h5>\n"
+"        <p><strong>Download</strong> is het verkeer dat de peer bereikt en "
+"<strong>upload</strong> het verkeer dat de peer verstuurt. De limiet geldt "
+"voor alle adressen en netwerken van de peer. Gebruik 0 om een richting "
+"zonder limiet te laten. Peers zonder profiel hebben geen limiet.</p>\n"
+"\n"
+"        <h5>Burst</h5>\n"
+"        <p>De hoeveelheid data die op volle snelheid mag passeren voordat de "
+"limiet ingaat. Deze vult zich weer aan zolang de peer minder dan zijn limiet "
+"gebruikt.</p>\n"
+"        <p>Webpagina's en de meeste apps versturen telkens maar een paar MB, "
+"dus afhankelijk van de situatie kan een burst van 5 of 10 MB het surfen "
+"flink verbeteren: pagina's laden op volle snelheid, terwijl lange downloads "
+"en streams op de ingestelde limiet blijven. Ter referentie: 10 Mbit/s is "
+"ongeveer 1,25 MB per seconde.</p>\n"
+"        <p>Gebruik 0 om de burst uit te schakelen.</p>\n"
+"        "
 
 #: speed_profiles/views.py:74
-#, fuzzy
-#| msgid "Edit Schedule Profile"
 msgid "Edit Speed Profile"
-msgstr "Planningsprofiel bewerken"
+msgstr "Snelheidsprofiel Bewerken"
 
 #: speed_profiles/views.py:74
-#, fuzzy
-#| msgid "Add Profile"
 msgid "Add Speed Profile"
-msgstr "Profiel toevoegen"
+msgstr "Snelheidsprofiel Toevoegen"
 
 #: speed_profiles/views.py:99
-#, fuzzy
-#| msgid "Peer deleted|Peer deleted successfully."
 msgid "Speed profile deleted|Speed profile deleted successfully."
-msgstr "Peer verwijderd|Peer succesvol verwijderd."
+msgstr "Snelheidsprofiel verwijderd|Snelheidsprofiel succesvol verwijderd."
 
 #: speed_profiles/views.py:104
 #: templates/speed_profiles/speed_profile_delete.html:7
-#, fuzzy
-#| msgid "Delete Schedule Profile"
 msgid "Delete Speed Profile"
-msgstr "Planningsprofiel verwijderen"
+msgstr "Snelheidsprofiel Verwijderen"
 
 #: templates/access_denied.html:12
 msgid "Sorry, you do not have permission to access this page."
@@ -3331,10 +3333,8 @@ msgstr "Laatste update"
 
 #: templates/cluster/worker_details.html:81
 #: templates/cluster/workers_list.html:155
-#, fuzzy
-#| msgid "Synchronization"
 msgid "Synchronized with warnings"
-msgstr "Synchronisatie"
+msgstr "Gesynchroniseerd met waarschuwingen"
 
 #: templates/cluster/worker_details.html:83
 #: templates/cluster/workers_list.html:42
@@ -4194,61 +4194,55 @@ msgstr "Profiel toevoegen"
 #: templates/speed_profiles/speed_profile_delete.html:13
 #, python-format
 msgid "The profile \"%(name)s\" is in use."
-msgstr ""
+msgstr "Het profiel \"%(name)s\" is in gebruik."
 
 #: templates/speed_profiles/speed_profile_delete.html:15
-#, fuzzy
-#| msgid "No peers linked to this profile."
 msgid "Peers using this profile"
-msgstr "Geen peers gekoppeld aan dit profiel."
+msgstr "Peers die dit profiel gebruiken"
 
 #: templates/speed_profiles/speed_profile_delete.html:23
 msgid "Default profile of the instances"
-msgstr ""
+msgstr "Standaardprofiel van de instanties"
 
 #: templates/speed_profiles/speed_profile_delete.html:31
 msgid ""
 "Unlinking removes the profile from these peers and instances. The peers will "
 "have no speed limit."
 msgstr ""
+"Ontkoppelen verwijdert het profiel van deze peers en instanties. De peers "
+"hebben dan geen snelheidslimiet."
 
 #: templates/speed_profiles/speed_profile_delete.html:40
 msgid "Unlink and Delete"
-msgstr ""
+msgstr "Ontkoppelen en Verwijderen"
 
 #: templates/speed_profiles/speed_profile_list.html:14
-#, fuzzy
-#| msgid "Download Buttons"
 msgid "Download"
-msgstr "Downloadknoppen"
+msgstr "Download"
 
 #: templates/speed_profiles/speed_profile_list.html:15
 msgid "Upload"
-msgstr ""
+msgstr "Upload"
 
 #: templates/speed_profiles/speed_profile_list.html:27
 #: templates/speed_profiles/speed_profile_list.html:35
 msgid "burst"
-msgstr ""
+msgstr "burst"
 
 #: templates/speed_profiles/speed_profile_list.html:29
 #: templates/speed_profiles/speed_profile_list.html:37
 #: templates/wireguard/wireguard_manage_peer.html:123 wireguard/forms.py:36
 #: wireguard_peer/forms.py:99
 msgid "No limit"
-msgstr ""
+msgstr "Geen limiet"
 
 #: templates/speed_profiles/speed_profile_list.html:64
-#, fuzzy
-#| msgid "No schedule profiles found."
 msgid "No speed profiles found."
-msgstr "Geen planningsprofielen gevonden."
+msgstr "Geen snelheidsprofielen gevonden."
 
 #: templates/speed_profiles/speed_profile_list.html:80
-#, fuzzy
-#| msgid "Back to List"
 msgid "Back to Peers"
-msgstr "Terug naar lijst"
+msgstr "Terug naar Peers"
 
 #: templates/template_parts/base_footer.html:4
 msgid "Update Available"
@@ -4674,7 +4668,7 @@ msgstr "Niet ingesteld"
 
 #: templates/wireguard/wireguard_manage_peer.html:116
 msgid "Speed Limit"
-msgstr ""
+msgstr "Snelheidslimiet"
 
 #: templates/wireguard/wireguard_manage_peer.html:136
 msgid "Keys"
@@ -5424,14 +5418,13 @@ msgstr ""
 "example.com)."
 
 #: wireguard/forms.py:35
-#, fuzzy
-#| msgid "Delete Schedule Profile"
 msgid "Default Speed Profile"
-msgstr "Planningsprofiel verwijderen"
+msgstr "Standaard Snelheidsprofiel"
 
 #: wireguard/forms.py:36
 msgid "Speed profile given to the peers created in this instance."
 msgstr ""
+"Snelheidsprofiel voor de peers die in deze instantie worden aangemaakt."
 
 #: wireguard/forms.py:67
 msgid ""
@@ -5514,16 +5507,16 @@ msgstr ""
 "Voer een geldig IPv6-adres tussen haakjes in, bijv. [2001:db8::1]:51820"
 
 #: wireguard_peer/forms.py:98
-#, fuzzy
-#| msgid "Schedule Profiles"
 msgid "Speed profile"
-msgstr "Planningsprofielen"
+msgstr "Snelheidsprofiel"
 
 #: wireguard_peer/forms.py:100
 msgid ""
 "Download and upload limits of this peer. Speed profiles are managed from the "
 "peer list."
 msgstr ""
+"Download- en uploadlimieten van deze peer. Snelheidsprofielen worden beheerd "
+"vanuit de peerlijst."
 
 #: wireguard_peer/forms.py:111
 msgid ""
@@ -5680,6 +5673,8 @@ msgid ""
 "wg%(id)s reloaded automatically, but the speed limits were not fully "
 "applied: "
 msgstr ""
+"wg%(id)s automatisch herladen, maar de snelheidslimieten zijn niet volledig "
+"toegepast: "
 
 #: wireguard_peer/views.py:45
 #, python-format
@@ -5743,10 +5738,8 @@ msgid "Edit Endpoint"
 msgstr "Endpoint bewerken"
 
 #: wireguard_peer/views.py:270
-#, fuzzy
-#| msgid "Edit Peer Name"
 msgid "Edit Speed Limit"
-msgstr "Peernaam bewerken"
+msgstr "Snelheidslimiet Bewerken"
 
 #: wireguard_peer/views.py:279
 msgid ""
@@ -5909,7 +5902,7 @@ msgstr "Planningsprofiel van peer beheren"
 
 #: wireguard_tools/views.py:109
 msgid "Speed limits not fully applied"
-msgstr ""
+msgstr "Snelheidslimieten niet volledig toegepast"
 
 #: wireguard_tools/views.py:242
 msgid ""

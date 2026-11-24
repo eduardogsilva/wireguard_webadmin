@@ -2678,70 +2678,62 @@ msgid "Are you sure you want to delete this time interval?"
 msgstr "Êtes-vous sûr de vouloir supprimer cet intervalle de temps ?"
 
 #: speed_profiles/forms.py:15
-#, fuzzy
-#| msgid "Download Buttons"
 msgid "Download (Mbit/s)"
-msgstr "Boutons de téléchargement"
+msgstr "Téléchargement (Mbit/s)"
 
 #: speed_profiles/forms.py:16
-#, fuzzy
-#| msgid "Download Buttons"
 msgid "Download burst (MB)"
-msgstr "Boutons de téléchargement"
+msgstr "Rafale de téléchargement (Mo)"
 
 #: speed_profiles/forms.py:17
 msgid "Upload (Mbit/s)"
-msgstr ""
+msgstr "Envoi (Mbit/s)"
 
 #: speed_profiles/forms.py:18
 msgid "Upload burst (MB)"
-msgstr ""
+msgstr "Rafale d'envoi (Mo)"
 
 #: speed_profiles/forms.py:21
 msgid "Traffic that reaches the peer. 0 disables the download limit."
-msgstr ""
+msgstr "Trafic qui arrive au peer. 0 désactive la limite de téléchargement."
 
 #: speed_profiles/forms.py:22
 msgid "Traffic that the peer sends. 0 disables the upload limit."
-msgstr ""
+msgstr "Trafic envoyé par le peer. 0 désactive la limite d'envoi."
 
 #: speed_profiles/forms.py:23 speed_profiles/forms.py:24
 msgid ""
 "Data that may pass at full speed before the limit applies. 0 disables the "
 "burst."
 msgstr ""
+"Données pouvant passer à pleine vitesse avant que la limite s'applique. 0 "
+"désactive la rafale."
 
 #: speed_profiles/forms.py:57
-#, fuzzy
-#| msgid "Priority must be greater than or equal to 1"
 msgid "Enter a value greater than or equal to zero."
-msgstr "La priorité doit être supérieure ou égale à 1."
+msgstr "Saisissez une valeur supérieure ou égale à zéro."
 
 #: speed_profiles/forms.py:62
 msgid "Set at least a download or an upload limit."
-msgstr ""
+msgstr "Définissez au moins une limite de téléchargement ou d'envoi."
 
 #: speed_profiles/forms.py:64
 msgid "The burst requires a download limit."
-msgstr ""
+msgstr "La rafale nécessite une limite de téléchargement."
 
 #: speed_profiles/forms.py:66
 msgid "The burst requires an upload limit."
-msgstr ""
+msgstr "La rafale nécessite une limite d'envoi."
 
 #: speed_profiles/views.py:34
 #: templates/speed_profiles/speed_profile_list.html:7
 #: templates/wireguard/wireguard_peer_list.html:52
-#, fuzzy
-#| msgid "Schedule Profiles"
 msgid "Speed Profiles"
-msgstr "Profils de Planification"
+msgstr "Profils de Vitesse"
 
 #: speed_profiles/views.py:51
-#, fuzzy
-#| msgid "Schedule Profile saved successfully."
 msgid "Speed profile saved|Speed profile saved successfully."
-msgstr "Profil de planification enregistré avec succès."
+msgstr "Profil de vitesse enregistré|Profil de vitesse enregistré avec succès."
 
 #: speed_profiles/views.py:58
 msgid ""
@@ -2766,31 +2758,41 @@ msgid ""
 "        <p>Use 0 to disable the burst.</p>\n"
 "        "
 msgstr ""
+"\n"
+"        <h5>Téléchargement et envoi</h5>\n"
+"        <p>Le <strong>téléchargement</strong> est le trafic qui arrive au "
+"peer et l'<strong>envoi</strong> le trafic qu'il émet. La limite couvre "
+"toutes les adresses et tous les réseaux du peer. Utilisez 0 pour laisser une "
+"direction sans limite. Les peers sans profil n'ont pas de limite.</p>\n"
+"\n"
+"        <h5>Burst</h5>\n"
+"        <p>La quantité de données pouvant passer à pleine vitesse avant que "
+"la limite s'applique. Elle se recharge tant que le peer utilise moins que sa "
+"limite.</p>\n"
+"        <p>Les pages web et la plupart des applications transfèrent quelques "
+"Mo à la fois ; selon le cas, une rafale de 5 ou 10 Mo peut donc nettement "
+"améliorer la navigation : les pages se chargent à pleine vitesse, tandis que "
+"les longs téléchargements et les streams restent à la limite configurée. À "
+"titre indicatif, 10 Mbit/s correspondent à environ 1,25 Mo par seconde.</p>\n"
+"        <p>Utilisez 0 pour désactiver la rafale.</p>\n"
+"        "
 
 #: speed_profiles/views.py:74
-#, fuzzy
-#| msgid "Edit Schedule Profile"
 msgid "Edit Speed Profile"
-msgstr "Modifier le Profil de Planification"
+msgstr "Modifier le Profil de Vitesse"
 
 #: speed_profiles/views.py:74
-#, fuzzy
-#| msgid "Add Profile"
 msgid "Add Speed Profile"
-msgstr "Ajouter un Profil"
+msgstr "Ajouter un Profil de Vitesse"
 
 #: speed_profiles/views.py:99
-#, fuzzy
-#| msgid "Peer deleted|Peer deleted successfully."
 msgid "Speed profile deleted|Speed profile deleted successfully."
-msgstr "Peer supprimé | Peer supprimé avec succès."
+msgstr "Profil de vitesse supprimé|Profil de vitesse supprimé avec succès."
 
 #: speed_profiles/views.py:104
 #: templates/speed_profiles/speed_profile_delete.html:7
-#, fuzzy
-#| msgid "Delete Schedule Profile"
 msgid "Delete Speed Profile"
-msgstr "Supprimer le Profil de Planification"
+msgstr "Supprimer le Profil de Vitesse"
 
 #: templates/access_denied.html:12
 msgid "Sorry, you do not have permission to access this page."
@@ -3348,10 +3350,8 @@ msgstr "Dernière mise à jour"
 
 #: templates/cluster/worker_details.html:81
 #: templates/cluster/workers_list.html:155
-#, fuzzy
-#| msgid "Synchronization"
 msgid "Synchronized with warnings"
-msgstr "Synchronisation"
+msgstr "Synchronisé avec des avertissements"
 
 #: templates/cluster/worker_details.html:83
 #: templates/cluster/workers_list.html:42
@@ -4214,61 +4214,55 @@ msgstr "Ajouter un Profil"
 #: templates/speed_profiles/speed_profile_delete.html:13
 #, python-format
 msgid "The profile \"%(name)s\" is in use."
-msgstr ""
+msgstr "Le profil \"%(name)s\" est utilisé."
 
 #: templates/speed_profiles/speed_profile_delete.html:15
-#, fuzzy
-#| msgid "No peers linked to this profile."
 msgid "Peers using this profile"
-msgstr "Aucun peer lié à ce profil."
+msgstr "Peers utilisant ce profil"
 
 #: templates/speed_profiles/speed_profile_delete.html:23
 msgid "Default profile of the instances"
-msgstr ""
+msgstr "Profil par défaut des instances"
 
 #: templates/speed_profiles/speed_profile_delete.html:31
 msgid ""
 "Unlinking removes the profile from these peers and instances. The peers will "
 "have no speed limit."
 msgstr ""
+"La dissociation retire le profil de ces peers et instances. Les peers "
+"n'auront plus de limite de vitesse."
 
 #: templates/speed_profiles/speed_profile_delete.html:40
 msgid "Unlink and Delete"
-msgstr ""
+msgstr "Dissocier et Supprimer"
 
 #: templates/speed_profiles/speed_profile_list.html:14
-#, fuzzy
-#| msgid "Download Buttons"
 msgid "Download"
-msgstr "Boutons de téléchargement"
+msgstr "Téléchargement"
 
 #: templates/speed_profiles/speed_profile_list.html:15
 msgid "Upload"
-msgstr ""
+msgstr "Envoi"
 
 #: templates/speed_profiles/speed_profile_list.html:27
 #: templates/speed_profiles/speed_profile_list.html:35
 msgid "burst"
-msgstr ""
+msgstr "rafale"
 
 #: templates/speed_profiles/speed_profile_list.html:29
 #: templates/speed_profiles/speed_profile_list.html:37
 #: templates/wireguard/wireguard_manage_peer.html:123 wireguard/forms.py:36
 #: wireguard_peer/forms.py:99
 msgid "No limit"
-msgstr ""
+msgstr "Sans limite"
 
 #: templates/speed_profiles/speed_profile_list.html:64
-#, fuzzy
-#| msgid "No schedule profiles found."
 msgid "No speed profiles found."
-msgstr "Aucun profil de planification trouvé."
+msgstr "Aucun profil de vitesse trouvé."
 
 #: templates/speed_profiles/speed_profile_list.html:80
-#, fuzzy
-#| msgid "Back to List"
 msgid "Back to Peers"
-msgstr "Retour à la liste"
+msgstr "Retour aux Peers"
 
 #: templates/template_parts/base_footer.html:4
 msgid "Update Available"
@@ -4694,7 +4688,7 @@ msgstr "Non défini"
 
 #: templates/wireguard/wireguard_manage_peer.html:116
 msgid "Speed Limit"
-msgstr ""
+msgstr "Limite de Vitesse"
 
 #: templates/wireguard/wireguard_manage_peer.html:136
 msgid "Keys"
@@ -5448,14 +5442,12 @@ msgstr ""
 "example.com)."
 
 #: wireguard/forms.py:35
-#, fuzzy
-#| msgid "Delete Schedule Profile"
 msgid "Default Speed Profile"
-msgstr "Supprimer le Profil de Planification"
+msgstr "Profil de Vitesse par Défaut"
 
 #: wireguard/forms.py:36
 msgid "Speed profile given to the peers created in this instance."
-msgstr ""
+msgstr "Profil de vitesse attribué aux peers créés dans cette instance."
 
 #: wireguard/forms.py:67
 msgid ""
@@ -5543,16 +5535,16 @@ msgstr ""
 "[2001:db8::1]:51820"
 
 #: wireguard_peer/forms.py:98
-#, fuzzy
-#| msgid "Schedule Profiles"
 msgid "Speed profile"
-msgstr "Profils de Planification"
+msgstr "Profil de vitesse"
 
 #: wireguard_peer/forms.py:100
 msgid ""
 "Download and upload limits of this peer. Speed profiles are managed from the "
 "peer list."
 msgstr ""
+"Limites de téléchargement et d'envoi de ce peer. Les profils de vitesse se "
+"gèrent depuis la liste des peers."
 
 #: wireguard_peer/forms.py:111
 msgid ""
@@ -5706,6 +5698,8 @@ msgid ""
 "wg%(id)s reloaded automatically, but the speed limits were not fully "
 "applied: "
 msgstr ""
+"wg%(id)s rechargée automatiquement, mais les limites de vitesse n'ont pas "
+"été entièrement appliquées : "
 
 #: wireguard_peer/views.py:45
 #, python-format
@@ -5769,10 +5763,8 @@ msgid "Edit Endpoint"
 msgstr "Modifier le point de terminaison"
 
 #: wireguard_peer/views.py:270
-#, fuzzy
-#| msgid "Edit Peer Name"
 msgid "Edit Speed Limit"
-msgstr "Modifier le Nom du Peer"
+msgstr "Modifier la Limite de Vitesse"
 
 #: wireguard_peer/views.py:279
 msgid ""
@@ -5933,7 +5925,7 @@ msgstr "Gérer le Profil de Planification du Peer"
 
 #: wireguard_tools/views.py:109
 msgid "Speed limits not fully applied"
-msgstr ""
+msgstr "Limites de vitesse partiellement appliquées"
 
 #: wireguard_tools/views.py:242
 msgid ""
