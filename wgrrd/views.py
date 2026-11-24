@@ -1,4 +1,3 @@
-import base64
 import os
 import subprocess
 import tempfile
@@ -9,6 +8,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 
 from user_manager.models import UserAcl
+from wgrrd.functions import peer_rrd_path
 from wgwadmlibrary.tools import user_has_access_to_peer
 from wireguard.models import Peer, WireGuardInstance
 
@@ -23,8 +23,7 @@ def view_rrd_graph(request):
         if not user_has_access_to_peer(user_acl, peer):
             raise PermissionDenied
         graph_type = 'peer'
-        rrd_filename = base64.urlsafe_b64encode(peer.public_key.encode()).decode().replace('=', '')
-        rrd_file_path = f'/rrd_data/peers/{rrd_filename}.rrd'
+        rrd_file_path = peer_rrd_path(peer)
         graph_title = f'Peer {peer}'
     elif request.GET.get('instance'):
         wireguard_instance = get_object_or_404(WireGuardInstance, uuid=request.GET.get('instance'))

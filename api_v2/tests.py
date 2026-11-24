@@ -1,15 +1,21 @@
 import json
-from datetime import timedelta
+import shutil
+import subprocess
+import tempfile
+import time
+import uuid
+from datetime import datetime, timedelta, timezone as dt_timezone
 from unittest.mock import patch
 
 from django.test import TestCase, override_settings
 from django.utils import timezone
 
 from api_v2.models import ApiKey
-from vpn_invite.models import InviteSettings, PeerInvite
 from cluster.models import ClusterSettings, Worker
 from cluster.tests import create_instance
 from dns.models import DNSSettings, StaticHost
+from vpn_invite.models import InviteSettings, PeerInvite
+from wgrrd.functions import peer_rrd_path
 from wireguard.models import Peer, WireGuardInstance
 
 
@@ -412,3 +418,132 @@ class ApiV2PeerInviteTests(TestCase):
     def test_other_methods_are_not_allowed(self):
         response = self.client.get(self.url, HTTP_TOKEN=str(self.api_key.token))
         self.assertEqual(response.status_code, 405)
+
+
+def create_traffic_rrd(path, start, updates, download_rate=1000, upload_rate=500):
+    """RRD with the same layout as the collector, receiving constant rates (bytes per second) every 5 minutes."""
+    subprocess.run([
+        "rrdtool", "create", path, "--start", str(start), "--step", "300",
+        "DS:tx:DERIVE:600:0:U", "DS:rx:DERIVE:600:0:U", "DS:status:GAUGE:600:0:1",
+        "RRA:AVERAGE:0.5:1:1440", "RRA:AVERAGE:0.5:6:700", "RRA:AVERAGE:0.5:24:775", "RRA:AVERAGE:0.5:288:797",
+    ], check=True)
+    for index in range(1, updates + 1):
+        subprocess.run([
+            "rrdtool", "update", path,
+            f"{start + index * 300}:{index * 300 * download_rate}:{index * 300 * upload_rate}:1",
+        ], check=True)
+
+
+class ApiV2PeerTrafficTests(TestCase):
+    url = "/api/v2/peer_traffic/"
+
+    def setUp(self):
+        self.instance = create_instance(0)
+        self.other_instance = create_instance(1)
+        self.api_key = ApiKey.objects.create(name="traffic-test-key", enabled=True)
+        self.api_key.allowed_instances.add(self.instance)
+        self.peer = Peer.objects.create(wireguard_instance=self.instance, name="Test Peer", public_key="peer-public")
+        rrd_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(rrd_dir.cleanup)
+        patcher = patch("wgrrd.functions.RRD_PEERS_PATH", rrd_dir.name)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def request(self, payload, api_key=None):
+        return self.client.post(
+            self.url, data=json.dumps(payload), content_type="application/json",
+            HTTP_TOKEN=str((api_key or self.api_key).token),
+        )
+
+    def create_history(self, updates=24):
+        """Two hours of history ending about an hour ago: 1000 B/s of download and 500 B/s of upload."""
+        if not shutil.which("rrdtool"):
+            self.skipTest("rrdtool is not installed")
+        self.history_start = (int(time.time()) // 300) * 300 - 3 * 3600
+        create_traffic_rrd(peer_rrd_path(self.peer), self.history_start, updates)
+
+    def iso(self, timestamp):
+        return datetime.fromtimestamp(timestamp, tz=dt_timezone.utc).isoformat()
+
+    @staticmethod
+    def period_seconds(body):
+        return datetime.fromisoformat(body["end"]).timestamp() - datetime.fromisoformat(body["start"]).timestamp()
+
+    def test_returns_download_and_upload_totals_of_the_period(self):
+        self.create_history()
+        response = self.request({
+            "instance": "wg0", "peer_uuid": str(self.peer.uuid),
+            "start": self.iso(self.history_start + 1200), "end": self.iso(self.history_start + 4800),
+        })
+        self.assertEqual(response.status_code, 200, response.content)
+        body = response.json()
+        # The returned period covers the requested one, rounded to the 5 minute samples
+        self.assertLessEqual(datetime.fromisoformat(body["start"]).timestamp(), self.history_start + 1200)
+        self.assertGreaterEqual(datetime.fromisoformat(body["end"]).timestamp(), self.history_start + 4800)
+        self.assertEqual(body["resolution_seconds"], 300)
+        # What the server sent to the peer is its download
+        self.assertEqual(body["download_bytes"], 1000 * self.period_seconds(body))
+        self.assertEqual(body["upload_bytes"], 500 * self.period_seconds(body))
+        self.assertNotIn("warning", body)
+
+    def test_period_without_end_goes_until_now(self):
+        self.create_history()
+        response = self.request({
+            "instance": "wg0", "peer_uuid": str(self.peer.uuid), "start": self.iso(self.history_start + 1200),
+        })
+        self.assertEqual(response.status_code, 200, response.content)
+        body = response.json()
+        # The history ends at its last update, so the returned end is the last sample
+        self.assertEqual(datetime.fromisoformat(body["end"]).timestamp(), self.history_start + 24 * 300)
+        self.assertEqual(body["download_bytes"], 1000 * self.period_seconds(body))
+        self.assertNotIn("warning", body)
+
+    def test_old_period_returns_the_resolution_and_a_warning(self):
+        self.create_history()
+        response = self.request({
+            "instance": "wg0", "peer_uuid": str(self.peer.uuid),
+            "start": self.iso(time.time() - 30 * 86400),
+        })
+        self.assertEqual(response.status_code, 200, response.content)
+        body = response.json()
+        self.assertEqual(body["resolution_seconds"], 7200)
+        self.assertIn("resolution of 2 hours", body["warning"])
+        # Most of the period is before the history of the peer
+        self.assertIn("Part of the period has no traffic data", body["warning"])
+
+    def test_selects_peer_by_public_key(self):
+        self.create_history()
+        response = self.request({
+            "instance": "wg0", "peer_public_key": "peer-public", "start": self.iso(self.history_start + 1200),
+        })
+        self.assertEqual(response.status_code, 200, response.content)
+        self.assertEqual(response.json()["peer_uuid"], str(self.peer.uuid))
+
+    def test_refuses_invalid_dates(self):
+        peer = {"instance": "wg0", "peer_uuid": str(self.peer.uuid)}
+        for payload, message in (
+            ({}, "Invalid or missing start date."),
+            ({"start": "yesterday"}, "Invalid or missing start date."),
+            ({"start": "2026-11-01", "end": "2026-13-01"}, "Invalid end date."),
+            ({"start": "2026-11-02T00:00:00", "end": "2026-11-01T00:00:00"}, "The start date must be before the end date."),
+            ({"start": self.iso(time.time() + 3600)}, "The start date must be before the end date."),
+        ):
+            response = self.request({**peer, **payload})
+            self.assertEqual(response.status_code, 400, payload)
+            self.assertEqual(response.json()["error_message"], message)
+
+    def test_unknown_peer_and_peer_without_history_return_404(self):
+        response = self.request({"instance": "wg0", "peer_uuid": str(uuid.uuid4()), "start": "2026-11-01"})
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()["error_message"], "Peer not found.")
+        response = self.request({"instance": "wg0", "peer_uuid": str(self.peer.uuid), "start": "2026-11-01"})
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()["error_message"], "There is no traffic history for this peer.")
+
+    def test_api_key_scope_is_respected(self):
+        other_peer = Peer.objects.create(wireguard_instance=self.other_instance, name="Other", public_key="other-public")
+        response = self.request({"instance": "wg1", "peer_uuid": str(other_peer.uuid), "start": "2026-11-01"})
+        self.assertEqual(response.status_code, 403)
+        # The peer of another instance is not found through an allowed instance
+        response = self.request({"instance": "wg0", "peer_uuid": str(other_peer.uuid), "start": "2026-11-01"})
+        self.assertEqual(response.status_code, 404)

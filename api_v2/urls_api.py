@@ -8,6 +8,7 @@ from .views_api import (
     api_v2_peer_detail,
     api_v2_peer_invite,
     api_v2_peer_list,
+    api_v2_peer_traffic,
     api_v2_wireguard_status,
 )
 
@@ -17,6 +18,7 @@ urlpatterns = [
     path('peer_list/', api_v2_peer_list, name='api_v2_peer_list'),
     path('peer_detail/', api_v2_peer_detail, name='api_v2_peer_detail'),
     path('peer_invite/', api_v2_peer_invite, name='api_v2_peer_invite'),
+    path('peer_traffic/', api_v2_peer_traffic, name='api_v2_peer_traffic'),
     path('wireguard_status/', api_v2_wireguard_status, name='api_v2_wireguard_status'),
     path('manage_cluster/status/', api_v2_manage_cluster_status, name='api_v2_manage_cluster_status'),
     path('manage_cluster/manage_status/', api_v2_manage_cluster_manage_status, name='api_v2_manage_cluster_manage_status'),

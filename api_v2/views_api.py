@@ -1,7 +1,8 @@
 import ipaddress
 import json
+import os
 import re
-from datetime import timedelta
+from datetime import datetime, time, timedelta
 from functools import wraps
 from typing import List, Optional, Tuple
 
@@ -11,6 +12,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.http import JsonResponse
 from django.utils import timezone
+from django.utils.dateparse import parse_date, parse_datetime
 from django.views.decorators.csrf import csrf_exempt
 
 from api.views import func_get_wireguard_status
@@ -23,6 +25,7 @@ from dns.views import export_dns_configuration
 from routing_templates.models import RoutingTemplate
 from speed_profiles.models import SpeedProfile
 from vpn_invite.models import InviteSettings, PeerInvite
+from wgrrd.functions import TrafficHistoryError, peer_rrd_path, peer_traffic_totals, traffic_warning
 from wgwadmlibrary.tools import create_peer_invite, get_peer_invite_data, send_email
 from wireguard.models import Peer, PeerAllowedIP, WireGuardInstance
 from wireguard_peer.forms import normalize_endpoint
@@ -1039,6 +1042,176 @@ def api_v2_peer_invite(request):
         message = f"{message} Email sent to {email}."
 
     return JsonResponse({"status": "success", "message": message, "invite_data": invite_data}, status=200)
+
+
+def _parse_api_datetime(value):
+    """ISO 8601 date or date and time. Values without a timezone use the server timezone."""
+    if not isinstance(value, str) or not value.strip():
+        return None
+    value = value.strip()
+    try:
+        parsed = parse_datetime(value)
+        if parsed is None:
+            parsed_date = parse_date(value)
+            if parsed_date is None:
+                return None
+            parsed = datetime.combine(parsed_date, time.min)
+    except ValueError:
+        return None
+    if timezone.is_naive(parsed):
+        parsed = timezone.make_aware(parsed, timezone.get_current_timezone())
+    return parsed
+
+
+def _api_datetime(timestamp):
+    return timezone.localtime(datetime.fromtimestamp(timestamp, tz=timezone.get_current_timezone())).isoformat()
+
+
+@csrf_exempt
+@api_doc(
+    summary="Download and upload totals of a peer between two dates, from the traffic history of the graphs",
+    auth="Header token: <ApiKey.token>",
+    methods=["POST", "GET"],
+    params=[
+        {"name": "instance", "in": "json", "type": "string", "required": True, "example": "wg0",
+         "description": "Required. Target instance name in the format wg{instance_id} (e.g. wg0, wg1)."},
+        {"name": "peer_uuid", "in": "json", "type": "string", "required": False,
+         "description": "Peer UUID selector. Inform peer_uuid or peer_public_key."},
+        {"name": "peer_public_key", "in": "json", "type": "string", "required": False,
+         "description": "Peer public key selector. Used when peer_uuid is not informed."},
+        {"name": "start", "in": "json", "type": "string", "required": True, "example": "2026-11-01T00:00:00-03:00",
+         "description": "Required. Start of the period, as an ISO 8601 date or date and time. Without a timezone, the "
+                        "server timezone is used. The history keeps 5 minute samples for about 5 days, then averages "
+                        "of 30 minutes (about 14 days), 2 hours (about 64 days) and 1 day (about 2 years). The "
+                        "resolution depends on how old the start is; the response returns the start and end that "
+                        "the history covers, and a warning when the resolution is larger than 5 minutes or part of "
+                        "the period has no data."},
+        {"name": "end", "in": "json", "type": "string", "required": False, "example": "2026-11-15T23:59:59-03:00",
+         "description": "End of the period, in the same format as start. When omitted, the period ends now."},
+    ],
+    returns=[
+        {"status": 200, "body": {
+            "status": "success", "peer_uuid": "...", "instance": "wg0",
+            "start": "2026-11-01T00:00:00-03:00", "end": "2026-11-15T23:55:00-03:00",
+            "download_bytes": 123456789, "upload_bytes": 9876543, "resolution_seconds": 300,
+        }},
+        {"status": 200, "body": {
+            "status": "success", "peer_uuid": "...", "instance": "wg0",
+            "start": "2026-08-01T00:00:00-03:00", "end": "2026-11-24T00:00:00-03:00",
+            "download_bytes": 123456789, "upload_bytes": 9876543, "resolution_seconds": 86400,
+            "warning": "The period starts before the detailed history; the totals were calculated with a "
+                       "resolution of 1 day.",
+        }},
+        {"status": 400, "body": {"status": "error", "error_message": "Invalid or missing start date."}},
+        {"status": 400, "body": {"status": "error", "error_message": "Invalid end date."}},
+        {"status": 400, "body": {"status": "error", "error_message": "The start date must be before the end date."}},
+        {"status": 400, "body": {"status": "error", "error_message": "Missing peer selector (peer_uuid or peer_public_key)."}},
+        {"status": 403, "body": {"status": "error", "error_message": "This API key is not allowed to access the requested instance."}},
+        {"status": 404, "body": {"status": "error", "error_message": "Peer not found."}},
+        {"status": 404, "body": {"status": "error", "error_message": "There is no traffic history for this peer."}},
+        {"status": 405, "body": {"status": "error", "error_message": "Method not allowed."}},
+        {"status": 500, "body": {"status": "error", "error_message": "Could not read the traffic history: ..."}},
+    ],
+    examples={
+        "traffic_by_uuid": {"method": "POST", "json": {
+            "instance": "wg0", "peer_uuid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+            "start": "2026-11-01T00:00:00-03:00", "end": "2026-11-15T23:59:59-03:00",
+        }},
+        "traffic_until_now": {"method": "POST", "json": {
+            "instance": "wg0", "peer_public_key": "BASE64PUBLICKEY...", "start": "2026-11-01",
+        }},
+    }
+)
+def api_v2_peer_traffic(request):
+    if request.method not in ("POST", "GET"):
+        return JsonResponse({"status": "error", "error_message": "Method not allowed."}, status=405)
+
+    if request.method == "POST":
+        try:
+            payload = json.loads(request.body.decode("utf-8")) if request.body else {}
+        except Exception:
+            return JsonResponse({"status": "error", "error_message": "Invalid JSON body."}, status=400)
+        if not isinstance(payload, dict):
+            return JsonResponse({"status": "error", "error_message": "Invalid JSON body."}, status=400)
+    else:
+        payload = request.GET.dict()
+
+    try:
+        wireguard_instance = WireGuardInstance.objects.get(
+            instance_id=int(str(payload.get("instance")).replace("wg", ""))
+        )
+    except Exception:
+        wireguard_instance = None
+
+    if not wireguard_instance:
+        return JsonResponse({"status": "error", "error_message": "Invalid or missing WireGuard instance."}, status=400)
+
+    api_key, api_error = validate_api_key(request, wireguard_instance=wireguard_instance)
+    if not api_key:
+        return JsonResponse({"status": "error", "error_message": api_error}, status=403)
+
+    selector_peer_uuid = payload.get("peer_uuid")
+    selector_peer_public_key = payload.get("peer_public_key")
+    if not selector_peer_uuid and not selector_peer_public_key:
+        return JsonResponse(
+            {"status": "error", "error_message": "Missing peer selector (peer_uuid or peer_public_key)."},
+            status=400,
+        )
+
+    now = timezone.now()
+    start = _parse_api_datetime(payload.get("start"))
+    if not start:
+        return JsonResponse({"status": "error", "error_message": "Invalid or missing start date."}, status=400)
+    if payload.get("end") in (None, ""):
+        end = now
+    else:
+        end = _parse_api_datetime(payload.get("end"))
+        if not end:
+            return JsonResponse({"status": "error", "error_message": "Invalid end date."}, status=400)
+    end = min(end, now)
+    if start >= end:
+        return JsonResponse(
+            {"status": "error", "error_message": "The start date must be before the end date."}, status=400,
+        )
+
+    peers = Peer.objects.filter(wireguard_instance=wireguard_instance)
+    try:
+        if selector_peer_uuid:
+            peer = peers.filter(uuid=selector_peer_uuid).first()
+        else:
+            peer = peers.filter(public_key=selector_peer_public_key).first()
+    except ValidationError:
+        peer = None
+    if not peer:
+        return JsonResponse({"status": "error", "error_message": "Peer not found."}, status=404)
+
+    rrd_path = peer_rrd_path(peer)
+    if not os.path.exists(rrd_path):
+        return JsonResponse(
+            {"status": "error", "error_message": "There is no traffic history for this peer."}, status=404,
+        )
+
+    try:
+        totals = peer_traffic_totals(rrd_path, start.timestamp(), end.timestamp())
+    except TrafficHistoryError as error:
+        return JsonResponse(
+            {"status": "error", "error_message": f"Could not read the traffic history: {error}"}, status=500,
+        )
+
+    data = {
+        "status": "success",
+        "peer_uuid": str(peer.uuid),
+        "instance": f"wg{wireguard_instance.instance_id}",
+        "start": _api_datetime(totals["start"]),
+        "end": _api_datetime(totals["end"]),
+        "download_bytes": totals["download_bytes"],
+        "upload_bytes": totals["upload_bytes"],
+        "resolution_seconds": totals["resolution_seconds"],
+    }
+    warning = traffic_warning(totals)
+    if warning:
+        data["warning"] = warning
+    return JsonResponse(data, status=200)
 
 
 @csrf_exempt
