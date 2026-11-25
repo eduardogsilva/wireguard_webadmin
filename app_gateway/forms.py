@@ -21,11 +21,12 @@ DOMAIN_PATTERN = re.compile(r'^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
-        fields = ['display_name', 'upstream', 'allow_invalid_cert', 'serve_on_primary', 'all_workers', 'workers']
+        fields = ['display_name', 'upstream', 'allow_invalid_cert', 'use_upstream_host', 'serve_on_primary', 'all_workers', 'workers']
         labels = {
             'display_name': _('Name'),
             'upstream': _('Upstream'),
             'allow_invalid_cert': _('Allow invalid/self-signed certificate'),
+            'use_upstream_host': _('Send the upstream address as Host'),
             'serve_on_primary': _('Serve on the primary server'),
             'all_workers': _('Serve on all cluster workers'),
             'workers': _('Cluster workers'),
@@ -70,6 +71,7 @@ class ApplicationForm(forms.ModelForm):
             Div(
                 Div('upstream', css_class='col-md-12'),
                 Div('allow_invalid_cert', css_class='col-md-12'),
+                Div('use_upstream_host', css_class='col-md-12'),
                 css_class='row'
             ),
             *cluster_rows,

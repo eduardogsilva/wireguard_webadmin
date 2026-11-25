@@ -67,6 +67,7 @@ class Application(models.Model):
     display_name = models.CharField(max_length=128, blank=True)
     upstream = models.CharField(max_length=255, help_text=_("Upstream address, e.g.: http://10.188.18.27:3000"))
     allow_invalid_cert = models.BooleanField(default=False, help_text=_("Allow invalid or self-signed TLS certificates from the upstream"))
+    use_upstream_host = models.BooleanField(default=False, help_text=_("Enable when the upstream selects the site by name, such as shared hosting, cloud services or CDNs. By default, the original Host of the request is sent."))
     serve_on_primary = models.BooleanField(default=True)
     all_workers = models.BooleanField(default=False)
     workers = models.ManyToManyField('cluster.Worker', blank=True, related_name='applications')

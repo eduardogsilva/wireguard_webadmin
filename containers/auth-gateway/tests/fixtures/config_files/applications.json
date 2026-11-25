@@ -5,7 +5,8 @@
       "name": "Caf\u00e9",
       "hosts": [],
       "upstream": "http://10.0.0.14:8000",
-      "allow_invalid_cert": false
+      "allow_invalid_cert": false,
+      "use_upstream_host": false
     },
     {
       "id": "dashboard",
@@ -14,14 +15,16 @@
         "dashboard.example.test"
       ],
       "upstream": "http://10.0.0.10:3000",
-      "allow_invalid_cert": false
+      "allow_invalid_cert": false,
+      "use_upstream_host": false
     },
     {
       "id": "files",
       "name": "Files",
       "hosts": [],
       "upstream": "http://10.0.0.13:8080",
-      "allow_invalid_cert": false
+      "allow_invalid_cert": false,
+      "use_upstream_host": false
     },
     {
       "id": "hypervisor",
@@ -30,7 +33,8 @@
         "hypervisor.example.test"
       ],
       "upstream": "https://10.0.0.12:8006",
-      "allow_invalid_cert": true
+      "allow_invalid_cert": true,
+      "use_upstream_host": false
     },
     {
       "id": "media",
@@ -40,7 +44,8 @@
         "media2.example.test"
       ],
       "upstream": "http://10.0.0.11:32400",
-      "allow_invalid_cert": false
+      "allow_invalid_cert": false,
+      "use_upstream_host": false
     },
     {
       "id": "sso",
@@ -49,7 +54,8 @@
         "sso.example.test"
       ],
       "upstream": "http://10.0.0.15:8000",
-      "allow_invalid_cert": false
+      "allow_invalid_cert": false,
+      "use_upstream_host": false
     }
   ]
 }

@@ -257,25 +257,28 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
             return "  handle {"
         return f"  handle {matcher} {{"
 
-    def emit_reverse_proxy(base, upstream_path, indent="    ", allow_invalid_cert=False):
+    def emit_reverse_proxy(base, upstream_path, indent="    ", allow_invalid_cert=False, host_header=None):
         if upstream_path:
             lines.append(f"{indent}rewrite * {upstream_path}{{uri}}")
+        if not allow_invalid_cert and not host_header:
+            lines.append(f"{indent}reverse_proxy {base}")
+            return
+        lines.append(f"{indent}reverse_proxy {base} {{")
+        if host_header:
+            lines.append(f"{indent}  header_up Host {host_header}")
         if allow_invalid_cert:
-            lines.append(f"{indent}reverse_proxy {base} {{")
             lines.append(f"{indent}  transport http {{")
             lines.append(f"{indent}    tls_insecure_skip_verify")
             lines.append(f"{indent}  }}")
-            lines.append(f"{indent}}}")
-        else:
-            lines.append(f"{indent}reverse_proxy {base}")
+        lines.append(f"{indent}}}")
 
-    def emit_protected_handle(path_matcher, base, upstream_path, allow_invalid_cert=False):
+    def emit_protected_handle(path_matcher, base, upstream_path, allow_invalid_cert=False, host_header=None):
         lines.append(handle_open(path_matcher))
         lines.append(f"    forward_auth {AUTH_GATEWAY_INTERNAL_URL} {{")
         lines.append(f"      uri {AUTH_GATEWAY_CHECK_URI}")
         lines.append("      copy_headers X-Auth-User X-Auth-Email X-Auth-Groups X-Auth-Factors X-Auth-Policy")
         lines.append("    }")
-        emit_reverse_proxy(base, upstream_path, allow_invalid_cert=allow_invalid_cert)
+        emit_reverse_proxy(base, upstream_path, allow_invalid_cert=allow_invalid_cert, host_header=host_header)
         lines.append("  }")
         lines.append("")
 
@@ -283,6 +286,14 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
         upstream = app.get("upstream", "")
         # tls_insecure_skip_verify is only valid for https upstreams
         allow_invalid_cert = app.get("allow_invalid_cert", False) and upstream.startswith("https://")
+        # Caddy sends the upstream address as Host to https upstreams; the original Host is kept unless the
+        # application asks for the upstream address, which upstreams that select the site by name may need
+        if app.get("use_upstream_host", False):
+            host_header = "{upstream_hostport}"
+        elif upstream.startswith("https://"):
+            host_header = "{hostport}"
+        else:
+            host_header = None
         static_routes = app.get("static_routes", [])
         app_id = app.get("id", "")
 
@@ -313,7 +324,7 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
 
         app_route_data = route_entries.get(app_id)
         if app_route_data is None:
-            emit_reverse_proxy(base, upstream_path, indent="  ", allow_invalid_cert=allow_invalid_cert)
+            emit_reverse_proxy(base, upstream_path, indent="  ", allow_invalid_cert=allow_invalid_cert, host_header=host_header)
             lines.append("}")
             lines.append("")
             return
@@ -325,7 +336,7 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
             matcher = emit_route_matcher(f"route_{app_id}_{route_index}", path_prefix)
             if policy_type == "bypass":
                 lines.append(handle_open(matcher))
-                emit_reverse_proxy(base, upstream_path, allow_invalid_cert=allow_invalid_cert)
+                emit_reverse_proxy(base, upstream_path, allow_invalid_cert=allow_invalid_cert, host_header=host_header)
                 lines.append("  }")
                 lines.append("")
             elif policy_type == "deny":
@@ -334,15 +345,15 @@ def build_caddyfile(apps, auth_policies, routes, tls_data=None):
                 lines.append("  }")
                 lines.append("")
             else:
-                emit_protected_handle(matcher, base, upstream_path, allow_invalid_cert=allow_invalid_cert)
+                emit_protected_handle(matcher, base, upstream_path, allow_invalid_cert=allow_invalid_cert, host_header=host_header)
 
         default_policy_type = get_policy_type(app_route_data.get("default_policy"))
         if default_policy_type == "bypass":
-            emit_reverse_proxy(base, upstream_path, indent="  ", allow_invalid_cert=allow_invalid_cert)
+            emit_reverse_proxy(base, upstream_path, indent="  ", allow_invalid_cert=allow_invalid_cert, host_header=host_header)
         elif default_policy_type == "deny":
             lines.append("  respond 403")
         else:
-            emit_protected_handle(None, base, upstream_path, allow_invalid_cert=allow_invalid_cert)
+            emit_protected_handle(None, base, upstream_path, allow_invalid_cert=allow_invalid_cert, host_header=host_header)
         lines.append("}")
         lines.append("")
 
