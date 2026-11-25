@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if [[ "$COMPOSE_VERSION" != "c2a" ]]; then
+if [[ "$COMPOSE_VERSION" != "d1a" ]]; then
     echo "ERROR: Please upgrade your docker compose file. Exiting."
     exit 1
 fi

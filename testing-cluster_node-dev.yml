@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile-cluster_node
     environment:
       - MASTER_SERVER_ADDRESS=${MASTER_SERVER_ADDRESS}
-      - COMPOSE_VERSION=c2a
+      - COMPOSE_VERSION=d1a
       - TZ=${TIMEZONE}
       - TOKEN=${TOKEN}
     volumes:

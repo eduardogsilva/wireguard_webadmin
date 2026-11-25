@@ -1,4 +1,4 @@
-version: '3'
+# Cluster node with WireGuard only. To also publish App Gateway applications, use cluster_node-gateway.yml instead.
 services:
   cluster-node:
     container_name: cluster-node
@@ -6,8 +6,7 @@ services:
     image: eduardosilva/wireguard-webadmin-cluster-node:latest
     environment:
       - MASTER_SERVER_ADDRESS=${MASTER_SERVER_ADDRESS}
-      - DEBUG_MODE=${DEBUG_MODE}
-      - COMPOSE_VERSION=c1b
+      - COMPOSE_VERSION=d1a
       - TZ=${TIMEZONE}
       - TOKEN=${TOKEN}
     volumes:
@@ -27,10 +26,15 @@ services:
     container_name: cluster-node-dns
     restart: unless-stopped
     image: eduardosilva/wireguard_webadmin_dns:latest
+    # Shares the network of cluster-node, so DNS is answered directly on the WireGuard interfaces
+    network_mode: "service:cluster-node"
     environment:
       - TZ=${TIMEZONE}
     volumes:
       - cluster_node_dnsmasq_conf:/etc/dnsmasq/
+    depends_on:
+      - cluster-node
+
 volumes:
   cluster_node_wireguard:
   cluster_node_dnsmasq_conf:

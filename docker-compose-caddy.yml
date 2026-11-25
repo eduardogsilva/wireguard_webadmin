@@ -7,7 +7,7 @@ services:
     environment:
       - SERVER_ADDRESS=${SERVER_ADDRESS}
       - DEBUG_MODE=${DEBUG_MODE}
-      - COMPOSE_VERSION=c2g
+      - COMPOSE_VERSION=d1a
       - TZ=${TIMEZONE}
       - EXTRA_ALLOWED_HOSTS=${EXTRA_ALLOWED_HOSTS}
       - WIREGUARD_STATUS_CACHE_ENABLED=${WIREGUARD_STATUS_CACHE_ENABLED}
@@ -24,6 +24,7 @@ services:
       - app_secrets:/app_secrets/
       - rrd_data:/rrd_data/
       - caddy_json_export:/caddy_json_export/
+      - caddy_cert_export:/caddy_cert_export/:ro
     ports:
       # Do not directly expose the Django port to the internet, use the reverse proxy below instead
       # - "127.0.0.1:8000:8000"
@@ -87,6 +88,7 @@ services:
     volumes:
       - static_volume:/static
       - caddy_json_export:/caddy_json_export
+      - caddy_cert_export:/caddy_cert_export
       - caddy_data:/data
       - caddy_config:/config
     network_mode: "service:wireguard-webadmin"
@@ -115,6 +117,7 @@ volumes:
   app_secrets:
   rrd_data:
   caddy_json_export:
+  caddy_cert_export:
   auth_gateway_data:
   caddy_data:
   caddy_config:

@@ -7,7 +7,7 @@ services:
     image: eduardosilva/wireguard-webadmin-cluster-node:testing
     environment:
       - MASTER_SERVER_ADDRESS=${MASTER_SERVER_ADDRESS}
-      - COMPOSE_VERSION=c2a
+      - COMPOSE_VERSION=d1a
       - TZ=${TIMEZONE}
       - TOKEN=${TOKEN}
     volumes:

@@ -1,0 +1,81 @@
+# Cluster node with WireGuard and the App Gateway (Caddy + auth-gateway).
+# For a VPN only node, use cluster_node.yml instead.
+services:
+  cluster-node:
+    container_name: cluster-node
+    restart: unless-stopped
+    image: eduardosilva/wireguard-webadmin-cluster-node:latest
+    environment:
+      - MASTER_SERVER_ADDRESS=${MASTER_SERVER_ADDRESS}
+      - COMPOSE_VERSION=d1a
+      - TZ=${TIMEZONE}
+      - TOKEN=${TOKEN}
+    volumes:
+      - cluster_node_wireguard:/etc/wireguard
+      - cluster_node_dnsmasq_conf:/etc/dnsmasq/
+      - cluster_node_caddy_json:/caddy_json_export/
+      - cluster_node_caddy_certificates:/caddy_certificates/
+    ports:
+      # Ports for WireGuard instances.
+      - "51820-51839:51820-51839/udp"
+      # Caddy shares the network of cluster-node, so its ports are published here
+      - "80:80"
+      - "443:443"
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv4.ip_forward=1
+
+  cluster-node-dns:
+    container_name: cluster-node-dns
+    restart: unless-stopped
+    image: eduardosilva/wireguard_webadmin_dns:latest
+    # Shares the network of cluster-node, so DNS is answered directly on the WireGuard interfaces
+    network_mode: "service:cluster-node"
+    environment:
+      - TZ=${TIMEZONE}
+    volumes:
+      - cluster_node_dnsmasq_conf:/etc/dnsmasq/
+    depends_on:
+      - cluster-node
+
+  cluster-node-caddy:
+    container_name: cluster-node-caddy
+    restart: unless-stopped
+    image: eduardosilva/wireguard_webadmin_caddy:latest
+    network_mode: "service:cluster-node"
+    environment:
+      - TZ=${TIMEZONE}
+      - CLUSTER_NODE=true
+      - AUTH_GATEWAY_INTERNAL_URL=http://cluster-node-auth-gateway:9091
+    volumes:
+      - cluster_node_caddy_json:/caddy_json_export/
+      - cluster_node_caddy_certificates:/caddy_certificates/:ro
+      - cluster_node_caddy_data:/data
+      - cluster_node_caddy_config:/config
+    depends_on:
+      - cluster-node
+      - cluster-node-auth-gateway
+
+  cluster-node-auth-gateway:
+    container_name: cluster-node-auth-gateway
+    restart: unless-stopped
+    image: eduardosilva/wireguard_webadmin_auth_gateway:latest
+    environment:
+      - TZ=${TIMEZONE}
+      - AUTH_GATEWAY_CONFIG_DIR=/caddy_json_export
+      - AUTH_GATEWAY_DATABASE_PATH=/data/auth-gateway.sqlite3
+    volumes:
+      - cluster_node_caddy_json:/caddy_json_export/
+      - cluster_node_auth_gateway_data:/data
+
+volumes:
+  cluster_node_wireguard:
+  cluster_node_dnsmasq_conf:
+  cluster_node_caddy_json:
+  cluster_node_caddy_certificates:
+  cluster_node_caddy_data:
+  cluster_node_caddy_config:
+  cluster_node_auth_gateway_data:
